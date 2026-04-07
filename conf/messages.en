@@ -1,4 +1,4 @@
-service.name = gambling-variations-frontend
+service.name = Gambling variations frontend
 
 site.back = Back
 site.remove = Remove
@@ -47,3 +47,9 @@ signedOut.guidance = We did not save your answers.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+systemError.title = Sorry, there is a problem with the service
+systemError.heading = Sorry, there is a problem with the service
+systemError.p1 = Try again later or contact the
+systemError.p1.link = HMRC Online Services Helpdesk (opens in a new tab)
+

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package viewmodels.govuk
 
 import play.api.data.Field
@@ -15,30 +31,30 @@ trait DateFluency {
   object DateViewModel extends ErrorMessageAwareness {
 
     def apply(
-               field: Field,
-               legend: Legend
-             )(implicit messages: Messages): DateInput =
+      field: Field,
+      legend: Legend
+    )(implicit messages: Messages): DateInput =
       apply(
         field    = field,
         fieldset = Fieldset(legend = Some(legend))
       )
 
     def apply(
-               field: Field,
-               fieldset: Fieldset
-             )(implicit messages: Messages): DateInput = {
+      field: Field,
+      fieldset: Fieldset
+    )(implicit messages: Messages): DateInput = {
 
       val errorClass = "govuk-input--error"
 
-      val dayError         = field.error.exists(_.args.contains(messages("date.error.day")))
-      val monthError       = field.error.exists(_.args.contains(messages("date.error.month")))
-      val yearError        = field.error.exists(_.args.contains(messages("date.error.year")))
+      val dayError = field.error.exists(_.args.contains(messages("date.error.day")))
+      val monthError = field.error.exists(_.args.contains(messages("date.error.month")))
+      val yearError = field.error.exists(_.args.contains(messages("date.error.year")))
       val anySpecificError = dayError || monthError || yearError
-      val allFieldsError   = field.error.isDefined && !anySpecificError
+      val allFieldsError = field.error.isDefined && !anySpecificError
 
-      val dayErrorClass   = if (dayError || allFieldsError) errorClass else ""
+      val dayErrorClass = if (dayError || allFieldsError) errorClass else ""
       val monthErrorClass = if (monthError || allFieldsError) errorClass else ""
-      val yearErrorClass  = if (yearError || allFieldsError) errorClass else ""
+      val yearErrorClass = if (yearError || allFieldsError) errorClass else ""
 
       val items = Seq(
         InputItem(
@@ -91,11 +107,9 @@ trait DateFluency {
       date.copy(attributes = date.attributes + attribute)
 
     def asDateOfBirth(): DateInput =
-      date.copy(
-        items = date.items map {
-          item =>
-            val name = item.id.split('.').last
-            item.copy(autocomplete = Some(s"bday-$name"))
-        })
+      date.copy(items = date.items map { item =>
+        val name = item.id.split('.').last
+        item.copy(autocomplete = Some(s"bday-$name"))
+      })
   }
 }
