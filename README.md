@@ -1,7 +1,7 @@
 
 # gambling-variations-frontend
 
-This is the new gabling-filing-frontend repository
+This is the new gambling-variations-frontend repository
 
 ## Git Hooks
 
@@ -55,7 +55,7 @@ GET        /there-is-a-problem-with-the-service                       controller
 Message key (messages.en):
 
 ```properties
-monthlyreturns.inactivityRequest.title = Do you want to submit an inactivity request?
+systemError.title = Sorry, there is a problem with the service
 ```
 
 ### License
