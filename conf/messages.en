@@ -53,3 +53,8 @@ systemError.heading = Sorry, there is a problem with the service
 systemError.p1 = Try again later or contact the
 systemError.p1.link = HMRC Online Services Helpdesk (opens in a new tab)
 
+
+accessDenied.title = Sorry, there is a problem with the service
+accessDenied.heading = Sorry, there is a problem with the service
+accessDenied.p1 = You do not have access to this service.
+accessDenied.p1.link = Continue to your account
