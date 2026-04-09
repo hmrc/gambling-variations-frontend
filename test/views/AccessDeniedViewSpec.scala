@@ -38,7 +38,7 @@ class AccessDeniedViewSpec extends SpecBase {
       doc.select("p").text must include(messages("accessDenied.p1"))
       val link = doc.select(".page-not-found-home-page-link a").attr("href")
 
-      link mustEqual "controllers.routes.IndexController.onPageLoad().url"
+      link mustEqual controllers.routes.IndexController.onPageLoad().url
 
     }
   }
