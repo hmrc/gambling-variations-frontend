@@ -20,4 +20,7 @@ GET         /account/signed-out                          controllers.auth.Signed
 
 GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad()
 
-GET        /there-is-a-problem-with-the-service                       controllers.SystemErrorController.onPageLoad()
+GET        /there-is-a-problem-with-the-service          controllers.SystemErrorController.onPageLoad()
+
+GET        /page-not-found                               controllers.PageNotFoundController.onPageLoad()
+
