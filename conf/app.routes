@@ -23,3 +23,5 @@ GET         /unauthorised                                controllers.Unauthorise
 GET        /there-is-a-problem-with-the-service          controllers.SystemErrorController.onPageLoad()
 
 GET        /there-is-a-problem-access-denied            controllers.AccessDeniedController.onPageLoad()
+GET        /page-not-found                               controllers.PageNotFoundController.onPageLoad()
+
