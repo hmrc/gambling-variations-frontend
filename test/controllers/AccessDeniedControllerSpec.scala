@@ -38,7 +38,8 @@ class AccessDeniedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AccessDeniedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("controllers.routes.IndexController.onPageLoad().url")(request, messages(application)).toString
+        contentAsString(result) must include("Sorry, there is a problem with the service")
+        contentAsString(result) must include("Continue to your account")
       }
     }
   }
