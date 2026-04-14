@@ -57,3 +57,8 @@ systemError.title = cy: Sorry, there is a problem with the service
 systemError.heading = cy: Sorry, there is a problem with the service
 systemError.p1 = cy: Try again later or contact the
 systemError.p1.link = cy: HMRC Online Services Helpdesk (opens in a new tab)
+
+accessDenied.title = cy:Sorry, there is a problem with the service
+accessDenied.heading = cy:Sorry, there is a problem with the service
+accessDenied.p1 = cy:You do not have access to this service.
+accessDenied.p1.link = cy:Continue to your account
