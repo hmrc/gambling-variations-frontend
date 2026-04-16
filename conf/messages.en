@@ -68,3 +68,9 @@ pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
 
 
+
+removeTradeName.title = removeTradeName
+removeTradeName.heading = removeTradeName
+removeTradeName.checkYourAnswersLabel = removeTradeName
+removeTradeName.error.required = Select yes if removeTradeName
+removeTradeName.change.hidden = RemoveTradeName

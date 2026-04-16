@@ -25,3 +25,8 @@ GET        /there-is-a-problem-with-the-service          controllers.SystemError
 GET        /there-is-a-problem-access-denied            controllers.AccessDeniedController.onPageLoad()
 GET        /page-not-found                               controllers.PageNotFoundController.onPageLoad()
 
+
+GET        /removeTradeName                        controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /removeTradeName                        controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
+GET        /changeRemoveTradeName                  controllers.RemoveTradeNameController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeRemoveTradeName                  controllers.RemoveTradeNameController.onSubmit(mode: Mode = CheckMode)
