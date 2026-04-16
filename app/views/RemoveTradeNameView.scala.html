@@ -14,18 +14,23 @@
  * limitations under the License.
  *@
 
+@import views.html.components.*
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption
 )
+
+
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("removeTradeName.title"))) {
-
+    @caption(messages("removeTradeName.caption"))
     @formHelper(action = routes.RemoveTradeNameController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
@@ -35,7 +40,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("removeTradeName.heading")).asPageHeading()
+                legend = LegendViewModel(messages("removeTradeName.heading")).asPageHeading(viewmodels.LegendSize.Large)
             )
         )
 
