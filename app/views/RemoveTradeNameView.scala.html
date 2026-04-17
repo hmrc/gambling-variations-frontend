@@ -30,13 +30,13 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("removeTradeName.title"))) {
-    @caption(messages("removeTradeName.caption"))
+
     @formHelper(action = routes.RemoveTradeNameController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-
+        @caption(messages("removeTradeName.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
