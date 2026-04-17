@@ -27,8 +27,8 @@ error.title.prefix = Error:
 error.prefix = Error
 error.summary.title = There is a problem
 
-index.title = gambling-variations-frontend
-index.heading = gambling-variations-frontend
+index.title = Manage your Machine Games Duty
+index.heading = Manage your Machine Games Duty
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 checkYourAnswers.title = Check your answers
