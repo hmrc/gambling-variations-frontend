@@ -68,3 +68,12 @@ pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
 
 
+
+businessName.title = Check your business name
+businessName.heading = Check your business name
+businessName.caption = Change registration details
+businessName.table.paragraph = If the business trades under a different name to the proprietor, you need to add a trading name.
+businessName.table.link = Change
+businessName.table.head1 = Trade Name
+businessName.table.head2 = Trade Name
+businessName.link = Cancel and return to change registration details
