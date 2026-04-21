@@ -25,7 +25,7 @@
         h1:H1,
         link: Link,
         paragraph: Paragraph,
-        summaryList: CustomSummaryList,
+        summaryList: SummaryListThreeCols
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -34,14 +34,14 @@
 @layout(pageTitle = titleNoForm(messages("businessName.title"))) {
     @caption(messages("businessName.caption"))
     @h1("businessName.heading", classes="govuk-heading-l")
-    @summaryList(Seq(("placeholder" -> Seq(("","","")))))
+    @summaryList(Seq(("placeholder", "name", Seq(("","Change","")))))
     @paragraph("businessName.table.paragraph")
-    @summaryList(Seq(("placeholder" -> Seq(("","","")))))
+    @summaryList(Seq(("placeholder", "name", Seq(("","Change","")))))
     @link(
     messages("businessName.link"),
     controllers.routes.IndexController.onPageLoad().url)
     @govukButton(ButtonViewModel(Text(messages("site.continue"))))
-    @break()
+    @break("m")
 
 
 
