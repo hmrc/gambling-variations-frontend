@@ -76,7 +76,13 @@ class RemoveTradeNameController @Inject() (
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] =
     for {
       ua1 <- userAnswers.set(RemoveTradeNamePage, value)
-      ua2 <- ua1.remove(TradingNamePage)
+      ua2 <- {
+        if(value) {
+          ua1.remove(TradingNamePage)
+        } else {
+          ua1
+        }
+      }
     } yield {
       ua2
     }
