@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.{AuthorisedAction, DataRetrievalAction}
 import models.{BusinessType, UserAnswers}
-import pages.{BusinessNamePage, BusinessTypePage}
+import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -39,6 +39,8 @@ class BusinessNameController @Inject() (
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
     val businessType = userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
     val businessName = userAnswers.get(BusinessNamePage).getOrElse("Test Business")
-    Ok(view(businessType, businessName))
+    val tradingName = userAnswers.get(TradingNamePage)
+
+    Ok(view(businessType, businessName, tradingName))
   }
 }

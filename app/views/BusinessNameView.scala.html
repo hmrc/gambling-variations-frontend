@@ -28,7 +28,7 @@
         summaryList: SummaryListThreeCols
 )
 
-@(businessType: String, businessName: String)(implicit request: Request[_], messages: Messages)
+@(businessType: String, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("businessName.title"))) {
 
@@ -40,8 +40,11 @@
             businessName,
             Seq(("","Change", messages("businessName.name", messages("businessType." + businessType)))))))
 
-    @paragraph("businessName.table.paragraph")
-    @summaryList(Seq(("placeholder", "name", Seq(("","Change","")))))
+    @paragraph("businessName.table.paragraph." + businessType)
+    @summaryList(Seq(
+        (messages("businessName.tradingName"),
+        tradingName.getOrElse(messages("businessName.notProvided")),
+        Seq(("","Change","")))))
 
     @link(
         messages("businessName.link"),
