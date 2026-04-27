@@ -18,8 +18,6 @@ package controllers
 
 import controllers.actions.*
 import forms.RemoveTradeNameFormProvider
-
-import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.RemoveTradeNamePage
@@ -29,13 +27,14 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveTradeNameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveTradeNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
-  identify: IdentifierAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   formProvider: RemoveTradeNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -46,7 +45,7 @@ class RemoveTradeNameController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData) { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.userId))
     val preparedForm = userAnswers.get(RemoveTradeNamePage) match {
       case None        => form
@@ -56,7 +55,7 @@ class RemoveTradeNameController @Inject() (
     Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.userId))
     form
       .bindFromRequest()
