@@ -67,16 +67,16 @@ pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in a new tab)
 pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
 
-soleproprietor.name = Sole proprietor
-unincorporatedbody.name = Unincorporated body
-corporatebody.name = Corporate body
-partnership.name = Partnership
-llp.name = Limited liability partnership
+businessType.soleproprietor = Sole proprietor
+businessType.unincorporatedbody = Unincorporated body
+businessType.corporatebody = Corporate body
+businessType.partnership = Partnership
+businessType.llp = Limited liability partnership
 
 businessName.title = Check your business name
 businessName.heading = Check your business name
 businessName.caption = Change registration details
-businessName.name = {0}'s name
+businessName.name = {0}’s name
 businessName.table.paragraph = If the business trades under a different name to the proprietor, you need to add a trading name.
 businessName.table.link = Change
 businessName.table.head1 = Trade Name

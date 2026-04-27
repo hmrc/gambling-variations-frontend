@@ -37,7 +37,7 @@ class BusinessNameControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessNameView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("")(request, messages(application)).toString
+        contentAsString(result) mustEqual view("partnership", "Test Business")(request, messages(application)).toString
       }
     }
   }

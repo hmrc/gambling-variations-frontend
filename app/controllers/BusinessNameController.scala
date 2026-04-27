@@ -16,22 +16,29 @@
 
 package controllers
 
-import controllers.actions.*
-import javax.inject.Inject
+import controllers.actions.{AuthorisedAction, DataRetrievalAction}
+import models.{BusinessType, UserAnswers}
+import pages.{BusinessNamePage, BusinessTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessNameView
 
+import javax.inject.Inject
+
 class BusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
   val controllerComponents: MessagesControllerComponents,
+  authorised: AuthorisedAction,
+  getData: DataRetrievalAction,
   view: BusinessNameView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    val businessType = ""
-    Ok(view(businessType))
+  def onPageLoad: Action[AnyContent] = (authorised andThen getData) { implicit request =>
+    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
+    val businessType = userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
+    val businessName = userAnswers.get(BusinessNamePage).getOrElse("Test Business")
+    Ok(view(businessType, businessName))
   }
 }
