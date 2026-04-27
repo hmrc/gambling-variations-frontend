@@ -39,6 +39,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new RemoveTradeNameFormProvider()
   val form = formProvider()
+  val tradingName = "Test Trader"
 
   lazy val removeTradeNameRoute = routes.RemoveTradeNameController.onPageLoad(NormalMode).url
 
@@ -56,7 +57,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[RemoveTradeNameView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, tradingName)(request, messages(application)).toString
       }
     }
 
@@ -74,7 +75,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, tradingName)(request, messages(application)).toString
       }
     }
 
@@ -120,7 +121,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, tradingName)(request, messages(application)).toString
       }
     }
   }

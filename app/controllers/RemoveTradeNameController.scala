@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveTradeNameFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.RemoveTradeNamePage
+import pages.{RemoveTradeNamePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,6 +29,7 @@ import views.html.RemoveTradeNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class RemoveTradeNameController @Inject() (
   override val messagesApi: MessagesApi,
@@ -52,20 +53,31 @@ class RemoveTradeNameController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    val tradingName = userAnswers.get(TradingNamePage).getOrElse("Test Trader")
+
+    Ok(view(preparedForm, mode, tradingName))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.userId))
+    val tradingName = userAnswers.get(TradingNamePage).getOrElse("Test Trader")
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(userAnswers.set(RemoveTradeNamePage, value))
+            updatedAnswers <- Future.fromTry(updateUserAnswers(userAnswers, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
       )
   }
+
+  private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] =
+    for {
+      ua1 <- userAnswers.set(RemoveTradeNamePage, value)
+      ua2 <- ua1.remove(TradingNamePage)
+    } yield {
+      ua2
+    }
 }

@@ -27,7 +27,7 @@
 
 
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, tradingName: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("removeTradeName.title"))) {
 
@@ -40,7 +40,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("removeTradeName.heading")).asPageHeading(viewmodels.LegendSize.Large)
+                legend = LegendViewModel(messages("removeTradeName.heading", tradingName)).asPageHeading(viewmodels.LegendSize.Large)
             )
         )
 
