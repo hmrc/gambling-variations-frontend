@@ -31,6 +31,7 @@ class BusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(view())
+    val businessType = ""
+    Ok(view(businessType))
   }
 }

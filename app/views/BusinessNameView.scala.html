@@ -28,23 +28,24 @@
         summaryList: SummaryListThreeCols
 )
 
-@()(implicit request: Request[_], messages: Messages)
-
+@(businessType: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("businessName.title"))) {
+
     @caption(messages("businessName.caption"))
+
     @h1("businessName.heading", classes="govuk-heading-l")
-    @summaryList(Seq(("placeholder", "name", Seq(("","Change","")))))
+    @summaryList(Seq((messages("businessName.name", messages(businessType + ".name")), "name", Seq(("","Change","")))))
+
     @paragraph("businessName.table.paragraph")
     @summaryList(Seq(("placeholder", "name", Seq(("","Change","")))))
+
     @link(
-    messages("businessName.link"),
-    controllers.routes.IndexController.onPageLoad().url)
-    @govukButton(ButtonViewModel(Text(messages("site.continue"))))
+        messages("businessName.link"),
+        controllers.routes.IndexController.onPageLoad().url)
+        @govukButton(ButtonViewModel(Text(messages("site.continue"))))
+
     @break("m")
-
-
-
 }
 
 
