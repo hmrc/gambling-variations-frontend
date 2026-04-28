@@ -23,15 +23,6 @@ import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import java.time.Instant
 import scala.util.{Failure, Success, Try}
 
-final case class PartnerMember(
-  namesOfPartMems: String,
-  solePropTitle: Option[String],
-  solePropFirstName: Option[String],
-  solePropMiddleName: Option[String],
-  solePropLastName: Option[String],
-  typeOfBusiness: Int // 1..5 mapping
-)
-
 final case class UserAnswers(
   id: String,
   data: JsObject = Json.obj(),
