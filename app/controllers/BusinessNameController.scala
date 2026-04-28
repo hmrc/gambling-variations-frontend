@@ -16,8 +16,8 @@
 
 package controllers
 
-import controllers.actions.{AuthorisedAction, DataRetrievalAction}
-import models.{BusinessType, UserAnswers}
+import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
+import models.BusinessType
 import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,15 +31,15 @@ class BusinessNameController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
   view: BusinessNameView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorised andThen getData) { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
-    val businessType = userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
-    val businessName = userAnswers.get(BusinessNamePage).getOrElse("Test Business")
-    val tradingName = userAnswers.get(TradingNamePage)
+  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
+    val businessType = request.userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
+    val businessName = request.userAnswers.get(BusinessNamePage).getOrElse("Test Business")
+    val tradingName = request.userAnswers.get(TradingNamePage)
 
     Ok(view(businessType, businessName, tradingName))
   }

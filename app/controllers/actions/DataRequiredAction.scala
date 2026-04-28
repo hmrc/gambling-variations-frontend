@@ -17,8 +17,11 @@
 package controllers.actions
 
 import controllers.routes
+import models.BusinessType.Soleproprietor
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
+import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
+import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -29,18 +32,30 @@ import scala.concurrent.{ExecutionContext, Future}
 class DataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository
 )(implicit val executionContext: ExecutionContext)
-    extends DataRequiredAction {
+    extends DataRequiredAction
+    with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
-
     request.userAnswers match {
       case None =>
-        val userAnswers = UserAnswers(request.mgdRegNum)
-        sessionRepository.set(userAnswers) map {
-          case true  => Right(DataRequest(request.request, request.mgdRegNum, userAnswers))
-          case false => Left(Redirect(routes.SystemErrorController.onPageLoad()))
-        }
+        logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
+        UserAnswers(request.mgdRegNum)
+          .set(TradingNamePage, "Trader One")
+          .flatMap(_.set(BusinessNamePage, "Business One"))
+          .flatMap(_.set(BusinessTypePage, Soleproprietor))
+          .map { ua =>
+            logger.info("User Answers not found. Saving User Answers")
+            sessionRepository.set(ua) map {
+              case true =>
+                logger.info("User Answers saved.")
+                Right(DataRequest(request.request, request.mgdRegNum, ua))
+              case false =>
+                logger.info("User Answers failed.")
+                Left(Redirect(routes.SystemErrorController.onPageLoad()))
+            }
+          } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
       case Some(data) =>
+        logger.info(s"User Answers found with id ${data.id}")
         Future.successful(Right(DataRequest(request.request, request.mgdRegNum, data)))
     }
   }
