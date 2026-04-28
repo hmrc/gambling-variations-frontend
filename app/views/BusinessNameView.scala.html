@@ -44,7 +44,8 @@
     @summaryList(Seq(
         (messages("businessName.tradingName"),
         tradingName.getOrElse(messages("businessName.notProvided")),
-        Seq(("","Change","")))))
+        Seq(("","Change",tradingName.getOrElse(messages("businessName.notProvided")))))
+    ))
 
     @link(
         messages("businessName.link"),
