@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.MgdCertificate
+import models.{BusinessName, MgdCertificate}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -52,6 +52,31 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
           case status =>
             throw UpstreamErrorResponse(
               s"Unexpected status while fetching MGD certificate: $status",
+              status
+            )
+        }
+      }
+  }
+
+  def getBusinessName(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[BusinessName] = {
+    http
+      .get(url"$baseUrl/business-name/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[BusinessName]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                cert => cert
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Business Name: $status",
               status
             )
         }

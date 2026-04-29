@@ -18,8 +18,9 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
+import models.BusinessType.Partnership
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{MgdCertificate, UserAnswers}
+import models.{BusinessName, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatest.RecoverMethods
@@ -55,12 +56,13 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(certificate)
+        when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
           "businessName" -> "Test Business Ltd",
-          "tradingName"  -> "Test Trader Ltd"
+          "tradingName"  -> "Test Trader Ltd",
+          "businessType" -> "partnership"
         )
 
         val result: Either[Result, DataRequest[AnyContent]] =
@@ -74,7 +76,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
           req.userAnswers.id mustBe expected.userAnswers.id
         }
         verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getCertificate(any())(any())
+        verify(gamblingConnector, times(1)).getBusinessName(any())(any())
       }
 
       "redirect to SystemError when User Answers cannot be saved" in {
@@ -82,7 +84,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(false)
-        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(certificate)
+        when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val result: Either[Result, DataRequest[AnyContent]] =
@@ -90,7 +92,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
 
         result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
         verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getCertificate(any())(any())
+        verify(gamblingConnector, times(1)).getBusinessName(any())(any())
       }
 
       "return a failed future when getCertificate throws an exception" in {
@@ -99,7 +101,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(false)
-        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR))
+        when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR))
         val action = new Harness(sessionRepository, gamblingConnector)
 
         recoverToSucceededIf[RuntimeException] {
@@ -118,7 +120,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(certificate)
+        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(businessNameModel)
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
@@ -143,36 +145,16 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
 
     }
 
-    def certificate: MgdCertificate =
-      MgdCertificate(
-        mgdRegNumber         = "MGD123",
-        registrationDate     = Some(LocalDate.parse("2026-01-01")),
-        individualName       = Some("John Doe"),
-        businessName         = Some("Test Business Ltd"),
-        tradingName          = Some("Test Trader Ltd"),
-        repMemName           = None,
-        busAddrLine1         = Some("Line 1"),
-        busAddrLine2         = Some("Line 2"),
-        busAddrLine3         = None,
-        busAddrLine4         = None,
-        busPostcode          = Some("AB1 2CD"),
-        busCountry           = None,
-        busAdi               = None,
-        repMemLine1          = None,
-        repMemLine2          = None,
-        repMemLine3          = None,
-        repMemLine4          = None,
-        repMemPostcode       = None,
-        repMemAdi            = None,
-        typeOfBusiness       = Some("Corporate Body"), // important: matches controller
-        businessTradeClass   = Some(1),
-        noOfPartners         = None,
-        groupReg             = "N",
-        noOfGroupMems        = None,
-        dateCertIssued       = Some(LocalDate.parse("2026-01-02")),
-        partMembers          = Seq.empty,
-        groupMembers         = Seq.empty,
-        returnPeriodEndDates = Seq.empty
-      )
+    def businessNameModel: BusinessName = BusinessName(
+      mgdRegNumber      = "ABC12345678901",
+      solePropTitle     = None,
+      solePropFirstName = None,
+      solePropMidName   = None,
+      solePropLastName  = None,
+      businessName      = Some("Test Business Ltd"),
+      businessType      = Partnership,
+      tradingName       = Some("Test Trader Ltd"),
+      systemDate        = Some(LocalDate.of(1991, 1, 1))
+    )
   }
 }

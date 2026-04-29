@@ -19,8 +19,8 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{MgdCertificate, UserAnswers}
-import pages.{BusinessNamePage, TradingNamePage}
+import models.{BusinessName, UserAnswers}
+import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -46,17 +46,20 @@ class DataRequiredActionImpl @Inject() (
 
         given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-        gamblingConnector.getCertificate(request.mgdRegNum) flatMap { certificate =>
+        gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { businessName =>
 
-          populateUserAnswers(UserAnswers(request.mgdRegNum), certificate).map { ua =>
-            logger.info("User Answers not found. Saving User Answers")
-            sessionRepository.set(ua) map {
-              case true =>
-                logger.info("User Answers saved.")
-                Right(DataRequest(request.request, request.mgdRegNum, ua))
-              case false =>
-                logger.info("User Answers failed.")
-                Left(Redirect(routes.SystemErrorController.onPageLoad()))
+          UserAnswers(request.mgdRegNum).set(BusinessTypePage, businessName.businessType).flatMap { userAnswers =>
+
+            populateUserAnswers(userAnswers, businessName).map { ua =>
+              logger.info("User Answers not found. Saving User Answers")
+              sessionRepository.set(ua) map {
+                case true =>
+                  logger.info("User Answers saved.")
+                  Right(DataRequest(request.request, request.mgdRegNum, ua))
+                case false =>
+                  logger.info("User Answers failed.")
+                  Left(Redirect(routes.SystemErrorController.onPageLoad()))
+              }
             }
           } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
         }
@@ -66,10 +69,10 @@ class DataRequiredActionImpl @Inject() (
     }
   }
 
-  private def populateUserAnswers(answers: UserAnswers, certificate: MgdCertificate): Try[UserAnswers] = {
+  private def populateUserAnswers(answers: UserAnswers, businessName: BusinessName): Try[UserAnswers] = {
     List(
-      BusinessNamePage -> certificate.businessName,
-      TradingNamePage  -> certificate.tradingName
+      BusinessNamePage -> businessName.businessName,
+      TradingNamePage  -> businessName.tradingName
     ).foldLeft(Try(answers)) {
       case (tryUa, (page, Some(value))) => tryUa.flatMap(_.set(page, value))
       case (tryUa, (_, None))           => tryUa
