@@ -72,12 +72,12 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
       val responseJson =
         Json.obj(
-          "mgdRegNumber"   -> mgdRegNumber,
-          "groupReg"     -> "N",
-          "businessName" -> "Test Business Ltd",
-          "tradingName" -> "Test Trader Ltd",
-          "groupMembers" -> JsArray(),
-          "partMembers" -> JsArray(),
+          "mgdRegNumber"         -> mgdRegNumber,
+          "groupReg"             -> "N",
+          "businessName"         -> "Test Business Ltd",
+          "tradingName"          -> "Test Trader Ltd",
+          "groupMembers"         -> JsArray(),
+          "partMembers"          -> JsArray(),
           "returnPeriodEndDates" -> JsArray()
         )
 

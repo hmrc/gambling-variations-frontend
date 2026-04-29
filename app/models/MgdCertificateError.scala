@@ -19,6 +19,6 @@ package models
 sealed trait MgdCertificateError
 
 object MgdCertificateError:
-  case object NotFound extends MgdCertificateError
-  case object UpstreamError extends MgdCertificateError
+  case object NotFound        extends MgdCertificateError
+  case object UpstreamError   extends MgdCertificateError
   case object UnexpectedError extends MgdCertificateError
