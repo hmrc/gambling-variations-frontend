@@ -18,10 +18,9 @@ package controllers.actions
 
 import connectors.GamblingConnector
 import controllers.routes
-import models.BusinessType.Soleproprietor
-import models.{MgdCertificate, UserAnswers}
 import models.requests.{DataRequest, OptionalDataRequest}
-import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
+import models.{MgdCertificate, UserAnswers}
+import pages.{BusinessNamePage, TradingNamePage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}

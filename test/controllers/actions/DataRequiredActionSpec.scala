@@ -18,12 +18,13 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.MgdCertificate
 import models.requests.{DataRequest, OptionalDataRequest}
+import models.{MgdCertificate, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.Result
+import play.api.libs.json.{JsSuccess, JsValue, Json}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import repositories.SessionRepository
 
@@ -42,21 +43,48 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
 
   "Data Required Action" - {
 
-    "when there is no data in the cache" - {
+    "when there is no User Answers in the cache" - {
 
-      "must populate sessionRepository" in {
+      "return the request with a populated User Answers with data from the certificate" in {
 
+        val request = FakeRequest()
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(true)
         when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(certificate)
         val action = new Harness(sessionRepository, gamblingConnector)
 
-        val result = action.callRefine(OptionalDataRequest(FakeRequest(), mgdRegNum, None)).futureValue
+        val data = Json.obj(
+          "businessName" -> "Test Business Ltd",
+          "tradingName" -> "Test Trader Ltd"
+        )
 
-        result.isRight mustBe true
+        val result: Either[Result, DataRequest[AnyContent]] =
+          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+
+        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+
+        result.map { req =>
+          req.request mustBe expected.request
+          req.userAnswers.data mustBe expected.userAnswers.data
+          req.userAnswers.id mustBe expected.userAnswers.id
+        }
         verify(sessionRepository, times(1)).set(any())
+        verify(gamblingConnector, times(1)).getCertificate(any())(any())
       }
+
+      "redirect to SystemError when User Answers cannot be saved" in {}
+
+      "return a failed future when getCertificate throws an exception" in {}
+
+      "return a failed future when sessionRepository.set throws an exception" in {}
+
+    }
+
+    "when there is no User Answers in the cache" - {
+
+      "return the request with a populated User Answers without call to backend" in {}
+
     }
 
     def certificate: MgdCertificate =
@@ -65,7 +93,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
         registrationDate     = Some(LocalDate.parse("2026-01-01")),
         individualName       = Some("John Doe"),
         businessName         = Some("Test Business Ltd"),
-        tradingName          = None,
+        tradingName          = Some("Test Trader Ltd"),
         repMemName           = None,
         busAddrLine1         = Some("Line 1"),
         busAddrLine2         = Some("Line 2"),
