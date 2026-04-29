@@ -58,7 +58,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
         when(sessionRepository.get("id")) thenReturn Future(Some(UserAnswers("id")))
         val action = new Harness(sessionRepository)
 
-        val result = action.callTransform(new AuthorisedRequest(FakeRequest(), AffinityGroup.Organisation, "id")).futureValue
+        val result = action.callTransform(AuthorisedRequest(FakeRequest(), AffinityGroup.Organisation, "id")).futureValue
 
         result.userAnswers mustBe defined
       }
