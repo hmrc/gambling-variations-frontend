@@ -35,10 +35,6 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   given ExecutionContext = ExecutionContext.global
   given HeaderCarrier = HeaderCarrier()
 
-  // ------------------------------------------
-  // WireMock setup
-  // ------------------------------------------
-
   private val wireMockServer = new WireMockServer(0)
 
   override def beforeAll(): Unit = {
@@ -49,13 +45,10 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   override def afterAll(): Unit =
     wireMockServer.stop()
 
-  // ------------------------------------------
-  // Test App (AFTER WireMock starts)
-  // ------------------------------------------
-
   private lazy val app =
     new GuiceApplicationBuilder()
       .configure(
+        "microservice.services.gambling.protocol" -> "http",
         "microservice.services.gambling.host" -> "localhost",
         "microservice.services.gambling.port" -> wireMockServer.port()
       )
