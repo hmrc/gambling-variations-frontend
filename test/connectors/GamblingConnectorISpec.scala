@@ -144,20 +144,22 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
     "return businessName when backend returns 200" in {
 
-      val responseJson =
-        Json.obj(
-          "mgdRegNumber"         -> mgdRegNumber,
-          "groupReg"             -> "N",
-          "businessName"         -> "Test Business Ltd",
-          "tradingName"          -> "Test Trader Ltd",
-          "groupMembers"         -> JsArray(),
-          "partMembers"          -> JsArray(),
-          "returnPeriodEndDates" -> JsArray()
-        )
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "ABC12345678901",
+           |  "solePropTitle": "Mr",
+           |  "solePropFirstName": "First",
+           |  "solePropMidName": "Middle",
+           |  "solePropLastName": "Last",
+           |  "businessName": "Test Business Ltd",
+           |  "businessType": "soleproprietor",
+           |  "tradingName": "Trading Name",
+           |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
+           |}""".stripMargin
 
       wireMockServer.stubFor(
         get(urlEqualTo(s"/gambling/business-name/mgd/$mgdRegNumber"))
-          .willReturn(okJson(responseJson.toString()))
+          .willReturn(okJson(jsonAsString))
       )
 
       connector.getBusinessName(mgdRegNumber).futureValue mustBe businessName
@@ -188,15 +190,15 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
     def businessName: BusinessName = BusinessName(
-      mgdRegNumber = "ABC12345678901",
-      solePropTitle = Some("Mr"),
+      mgdRegNumber      = "ABC12345678901",
+      solePropTitle     = Some("Mr"),
       solePropFirstName = Some("First"),
-      solePropMidName = Some("Middle"),
-      solePropLastName = Some("Last"),
-      businessName = Some("Test Business Ltd"),
-      businessType = Soleproprietor,
-      tradingName = Some("Trading Name"),
-      systemDate = Some(LocalDate.of(1991, 1, 1))
+      solePropMidName   = Some("Middle"),
+      solePropLastName  = Some("Last"),
+      businessName      = Some("Test Business Ltd"),
+      businessType      = Soleproprietor,
+      tradingName       = Some("Trading Name"),
+      systemDate        = Some(LocalDate.of(1991, 1, 1))
     )
 
   }
