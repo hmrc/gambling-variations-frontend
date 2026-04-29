@@ -16,23 +16,63 @@
 
 package controllers.actions
 
-import javax.inject.Inject
+import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
+import models.{MgdCertificate, UserAnswers}
+import pages.{BusinessNamePage, TradingNamePage}
+import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
+import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
-class DataRequiredActionImpl @Inject() (implicit val executionContext: ExecutionContext) extends DataRequiredAction {
+class DataRequiredActionImpl @Inject() (
+  val sessionRepository: SessionRepository,
+  val gamblingConnector: GamblingConnector
+)(implicit val executionContext: ExecutionContext)
+    extends DataRequiredAction
+    with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
-
     request.userAnswers match {
       case None =>
-        Future.successful(Left(Redirect(routes.JourneyRecoveryController.onPageLoad())))
+        logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
+
+        given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+        gamblingConnector.getCertificate(request.mgdRegNum) flatMap { certificate =>
+
+          populateUserAnswers(UserAnswers(request.mgdRegNum), certificate).map { ua =>
+            logger.info("User Answers not found. Saving User Answers")
+            sessionRepository.set(ua) map {
+              case true =>
+                logger.info("User Answers saved.")
+                Right(DataRequest(request.request, request.mgdRegNum, ua))
+              case false =>
+                logger.info("User Answers failed.")
+                Left(Redirect(routes.SystemErrorController.onPageLoad()))
+            }
+          } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+        }
       case Some(data) =>
-        Future.successful(Right(DataRequest(request.request, request.userId, data)))
+        logger.info(s"User Answers found with id ${data.id}")
+        Future.successful(Right(DataRequest(request.request, request.mgdRegNum, data)))
+    }
+  }
+
+  private def populateUserAnswers(answers: UserAnswers, certificate: MgdCertificate): Try[UserAnswers] = {
+    List(
+      BusinessNamePage -> certificate.businessName,
+      TradingNamePage  -> certificate.tradingName
+    ).foldLeft(Try(answers)) {
+      case (tryUa, (page, Some(value))) => tryUa.flatMap(_.set(page, value))
+      case (tryUa, (_, None))           => tryUa
     }
   }
 }
