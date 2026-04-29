@@ -18,7 +18,8 @@ package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.{MgdCertificate, MgdCertificateError}
+import models.BusinessType.Soleproprietor
+import models.{BusinessName, MgdCertificate, MgdCertificateError}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -137,5 +138,66 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         groupMembers         = Seq.empty,
         returnPeriodEndDates = Seq.empty
       )
+  }
+
+  "GamblingConnector.getBusinessName" should {
+
+    "return businessName when backend returns 200" in {
+
+      val responseJson =
+        Json.obj(
+          "mgdRegNumber"         -> mgdRegNumber,
+          "groupReg"             -> "N",
+          "businessName"         -> "Test Business Ltd",
+          "tradingName"          -> "Test Trader Ltd",
+          "groupMembers"         -> JsArray(),
+          "partMembers"          -> JsArray(),
+          "returnPeriodEndDates" -> JsArray()
+        )
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-name/mgd/$mgdRegNumber"))
+          .willReturn(okJson(responseJson.toString()))
+      )
+
+      connector.getBusinessName(mgdRegNumber).futureValue mustBe businessName
+    }
+
+    "return NotFound when backend returns UpstreamErrorResponse" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-name/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessName(mgdRegNumber)
+      }
+    }
+
+    "return Left(UnexpectedError) when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-name/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessName(mgdRegNumber)
+      }
+    }
+
+    def businessName: BusinessName = BusinessName(
+      mgdRegNumber = "ABC12345678901",
+      solePropTitle = Some("Mr"),
+      solePropFirstName = Some("First"),
+      solePropMidName = Some("Middle"),
+      solePropLastName = Some("Last"),
+      businessName = Some("Test Business Ltd"),
+      businessType = Soleproprietor,
+      tradingName = Some("Trading Name"),
+      systemDate = Some(LocalDate.of(1991, 1, 1))
+    )
+
   }
 }
