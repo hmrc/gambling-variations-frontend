@@ -88,3 +88,15 @@ businessName.notProvided = Not provided
 businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
+
+soleProprietorNameForm.title = soleProprietorNameForm
+soleProprietorNameForm.heading = soleProprietorNameForm
+soleProprietorNameForm.title = title
+soleProprietorNameForm.firstName = firstName
+soleProprietorNameForm.checkYourAnswersLabel = SoleProprietorNameForm
+soleProprietorNameForm.error.title.required = Enter title
+soleProprietorNameForm.error.firstName.required = Enter firstName
+soleProprietorNameForm.error.title.length = title must be 100 characters or less
+soleProprietorNameForm.error.firstName.length = firstName must be 100 characters or less
+soleProprietorNameForm.title.change.hidden = title
+soleProprietorNameForm.firstName.change.hidden = firstName

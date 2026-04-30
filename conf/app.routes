@@ -25,3 +25,8 @@ GET        /page-not-found                               controllers.PageNotFoun
 
 
 GET        /change-registration/business-name/check                       controllers.BusinessNameController.onPageLoad()
+
+GET        /soleProprietorNameForm                        controllers.SoleProprietorNameFormController.onPageLoad(mode: Mode = NormalMode)
+POST       /soleProprietorNameForm                        controllers.SoleProprietorNameFormController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSoleProprietorNameForm                  controllers.SoleProprietorNameFormController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSoleProprietorNameForm                  controllers.SoleProprietorNameFormController.onSubmit(mode: Mode = CheckMode)

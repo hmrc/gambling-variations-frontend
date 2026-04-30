@@ -61,7 +61,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
   "GamblingConnector.getCertificate" should {
 
-    "return certificate when backend returns 200" ignore {
+    "return certificate when backend returns 200" in {
 
       val responseJson =
         Json.obj(
