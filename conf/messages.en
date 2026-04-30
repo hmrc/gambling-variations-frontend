@@ -68,3 +68,7 @@ pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
 
 
+
+changeRegistrationDetails.title = Change registration details
+changeRegistrationDetails.heading = Change registration details
+changeRegistrationDetails.heading.caption =MGD registration number: {0}
