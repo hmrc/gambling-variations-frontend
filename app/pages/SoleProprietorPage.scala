@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.{Json, OFormat}
+import models.{BusinessType, SoleProprietorDetails}
+import play.api.libs.json.JsPath
 
-import java.time.LocalDate
+case object SoleProprietorPage extends QuestionPage[SoleProprietorDetails] {
 
-case class BusinessName(
-  mgdRegNumber: String,
-  solePropTitle: Option[String],
-  solePropFirstName: Option[String],
-  solePropMidName: Option[String],
-  solePropLastName: Option[String],
-  businessName: Option[String],
-  businessType: BusinessType,
-  tradingName: Option[String],
-  systemDate: Option[LocalDate]
-)
+  override def path: JsPath = JsPath \ toString
 
-object BusinessName {
-  implicit val format: OFormat[BusinessName] = Json.format[BusinessName]
+  override def toString: String = "soleProprietorDetails"
 }

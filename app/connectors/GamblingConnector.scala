@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{BusinessName, MgdCertificate}
+import models.{BusinessName, BusinessNameResponse, EntityName, MgdCertificate}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -58,7 +58,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
       }
   }
 
-  def getBusinessName(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[BusinessName] = {
+  def getBusinessName(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[EntityName] = {
     http
       .get(url"$baseUrl/business-name/mgd/$mgdRegNumber")
       .execute[HttpResponse]
@@ -68,10 +68,10 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
 
           case OK =>
             response.json
-              .validate[BusinessName]
+              .validate[EntityName]
               .fold(
                 errors => throw new RuntimeException(s"Invalid JSON: $errors"),
-                cert => cert
+                entity => entity
               )
 
           case status =>
