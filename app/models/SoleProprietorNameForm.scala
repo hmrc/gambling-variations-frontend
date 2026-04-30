@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package generators
+package models
 
-trait ModelGenerators {}
+import play.api.libs.json.*
 
-implicit lazy val arbitrarySoleProprietorNameForm: Arbitrary[SoleProprietorNameForm] =
-  Arbitrary {
-    for {
-      title     <- arbitrary[String]
-      firstName <- arbitrary[String]
-    } yield SoleProprietorNameForm(title, firstName)
-  }
+case class SoleProprietorNameForm(title: Option[String], firstName: String, middleName: Option[String], lastName: String)
+
+object SoleProprietorNameForm {
+
+  implicit val format: OFormat[SoleProprietorNameForm] = Json.format
+}

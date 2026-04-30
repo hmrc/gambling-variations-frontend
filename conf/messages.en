@@ -126,6 +126,18 @@ declaration.submit = Declare and submit
 
 submit.changes = Submit changes
 
+soleProprietorNameForm.title = soleProprietorNameForm
+soleProprietorNameForm.heading = soleProprietorNameForm
+soleProprietorNameForm.title = title
+soleProprietorNameForm.firstName = firstName
+soleProprietorNameForm.checkYourAnswersLabel = SoleProprietorNameForm
+soleProprietorNameForm.error.title.required = Enter title
+soleProprietorNameForm.error.firstName.required = Enter firstName
+soleProprietorNameForm.error.title.length = title must be 100 characters or less
+soleProprietorNameForm.error.firstName.length = firstName must be 100 characters or less
+soleProprietorNameForm.title.change.hidden = title
+soleProprietorNameForm.firstName.change.hidden = firstName
+
 removeTradeName.title = Are you sure you want to remove the trading name?
 removeTradeName.heading = Are you sure you want to remove the trading name {0}?
 removeTradeName.caption = Change registration details

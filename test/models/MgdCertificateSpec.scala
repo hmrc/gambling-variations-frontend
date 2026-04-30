@@ -45,7 +45,7 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
     repMemLine4        = None,
     repMemPostcode     = None,
     repMemAdi          = None,
-    typeOfBusiness     = Some(Corporatebody),
+    typeOfBusiness     = Some("Limited"),
     businessTradeClass = Some(1),
     noOfPartners       = Some(2),
     groupReg           = false,
@@ -58,7 +58,9 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
         solePropFirstName  = Some("A"),
         solePropMiddleName = None,
         solePropLastName   = Some("Smith"),
-        typeOfBusiness     = Soleproprietor
+        typeOfBusiness     = Soleproprietor,
+        solePropLastName   = Some("Smith"),
+        typeOfBusiness     = 1
       )
     ),
     groupMembers = Seq(
@@ -133,7 +135,9 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
           solePropFirstName  = Some("B"),
           solePropMiddleName = Some("M"),
           solePropLastName   = Some("Jones"),
-          typeOfBusiness     = Corporatebody
+          typeOfBusiness     = Corporatebody,
+          solePropLastName   = Some("Jones"),
+          typeOfBusiness     = 2
         )
 
         val json = Json.toJson(member)

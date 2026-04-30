@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-trait ModelGenerators {}
+import models.SoleProprietorNameForm
+import play.api.libs.json.JsPath
 
-implicit lazy val arbitrarySoleProprietorNameForm: Arbitrary[SoleProprietorNameForm] =
-  Arbitrary {
-    for {
-      title     <- arbitrary[String]
-      firstName <- arbitrary[String]
-    } yield SoleProprietorNameForm(title, firstName)
-  }
+case object SoleProprietorNameFormPage extends QuestionPage[SoleProprietorNameForm] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "soleProprietorNameForm"
+}

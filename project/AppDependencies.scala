@@ -1,4 +1,4 @@
-import sbt._
+import sbt.*
 
 object AppDependencies {
 
@@ -14,10 +14,10 @@ object AppDependencies {
   )
 
   val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-30"  % bootstrapVersion,
-    "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-30" % hmrcMongoVersion,
-    "org.scalatestplus"       %% "scalacheck-1-17"         % "3.2.18.0",
-    "org.scalamock"           %% "scalamock"               % "7.5.5"
+    "uk.gov.hmrc"       %% "bootstrap-test-play-30"  % bootstrapVersion,
+    "uk.gov.hmrc.mongo" %% "hmrc-mongo-test-play-30" % hmrcMongoVersion,
+    "org.scalatestplus" %% "scalacheck-1-17"         % "3.2.18.0",
+    "org.scalamock"     %% "scalamock"               % "7.5.5"
   ).map(_ % Test)
 
   def apply(): Seq[ModuleID] = compile ++ test
