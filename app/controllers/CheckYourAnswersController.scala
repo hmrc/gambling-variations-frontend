@@ -28,16 +28,17 @@ class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val list = SummaryListViewModel(
-      rows = Seq.empty
-    )
-    Ok(view(list))
+  def onPageLoad(): Action[AnyContent] = (authorise andThen getData) { implicit request =>
+    request.userAnswers.map { _ =>
+      val list = SummaryListViewModel(
+        rows = Seq.empty
+      )
+      Ok(view(list))
+    } getOrElse Redirect(routes.JourneyRecoveryController.onPageLoad())
   }
 }

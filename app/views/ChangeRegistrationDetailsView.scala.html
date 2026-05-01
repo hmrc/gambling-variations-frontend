@@ -19,15 +19,18 @@
     layout: templates.Layout,
     govukButton: GovukButton,
     h1:H1,
+    h2:H2,
+    p:Paragraph,
+    link:Link,
     sectionHeader: sectionHeader,
     )
 
-@(mgdRegNumber: String)(implicit request: Request[_], messages: Messages)
+@(mgdRegNumber: String, managementHomeUrl: String, canStart: Boolean = false)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("changeRegistrationDetails.title"))) {
 
 @sectionHeader(messages("changeRegistrationDetails.heading.caption", mgdRegNumber))
-@h1("changeRegistrationDetails.heading", classes = "govuk-heading-l")
+    @h1("changeRegistrationDetails.heading", classes = "govuk-heading-l")
 
 <ul class="govuk-task-list">
 
@@ -143,8 +146,48 @@
             </strong>
         </div>
     </li>
+</ul>
 
+@h2("changeRegistrationDetails.h2", classes = "govuk-heading-m")
+@p("changeRegistrationDetails.p1")
 
+<ul class="govuk-task-list">
+
+    <li class="govuk-task-list__item">
+        <div class="govuk-task-list__name-and-hint">
+
+            @if(canStart) {
+            <a class="govuk-link govuk-task-list__link"
+               href="@controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url"
+               aria-describedby="prepare-application-1-status">
+                Declare and submit
+            </a>
+            } else {
+            <div>
+                Declare and submit
+            </div>
+            }
+
+        </div>
+
+        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet"
+             id="prepare-application-1-status">
+
+            @if(canStart) {
+            Ready to start
+            } else {
+            Cannot start yet
+            }
+
+        </div>
+    </li>
 
 </ul>
+
+    @link(
+    messages("changeRegistrationDetails.change-registration.link"),
+    managementHomeUrl,
+    extraClasses = "change-registration-page-link govuk-!-margin-bottom-8"
+    )
+
 }

@@ -16,28 +16,31 @@
 
 package controllers
 
-import config.FrontendAppConfig
-import controllers.actions.*
-
-import javax.inject.Inject
+import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
+import models.BusinessType
+import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChangeRegistrationDetailsView
+import views.html.BusinessNameView
 
-class ChangeRegistrationDetailsController @Inject() (
+import javax.inject.Inject
+
+class BusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
-  authorise: AuthorisedAction,
+  val controllerComponents: MessagesControllerComponents,
+  authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  appConfig: FrontendAppConfig,
-  val controllerComponents: MessagesControllerComponents,
-  view: ChangeRegistrationDetailsView
+  view: BusinessNameView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val mgdRegNumber = request.userId
-    Ok(view(mgdRegNumber, appConfig.gamblingManagementHomeUrl))
+  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
+    val businessType = request.userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
+    val businessName = request.userAnswers.get(BusinessNamePage).getOrElse("Test Business")
+    val tradingName = request.userAnswers.get(TradingNamePage)
+
+    Ok(view(businessType, businessName, tradingName))
   }
 }

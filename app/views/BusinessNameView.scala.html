@@ -1,0 +1,58 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.components.*
+
+
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton,
+        break: SectionBreakNoLine,
+        caption: Caption,
+        h1:H1,
+        link: Link,
+        paragraph: Paragraph,
+        summaryList: SummaryListThreeCols
+)
+
+@(businessType: String, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = titleNoForm(messages("businessName.title"))) {
+
+    @caption(messages("businessName.caption"))
+
+    @h1("businessName.heading", classes="govuk-heading-l")
+    @summaryList(Seq(
+        (messages("businessName.name", messages("businessType." + businessType)),
+            businessName,
+            Seq(("","Change", messages("businessName.name", messages("businessType." + businessType)))))))
+
+    @paragraph("businessName.table.paragraph." + businessType)
+    @summaryList(Seq(
+        (messages("businessName.tradingName"),
+        tradingName.getOrElse(messages("businessName.notProvided")),
+        Seq(("","Change",tradingName.getOrElse(messages("businessName.notProvided")))))
+    ))
+
+    @link(
+        messages("businessName.link"),
+        controllers.routes.IndexController.onPageLoad().url)
+        @govukButton(ButtonViewModel(Text(messages("site.continue"))))
+
+    @break("m")
+}
+
+

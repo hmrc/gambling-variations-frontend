@@ -67,8 +67,36 @@ pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in a new tab)
 pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
 
+businessType.soleproprietor = Sole proprietor
+businessType.unincorporatedbody = Unincorporated body
+businessType.corporatebody = Corporate body
+businessType.partnership = Partnership
+businessType.llp = Limited liability partnership
+
+businessName.title = Check your business name
+businessName.heading = Check your business name
+businessName.caption = Change registration details
+businessName.name = {0}’s name
+businessName.table.paragraph.soleproprietor = If the business trades under a different name to the sole proprietor, you need to add a trading name.
+businessName.table.paragraph.unincorporatedbody = If the unincorporated body operates under a different name, you need to add a trading name.
+businessName.table.paragraph.corporatebody = If the corporate body operates under a different name, you need to add a trading name.
+businessName.table.paragraph.partnership = If the partnership operates under a different name, you need to add a trading name.
+businessName.table.paragraph.llp = If the limited liability partnership operates under a different name, you need to add a trading name.
+businessName.table.link = Change
+businessName.tradingName = Trading Name
+businessName.notProvided = Not provided
+businessName.table.head1 = Trade Name
+businessName.table.head2 = Trade Name
+businessName.link = Cancel and return to change registration details
+
+
 
 
 changeRegistrationDetails.title = Change registration details
 changeRegistrationDetails.heading = Change registration details
-changeRegistrationDetails.heading.caption =MGD registration number: {0}
+changeRegistrationDetails.heading.caption = MGD registration number: {0}
+changeRegistrationDetails.h2 = Declaration
+changeRegistrationDetails.p1 = You must make at least one change before you read the declaration and submit changes.
+changeRegistrationDetails.change-registration.link = Cancel and return to manage your Machine Games Duty
+
+

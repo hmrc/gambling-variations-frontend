@@ -25,3 +25,5 @@ GET        /page-not-found                               controllers.PageNotFoun
 
 
 GET        /change-registration-details                       controllers.ChangeRegistrationDetailsController.onPageLoad()
+GET        /change-registration/business-name/check           controllers.BusinessNameController.onPageLoad()
+

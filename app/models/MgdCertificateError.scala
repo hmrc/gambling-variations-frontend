@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package models.requests
+package models
 
-import play.api.mvc.{Request, WrappedRequest}
-import models.UserAnswers
+sealed trait MgdCertificateError
 
-case class OptionalDataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
-
-case class DataRequest[A](request: Request[A], userId: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+object MgdCertificateError:
+  case object NotFound        extends MgdCertificateError
+  case object UpstreamError   extends MgdCertificateError
+  case object UnexpectedError extends MgdCertificateError
