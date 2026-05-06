@@ -22,6 +22,9 @@ import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReadsInstances, HttpResponse, StringContextOps, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import models.BusinessDetails
+import play.api.http.Status.OK
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,6 +55,30 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
           case status =>
             throw UpstreamErrorResponse(
               s"Unexpected status while fetching MGD certificate: $status",
+              status
+            )
+        }
+      }
+  }
+
+  def getBusinessDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[BusinessDetails] = {
+    http
+      .get(url"$baseUrl/business-details/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[BusinessDetails]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                details => details
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Business Details: $status",
               status
             )
         }

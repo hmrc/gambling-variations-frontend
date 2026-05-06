@@ -1,0 +1,59 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package models
+
+import play.api.libs.json.*
+
+sealed trait ApiBusinessType {
+  def code: Int
+}
+
+object ApiBusinessType {
+
+  case object SoleProprietor              extends ApiBusinessType { val code = 1 }
+  case object CorporateBody               extends ApiBusinessType { val code = 2 }
+  case object UnincorporatedBody          extends ApiBusinessType { val code = 3 }
+  case object Partnership                 extends ApiBusinessType { val code = 4 }
+  case object LimitedLiabilityPartnership extends ApiBusinessType { val code = 5 }
+
+  val values: Seq[ApiBusinessType] = Seq(
+    SoleProprietor,
+    CorporateBody,
+    UnincorporatedBody,
+    Partnership,
+    LimitedLiabilityPartnership
+  )
+
+  def fromCode(code: Int): Option[ApiBusinessType] =
+    values.find(_.code == code)
+
+  implicit val reads: Reads[ApiBusinessType] =
+    Reads {
+      case JsNumber(n) =>
+        fromCode(n.toInt)
+          .map(JsSuccess(_))
+          .getOrElse(JsError(s"Invalid businessType: $n"))
+      case _ =>
+        JsError("Expected numeric businessType")
+    }
+
+  implicit val writes: Writes[ApiBusinessType] =
+    Writes(bt => JsNumber(bt.code))
+
+  implicit val format: Format[ApiBusinessType] =
+    Format(reads, writes)
+}

@@ -18,15 +18,20 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.*
+import models.BusinessType
 import models.requests.DataRequest
 import pages.*
+import play.api.Logging
 import viewmodels.*
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.BusinessDetailsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ChangeRegistrationDetailsView
+
+import scala.concurrent.ExecutionContext
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -34,34 +39,56 @@ class ChangeRegistrationDetailsController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   appConfig: FrontendAppConfig,
+  businessDetailsService: BusinessDetailsService,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeRegistrationDetailsView
-) extends FrontendBaseController
-    with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   def onPageLoad: Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
+      //  Prefer mgdRefNum if available in your request
       val mgdRegNumber = request.userId
 
-      val tasks = buildTaskList()
+      businessDetailsService
+        .retrieveBusinessDetails(mgdRegNumber)
+        .map { businessDetails =>
 
-      val canStart = tasks.exists(_.status == ReadyToSubmit)
+          val isGroupMember = businessDetails.groupReg
+          val isPartnership =
+            businessDetails.businessType.contains(BusinessType.Partnership)
 
-      Ok(view(mgdRegNumber, appConfig.gamblingManagementHomeUrl, tasks, canStart))
+          val tasks = buildTaskList(isGroupMember, isPartnership)
+
+          val canStart = tasks.exists(_.status == ReadyToSubmit)
+
+          Ok(
+            view(
+              mgdRegNumber,
+              appConfig.gamblingManagementHomeUrl,
+              tasks,
+              canStart
+            )
+          )
+        }
+        .recover { case ex =>
+          logger.error(s"Failed to load business details for $mgdRegNumber", ex)
+          Redirect(controllers.routes.SystemErrorController.onPageLoad())
+        }
     }
 
-  private def buildTaskList()(implicit request: DataRequest[?], messages: Messages): Seq[TaskListItem] = {
-
-    val isGroupMember = false // TODO derive properly
-
-    val businessType =
-      request.userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("")
+  private def buildTaskList(
+    isGroupMember: Boolean,
+    isPartnership: Boolean
+  )(implicit request: DataRequest[?], messages: Messages): Seq[TaskListItem] = {
 
     val businessNameChanged =
       request.userAnswers.get(BusinessNameChangesPage).getOrElse(false)
 
-    val licencesChanged = false
+    val licencesChanged = false // will remove it once other pages available
     val premisesExists = false
     val premisesTriggered = licencesChanged
 
@@ -87,6 +114,15 @@ class ChangeRegistrationDetailsController @Inject() (
           )
         )
       else None,
+      if (!isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.businessContactDetails"),
+            routes.IndexController.onPageLoad().url,
+            NoChange
+          )
+        )
+      else None,
       Some(
         TaskListItem(
           messages("changeRegistrationDetails.correspondenceDetails"),
@@ -101,7 +137,14 @@ class ChangeRegistrationDetailsController @Inject() (
           NoChange
         )
       ),
-      if (businessType == "partnership")
+      Some(
+        TaskListItem(
+          messages("changeRegistrationDetails.returnPeriod"),
+          routes.IndexController.onPageLoad().url,
+          NoChange
+        )
+      ),
+      if (isPartnership)
         Some(
           TaskListItem(
             messages("changeRegistrationDetails.partnerDetails"),
@@ -116,6 +159,33 @@ class ChangeRegistrationDetailsController @Inject() (
             messages("changeRegistrationDetails.groupMemberDetails"),
             "group-member-details",
             NoChange
+          )
+        )
+      else None,
+      if (isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.controllingBodyDetails"),
+            "group-member-details",
+            NoChange
+          )
+        )
+      else None,
+      if (isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.disbandMGDGroup"),
+            "group-member-details",
+            NoChange
+          )
+        )
+      else None,
+      if (!isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.premises"),
+            routes.IndexController.onPageLoad().url,
+            status(licencesChanged)
           )
         )
       else None,
