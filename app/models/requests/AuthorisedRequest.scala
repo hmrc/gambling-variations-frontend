@@ -22,5 +22,5 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 final case class AuthorisedRequest[A](
   request: Request[A],
   affinityGroup: AffinityGroup,
-  mgdRefNum: String
+  mgdRegNum: String
 ) extends WrappedRequest[A](request)
