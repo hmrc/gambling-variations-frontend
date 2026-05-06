@@ -14,180 +14,123 @@
  * limitations under the License.
  *@
 
-    @import views.html.components.*
-    @this(
-    layout: templates.Layout,
-    govukButton: GovukButton,
-    h1:H1,
-    h2:H2,
-    p:Paragraph,
-    link:Link,
-    sectionHeader: sectionHeader,
-    )
+@import views.html.components._
+@import viewmodels.TaskListItem
+@import viewmodels.TaskStatus
+@import viewmodels.ReadyToSubmit
+@import viewmodels.NoChange
+@import viewmodels.NotStarted
 
-@(mgdRegNumber: String, managementHomeUrl: String, canStart: Boolean = false)(implicit request: Request[_], messages: Messages)
+@this(
+layout: templates.Layout,
+govukButton: GovukButton,
+h1: H1,
+h2: H2,
+p: Paragraph,
+link: Link,
+sectionHeader: sectionHeader
+)
+
+@(
+mgdRegNumber: String,
+managementHomeUrl: String,
+tasks: Seq[TaskListItem],
+canStart: Boolean = false
+)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("changeRegistrationDetails.title"))) {
 
 @sectionHeader(messages("changeRegistrationDetails.heading.caption", mgdRegNumber))
-    @h1("changeRegistrationDetails.heading", classes = "govuk-heading-l")
+
+@h1("changeRegistrationDetails.heading", classes = "govuk-heading-l")
+
 
 <ul class="govuk-task-list">
 
+    @for((task, index) <- tasks.zipWithIndex) {
+
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
+
         <div class="govuk-task-list__name-and-hint">
             <a class="govuk-link govuk-task-list__link"
-               href="@controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url"
-               aria-describedby="task-list-1-status">
-                Business name
+               href="@task.url"
+               aria-describedby="task-list-@index-status">
+                @task.name
             </a>
         </div>
 
-        <div class="govuk-task-list__status" id="task-list-1-status">
-            <strong class="govuk-tag govuk-tag--light-blue">
-                No changes
+        <div class="govuk-task-list__status" id="task-list-@index-status">
+
+            @task.status match {
+
+            case ReadyToSubmit => {
+            <strong class="govuk-tag govuk-tag--green">
+                @messages("changeRegistrationDetails.readyToSubmit")
             </strong>
+            }
+
+            case NoChange => {
+            <strong class="govuk-tag govuk-tag--light-blue">
+                @messages("changeRegistrationDetails.noChange")
+            </strong>
+            }
+
+            case NotStarted => {
+            <strong class="govuk-tag govuk-tag--blue">
+                @messages("site.notStarted")
+            </strong>
+            }
+            }
+
         </div>
+
     </li>
 
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-        <div class="govuk-task-list__name-and-hint">
-            <a class="govuk-link govuk-task-list__link"
-               href="business-address/ch-ba-business-address"
-               aria-describedby="task-list-2-status">
-                Business address
-            </a>
-        </div>
+    }
 
-        <div class="govuk-task-list__status" id="task-list-2-status">
-            <strong class="govuk-tag govuk-tag--light-blue">
-                No changes
-            </strong>
-        </div>
-    </li>
-
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-        <div class="govuk-task-list__name-and-hint">
-            <a class="govuk-link govuk-task-list__link"
-               href="contact-details/ch-cd-change-contact-details"
-               aria-describedby="task-list-3-status">
-                Business contact details
-            </a>
-        </div>
-
-        <div class="govuk-task-list__status" id="task-list-3-status">
-            <strong class="govuk-tag govuk-tag--light-blue">
-                No changes
-            </strong>
-        </div>
-    </li>
-
-
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-        <div class="govuk-task-list__name-and-hint">
-            <a class="govuk-link govuk-task-list__link"
-               href="contact-details/ch-cd-change-contact-details"
-               aria-describedby="task-list-4-status">
-                Correspondence details
-            </a>
-        </div>
-
-        <div class="govuk-task-list__status" id="task-list-4-status">
-            <strong class="govuk-tag govuk-tag--light-blue">
-                No changes
-            </strong>
-        </div>
-    </li>
-
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-        <div class="govuk-task-list__name-and-hint">
-            <a class="govuk-link govuk-task-list__link"
-               href="contact-details/ch-cd-change-contact-details"
-               aria-describedby="task-list-5-status">
-                Trading details
-            </a>
-        </div>
-
-        <div class="govuk-task-list__status" id="task-list-5-status">
-            <strong class="govuk-tag govuk-tag--light-blue">
-                No changes
-            </strong>
-        </div>
-    </li>
-
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-        <div class="govuk-task-list__name-and-hint">
-            <a class="govuk-link govuk-task-list__link"
-               href="contact-details/ch-cd-change-contact-details"
-               aria-describedby="task-list-6-status">
-                Return details
-            </a>
-        </div>
-
-        <div class="govuk-task-list__status" id="task-list-6-status">
-            <strong class="govuk-tag govuk-tag--light-blue">
-                No changes
-            </strong>
-        </div>
-    </li>
-
-    <li class="govuk-task-list__item govuk-task-list__item--with-link">
-        <div class="govuk-task-list__name-and-hint">
-            <a class="govuk-link govuk-task-list__link"
-               href="contact-details/ch-cd-change-contact-details"
-               aria-describedby="task-list-7-status">
-                Licences
-            </a>
-        </div>
-
-        <div class="govuk-task-list__status" id="task-list-7-status">
-            <strong class="govuk-tag govuk-tag--light-blue">
-                No changes
-            </strong>
-        </div>
-    </li>
 </ul>
 
+
 @h2("changeRegistrationDetails.h2", classes = "govuk-heading-m")
+
 @p("changeRegistrationDetails.p1")
 
 <ul class="govuk-task-list">
 
     <li class="govuk-task-list__item">
+
         <div class="govuk-task-list__name-and-hint">
 
             @if(canStart) {
             <a class="govuk-link govuk-task-list__link"
-               href="@controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url"
-               aria-describedby="prepare-application-1-status">
-                Declare and submit
+               href="@controllers.routes.DeclarationController.onPageLoad().url">
+                @messages("changeRegistrationDetails.submit")
             </a>
             } else {
             <div>
-                Declare and submit
+                @messages("changeRegistrationDetails.submit")
             </div>
             }
 
         </div>
 
-        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet"
-             id="prepare-application-1-status">
+        <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet">
 
             @if(canStart) {
-            Ready to start
+            @messages("changeRegistrationDetails.submit")
             } else {
-            Cannot start yet
+            @messages("changeRegistrationDetails.notYetStarted")
             }
 
         </div>
     </li>
-
 </ul>
 
-    @link(
-    messages("changeRegistrationDetails.change-registration.link"),
-    managementHomeUrl,
-    extraClasses = "change-registration-page-link govuk-!-margin-bottom-8"
-    )
+
+@link(
+messages("changeRegistrationDetails.change-registration.link"),
+managementHomeUrl,
+extraClasses = "change-registration-page-link govuk-!-margin-bottom-8"
+)
 
 }

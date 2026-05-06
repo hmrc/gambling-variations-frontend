@@ -17,34 +17,27 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import play.api.test.FakeRequest
-import play.api.test.Helpers.*
-import views.html.ChangeRegistrationDetailsView
+import play.api.test.Helpers._
+import views.html.DeclarationView
 
-class ChangeRegistrationDetailsControllerSpec extends SpecBase {
+class DeclarationControllerSpec extends SpecBase {
 
-  "ChangeRegistrationDetails Controller" - {
+  "Declaration Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.DeclarationController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ChangeRegistrationDetailsView]
-        val appConfig = application.injector.instanceOf[FrontendAppConfig]
-
-        val mgdRegNumber = emptyUserAnswers.id
+        val view = application.injector.instanceOf[DeclarationView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(
-          mgdRegNumber,
-          appConfig.gamblingManagementHomeUrl
-        )(request, messages(application)).toString
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }

@@ -21,6 +21,7 @@
         layout: templates.Layout,
         govukButton: GovukButton,
         break: SectionBreakNoLine,
+        formHelper: FormWithCSRF,
         caption: Caption,
         h1:H1,
         link: Link,
@@ -32,7 +33,9 @@
 
 @layout(pageTitle = titleNoForm(messages("businessName.title"))) {
 
-    @caption(messages("businessName.caption"))
+@formHelper(action = controllers.routes.BusinessNameController.onSubmit()) {
+
+@caption(messages("businessName.caption"))
 
     @h1("businessName.heading", classes="govuk-heading-l")
     @summaryList(Seq(
@@ -53,6 +56,7 @@
         @govukButton(ButtonViewModel(Text(messages("site.continue"))))
 
     @break("m")
+ }
 }
 
 

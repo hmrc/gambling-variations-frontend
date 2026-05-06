@@ -97,6 +97,26 @@ changeRegistrationDetails.heading = Change registration details
 changeRegistrationDetails.heading.caption = MGD registration number: {0}
 changeRegistrationDetails.h2 = Declaration
 changeRegistrationDetails.p1 = You must make at least one change before you read the declaration and submit changes.
+changeRegistrationDetails.businessName = Business name
+changeRegistrationDetails.noChange = No changes
+changeRegistrationDetails.businessAddress = Business address
+changeRegistrationDetails.businessContactDetails = Business contact details
+changeRegistrationDetails.correspondenceDetails = Correspondence details
+changeRegistrationDetails.tradingDetails = Trading details
+changeRegistrationDetails.returnDetails = Return details
+changeRegistrationDetails.licences = Licences
+changeRegistrationDetails.readyToSubmit = Ready to submit
+changeRegistrationDetails.notYetStarted = Not yet started
+changeRegistrationDetails.submit = Declare and submit
+changeRegistrationDetails.can-not-start = Cannot start yet
 changeRegistrationDetails.change-registration.link = Cancel and return to manage your Machine Games Duty
 
 
+
+declaration.title = Declaration
+declaration.heading = Declaration
+declaration.heading.caption = Change registration details
+declaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+declaration.submit = Declare and submit
+
+submit.changes = Submit changes

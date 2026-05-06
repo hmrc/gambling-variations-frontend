@@ -18,9 +18,12 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.*
+import models.requests.DataRequest
+import pages.*
+import viewmodels.*
 
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ChangeRegistrationDetailsView
@@ -36,8 +39,104 @@ class ChangeRegistrationDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val mgdRegNumber = request.userId
-    Ok(view(mgdRegNumber, appConfig.gamblingManagementHomeUrl))
+  def onPageLoad: Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+
+      val mgdRegNumber = request.userId
+
+      val tasks = buildTaskList()
+
+      val canStart = tasks.exists(_.status == ReadyToSubmit)
+
+      Ok(view(mgdRegNumber, appConfig.gamblingManagementHomeUrl, tasks, canStart))
+    }
+
+  private def buildTaskList()(implicit request: DataRequest[?], messages: Messages): Seq[TaskListItem] = {
+
+    val isGroupMember = false // TODO derive properly
+
+    val businessType =
+      request.userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("")
+
+    val businessNameChanged =
+      request.userAnswers.get(BusinessNameChangesPage).getOrElse(false)
+
+    val licencesChanged = false
+    val premisesExists = false
+    val premisesTriggered = licencesChanged
+
+    def status(flag: Boolean): TaskStatus =
+      if (flag) ReadyToSubmit else NoChange
+
+    Seq(
+      if (!isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.businessName"),
+            routes.BusinessNameController.onPageLoad().url,
+            status(businessNameChanged)
+          )
+        )
+      else None,
+      if (!isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.businessAddress"),
+            routes.IndexController.onPageLoad().url,
+            NoChange
+          )
+        )
+      else None,
+      Some(
+        TaskListItem(
+          messages("changeRegistrationDetails.correspondenceDetails"),
+          routes.IndexController.onPageLoad().url,
+          NoChange
+        )
+      ),
+      Some(
+        TaskListItem(
+          messages("changeRegistrationDetails.tradingDetails"),
+          routes.IndexController.onPageLoad().url,
+          NoChange
+        )
+      ),
+      if (businessType == "partnership")
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.partnerDetails"),
+            routes.IndexController.onPageLoad().url,
+            NoChange
+          )
+        )
+      else None,
+      if (isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.groupMemberDetails"),
+            "group-member-details",
+            NoChange
+          )
+        )
+      else None,
+      if (!isGroupMember)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.licences"),
+            routes.IndexController.onPageLoad().url,
+            status(licencesChanged)
+          )
+        )
+      else None,
+      if (!isGroupMember && premisesTriggered)
+        Some(
+          TaskListItem(
+            messages("changeRegistrationDetails.premises"),
+            "premises",
+            if (premisesExists) NoChange else NotStarted
+          )
+        )
+      else None
+    ).flatten
   }
 }

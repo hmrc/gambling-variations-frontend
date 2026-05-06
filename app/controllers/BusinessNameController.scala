@@ -18,11 +18,16 @@ package controllers
 
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
 import models.BusinessType
-import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessNamePage, BusinessTypePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessNameView
+
+import scala.concurrent.{ExecutionContext, Future}
+import play.api.mvc.Result
+import javax.inject.Inject
 
 import javax.inject.Inject
 
@@ -32,8 +37,10 @@ class BusinessNameController @Inject() (
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  sessionRepository: SessionRepository,
   view: BusinessNameView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
@@ -43,4 +50,22 @@ class BusinessNameController @Inject() (
 
     Ok(view(businessType, businessName, tradingName))
   }
+
+  def onSubmit: Action[AnyContent] =
+    (authorised andThen getData andThen requireData).async { implicit request =>
+
+      val updatedAnswers = for {
+        ua <- request.userAnswers.set(BusinessNameChangesPage, true)
+      } yield ua
+
+      updatedAnswers match {
+        case scala.util.Success(answers) =>
+          sessionRepository.set(answers).map { _ =>
+            Redirect(routes.BusinessNameController.onPageLoad()) // change to next page
+          }
+
+        case scala.util.Failure(_) =>
+          Future.successful(InternalServerError("Unable to save data"))
+      }
+    }
 }
