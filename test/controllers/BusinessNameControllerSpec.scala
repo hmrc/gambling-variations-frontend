@@ -31,9 +31,10 @@ class BusinessNameControllerSpec extends SpecBase {
       "when sole proprietor" in {
 
         val data = Json.obj(
-          "businessDetails" -> Json.obj(
-            "businessName" -> "Test Business Ltd",
-            "businessType" -> 4
+          "soleProprietorDetails" -> Json.obj(
+            "title"     -> "Mr",
+            "firstName" -> "Test",
+            "lastName"  -> "Fella"
           )
         )
 
@@ -49,7 +50,7 @@ class BusinessNameControllerSpec extends SpecBase {
           val view = application.injector.instanceOf[BusinessNameView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view("partnership", "Test Business Ltd", None)(request, messages(application)).toString
+          contentAsString(result) mustEqual view("soleproprietor", "Test Fella", None)(request, messages(application)).toString
         }
       }
       "when partnership" in {

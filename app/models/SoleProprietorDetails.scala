@@ -19,16 +19,16 @@ package models
 import play.api.libs.json.{Json, OFormat}
 
 case class SoleProprietorDetails(
-  solePropTitle: String,
-  solePropFirstName: String,
-  solePropMidName: Option[String],
-  solePropLastName: String,
+  title: String,
+  firstName: String,
+  middleName: Option[String],
+  lastName: String,
   tradingName: Option[String]
 ) {
   def fullName: String = Seq(
-    Some(solePropFirstName),
-    solePropMidName,
-    Some(solePropLastName)
+    Some(firstName),
+    middleName,
+    Some(lastName)
   ).flatten.mkString(" ")
 }
 
