@@ -131,7 +131,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         typeOfBusiness       = None, // important: matches controller
         businessTradeClass   = None,
         noOfPartners         = None,
-        groupReg             = "N",
+        groupReg             = false,
         noOfGroupMems        = None,
         dateCertIssued       = None,
         partMembers          = Seq.empty,
