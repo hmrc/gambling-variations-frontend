@@ -1,0 +1,61 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package connectors
+
+import models.MgdCertificate
+import play.api.Logging
+import play.api.http.Status.OK
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReadsInstances, HttpResponse, StringContextOps, UpstreamErrorResponse}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
+@Singleton
+class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(implicit ec: ExecutionContext)
+    extends HttpReadsInstances
+    with Logging {
+
+  private val baseUrl: String = config.baseUrl("gambling") + "/gambling"
+
+  def getCertificate(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[MgdCertificate] = {
+    http
+      .get(url"$baseUrl/certificate/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[MgdCertificate]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                cert => cert
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching MGD certificate: $status",
+              status
+            )
+        }
+      }
+  }
+
+}

@@ -16,29 +16,31 @@
 
 package controllers
 
-import com.google.inject.Inject
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
+import models.BusinessType
+import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.govuk.summarylist.*
-import views.html.CheckYourAnswersView
+import views.html.BusinessNameView
 
-class CheckYourAnswersController @Inject() (
+import javax.inject.Inject
+
+class BusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckYourAnswersView
+  authorised: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  view: BusinessNameView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (authorise andThen getData) { implicit request =>
-    request.userAnswers.map { _ =>
-      val list = SummaryListViewModel(
-        rows = Seq.empty
-      )
-      Ok(view(list))
-    } getOrElse Redirect(routes.JourneyRecoveryController.onPageLoad())
+  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
+    val businessType = request.userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
+    val businessName = request.userAnswers.get(BusinessNamePage).getOrElse("Test Business")
+    val tradingName = request.userAnswers.get(TradingNamePage)
+
+    Ok(view(businessType, businessName, tradingName))
   }
 }

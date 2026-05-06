@@ -1,5 +1,5 @@
-/*
- * Copyright 2026 HM Revenue & Customs
+@*
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package models.requests
+@this()
 
-import play.api.mvc.{Request, WrappedRequest}
-import models.UserAnswers
+@(size: String = "l")
 
-case class OptionalDataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
-
-case class DataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+<hr class="govuk-section-break govuk-section-break--$size">
