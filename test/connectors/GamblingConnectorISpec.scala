@@ -18,7 +18,8 @@ package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.{MgdCertificate, MgdCertificateError}
+import models.BusinessType.{Soleproprietor, Unincorporatedbody}
+import models.{BusinessName, MgdCertificate}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -130,12 +131,67 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         typeOfBusiness       = None, // important: matches controller
         businessTradeClass   = None,
         noOfPartners         = None,
-        groupReg             = "N",
+        groupReg             = false,
         noOfGroupMems        = None,
         dateCertIssued       = None,
         partMembers          = Seq.empty,
         groupMembers         = Seq.empty,
         returnPeriodEndDates = Seq.empty
       )
+  }
+
+  "GamblingConnector.getBusinessName" should {
+
+    "return businessName when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "ABC12345678901",
+           |  "businessName": "Test Business Ltd",
+           |  "businessType": 2,
+           |  "tradingName": "Trading Name",
+           |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-name/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getBusinessName(mgdRegNumber).futureValue mustBe businessName
+    }
+
+    "return NotFound when backend returns UpstreamErrorResponse" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-name/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessName(mgdRegNumber)
+      }
+    }
+
+    "return Left(UnexpectedError) when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-name/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessName(mgdRegNumber)
+      }
+    }
+
+    def businessName: BusinessName = BusinessName(
+      mgdRegNum    = "ABC12345678901",
+      businessName = "Test Business Ltd",
+      businessType = Unincorporatedbody,
+      tradingName  = Some("Trading Name"),
+      systemDate   = Some(LocalDate.of(1991, 1, 1))
+    )
+
   }
 }

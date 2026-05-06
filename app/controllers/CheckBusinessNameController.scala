@@ -17,8 +17,10 @@
 package controllers
 
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
+import models.{BusinessNameDetails, BusinessType, SoleProprietorDetails}
+import pages.{BusinessDetailsPage, SoleProprietorPage}
 import models.BusinessType
-import pages.{BusinessNameChangesPage, BusinessNamePage, BusinessTypePage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessTypePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -31,7 +33,7 @@ import javax.inject.Inject
 
 import javax.inject.Inject
 
-class BusinessNameController @Inject() (
+class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
   val controllerComponents: MessagesControllerComponents,
   authorised: AuthorisedAction,
@@ -44,11 +46,14 @@ class BusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val businessType = request.userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
-    val businessName = request.userAnswers.get(BusinessNamePage).getOrElse("Test Business")
-    val tradingName = request.userAnswers.get(TradingNamePage)
+    val businessNameDetails: Option[BusinessNameDetails] = request.userAnswers.get(BusinessDetailsPage)
+    val soleProprietorName: Option[SoleProprietorDetails] = request.userAnswers.get(SoleProprietorPage)
 
-    Ok(view(businessType, businessName, tradingName))
+    businessNameDetails map { business =>
+      Ok(view(business.businessType.toString, business.businessName, business.tradingName))
+    } orElse soleProprietorName.map { soleProprietor =>
+      Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.fullName, soleProprietor.tradingName))
+    } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
   }
 
   def onSubmit: Action[AnyContent] =
@@ -61,7 +66,7 @@ class BusinessNameController @Inject() (
       updatedAnswers match {
         case scala.util.Success(answers) =>
           sessionRepository.set(answers).map { _ =>
-            Redirect(routes.BusinessNameController.onPageLoad()) // change to next page
+            Redirect(routes.CheckBusinessNameController.onPageLoad()) // change to next page
           }
 
         case scala.util.Failure(_) =>

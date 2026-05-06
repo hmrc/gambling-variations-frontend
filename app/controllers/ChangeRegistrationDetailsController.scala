@@ -51,7 +51,7 @@ class ChangeRegistrationDetailsController @Inject() (
     (authorise andThen getData andThen requireData).async { implicit request =>
 
       //  Prefer mgdRefNum if available in your request
-      val mgdRegNumber = request.userId
+      val mgdRegNumber = request.mgdRegNum
 
       businessDetailsService
         .retrieveBusinessDetails(mgdRegNumber)
@@ -100,7 +100,7 @@ class ChangeRegistrationDetailsController @Inject() (
         Some(
           TaskListItem(
             messages("changeRegistrationDetails.businessName"),
-            routes.BusinessNameController.onPageLoad().url,
+            routes.CheckBusinessNameController.onPageLoad().url,
             status(businessNameChanged)
           )
         )

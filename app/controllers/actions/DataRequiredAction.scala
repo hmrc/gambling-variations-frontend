@@ -19,8 +19,8 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{MgdCertificate, UserAnswers}
-import pages.{BusinessNamePage, TradingNamePage}
+import models.{BusinessName, BusinessNameDetails, SoleProprietorDetails, SoleProprietorName, UserAnswers}
+import pages.{BusinessDetailsPage, SoleProprietorPage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -30,7 +30,6 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class DataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
@@ -46,9 +45,18 @@ class DataRequiredActionImpl @Inject() (
 
         given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-        gamblingConnector.getCertificate(request.mgdRegNum) flatMap { certificate =>
+        gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
 
-          populateUserAnswers(UserAnswers(request.mgdRegNum), certificate).map { ua =>
+          val answers = UserAnswers(request.mgdRegNum)
+
+          val updatedAnswers = entityName match {
+            case SoleProprietorName(_, solePropTitle, solePropFirstName, solePropMidName, solePropLastName, tradingName, _, _) =>
+              answers.set(SoleProprietorPage, SoleProprietorDetails(solePropTitle, solePropFirstName, solePropMidName, solePropLastName, tradingName))
+            case BusinessName(_, businessName, businessType, tradingName, _) =>
+              answers.set(BusinessDetailsPage, BusinessNameDetails(businessName, businessType, tradingName))
+          }
+
+          updatedAnswers.map { ua =>
             logger.info("User Answers not found. Saving User Answers")
             sessionRepository.set(ua) map {
               case true =>
@@ -63,16 +71,6 @@ class DataRequiredActionImpl @Inject() (
       case Some(data) =>
         logger.info(s"User Answers found with id ${data.id}")
         Future.successful(Right(DataRequest(request.request, request.mgdRegNum, data)))
-    }
-  }
-
-  private def populateUserAnswers(answers: UserAnswers, certificate: MgdCertificate): Try[UserAnswers] = {
-    List(
-      BusinessNamePage -> certificate.businessName,
-      TradingNamePage  -> certificate.tradingName
-    ).foldLeft(Try(answers)) {
-      case (tryUa, (page, Some(value))) => tryUa.flatMap(_.set(page, value))
-      case (tryUa, (_, None))           => tryUa
     }
   }
 }

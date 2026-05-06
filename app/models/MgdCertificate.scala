@@ -27,7 +27,7 @@ final case class PartnerMember(
   solePropFirstName: Option[String],
   solePropMiddleName: Option[String],
   solePropLastName: Option[String],
-  typeOfBusiness: Int // 1..5 mapping
+  typeOfBusiness: BusinessType
 )
 
 object PartnerMember {
@@ -74,10 +74,10 @@ final case class MgdCertificate(
   repMemLine4: Option[String],
   repMemPostcode: Option[String],
   repMemAdi: Option[String],
-  typeOfBusiness: Option[String],
+  typeOfBusiness: Option[BusinessType],
   businessTradeClass: Option[Int],
   noOfPartners: Option[Int],
-  groupReg: String, // "Y" | "N"
+  groupReg: Boolean,
   noOfGroupMems: Option[Int],
   dateCertIssued: Option[LocalDate],
   partMembers: Seq[PartnerMember],

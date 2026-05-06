@@ -21,12 +21,12 @@ GET         /account/signed-out                          controllers.auth.Signed
 GET        /there-is-a-problem-with-the-service          controllers.SystemErrorController.onPageLoad()
 
 GET        /there-is-a-problem-access-denied            controllers.AccessDeniedController.onPageLoad()
-GET        /page-not-found                               controllers.PageNotFoundController.onPageLoad()
-
+GET        /page-not-found                              controllers.PageNotFoundController.onPageLoad()
 
 GET        /change-registration-details                       controllers.ChangeRegistrationDetailsController.onPageLoad()
-GET        /change-registration/business-name/check           controllers.BusinessNameController.onPageLoad()
-POST       /change-registration/business-name/check           controllers.BusinessNameController.onSubmit()
+
+GET        /change-registration/check-business-name           controllers.CheckBusinessNameController.onPageLoad()
+POST       /change-registration/check-business-name           controllers.CheckBusinessNameController.onSubmit()
 
 
 GET       /change-registration/declaration                       controllers.DeclarationController.onPageLoad()
