@@ -18,9 +18,9 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.BusinessType.Partnership
+import models.BusinessType.{Partnership, Soleproprietor}
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessName, UserAnswers}
+import models.{BusinessName, SoleProprietorName, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatest.RecoverMethods
@@ -50,51 +50,85 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
 
     "when there is no User Answers in the cache" - {
 
-      "return the request with a populated User Answers with data from the certificate" in {
+      "return the request with a populated User Answers with data from the certificate" - {
+        "when business" in {
 
-        val request = FakeRequest()
-        val sessionRepository = mock[SessionRepository]
-        val gamblingConnector = mock[GamblingConnector]
-        when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
-        val action = new Harness(sessionRepository, gamblingConnector)
+          val request = FakeRequest()
+          val sessionRepository = mock[SessionRepository]
+          val gamblingConnector = mock[GamblingConnector]
+          when(sessionRepository.set(any())) thenReturn Future(true)
+          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
+          val action = new Harness(sessionRepository, gamblingConnector)
 
-        val data = Json.obj(
-          "businessDetails" -> Json.obj(
-            "businessName" -> "Test Business Ltd",
-            "tradingName"  -> "Test Trader Ltd",
-            "businessType" -> 4
+          val data = Json.obj(
+            "businessDetails" -> Json.obj(
+              "businessName" -> "Test Business Ltd",
+              "tradingName"  -> "Test Trader Ltd",
+              "businessType" -> 4
+            )
           )
-        )
 
-        val result: Either[Result, DataRequest[AnyContent]] =
-          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+          val result: Either[Result, DataRequest[AnyContent]] =
+            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
 
-        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
 
-        result.map { req =>
-          req.request mustBe expected.request
-          req.userAnswers.data mustBe expected.userAnswers.data
-          req.userAnswers.id mustBe expected.userAnswers.id
+          result.map { req =>
+            req.request mustBe expected.request
+            req.userAnswers.data mustBe expected.userAnswers.data
+            req.userAnswers.id mustBe expected.userAnswers.id
+          }
+          verify(sessionRepository, times(1)).set(any())
+          verify(gamblingConnector, times(1)).getBusinessName(any())(any())
         }
-        verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getBusinessName(any())(any())
+        "when sole proprietor" in {
+
+          val request = FakeRequest()
+          val sessionRepository = mock[SessionRepository]
+          val gamblingConnector = mock[GamblingConnector]
+          when(sessionRepository.set(any())) thenReturn Future(true)
+          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
+          val action = new Harness(sessionRepository, gamblingConnector)
+
+          val data = Json.obj(
+            "soleProprietorDetails" -> Json.obj(
+              "title"     -> "Mr",
+              "firstName" -> "Test",
+              "lastName"  -> "Fella"
+            )
+          )
+
+          val result: Either[Result, DataRequest[AnyContent]] =
+            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+
+          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+
+          result.map { req =>
+            req.request mustBe expected.request
+            req.userAnswers.data mustBe expected.userAnswers.data
+            req.userAnswers.id mustBe expected.userAnswers.id
+          }
+          verify(sessionRepository, times(1)).set(any())
+          verify(gamblingConnector, times(1)).getBusinessName(any())(any())
+        }
       }
 
-      "redirect to SystemError when User Answers cannot be saved" in {
-        val request = FakeRequest()
-        val sessionRepository = mock[SessionRepository]
-        val gamblingConnector = mock[GamblingConnector]
-        when(sessionRepository.set(any())) thenReturn Future(false)
-        when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
-        val action = new Harness(sessionRepository, gamblingConnector)
+      "redirect to SystemError " - {
+        "when User Answers cannot be saved" in {
+          val request = FakeRequest()
+          val sessionRepository = mock[SessionRepository]
+          val gamblingConnector = mock[GamblingConnector]
+          when(sessionRepository.set(any())) thenReturn Future(false)
+          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
+          val action = new Harness(sessionRepository, gamblingConnector)
 
-        val result: Either[Result, DataRequest[AnyContent]] =
-          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+          val result: Either[Result, DataRequest[AnyContent]] =
+            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
 
-        result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
-        verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getBusinessName(any())(any())
+          result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
+          verify(sessionRepository, times(1)).set(any())
+          verify(gamblingConnector, times(1)).getBusinessName(any())(any())
+        }
       }
 
       "return a failed future when getCertificate throws an exception" in {
@@ -122,7 +156,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(businessNameModel)
+        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(soleProprietorModel)
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
@@ -153,6 +187,16 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
       businessType = Partnership,
       tradingName  = Some("Test Trader Ltd"),
       systemDate   = Some(LocalDate.of(1991, 1, 1))
+    )
+    def soleProprietorModel: SoleProprietorName = SoleProprietorName(
+      mgdRegNum    = "ABC12345678901",
+      title        = "Mr",
+      firstName    = "Test",
+      middleName   = None,
+      lastName     = "Fella",
+      systemDate   = Some(LocalDate.of(1991, 1, 1)),
+      tradingName  = None,
+      businessType = Soleproprietor
     )
   }
 }

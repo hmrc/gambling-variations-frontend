@@ -57,7 +57,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
       "map all fields correctly" in {
         val result = soleProprietorJson.validate[EntityName].get.asInstanceOf[SoleProprietorName]
 
-        result.mgdRegNumber shouldBe "REG123"
+        result.mgdRegNum    shouldBe "REG123"
         result.title        shouldBe "Mr"
         result.firstName    shouldBe "John"
         result.middleName   shouldBe Some("James")

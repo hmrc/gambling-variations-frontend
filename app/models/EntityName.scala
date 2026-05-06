@@ -32,7 +32,7 @@ case class BusinessName(
 ) extends EntityName
 
 case class SoleProprietorName(
-  mgdRegNumber: String,
+  mgdRegNum: String,
   title: String,
   firstName: String,
   middleName: Option[String],

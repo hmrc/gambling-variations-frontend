@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
 import models.{BusinessDetails, BusinessType, SoleProprietorDetails}
-import pages.{BusinessDetailsPage, BusinessTypePage, CheckBusinessNamePage, SoleProprietorPage, TradingNamePage}
+import pages.{BusinessDetailsPage, SoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
