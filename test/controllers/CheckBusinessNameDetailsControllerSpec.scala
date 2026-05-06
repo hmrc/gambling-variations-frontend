@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.BusinessNameView
 
-class CheckBusinessNameDetailsControllerSpec extends SpecBase {
+class CheckBusinessNameControllerSpec extends SpecBase {
 
   "BusinessName Controller" - {
 
@@ -31,7 +31,7 @@ class CheckBusinessNameDetailsControllerSpec extends SpecBase {
       "when sole proprietor" in {
 
         val data = Json.obj(
-          "soleProprietorDetails" -> Json.obj(
+          "soleProprietor" -> Json.obj(
             "title"     -> "Mr",
             "firstName" -> "Test",
             "lastName"  -> "Fella"
@@ -56,10 +56,8 @@ class CheckBusinessNameDetailsControllerSpec extends SpecBase {
       "when partnership" in {
 
         val data = Json.obj(
-          "businessDetails" -> Json.obj(
-            "businessName" -> "Test Business Ltd",
-            "businessType" -> 4
-          )
+          "businessName" -> "Test Business Ltd",
+          "businessType" -> 4
         )
 
         val userAnswers = UserAnswers("id", data)
