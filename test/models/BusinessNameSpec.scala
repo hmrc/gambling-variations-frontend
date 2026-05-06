@@ -16,7 +16,7 @@
 
 package models
 
-import models.BusinessType.Soleproprietor
+import models.BusinessType.Corporatebody
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsValue, Json}
@@ -28,32 +28,21 @@ class BusinessNameSpec extends AnyWordSpec with Matchers:
   val jsonAsString: String =
     s"""{
        |  "mgdRegNumber": "ABC12345678901",
-       |  "solePropTitle": "Mr",
-       |  "solePropFirstName": "First",
-       |  "solePropMidName": "Middle",
-       |  "solePropLastName": "Last",
        |  "businessName": "Test Business Ltd",
-       |  "businessType": "soleproprietor",
+       |  "businessType": 3,
        |  "tradingName": "Trading Name",
        |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
        |}""".stripMargin
 
   val model: BusinessName = BusinessName(
-    mgdRegNumber      = "ABC12345678901",
-    solePropTitle     = Some("Mr"),
-    solePropFirstName = Some("First"),
-    solePropMidName   = Some("Middle"),
-    solePropLastName  = Some("Last"),
-    businessName      = Some("Test Business Ltd"),
-    businessType      = Soleproprietor,
-    tradingName       = Some("Trading Name"),
-    systemDate        = Some(LocalDate.of(1991, 1, 1))
+    mgdRegNum    = "ABC12345678901",
+    businessName = "Test Business Ltd",
+    businessType = Corporatebody,
+    tradingName  = Some("Trading Name"),
+    systemDate   = Some(LocalDate.of(1991, 1, 1))
   )
   val json: JsValue = Json.parse(jsonAsString)
 
   "BusinessName" should:
     "read JSON correctly" in:
       Json.fromJson[BusinessName](json).get shouldBe model
-
-    "write JSON correctly" in:
-      Json.parse(Json.toJson[BusinessName](model).toString) shouldBe Json.parse(jsonAsString)

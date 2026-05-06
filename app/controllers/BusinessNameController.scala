@@ -37,13 +37,13 @@ class BusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val businessName: Option[BusinessDetails] = request.userAnswers.get(BusinessDetailsPage)
+    val businessDetails: Option[BusinessDetails] = request.userAnswers.get(BusinessDetailsPage)
     val soleProprietorName: Option[SoleProprietorDetails] = request.userAnswers.get(SoleProprietorPage)
 
-    businessName map { business =>
+    businessDetails map { business =>
       Ok(view(business.businessType.toString, business.businessName, business.tradingName))
     } orElse soleProprietorName.map { soleProprietor =>
-      Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.solePropFirstName + soleProprietor.solePropLastName, soleProprietor.tradingName))
+      Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.fullName, soleProprietor.tradingName))
     } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
   }
 }

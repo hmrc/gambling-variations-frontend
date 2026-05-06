@@ -16,7 +16,7 @@
 
 package pages
 
-import models.{BusinessDetails, BusinessType, SoleProprietorDetails}
+import models.BusinessDetails
 import play.api.libs.json.JsPath
 
 case object BusinessDetailsPage extends QuestionPage[BusinessDetails] {

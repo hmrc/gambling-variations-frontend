@@ -17,7 +17,7 @@
 package models
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{Format, Json, OFormat, Reads, Writes, __}
+import play.api.libs.json.{Reads, __}
 
 import java.time.LocalDate
 
@@ -64,7 +64,7 @@ object SoleProprietorName {
 }
 
 object BusinessName {
-  val reads: Reads[BusinessName] = (
+  implicit val reads: Reads[BusinessName] = (
     (__ \ "mgdRegNumber").read[String] and
       (__ \ "businessName").read[String] and
       (__ \ "businessType").read[BusinessType] and

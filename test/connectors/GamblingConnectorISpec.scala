@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.BusinessType.Soleproprietor
+import models.BusinessType.{Soleproprietor, Unincorporatedbody}
 import models.{BusinessName, MgdCertificate}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -147,12 +147,8 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       val jsonAsString: String =
         s"""{
            |  "mgdRegNumber": "ABC12345678901",
-           |  "solePropTitle": "Mr",
-           |  "solePropFirstName": "First",
-           |  "solePropMidName": "Middle",
-           |  "solePropLastName": "Last",
            |  "businessName": "Test Business Ltd",
-           |  "businessType": "soleproprietor",
+           |  "businessType": 2,
            |  "tradingName": "Trading Name",
            |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
            |}""".stripMargin
@@ -190,15 +186,11 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
     def businessName: BusinessName = BusinessName(
-      mgdRegNumber      = "ABC12345678901",
-      solePropTitle     = Some("Mr"),
-      solePropFirstName = Some("First"),
-      solePropMidName   = Some("Middle"),
-      solePropLastName  = Some("Last"),
-      businessName      = Some("Test Business Ltd"),
-      businessType      = Soleproprietor,
-      tradingName       = Some("Trading Name"),
-      systemDate        = Some(LocalDate.of(1991, 1, 1))
+      mgdRegNum    = "ABC12345678901",
+      businessName = "Test Business Ltd",
+      businessType = Unincorporatedbody,
+      tradingName  = Some("Trading Name"),
+      systemDate   = Some(LocalDate.of(1991, 1, 1))
     )
 
   }

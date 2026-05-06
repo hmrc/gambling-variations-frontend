@@ -60,9 +60,11 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "businessName" -> "Test Business Ltd",
-          "tradingName"  -> "Test Trader Ltd",
-          "businessType" -> "partnership"
+          "businessDetails" -> Json.obj(
+            "businessName" -> "Test Business Ltd",
+            "tradingName"  -> "Test Trader Ltd",
+            "businessType" -> 4
+          )
         )
 
         val result: Either[Result, DataRequest[AnyContent]] =
@@ -146,15 +148,11 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
     }
 
     def businessNameModel: BusinessName = BusinessName(
-      mgdRegNumber      = "ABC12345678901",
-      solePropTitle     = None,
-      solePropFirstName = None,
-      solePropMidName   = None,
-      solePropLastName  = None,
-      businessName      = Some("Test Business Ltd"),
-      businessType      = Partnership,
-      tradingName       = Some("Test Trader Ltd"),
-      systemDate        = Some(LocalDate.of(1991, 1, 1))
+      mgdRegNum    = "ABC12345678901",
+      businessName = "Test Business Ltd",
+      businessType = Partnership,
+      tradingName  = Some("Test Trader Ltd"),
+      systemDate   = Some(LocalDate.of(1991, 1, 1))
     )
   }
 }

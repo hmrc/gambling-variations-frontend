@@ -16,9 +16,8 @@
 
 package models
 
-import models.{Enumerable, WithName}
 import play.api.i18n.Messages
-import play.api.libs.json.{Format, JsError, JsNumber, JsSuccess, Reads, Writes}
+import play.api.libs.json.*
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 

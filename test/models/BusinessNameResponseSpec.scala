@@ -16,10 +16,10 @@
 
 package models
 
+import models.BusinessType.Soleproprietor
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.*
-import uk.gov.hmrc.gambling.models.BusinessType.{CorporateBody, SoleProprietor}
 
 import java.time.LocalDate
 
@@ -33,7 +33,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
     "solePropFirstName" -> "John",
     "solePropMidName"   -> "James",
     "solePropLastName"  -> "Smith",
-    "businessType"      -> SoleProprietorDetails.code,
+    "businessType"      -> BusinessType.Soleproprietor.code,
     "tradingName"       -> "J Smith Trading",
     "systemDate"        -> "2024-01-15"
   )
@@ -41,7 +41,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
   val businessJson: JsObject = Json.obj(
     "mgdRegNumber" -> "REG456",
     "businessName" -> "Acme Corp",
-    "businessType" -> CorporateBody.code,
+    "businessType" -> BusinessType.Corporatebody.code,
     "tradingName"  -> "Acme",
     "systemDate"   -> "2024-01-15"
   )
@@ -62,7 +62,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
         result.solePropFirstName shouldBe "John"
         result.solePropMidName   shouldBe Some("James")
         result.solePropLastName  shouldBe "Smith"
-        result.businessType      shouldBe SoleProprietorDetails
+        result.businessType      shouldBe Soleproprietor
         result.tradingName       shouldBe Some("J Smith Trading")
         result.systemDate        shouldBe Some(systemDate)
       }
@@ -114,7 +114,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
 
         result.mgdRegNum    shouldBe "REG456"
         result.businessName shouldBe "Acme Corp"
-        result.businessType shouldBe CorporateBody
+        result.businessType shouldBe BusinessType.Corporatebody
         result.tradingName  shouldBe Some("Acme")
         result.systemDate   shouldBe Some(systemDate)
       }

@@ -17,6 +17,8 @@
 package controllers
 
 import base.SpecBase
+import models.UserAnswers
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.BusinessNameView
@@ -27,7 +29,16 @@ class BusinessNameControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val data = Json.obj(
+        "businessDetails" -> Json.obj(
+          "businessName" -> "Test Business Ltd",
+          "businessType" -> 4
+        )
+      )
+
+      val userAnswers = UserAnswers("id", data)
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
@@ -37,7 +48,21 @@ class BusinessNameControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessNameView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("partnership", "Test Business", None)(request, messages(application)).toString
+        contentAsString(result) mustEqual view("partnership", "Test Business Ltd", None)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect with an empty set of User Answers" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
   }
