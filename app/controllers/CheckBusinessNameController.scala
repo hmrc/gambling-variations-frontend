@@ -26,7 +26,7 @@ import views.html.BusinessNameView
 
 import javax.inject.Inject
 
-class BusinessNameController @Inject() (
+class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
   val controllerComponents: MessagesControllerComponents,
   authorised: AuthorisedAction,

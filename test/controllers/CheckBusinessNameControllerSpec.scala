@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.BusinessNameView
 
-class BusinessNameControllerSpec extends SpecBase {
+class CheckBusinessNameControllerSpec extends SpecBase {
 
   "BusinessName Controller" - {
 
@@ -43,7 +43,7 @@ class BusinessNameControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
+          val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
 
           val result = route(application, request).value
 
@@ -67,7 +67,7 @@ class BusinessNameControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
+          val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
 
           val result = route(application, request).value
 
@@ -84,7 +84,7 @@ class BusinessNameControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
 
         val result = route(application, request).value
 

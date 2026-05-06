@@ -24,4 +24,4 @@ GET        /there-is-a-problem-access-denied            controllers.AccessDenied
 GET        /page-not-found                              controllers.PageNotFoundController.onPageLoad()
 
 
-GET        /change-registration/check-business-name     controllers.BusinessNameController.onPageLoad()
+GET        /change-registration/check-business-name     controllers.CheckBusinessNameController.onPageLoad()
