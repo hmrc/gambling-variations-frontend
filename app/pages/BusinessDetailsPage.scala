@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package models.requests
+package pages
 
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
+import models.BusinessDetails
+import play.api.libs.json.JsPath
 
-case class OptionalDataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case object BusinessDetailsPage extends QuestionPage[BusinessDetails] {
 
-case class DataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "businessDetails"
+}

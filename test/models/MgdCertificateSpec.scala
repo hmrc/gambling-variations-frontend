@@ -16,6 +16,7 @@
 
 package models
 
+import models.BusinessType.{Corporatebody, Soleproprietor}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
@@ -44,10 +45,10 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
     repMemLine4        = None,
     repMemPostcode     = None,
     repMemAdi          = None,
-    typeOfBusiness     = Some("Limited"),
+    typeOfBusiness     = Some(Corporatebody),
     businessTradeClass = Some(1),
     noOfPartners       = Some(2),
-    groupReg           = "N",
+    groupReg           = false,
     noOfGroupMems      = None,
     dateCertIssued     = Some(LocalDate.of(2024, 2, 1)),
     partMembers = Seq(
@@ -57,7 +58,7 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
         solePropFirstName  = Some("A"),
         solePropMiddleName = None,
         solePropLastName   = Some("Smith"),
-        typeOfBusiness     = 1
+        typeOfBusiness     = Soleproprietor
       )
     ),
     groupMembers = Seq(
@@ -74,7 +75,7 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
       val json = Json.toJson(sampleCertificate)
 
       (json \ "mgdRegNumber").as[String] mustBe "XYZ00000000001"
-      (json \ "groupReg").as[String] mustBe "N"
+      (json \ "groupReg").as[Boolean] mustBe false
 
       (json \ "partMembers").as[Seq[PartnerMember]].size mustBe 1
       (json \ "groupMembers").as[Seq[GroupMember]].size mustBe 1
@@ -132,7 +133,7 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
           solePropFirstName  = Some("B"),
           solePropMiddleName = Some("M"),
           solePropLastName   = Some("Jones"),
-          typeOfBusiness     = 2
+          typeOfBusiness     = Corporatebody
         )
 
         val json = Json.toJson(member)

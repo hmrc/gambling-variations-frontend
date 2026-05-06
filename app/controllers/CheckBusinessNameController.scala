@@ -17,8 +17,8 @@
 package controllers
 
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
-import models.BusinessType
-import pages.{BusinessNamePage, BusinessTypePage, TradingNamePage}
+import models.{BusinessDetails, BusinessType, SoleProprietorDetails}
+import pages.{BusinessDetailsPage, SoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -26,7 +26,7 @@ import views.html.BusinessNameView
 
 import javax.inject.Inject
 
-class BusinessNameController @Inject() (
+class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
   val controllerComponents: MessagesControllerComponents,
   authorised: AuthorisedAction,
@@ -37,10 +37,13 @@ class BusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val businessType = request.userAnswers.get(BusinessTypePage).map(_.toString).getOrElse("partnership")
-    val businessName = request.userAnswers.get(BusinessNamePage).getOrElse("Test Business")
-    val tradingName = request.userAnswers.get(TradingNamePage)
+    val businessDetails: Option[BusinessDetails] = request.userAnswers.get(BusinessDetailsPage)
+    val soleProprietorName: Option[SoleProprietorDetails] = request.userAnswers.get(SoleProprietorPage)
 
-    Ok(view(businessType, businessName, tradingName))
+    businessDetails map { business =>
+      Ok(view(business.businessType.toString, business.businessName, business.tradingName))
+    } orElse soleProprietorName.map { soleProprietor =>
+      Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.fullName, soleProprietor.tradingName))
+    } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
   }
 }

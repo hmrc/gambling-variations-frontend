@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
-package models.requests
+package models
 
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
+import play.api.libs.json.{Json, OFormat}
 
-case class OptionalDataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case class SoleProprietorDetails(
+  title: String,
+  firstName: String,
+  middleName: Option[String],
+  lastName: String,
+  tradingName: Option[String]
+) {
+  def fullName: String = Seq(
+    Some(firstName),
+    middleName,
+    Some(lastName)
+  ).flatten.mkString(" ")
+}
 
-case class DataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+object SoleProprietorDetails {
+  implicit val format: OFormat[SoleProprietorDetails] = Json.format[SoleProprietorDetails]
+}

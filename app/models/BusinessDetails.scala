@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-package models.requests
+package models
 
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
+import play.api.libs.json.{Json, OFormat}
 
-case class OptionalDataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case class BusinessDetails(
+  businessName: String,
+  businessType: BusinessType,
+  tradingName: Option[String]
+)
 
-case class DataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+object BusinessDetails {
+  implicit val format: OFormat[BusinessDetails] = Json.format[BusinessDetails]
+}
