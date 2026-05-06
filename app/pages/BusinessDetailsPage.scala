@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package models.requests
+package pages
 
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.AffinityGroup
+import models.BusinessDetails
+import play.api.libs.json.JsPath
 
-final case class AuthorisedRequest[A](
-  request: Request[A],
-  affinityGroup: AffinityGroup,
-  mgdRegNum: String
-) extends WrappedRequest[A](request)
+case object BusinessDetailsPage extends QuestionPage[BusinessDetails] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "businessDetails"
+}

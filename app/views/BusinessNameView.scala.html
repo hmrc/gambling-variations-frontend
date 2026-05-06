@@ -47,10 +47,11 @@
         Seq(("","Change",tradingName.getOrElse(messages("businessName.notProvided")))))
     ))
 
+    @govukButton(ButtonViewModel(Text(messages("site.continue"))))
+
     @link(
         messages("businessName.link"),
-        controllers.routes.IndexController.onPageLoad().url)
-        @govukButton(ButtonViewModel(Text(messages("site.continue"))))
+        controllers.routes.IndexController.onPageLoad().url())
 
     @break("m")
 }

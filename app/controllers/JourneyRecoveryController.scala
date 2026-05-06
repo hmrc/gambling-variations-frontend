@@ -31,7 +31,6 @@ import javax.inject.Inject
 class JourneyRecoveryController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   authorise: AuthorisedAction,
-  sessionRepository: SessionRepository,
   continueView: JourneyRecoveryContinueView,
   startAgainView: JourneyRecoveryStartAgainView
 ) extends FrontendBaseController

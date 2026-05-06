@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-package models.requests
+package models
 
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.AffinityGroup
+import play.api.libs.json.{Json, OFormat}
 
-final case class AuthorisedRequest[A](
-  request: Request[A],
-  affinityGroup: AffinityGroup,
-  mgdRegNum: String
-) extends WrappedRequest[A](request)
+case class SoleProprietorDetails(
+  title: String,
+  firstName: String,
+  middleName: Option[String],
+  lastName: String,
+  tradingName: Option[String]
+) {
+  def fullName: String = Seq(
+    Some(firstName),
+    middleName,
+    Some(lastName)
+  ).flatten.mkString(" ")
+}
+
+object SoleProprietorDetails {
+  implicit val format: OFormat[SoleProprietorDetails] = Json.format[SoleProprietorDetails]
+}
