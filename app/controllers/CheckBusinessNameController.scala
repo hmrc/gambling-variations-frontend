@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
-import models.{BusinessDetails, BusinessType, SoleProprietorDetails}
+import models.{BusinessNameDetails, BusinessType, SoleProprietorDetails}
 import pages.{BusinessDetailsPage, SoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -37,10 +37,10 @@ class CheckBusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val businessDetails: Option[BusinessDetails] = request.userAnswers.get(BusinessDetailsPage)
+    val businessNameDetails: Option[BusinessNameDetails] = request.userAnswers.get(BusinessDetailsPage)
     val soleProprietorName: Option[SoleProprietorDetails] = request.userAnswers.get(SoleProprietorPage)
 
-    businessDetails map { business =>
+    businessNameDetails map { business =>
       Ok(view(business.businessType.toString, business.businessName, business.tradingName))
     } orElse soleProprietorName.map { soleProprietor =>
       Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.fullName, soleProprietor.tradingName))

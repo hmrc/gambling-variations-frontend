@@ -63,7 +63,6 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
       .get(url"$baseUrl/business-name/mgd/$mgdRegNumber")
       .execute[HttpResponse]
       .map { response =>
-
         response.status match {
 
           case OK =>
