@@ -47,7 +47,7 @@ class RemoveTradeNameController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData) { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.userId))
+    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
     val preparedForm = userAnswers.get(RemoveTradeNamePage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -59,7 +59,7 @@ class RemoveTradeNameController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.userId))
+    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
     val tradingName = userAnswers.get(TradingNamePage).getOrElse("Test Trader")
     form
       .bindFromRequest()

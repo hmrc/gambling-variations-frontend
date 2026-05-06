@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import pages.RemoveTradeNamePage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -35,7 +35,7 @@ object RemoveTradeNameSummary {
         key   = "removeTradeName.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemoveTradeNameController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.RemoveTradeNameController.onPageLoad().url)
             .withVisuallyHiddenText(messages("removeTradeName.change.hidden"))
         )
       )

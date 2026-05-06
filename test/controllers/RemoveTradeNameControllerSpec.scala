@@ -41,7 +41,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
   val tradingName = "Test Trader"
 
-  lazy val removeTradeNameRoute = routes.RemoveTradeNameController.onPageLoad(NormalMode).url
+  lazy val removeTradeNameRoute = routes.RemoveTradeNameController.onPageLoad().url
 
   "RemoveTradeName Controller" - {
 
