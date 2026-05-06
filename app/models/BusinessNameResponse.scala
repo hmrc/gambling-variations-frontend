@@ -35,13 +35,13 @@ case class BusinessNameResponse(
 object BusinessNameResponse {
   implicit val format: OFormat[BusinessNameResponse] = Json.format[BusinessNameResponse]
 
-  val soleProprietorReads: Reads[SoleProprietorName] = SoleProprietorName.reads
-  val businessNameReads: Reads[BusinessName] = BusinessName.reads
+  val soleProprietorReads: Reads[SoleProprietorNameDetails] = SoleProprietorNameDetails.reads
+  val businessNameDetailsReads: Reads[BusinessNameDetails] = BusinessNameDetails.reads
 
   implicit val entityNameReads: Reads[EntityName] =
     (__ \ "businessType").readNullable[BusinessType].flatMap {
       case Some(BusinessType.Soleproprietor) => soleProprietorReads.widen[EntityName]
-      case _                                 => businessNameReads.widen[EntityName]
+      case _                                 => businessNameDetailsReads.widen[EntityName]
     }
 
 }

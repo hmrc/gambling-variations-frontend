@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessName, BusinessNameDetails, SoleProprietorDetails, SoleProprietorName, UserAnswers}
+import models.{BusinessName, BusinessNameDetails, SoleProprietorDetails, SoleProprietorNameDetails, UserAnswers}
 import pages.{BusinessDetailsPage, SoleProprietorPage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
@@ -50,10 +50,10 @@ class DataRequiredActionImpl @Inject() (
           val answers = UserAnswers(request.mgdRegNum)
 
           val updatedAnswers = entityName match {
-            case SoleProprietorName(_, solePropTitle, solePropFirstName, solePropMidName, solePropLastName, tradingName, _, _) =>
+            case SoleProprietorNameDetails(_, solePropTitle, solePropFirstName, solePropMidName, solePropLastName, tradingName, _, _) =>
               answers.set(SoleProprietorPage, SoleProprietorDetails(solePropTitle, solePropFirstName, solePropMidName, solePropLastName, tradingName))
-            case BusinessName(_, businessName, businessType, tradingName, _) =>
-              answers.set(BusinessDetailsPage, BusinessNameDetails(businessName, businessType, tradingName))
+            case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
+              answers.set(BusinessDetailsPage, BusinessName(businessName, businessType, tradingName))
           }
 
           updatedAnswers.map { ua =>

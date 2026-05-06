@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.BusinessNameView
 
-class CheckBusinessNameControllerSpec extends SpecBase {
+class CheckBusinessNameDetailsControllerSpec extends SpecBase {
 
   "BusinessName Controller" - {
 

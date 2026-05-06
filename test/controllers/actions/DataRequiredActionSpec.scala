@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import models.BusinessType.{Partnership, Soleproprietor}
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessName, SoleProprietorName, UserAnswers}
+import models.{BusinessNameDetails, SoleProprietorNameDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatest.RecoverMethods
@@ -181,14 +181,14 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
 
     }
 
-    def businessNameModel: BusinessName = BusinessName(
+    def businessNameModel: BusinessNameDetails = BusinessNameDetails(
       mgdRegNum    = "ABC12345678901",
       businessName = "Test Business Ltd",
       businessType = Partnership,
       tradingName  = Some("Test Trader Ltd"),
       systemDate   = Some(LocalDate.of(1991, 1, 1))
     )
-    def soleProprietorModel: SoleProprietorName = SoleProprietorName(
+    def soleProprietorModel: SoleProprietorNameDetails = SoleProprietorNameDetails(
       mgdRegNum    = "ABC12345678901",
       title        = "Mr",
       firstName    = "Test",

@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.{Soleproprietor, Unincorporatedbody}
-import models.{BusinessName, MgdCertificate}
+import models.{BusinessNameDetails, MgdCertificate}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -185,7 +185,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       }
     }
 
-    def businessName: BusinessName = BusinessName(
+    def businessName: BusinessNameDetails = BusinessNameDetails(
       mgdRegNum    = "ABC12345678901",
       businessName = "Test Business Ltd",
       businessType = Unincorporatedbody,
