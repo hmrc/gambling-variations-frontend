@@ -18,8 +18,6 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-import java.time.LocalDate
-
 case class BusinessDetails(
   businessName: String,
   businessType: BusinessType,

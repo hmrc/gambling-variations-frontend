@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{BusinessName, BusinessNameResponse, EntityName, MgdCertificate}
+import models.{EntityName, MgdCertificate}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2

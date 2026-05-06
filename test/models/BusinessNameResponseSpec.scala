@@ -57,23 +57,23 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
       "map all fields correctly" in {
         val result = soleProprietorJson.validate[EntityName].get.asInstanceOf[SoleProprietorName]
 
-        result.mgdRegNumber      shouldBe "REG123"
-        result.solePropTitle     shouldBe "Mr"
-        result.solePropFirstName shouldBe "John"
-        result.solePropMidName   shouldBe Some("James")
-        result.solePropLastName  shouldBe "Smith"
-        result.businessType      shouldBe Soleproprietor
-        result.tradingName       shouldBe Some("J Smith Trading")
-        result.systemDate        shouldBe Some(systemDate)
+        result.mgdRegNumber shouldBe "REG123"
+        result.title        shouldBe "Mr"
+        result.firstName    shouldBe "John"
+        result.middleName   shouldBe Some("James")
+        result.lastName     shouldBe "Smith"
+        result.businessType shouldBe Soleproprietor
+        result.tradingName  shouldBe Some("J Smith Trading")
+        result.systemDate   shouldBe Some(systemDate)
       }
 
       "succeed when optional fields are absent" in {
         val json = soleProprietorJson - "solePropMidName" - "tradingName" - "systemDate"
         val result = json.validate[EntityName].get.asInstanceOf[SoleProprietorName]
 
-        result.solePropMidName shouldBe None
-        result.tradingName     shouldBe None
-        result.systemDate      shouldBe None
+        result.middleName  shouldBe None
+        result.tradingName shouldBe None
+        result.systemDate  shouldBe None
       }
 
       "return JsError when mgdRegNumber is missing" in {

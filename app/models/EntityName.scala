@@ -33,10 +33,10 @@ case class BusinessName(
 
 case class SoleProprietorName(
   mgdRegNumber: String,
-  solePropTitle: String,
-  solePropFirstName: String,
-  solePropMidName: Option[String],
-  solePropLastName: String,
+  title: String,
+  firstName: String,
+  middleName: Option[String],
+  lastName: String,
   tradingName: Option[String],
   businessType: BusinessType,
   systemDate: Option[LocalDate]

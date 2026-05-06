@@ -27,28 +27,54 @@ class BusinessNameControllerSpec extends SpecBase {
 
   "BusinessName Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
+      "when sole proprietor" in {
 
-      val data = Json.obj(
-        "businessDetails" -> Json.obj(
-          "businessName" -> "Test Business Ltd",
-          "businessType" -> 4
+        val data = Json.obj(
+          "businessDetails" -> Json.obj(
+            "businessName" -> "Test Business Ltd",
+            "businessType" -> 4
+          )
         )
-      )
 
-      val userAnswers = UserAnswers("id", data)
+        val userAnswers = UserAnswers("id", data)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      running(application) {
-        val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
+        running(application) {
+          val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[BusinessNameView]
+          val view = application.injector.instanceOf[BusinessNameView]
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view("partnership", "Test Business Ltd", None)(request, messages(application)).toString
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view("partnership", "Test Business Ltd", None)(request, messages(application)).toString
+        }
+      }
+      "when partnership" in {
+
+        val data = Json.obj(
+          "businessDetails" -> Json.obj(
+            "businessName" -> "Test Business Ltd",
+            "businessType" -> 4
+          )
+        )
+
+        val userAnswers = UserAnswers("id", data)
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.BusinessNameController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[BusinessNameView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view("partnership", "Test Business Ltd", None)(request, messages(application)).toString
+        }
       }
     }
 
