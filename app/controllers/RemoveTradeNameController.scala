@@ -37,6 +37,7 @@ class RemoveTradeNameController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
   formProvider: RemoveTradeNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveTradeNameView
@@ -46,31 +47,26 @@ class RemoveTradeNameController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData) { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
-    val preparedForm = userAnswers.get(RemoveTradeNamePage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
-
-    val tradingName = userAnswers.get(TradingNamePage).getOrElse("Test Trader")
-
-    Ok(view(preparedForm, mode, tradingName))
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    request.userAnswers.get(TradingNamePage) map { tradingName =>
+      Ok(view(form, mode, tradingName))
+    } getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
-    val tradingName = userAnswers.get(TradingNamePage).getOrElse("Test Trader")
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(updateUserAnswers(userAnswers, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
-      )
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) async { implicit request =>
+
+    request.userAnswers.get(TradingNamePage) map { tradingName =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
+        )
+    } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {

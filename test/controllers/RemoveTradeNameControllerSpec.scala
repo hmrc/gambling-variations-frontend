@@ -25,6 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.RemoveTradeNamePage
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -40,6 +41,9 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new RemoveTradeNameFormProvider()
   val form = formProvider()
   val tradingName = "Test Trader"
+  val data = Json.obj(
+    "tradingName" -> "Test Trader"
+  )
 
   lazy val removeTradeNameRoute = routes.RemoveTradeNameController.onPageLoad().url
 
@@ -47,7 +51,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
 
       running(application) {
         val request = FakeRequest(GET, removeTradeNameRoute)
@@ -61,53 +65,72 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must redirect" - {
+      "to Check Business Name when no Trading Name exists" - {
+        "when GET" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(RemoveTradeNamePage, true).success.value
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          running(application) {
+            val request = FakeRequest(GET, removeTradeNameRoute)
 
-      running(application) {
-        val request = FakeRequest(GET, removeTradeNameRoute)
+            val result = route(application, request).value
 
-        val view = application.injector.instanceOf[RemoveTradeNameView]
+            val view = application.injector.instanceOf[RemoveTradeNameView]
 
-        val result = route(application, request).value
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
+          }
+        }
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, tradingName)(request, messages(application)).toString
+        "when POST" in {
+
+          val application =
+            applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, removeTradeNameRoute)
+                .withFormUrlEncodedBody(("value", "true"))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
+          }
+        }
       }
-    }
 
-    "must redirect to the next page when valid data is submitted" in {
+      "to the next page when valid data is submitted" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+        val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+        val application =
+          applicationBuilder(userAnswers = Some(UserAnswers("id", data)))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, removeTradeNameRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        running(application) {
+          val request =
+            FakeRequest(POST, removeTradeNameRoute)
+              .withFormUrlEncodedBody(("value", "true"))
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
 
       running(application) {
         val request =
