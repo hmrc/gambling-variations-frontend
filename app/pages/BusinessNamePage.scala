@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsPath
 
-case class SoleProprietorDetails(
-  title: String,
-  firstName: String,
-  middleName: Option[String],
-  lastName: String,
-  tradingName: Option[String]
-) {
-  def fullName: String = Seq(
-    Some(firstName),
-    middleName,
-    Some(lastName)
-  ).flatten.mkString(" ")
-}
+case object BusinessNamePage extends QuestionPage[String] {
 
-object SoleProprietorDetails {
-  implicit val format: OFormat[SoleProprietorDetails] = Json.format[SoleProprietorDetails]
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "businessName"
 }

@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import models.BusinessType.{Partnership, Soleproprietor}
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessName, SoleProprietorName, UserAnswers}
+import models.{BusinessNameDetails, SoleProprietorNameDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatest.RecoverMethods
@@ -61,11 +61,9 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "businessDetails" -> Json.obj(
-              "businessName" -> "Test Business Ltd",
-              "tradingName"  -> "Test Trader Ltd",
-              "businessType" -> 4
-            )
+            "businessName" -> "Test Business Ltd",
+            "tradingName"  -> "Test Trader Ltd",
+            "businessType" -> 4
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -91,11 +89,13 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "soleProprietorDetails" -> Json.obj(
+            "soleProprietor" -> Json.obj(
               "title"     -> "Mr",
               "firstName" -> "Test",
               "lastName"  -> "Fella"
-            )
+            ),
+            "businessType" -> 1,
+            "tradingName"  -> "Test Trader"
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -181,21 +181,21 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
 
     }
 
-    def businessNameModel: BusinessName = BusinessName(
+    def businessNameModel: BusinessNameDetails = BusinessNameDetails(
       mgdRegNum    = "ABC12345678901",
       businessName = "Test Business Ltd",
       businessType = Partnership,
       tradingName  = Some("Test Trader Ltd"),
       systemDate   = Some(LocalDate.of(1991, 1, 1))
     )
-    def soleProprietorModel: SoleProprietorName = SoleProprietorName(
+    def soleProprietorModel: SoleProprietorNameDetails = SoleProprietorNameDetails(
       mgdRegNum    = "ABC12345678901",
       title        = "Mr",
       firstName    = "Test",
       middleName   = None,
       lastName     = "Fella",
       systemDate   = Some(LocalDate.of(1991, 1, 1)),
-      tradingName  = None,
+      tradingName  = Some("Test Trader"),
       businessType = Soleproprietor
     )
   }

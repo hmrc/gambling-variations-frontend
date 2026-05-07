@@ -17,21 +17,16 @@
 package controllers
 
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
-import models.{BusinessNameDetails, BusinessType, SoleProprietorDetails}
-import pages.{BusinessDetailsPage, SoleProprietorPage}
-import models.BusinessType
-import pages.{BusinessNameChangesPage, BusinessTypePage, TradingNamePage}
+import models.{BusinessType, SoleProprietorName}
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessNameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import play.api.mvc.Result
-import javax.inject.Inject
-
-import javax.inject.Inject
 
 class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
@@ -46,14 +41,20 @@ class CheckBusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val businessNameDetails: Option[BusinessNameDetails] = request.userAnswers.get(BusinessDetailsPage)
-    val soleProprietorName: Option[SoleProprietorDetails] = request.userAnswers.get(SoleProprietorPage)
 
-    businessNameDetails map { business =>
-      Ok(view(business.businessType.toString, business.businessName, business.tradingName))
-    } orElse soleProprietorName.map { soleProprietor =>
-      Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.fullName, soleProprietor.tradingName))
-    } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
+    val businessNameView: Option[Result] = for {
+      businessName <- request.userAnswers.get(BusinessNamePage)
+      businessType <- request.userAnswers.get(BusinessTypePage)
+    } yield {
+      Ok(view(businessType.toString, businessName, request.userAnswers.get(TradingNamePage)))
+    }
+
+    val soleProprietorView: Option[Result] = request.userAnswers.get(SoleProprietorPage).map { soleProprietor =>
+      Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.fullName, request.userAnswers.get(TradingNamePage)))
+    }
+
+    businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
+
   }
 
   def onSubmit: Action[AnyContent] =

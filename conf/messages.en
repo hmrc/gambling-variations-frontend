@@ -125,3 +125,9 @@ declaration.p1 = To the best of my knowledge, I declare that the information I h
 declaration.submit = Declare and submit
 
 submit.changes = Submit changes
+
+removeTradeName.title = Are you sure you want to remove the trading name?
+removeTradeName.heading = Are you sure you want to remove the trading name {0}?
+removeTradeName.caption = Change registration details
+removeTradeName.error.required = Select yes to if you want to remove the trading name
+removeTradeName.change.hidden = RemoveTradeName

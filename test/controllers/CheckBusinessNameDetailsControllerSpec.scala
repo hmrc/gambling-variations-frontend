@@ -31,7 +31,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
       "when sole proprietor" in {
 
         val data = Json.obj(
-          "soleProprietorDetails" -> Json.obj(
+          "soleProprietor" -> Json.obj(
             "title"     -> "Mr",
             "firstName" -> "Test",
             "lastName"  -> "Fella"
@@ -56,10 +56,8 @@ class CheckBusinessNameControllerSpec extends SpecBase {
       "when partnership" in {
 
         val data = Json.obj(
-          "businessDetails" -> Json.obj(
-            "businessName" -> "Test Business Ltd",
-            "businessType" -> 4
-          )
+          "businessName" -> "Test Business Ltd",
+          "businessType" -> 4
         )
 
         val userAnswers = UserAnswers("id", data)

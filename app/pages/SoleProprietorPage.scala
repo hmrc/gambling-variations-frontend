@@ -16,12 +16,12 @@
 
 package pages
 
-import models.SoleProprietorDetails
+import models.SoleProprietorName
 import play.api.libs.json.JsPath
 
-case object SoleProprietorPage extends QuestionPage[SoleProprietorDetails] {
+case object SoleProprietorPage extends QuestionPage[SoleProprietorName] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "soleProprietorDetails"
+  override def toString: String = "soleProprietor"
 }

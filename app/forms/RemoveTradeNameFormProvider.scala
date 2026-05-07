@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-class CheckBusinessNamePageSpec extends AnyFreeSpec with Matchers {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  ".CheckBusinessNamePage" - {
+class RemoveTradeNameFormProvider @Inject() extends Mappings {
 
-    "must have the correct toString" in {
-      CheckBusinessNamePage.toString mustBe "businessName"
-    }
-
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "businessName"
-      CheckBusinessNamePage.path mustBe expectedPath
-    }
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeTradeName.error.required")
+    )
 }

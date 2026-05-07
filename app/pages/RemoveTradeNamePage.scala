@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsPath
 
-case class BusinessNameDetails(
-  businessName: String,
-  businessType: BusinessType,
-  tradingName: Option[String]
-)
+case object RemoveTradeNamePage extends QuestionPage[Boolean] {
 
-object BusinessNameDetails {
-  implicit val format: OFormat[BusinessNameDetails] = Json.format[BusinessNameDetails]
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "removeTradeName"
 }
