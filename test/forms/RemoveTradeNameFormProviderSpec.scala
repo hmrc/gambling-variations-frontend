@@ -14,16 +14,32 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.{Json, OFormat}
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-case class BusinessNameDetails(
-  businessName: String,
-  businessType: BusinessType,
-  tradingName: Option[String]
-)
+class RemoveTradeNameFormProviderSpec extends BooleanFieldBehaviours {
 
-object BusinessNameDetails {
-  implicit val format: OFormat[BusinessNameDetails] = Json.format[BusinessNameDetails]
+  val requiredKey = "removeTradeName.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new RemoveTradeNameFormProvider()()
+
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

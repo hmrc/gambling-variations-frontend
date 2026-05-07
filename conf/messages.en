@@ -88,3 +88,9 @@ businessName.notProvided = Not provided
 businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
+
+removeTradeName.title = Are you sure you want to remove the trading name?
+removeTradeName.heading = Are you sure you want to remove the trading name {0}?
+removeTradeName.caption = Change registration details
+removeTradeName.error.required = Select yes to if you want to remove the trading name
+removeTradeName.change.hidden = RemoveTradeName

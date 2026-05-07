@@ -19,8 +19,8 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessName, BusinessNameDetails, SoleProprietorDetails, SoleProprietorName, UserAnswers}
-import pages.{BusinessDetailsPage, SoleProprietorPage}
+import models.{BusinessNameDetails, BusinessType, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
+import pages.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class DataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
@@ -49,11 +50,19 @@ class DataRequiredActionImpl @Inject() (
 
           val answers = UserAnswers(request.mgdRegNum)
 
-          val updatedAnswers = entityName match {
-            case SoleProprietorName(_, solePropTitle, solePropFirstName, solePropMidName, solePropLastName, tradingName, _, _) =>
-              answers.set(SoleProprietorPage, SoleProprietorDetails(solePropTitle, solePropFirstName, solePropMidName, solePropLastName, tradingName))
-            case BusinessName(_, businessName, businessType, tradingName, _) =>
-              answers.set(BusinessDetailsPage, BusinessNameDetails(businessName, businessType, tradingName))
+          val updatedAnswers: Try[UserAnswers] = entityName match {
+            case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
+              for {
+                a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
+                b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
+                c <- setTradingName(b, tradingName)
+              } yield c
+            case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
+              for {
+                a <- answers.set(BusinessNamePage, businessName)
+                b <- a.set(BusinessTypePage, businessType)
+                c <- setTradingName(b, tradingName)
+              } yield c
           }
 
           updatedAnswers.map { ua =>
@@ -73,6 +82,11 @@ class DataRequiredActionImpl @Inject() (
         Future.successful(Right(DataRequest(request.request, request.mgdRegNum, data)))
     }
   }
+
+  private def setTradingName(userAnswers: UserAnswers, tradingName: Option[String]): Try[UserAnswers] =
+    tradingName.fold(Try(userAnswers)) { tradingName =>
+      userAnswers.set(TradingNamePage, tradingName)
+    }
 }
 
 trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

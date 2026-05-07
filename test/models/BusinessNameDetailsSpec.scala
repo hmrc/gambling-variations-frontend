@@ -23,7 +23,7 @@ import play.api.libs.json.{JsValue, Json}
 
 import java.time.LocalDate
 
-class BusinessNameSpec extends AnyWordSpec with Matchers:
+class BusinessNameDetailsSpec extends AnyWordSpec with Matchers:
 
   val jsonAsString: String =
     s"""{
@@ -34,7 +34,7 @@ class BusinessNameSpec extends AnyWordSpec with Matchers:
        |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
        |}""".stripMargin
 
-  val model: BusinessName = BusinessName(
+  val model: BusinessNameDetails = BusinessNameDetails(
     mgdRegNum    = "ABC12345678901",
     businessName = "Test Business Ltd",
     businessType = Corporatebody,
@@ -45,4 +45,4 @@ class BusinessNameSpec extends AnyWordSpec with Matchers:
 
   "BusinessName" should:
     "read JSON correctly" in:
-      Json.fromJson[BusinessName](json).get shouldBe model
+      Json.fromJson[BusinessNameDetails](json).get shouldBe model

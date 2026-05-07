@@ -23,7 +23,7 @@ import play.api.libs.json.*
 
 import java.time.LocalDate
 
-class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
+class BusinessNameDetailsResponseSpec extends AnyWordSpec with Matchers {
 
   val systemDate: LocalDate = LocalDate.of(2024, 1, 15)
 
@@ -51,11 +51,11 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
     "businessType is SoleProprietor" should {
 
       "parse into a SoleProprietorName" in {
-        soleProprietorJson.validate[EntityName].get shouldBe a[SoleProprietorName]
+        soleProprietorJson.validate[EntityName].get shouldBe a[SoleProprietorNameDetails]
       }
 
       "map all fields correctly" in {
-        val result = soleProprietorJson.validate[EntityName].get.asInstanceOf[SoleProprietorName]
+        val result = soleProprietorJson.validate[EntityName].get.asInstanceOf[SoleProprietorNameDetails]
 
         result.mgdRegNum    shouldBe "REG123"
         result.title        shouldBe "Mr"
@@ -69,7 +69,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
 
       "succeed when optional fields are absent" in {
         val json = soleProprietorJson - "solePropMidName" - "tradingName" - "systemDate"
-        val result = json.validate[EntityName].get.asInstanceOf[SoleProprietorName]
+        val result = json.validate[EntityName].get.asInstanceOf[SoleProprietorNameDetails]
 
         result.middleName  shouldBe None
         result.tradingName shouldBe None
@@ -106,11 +106,11 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
     "businessType is not SoleProprietor" should {
 
       "parse into a BusinessName" in {
-        businessJson.validate[EntityName].get shouldBe a[BusinessName]
+        businessJson.validate[EntityName].get shouldBe a[BusinessNameDetails]
       }
 
       "map all fields correctly" in {
-        val result = businessJson.validate[EntityName].get.asInstanceOf[BusinessName]
+        val result = businessJson.validate[EntityName].get.asInstanceOf[BusinessNameDetails]
 
         result.mgdRegNum    shouldBe "REG456"
         result.businessName shouldBe "Acme Corp"
@@ -121,7 +121,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
 
       "succeed when optional fields are absent" in {
         val json = businessJson - "tradingName" - "systemDate"
-        val result = json.validate[EntityName].get.asInstanceOf[BusinessName]
+        val result = json.validate[EntityName].get.asInstanceOf[BusinessNameDetails]
 
         result.tradingName shouldBe None
         result.systemDate  shouldBe None
@@ -141,7 +141,7 @@ class BusinessNameResponseSpec extends AnyWordSpec with Matchers {
       }
 
       "parse businessType CorporateBody as BusinessName" in {
-        businessJson.validate[EntityName].get shouldBe a[BusinessName]
+        businessJson.validate[EntityName].get shouldBe a[BusinessNameDetails]
       }
 
       "parse a missing businessType as BusinessName" in {

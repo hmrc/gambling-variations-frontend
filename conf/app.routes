@@ -25,3 +25,6 @@ GET        /page-not-found                              controllers.PageNotFound
 
 
 GET        /change-registration/check-business-name     controllers.CheckBusinessNameController.onPageLoad()
+
+GET        /change-registration-details/business-name/remove-trading-name                     controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/remove-trading-name                      controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)

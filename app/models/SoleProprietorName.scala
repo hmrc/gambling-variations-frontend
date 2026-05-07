@@ -18,12 +18,11 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SoleProprietorDetails(
+case class SoleProprietorName(
   title: String,
   firstName: String,
   middleName: Option[String],
-  lastName: String,
-  tradingName: Option[String]
+  lastName: String
 ) {
   def fullName: String = Seq(
     Some(firstName),
@@ -32,6 +31,6 @@ case class SoleProprietorDetails(
   ).flatten.mkString(" ")
 }
 
-object SoleProprietorDetails {
-  implicit val format: OFormat[SoleProprietorDetails] = Json.format[SoleProprietorDetails]
+object SoleProprietorName {
+  implicit val format: OFormat[SoleProprietorName] = Json.format[SoleProprietorName]
 }

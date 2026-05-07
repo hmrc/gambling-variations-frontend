@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 sealed trait EntityName
 
-case class BusinessName(
+case class BusinessNameDetails(
   mgdRegNum: String,
   businessName: String,
   businessType: BusinessType,
@@ -31,7 +31,7 @@ case class BusinessName(
   systemDate: Option[LocalDate]
 ) extends EntityName
 
-case class SoleProprietorName(
+case class SoleProprietorNameDetails(
   mgdRegNum: String,
   title: String,
   firstName: String,
@@ -46,12 +46,12 @@ object EntityName {
   implicit val reads: Reads[EntityName] =
     (__ \ "businessType").readNullable[BusinessType].flatMap {
       case Some(BusinessType.Soleproprietor) => BusinessNameResponse.soleProprietorReads.widen[EntityName]
-      case _                                 => BusinessNameResponse.businessNameReads.widen[EntityName]
+      case _                                 => BusinessNameResponse.businessNameDetailsReads.widen[EntityName]
     }
 }
 
-object SoleProprietorName {
-  val reads: Reads[SoleProprietorName] = (
+object SoleProprietorNameDetails {
+  val reads: Reads[SoleProprietorNameDetails] = (
     (__ \ "mgdRegNumber").read[String] and
       (__ \ "solePropTitle").read[String] and
       (__ \ "solePropFirstName").read[String] and
@@ -60,15 +60,15 @@ object SoleProprietorName {
       (__ \ "tradingName").readNullable[String] and
       (__ \ "businessType").read[BusinessType] and
       (__ \ "systemDate").readNullable[LocalDate]
-  )(SoleProprietorName.apply _)
+  )(SoleProprietorNameDetails.apply _)
 }
 
-object BusinessName {
-  implicit val reads: Reads[BusinessName] = (
+object BusinessNameDetails {
+  implicit val reads: Reads[BusinessNameDetails] = (
     (__ \ "mgdRegNumber").read[String] and
       (__ \ "businessName").read[String] and
       (__ \ "businessType").read[BusinessType] and
       (__ \ "tradingName").readNullable[String] and
       (__ \ "systemDate").readNullable[LocalDate]
-  )(BusinessName.apply _)
+  )(BusinessNameDetails.apply _)
 }
