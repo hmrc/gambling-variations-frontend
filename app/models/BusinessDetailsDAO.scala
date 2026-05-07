@@ -16,10 +16,10 @@
 
 package models
 
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json.{Format, Json, OFormat, Reads, Writes}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-
-import java.time.Instant
+import java.time.{Instant, LocalDate}
+import java.time.format.DateTimeFormatter
 
 case class BusinessDetailsDAO(
   id: String, // mgdRegNumber
@@ -28,6 +28,16 @@ case class BusinessDetailsDAO(
 )
 
 object BusinessDetailsDAO {
+
+  // Instant format using HMRC Mongo helper
   implicit val instantFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
+
+  // LocalDate format for nested BusinessDetails fields
+  implicit val localDateFormat: Format[LocalDate] = Format(
+    Reads.localDateReads("yyyy-MM-dd"),
+    Writes.temporalWrites[LocalDate, DateTimeFormatter](DateTimeFormatter.ISO_LOCAL_DATE)
+  )
+
+  // Json formatter for BusinessDetailsDAO
   implicit val format: OFormat[BusinessDetailsDAO] = Json.format[BusinessDetailsDAO]
 }

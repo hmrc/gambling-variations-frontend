@@ -18,7 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.*
-import models.BusinessType
+import models.ApiBusinessType
 import models.requests.DataRequest
 import pages.*
 import play.api.Logging
@@ -59,7 +59,7 @@ class ChangeRegistrationDetailsController @Inject() (
 
           val isGroupMember = businessDetails.groupReg
           val isPartnership =
-            businessDetails.businessType.contains(BusinessType.Partnership)
+            businessDetails.businessType.contains(ApiBusinessType.Partnership)
 
           val tasks = buildTaskList(isGroupMember, isPartnership)
 

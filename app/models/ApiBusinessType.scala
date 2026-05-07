@@ -30,7 +30,7 @@ object ApiBusinessType {
   case object Partnership                 extends ApiBusinessType { val code = 4 }
   case object LimitedLiabilityPartnership extends ApiBusinessType { val code = 5 }
 
-  val values: Seq[ApiBusinessType] = Seq(
+  val values: List[ApiBusinessType] = List(
     SoleProprietor,
     CorporateBody,
     UnincorporatedBody,
@@ -42,13 +42,12 @@ object ApiBusinessType {
     values.find(_.code == code)
 
   implicit val reads: Reads[ApiBusinessType] =
-    Reads {
-      case JsNumber(n) =>
-        fromCode(n.toInt)
+    Reads { json =>
+      json.validate[Int].flatMap { code =>
+        fromCode(code)
           .map(JsSuccess(_))
-          .getOrElse(JsError(s"Invalid businessType: $n"))
-      case _ =>
-        JsError("Expected numeric businessType")
+          .getOrElse(JsError("Invalid business type"))
+      }
     }
 
   implicit val writes: Writes[ApiBusinessType] =
