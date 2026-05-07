@@ -43,7 +43,9 @@
     @summaryList(Seq(
         (messages("businessName.tradingName"),
         tradingName.getOrElse(messages("businessName.notProvided")),
-        Seq(("","Change",tradingName.getOrElse(messages("businessName.notProvided")))))
+        Seq(("","site.change",tradingName.getOrElse(messages("businessName.notProvided"))),
+            ("","site.remove",tradingName.getOrElse(messages("businessName.notProvided"))))
+            )
     ))
 
     @govukButton(ButtonViewModel(Text(messages("site.continue"))))

@@ -19,7 +19,7 @@
 @(rows: Seq[(String, String, Seq[(String, String, String)])])(implicit messages: Messages)
 
 
-<dl class="govuk-summary-list govuk-!-margin-bottom-9">
+<dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list--long-key">
     @for((heading, content, links) <- rows) {
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -28,20 +28,16 @@
         <dd class="govuk-summary-list__value">
             @content
         </dd>
+        @if(links.nonEmpty) {
+        @for((url, linkText, hiddenKey) <- links) {
         <dd class="govuk-summary-list__actions">
-            @if(links.nonEmpty) {
-            <ul class="govuk-summary-list__actions-list">
-                @for((url, linkText, hiddenKey) <- links) {
-                <li class="govuk-summary-list__actions-list-item">
-                    <a class="govuk-link" href="@url">
-                        <span class="link-text" aria-hidden="true">@messages(linkText)</span>
-                        <span class="govuk-visually-hidden"> @messages(hiddenKey, heading)</span>
-                    </a>
-                </li>
-                }
-            </ul>
+            <a class="govuk-link" href="@url">
+                <span class="link-text" aria-hidden="true">@messages(linkText)</span>
+                <span class="govuk-visually-hidden"> @messages(hiddenKey, heading)</span>
+            </a>
             }
         </dd>
+        }
     </div>
     }
 </dl>
