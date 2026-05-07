@@ -43,7 +43,18 @@
     @summaryList(Seq(
         (messages("businessName.tradingName"),
         tradingName.getOrElse(messages("businessName.notProvided")),
-        Seq(("","Change",tradingName.getOrElse(messages("businessName.notProvided")))))
+        if(tradingName.isEmpty){
+        Seq(
+            ("#","Change",tradingName.getOrElse(messages("businessName.notProvided"))))
+        } else {
+        Seq(
+            ("#","Change",tradingName.getOrElse(messages("businessName.notProvided"))),
+            (
+                controllers.routes.RemoveTradeNameController.onPageLoad().url(),
+                "Remove",
+                tradingName.getOrElse(messages("businessName.notProvided")
+            )))
+        })
     ))
 
     @govukButton(ButtonViewModel(Text(messages("site.continue"))))

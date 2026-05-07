@@ -18,7 +18,6 @@
 
 @(rows: Seq[(String, String, Seq[(String, String, String)])])(implicit messages: Messages)
 
-
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     @for((heading, content, links) <- rows) {
     <div class="govuk-summary-list__row">
