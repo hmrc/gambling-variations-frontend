@@ -20,7 +20,6 @@
 @this(
         layout: templates.Layout,
         govukButton: GovukButton,
-        break: SectionBreakNoLine,
         formHelper: FormWithCSRF,
         caption: Caption,
         h1:H1,
@@ -55,9 +54,7 @@
     @link(
         messages("businessName.link"),
         controllers.routes.IndexController.onPageLoad().url())
-
-    @break("m")
- }
+    }
 }
 
 
