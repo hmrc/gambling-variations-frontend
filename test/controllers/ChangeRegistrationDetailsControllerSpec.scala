@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import config.FrontendAppConfig
-import models.{ApiBusinessType, BusinessDetails}
+import models.{BusinessDetails, BusinessType}
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -57,7 +57,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
   private def buildBusinessDetails(
     mgdRegNumber: String,
     groupReg: Boolean,
-    businessType: Option[ApiBusinessType]
+    businessType: Option[BusinessType]
   ): BusinessDetails =
     BusinessDetails(
       mgdRegNumber          = mgdRegNumber,
@@ -233,7 +233,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
               buildBusinessDetails(
                 mgdRegNumber = mgd,
                 groupReg     = false,
-                businessType = Some(ApiBusinessType.Partnership)
+                businessType = Some(BusinessType.Partnership)
               )
             )
           }

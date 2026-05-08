@@ -28,7 +28,7 @@ class BusinessDetailsDAOSpec extends AnyFreeSpec with Matchers {
 
     val businessDetails = BusinessDetails(
       mgdRegNumber          = "12345",
-      businessType          = Some(ApiBusinessType.CorporateBody),
+      businessType          = Some(BusinessType.Corporatebody),
       currentlyRegistered   = 1,
       groupReg              = true,
       dateOfRegistration    = Some(LocalDate.of(2020, 1, 1)),

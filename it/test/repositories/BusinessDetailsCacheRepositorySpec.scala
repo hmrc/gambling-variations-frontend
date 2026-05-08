@@ -16,7 +16,7 @@
 
 package repositories
 
-import models.{ApiBusinessType, BusinessDetails, BusinessDetailsDAO}
+import models.{BusinessType, BusinessDetails, BusinessDetailsDAO}
 import org.mongodb.scala.model.Filters
 import org.scalactic.source.Position
 import org.scalatest.OptionValues
@@ -50,7 +50,7 @@ class BusinessDetailsCacheRepositorySpec
 
   private val sampleBusinessDetails = BusinessDetails(
     mgdRegNumber          = "MGD123",
-    businessType          = Some(ApiBusinessType.SoleProprietor),
+    businessType          = Some(BusinessType.Soleproprietor),
     currentlyRegistered   = 1,
     groupReg              = false,
     dateOfRegistration    = Some(LocalDate.of(2020, 1, 1)),
