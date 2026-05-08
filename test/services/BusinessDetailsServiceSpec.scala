@@ -23,32 +23,25 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.concurrent.ScalaFutures
 import org.mockito.Mockito.*
-import org.mockito.ArgumentMatchers.*
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import play.api.mvc.AnyContent
 import play.api.test.FakeRequest
-import repositories.BusinessDetailsCacheRepository
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.mdc.MdcExecutionContext
 
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessDetailsServiceSpec extends AnyFreeSpec with Matchers with MockitoSugar with ScalaFutures {
 
-  // Use MDC-preserving ExecutionContext
-  implicit val ec: ExecutionContext = MdcExecutionContext()
+  implicit val ec: ExecutionContext = ExecutionContext.global
 
-  // Implicits required by the service
   implicit private val hc: HeaderCarrier = HeaderCarrier()
   implicit private val request: FakeRequest[AnyContent] = FakeRequest()
 
-  // Mocks
   private val mockConnector = mock[GamblingConnector]
-  private val mockRepo = mock[BusinessDetailsCacheRepository]
 
-  private val service = new BusinessDetailsService(mockConnector, mockRepo)
+  private val service = new BusinessDetailsService(mockConnector)
 
-  // Sample data
   private val sampleDetails = BusinessDetails(
     mgdRegNumber          = "MGD123",
     businessType          = Some(BusinessType.Soleproprietor),
@@ -59,37 +52,43 @@ class BusinessDetailsServiceSpec extends AnyFreeSpec with Matchers with MockitoS
     systemDate            = LocalDate.of(2026, 5, 7)
   )
 
+  override implicit val patienceConfig: PatienceConfig =
+    PatienceConfig(
+      timeout = scaled(org.scalatest.time.Span(5, org.scalatest.time.Seconds))
+    )
+
   ".retrieveBusinessDetails" - {
 
-    "must return cached BusinessDetails if available in repository" in {
-      reset(mockRepo, mockConnector) // clear previous calls
+    "must return business details from connector" in {
 
-      when(mockRepo.getBusinessDetails("MGD123"))
-        .thenReturn(Future.successful(Some(sampleDetails)))
+      reset(mockConnector)
+
+      when(mockConnector.getBusinessDetails(eqTo("MGD123"))(any[HeaderCarrier]))
+        .thenReturn(Future.successful(sampleDetails))
 
       val result = service.retrieveBusinessDetails("MGD123").futureValue
 
       result mustBe sampleDetails
-      verify(mockRepo, times(1)).getBusinessDetails("MGD123")
-      verifyNoMoreInteractions(mockConnector) // connector should not be called
+
+      verify(mockConnector, times(1))
+        .getBusinessDetails(eqTo("MGD123"))(any[HeaderCarrier])
     }
 
-    "must fetch from connector and cache if not in repository" in {
-      reset(mockRepo, mockConnector) // ensure no leftover invocations
+    "must propagate connector failure" in {
 
-      when(mockRepo.getBusinessDetails("MGD123"))
-        .thenReturn(Future.successful(None))
-      when(mockConnector.getBusinessDetails("MGD123")(hc))
-        .thenReturn(Future.successful(sampleDetails))
-      when(mockRepo.cacheBusinessDetails(sampleDetails))
-        .thenReturn(Future.successful(true))
+      reset(mockConnector)
 
-      val result = service.retrieveBusinessDetails("MGD123").futureValue
+      val exception = new RuntimeException("connector failed")
 
-      result mustBe sampleDetails
-      verify(mockRepo, times(1)).getBusinessDetails("MGD123")
-      verify(mockConnector, times(1)).getBusinessDetails("MGD123")(hc)
-      verify(mockRepo, times(1)).cacheBusinessDetails(sampleDetails)
+      when(mockConnector.getBusinessDetails(eqTo("MGD123"))(any[HeaderCarrier]))
+        .thenReturn(Future.failed(exception))
+
+      val result = service.retrieveBusinessDetails("MGD123").failed.futureValue
+
+      result mustBe exception
+
+      verify(mockConnector, times(1))
+        .getBusinessDetails(eqTo("MGD123"))(any[HeaderCarrier])
     }
   }
 }

@@ -27,11 +27,13 @@ import viewmodels.*
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import services.BusinessDetailsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ChangeRegistrationDetailsView
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -40,6 +42,7 @@ class ChangeRegistrationDetailsController @Inject() (
   requireData: DataRequiredAction,
   appConfig: FrontendAppConfig,
   businessDetailsService: BusinessDetailsService,
+  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeRegistrationDetailsView
 )(implicit ec: ExecutionContext)
@@ -50,33 +53,82 @@ class ChangeRegistrationDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      //  Prefer mgdRefNum if available in your request
       val mgdRegNumber = request.mgdRegNum
 
       businessDetailsService
         .retrieveBusinessDetails(mgdRegNumber)
-        .map { businessDetails =>
+        .flatMap { businessDetails =>
 
-          val isGroupMember = businessDetails.groupReg
-          val isPartnership =
-            businessDetails.businessType.contains(BusinessType.Partnership)
+          val updatedAnswers =
+            for {
+              answersWithGroupReg <-
+                request.userAnswers.set(
+                  GroupMemberPage,
+                  businessDetails.groupReg
+                )
 
-          val tasks = buildTaskList(isGroupMember, isPartnership)
+              answersWithBusinessType <-
+                businessDetails.businessType match {
 
-          val canStart = tasks.exists(_.status == ReadyToSubmit)
+                  case Some(businessType) =>
+                    answersWithGroupReg.set(
+                      BusinessTypePage,
+                      businessType
+                    )
 
-          Ok(
-            view(
-              mgdRegNumber,
-              appConfig.gamblingManagementHomeUrl,
-              tasks,
-              canStart
-            )
-          )
+                  case None =>
+                    Success(answersWithGroupReg)
+                }
+
+            } yield answersWithBusinessType
+
+          updatedAnswers match {
+
+            case Success(userAnswers) =>
+              sessionRepository
+                .set(userAnswers)
+                .map { _ =>
+
+                  val isGroupMember =
+                    businessDetails.groupReg
+
+                  val isPartnership =
+                    businessDetails.businessType.contains(
+                      BusinessType.Partnership
+                    )
+
+                  val tasks =
+                    buildTaskList(
+                      isGroupMember,
+                      isPartnership
+                    )
+
+                  val canStart =
+                    tasks.exists(_.status == ReadyToSubmit)
+
+                  Ok(
+                    view(
+                      mgdRegNumber,
+                      appConfig.gamblingManagementHomeUrl,
+                      tasks,
+                      canStart
+                    )
+                  )
+                }
+
+            case Failure(ex) =>
+              Future.failed(ex)
+          }
         }
         .recover { case ex =>
-          logger.error(s"Failed to load business details for $mgdRegNumber", ex)
-          Redirect(controllers.routes.SystemErrorController.onPageLoad())
+          logger.error(
+            s"Failed to load business details for $mgdRegNumber",
+            ex
+          )
+
+          Redirect(
+            controllers.routes.SystemErrorController.onPageLoad()
+          )
         }
     }
 
@@ -86,7 +138,9 @@ class ChangeRegistrationDetailsController @Inject() (
   )(implicit request: DataRequest[?], messages: Messages): Seq[TaskListItem] = {
 
     val businessNameChanged =
-      request.userAnswers.get(BusinessNameChangesPage).getOrElse(false)
+      request.userAnswers
+        .get(BusinessNameChangesPage)
+        .getOrElse(false)
 
     val licencesChanged = false // will remove it once other pages available
     val premisesExists = false

@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package services
+package pages
 
-import connectors.GamblingConnector
-import models.BusinessDetails
-import play.api.mvc.Request
-import repositories.BusinessDetailsCacheRepository
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.libs.json.JsPath
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+case object GroupMemberPage extends QuestionPage[Boolean] {
 
-class BusinessDetailsService @Inject() (
-  connector: GamblingConnector
-)(implicit ec: ExecutionContext) {
+  override def path: JsPath = JsPath \ toString
 
-  def retrieveBusinessDetails(mgdRegNumber: String)(implicit
-    hc: HeaderCarrier,
-    request: Request[?]
-  ): Future[BusinessDetails] =
-    connector.getBusinessDetails(mgdRegNumber)
+  override def toString: String = "isGroupMember"
 }
