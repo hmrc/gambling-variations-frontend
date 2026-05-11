@@ -69,7 +69,6 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
       systemDate            = LocalDate.of(2026, 1, 1)
     )
 
-  // Mirrors your controller's buildTaskList() logic exactly
   private def expectedTasks(
     isGroupMember: Boolean,
     isPartnership: Boolean,

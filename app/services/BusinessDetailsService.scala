@@ -26,7 +26,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessDetailsService @Inject() (
   connector: GamblingConnector
-)(implicit ec: ExecutionContext) {
+)() {
 
   def retrieveBusinessDetails(mgdRegNumber: String)(implicit
     hc: HeaderCarrier,

@@ -42,7 +42,7 @@ class OperatorDetailsSpec extends AnyFreeSpec with Matchers {
     address4           = Some("County"),
     postcode           = Some("AB12 3CD"),
     country            = Some("UK"),
-    abroadSig          = Some("N"),
+    abroadSig          = Some(false), // UPDATED HERE
     agentOwnRef        = Some("REF001"),
     systemDate         = Some(LocalDate.of(2026, 5, 7))
   )
@@ -51,9 +51,12 @@ class OperatorDetailsSpec extends AnyFreeSpec with Matchers {
 
     "must serialize to JSON correctly" in {
       val json = Json.toJson(sample)
+
       (json \ "mgdRegNumber").as[String] mustBe "MGD123"
       (json \ "solePropName").as[String] mustBe "John Doe"
       (json \ "systemDate").as[String] mustBe "2026-05-07"
+
+      (json \ "abroadSig").as[String] mustBe "N"
     }
 
     "must deserialize from JSON correctly" in {
@@ -83,10 +86,12 @@ class OperatorDetailsSpec extends AnyFreeSpec with Matchers {
           |""".stripMargin
 
       val parsed = Json.parse(jsonString).as[OperatorDetails]
+
       parsed mustBe sample
     }
 
     "must handle optional fields being None" in {
+
       val minimal = OperatorDetails(
         mgdRegNumber       = "MGD999",
         solePropName       = None,
@@ -104,12 +109,13 @@ class OperatorDetailsSpec extends AnyFreeSpec with Matchers {
         address4           = None,
         postcode           = None,
         country            = None,
-        abroadSig          = None,
+        abroadSig          = None, // unchanged
         agentOwnRef        = None,
         systemDate         = None
       )
 
       val json = Json.toJson(minimal)
+
       (json \ "mgdRegNumber").as[String] mustBe "MGD999"
       (json \ "systemDate").toOption mustBe None
 

@@ -16,8 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat, Writes}
-
+import play.api.libs.json.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -38,17 +37,33 @@ final case class OperatorDetails(
   address4: Option[String],
   postcode: Option[String],
   country: Option[String],
-  abroadSig: Option[String], // "Y" | "N"
+  abroadSig: Option[Boolean], // "Y" / "N" mapped to Boolean
   agentOwnRef: Option[String],
   systemDate: Option[LocalDate]
 )
 
 object OperatorDetails {
 
-  private val fmt = DateTimeFormatter.ISO_LOCAL_DATE
+  private val dateFormat = DateTimeFormatter.ISO_LOCAL_DATE
 
-  implicit val localDateWrites: Writes[LocalDate] =
-    Writes.temporalWrites[LocalDate, DateTimeFormatter](fmt)
+  implicit val localDateFormat: Format[LocalDate] =
+    Format(
+      Reads.localDateReads(dateFormat),
+      Writes.temporalWrites[LocalDate, DateTimeFormatter](dateFormat)
+    )
+
+  implicit val abroadSigReads: Reads[Boolean] =
+    Reads {
+      case JsString("Y") => JsSuccess(true)
+      case JsString("N") => JsSuccess(false)
+      case _             => JsError("Expected Y or N for abroadSig")
+    }
+
+  implicit val abroadSigWrites: Writes[Boolean] =
+    Writes {
+      case true  => JsString("Y")
+      case false => JsString("N")
+    }
 
   implicit val format: OFormat[OperatorDetails] =
     Json.format[OperatorDetails]
