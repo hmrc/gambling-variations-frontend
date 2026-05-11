@@ -18,29 +18,38 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.SoleProprietorNameFormPage
+import pages.SoleProprietorNamePage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object SoleProprietorNameFormSummary  {
+object SoleProprietorNameSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(SoleProprietorNameFormPage).map {
-      answer =>
+    answers.get(SoleProprietorNamePage).map { answer =>
 
-      val value = HtmlFormat.escape(answer.title).toString + "<br/>" + HtmlFormat.escape(answer.firstName).toString
+      val value = List(
+        answer.title,
+        answer.firstName,
+        answer.middleName.getOrElse(""),
+        answer.lastName
+      ).map(_.trim)
+        .filter(_.nonEmpty)
+        .map(HtmlFormat.escape(_).toString)
+        .mkString("<br/>")
 
-        SummaryListRowViewModel(
-          key     = "soleProprietorNameForm.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlContent(value)),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.SoleProprietorNameFormController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("soleProprietorNameForm.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "soleProprietorNameForm.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlContent(value)),
+        actions = Seq(
+          ActionItemViewModel(
+            "site.change",
+            routes.SoleProprietorNameController.onPageLoad(CheckMode).url
+          ).withVisuallyHiddenText(messages("soleProprietorNameForm.change.hidden"))
         )
+      )
     }
 }

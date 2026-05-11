@@ -68,7 +68,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       "to Check Business Name when no Trading Name exists" - {
         "when GET" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
           running(application) {
             val request = FakeRequest(GET, removeTradeNameRoute)
@@ -85,7 +85,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
         "when POST" in {
 
           val application =
-            applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+            applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
           running(application) {
             val request =

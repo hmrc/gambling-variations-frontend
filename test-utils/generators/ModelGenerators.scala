@@ -17,11 +17,3 @@
 package generators
 
 trait ModelGenerators {}
-
-implicit lazy val arbitrarySoleProprietorNameForm: Arbitrary[SoleProprietorNameForm] =
-  Arbitrary {
-    for {
-      title     <- arbitrary[String]
-      firstName <- arbitrary[String]
-    } yield SoleProprietorNameForm(title, firstName)
-  }

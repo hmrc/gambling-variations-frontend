@@ -137,6 +137,21 @@ soleProprietorNameForm.error.title.length = title must be 100 characters or less
 soleProprietorNameForm.error.firstName.length = firstName must be 100 characters or less
 soleProprietorNameForm.title.change.hidden = title
 soleProprietorNameForm.firstName.change.hidden = firstName
+soleProprietorName.changeRegistrationDetails = Change registration details
+soleProprietorName.heading = What is the sole proprietor''s name?
+soleProprietorName.title = Sole Proprietors Name
+soleProprietorName.title.label = Title
+soleProprietorName.firstName.label = First Name
+soleProprietorName.middleName.label = Middle Names (optional)
+soleProprietorName.lastName.label = Last Name
+
+soleProprietorName.checkYourAnswersLabel = SoleProprietorNameForm
+soleProprietorName.error.title.required = Enter title
+soleProprietorName.error.firstName.required = Enter firstName
+soleProprietorName.error.title.length = title must be 100 characters or less
+soleProprietorName.error.firstName.length = firstName must be 100 characters or less
+soleProprietorName.title.change.hidden = title
+soleProprietorName.firstName.change.hidden = firstName
 
 removeTradeName.title = Are you sure you want to remove the trading name?
 removeTradeName.heading = Are you sure you want to remove the trading name {0}?

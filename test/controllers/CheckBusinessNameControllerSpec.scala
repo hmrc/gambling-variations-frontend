@@ -79,7 +79,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
 
     "must redirect with an empty set of User Answers" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
