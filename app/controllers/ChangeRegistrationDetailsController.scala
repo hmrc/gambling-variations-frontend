@@ -19,19 +19,17 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.*
 import models.BusinessType
-import models.requests.DataRequest
 import pages.*
 import play.api.Logging
-import viewmodels.*
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.BusinessDetailsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.*
 import views.html.ChangeRegistrationDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 

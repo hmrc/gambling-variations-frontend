@@ -22,7 +22,7 @@ import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class BusinessDetailsService @Inject() (
   connector: GamblingConnector
