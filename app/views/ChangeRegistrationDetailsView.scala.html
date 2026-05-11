@@ -15,11 +15,7 @@
  *@
 
 @import views.html.components._
-@import viewmodels.TaskListItem
-@import viewmodels.TaskStatus
-@import viewmodels.ReadyToSubmit
-@import viewmodels.NoChange
-@import viewmodels.NotStarted
+@import viewmodels._
 
 @this(
 layout: templates.Layout,
@@ -32,10 +28,10 @@ sectionHeader: sectionHeader
 )
 
 @(
+vm: ChangeRegistrationDetailsViewModel,
 mgdRegNumber: String,
 managementHomeUrl: String,
-tasks: Seq[TaskListItem],
-canStart: Boolean = false
+submitUrl: String
 )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("changeRegistrationDetails.title"))) {
@@ -44,10 +40,9 @@ canStart: Boolean = false
 
 @h1("changeRegistrationDetails.heading", classes = "govuk-heading-l")
 
-
 <ul class="govuk-task-list">
 
-    @for((task, index) <- tasks.zipWithIndex) {
+    @for((task, index) <- vm.tasks.zipWithIndex) {
 
     <li class="govuk-task-list__item govuk-task-list__item--with-link">
 
@@ -63,19 +58,19 @@ canStart: Boolean = false
 
             @task.status match {
 
-            case ReadyToSubmit => {
+            case viewmodels.ReadyToSubmit => {
             <strong class="govuk-tag govuk-tag--green">
                 @messages("changeRegistrationDetails.readyToSubmit")
             </strong>
             }
 
-            case NoChange => {
+            case viewmodels.NoChange => {
             <strong class="govuk-tag govuk-tag--light-blue">
                 @messages("changeRegistrationDetails.noChange")
             </strong>
             }
 
-            case NotStarted => {
+            case viewmodels.NotStarted => {
             <strong class="govuk-tag govuk-tag--blue">
                 @messages("site.notStarted")
             </strong>
@@ -85,11 +80,9 @@ canStart: Boolean = false
         </div>
 
     </li>
-
     }
 
 </ul>
-
 
 @h2("changeRegistrationDetails.h2", classes = "govuk-heading-m")
 
@@ -101,9 +94,9 @@ canStart: Boolean = false
 
         <div class="govuk-task-list__name-and-hint">
 
-            @if(canStart) {
+            @if(vm.canStart) {
             <a class="govuk-link govuk-task-list__link"
-               href="@controllers.routes.DeclarationController.onPageLoad().url">
+               href="@submitUrl">
                 @messages("changeRegistrationDetails.submit")
             </a>
             } else {
@@ -116,16 +109,17 @@ canStart: Boolean = false
 
         <div class="govuk-task-list__status govuk-task-list__status--cannot-start-yet">
 
-            @if(canStart) {
+            @if(vm.canStart) {
             @messages("changeRegistrationDetails.submit")
             } else {
             @messages("changeRegistrationDetails.notYetStarted")
             }
 
         </div>
-    </li>
-</ul>
 
+    </li>
+
+</ul>
 
 @link(
 messages("changeRegistrationDetails.change-registration.link"),

@@ -61,206 +61,69 @@ class ChangeRegistrationDetailsController @Inject() (
 
           val updatedAnswers =
             for {
-              answersWithGroupReg <-
-                request.userAnswers.set(
-                  GroupMemberPage,
-                  businessDetails.groupReg
-                )
+              groupUpdated <- request.userAnswers.set(GroupMemberPage, businessDetails.groupReg)
 
-              answersWithBusinessType <-
-                businessDetails.businessType match {
-
-                  case Some(businessType) =>
-                    answersWithGroupReg.set(
-                      BusinessTypePage,
-                      businessType
-                    )
-
-                  case None =>
-                    Success(answersWithGroupReg)
-                }
-
-            } yield answersWithBusinessType
+              finalAnswers <- businessDetails.businessType match {
+                                case Some(bt) => groupUpdated.set(BusinessTypePage, bt)
+                                case None     => Success(groupUpdated)
+                              }
+            } yield finalAnswers
 
           updatedAnswers match {
 
             case Success(userAnswers) =>
-              sessionRepository
-                .set(userAnswers)
-                .map { _ =>
+              sessionRepository.set(userAnswers).map { _ =>
 
-                  val isGroupMember =
-                    businessDetails.groupReg
+                implicit val msgs: Messages = messagesApi.preferred(request)
 
-                  val isPartnership =
-                    businessDetails.businessType.contains(
-                      BusinessType.Partnership
-                    )
+                val isGroupMember =
+                  businessDetails.groupReg
 
-                  val tasks =
-                    buildTaskList(
-                      isGroupMember,
-                      isPartnership
-                    )
+                val isPartnership =
+                  businessDetails.businessType.contains(BusinessType.Partnership)
 
-                  val canStart =
-                    tasks.exists(_.status == ReadyToSubmit)
+                val businessNameChanged =
+                  request.userAnswers
+                    .get(BusinessNameChangesPage)
+                    .getOrElse(false)
 
-                  Ok(
-                    view(
-                      mgdRegNumber,
-                      appConfig.gamblingManagementHomeUrl,
-                      tasks,
-                      canStart
-                    )
+                val licencesChanged = false
+                val premisesExists = false
+                val premisesTriggered = licencesChanged
+
+                val submitUrl =
+                  routes.DeclarationController.onPageLoad().url
+
+                val vm =
+                  ChangeRegistrationDetailsViewModel(
+                    mgdRegNumber        = mgdRegNumber,
+                    managementHomeUrl   = appConfig.gamblingManagementHomeUrl,
+                    isGroupMember       = isGroupMember,
+                    isPartnership       = isPartnership,
+                    businessNameChanged = businessNameChanged,
+                    licencesChanged     = licencesChanged,
+                    premisesExists      = premisesExists,
+                    premisesTriggered   = premisesTriggered,
+                    submitUrl           = submitUrl
                   )
-                }
+
+                Ok(
+                  view(
+                    vm,
+                    mgdRegNumber,
+                    appConfig.gamblingManagementHomeUrl,
+                    submitUrl
+                  )
+                )
+              }
 
             case Failure(ex) =>
               Future.failed(ex)
           }
         }
         .recover { case ex =>
-          logger.error(
-            s"Failed to load business details for $mgdRegNumber",
-            ex
-          )
-
-          Redirect(
-            controllers.routes.SystemErrorController.onPageLoad()
-          )
+          logger.error(s"Failed to load business details for $mgdRegNumber", ex)
+          Redirect(controllers.routes.SystemErrorController.onPageLoad())
         }
     }
-
-  private def buildTaskList(
-    isGroupMember: Boolean,
-    isPartnership: Boolean
-  )(implicit request: DataRequest[?], messages: Messages): Seq[TaskListItem] = {
-
-    val businessNameChanged =
-      request.userAnswers
-        .get(BusinessNameChangesPage)
-        .getOrElse(false)
-
-    val licencesChanged = false // will remove it once other pages available to do
-    val premisesExists = false
-    val premisesTriggered = licencesChanged
-
-    def status(flag: Boolean): TaskStatus =
-      if (flag) ReadyToSubmit else NoChange
-
-    Seq(
-      if (!isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.businessName"),
-            routes.CheckBusinessNameController.onPageLoad().url,
-            status(businessNameChanged)
-          )
-        )
-      else None,
-      if (!isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.businessAddress"),
-            routes.IndexController.onPageLoad().url,
-            NoChange
-          )
-        )
-      else None,
-      if (!isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.businessContactDetails"),
-            routes.IndexController.onPageLoad().url,
-            NoChange
-          )
-        )
-      else None,
-      Some(
-        TaskListItem(
-          messages("changeRegistrationDetails.correspondenceDetails"),
-          routes.IndexController.onPageLoad().url,
-          NoChange
-        )
-      ),
-      Some(
-        TaskListItem(
-          messages("changeRegistrationDetails.tradingDetails"),
-          routes.IndexController.onPageLoad().url,
-          NoChange
-        )
-      ),
-      Some(
-        TaskListItem(
-          messages("changeRegistrationDetails.returnPeriod"),
-          routes.IndexController.onPageLoad().url,
-          NoChange
-        )
-      ),
-      if (isPartnership)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.partnerDetails"),
-            routes.IndexController.onPageLoad().url,
-            NoChange
-          )
-        )
-      else None,
-      if (isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.groupMemberDetails"),
-            "group-member-details",
-            NoChange
-          )
-        )
-      else None,
-      if (isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.controllingBodyDetails"),
-            "group-member-details",
-            NoChange
-          )
-        )
-      else None,
-      if (isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.disbandMGDGroup"),
-            "group-member-details",
-            NoChange
-          )
-        )
-      else None,
-      if (!isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.premises"),
-            routes.IndexController.onPageLoad().url,
-            status(licencesChanged)
-          )
-        )
-      else None,
-      if (!isGroupMember)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.licences"),
-            routes.IndexController.onPageLoad().url,
-            status(licencesChanged)
-          )
-        )
-      else None,
-      if (!isGroupMember && premisesTriggered)
-        Some(
-          TaskListItem(
-            messages("changeRegistrationDetails.premises"),
-            "premises",
-            if (premisesExists) NoChange else NotStarted
-          )
-        )
-      else None
-    ).flatten
-  }
 }
