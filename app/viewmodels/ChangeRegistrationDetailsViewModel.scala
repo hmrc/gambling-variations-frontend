@@ -17,6 +17,7 @@
 package viewmodels
 
 import controllers.routes
+import play.api.i18n.Messages
 
 final case class ChangeRegistrationDetailsViewModel(
   mgdRegNumber: String,
@@ -28,7 +29,7 @@ final case class ChangeRegistrationDetailsViewModel(
   premisesExists: Boolean,
   premisesTriggered: Boolean,
   submitUrl: String
-) {
+)(implicit messages: Messages) {
 
   def tasks: Seq[TaskListItem] = {
 
@@ -38,91 +39,91 @@ final case class ChangeRegistrationDetailsViewModel(
     Seq(
       optional(!isGroupMember)(
         TaskListItem(
-          "Business name",
+          messages("changeRegistrationDetails.businessName"),
           routes.CheckBusinessNameController.onPageLoad().url,
           status(businessNameChanged)
         )
       ),
       optional(!isGroupMember)(
         TaskListItem(
-          "Business address",
+          messages("changeRegistrationDetails.businessAddress"),
           routes.IndexController.onPageLoad().url,
           NoChange
         )
       ),
       optional(!isGroupMember)(
         TaskListItem(
-          "Business contact details",
+          messages("changeRegistrationDetails.businessContactDetails"),
+          routes.IndexController.onPageLoad().url,
+          NoChange
+        )
+      ),
+      optional(isGroupMember)(
+        TaskListItem(
+          messages("changeRegistrationDetails.controllingBodyDetails"),
+          "group-member-details",
+          NoChange
+        )
+      ),
+      optional(isGroupMember)(
+        TaskListItem(
+          messages("changeRegistrationDetails.groupMemberDetails"),
+          "group-member-details",
+          NoChange
+        )
+      ),
+      Some(
+        TaskListItem(
+          messages("changeRegistrationDetails.correspondenceDetails"),
           routes.IndexController.onPageLoad().url,
           NoChange
         )
       ),
       Some(
         TaskListItem(
-          "Correspondence details",
+          messages("changeRegistrationDetails.tradingDetails"),
           routes.IndexController.onPageLoad().url,
           NoChange
         )
       ),
       Some(
         TaskListItem(
-          "Trading details",
-          routes.IndexController.onPageLoad().url,
-          NoChange
-        )
-      ),
-      Some(
-        TaskListItem(
-          "Return period",
+          messages("changeRegistrationDetails.returnPeriod"),
           routes.IndexController.onPageLoad().url,
           NoChange
         )
       ),
       optional(isPartnership)(
         TaskListItem(
-          "Partner details",
+          messages("changeRegistrationDetails.partnerDetails"),
           routes.IndexController.onPageLoad().url,
           NoChange
         )
       ),
       optional(isGroupMember)(
         TaskListItem(
-          "Group member details",
-          "group-member-details",
-          NoChange
-        )
-      ),
-      optional(isGroupMember)(
-        TaskListItem(
-          "Controlling body details",
-          "group-member-details",
-          NoChange
-        )
-      ),
-      optional(isGroupMember)(
-        TaskListItem(
-          "Disband MGD group",
+          messages("changeRegistrationDetails.disbandMGDGroup"),
           "group-member-details",
           NoChange
         )
       ),
       optional(!isGroupMember)(
         TaskListItem(
-          "Premises",
+          messages("changeRegistrationDetails.premises"),
           routes.IndexController.onPageLoad().url,
           status(licencesChanged)
         )
       ),
       optional(!isGroupMember)(
         TaskListItem(
-          "Licences",
+          messages("changeRegistrationDetails.licences"),
           routes.IndexController.onPageLoad().url,
           status(licencesChanged)
         )
       ),
       optional(!isGroupMember && premisesTriggered)(
         TaskListItem(
-          "Premises triggered",
+          messages("changeRegistrationDetails.premises"),
           "premises",
           if (premisesExists) NoChange else NotStarted
         )
