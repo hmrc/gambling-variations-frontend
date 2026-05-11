@@ -32,7 +32,6 @@
 
 @layout(pageTitle = titleNoForm(messages("businessName.title"))) {
 
-@formHelper(action = controllers.routes.CheckBusinessNameController.onSubmit()) {
 
 @caption(messages("businessName.caption"))
 
@@ -49,12 +48,17 @@
         Seq(("","Change",tradingName.getOrElse(messages("businessName.notProvided")))))
     ))
 
-    @govukButton(ButtonViewModel(Text(messages("site.continue"))))
+    <p class="govuk-body">
+        @govukButton(
+        ButtonViewModel(messages("site.continue"))
+        .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+        )
+    </p>
 
     @link(
         messages("businessName.link"),
         controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url())
     }
-}
+
 
 

@@ -21,15 +21,7 @@ import models.UserAnswers
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import repositories.SessionRepository
 import views.html.BusinessNameView
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
-import org.scalatestplus.mockito.MockitoSugar
-import play.api.inject.bind
-import repositories.SessionRepository
-
-import scala.concurrent.Future
 
 class CheckBusinessNameControllerSpec extends SpecBase {
 
@@ -96,34 +88,6 @@ class CheckBusinessNameControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
-      }
-    }
-
-    "must redirect to ChangeRegistrationDetailsController on successful submit" in {
-
-      val data = Json.obj(
-        "businessName" -> "Test Business Ltd",
-        "businessType" -> 4
-      )
-
-      val userAnswers = UserAnswers("id", data)
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .build()
-
-      running(application) {
-
-        val request =
-          FakeRequest(POST, routes.CheckBusinessNameController.onSubmit().url)
-
-        val result =
-          route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
     }
 
