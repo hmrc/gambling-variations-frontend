@@ -67,7 +67,19 @@
                 value = Value(
                     content = tradingName.getOrElse(messages("businessName.notProvided"))
                     ),
-                actions = Some(Actions(
+                actions =
+                if(tradingName.isEmpty){
+                    Some(Actions(
+                        items = Seq(
+                            ActionItem(
+                                href = "#",
+                                content = "site.change",
+                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
+                                )
+                            )
+                    ))
+                } else {
+                Some(Actions(
                     items = Seq(
                         ActionItem(
                             href = "#",
@@ -75,13 +87,14 @@
                             visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
                                 ),
                             ActionItem(
-                            href = "#",
-                            content = "site.remove",
-                            visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
+                                href = controllers.routes.RemoveTradeNameController.onPageLoad().url(),
+                                content = "site.remove",
+                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
                                 )
                             ),
                 classes = "govuk-summary-list__actions govuk-!-width-one-third"
                 ))
+                }
             )
         ))
     )
