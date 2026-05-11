@@ -20,7 +20,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.Helpers.stubMessagesApi
-import org.scalatest.OptionValues._
+import org.scalatest.OptionValues.*
 
 class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
 
@@ -76,9 +76,8 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
         "Licences"
       )
 
-      tasks.map(_.name) must not contain (
+      tasks.map(_.name) must not contain
         "Controlling body details"
-        )
 
       tasks.find(_.name == "Business name").value.status mustBe ReadyToSubmit
       tasks.find(_.name == "Licences").value.status mustBe ReadyToSubmit
@@ -98,7 +97,7 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
         submitUrl           = "/submit"
       )
 
-      viewModel.tasks.map(_.name) must contain ("Partner details")
+      viewModel.tasks.map(_.name) must contain("Partner details")
     }
 
     "include group member tasks when isGroupMember is true" in {
@@ -123,9 +122,8 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
         "Disband MGD group"
       )
 
-      taskMessages must not contain (
+      taskMessages must not contain
         "Business name"
-        )
     }
 
     "include triggered premises task with NotStarted when premises do not exist" in {
