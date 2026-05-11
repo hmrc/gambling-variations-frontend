@@ -67,7 +67,7 @@ class CheckBusinessNameController @Inject() (
       updatedAnswers match {
         case scala.util.Success(answers) =>
           sessionRepository.set(answers).map { _ =>
-            Redirect(routes.CheckBusinessNameController.onPageLoad()) // change to next page
+            Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
           }
 
         case scala.util.Failure(_) =>
