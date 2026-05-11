@@ -73,13 +73,14 @@
                             href = "#",
                             content = "site.change",
                             visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
-                            ),
+                                ),
                             ActionItem(
                             href = "#",
                             content = "site.remove",
                             visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
-                            )
-                    )
+                                )
+                            ),
+                classes = "govuk-summary-list__actions govuk-!-width-one-third"
                 ))
             )
         ))
