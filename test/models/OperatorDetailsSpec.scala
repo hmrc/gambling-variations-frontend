@@ -16,9 +16,11 @@
 
 package models
 
+import models.BusinessType.Soleproprietor
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.Json
+
 import java.time.LocalDate
 
 class OperatorDetailsSpec extends AnyFreeSpec with Matchers {
@@ -32,7 +34,7 @@ class OperatorDetailsSpec extends AnyFreeSpec with Matchers {
     solePropLastName   = Some("Doe"),
     tradingName        = Some("JD Trading"),
     businessName       = Some("JD Ltd"),
-    businessType       = Some(1),
+    businessType       = Some(Soleproprietor),
     adi                = Some("ADI123"),
     address1           = Some("123 Street"),
     address2           = Some("Area"),

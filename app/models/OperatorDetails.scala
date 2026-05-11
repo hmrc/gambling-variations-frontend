@@ -30,7 +30,7 @@ final case class OperatorDetails(
   solePropLastName: Option[String],
   tradingName: Option[String],
   businessName: Option[String],
-  businessType: Option[Int], // 1..5 mapping
+  businessType: Option[BusinessType],
   adi: Option[String],
   address1: Option[String],
   address2: Option[String],

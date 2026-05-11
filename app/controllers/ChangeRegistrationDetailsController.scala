@@ -142,7 +142,7 @@ class ChangeRegistrationDetailsController @Inject() (
         .get(BusinessNameChangesPage)
         .getOrElse(false)
 
-    val licencesChanged = false // will remove it once other pages available
+    val licencesChanged = false // will remove it once other pages available to do
     val premisesExists = false
     val premisesTriggered = licencesChanged
 
