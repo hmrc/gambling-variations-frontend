@@ -148,7 +148,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         s"""{
            |  "mgdRegNumber": "ABC12345678901",
            |  "businessName": "Test Business Ltd",
-           |  "businessType": 2,
+           |  "businessType": 3,
            |  "tradingName": "Trading Name",
            |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
            |}""".stripMargin

@@ -29,7 +29,7 @@ class BusinessNameDetailsSpec extends AnyWordSpec with Matchers:
     s"""{
        |  "mgdRegNumber": "ABC12345678901",
        |  "businessName": "Test Business Ltd",
-       |  "businessType": 3,
+       |  "businessType": 2,
        |  "tradingName": "Trading Name",
        |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
        |}""".stripMargin
