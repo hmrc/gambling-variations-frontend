@@ -24,7 +24,7 @@
         h1:H1,
         link: Link,
         paragraph: Paragraph,
-        summaryList: SummaryListThreeCols
+        govukSummaryList : GovukSummaryList
 )
 
 @(businessType: String, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
@@ -34,19 +34,60 @@
     @caption(messages("businessName.caption"))
 
     @h1("businessName.heading", classes="govuk-heading-l")
-    @summaryList(Seq(
-        (messages("businessName.name", messages("businessType." + businessType)),
-            businessName,
-            Seq(("","Change", messages("businessName.name", messages("businessType." + businessType)))))))
+    @govukSummaryList(SummaryList(
+        rows = Seq(
+            SummaryListRow(
+                key = Key(
+                    content = messages("businessName.name", messages("businessType." + businessType)
+                    )),
+                value = Value(
+                    content = businessName
+                    ),
+                actions = Some(Actions(
+                    items = Seq(
+                        ActionItem(
+                            href = "#",
+                            content = "site.change",
+                            visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType)))
+                            )
+                    )
+                ))
+            )
+        ))
+    )
 
     @paragraph("businessName.table.paragraph." + businessType)
-    @summaryList(Seq(
-        (messages("businessName.tradingName"),
-        tradingName.getOrElse(messages("businessName.notProvided")),
-        Seq(("","site.change",tradingName.getOrElse(messages("businessName.notProvided"))),
-            ("","site.remove",tradingName.getOrElse(messages("businessName.notProvided"))))
+
+    @govukSummaryList(SummaryList(
+        rows = Seq(
+            SummaryListRow(
+                key = Key(
+                    content = messages("businessName.tradingName")
+                    ),
+                value = Value(
+                    content = tradingName.getOrElse(messages("businessName.notProvided"))
+                    ),
+                actions = Some(Actions(
+                    items = Seq(
+                        ActionItem(
+                            href = "#",
+                            content = "site.change",
+                            visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
+                            ),
+                            ActionItem(
+                            href = "#",
+                            content = "site.remove",
+                            visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
+                            )
+                    )
+                ))
             )
-    ))
+        ))
+    )
+
+
+
+
 
     @govukButton(ButtonViewModel(Text(messages("site.continue"))))
 
