@@ -17,76 +17,102 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
 
   val form = new SoleProprietorNameFormProvider()()
+  private val validTitles = Gen.oneOf("Mr", "Mrs", "Ms", "Mx", "O'Neil-Smith")
+  private val validNames = Gen.oneOf("John", "Jane-Ann", "O'Connor", "A1ex", "Mary 2")
 
   ".title" - {
 
     val fieldName = "title"
-    val requiredKey = "soleProprietorNameForm.error.title.required"
-    val lengthKey = "soleProprietorNameForm.error.title.length"
-    val maxLength = 100
+    val requiredKey = "soleProprietorName.error.title.required"
+    val lengthKey = "soleProprietorName.error.title.length"
+    val invalidKey = "soleProprietorName.error.title.invalid"
+    val maxLength = 20
 
-    behave like fieldThatBindsValidData(form, fieldName, stringsWithMaxLength(maxLength))
+    behave like fieldThatBindsValidData(form, fieldName, validTitles)
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength,
-      FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    s"not bind strings longer than $maxLength characters" in {
+      val result = form.bind(Map(fieldName -> ("A" * (maxLength + 1)))).apply(fieldName)
+      result.errors must contain only FormError(fieldName, lengthKey, Seq(maxLength))
+    }
 
     behave like mandatoryField(
       form,
       fieldName,
       FormError(fieldName, requiredKey)
     )
+
+    "not bind invalid characters" in {
+      val result = form.bind(Map(fieldName -> "Mr.")).apply(fieldName)
+      result.errors must contain only FormError(fieldName, invalidKey, Seq("^[A-Za-z' -]+$"))
+    }
+
+    "bind length and invalid character errors together" in {
+      val result = form.bind(Map(fieldName -> (("x" * 21) + "!"))).apply(fieldName)
+      result.errors mustBe Seq(
+        FormError(fieldName, lengthKey, Seq(maxLength)),
+        FormError(fieldName, invalidKey, Seq("^[A-Za-z' -]+$"))
+      )
+    }
   }
 
   ".firstName" - {
 
     val fieldName = "firstName"
-    val requiredKey = "soleProprietorNameForm.error.firstName.required"
-    val lengthKey = "soleProprietorNameForm.error.firstName.length"
+    val requiredKey = "soleProprietorName.error.firstName.required"
+    val lengthKey = "soleProprietorName.error.firstName.length"
+    val invalidKey = "soleProprietorName.error.firstName.invalid"
     val maxLength = 100
 
-    behave like fieldThatBindsValidData(form, fieldName, stringsWithMaxLength(maxLength))
+    behave like fieldThatBindsValidData(form, fieldName, validNames)
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength,
-      FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    s"not bind strings longer than $maxLength characters" in {
+      val result = form.bind(Map(fieldName -> ("A" * (maxLength + 1)))).apply(fieldName)
+      result.errors must contain only FormError(fieldName, lengthKey, Seq(maxLength))
+    }
 
     behave like mandatoryField(
       form,
       fieldName,
       FormError(fieldName, requiredKey)
     )
+
+    "not bind invalid characters" in {
+      val result = form.bind(Map(fieldName -> "John@")).apply(fieldName)
+      result.errors must contain only FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
+    }
+
+    "bind length and invalid character errors together" in {
+      val result = form.bind(Map(fieldName -> (("a" * 101) + "@"))).apply(fieldName)
+      result.errors mustBe Seq(
+        FormError(fieldName, lengthKey, Seq(maxLength)),
+        FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
+      )
+    }
   }
 
   ".middleName" - {
 
     val fieldName = "middleName"
-    val lengthKey = "soleProprietorNameForm.error.middleName.length"
+    val lengthKey = "soleProprietorName.error.middleName.length"
+    val invalidKey = "soleProprietorName.error.middleName.invalid"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      validNames
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength,
-      FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    s"not bind strings longer than $maxLength characters" in {
+      val result = form.bind(Map(fieldName -> ("A" * (maxLength + 1)))).apply(fieldName)
+      result.errors must contain only FormError(fieldName, lengthKey, Seq(maxLength))
+    }
 
     "bind None when field is missing" in {
       val result = form.bind(Map.empty[String, String]).value
@@ -119,33 +145,58 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
 
       result.flatMap(_.middleName) mustBe Some(middleName)
     }
+
+    "not bind invalid characters" in {
+      val result = form.bind(Map(fieldName -> "Middle!")).apply(fieldName)
+      result.errors must contain only FormError(fieldName, invalidKey, Seq("^$|^[A-Za-z0-9' -]+$"))
+    }
+
+    "bind length and invalid character errors together" in {
+      val result = form.bind(Map(fieldName -> (("a" * 101) + "!"))).apply(fieldName)
+      result.errors mustBe Seq(
+        FormError(fieldName, lengthKey, Seq(maxLength)),
+        FormError(fieldName, invalidKey, Seq("^$|^[A-Za-z0-9' -]+$"))
+      )
+    }
   }
 
   ".lastName" - {
 
     val fieldName = "lastName"
-    val requiredKey = "soleProprietorNameForm.error.lastName.required"
-    val lengthKey = "soleProprietorNameForm.error.lastName.length"
+    val requiredKey = "soleProprietorName.error.lastName.required"
+    val lengthKey = "soleProprietorName.error.lastName.length"
+    val invalidKey = "soleProprietorName.error.lastName.invalid"
     val maxLength = 100
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      validNames
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength,
-      FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    s"not bind strings longer than $maxLength characters" in {
+      val result = form.bind(Map(fieldName -> ("A" * (maxLength + 1)))).apply(fieldName)
+      result.errors must contain only FormError(fieldName, lengthKey, Seq(maxLength))
+    }
 
     behave like mandatoryField(
       form,
       fieldName,
       FormError(fieldName, requiredKey)
     )
+
+    "not bind invalid characters" in {
+      val result = form.bind(Map(fieldName -> "Smith!")).apply(fieldName)
+      result.errors must contain only FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
+    }
+
+    "bind length and invalid character errors together" in {
+      val result = form.bind(Map(fieldName -> (("a" * 101) + "!"))).apply(fieldName)
+      result.errors mustBe Seq(
+        FormError(fieldName, lengthKey, Seq(maxLength)),
+        FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
+      )
+    }
 
     "trim input" in {
 

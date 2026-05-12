@@ -25,11 +25,28 @@ import javax.inject.Inject
 
 class SoleProprietorNameFormProvider @Inject() extends Mappings {
 
-  private def optionalCleanText(max: Int, errorKey: String) =
+  private val titleRegex = "^[A-Za-z' -]+$"
+  private val nameRegex = "^[A-Za-z0-9' -]+$"
+  private val optionalNameRegex = "^$|^[A-Za-z0-9' -]+$"
+
+  private def trimmedValidatedText(
+    requiredKey: String,
+    max: Int,
+    lengthKey: String,
+    invalidKey: String,
+    regex: String
+  ) =
+    text(requiredKey)
+      .transform[String](_.trim, identity)
+      .verifying(maxLength(max, lengthKey))
+      .verifying(regexp(regex, invalidKey))
+
+  private def optionalTrimmedValidatedText(max: Int, lengthKey: String, invalidKey: String) =
     optional(
       text()
         .transform[String](_.trim, identity)
-        .verifying(maxLength(max, errorKey))
+        .verifying(maxLength(max, lengthKey))
+        .verifying(regexp(optionalNameRegex, invalidKey))
     ).transform[Option[String]](
       _.filter(_.nonEmpty),
       identity
@@ -39,22 +56,35 @@ class SoleProprietorNameFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "title" ->
-          text("soleProprietorNameForm.error.title.required")
-            .transform[String](_.trim, identity)
-            .verifying(maxLength(100, "soleProprietorNameForm.error.title.length")),
+          trimmedValidatedText(
+            "soleProprietorName.error.title.required",
+            20,
+            "soleProprietorName.error.title.length",
+            "soleProprietorName.error.title.invalid",
+            titleRegex
+          ),
         "firstName" ->
-          text("soleProprietorNameForm.error.firstName.required")
-            .transform[String](_.trim, identity)
-            .verifying(maxLength(100, "soleProprietorNameForm.error.firstName.length")),
-        "middleName" ->
-          optionalCleanText(
+          trimmedValidatedText(
+            "soleProprietorName.error.firstName.required",
             100,
-            "soleProprietorNameForm.error.middleName.length"
+            "soleProprietorName.error.firstName.length",
+            "soleProprietorName.error.firstName.invalid",
+            nameRegex
+          ),
+        "middleName" ->
+          optionalTrimmedValidatedText(
+            100,
+            "soleProprietorName.error.middleName.length",
+            "soleProprietorName.error.middleName.invalid"
           ),
         "lastName" ->
-          text("soleProprietorNameForm.error.lastName.required")
-            .transform[String](_.trim, identity)
-            .verifying(maxLength(100, "soleProprietorNameForm.error.lastName.length"))
+          trimmedValidatedText(
+            "soleProprietorName.error.lastName.required",
+            100,
+            "soleProprietorName.error.lastName.length",
+            "soleProprietorName.error.lastName.invalid",
+            nameRegex
+          )
       )(SoleProprietorName.apply)(sp => Some((sp.title, sp.firstName, sp.middleName, sp.lastName)))
     )
 
