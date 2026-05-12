@@ -1,0 +1,169 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package forms
+
+import forms.behaviours.StringFieldBehaviours
+import play.api.data.FormError
+
+class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
+
+  val form = new SoleProprietorNameFormProvider()()
+
+  ".title" - {
+
+    val fieldName = "title"
+    val requiredKey = "soleProprietorNameForm.error.title.required"
+    val lengthKey = "soleProprietorNameForm.error.title.length"
+    val maxLength = 100
+
+    behave like fieldThatBindsValidData(form, fieldName, stringsWithMaxLength(maxLength))
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength,
+      FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".firstName" - {
+
+    val fieldName = "firstName"
+    val requiredKey = "soleProprietorNameForm.error.firstName.required"
+    val lengthKey = "soleProprietorNameForm.error.firstName.length"
+    val maxLength = 100
+
+    behave like fieldThatBindsValidData(form, fieldName, stringsWithMaxLength(maxLength))
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength,
+      FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".middleName" - {
+
+    val fieldName = "middleName"
+    val lengthKey = "soleProprietorNameForm.error.middleName.length"
+    val maxLength = 100
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength,
+      FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    "bind None when field is missing" in {
+      val result = form.bind(Map.empty[String, String]).value
+      result.flatMap(_.middleName) mustBe None
+    }
+
+    "bind None when field is empty" in {
+      val result = form.bind(Map(fieldName -> "")).value
+      result.flatMap(_.middleName) mustBe None
+    }
+
+    "bind None when field is whitespace" in {
+      val result = form.bind(Map(fieldName -> "   ")).value
+      result.flatMap(_.middleName) mustBe None
+    }
+
+    "bind Some when valid value provided" in {
+      val middleName = "Michael"
+
+      val result = form
+        .bind(
+          Map(
+            "title"     -> "Mr",
+            "firstName" -> "John",
+            "lastName"  -> "Doe",
+            fieldName   -> middleName
+          )
+        )
+        .value
+
+      result.flatMap(_.middleName) mustBe Some(middleName)
+    }
+  }
+
+  ".lastName" - {
+
+    val fieldName = "lastName"
+    val requiredKey = "soleProprietorNameForm.error.lastName.required"
+    val lengthKey = "soleProprietorNameForm.error.lastName.length"
+    val maxLength = 100
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength,
+      FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      FormError(fieldName, requiredKey)
+    )
+
+    "trim input" in {
+
+      val lastName = "  Smith  "
+
+      val result = form
+        .bind(
+          Map(
+            "title"     -> "Mr",
+            "firstName" -> "John",
+            "lastName"  -> "Doe",
+            fieldName   -> lastName
+          )
+        )
+        .value
+
+      result.value.lastName mustBe "Smith"
+    }
+
+  }
+}

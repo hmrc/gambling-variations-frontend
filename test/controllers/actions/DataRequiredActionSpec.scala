@@ -23,7 +23,6 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessNameDetails, SoleProprietorNameDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
-import org.scalatest.RecoverMethods
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
@@ -37,7 +36,7 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMethods {
+class DataRequiredActionSpec extends SpecBase with MockitoSugar {
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
       extends DataRequiredActionImpl(sessionRepository, gamblingConnector) {
@@ -131,7 +130,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         }
       }
 
-      "return a failed future when getCertificate throws an exception" in {
+      "redirect to SystemError when getBusinessName throws an exception" in {
 
         val request = FakeRequest()
         val sessionRepository = mock[SessionRepository]
@@ -140,9 +139,10 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar with RecoverMeth
         when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR))
         val action = new Harness(sessionRepository, gamblingConnector)
 
-        recoverToSucceededIf[RuntimeException] {
-          action.callRefine(OptionalDataRequest(request, mgdRegNum, None))
-        }
+        val result: Either[Result, DataRequest[AnyContent]] =
+          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+
+        result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
 
       }
 
