@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
-import pages.{BusinessNamePage, BusinessTypePage, SoleProprietorPage, TradingNamePage}
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -33,7 +33,7 @@ class CheckBusinessNameController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   view: BusinessNameView
-) extends FrontendBaseController
+)() extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
@@ -52,4 +52,5 @@ class CheckBusinessNameController @Inject() (
     businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
 
   }
+
 }

@@ -90,5 +90,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
+
   }
+
 }

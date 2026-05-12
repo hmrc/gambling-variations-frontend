@@ -20,6 +20,7 @@
 @this(
         layout: templates.Layout,
         govukButton: GovukButton,
+        formHelper: FormWithCSRF,
         caption: Caption,
         h1:H1,
         link: Link,
@@ -31,7 +32,8 @@
 
 @layout(pageTitle = titleNoForm(messages("businessName.title"))) {
 
-    @caption(messages("businessName.caption"))
+
+@caption(messages("businessName.caption"))
 
     @h1("businessName.heading", classes="govuk-heading-l")
     @govukSummaryList(SummaryList(
@@ -103,12 +105,17 @@
 
 
 
-    @govukButton(ButtonViewModel(Text(messages("site.continue"))))
+    <p class="govuk-body">
+        @govukButton(
+        ButtonViewModel(messages("site.continue"))
+        .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+        )
+    </p>
 
     @link(
         messages("businessName.link"),
-        controllers.routes.IndexController.onPageLoad().url())
+        controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url())
+    }
 
-}
 
 

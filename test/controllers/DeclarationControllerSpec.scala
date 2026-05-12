@@ -19,26 +19,25 @@ package controllers
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.AccessDeniedView
+import views.html.DeclarationView
 
-class AccessDeniedControllerSpec extends SpecBase {
+class DeclarationControllerSpec extends SpecBase {
 
-  "AccessDenied Controller" - {
+  "Declaration Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.AccessDeniedController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.DeclarationController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AccessDeniedView]
+        val view = application.injector.instanceOf[DeclarationView]
 
         status(result) mustEqual OK
-        contentAsString(result) must include("Sorry, there is a problem with the service")
-        contentAsString(result) must include("Continue to your account")
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }

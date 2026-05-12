@@ -18,8 +18,8 @@ package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.BusinessType.{Soleproprietor, Unincorporatedbody}
-import models.{BusinessNameDetails, MgdCertificate}
+import models.BusinessType.Unincorporatedbody
+import models.{BusinessDetails, BusinessNameDetails, MgdCertificate}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -137,6 +137,103 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         partMembers          = Seq.empty,
         groupMembers         = Seq.empty,
         returnPeriodEndDates = Seq.empty
+      )
+  }
+
+  "GamblingConnector.getBusinessDetails" should {
+
+    "return business details when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "$mgdRegNumber",
+           |  "businessType": 3,
+           |  "currentlyRegistered": 1,
+           |  "groupReg": false,
+           |  "dateOfRegistration": "2020-01-01",
+           |  "businessPartnerNumber": "XB1234567890",
+           |  "systemDate": "2026-01-01"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getBusinessDetails(mgdRegNumber).futureValue mustBe businessDetails
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-details/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessDetails(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-details/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessDetails(mgdRegNumber)
+      }
+    }
+
+    "throw RuntimeException when backend returns invalid JSON" in {
+
+      val invalidJson =
+        """{
+          |  "invalidField": "invalidValue"
+          |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(invalidJson))
+      )
+
+      recoverToSucceededIf[RuntimeException] {
+        connector.getBusinessDetails(mgdRegNumber)
+      }
+    }
+
+    "throw RuntimeException when business type code is invalid" in {
+
+      val invalidBusinessTypeJson =
+        s"""{
+           |  "mgdRegNumber": "$mgdRegNumber",
+           |  "businessType": 999,
+           |  "currentlyRegistered": 1,
+           |  "groupReg": false,
+           |  "systemDate": "2026-01-01"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(invalidBusinessTypeJson))
+      )
+
+      recoverToSucceededIf[RuntimeException] {
+        connector.getBusinessDetails(mgdRegNumber)
+      }
+    }
+
+    def businessDetails: BusinessDetails =
+      BusinessDetails(
+        mgdRegNumber          = mgdRegNumber,
+        businessType          = Some(Unincorporatedbody),
+        currentlyRegistered   = 1,
+        groupReg              = false,
+        dateOfRegistration    = Some(LocalDate.of(2020, 1, 1)),
+        businessPartnerNumber = Some("XB1234567890"),
+        systemDate            = LocalDate.of(2026, 1, 1)
       )
   }
 

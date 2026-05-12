@@ -36,7 +36,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   val signOutUrl: String = configuration.get[String]("urls.signOut")
   lazy val hmrcOnlineServiceDesk: String = configuration.get[String]("urls.hmrcOnlineServiceDesk")
-
+  lazy val gamblingManagementHomeUrl: String = configuration.get[String]("urls.gamblingManagementHome")
   private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
   val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/gambling-variations-frontend"
 

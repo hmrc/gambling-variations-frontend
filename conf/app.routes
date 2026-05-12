@@ -23,8 +23,12 @@ GET        /there-is-a-problem-with-the-service          controllers.SystemError
 GET        /there-is-a-problem-access-denied            controllers.AccessDeniedController.onPageLoad()
 GET        /page-not-found                              controllers.PageNotFoundController.onPageLoad()
 
+GET        /change-registration-details                       controllers.ChangeRegistrationDetailsController.onPageLoad()
 
-GET        /change-registration/check-business-name     controllers.CheckBusinessNameController.onPageLoad()
+GET        /change-registration/check-business-name           controllers.CheckBusinessNameController.onPageLoad()
+
+
+GET       /change-registration/declaration                       controllers.DeclarationController.onPageLoad()
 
 GET        /change-registration-details/business-name/remove-trading-name                     controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-name/remove-trading-name                      controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)

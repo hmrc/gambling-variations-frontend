@@ -1,0 +1,127 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package controllers
+
+import config.FrontendAppConfig
+import controllers.actions.*
+import models.BusinessType
+import pages.*
+import play.api.Logging
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
+import services.BusinessDetailsService
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.*
+import views.html.ChangeRegistrationDetailsView
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
+
+class ChangeRegistrationDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  appConfig: FrontendAppConfig,
+  businessDetailsService: BusinessDetailsService,
+  sessionRepository: SessionRepository,
+  val controllerComponents: MessagesControllerComponents,
+  view: ChangeRegistrationDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
+
+  def onPageLoad: Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+
+      val mgdRegNumber = request.mgdRegNum
+
+      businessDetailsService
+        .retrieveBusinessDetails(mgdRegNumber)
+        .flatMap { businessDetails =>
+
+          val updatedAnswers =
+            for {
+              groupUpdated <- request.userAnswers.set(GroupMemberPage, businessDetails.groupReg)
+
+              finalAnswers <- businessDetails.businessType match {
+                                case Some(bt) => groupUpdated.set(BusinessTypePage, bt)
+                                case None     => Success(groupUpdated)
+                              }
+            } yield finalAnswers
+
+          updatedAnswers match {
+
+            case Success(userAnswers) =>
+              sessionRepository.set(userAnswers).map { _ =>
+
+                implicit val msgs: Messages = messagesApi.preferred(request)
+
+                val isGroupMember =
+                  businessDetails.groupReg
+
+                val isPartnership =
+                  businessDetails.businessType.contains(BusinessType.Partnership)
+
+                val businessNameChanged =
+                  request.userAnswers
+                    .get(BusinessNameChangesPage)
+                    .getOrElse(false)
+
+                val licencesChanged = false
+                val premisesExists = false
+                val premisesTriggered = licencesChanged
+
+                val submitUrl =
+                  routes.DeclarationController.onPageLoad().url
+
+                val vm =
+                  ChangeRegistrationDetailsViewModel(
+                    mgdRegNumber        = mgdRegNumber,
+                    managementHomeUrl   = appConfig.gamblingManagementHomeUrl,
+                    isGroupMember       = isGroupMember,
+                    isPartnership       = isPartnership,
+                    businessNameChanged = businessNameChanged,
+                    licencesChanged     = licencesChanged,
+                    premisesExists      = premisesExists,
+                    premisesTriggered   = premisesTriggered,
+                    submitUrl           = submitUrl
+                  )
+
+                Ok(
+                  view(
+                    vm,
+                    mgdRegNumber,
+                    appConfig.gamblingManagementHomeUrl,
+                    submitUrl
+                  )
+                )
+              }
+
+            case Failure(ex) =>
+              Future.failed(ex)
+          }
+        }
+        .recover { case ex =>
+          logger.error(s"Failed to load business details for $mgdRegNumber", ex)
+          Redirect(controllers.routes.SystemErrorController.onPageLoad())
+        }
+    }
+}
