@@ -27,8 +27,8 @@ class AccessDeniedViewSpec extends SpecBase {
   "AccessDeniedView" - {
 
     "must render the page with correct heading and service desk link" in new Setup {
-
-      val html = view()
+      val continueLink = "https://www.tax.service.gov.uk/sign-in-to-hmrc-online-services/identity/sign-in/wAE_iwZkS3vQIqdVkFS8R8AAGWE4"
+      val html = view(continueLink)
       val doc = Jsoup.parse(html.body)
 
       doc.title must include(messages("accessDenied.title"))
@@ -38,8 +38,7 @@ class AccessDeniedViewSpec extends SpecBase {
       doc.select("p").text must include(messages("accessDenied.p1"))
       val link = doc.select(".page-not-found-home-page-link a").attr("href")
 
-      link mustEqual "https://www.tax.service.gov.uk/sign-in-to-hmrc-online-services/identity/sign-in/wAE_iwZkS3vQIqdVkFS8R8AAGWE4"
-
+      link mustEqual continueLink
     }
   }
 
