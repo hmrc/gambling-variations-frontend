@@ -24,7 +24,7 @@
         h1:H1
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(continueToLogin: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("accessDenied.title")),
     showBackLink = true,
@@ -35,7 +35,7 @@
     @paragraph(message= "accessDenied.p1")
     @link(
         "accessDenied.p1.link",
-        "https://www.tax.service.gov.uk/sign-in-to-hmrc-online-services/identity/sign-in/wAE_iwZkS3vQIqdVkFS8R8AAGWE4",
+        continueToLogin,
         extraClasses = "page-not-found-home-page-link"
         )
 
