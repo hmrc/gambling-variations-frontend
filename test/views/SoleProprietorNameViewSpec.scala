@@ -56,10 +56,10 @@ class SoleProprietorNameViewSpec extends SpecBase {
 
       val populatedForm = form.fill(
         SoleProprietorName(
-          title = "Mr",
-          firstName = "John",
+          title      = "Mr",
+          firstName  = "John",
           middleName = Some("Middle Name"),
-          lastName = "Doe"
+          lastName   = "Doe"
         )
       )
 
