@@ -42,13 +42,13 @@ object SoleProprietorNameSummary {
         .mkString("<br/>")
 
       SummaryListRowViewModel(
-        key   = "soleProprietorNameForm.checkYourAnswersLabel",
+        key   = "soleProprietorName.checkYourAnswersLabel",
         value = ValueViewModel(HtmlContent(value)),
         actions = Seq(
           ActionItemViewModel(
             "site.change",
             routes.SoleProprietorNameController.onPageLoad(CheckMode).url
-          ).withVisuallyHiddenText(messages("soleProprietorNameForm.change.hidden"))
+          ).withVisuallyHiddenText(messages("soleProprietorName.change.hidden"))
         )
       )
     }

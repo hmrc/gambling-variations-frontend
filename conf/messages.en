@@ -126,32 +126,34 @@ declaration.submit = Declare and submit
 
 submit.changes = Submit changes
 
-soleProprietorNameForm.title = soleProprietorNameForm
-soleProprietorNameForm.heading = soleProprietorNameForm
-soleProprietorNameForm.title = title
-soleProprietorNameForm.firstName = firstName
-soleProprietorNameForm.checkYourAnswersLabel = SoleProprietorNameForm
-soleProprietorNameForm.error.title.required = Enter title
-soleProprietorNameForm.error.firstName.required = Enter firstName
-soleProprietorNameForm.error.title.length = title must be 100 characters or less
-soleProprietorNameForm.error.firstName.length = firstName must be 100 characters or less
-soleProprietorNameForm.title.change.hidden = title
-soleProprietorNameForm.firstName.change.hidden = firstName
+soleProprietorName.title = 	What is the sole proprietor's name? - Change registration details - Manage your Machine Games Duty - GOV.UK
+
 soleProprietorName.changeRegistrationDetails = Change registration details
 soleProprietorName.heading = What is the sole proprietor''s name?
-soleProprietorName.title = Sole Proprietors Name
-soleProprietorName.title.label = Title
-soleProprietorName.firstName.label = First Name
-soleProprietorName.middleName.label = Middle Names (optional)
-soleProprietorName.lastName.label = Last Name
-
 soleProprietorName.checkYourAnswersLabel = SoleProprietorNameForm
-soleProprietorName.error.title.required = Enter title
-soleProprietorName.error.firstName.required = Enter firstName
-soleProprietorName.error.title.length = title must be 100 characters or less
-soleProprietorName.error.firstName.length = firstName must be 100 characters or less
-soleProprietorName.title.change.hidden = title
-soleProprietorName.firstName.change.hidden = firstName
+
+soleProprietorName.title.label = Title
+soleProprietorName.title.change.hidden = Title
+
+soleProprietorName.error.title.required = Enter the sole proprietor''s title
+soleProprietorName.error.title.length = The sole proprietor''s title must be 20 characters or less
+soleProprietorName.error.title.invalid = The sole proprietor''s title must only include letters a to z, apostrophes, hyphens or spaces
+
+soleProprietorName.firstName.label = First Name
+soleProprietorName.firstName.change.hidden = First Name
+
+soleProprietorName.error.firstName.required = Enter the sole proprietor''s first name
+soleProprietorName.error.firstName.length = The sole proprietor''s first name must be 100 characters or less
+soleProprietorName.error.firstName.invalid = The sole proprietor's first name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+
+soleProprietorName.middleName.label = Middle Names (optional)
+soleProprietorName.error.middleName.length = The sole proprietor's middle name must be 100 characters or less
+soleProprietorName.error.middleName.invalid = The sole proprietor's middle name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+
+soleProprietorName.lastName.label = Last Name
+soleProprietorName.error.lastName.required = Enter the sole proprietor's last name
+soleProprietorName.error.lastName.length = The sole proprietor's last name must be 100 characters or less
+soleProprietorName.error.lastName.invalid = The sole proprietor's last name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
 removeTradeName.title = Are you sure you want to remove the trading name?
 removeTradeName.heading = Are you sure you want to remove the trading name {0}?
