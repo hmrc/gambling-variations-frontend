@@ -27,8 +27,8 @@ sealed trait BusinessType {
 object BusinessType extends Enumerable.Implicits {
 
   case object Soleproprietor              extends WithName("soleproprietor") with BusinessType { val code = 1 }
-  case object Unincorporatedbody          extends WithName("unincorporatedbody") with BusinessType { val code = 2 }
-  case object Corporatebody               extends WithName("corporatebody") with BusinessType { val code = 3 }
+  case object Corporatebody               extends WithName("corporatebody") with BusinessType { val code = 2 }
+  case object Unincorporatedbody          extends WithName("unincorporatedbody") with BusinessType { val code = 3 }
   case object Partnership                 extends WithName("partnership") with BusinessType { val code = 4 }
   case object LimitedLiabilityPartnership extends WithName("llp") with BusinessType { val code = 5 }
 
