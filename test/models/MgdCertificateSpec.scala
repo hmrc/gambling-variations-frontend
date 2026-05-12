@@ -45,7 +45,7 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
     repMemLine4        = None,
     repMemPostcode     = None,
     repMemAdi          = None,
-    typeOfBusiness     = Some(Soleproprietor),
+    typeOfBusiness     = Some(Corporatebody),
     businessTradeClass = Some(1),
     noOfPartners       = Some(2),
     groupReg           = false,

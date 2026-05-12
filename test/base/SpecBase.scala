@@ -18,7 +18,7 @@ package base
 
 import com.typesafe.config.ConfigFactory
 import controllers.actions.*
-import models.{SoleProprietorName, UserAnswers}
+import models.UserAnswers
 import config.FrontendAppConfig
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
@@ -27,7 +27,6 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{OptionValues, TryValues}
-import pages.SoleProprietorNamePage
 import play.api.{Application, Configuration}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
@@ -41,10 +40,7 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
 
   val userAnswersId: String = "id"
 
-  def validUserAnswers: UserAnswers = UserAnswers(userAnswersId)
-    .set(SoleProprietorNamePage, SoleProprietorName("Mr", "John", Some("A"), "Doe"))
-    .success
-    .value
+  def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
 

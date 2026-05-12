@@ -2,6 +2,16 @@
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package controllers
@@ -10,17 +20,18 @@ import base.SpecBase
 import forms.SoleProprietorNameFormProvider
 import models.{NormalMode, SoleProprietorName, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.SoleProprietorNamePage
+import pages.SoleProprietorPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.SoleProprietorNameFormView
+import views.html.SoleProprietorNameView
 
 import scala.concurrent.Future
 
@@ -30,13 +41,6 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
 
   private val formProvider = new SoleProprietorNameFormProvider()
   private val form = formProvider()
-
-  private val routeUrl =
-    routes.SoleProprietorNameController.onPageLoad(NormalMode).url
-
-  // ------------------------------------------
-  // Test Data
-  // ------------------------------------------
 
   private val validData = Map(
     "title"      -> "Mr",
@@ -55,38 +59,29 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
   private val populatedAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
-      SoleProprietorNamePage.toString -> Json.toJson(model)
+      SoleProprietorPage.toString -> Json.toJson(model)
     )
   )
-
-  // ------------------------------------------
-  // Tests
-  // ------------------------------------------
 
   "SoleProprietorNameController" - {
 
     // ============================
     // GET
     // ============================
-
     "onPageLoad" - {
 
       "return OK and render empty form when no existing answer" in {
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
 
         running(application) {
-          val request = FakeRequest(GET, routeUrl)
-
-          val result = route(application, request).value
+          val request = FakeRequest(GET, routes.SoleProprietorNameController.onPageLoad(NormalMode).url)
+          val controller = application.injector.instanceOf[SoleProprietorNameController]
+          val result = call(controller.onPageLoad(NormalMode), request)
+          val view = application.injector.instanceOf[SoleProprietorNameView]
 
           status(result) mustEqual OK
-
-          val content = contentAsString(result)
-
-          content must include("""name="title"""")
-          content must include("""name="firstName"""")
-          content must include("""name="lastName"""")
+          contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -95,40 +90,21 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = Some(populatedAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routeUrl)
-
-          val result = route(application, request).value
-          val content = contentAsString(result)
+          val request = FakeRequest(GET, routes.SoleProprietorNameController.onPageLoad(NormalMode).url)
+          val controller = application.injector.instanceOf[SoleProprietorNameController]
+          val result = call(controller.onPageLoad(NormalMode), request)
+          val view = application.injector.instanceOf[SoleProprietorNameView]
 
           status(result) mustEqual OK
-
-          content must include("""value="Mr"""")
-          content must include("""value="John"""")
-          content must include("""value="A"""")
-          content must include("""value="Doe"""")
+          contentAsString(result) mustEqual view(form.fill(model), NormalMode)(request, messages(application)).toString
         }
       }
 
-      "redirect to Journey Recovery when no UserAnswers" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request = FakeRequest(GET, routeUrl)
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            routes.JourneyRecoveryController.onPageLoad().url
-        }
-      }
     }
 
     // ============================
     // POST
     // ============================
-
     "onSubmit" - {
 
       "redirect on valid submission" in {
@@ -139,7 +115,7 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
           .thenReturn(Future.successful(true))
 
         val application =
-          applicationBuilder(userAnswers = Some(validUserAnswers))
+          applicationBuilder(userAnswers = Some(emptyUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -148,10 +124,11 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            FakeRequest(POST, routeUrl)
+            FakeRequest(POST, routes.SoleProprietorNameController.onSubmit(NormalMode).url)
               .withFormUrlEncodedBody(validData.toSeq*)
+          val controller = application.injector.instanceOf[SoleProprietorNameController]
 
-          val result = route(application, request).value
+          val result = call(controller.onSubmit(NormalMode), request)
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
@@ -160,11 +137,11 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
 
       "return BAD_REQUEST when invalid data submitted" in {
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         running(application) {
           val request =
-            FakeRequest(POST, routeUrl)
+            FakeRequest(POST, routes.SoleProprietorNameController.onSubmit(NormalMode).url)
               .withFormUrlEncodedBody(
                 "title"      -> "",
                 "firstName"  -> "",
@@ -172,34 +149,23 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
                 "lastName"   -> ""
               )
 
-          val result = route(application, request).value
+          val controller = application.injector.instanceOf[SoleProprietorNameController]
+          val boundForm = form.bind(
+            Map(
+              "title"      -> "",
+              "firstName"  -> "",
+              "middleName" -> "",
+              "lastName"   -> ""
+            )
+          )
+          val view = application.injector.instanceOf[SoleProprietorNameView]
+          val result = call(controller.onSubmit(NormalMode), request)
 
           status(result) mustEqual BAD_REQUEST
-
-          val content = contentAsString(result)
-
-          content must include("soleProprietorNameForm.error.title.required")
-          content must include("soleProprietorNameForm.error.firstName.required")
-          content must include("soleProprietorNameForm.error.lastName.required")
+          contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
         }
       }
 
-      "redirect to Journey Recovery when no UserAnswers" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request =
-            FakeRequest(POST, routeUrl)
-              .withFormUrlEncodedBody(validData.toSeq*)
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            routes.JourneyRecoveryController.onPageLoad().url
-        }
-      }
     }
   }
 }

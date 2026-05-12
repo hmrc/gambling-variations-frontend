@@ -18,16 +18,14 @@ package controllers
 
 import controllers.actions.*
 import forms.SoleProprietorNameFormProvider
-import models.{Mode, SoleProprietorName, UserAnswers}
+import models.{Mode, SoleProprietorName}
 import navigation.Navigator
-import pages.SoleProprietorNamePage
-import play.api.data.Form
-import play.api.i18n.Lang.logger
+import pages.SoleProprietorPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.SoleProprietorNameFormView
+import views.html.SoleProprietorNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,48 +39,31 @@ class SoleProprietorNameController @Inject() (
   requireData: DataRequiredAction,
   formProvider: SoleProprietorNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: SoleProprietorNameFormView
+  view: SoleProprietorNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData).async { implicit request =>
+  val form = formProvider()
 
-    val form: Form[SoleProprietorName] = formProvider()
-
-    logger.info("Reached SoleProprietorNameController")
-
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.mgdRegNum))
-
-    val preparedForm = userAnswers
-      .get(SoleProprietorNamePage)
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers
+      .get(SoleProprietorPage)
       .fold(form)(form.fill)
 
-    // This prevents requireData from calling backend next time
-    val initialiseUserAnswers: Future[Boolean] =
-      if (request.userAnswers.isEmpty)
-        sessionRepository.set(userAnswers)
-      else Future.successful(true)
-
-    initialiseUserAnswers.map { _ =>
-      Ok(view(preparedForm, mode))
-    }
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    val form = formProvider()
-
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) async { implicit request =>
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorNamePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(routes.SoleProprietorNameController.onPageLoad(mode))
-        // yield Redirect(navigator.nextPage(SoleProprietorNamePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(SoleProprietorPage, mode, updatedAnswers))
       )
   }
 }
