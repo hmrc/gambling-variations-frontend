@@ -147,7 +147,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       val jsonAsString: String =
         s"""{
            |  "mgdRegNumber": "$mgdRegNumber",
-           |  "businessType": 2,
+           |  "businessType": 3,
            |  "currentlyRegistered": 1,
            |  "groupReg": false,
            |  "dateOfRegistration": "2020-01-01",
