@@ -1,0 +1,97 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.InputWidth._
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukInput: GovukInput,
+    govukButton: GovukButton
+)
+
+@(form: Form[models.SoleProprietorName], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = messages("soleProprietorName.title")) {
+
+  @formHelper(action = controllers.routes.SoleProprietorNameController.onSubmit(mode)) {
+
+    @if(form.hasErrors) {
+      @govukErrorSummary(ErrorSummaryViewModel(form))
+    }
+
+    <span class="govuk-caption-l">
+      @messages("soleProprietorName.changeRegistrationDetails")
+    </span>
+
+    <fieldset class="govuk-fieldset">
+
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+          @messages("soleProprietorName.heading")
+        </h1>
+      </legend>
+
+        @govukInput(
+          InputViewModel(
+            field = form("title"),
+            label = LabelViewModel(
+              content = Text(messages("soleProprietorName.title.label"))
+            )
+          )
+          .withCssClass("govuk-input--width-10")
+        )
+
+    @govukInput(
+      InputViewModel(
+        field = form("firstName"),
+        label = LabelViewModel(
+          content = Text(messages("soleProprietorName.firstName.label"))
+        )
+      )
+      .withCssClass("govuk-input--width-100")
+    )
+
+    @govukInput(
+      InputViewModel(
+        field = form("middleName"),
+        label = LabelViewModel(
+          content = Text(messages("soleProprietorName.middleName.label"))
+        )
+      )
+       .withCssClass("govuk-input--width-100")
+    )
+
+    @govukInput(
+      InputViewModel(
+        field = form("lastName"),
+        label = LabelViewModel(
+          content = Text(messages("soleProprietorName.lastName.label"))
+        )
+        //.withCssClass("govuk-label--m")
+      )
+      //.withHint(HintViewModel(Text(messages("soleProprietorName.middleName.hint"))))
+      .withCssClass("govuk-input--width-100")
+    )
+
+    </fieldset>
+
+    @govukButton(
+      ButtonViewModel(messages("site.continue"))
+    )
+  }
+}
