@@ -41,7 +41,9 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("businessTradingName.heading")).asPageHeading()
+                label = LabelViewModel(messages("businessTradingName.heading"))
+                .asPageHeading()
+                .withCssClass("govuk-fieldset__legend--l")
             )
             .withHint(HintViewModel(messages("businessTradingName.hint")))
             .withWidth(Full)
