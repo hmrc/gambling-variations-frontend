@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.JsPath
 
-import java.time.LocalDate
-
-final case class BusinessContactDetails(
-  mgdRegNumber: String,
-  phoneNumber: Option[String],
-  mobilePhoneNumber: Option[String],
-  faxNumber: Option[String],
-  emailAddr: Option[String],
-  systemDate: LocalDate
-)
-
-object BusinessContactDetails {
-  implicit val format: OFormat[BusinessContactDetails] = Json.format[BusinessContactDetails]
+case object BusinessEmailPage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \ "businessEmail"
 }
