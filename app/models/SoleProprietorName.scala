@@ -25,6 +25,7 @@ case class SoleProprietorName(
   lastName: String
 ) {
   def fullName: String = Seq(
+    Some(title),
     Some(firstName),
     middleName,
     Some(lastName)
