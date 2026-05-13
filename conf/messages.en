@@ -161,7 +161,7 @@ removeTradeName.caption = Change registration details
 removeTradeName.error.required = Select yes to if you want to remove the trading name
 removeTradeName.change.hidden = RemoveTradeName
 
-businessTradingName.title = What is the business trading name?
+businessTradingName.title = What is the business trading name? - Change registration details
 businessTradingName.heading = What is the business trading name?
 BusinessTradingNameController.heading.caption = Change registration details
 businessTradingName.checkYourAnswersLabel = What is the business trading name?
