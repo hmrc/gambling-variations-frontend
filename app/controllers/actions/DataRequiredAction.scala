@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 import scala.util.Try
 
 class DataRequiredActionImpl @Inject() (
@@ -76,6 +77,9 @@ class DataRequiredActionImpl @Inject() (
                 Left(Redirect(routes.SystemErrorController.onPageLoad()))
             }
           } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+        } recover { case NonFatal(e) =>
+          logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
+          Left(Redirect(routes.SystemErrorController.onPageLoad()))
         }
       case Some(data) =>
         logger.info(s"User Answers found with id ${data.id}")

@@ -18,8 +18,8 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import pages.*
 import models.*
+import pages.*
 
 class NavigatorSpec extends SpecBase {
 
@@ -29,27 +29,42 @@ class NavigatorSpec extends SpecBase {
 
     "in Normal mode" - {
 
-      "must go from a page that doesn't exist in the route map to Index" in {
+      "must go to" - {
 
-        case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id")) mustBe routes.IndexController.onPageLoad()
-      }
+        "CheckBusinessNameController from RemoveTradeNamePage" in {
 
-      "must go from TradingNamePage to CheckBusinessName" in {
+          case object UnknownPage extends Page
+          navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id")) mustBe routes.IndexController.onPageLoad()
+        }
 
-        navigator.nextPage(TradingNamePage, NormalMode, UserAnswers("id")) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+        "must go from TradingNamePage to CheckBusinessName" in {
+
+          navigator.nextPage(TradingNamePage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckBusinessNameController.onPageLoad()
+        }
+
+        "a page that doesn't exist in the route map to Index" in {
+          navigator.nextPage(RemoveTradeNamePage, NormalMode, UserAnswers("id")) mustBe routes.CheckBusinessNameController.onPageLoad()
+        }
       }
 
     }
 
     "in Check mode" - {
 
-      "must go from a page that doesn't exist in the edit route map to CheckYourAnswers" in {
+      "must go to" - {
+        "CheckBusinessNameController from RemoveTradeNamePage" in {
 
-        case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad()
+          navigator.nextPage(RemoveTradeNamePage, CheckMode, UserAnswers("id")) mustBe routes.CheckBusinessNameController.onPageLoad()
+        }
+
+        "a page that doesn't exist in the edit route map to CheckYourAnswers" in {
+
+          case object UnknownPage extends Page
+          navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad()
+        }
       }
+
     }
   }
 }
