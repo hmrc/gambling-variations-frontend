@@ -42,6 +42,17 @@ case class SoleProprietorNameDetails(
   systemDate: Option[LocalDate]
 ) extends EntityName
 
+case class BusinessContactDetails(
+  mgdRegNum: String,
+  phoneNumber: Option[String],
+  mobileNumber: Option[String],
+  faxNumber: Option[String],
+  emailAddr: Option[String],
+  systemDate: Option[LocalDate]
+) extends EntityName
+
+
+
 object EntityName {
   implicit val reads: Reads[EntityName] =
     (__ \ "businessType").readNullable[BusinessType].flatMap {
@@ -71,4 +82,15 @@ object BusinessNameDetails {
       (__ \ "tradingName").readNullable[String] and
       (__ \ "systemDate").readNullable[LocalDate]
   )(BusinessNameDetails.apply _)
+}
+
+object BusinessContactDetails {
+  implicit val reads: Reads[BusinessContactDetails] = (
+    (__ \ "mgdRegNumber").read[String] and
+      (__ \ "phoneNumber").readNullable[String] and
+      (__ \ "mobilePhoneNumber").readNullable[String] and
+      (__ \ "faxNumber").readNullable[String] and
+      (__ \ "emailAddr").readNullable[String] and
+      (__ \ "systemDate").readNullable[LocalDate]
+  )(BusinessContactDetails.apply _)
 }

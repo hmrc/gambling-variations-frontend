@@ -26,7 +26,7 @@ final case class BusinessContactDetails(
   mobilePhoneNumber: Option[String],
   faxNumber: Option[String],
   emailAddr: Option[String],
-  systemDate: LocalDate
+  systemDate: Option[LocalDate]
 )
 
 object BusinessContactDetails {
