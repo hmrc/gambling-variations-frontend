@@ -28,11 +28,13 @@ class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
     case RemoveTradeNamePage => userAnswers => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage  => userAnswers => routes.CheckBusinessNameController.onPageLoad()
     case _                   => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
     case RemoveTradeNamePage => userAnswers => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage  => userAnswers => routes.CheckBusinessNameController.onPageLoad()
     case _                   => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
