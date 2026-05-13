@@ -107,7 +107,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
   }
   def getBusinessContactDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[BusinessContactDetails] = {
     http
-      .get(url"$baseUrl/business-details/mgd/$mgdRegNumber")
+      .get(url"$baseUrl/business-contact-details/mgd/$mgdRegNumber")
       .execute[HttpResponse]
       .map { response =>
         response.status match {
