@@ -126,7 +126,7 @@ declaration.submit = Declare and submit
 
 submit.changes = Submit changes
 
-soleProprietorName.title = 	What is the sole proprietor's name? - Change registration details - Manage your Machine Games Duty - GOV.UK
+soleProprietorName.title = 	What is the sole proprietor''s name? - Change registration details - Manage your Machine Games Duty - GOV.UK
 
 soleProprietorName.changeRegistrationDetails = Change registration details
 soleProprietorName.heading = What is the sole proprietor''s name?
@@ -139,21 +139,21 @@ soleProprietorName.error.title.required = Enter the sole proprietor''s title
 soleProprietorName.error.title.length = The sole proprietor''s title must be 20 characters or less
 soleProprietorName.error.title.invalid = The sole proprietor''s title must only include letters a to z, apostrophes, hyphens or spaces
 
-soleProprietorName.firstName.label = First Name
-soleProprietorName.firstName.change.hidden = First Name
+soleProprietorName.firstName.label = First name
+soleProprietorName.firstName.change.hidden = First name
 
 soleProprietorName.error.firstName.required = Enter the sole proprietor''s first name
 soleProprietorName.error.firstName.length = The sole proprietor''s first name must be 100 characters or less
-soleProprietorName.error.firstName.invalid = The sole proprietor's first name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+soleProprietorName.error.firstName.invalid = The sole proprietor''s first name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
-soleProprietorName.middleName.label = Middle Names (optional)
-soleProprietorName.error.middleName.length = The sole proprietor's middle name must be 100 characters or less
-soleProprietorName.error.middleName.invalid = The sole proprietor's middle name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+soleProprietorName.middleName.label = Middle names (optional)
+soleProprietorName.error.middleName.length = The sole proprietor''s middle name must be 100 characters or less
+soleProprietorName.error.middleName.invalid = The sole proprietor''s middle name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
-soleProprietorName.lastName.label = Last Name
-soleProprietorName.error.lastName.required = Enter the sole proprietor's last name
-soleProprietorName.error.lastName.length = The sole proprietor's last name must be 100 characters or less
-soleProprietorName.error.lastName.invalid = The sole proprietor's last name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+soleProprietorName.lastName.label = Last name
+soleProprietorName.error.lastName.required = Enter the sole proprietor''s last name
+soleProprietorName.error.lastName.length = The sole proprietor''s last name must be 100 characters or less
+soleProprietorName.error.lastName.invalid = The sole proprietor''s last name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
 removeTradeName.title = Are you sure you want to remove the trading name?
 removeTradeName.heading = Are you sure you want to remove the trading name {0}?
