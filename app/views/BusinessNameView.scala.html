@@ -74,9 +74,9 @@
                     Some(Actions(
                         items = Seq(
                             ActionItem(
-                                href = "#",
+                                href = controllers.routes.BusinessTradingNameController.onPageLoad(NormalMode).url(),
                                 content = "site.change",
-                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
+                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.tradingName")))
                                 )
                             )
                     ))
@@ -84,14 +84,14 @@
                 Some(Actions(
                     items = Seq(
                         ActionItem(
-                            href = "#",
+                            href = controllers.routes.BusinessTradingNameController.onPageLoad(NormalMode).url(),
                             content = "site.change",
-                            visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
+                            visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.tradingName")))
                                 ),
                             ActionItem(
                                 href = controllers.routes.RemoveTradeNameController.onPageLoad().url(),
                                 content = "site.remove",
-                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.notProvided")))
+                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.tradingName")))
                                 )
                             ),
                 classes = "govuk-summary-list__actions govuk-!-width-one-third"
