@@ -160,3 +160,14 @@ removeTradeName.heading = Are you sure you want to remove the trading name {0}?
 removeTradeName.caption = Change registration details
 removeTradeName.error.required = Select yes to if you want to remove the trading name
 removeTradeName.change.hidden = RemoveTradeName
+
+# Change Business Name
+changeBusinessName.title = Change business name
+changeBusinessName.heading = Change the business name for {0}
+changeBusinessName.caption = Business details
+
+changeBusinessName.label = Business name
+
+changeBusinessName.error.required = Enter a business name
+changeBusinessName.error.length = The business name must be 160 characters or fewer
+
