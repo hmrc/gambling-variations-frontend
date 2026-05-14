@@ -26,7 +26,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessTradingNameView
-
+import pages.BusinessTypePage
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,21 +47,27 @@ class BusinessTradingNameController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
+    val businessType =
+      request.userAnswers
+        .get(BusinessTypePage)
+        .getOrElse(throw new Exception())
     val preparedForm = request.userAnswers.get(TradingNamePage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode, businessType))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
+    val businessType =
+      request.userAnswers
+        .get(BusinessTypePage)
+        .getOrElse(throw new Exception())
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
