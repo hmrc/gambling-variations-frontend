@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import models.BusinessType.{Partnership, Soleproprietor}
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessNameDetails, SoleProprietorNameDetails, UserAnswers}
+import models.{BusinessContactDetails, BusinessNameDetails, SoleProprietorNameDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -197,6 +197,15 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
       systemDate   = Some(LocalDate.of(1991, 1, 1)),
       tradingName  = Some("Test Trader"),
       businessType = Soleproprietor
+    )
+
+    def businessContactDetailsModel: BusinessContactDetails = BusinessContactDetails(
+      mgdRegNumber = "ABC12345678901",
+      phoneNumber = Some("+44 8903928171"),
+      mobilePhoneNumber = Some("+44 8903928171"),
+      faxNumber = Some("+_+_ hdj39783"),
+      emailAddr = Some("a@b.com"),
+      systemDate = Some(LocalDate.of(1991, 1, 1))
     )
   }
 }
