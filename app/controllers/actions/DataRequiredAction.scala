@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessNameDetails, BusinessType, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
+import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
@@ -50,7 +50,6 @@ class DataRequiredActionImpl @Inject() (
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
 
           val answers = UserAnswers(request.mgdRegNum)
-
           val updatedAnswers: Try[UserAnswers] = entityName match {
             case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
               for {
@@ -64,6 +63,10 @@ class DataRequiredActionImpl @Inject() (
                 b <- a.set(BusinessTypePage, businessType)
                 c <- setTradingName(b, tradingName)
               } yield c
+          }
+
+          gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
+            Future(setBusinessContactDetails(updatedAnswers, contact))
           }
 
           updatedAnswers.map { ua =>
@@ -91,8 +94,19 @@ class DataRequiredActionImpl @Inject() (
     tradingName.fold(Try(userAnswers)) { tradingName =>
       userAnswers.set(TradingNamePage, tradingName)
     }
-}
 
-    
+  private def setBusinessContactDetails(updatedA: Try[UserAnswers], contact: BusinessContactDetails): Try[UserAnswers] = {
+    val finalAnswers: Try[UserAnswers] = {
+      for {
+        answers <- updatedA
+        a       <- answers.set(PhoneNumberPage, contact.phoneNumber)
+        b       <- a.set(MobileNumberPage, contact.mobilePhoneNumber)
+        c       <- b.set(FaxNumberPage, contact.faxNumber)
+        d       <- c.set(BusinessEmailPage, contact.emailAddr)
+      } yield d
+    }
+    finalAnswers
+  }
+}
 
 trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
