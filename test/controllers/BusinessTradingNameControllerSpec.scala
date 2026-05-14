@@ -15,15 +15,14 @@
  */
 
 package controllers
-
 import base.SpecBase
 import forms.BusinessTradingNameFormProvider
-import models.{BusinessNameDetails, BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TradingNamePage
+import pages.{BusinessTypePage, TradingNamePage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -31,7 +30,7 @@ import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessTradingNameView
 import connectors.GamblingConnector
-
+import models.{BusinessNameDetails, BusinessType, NormalMode, UserAnswers}
 import scala.concurrent.Future
 
 class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
@@ -44,12 +43,15 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
   lazy val businessTradingNameRoute =
     routes.BusinessTradingNameController.onPageLoad(NormalMode).url
 
+  private val baseUserAnswers =
+    emptyUserAnswers.set(BusinessTypePage, BusinessType.Partnership).success.value
+
   "BusinessTradingName Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
 
@@ -59,14 +61,14 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode)(request, messages(application)).toString
+          view(form, NormalMode, BusinessType.Partnership)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers =
-        UserAnswers(userAnswersId)
+        baseUserAnswers
           .set(TradingNamePage, "answer")
           .success
           .value
@@ -82,7 +84,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+          view(form.fill("answer"), NormalMode, BusinessType.Partnership)(request, messages(application)).toString
       }
     }
 
@@ -94,7 +96,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -117,7 +119,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
 
@@ -131,14 +133,14 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode)(request, messages(application)).toString
+          view(boundForm, NormalMode, BusinessType.Partnership)(request, messages(application)).toString
       }
     }
 
     "must return a Bad Request when invalid characters are submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
 
@@ -152,7 +154,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode)(request, messages(application)).toString
+          view(boundForm, NormalMode, BusinessType.Partnership)(request, messages(application)).toString
       }
     }
 
