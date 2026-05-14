@@ -168,7 +168,7 @@ changeBusinessName.heading.partnership = What is the partnership’s name?
 changeBusinessName.heading.corporateBody = What is the corporate body’s name?
 changeBusinessName.heading.unincorporatedBody = What is the unincorporated body name?
 changeBusinessName.heading.limitedLiabilityPartnership = What is the limited liability partnership name?
-changeBusinessName.caption = Change Registration Details
+changeBusinessName.caption = Change registration details
 
 changeBusinessName.label = Business name
 
