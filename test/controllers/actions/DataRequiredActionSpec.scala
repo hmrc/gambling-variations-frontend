@@ -200,12 +200,12 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
     )
 
     def businessContactDetailsModel: BusinessContactDetails = BusinessContactDetails(
-      mgdRegNumber = "ABC12345678901",
-      phoneNumber = Some("+44 8903928171"),
+      mgdRegNumber      = "ABC12345678901",
+      phoneNumber       = Some("+44 8903928171"),
       mobilePhoneNumber = Some("+44 8903928171"),
-      faxNumber = Some("+_+_ hdj39783"),
-      emailAddr = Some("a@b.com"),
-      systemDate = Some(LocalDate.of(1991, 1, 1))
+      faxNumber         = Some("+_+_ hdj39783"),
+      emailAddr         = Some("a@b.com"),
+      systemDate        = Some(LocalDate.of(1991, 1, 1))
     )
   }
 }

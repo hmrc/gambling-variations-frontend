@@ -122,7 +122,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
 
           case status =>
             throw UpstreamErrorResponse(
-              s"Unexpected status while fetching Business Details: $status",
+              s"Unexpected status while fetching Business Contact Details: $status",
               status
             )
         }

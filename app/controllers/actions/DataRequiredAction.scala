@@ -50,7 +50,8 @@ class DataRequiredActionImpl @Inject() (
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
 
           val answers = UserAnswers(request.mgdRegNum)
-          val updatedAnswers: Try[UserAnswers] = entityName match {
+
+          val businessNameAnswers: Try[UserAnswers] = entityName match {
             case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
               for {
                 a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
@@ -64,22 +65,21 @@ class DataRequiredActionImpl @Inject() (
                 c <- setTradingName(b, tradingName)
               } yield c
           }
-
           gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
-            Future(setBusinessContactDetails(updatedAnswers, contact))
-          }
+            val FinalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
 
-          updatedAnswers.map { ua =>
-            logger.info("User Answers not found. Saving User Answers")
-            sessionRepository.set(ua) map {
-              case true =>
-                logger.info("User Answers saved.")
-                Right(DataRequest(request.request, request.mgdRegNum, ua))
-              case false =>
-                logger.info("User Answers failed.")
-                Left(Redirect(routes.SystemErrorController.onPageLoad()))
-            }
-          } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+            FinalAnswers.map { ua =>
+              logger.info("User Answers not found. Saving User Answers")
+              sessionRepository.set(ua) map {
+                case true =>
+                  logger.info("User Answers saved.")
+                  Right(DataRequest(request.request, request.mgdRegNum, ua))
+                case false =>
+                  logger.info("User Answers failed.")
+                  Left(Redirect(routes.SystemErrorController.onPageLoad()))
+              }
+            } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+          }
         } recover { case NonFatal(e) =>
           logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
           Left(Redirect(routes.SystemErrorController.onPageLoad()))
@@ -95,17 +95,17 @@ class DataRequiredActionImpl @Inject() (
       userAnswers.set(TradingNamePage, tradingName)
     }
 
-  private def setBusinessContactDetails(updatedA: Try[UserAnswers], contact: BusinessContactDetails): Try[UserAnswers] = {
-    val finalAnswers: Try[UserAnswers] = {
+  private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
+    val contactAnswers: Try[UserAnswers] = {
       for {
-        answers <- updatedA
-        a       <- answers.set(PhoneNumberPage, contact.phoneNumber)
-        b       <- a.set(MobileNumberPage, contact.mobilePhoneNumber)
-        c       <- b.set(FaxNumberPage, contact.faxNumber)
-        d       <- c.set(BusinessEmailPage, contact.emailAddr)
+        ans <- answers
+        a   <- ans.set(PhoneNumberPage, contact.phoneNumber)
+        b   <- a.set(MobileNumberPage, contact.mobilePhoneNumber)
+        c   <- b.set(FaxNumberPage, contact.faxNumber)
+        d   <- c.set(BusinessEmailPage, contact.emailAddr)
       } yield d
     }
-    finalAnswers
+    contactAnswers
   }
 }
 
