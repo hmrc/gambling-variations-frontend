@@ -163,8 +163,12 @@ removeTradeName.change.hidden = RemoveTradeName
 
 # Change Business Name
 changeBusinessName.title = Change business name
-changeBusinessName.heading = Change the business name for {0}
-changeBusinessName.caption = Business details
+changeBusinessName.heading.soleProprietor = What is the sole trader’s name?
+changeBusinessName.heading.partnership = What is the partnership’s name?
+changeBusinessName.heading.corporateBody = What is the corporate body’s name?
+changeBusinessName.heading.unincorporatedBody = What is the unincorporated body name?
+changeBusinessName.heading.limitedLiabilityPartnership = What is the limited liability partnership name?
+changeBusinessName.caption = Change Registration Details
 
 changeBusinessName.label = Business name
 

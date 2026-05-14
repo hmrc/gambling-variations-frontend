@@ -18,7 +18,8 @@ package controllers
 
 import controllers.actions.*
 import forms.ChangeBusinessNameFormProvider
-import models.{Mode, UserAnswers}
+import models.BusinessType.LimitedLiabilityPartnership
+import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
 import pages.{BusinessNamePage, BusinessTypePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,6 +48,15 @@ class ChangeBusinessNameController @Inject() (
 
   val form = formProvider()
 
+  private def headingKeyFor(businessType: BusinessType): String =
+    businessType match {
+      case BusinessType.Soleproprietor => "changeBusinessName.heading.soleProprietor"
+      case BusinessType.Partnership => "changeBusinessName.heading.partnership"
+      case BusinessType.Corporatebody => "changeBusinessName.heading.corporateBody"
+      case BusinessType.Unincorporatedbody => "changeBusinessName.heading.unincorporatedBody"
+      case LimitedLiabilityPartnership => "changeBusinessName.heading.limitedLiabilityPartnership"
+    }
+
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -56,20 +66,21 @@ class ChangeBusinessNameController @Inject() (
           businessName <- request.userAnswers.get(BusinessNamePage)
         } yield {
           val preparedForm = form.fill(businessName)
-          Ok(view(preparedForm, mode, businessType.code))
+          val headingKey = headingKeyFor(businessType)
+          Ok(view(preparedForm, mode, headingKey))
         }
       ) getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
     }
 
-
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(BusinessTypePage) map { businessType =>
+        val headingKey = headingKeyFor(businessType)
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType.code))),
-            value =>
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, headingKey))),
+              value =>
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
                 _              <- sessionRepository.set(updatedAnswers)
@@ -77,7 +88,6 @@ class ChangeBusinessNameController @Inject() (
           )
       } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
     }
-
 
   private def updateUserAnswers(userAnswers: UserAnswers, newName: String): Try[UserAnswers] =
     userAnswers.set(BusinessNamePage, newName)

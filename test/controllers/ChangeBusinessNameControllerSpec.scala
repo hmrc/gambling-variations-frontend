@@ -52,7 +52,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill(businessName), NormalMode, businessType.code)(request, messages(application)).toString
+          view(form.fill(businessName), NormalMode, "What is the sole trader’s name?")(request, messages(application)).toString
       }
     }
 
@@ -135,7 +135,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, businessType.code)(request, messages(application)).toString
+          view(boundForm, NormalMode, "What is the sole trader’s name?")(request, messages(application)).toString
       }
     }
   }
