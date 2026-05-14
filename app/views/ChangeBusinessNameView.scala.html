@@ -40,7 +40,7 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages(headingKey))
+                label = LabelViewModel(messages(headingKey)).asPageHeading(viewmodels.LegendSize.Large)
             )
         )
 
