@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
+import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
@@ -52,23 +52,10 @@ class DataRequiredActionImpl @Inject() (
 
             val answers = UserAnswers(request.mgdRegNum)
 
-            val businessNameAnswers: Try[UserAnswers] = entityName match {
-              case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
-                for {
-                  a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
-                  b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
-                  c <- setTradingName(b, tradingName)
-                } yield c
-              case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
-                for {
-                  a <- answers.set(BusinessNamePage, businessName)
-                  b <- a.set(BusinessTypePage, businessType)
-                  c <- setTradingName(b, tradingName)
-                } yield c
-            }
-            val FinalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
+            val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
+            val finalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
 
-            FinalAnswers.map { ua =>
+            finalAnswers.map { ua =>
               logger.info("User Answers not found. Saving User Answers")
               sessionRepository.set(ua) map {
                 case true =>
@@ -95,6 +82,22 @@ class DataRequiredActionImpl @Inject() (
       userAnswers.set(TradingNamePage, tradingName)
     }
 
+  private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
+    entity match {
+      case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
+        for {
+          a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
+          b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
+          c <- setTradingName(b, tradingName)
+        } yield c
+      case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
+        for {
+          a <- answers.set(BusinessNamePage, businessName)
+          b <- a.set(BusinessTypePage, businessType)
+          c <- setTradingName(b, tradingName)
+        } yield c
+    }
+  }
   private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
     val contactAnswers: Try[UserAnswers] = {
       for {
