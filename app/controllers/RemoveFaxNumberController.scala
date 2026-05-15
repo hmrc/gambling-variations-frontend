@@ -59,7 +59,7 @@ class RemoveFaxNumberController @Inject() (
 
         Ok(view(preparedForm, mode, faxNumber))
 
-      } getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
+      } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
@@ -81,7 +81,7 @@ class RemoveFaxNumberController @Inject() (
           )
 
       } getOrElse Future.successful(
-        Redirect(routes.CheckBusinessNameController.onPageLoad())
+        Redirect(routes.SystemErrorController.onPageLoad())
       )
     }
 

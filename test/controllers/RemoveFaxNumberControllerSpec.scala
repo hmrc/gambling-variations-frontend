@@ -159,7 +159,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.CheckBusinessNameController.onPageLoad().url
+          routes.SystemErrorController.onPageLoad().url
       }
     }
 
@@ -179,7 +179,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.CheckBusinessNameController.onPageLoad().url
+          routes.SystemErrorController.onPageLoad().url
       }
     }
 
