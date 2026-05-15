@@ -170,3 +170,10 @@ businessTradingName.error.invalid = The business trading name must only include 
 businessTradingName.error.length = The business trading name must be 100 characters or less
 businessTradingName.change.hidden = What is the business trading name?
 businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
+
+removeFaxNumber.title = Are you sure you want to remove the fax number? - Change registration details
+removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
+removeFaxNumber.checkYourAnswersLabel = Fax number
+removeFaxNumber.error.required = Select yes if you want to remove the fax number
+removeFaxNumber.change.hidden = RemoveFaxNumber
+RemoveFaxNumberController.heading.caption = Change registration details
