@@ -162,32 +162,31 @@ removeTradeName.error.required = Select yes to if you want to remove the trading
 removeTradeName.change.hidden = RemoveTradeName
 
 # Change Business Name
-changeBusinessName.title = Change business name
-changeBusinessName.heading.soleProprietor = What is the sole trader’s name?
-changeBusinessName.heading.partnership = What is the partnership’s name?
-changeBusinessName.heading.corporateBody = What is the corporate body’s name?
-changeBusinessName.heading.unincorporatedBody = What is the unincorporated body's name?
-changeBusinessName.heading.limitedLiabilityPartnership = What is the limited liability partnership name?
+changeBusinessName.heading.soleProprietor = What is the sole proprietor''s name?
+changeBusinessName.heading.partnership = What is the partnership''s name?
+changeBusinessName.heading.corporateBody = What is the corporate body''s name?
+changeBusinessName.heading.unincorporatedBody = What is the unincorporated body''s name?
+changeBusinessName.heading.limitedLiabilityPartnership = What is the limited liability partnership''s name?
 changeBusinessName.caption = Change registration details
 
 changeBusinessName.label = Business name
 
-changeBusinessName.error.required.soleProprietor = Enter the sole trader’s name
-changeBusinessName.error.required.partnership = Enter the partnership’s name
-changeBusinessName.error.required.corporateBody = Enter the corporate body's name
-changeBusinessName.error.required.unincorporatedBody = Enter the unincorporated body's name
-changeBusinessName.error.required.limitedLiabilityPartnership = Enter the limited liability partnership name
+changeBusinessName.error.required.soleProprietor = Enter the sole proprietor''s name
+changeBusinessName.error.required.partnership = Enter the partnership''s name
+changeBusinessName.error.required.corporateBody = Enter the corporate body''s name
+changeBusinessName.error.required.unincorporatedBody = Enter the unincorporated body''s name
+changeBusinessName.error.required.limitedLiabilityPartnership = Enter the limited liability partnership''s name
 
-changeBusinessName.error.invalid.soleProprietor = The sole trader’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.partnership = The partnership’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.corporateBody = The corporate body's name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.required.unincorporatedBody = The unincorporated body's name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.required.limitedLiabilityPartnership = The limited liability partnership name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.soleProprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.corporateBody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.required.unincorporatedBody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.required.limitedLiabilityPartnership = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
-changeBusinessName.error.length.soleProprietor = The sole trader’s name must be 160 characters or less
-changeBusinessName.error.length.partnership = The partnership’s name must be 160 characters or less
-changeBusinessName.error.length.corporateBody = The corporate body's name must be 160 characters or less
-changeBusinessName.error.length.unincorporatedBody = The unincorporated body's name must be 160 characters or less
-changeBusinessName.error.length.limitedLiabilityPartnership = The limited liability partnership name must be 160 characters or less
+changeBusinessName.error.length.soleProprietor = The sole proprietor''s name must be 160 characters or less
+changeBusinessName.error.length.partnership = The partnership''s name must be 160 characters or less
+changeBusinessName.error.length.corporateBody = The corporate body''s name must be 160 characters or less
+changeBusinessName.error.length.unincorporatedBody = The unincorporated body''s name must be 160 characters or less
+changeBusinessName.error.length.limitedLiabilityPartnership = The limited liability partnership''s name must be 160 characters or less
 
 

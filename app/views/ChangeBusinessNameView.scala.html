@@ -27,9 +27,9 @@
 
 @(form: Form[_], mode: Mode, headingKey: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("changeBusinessName.title"))) {
+@layout(pageTitle = title(form, messages(headingKey))) {
 
-    @formHelper(action = routes.ChangeBusinessNameController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.ChangeBusinessNameController.onSubmit(), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

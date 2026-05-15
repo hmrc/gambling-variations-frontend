@@ -38,5 +38,5 @@ POST      /change-registration-details/change-sole-proprietor-name              
 GET        /change-registration-details/business-name/remove-trading-name                     controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-name/remove-trading-name                      controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
 
-GET    /change-registration-details/change-business-name/     controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode)
-POST   /change-registration-details/change-business-name/   controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode)
+GET    /change-registration-details/change-business-name     controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode)
+POST   /change-registration-details/change-business-name   controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode)
