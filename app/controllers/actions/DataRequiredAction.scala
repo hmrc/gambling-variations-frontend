@@ -48,24 +48,24 @@ class DataRequiredActionImpl @Inject() (
         given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
-
-          val answers = UserAnswers(request.mgdRegNum)
-
-          val businessNameAnswers: Try[UserAnswers] = entityName match {
-            case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
-              for {
-                a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
-                b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
-                c <- setTradingName(b, tradingName)
-              } yield c
-            case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
-              for {
-                a <- answers.set(BusinessNamePage, businessName)
-                b <- a.set(BusinessTypePage, businessType)
-                c <- setTradingName(b, tradingName)
-              } yield c
-          }
           gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
+
+            val answers = UserAnswers(request.mgdRegNum)
+
+            val businessNameAnswers: Try[UserAnswers] = entityName match {
+              case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
+                for {
+                  a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
+                  b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
+                  c <- setTradingName(b, tradingName)
+                } yield c
+              case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
+                for {
+                  a <- answers.set(BusinessNamePage, businessName)
+                  b <- a.set(BusinessTypePage, businessType)
+                  c <- setTradingName(b, tradingName)
+                } yield c
+            }
             val FinalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
 
             FinalAnswers.map { ua =>

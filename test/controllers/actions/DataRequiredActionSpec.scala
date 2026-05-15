@@ -57,12 +57,17 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(true)
           when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
+          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "businessName" -> "Test Business Ltd",
-            "tradingName"  -> "Test Trader Ltd",
-            "businessType" -> 4
+            "businessName"  -> "Test Business Ltd",
+            "tradingName"   -> "Test Trader Ltd",
+            "businessType"  -> 4,
+            "phoneNumber"   -> "+44 8903928171",
+            "mobileNumber"  -> "+44 8903928171",
+            "faxNumber"     -> "+_+_ hdj39783",
+            "businessEmail" -> "a@b.com"
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -77,6 +82,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           }
           verify(sessionRepository, times(1)).set(any())
           verify(gamblingConnector, times(1)).getBusinessName(any())(any())
+          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
         }
         "when sole proprietor" in {
 
@@ -85,6 +91,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(true)
           when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
+          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
@@ -93,8 +100,12 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
               "firstName" -> "Test",
               "lastName"  -> "Fella"
             ),
-            "businessType" -> 1,
-            "tradingName"  -> "Test Trader"
+            "businessType"  -> 1,
+            "tradingName"   -> "Test Trader",
+            "phoneNumber"   -> "+44 8903928171",
+            "mobileNumber"  -> "+44 8903928171",
+            "faxNumber"     -> "+_+_ hdj39783",
+            "businessEmail" -> "a@b.com"
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -109,6 +120,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           }
           verify(sessionRepository, times(1)).set(any())
           verify(gamblingConnector, times(1)).getBusinessName(any())(any())
+          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
         }
       }
 
@@ -119,6 +131,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(false)
           when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
+          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -127,10 +140,26 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
           verify(sessionRepository, times(1)).set(any())
           verify(gamblingConnector, times(1)).getBusinessName(any())(any())
+          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
         }
       }
 
       "redirect to SystemError when getBusinessName throws an exception" in {
+
+        val request = FakeRequest()
+        val sessionRepository = mock[SessionRepository]
+        val gamblingConnector = mock[GamblingConnector]
+        when(sessionRepository.set(any())) thenReturn Future(false)
+        when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR))
+        val action = new Harness(sessionRepository, gamblingConnector)
+
+        val result: Either[Result, DataRequest[AnyContent]] =
+          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+
+        result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
+
+      }
+      "redirect to SystemError when getBusinessContactDetails throws an exception" in {
 
         val request = FakeRequest()
         val sessionRepository = mock[SessionRepository]
