@@ -23,10 +23,11 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new ChangeBusinessNameFormProvider()
-  val form = formProvider()
 
   val businessType: BusinessType = BusinessType.values.head
   val businessName = "Test Business"
+
+  val form = formProvider(businessType)
 
   val data = Json.obj(
     BusinessTypePage.toString -> businessType.code,

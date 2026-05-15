@@ -17,15 +17,21 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import models.BusinessType
 import play.api.data.FormError
 
 class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "changeBusinessName.error.required"
-  val lengthKey = "changeBusinessName.error.length"
   val maxLength = 160
 
-  val form = new ChangeBusinessNameFormProvider()()
+  val businessType: BusinessType = BusinessType.Corporatebody
+
+  val requiredKey = "changeBusinessName.error.required.corporateBody"
+  val invalidKey  = "changeBusinessName.error.invalid.corporateBody"
+  val lengthKey   = "changeBusinessName.error.length.corporateBody"
+
+  val formProvider = new ChangeBusinessNameFormProvider()
+  val form = formProvider(businessType)
 
   ".value" - {
 
@@ -50,5 +56,12 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
 
       result.value.value mustEqual validString
     }
+
+    "must fail when invalid characters are used" in {
+      val result = form.bind(Map(fieldName -> "@@@@"))
+
+      result.errors must contain only FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
+    }
   }
 }
+

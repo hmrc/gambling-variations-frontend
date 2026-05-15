@@ -46,17 +46,14 @@ class ChangeBusinessNameController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
-
   private def headingKeyFor(businessType: BusinessType): String =
     businessType match {
-      case BusinessType.Soleproprietor => "changeBusinessName.heading.soleProprietor"
-      case BusinessType.Partnership => "changeBusinessName.heading.partnership"
-      case BusinessType.Corporatebody => "changeBusinessName.heading.corporateBody"
+      case BusinessType.Soleproprietor     => "changeBusinessName.heading.soleProprietor"
+      case BusinessType.Partnership        => "changeBusinessName.heading.partnership"
+      case BusinessType.Corporatebody      => "changeBusinessName.heading.corporateBody"
       case BusinessType.Unincorporatedbody => "changeBusinessName.heading.unincorporatedBody"
-      case LimitedLiabilityPartnership => "changeBusinessName.heading.limitedLiabilityPartnership"
+      case LimitedLiabilityPartnership     => "changeBusinessName.heading.limitedLiabilityPartnership"
     }
-
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -65,6 +62,7 @@ class ChangeBusinessNameController @Inject() (
           businessType <- request.userAnswers.get(BusinessTypePage)
           businessName <- request.userAnswers.get(BusinessNamePage)
         } yield {
+          val form = formProvider(businessType)
           val preparedForm = form.fill(businessName)
           val headingKey = headingKeyFor(businessType)
           Ok(view(preparedForm, mode, headingKey))
@@ -76,11 +74,12 @@ class ChangeBusinessNameController @Inject() (
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(BusinessTypePage) map { businessType =>
         val headingKey = headingKeyFor(businessType)
+        val form = formProvider(businessType)
         form
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, headingKey))),
-              value =>
+            value =>
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
                 _              <- sessionRepository.set(updatedAnswers)
