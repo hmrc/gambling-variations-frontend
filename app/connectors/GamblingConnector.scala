@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{BusinessDetails, EntityName, MgdCertificate}
+import models.{BusinessContactDetails, BusinessDetails, EntityName, MgdCertificate}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -100,6 +100,29 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
           case status =>
             throw UpstreamErrorResponse(
               s"Unexpected status while fetching Business Details: $status",
+              status
+            )
+        }
+      }
+  }
+  def getBusinessContactDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[BusinessContactDetails] = {
+    http
+      .get(url"$baseUrl/business-contact-details/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[BusinessContactDetails]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                details => details
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Business Contact Details: $status",
               status
             )
         }

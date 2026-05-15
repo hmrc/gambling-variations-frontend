@@ -14,6 +14,21 @@
  * limitations under the License.
  */
 
-package views
+package models
 
-class BusinessTradingNameViewSpec {}
+import play.api.libs.json.{Json, OFormat}
+
+import java.time.LocalDate
+
+final case class BusinessContactDetails(
+  mgdRegNumber: String,
+  phoneNumber: Option[String],
+  mobilePhoneNumber: Option[String],
+  faxNumber: Option[String],
+  emailAddr: Option[String],
+  systemDate: Option[LocalDate]
+)
+
+object BusinessContactDetails {
+  implicit val format: OFormat[BusinessContactDetails] = Json.format[BusinessContactDetails]
+}

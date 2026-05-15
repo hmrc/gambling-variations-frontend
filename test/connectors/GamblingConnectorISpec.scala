@@ -19,9 +19,8 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.{BusinessDetails, BusinessNameDetails, MgdCertificate}
+import models.{BusinessContactDetails, BusinessDetails, BusinessNameDetails, MgdCertificate}
 import models.BusinessType.Unincorporatedbody
-import models.{BusinessNameDetails, MgdCertificate}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -290,6 +289,51 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       businessType = Unincorporatedbody,
       tradingName  = Some("Trading Name"),
       systemDate   = Some(LocalDate.of(1991, 1, 1))
+    )
+
+  }
+
+  "GamblingConnector.getBusinessContactDetails" should {
+
+    "return businessContactDetails when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "ABC12345678901",
+           |  "phoneNumber": "+44 8903928171",
+           |  "mobilePhoneNumber": "+44 8903928171",
+           |  "faxNumber": "+_+_ hdj39783",
+           |  "emailAddr": "a@b.com",
+           |  "systemDate": "${LocalDate.of(1991, 1, 1)}"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-contact-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getBusinessContactDetails(mgdRegNumber).futureValue mustBe businessContactDetails
+    }
+
+    "return NotFound when backend returns UpstreamErrorResponse" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-contact-details/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessName(mgdRegNumber)
+      }
+    }
+
+    def businessContactDetails: BusinessContactDetails = BusinessContactDetails(
+      mgdRegNumber      = "ABC12345678901",
+      phoneNumber       = Some("+44 8903928171"),
+      mobilePhoneNumber = Some("+44 8903928171"),
+      faxNumber         = Some("+_+_ hdj39783"),
+      emailAddr         = Some("a@b.com"),
+      systemDate        = Some(LocalDate.of(1991, 1, 1))
     )
 
   }
