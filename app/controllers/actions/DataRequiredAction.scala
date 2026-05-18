@@ -103,7 +103,7 @@ class DataRequiredActionImpl @Inject() (
       for {
         ans <- answers
         a   <- ans.set(PhoneNumberPage, contact.phoneNumber)
-        b   <- a.set(MobileNumberPage, contact.mobilePhoneNumber)
+        b   <- a.set(MobilePhoneNumberPage, contact.mobilePhoneNumber)
         c   <- b.set(FaxNumberPage, contact.faxNumber)
         d   <- c.set(BusinessEmailPage, contact.emailAddr)
       } yield d
