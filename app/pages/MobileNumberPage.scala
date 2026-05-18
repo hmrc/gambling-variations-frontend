@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-package views
+package pages
 
-class BusinessTradingNameViewSpec {}
+import play.api.libs.json.JsPath
+
+case object MobileNumberPage extends QuestionPage[Option[String]] {
+  override def path: JsPath = JsPath \ "mobileNumber"
+}

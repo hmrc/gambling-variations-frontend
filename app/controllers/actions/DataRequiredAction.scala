@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessNameDetails, BusinessType, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
+import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
@@ -48,35 +48,25 @@ class DataRequiredActionImpl @Inject() (
         given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
+          gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
 
-          val answers = UserAnswers(request.mgdRegNum)
+            val answers = UserAnswers(request.mgdRegNum)
 
-          val updatedAnswers: Try[UserAnswers] = entityName match {
-            case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
-              for {
-                a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
-                b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
-                c <- setTradingName(b, tradingName)
-              } yield c
-            case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
-              for {
-                a <- answers.set(BusinessNamePage, businessName)
-                b <- a.set(BusinessTypePage, businessType)
-                c <- setTradingName(b, tradingName)
-              } yield c
+            val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
+            val finalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
+
+            finalAnswers.map { ua =>
+              logger.info("User Answers not found. Saving User Answers")
+              sessionRepository.set(ua) map {
+                case true =>
+                  logger.info("User Answers saved.")
+                  Right(DataRequest(request.request, request.mgdRegNum, ua))
+                case false =>
+                  logger.info("User Answers failed.")
+                  Left(Redirect(routes.SystemErrorController.onPageLoad()))
+              }
+            } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
           }
-
-          updatedAnswers.map { ua =>
-            logger.info("User Answers not found. Saving User Answers")
-            sessionRepository.set(ua) map {
-              case true =>
-                logger.info("User Answers saved.")
-                Right(DataRequest(request.request, request.mgdRegNum, ua))
-              case false =>
-                logger.info("User Answers failed.")
-                Left(Redirect(routes.SystemErrorController.onPageLoad()))
-            }
-          } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
         } recover { case NonFatal(e) =>
           logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
           Left(Redirect(routes.SystemErrorController.onPageLoad()))
@@ -91,6 +81,35 @@ class DataRequiredActionImpl @Inject() (
     tradingName.fold(Try(userAnswers)) { tradingName =>
       userAnswers.set(TradingNamePage, tradingName)
     }
+
+  private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
+    entity match {
+      case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
+        for {
+          a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
+          b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
+          c <- setTradingName(b, tradingName)
+        } yield c
+      case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
+        for {
+          a <- answers.set(BusinessNamePage, businessName)
+          b <- a.set(BusinessTypePage, businessType)
+          c <- setTradingName(b, tradingName)
+        } yield c
+    }
+  }
+  private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
+    val contactAnswers: Try[UserAnswers] = {
+      for {
+        ans <- answers
+        a   <- ans.set(PhoneNumberPage, contact.phoneNumber)
+        b   <- a.set(MobileNumberPage, contact.mobilePhoneNumber)
+        c   <- b.set(FaxNumberPage, contact.faxNumber)
+        d   <- c.set(BusinessEmailPage, contact.emailAddr)
+      } yield d
+    }
+    contactAnswers
+  }
 }
 
 trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

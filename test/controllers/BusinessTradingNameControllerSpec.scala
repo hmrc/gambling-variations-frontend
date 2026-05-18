@@ -17,7 +17,7 @@
 package controllers
 import base.SpecBase
 import forms.BusinessTradingNameFormProvider
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -30,7 +30,7 @@ import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessTradingNameView
 import connectors.GamblingConnector
-import models.{BusinessNameDetails, BusinessType, NormalMode, UserAnswers}
+
 import scala.concurrent.Future
 
 class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
@@ -175,6 +175,19 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
             )
           )
         )
+      when(mockConnector.getBusinessContactDetails(any())(any()))
+        .thenReturn(
+          Future.successful(
+            BusinessContactDetails(
+              mgdRegNumber      = "safeId",
+              phoneNumber       = None,
+              mobilePhoneNumber = None,
+              faxNumber         = None,
+              emailAddr         = None,
+              systemDate        = None
+            )
+          )
+        )
 
       when(mockSessionRepository.set(any()))
         .thenReturn(Future.successful(true))
@@ -210,6 +223,19 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
               businessType = BusinessType.Partnership,
               tradingName  = None,
               systemDate   = None
+            )
+          )
+        )
+      when(mockConnector.getBusinessContactDetails(any())(any()))
+        .thenReturn(
+          Future.successful(
+            BusinessContactDetails(
+              mgdRegNumber      = "safeId",
+              phoneNumber       = None,
+              mobilePhoneNumber = None,
+              faxNumber         = None,
+              emailAddr         = None,
+              systemDate        = None
             )
           )
         )
