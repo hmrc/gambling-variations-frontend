@@ -103,7 +103,7 @@ class DataRequiredActionImpl @Inject() (
       for {
         ans <- answers
         a   <- ans.set(PhoneNumberPage, contact.phoneNumber)
-        b   <- a.set(MobileNumberPage, contact.mobilePhoneNumber)
+        b   <- a.set(MobilePhoneNumberPage, contact.mobilePhoneNumber)
         c <- contact.faxNumber match {
                case Some(fax) => b.set(FaxNumberPage, fax)
                case None      => Try(b)
