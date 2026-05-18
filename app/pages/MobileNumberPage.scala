@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,31 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import views.html.components.*
+package pages
 
-@this(
-        layout: templates.Layout,
-        govukButton: GovukButton,
-        paragraph: Paragraph,
-        link: Link,
-        h1:H1
-)
+import play.api.libs.json.JsPath
 
-@(login: String)(implicit request: Request[_], messages: Messages)
-
-@layout(pageTitle = titleNoForm(messages("accessDenied.title")),
-    showBackLink = true,
-    showSignOut = false,
-    ) {
-
-    @h1("accessDenied.heading", classes = "govuk-heading-l")
-    @paragraph(message= "accessDenied.p1")
-    @link(
-        "accessDenied.p1.link",
-        login,
-        extraClasses = "page-not-found-home-page-link"
-        )
-
+case object MobileNumberPage extends QuestionPage[Option[String]] {
+  override def path: JsPath = JsPath \ "mobileNumber"
 }
