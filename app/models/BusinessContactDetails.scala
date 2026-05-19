@@ -18,20 +18,17 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SoleProprietorName(
-  title: String,
-  firstName: String,
-  middleName: Option[String],
-  lastName: String
-) {
-  def fullName: String = Seq(
-    Some(title),
-    Some(firstName),
-    middleName,
-    Some(lastName)
-  ).flatten.mkString(" ")
-}
+import java.time.LocalDate
 
-object SoleProprietorName {
-  implicit val format: OFormat[SoleProprietorName] = Json.format[SoleProprietorName]
+final case class BusinessContactDetails(
+  mgdRegNumber: String,
+  phoneNumber: Option[String],
+  mobilePhoneNumber: Option[String],
+  faxNumber: Option[String],
+  emailAddr: Option[String],
+  systemDate: Option[LocalDate]
+)
+
+object BusinessContactDetails {
+  implicit val format: OFormat[BusinessContactDetails] = Json.format[BusinessContactDetails]
 }

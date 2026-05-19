@@ -29,7 +29,7 @@ class SoleProprietorNameFormProvider @Inject() extends Mappings {
   private val nameRegex = "^[A-Za-z0-9' -]+$"
   private val optionalNameRegex = "^$|^[A-Za-z0-9' -]+$"
 
-  private def cleanText(
+  private def validateText(
     requiredKey: String,
     max: Int,
     lengthKey: String,
@@ -41,7 +41,7 @@ class SoleProprietorNameFormProvider @Inject() extends Mappings {
       .verifying(maxLength(max, lengthKey))
       .verifying(regexp(regex, invalidKey))
 
-  private def optionalCleanText(max: Int, lengthKey: String, invalidKey: String) =
+  private def optionalValidateText(max: Int, lengthKey: String, invalidKey: String) =
     optional(
       text()
         .transform[String](_.trim, identity)
@@ -56,7 +56,7 @@ class SoleProprietorNameFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "title" ->
-          cleanText(
+          validateText(
             "soleProprietorName.error.title.required",
             20,
             "soleProprietorName.error.title.length",
@@ -64,7 +64,7 @@ class SoleProprietorNameFormProvider @Inject() extends Mappings {
             titleRegex
           ),
         "firstName" ->
-          cleanText(
+          validateText(
             "soleProprietorName.error.firstName.required",
             100,
             "soleProprietorName.error.firstName.length",
@@ -72,13 +72,13 @@ class SoleProprietorNameFormProvider @Inject() extends Mappings {
             nameRegex
           ),
         "middleName" ->
-          optionalCleanText(
+          optionalValidateText(
             100,
             "soleProprietorName.error.middleName.length",
             "soleProprietorName.error.middleName.invalid"
           ),
         "lastName" ->
-          cleanText(
+          validateText(
             "soleProprietorName.error.lastName.required",
             100,
             "soleProprietorName.error.lastName.length",

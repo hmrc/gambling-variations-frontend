@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package models
+package pages
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.JsPath
 
-import play.api.libs.json.{Json, OFormat}
+class BusinessEmailPageSpec extends AnyFreeSpec with Matchers {
 
-case class SoleProprietorName(
-  title: String,
-  firstName: String,
-  middleName: Option[String],
-  lastName: String
-) {
-  def fullName: String = Seq(
-    Some(title),
-    Some(firstName),
-    middleName,
-    Some(lastName)
-  ).flatten.mkString(" ")
-}
+  ".BusinessEmailPage" - {
 
-object SoleProprietorName {
-  implicit val format: OFormat[SoleProprietorName] = Json.format[SoleProprietorName]
+    "must have the correct toString" in {
+      BusinessEmailPage.toString mustBe "emailAddr"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "emailAddr"
+      BusinessEmailPage.path mustBe expectedPath
+    }
+  }
 }

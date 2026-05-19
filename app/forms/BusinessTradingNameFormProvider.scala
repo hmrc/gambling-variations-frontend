@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.{Json, OFormat}
+import javax.inject.Inject
 
-case class SoleProprietorName(
-  title: String,
-  firstName: String,
-  middleName: Option[String],
-  lastName: String
-) {
-  def fullName: String = Seq(
-    Some(title),
-    Some(firstName),
-    middleName,
-    Some(lastName)
-  ).flatten.mkString(" ")
-}
+import forms.mappings.Mappings
+import play.api.data.Form
 
-object SoleProprietorName {
-  implicit val format: OFormat[SoleProprietorName] = Json.format[SoleProprietorName]
+class BusinessTradingNameFormProvider @Inject() extends Mappings {
+
+  private val businessNameRegex = "^[a-zA-Z0-9\\- '\\s]+$"
+
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("businessTradingName.error.required")
+        .verifying(
+          maxLength(100, "businessTradingName.error.length")
+        )
+        .verifying(
+          regexp(
+            businessNameRegex,
+            "businessTradingName.error.invalid"
+          )
+        )
+    )
 }

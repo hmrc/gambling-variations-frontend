@@ -30,10 +30,17 @@ class NavigatorSpec extends SpecBase {
     "in Normal mode" - {
 
       "must go to" - {
+
         "CheckBusinessNameController from RemoveTradeNamePage" in {
 
           case object UnknownPage extends Page
           navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id")) mustBe routes.IndexController.onPageLoad()
+        }
+
+        "must go from TradingNamePage to CheckBusinessName" in {
+
+          navigator.nextPage(TradingNamePage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckBusinessNameController.onPageLoad()
         }
 
         "a page that doesn't exist in the route map to Index" in {

@@ -14,24 +14,6 @@
  * limitations under the License.
  */
 
-package models
+package views
 
-import play.api.libs.json.{Json, OFormat}
-
-case class SoleProprietorName(
-  title: String,
-  firstName: String,
-  middleName: Option[String],
-  lastName: String
-) {
-  def fullName: String = Seq(
-    Some(title),
-    Some(firstName),
-    middleName,
-    Some(lastName)
-  ).flatten.mkString(" ")
-}
-
-object SoleProprietorName {
-  implicit val format: OFormat[SoleProprietorName] = Json.format[SoleProprietorName]
-}
+class BusinessTradingNameViewSpec {}
