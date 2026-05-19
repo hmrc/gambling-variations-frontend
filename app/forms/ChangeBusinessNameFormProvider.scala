@@ -58,9 +58,12 @@ class ChangeBusinessNameFormProvider @Inject() extends Mappings {
 
     Form(
       "value" -> text(requiredKey)
+        .transform[String](_.trim, identity)
+        .verifying(requiredKey, _.nonEmpty)
         .verifying(maxLength(160, lengthKey))
         .verifying(regexp("""^[A-Za-z0-9' -]+$""", invalidKey))
     )
   }
+
 
 }
