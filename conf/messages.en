@@ -188,13 +188,13 @@ changeBusinessName.error.required.unincorporatedBody = Enter the unincorporated 
 changeBusinessName.error.required.limitedLiabilityPartnership = Enter the limited liability partnership''s name
 
 changeBusinessName.error.invalid.soleProprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
 changeBusinessName.error.invalid.corporateBody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.unincorporatedBody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.limitedLiabilityPartnership = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
 changeBusinessName.error.length.soleProprietor = The sole proprietor''s name must be 160 characters or less
-changeBusinessName.error.length.partnership = The partnership''s name must be 160 characters or less
+changeBusinessName.error.length.partnership = The partnership''s name must be 34 characters or less
 changeBusinessName.error.length.corporateBody = The corporate body''s name must be 160 characters or less
 changeBusinessName.error.length.unincorporatedBody = The unincorporated body''s name must be 160 characters or less
 changeBusinessName.error.length.limitedLiabilityPartnership = The limited liability partnership''s name must be 160 characters or less
