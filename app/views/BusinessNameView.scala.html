@@ -101,21 +101,14 @@
         ))
     )
 
-
-
-
-
     <p class="govuk-body">
         @govukButton(
-        ButtonViewModel(messages("site.continue"))
-        .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+            ButtonViewModel(messages("site.continue"))
+                .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
         )
     </p>
 
-    @link(
-        messages("businessName.link"),
-        controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url())
-    }
+}
 
 
 
