@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-package pages
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.JsPath
+package forms
 
-class BusinessEmailPageSpec extends AnyFreeSpec with Matchers {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  ".BusinessEmailPage" - {
+import javax.inject.Inject
 
-    "must have the correct toString" in {
-      BusinessEmailPage.toString mustBe "emailAddr"
-    }
+class RemoveEmailAddressFormProvider @Inject() extends Mappings {
 
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "emailAddr"
-      BusinessEmailPage.path mustBe expectedPath
-    }
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeEmailAddress.error.required")
+    )
 }

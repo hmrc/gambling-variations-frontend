@@ -106,7 +106,7 @@ class DataRequiredActionImpl @Inject() (
         updatedAnswers <- setIfDefined(ans, contact.phoneNumber, PhoneNumberPage)
         updatedAnswers <- setIfDefined(updatedAnswers, contact.mobilePhoneNumber, MobilePhoneNumberPage)
         updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
-        updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailPage)
+        updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
       } yield updatedAnswers
     }
     contactAnswers
