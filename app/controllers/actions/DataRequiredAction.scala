@@ -22,6 +22,7 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
+import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -77,9 +78,9 @@ class DataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setTradingName(userAnswers: UserAnswers, tradingName: Option[String]): Try[UserAnswers] =
-    tradingName.fold(Try(userAnswers)) { tradingName =>
-      userAnswers.set(TradingNamePage, tradingName)
+  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
+    optional.fold(Try(userAnswers)) { value =>
+      userAnswers.set(page, value)
     }
 
   private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
@@ -88,25 +89,25 @@ class DataRequiredActionImpl @Inject() (
         for {
           a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
           b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
-          c <- setTradingName(b, tradingName)
+          c <- setIfDefined(b, tradingName, TradingNamePage)
         } yield c
       case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
         for {
           a <- answers.set(BusinessNamePage, businessName)
           b <- a.set(BusinessTypePage, businessType)
-          c <- setTradingName(b, tradingName)
+          c <- setIfDefined(b, tradingName, TradingNamePage)
         } yield c
     }
   }
   private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
     val contactAnswers: Try[UserAnswers] = {
       for {
-        ans <- answers
-        a   <- ans.set(PhoneNumberPage, contact.phoneNumber)
-        b   <- a.set(MobilePhoneNumberPage, contact.mobilePhoneNumber)
-        c   <- b.set(FaxNumberPage, contact.faxNumber)
-        d   <- c.set(BusinessEmailPage, contact.emailAddr)
-      } yield d
+        ans            <- answers
+        updatedAnswers <- setIfDefined(ans, contact.phoneNumber, PhoneNumberPage)
+        updatedAnswers <- setIfDefined(updatedAnswers, contact.mobilePhoneNumber, MobilePhoneNumberPage)
+        updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
+        updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailPage)
+      } yield updatedAnswers
     }
     contactAnswers
   }
