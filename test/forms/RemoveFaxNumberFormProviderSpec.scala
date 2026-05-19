@@ -14,11 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-case object PhoneNumberPage extends QuestionPage[String] {
-  override def path: JsPath = JsPath \ toString
-  override def toString: String = "phoneNumber"
+class RemoveFaxNumberFormProviderSpec extends BooleanFieldBehaviours {
+
+  val requiredKey = "removeFaxNumber.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new RemoveFaxNumberFormProvider()()
+
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

@@ -42,3 +42,8 @@ GET        /change-registration-details/business-trading-name                   
 POST       /change-registration-details/business-trading-name                        controllers.BusinessTradingNameController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/change-business-trading-name                  controllers.BusinessTradingNameController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/change-business-trading-name                  controllers.BusinessTradingNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/business-contact-remove-fax-number                        controllers.RemoveFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-contact-remove-fax-number                       controllers.RemoveFaxNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/change-business-contact-remove-fax-number                controllers.RemoveFaxNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/change-business-contact-remove-fax-number                  controllers.RemoveFaxNumberController.onSubmit(mode: Mode = CheckMode)

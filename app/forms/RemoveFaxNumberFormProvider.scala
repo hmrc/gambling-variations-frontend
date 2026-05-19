@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object PhoneNumberPage extends QuestionPage[String] {
-  override def path: JsPath = JsPath \ toString
-  override def toString: String = "phoneNumber"
+import forms.mappings.Mappings
+import play.api.data.Form
+
+class RemoveFaxNumberFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeFaxNumber.error.required")
+    )
 }
