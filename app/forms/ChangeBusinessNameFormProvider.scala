@@ -56,12 +56,26 @@ class ChangeBusinessNameFormProvider @Inject() extends Mappings {
     val invalidKey = invalidErrorKeyFor(businessType)
     val lengthKey = lengthErrorKeyFor(businessType)
 
+    val (maxLen, regex) = businessType match {
+      case BusinessType.Partnership =>
+        (
+          34,
+          """^[A-Za-z0-9&'(),!\/ -]+$"""
+        )
+
+      case _ =>
+        (
+          160,
+          """^[A-Za-z0-9' -]+$"""
+        )
+    }
+
     Form(
       "value" -> text(requiredKey)
         .transform[String](_.trim, identity)
         .verifying(requiredKey, _.nonEmpty)
-        .verifying(maxLength(160, lengthKey))
-        .verifying(regexp("""^[A-Za-z0-9' -]+$""", invalidKey))
+        .verifying(maxLength(maxLen, lengthKey))
+        .verifying(regexp(regex, invalidKey))
     )
   }
 
