@@ -171,9 +171,38 @@ businessTradingName.error.length = The business trading name must be 100 charact
 businessTradingName.change.hidden = What is the business trading name?
 businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
 
+# Change Business Name
+changeBusinessName.heading.soleProprietor = What is the sole proprietor''s name?
+changeBusinessName.heading.partnership = What is the partnership''s name?
+changeBusinessName.heading.corporateBody = What is the corporate body''s name?
+changeBusinessName.heading.unincorporatedBody = What is the unincorporated body''s name?
+changeBusinessName.heading.limitedLiabilityPartnership = What is the limited liability partnership''s name?
+changeBusinessName.caption = Change registration details
+
+changeBusinessName.label = Business name
+
+changeBusinessName.error.required.soleProprietor = Enter the sole proprietor''s name
+changeBusinessName.error.required.partnership = Enter the partnership''s name
+changeBusinessName.error.required.corporateBody = Enter the corporate body''s name
+changeBusinessName.error.required.unincorporatedBody = Enter the unincorporated body''s name
+changeBusinessName.error.required.limitedLiabilityPartnership = Enter the limited liability partnership''s name
+
+changeBusinessName.error.invalid.soleProprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
+changeBusinessName.error.invalid.corporateBody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.unincorporatedBody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.limitedLiabilityPartnership = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+
+changeBusinessName.error.length.soleProprietor = The sole proprietor''s name must be 160 characters or less
+changeBusinessName.error.length.partnership = The partnership''s name must be 34 characters or less
+changeBusinessName.error.length.corporateBody = The corporate body''s name must be 160 characters or less
+changeBusinessName.error.length.unincorporatedBody = The unincorporated body''s name must be 160 characters or less
+changeBusinessName.error.length.limitedLiabilityPartnership = The limited liability partnership''s name must be 160 characters or less
+
+
 removeFaxNumber.title = Are you sure you want to remove the fax number? - Change registration details
 removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
 removeFaxNumber.checkYourAnswersLabel = Fax number
 removeFaxNumber.error.required = Select yes if you want to remove the fax number
 removeFaxNumber.change.hidden = RemoveFaxNumber
-RemoveFaxNumberController.heading.caption = Change registration details
+removeFaxNumberController.heading.caption = Change registration details
