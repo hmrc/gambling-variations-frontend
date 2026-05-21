@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions.*
 import forms.ChangeBusinessNameFormProvider
-import models.BusinessType.LimitedLiabilityPartnership
 import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
 import pages.{BusinessNamePage, BusinessTypePage}
