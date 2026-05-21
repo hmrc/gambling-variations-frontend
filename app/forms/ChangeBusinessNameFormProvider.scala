@@ -22,33 +22,16 @@ import models.BusinessType
 import play.api.data.Form
 
 class ChangeBusinessNameFormProvider @Inject() extends Mappings {
-
+  
   private def requiredErrorKeyFor(businessType: BusinessType): String =
-    businessType match {
-      case BusinessType.Soleproprietor              => "changeBusinessName.error.required.soleProprietor"
-      case BusinessType.Partnership                 => "changeBusinessName.error.required.partnership"
-      case BusinessType.Corporatebody               => "changeBusinessName.error.required.corporateBody"
-      case BusinessType.Unincorporatedbody          => "changeBusinessName.error.required.unincorporatedBody"
-      case BusinessType.LimitedLiabilityPartnership => "changeBusinessName.error.required.limitedLiabilityPartnership"
-    }
+    s"changeBusinessName.error.required.${businessType.toString}"
 
   private def invalidErrorKeyFor(businessType: BusinessType): String =
-    businessType match {
-      case BusinessType.Soleproprietor              => "changeBusinessName.error.invalid.soleProprietor"
-      case BusinessType.Partnership                 => "changeBusinessName.error.invalid.partnership"
-      case BusinessType.Corporatebody               => "changeBusinessName.error.invalid.corporateBody"
-      case BusinessType.Unincorporatedbody          => "changeBusinessName.error.invalid.unincorporatedBody"
-      case BusinessType.LimitedLiabilityPartnership => "changeBusinessName.error.invalid.limitedLiabilityPartnership"
-    }
+    s"changeBusinessName.error.invalid.${businessType.toString}"
 
   private def lengthErrorKeyFor(businessType: BusinessType): String =
-    businessType match {
-      case BusinessType.Soleproprietor              => "changeBusinessName.error.length.soleProprietor"
-      case BusinessType.Partnership                 => "changeBusinessName.error.length.partnership"
-      case BusinessType.Corporatebody               => "changeBusinessName.error.length.corporateBody"
-      case BusinessType.Unincorporatedbody          => "changeBusinessName.error.length.unincorporatedBody"
-      case BusinessType.LimitedLiabilityPartnership => "changeBusinessName.error.length.limitedLiabilityPartnership"
-    }
+    s"changeBusinessName.error.length.${businessType.toString}"
+
 
   def apply(businessType: BusinessType): Form[String] = {
 

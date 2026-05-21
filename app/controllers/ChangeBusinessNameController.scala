@@ -47,13 +47,10 @@ class ChangeBusinessNameController @Inject() (
     with I18nSupport {
 
   private def headingKeyFor(businessType: BusinessType): String =
-    businessType match {
-      case BusinessType.Soleproprietor     => "changeBusinessName.heading.soleProprietor"
-      case BusinessType.Partnership        => "changeBusinessName.heading.partnership"
-      case BusinessType.Corporatebody      => "changeBusinessName.heading.corporateBody"
-      case BusinessType.Unincorporatedbody => "changeBusinessName.heading.unincorporatedBody"
-      case LimitedLiabilityPartnership     => "changeBusinessName.heading.limitedLiabilityPartnership"
-    }
+    s"changeBusinessName.heading.${businessType.toString}"
+
+  private def titleKeyFor(businessType: BusinessType): String =
+    s"changeBusinessName.title.${businessType.toString}"
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -65,7 +62,8 @@ class ChangeBusinessNameController @Inject() (
           val form = formProvider(businessType)
           val preparedForm = form.fill(businessName)
           val headingKey = headingKeyFor(businessType)
-          Ok(view(preparedForm, mode, headingKey))
+          val titleKey = titleKeyFor(businessType)
+          Ok(view(preparedForm, mode, headingKey, titleKey))
         }
       ) getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
     }
@@ -75,10 +73,11 @@ class ChangeBusinessNameController @Inject() (
       request.userAnswers.get(BusinessTypePage) map { businessType =>
         val headingKey = headingKeyFor(businessType)
         val form = formProvider(businessType)
+        val titleKey = titleKeyFor(businessType)
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, headingKey))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, headingKey, titleKey))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
