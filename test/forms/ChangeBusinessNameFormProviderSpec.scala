@@ -27,8 +27,8 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
   val businessType: BusinessType = BusinessType.Corporatebody
 
   val requiredKey = "changeBusinessName.error.required.corporateBody"
-  val invalidKey  = "changeBusinessName.error.invalid.corporateBody"
-  val lengthKey   = "changeBusinessName.error.length.corporateBody"
+  val invalidKey = "changeBusinessName.error.invalid.corporateBody"
+  val lengthKey = "changeBusinessName.error.length.corporateBody"
 
   val formProvider = new ChangeBusinessNameFormProvider()
   val form = formProvider(businessType)
@@ -64,4 +64,3 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
     }
   }
 }
-
