@@ -22,7 +22,7 @@
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     govukButton: GovukButton,
-    sectionHeader: sectionHeader
+    caption: Caption
 )
 
 @(form: Form[_], mode: Mode, faxNumber: String)(implicit request: Request[_], messages: Messages)
@@ -35,7 +35,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @sectionHeader(messages("RemoveFaxNumberController.heading.caption"))
+        @caption(messages("removeFaxNumberController.heading.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
