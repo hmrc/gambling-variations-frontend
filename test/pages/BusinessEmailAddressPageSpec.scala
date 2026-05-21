@@ -21,14 +21,14 @@ import play.api.libs.json.JsPath
 
 class BusinessEmailAddressPageSpec extends AnyFreeSpec with Matchers {
 
-  ".BusinessEmailPage" - {
+  "BusinessEmailAddressPage" - {
 
     "must have the correct toString" in {
-      BusinessEmailAddressPage.toString mustBe "emailAddr"
+      BusinessEmailAddressPage.toString mustBe "businessEmailAddress"
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "emailAddr"
+      val expectedPath: JsPath = JsPath \ "businessEmailAddress"
       BusinessEmailAddressPage.path mustBe expectedPath
     }
   }
