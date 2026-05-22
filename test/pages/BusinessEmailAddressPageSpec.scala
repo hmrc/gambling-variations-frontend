@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,29 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import views.html.components.*
+package pages
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.JsPath
 
-@this(
-        layout: templates.Layout,
-        govukButton: GovukButton,
-        h1:H1,
-        p:Paragraph,
-        caption: Caption,
-)
+class BusinessEmailAddressPageSpec extends AnyFreeSpec with Matchers {
 
-@()(implicit request: Request[_], messages: Messages)
+  "BusinessEmailAddressPage" - {
 
-@layout(pageTitle = titleNoForm(messages("declaration.title"))) {
+    "must have the correct toString" in {
+      BusinessEmailAddressPage.toString mustBe "businessEmailAddress"
+    }
 
-   @caption(messages("declaration.heading.caption"))
-   @h1("declaration.heading", classes = "govuk-heading-l")
-   @p("declaration.p1")
-
-    @govukButton(
-    ButtonViewModel(messages("submit.changes"))
-    .withCssClass("govuk-!-margin-bottom-8")
-    )
-    <br>
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "businessEmailAddress"
+      BusinessEmailAddressPage.path mustBe expectedPath
+    }
+  }
 }

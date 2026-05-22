@@ -204,5 +204,12 @@ removeFaxNumber.title = Are you sure you want to remove the fax number? - Change
 removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
 removeFaxNumber.checkYourAnswersLabel = Fax number
 removeFaxNumber.error.required = Select yes if you want to remove the fax number
-removeFaxNumber.change.hidden = RemoveFaxNumber
-removeFaxNumberController.heading.caption = Change registration details
+removeFaxNumber.change.hidden = remove fax number
+removeFaxNumber.heading.caption = Change registration details
+
+removeEmailAddress.title = Are you sure you want to remove the email address? - Change registration details
+removeEmailAddress.heading = Are you sure you want to remove the email address {0}?
+removeEmailAddress.checkYourAnswersLabel = Business email address
+removeEmailAddress.error.required = Select yes if you want to remove the email address
+removeEmailAddress.change.hidden = remove business email address
+removeEmailAddress.heading.caption = Change registration details
