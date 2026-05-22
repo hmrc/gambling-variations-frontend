@@ -29,14 +29,14 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class AccessDeniedController @Inject() (
-                                         override val messagesApi: MessagesApi,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         appConfig: FrontendAppConfig,
-                                         sessionRepository: SessionRepository,
-                                         authorise: AuthorisedAction,
-                                         view: AccessDeniedView
-                                       )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  val controllerComponents: MessagesControllerComponents,
+  appConfig: FrontendAppConfig,
+  sessionRepository: SessionRepository,
+  authorise: AuthorisedAction,
+  view: AccessDeniedView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = authorise.async { implicit request =>
