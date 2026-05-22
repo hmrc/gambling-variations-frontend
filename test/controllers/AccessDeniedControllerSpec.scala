@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import controllers.actions.AuthorisedAction
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.AccessDeniedView

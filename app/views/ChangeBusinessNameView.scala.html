@@ -14,33 +14,34 @@
  * limitations under the License.
  *@
 
-@import views.html.components._
+@import views.html.components.*
 
 @this(
-    layout: templates.Layout,
-    formHelper: FormWithCSRF,
-    govukErrorSummary: GovukErrorSummary,
-    govukRadios: GovukRadios,
-    govukButton: GovukButton,
-    caption: Caption
+        layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        govukErrorSummary: GovukErrorSummary,
+        govukInput: GovukInput,
+        govukButton: GovukButton,
+        caption: Caption
 )
 
-@(form: Form[_], mode: Mode, faxNumber: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, headingKey: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removeFaxNumber.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages(headingKey), Some(messages("changeRegistrationDetails.title")))) {
 
-    @formHelper(action = routes.RemoveFaxNumberController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.ChangeBusinessNameController.onSubmit(), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @caption(messages("removeFaxNumberController.heading.caption"))
-        @govukRadios(
-            RadiosViewModel.yesNo(
+        @caption(messages("changeBusinessName.caption"))
+
+        @govukInput(
+            InputViewModel(
                 field = form("value"),
-                legend = LegendViewModel(messages("removeFaxNumber.heading", faxNumber)).asPageHeading(viewmodels.LegendSize.Large)
-            )
+                label = LabelViewModel(messages(headingKey)).asPageHeading(viewmodels.LabelSize.Large)
+            ).withAttribute("autocomplete" -> "business_name")
         )
 
         @govukButton(

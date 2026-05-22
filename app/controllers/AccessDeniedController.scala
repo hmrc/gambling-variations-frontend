@@ -21,18 +21,29 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AccessDeniedView
 import config.FrontendAppConfig
+import controllers.actions.AuthorisedAction
+import controllers.auth.AuthController
+import repositories.SessionRepository
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class AccessDeniedController @Inject() (
   override val messagesApi: MessagesApi,
   val controllerComponents: MessagesControllerComponents,
   appConfig: FrontendAppConfig,
+  sessionRepository: SessionRepository,
+  authorise: AuthorisedAction,
   view: AccessDeniedView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(view(appConfig.loginUrl))
+  def onPageLoad: Action[AnyContent] = authorise.async { implicit request =>
+    sessionRepository
+      .clear(request.mgdRegNum)
+      .map { _ =>
+        Ok(view(appConfig.accountUrl))
+      }
   }
 }

@@ -30,7 +30,7 @@
 
 @(businessType: String, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("businessName.title"))) {
+@layout(pageTitle = titleNoForm(messages("businessName.title"), Some(messages("changeRegistrationDetails.title")))) {
 
 
 @caption(messages("businessName.caption"))
@@ -48,7 +48,7 @@
                 actions = Some(Actions(
                     items = Seq(
                         ActionItem(
-                            href = "#",
+                            href = controllers.routes.ChangeBusinessNameController.onPageLoad().url(),
                             content = "site.change",
                             visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType)))
                             )
