@@ -172,11 +172,11 @@ businessTradingName.change.hidden = What is the business trading name?
 businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
 
 # Change Business Name
-changeBusinessName.title.soleproprietor =What is the sole proprietor''s name? - Change registration details
-changeBusinessName.title.partnership =What is the partnership''s name? - Change registration details
-changeBusinessName.title.corporatebody =What is the corporate body''s name? - Change registration details
-changeBusinessName.title.unincorporatedbody =What is the unincorporated body''s name? - Change registration details
-changeBusinessName.title.llp =What is the limited liability partnership''s name? - Change registration details
+changeBusinessName.title.soleproprietor=What is the sole proprietor''s name? - Change registration details
+changeBusinessName.title.partnership=What is the partnership''s name? - Change registration details
+changeBusinessName.title.corporatebody=What is the corporate body''s name? - Change registration details
+changeBusinessName.title.unincorporatedbody=What is the unincorporated body''s name? - Change registration details
+changeBusinessName.title.llp=What is the limited liability partnership''s name? - Change registration details
 
 changeBusinessName.heading.soleproprietor = What is the sole proprietor''s name?
 changeBusinessName.heading.partnership = What is the partnership''s name?
