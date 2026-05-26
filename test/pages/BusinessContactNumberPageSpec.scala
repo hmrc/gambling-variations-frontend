@@ -39,7 +39,7 @@ class BusinessContactNumberPageSpec extends PlaySpec {
 
       val value = BusinessContactNumber(
         phoneNumber  = "01632 960 001",
-        mobileNumber = "07700 900000"
+        mobileNumber = Some("07700 900000")
       )
 
       val json = Json.obj(

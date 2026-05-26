@@ -28,7 +28,7 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessContactNumberView
 
@@ -49,8 +49,8 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       userAnswersId,
       Json.obj(
         BusinessContactNumberPage.toString -> Json.obj(
-          "PhoneNumber" -> "01632 960 001",
-          "MobileNumber" -> "07700900000"
+          "phoneNumber"  -> "01632 960 001",
+          "mobileNumber" -> "07700900000"
         )
       )
     )
@@ -63,6 +63,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
+
         val request = FakeRequest(GET, businessContactNumberRoute)
 
         val view = application.injector.instanceOf[BusinessContactNumberView]
@@ -70,6 +71,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
+
         contentAsString(result) mustEqual
           view(form, NormalMode)(request, messages(application)).toString
       }
@@ -81,6 +83,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
+
         val request = FakeRequest(GET, businessContactNumberRoute)
 
         val view = application.injector.instanceOf[BusinessContactNumberView]
@@ -88,9 +91,15 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
+
         contentAsString(result) mustEqual
           view(
-            form.fill(BusinessContactNumber("01632 960 001", "07700900000")),
+            form.fill(
+              BusinessContactNumber(
+                "01632 960 001",
+                Some("07700900000")
+              )
+            ),
             NormalMode
           )(request, messages(application)).toString
       }
@@ -99,7 +108,9 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -110,11 +121,12 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
           .build()
 
       running(application) {
+
         val request =
           FakeRequest(POST, businessContactNumberRoute)
             .withFormUrlEncodedBody(
-              ("PhoneNumber", "01632 960 001"),
-              ("MobileNumber", "07700900000")
+              ("phoneNumber", "01632 960 001"),
+              ("mobileNumber", "07700900000")
             )
 
         val result = route(application, request).value
@@ -130,18 +142,19 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
+
         val request =
           FakeRequest(POST, businessContactNumberRoute)
             .withFormUrlEncodedBody(
-              ("PhoneNumber", "invalid"),
-              ("MobileNumber", "invalid")
+              ("phoneNumber", "invalid"),
+              ("mobileNumber", "invalid")
             )
 
         val boundForm =
           form.bind(
             Map(
-              "PhoneNumber" -> "invalid",
-              "MobileNumber" -> "invalid"
+              "phoneNumber"  -> "invalid",
+              "mobileNumber" -> "invalid"
             )
           )
 
@@ -150,6 +163,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
+
         contentAsString(result) mustEqual
           view(boundForm, NormalMode)(request, messages(application)).toString
       }
@@ -157,14 +171,17 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to Journey Recovery for a GET if no data" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None).build()
 
       running(application) {
+
         val request = FakeRequest(GET, businessContactNumberRoute)
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+
         redirectLocation(result).value mustEqual
           routes.SystemErrorController.onPageLoad().url
       }
@@ -172,19 +189,22 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to Journey Recovery for a POST if no data" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None).build()
 
       running(application) {
+
         val request =
           FakeRequest(POST, businessContactNumberRoute)
             .withFormUrlEncodedBody(
-              ("PhoneNumber", "01632 960 001"),
-              ("MobileNumber", "07700900000")
+              ("phoneNumber", "01632 960 001"),
+              ("mobileNumber", "07700900000")
             )
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+
         redirectLocation(result).value mustEqual
           routes.SystemErrorController.onPageLoad().url
       }

@@ -43,6 +43,12 @@ class NavigatorSpec extends SpecBase {
             routes.CheckBusinessNameController.onPageLoad()
         }
 
+        "must go from BusinessContactNumberPage to next page" in { // update it later
+
+          navigator.nextPage(BusinessContactNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.BusinessContactNumberController.onPageLoad(NormalMode)
+        }
+
         "a page that doesn't exist in the route map to Index" in {
           navigator.nextPage(RemoveTradeNamePage, NormalMode, UserAnswers("id")) mustBe routes.CheckBusinessNameController.onPageLoad()
         }

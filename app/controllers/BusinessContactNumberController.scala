@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.BusinessContactNumberFormProvider
 import javax.inject.Inject
 import models.Mode
@@ -30,18 +30,19 @@ import views.html.BusinessContactNumberView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessContactNumberController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 sessionRepository: SessionRepository,
-                                                 navigator: Navigator,
-                                                 authorise: AuthorisedAction,
-                                                 getData: DataRetrievalAction,
-                                                 requireData: DataRequiredAction,
-                                                 formProvider: BusinessContactNumberFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: BusinessContactNumberView
-                                               )(implicit ec: ExecutionContext)
-  extends FrontendBaseController with I18nSupport {
+class BusinessContactNumberController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: BusinessContactNumberFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: BusinessContactNumberView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   private val form = formProvider()
 
@@ -59,19 +60,19 @@ class BusinessContactNumberController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(
-              request.userAnswers.set(BusinessContactNumberPage, value)
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(
+                                  request.userAnswers.set(BusinessContactNumberPage, value)
+                                )
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(
+              navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
             )
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(
-            navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
-          )
-      )
+        )
     }
 }

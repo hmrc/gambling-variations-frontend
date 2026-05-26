@@ -24,13 +24,12 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
   val form = new BusinessContactNumberFormProvider()()
 
-  ".PhoneNumber" - {
+  ".phoneNumber" - {
 
-    val fieldName   = "PhoneNumber"
+    val fieldName = "phoneNumber"
     val requiredKey = "businessContactNumber.error.PhoneNumber.required"
-    val lengthKey   = "businessContactNumber.error.PhoneNumber.length"
-    val invalidKey  = "businessContactNumber.error.PhoneNumber.invalid"
-    val maxLength   = 20
+    val lengthKey = "businessContactNumber.error.PhoneNumber.length"
+    val invalidKey = "businessContactNumber.error.PhoneNumber.invalid"
 
     behave like fieldThatBindsValidData(
       form,
@@ -53,8 +52,8 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
       val result = form.bind(
         Map(
-          fieldName -> "123456789012345678901",
-          "MobileNumber" -> "07700900000"
+          fieldName      -> "123456789012345678901",
+          "mobileNumber" -> "07700900000"
         )
       )
 
@@ -65,8 +64,8 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
       val result = form.bind(
         Map(
-          fieldName -> "abc123",
-          "MobileNumber" -> "07700900000"
+          fieldName      -> "abc123",
+          "mobileNumber" -> "07700900000"
         )
       )
 
@@ -77,8 +76,8 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
       val result = form.bind(
         Map(
-          fieldName -> "01632-960-001",
-          "MobileNumber" -> "07700900000"
+          fieldName      -> "01632-960-001",
+          "mobileNumber" -> "07700900000"
         )
       )
 
@@ -86,13 +85,11 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
     }
   }
 
-  ".MobileNumber" - {
+  ".mobileNumber" - {
 
-    val fieldName   = "MobileNumber"
-    val requiredKey = "businessContactNumber.error.MobileNumber.required"
-    val lengthKey   = "businessContactNumber.error.MobileNumber.length"
-    val invalidKey  = "businessContactNumber.error.MobileNumber.invalid"
-    val maxLength   = 20
+    val fieldName = "mobileNumber"
+    val lengthKey = "businessContactNumber.error.MobileNumber.length"
+    val invalidKey = "businessContactNumber.error.MobileNumber.invalid"
 
     behave like fieldThatBindsValidData(
       form,
@@ -104,18 +101,24 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
       )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    "allow empty mobile number" in {
+
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> ""
+        )
+      )
+
+      result.errors mustBe empty
+    }
 
     "not bind strings longer than 20 characters" in {
 
       val result = form.bind(
         Map(
-          "PhoneNumber" -> "01632960001",
-          fieldName -> "123456789012345678901"
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "123456789012345678901"
         )
       )
 
@@ -126,8 +129,8 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
       val result = form.bind(
         Map(
-          "PhoneNumber" -> "01632960001",
-          fieldName -> "mobile123"
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "mobile123"
         )
       )
 
@@ -138,8 +141,8 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
       val result = form.bind(
         Map(
-          "PhoneNumber" -> "01632960001",
-          fieldName -> "07700-900000"
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "07700-900000"
         )
       )
 

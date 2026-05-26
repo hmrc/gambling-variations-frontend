@@ -16,9 +16,9 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
-case class BusinessContactNumber (phoneNumber: String, mobileNumber: String)
+case class BusinessContactNumber(phoneNumber: String, mobileNumber: Option[String])
 
 object BusinessContactNumber {
 

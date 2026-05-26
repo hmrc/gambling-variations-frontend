@@ -105,7 +105,7 @@ class DataRequiredActionImpl @Inject() (
         ans <- answers
         updatedAnswers <- setIfDefined(ans,
                                        contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
-                                         BusinessContactNumber(phone, mobile)
+                                         BusinessContactNumber(phone, Some(mobile))
                                        },
                                        BusinessContactNumberPage
                                       )

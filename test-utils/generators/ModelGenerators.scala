@@ -25,8 +25,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryBusinessContactNumber: Arbitrary[BusinessContactNumber] =
     Arbitrary {
       for {
-        phoneNumber  <- arbitrary[String]
-        mobileNumber <- arbitrary[String]
-      } yield BusinessContactNumber(phoneNumber, mobileNumber)
+        phoneNumber <- arbitrary[String]
+        mobileOpt   <- arbitrary[Option[String]]
+      } yield BusinessContactNumber(
+        phoneNumber  = phoneNumber,
+        mobileNumber = mobileOpt
+      )
     }
 }

@@ -17,54 +17,54 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import models.BusinessContactNumber
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
+import play.api.data.validation.*
 
 class BusinessContactNumberFormProvider @Inject() extends Mappings {
 
   private val phoneNumberRegex = "^[0-9 ]{1,20}$"
 
+  private val phoneConstraint: Constraint[String] =
+    Constraint { value =>
+      val trimmed = value.trim
+
+      if (trimmed.isEmpty)
+        Invalid("businessContactNumber.error.PhoneNumber.required")
+      else if (trimmed.length > 20)
+        Invalid("businessContactNumber.error.PhoneNumber.length")
+      else if (!trimmed.matches(phoneNumberRegex))
+        Invalid("businessContactNumber.error.PhoneNumber.invalid")
+      else
+        Valid
+    }
+
+  private val mobileConstraint: Constraint[String] =
+    Constraint { value =>
+      val trimmed = value.trim
+      if (trimmed.length > 20)
+        Invalid("businessContactNumber.error.MobileNumber.length")
+      else if (!trimmed.matches(phoneNumberRegex))
+        Invalid("businessContactNumber.error.MobileNumber.invalid")
+      else
+        Valid
+    }
+
   def apply(): Form[BusinessContactNumber] =
     Form(
       mapping(
-        "PhoneNumber" ->
+        "phoneNumber" ->
           text("businessContactNumber.error.PhoneNumber.required")
             .transform(_.trim, identity)
-            .verifying(
-              maxLength(
-                20,
-                "businessContactNumber.error.PhoneNumber.length"
-              )
-            )
-            .verifying(
-              regexp(
-                phoneNumberRegex,
-                "businessContactNumber.error.PhoneNumber.invalid"
-              )
-            ),
-
-        "MobileNumber" ->
-          text("businessContactNumber.error.MobileNumber.required")
-            .transform(_.trim, identity)
-            .verifying(
-              maxLength(
-                20,
-                "businessContactNumber.error.MobileNumber.length"
-              )
-            )
-            .verifying(
-              regexp(
-                phoneNumberRegex,
-                "businessContactNumber.error.MobileNumber.invalid"
-              )
-            )
-
-      )(BusinessContactNumber.apply)(x =>
-        Some((x.phoneNumber, x.mobileNumber))
-      )
+            .verifying(phoneConstraint),
+        "mobileNumber" ->
+          optional(
+            text()
+              .transform(_.trim, identity)
+              .verifying(mobileConstraint)
+          )
+      )(BusinessContactNumber.apply)(x => Some((x.phoneNumber, x.mobileNumber)))
     )
 }
-

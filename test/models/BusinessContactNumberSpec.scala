@@ -27,12 +27,12 @@ class BusinessContactNumberSpec extends PlaySpec {
 
       val model = BusinessContactNumber(
         phoneNumber  = "01632 960 001",
-        mobileNumber = "07700 900000"
+        mobileNumber = Some("07700 900000")
       )
 
       val expectedJson = Json.obj(
-        "PhoneNumber"  -> "01632 960 001",
-        "MobileNumber" -> "07700 900000"
+        "phoneNumber"  -> "01632 960 001",
+        "mobileNumber" -> "07700 900000"
       )
 
       Json.toJson(model) mustEqual expectedJson
@@ -47,7 +47,7 @@ class BusinessContactNumberSpec extends PlaySpec {
 
       val expectedModel = BusinessContactNumber(
         phoneNumber  = "01632 960 001",
-        mobileNumber = "07700 900000"
+        mobileNumber = Some("07700 900000")
       )
 
       json.validate[BusinessContactNumber] mustEqual JsSuccess(expectedModel)
