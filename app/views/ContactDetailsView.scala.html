@@ -32,10 +32,10 @@
 
     @caption(messages("contactDetails.caption"))
     @h1("contactDetails.heading", classes="govuk-heading-l")
-    @govukSummaryList(
-        SummaryList(
-            rows = Seq(
-                SummaryListRow(
+
+    @govukSummaryList(SummaryList(
+        rows = Seq(
+            SummaryListRow(
                     key = Key(
                         content = messages("contactDetails.heading.contactNumber")
                     ),
@@ -59,83 +59,89 @@
                                 content = "site.change",
                                 visuallyHiddenText = Some(messages("contactDetails.label.contactNumbers"))
                             ),
-                        )
+                        ),
+                    classes = "govuk-summary-list__actions govuk-!-width-one-third"
                     ))
                 ),
-                SummaryListRow(
-                    key = Key(
-                        content = messages("contactDetails.heading.faxNumber")
+            SummaryListRow(
+                key = Key(
+                    content = messages("contactDetails.heading.faxNumber")
                     ),
-                    value = Value(
-                        content = faxNumber
+                value = Value(
+                    content = faxNumber
                     ),
-                    actions =
-                    if (faxNumber.isEmpty) {
-                        Some(Actions(
-                            items = Seq(
-                                ActionItem(
+                actions =
+                if(faxNumber.isEmpty){
+                    Some(Actions(
+                        items = Seq(
+                            ActionItem(
                                     href = "#",
                                     content = "site.change",
                                     visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
                                 ),
                             )
-                        ))
-                    } else {
-                        Some(Actions(
-                                items = Seq(
-                                    ActionItem(
-                                        href = "#",
-                                        content = "site.change",
-                                        visuallyHiddenText = Some(messages("contactDetails.label.contactNumbers"))
-                                    ),
-                                    ActionItem(
-                                        href = "#",
-                                        content = "site.remove",
-                                        visuallyHiddenText = Some(messages("contactDetails.label.contactNumbers"))
-                                    ),
-                                ),
-                        classes = "govuk-summary-list__actions govuk-!-width-one-third"
-                        ))
-                    }
-                ),
-                SummaryListRow(
-                    key = Key(
-                        content = messages("contactDetails.heading.emailAddr")
+                    ))
+                } else {
+                Some(Actions(
+                    items = Seq(
+                        ActionItem(
+                            href = "#",
+                            content = "site.change",
+                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                            ),
+                        ActionItem(
+                            href = "#",
+                            content = "site.remove",
+                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                            ),
+                        ),
+                classes = "govuk-summary-list__actions govuk-!-width-one-third"
+                ))
+                }
+            ),
+            SummaryListRow(
+                key = Key(
+                    content = messages("contactDetails.heading.faxNumber")
                     ),
-                    value = Value(
-                        content = emailAddr
+                value = Value(
+                    content = faxNumber
                     ),
-                    actions =
-                    if (faxNumber.isEmpty) {
-                        Some(Actions(
-                            items = Seq(
-                                ActionItem(
+                actions =
+                if(faxNumber.isEmpty){
+                    Some(Actions(
+                        items = Seq(
+                            ActionItem(
                                     href = "#",
                                     content = "site.change",
-                                    visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
+                                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
                                 ),
                             )
-                        ))
-                    } else {
-                        Some(Actions(
-                                items = Seq(
-                                    ActionItem(
-                                        href = "#",
-                                        content = "site.change",
-                                        visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
-                                    ),
-                                    ActionItem(
-                                        href = "#",
-                                        content = "site.remove",
-                                        visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
-                                    ),
-                                ),
-                        classes = "govuk-summary-list__actions govuk-!-width-one-third"
-                        ))
-                    }
-                ),
+                    ))
+                } else {
+                Some(Actions(
+                    items = Seq(
+                        ActionItem(
+                            href = "#",
+                            content = "site.change",
+                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                            ),
+                        ActionItem(
+                            href = "#",
+                            content = "site.remove",
+                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                            ),
+                        ),
+                classes = "govuk-summary-list__actions govuk-!-width-one-third"
+                ))
+                }
             )
-        )
+        ))
     )
+    <p class="govuk-body">
+        @govukButton(
+        ButtonViewModel(messages("site.continue"))
+        .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+        )
+    </p>
 
 }
