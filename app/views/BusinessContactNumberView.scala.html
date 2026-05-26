@@ -46,7 +46,7 @@
                 field = form("phoneNumber"),
                 label = LabelViewModel(messages("businessContactNumber.PhoneNumber"))
             )
-            .withWidth(Full)
+            .withWidth(Fixed20)
         )
 
         @govukInput(
@@ -54,7 +54,7 @@
                 field = form("mobileNumber"),
                 label = LabelViewModel(messages("businessContactNumber.MobileNumber"))
             )
-            .withWidth(Full)
+            .withWidth(Fixed20)
         )
 
         @govukButton(
