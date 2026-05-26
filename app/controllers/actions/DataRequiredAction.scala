@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
+import models.{BusinessContactDetails, BusinessContactNumber, BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
@@ -102,9 +102,13 @@ class DataRequiredActionImpl @Inject() (
   private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
     val contactAnswers: Try[UserAnswers] = {
       for {
-        ans            <- answers
-        updatedAnswers <- setIfDefined(ans, contact.phoneNumber, PhoneNumberPage)
-        updatedAnswers <- setIfDefined(updatedAnswers, contact.mobilePhoneNumber, MobilePhoneNumberPage)
+        ans <- answers
+        updatedAnswers <- setIfDefined(ans,
+                                       contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
+                                         BusinessContactNumber(phone, mobile)
+                                       },
+                                       BusinessContactNumberPage
+                                      )
         updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
         updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
       } yield updatedAnswers

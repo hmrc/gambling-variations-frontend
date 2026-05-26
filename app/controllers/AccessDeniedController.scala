@@ -16,14 +16,13 @@
 
 package controllers
 
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.AccessDeniedView
 import config.FrontendAppConfig
 import controllers.actions.AuthorisedAction
-import controllers.auth.AuthController
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.AccessDeniedView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext

@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package generators
+package models
 
-import models.BusinessContactNumber
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
+import play.api.libs.json._
 
-trait ModelGenerators {
+case class BusinessContactNumber (phoneNumber: String, mobileNumber: String)
 
-  implicit lazy val arbitraryBusinessContactNumber: Arbitrary[BusinessContactNumber] =
-    Arbitrary {
-      for {
-        phoneNumber  <- arbitrary[String]
-        mobileNumber <- arbitrary[String]
-      } yield BusinessContactNumber(phoneNumber, mobileNumber)
-    }
+object BusinessContactNumber {
+
+  implicit val format: OFormat[BusinessContactNumber] = Json.format
 }

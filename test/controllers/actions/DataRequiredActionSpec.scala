@@ -61,11 +61,13 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "businessName"         -> "Test Business Ltd",
-            "tradingName"          -> "Test Trader Ltd",
-            "businessType"         -> 4,
-            "phoneNumber"          -> "+44 8903928171",
-            "mobilePhoneNumber"    -> "+44 8903928171",
+            "businessName" -> "Test Business Ltd",
+            "tradingName"  -> "Test Trader Ltd",
+            "businessType" -> 4,
+            "businessContactNumber" -> Json.obj(
+              "phoneNumber"  -> "+44 8903928171",
+              "mobileNumber" -> "+44 8903928171"
+            ),
             "faxNumber"            -> "+_+_ hdj39783",
             "businessEmailAddress" -> "a@b.com"
           )
@@ -100,10 +102,12 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
               "firstName" -> "Test",
               "lastName"  -> "Fella"
             ),
-            "businessType"         -> 1,
-            "tradingName"          -> "Test Trader",
-            "phoneNumber"          -> "+44 8903928171",
-            "mobilePhoneNumber"    -> "+44 8903928171",
+            "businessType" -> 1,
+            "tradingName"  -> "Test Trader",
+            "businessContactNumber" -> Json.obj(
+              "phoneNumber"  -> "+44 8903928171",
+              "mobileNumber" -> "+44 8903928171"
+            ),
             "faxNumber"            -> "+_+_ hdj39783",
             "businessEmailAddress" -> "a@b.com"
           )

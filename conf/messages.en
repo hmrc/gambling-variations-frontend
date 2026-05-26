@@ -213,3 +213,22 @@ removeEmailAddress.checkYourAnswersLabel = Business email address
 removeEmailAddress.error.required = Select yes if you want to remove the email address
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
+
+
+businessContactNumber.title = What are your business contact numbers? - Change registration details
+businessContactNumber.heading = What are your business contact numbers?
+businessContactNumber.p1 = You must provide at least one contact number.
+businessContactNumber.PhoneNumber = Phone number
+businessContactNumber.MobileNumber = Mobile number
+businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
+
+businessContactNumber.error.PhoneNumber.required = Enter the phone number for this business
+businessContactNumber.error.PhoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
+businessContactNumber.error.PhoneNumber.length = The phone number must be 20 characters or less
+
+businessContactNumber.error.MobileNumber.required = Enter the mobile number for this business
+businessContactNumber.error.MobileNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
+businessContactNumber.error.MobileNumber.length = The mobile number must be 20 characters or less
+
+businessContactNumber.PhoneNumber.change.hidden = phone number
+businessContactNumber.MobileNumber.change.hidden = mobile number
