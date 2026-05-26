@@ -61,4 +61,4 @@ GET        /change-registration-details/change-business-contact-details/remove-e
 POST       /change-registration-details/change-business-contact-details/remove-email-address    controllers.RemoveEmailAddressController.onSubmit(mode: Mode = CheckMode)
 
 
-GET        /checkContactDetails                       controllers.CheckContactDetailsController.onPageLoad()
+GET        /change-registration-details/business-contact-details/check                       controllers.CheckContactDetailsController.onPageLoad()

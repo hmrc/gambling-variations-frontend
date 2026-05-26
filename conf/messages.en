@@ -215,15 +215,16 @@ removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
 
 #Check Contact Details
-checkContactDetails.caption = Change registration details
-checkContactDetails.title = Check your business contact details
-checkContactDetails.error.contactNumber = You must provide at least one contact number.
-checkContactDetails.heading.contactNumber = Contact numbers
-checkContactDetails.heading.faxNumber = Fax number
-checkContactDetails.heading.emailAddr = Email address
-checkContactDetails.label.phoneNumber = Phone number
-checkContactDetails.label.mobilePhoneNumber = Mobile number
-checkContactDetails.label.contactNumbers = Contact numbers
-checkContactDetails.message.notProvided = Not provided
-checkContactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
+contactDetails.caption = Change registration details
+contactDetails.title = Check your business contact details
+contactDetails.heading = Check your business contact details
+contactDetails.error.contactNumber = You must provide at least one contact number.
+contactDetails.heading.contactNumber = Contact numbers
+contactDetails.heading.faxNumber = Fax number
+contactDetails.heading.emailAddr = Email address
+contactDetails.label.phoneNumber = Phone number
+contactDetails.label.mobilePhoneNumber = Mobile number
+contactDetails.label.contactNumbers = Contact numbers
+contactDetails.message.notProvided = Not provided
+contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 

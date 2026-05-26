@@ -25,20 +25,21 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ContactDetailsView
 
-class CheckContactDetailsController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       authorised: AuthorisedAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: ContactDetailsView
-                                     ) extends FrontendBaseController with I18nSupport {
+class CheckContactDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  authorised: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: ContactDetailsView
+) extends FrontendBaseController
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
     val contactNameView: Option[Result] = for {
-      phoneNumber <- request.userAnswers.get(PhoneNumberPage)
-      mobilePhoneNumber <- request.userAnswers.get(MobilePhoneNumberPage)
-      faxNumber <- request.userAnswers.get(FaxNumberPage)
+      phoneNumber          <- request.userAnswers.get(PhoneNumberPage)
+      mobilePhoneNumber    <- request.userAnswers.get(MobilePhoneNumberPage)
+      faxNumber            <- request.userAnswers.get(FaxNumberPage)
       businessEmailAddress <- request.userAnswers.get(BusinessEmailAddressPage)
     } yield {
       Ok(view(phoneNumber, mobilePhoneNumber, faxNumber, businessEmailAddress))

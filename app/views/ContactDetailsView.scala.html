@@ -28,17 +28,31 @@
 
 @(phoneNumber: String, mobilePhoneNumber:String, faxNumber:String, emailAdd:String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("checkContactDetails.title"))) {
-<!--    this all needs to be changed to the correct messages-->
-<!--                                                        -->
-<!--                                                        -->
-<!--                                                        -->
-<!--                                                        -->
-<!--                                                        -->
-<!--                                                        -->
-<!--                                                        -->
-<!--                                                        -->
-<!--                                                        -->
-    <h1 class="govuk-heading-xl">@messages("checkContactDetails.heading")</h1>
+@layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
+
+    @caption(messages("contactDetails.caption"))
+    @h1("contactDetails.heading", classes="govuk-heading-l")
+    @govukSummaryList(
+        SummaryList(
+            rows = Seq(
+                SummaryListRow(
+                    key = Key(
+                        content = messages("contactDetails.heading.contactNumber")
+                    ),
+                    value = Value(
+                    ),
+                    actions = Some(Actions(
+                        items = Seq(
+                            ActionItem(
+                                href = "#",
+                                content = "site.change",
+                                visuallyHiddenText = Some(messages("contactDetails.label.contactNumbers"))
+                            ),
+                        )
+                    ))
+                )
+            )
+        )
+    )
 
 }
