@@ -40,11 +40,16 @@
                         content = messages("contactDetails.heading.contactNumber")
                     ),
                     value = Value(
-                        content = Text(
-                            s"""${messages("contactDetails.label.phoneNumber")}
-                            |${phoneNumber}
-                            |${messages("contactDetails.label.mobilePhoneNumber")}
-                            |${mobilePhoneNumber}""".stripMargin
+                                content = HtmlContent(Html(
+                                    s"${messages("contactDetails.label.phoneNumber")}" +
+                                    "<br>"+
+                                    s"${phoneNumber}" +
+                                    "<br>"+
+                                    "<br>"+
+                                    s"${messages("contactDetails.label.mobilePhoneNumber")}" +
+                                    "<br>"+
+                                    s"${mobilePhoneNumber}"
+                                    )
                         )
                     ),
                     actions = Some(Actions(
