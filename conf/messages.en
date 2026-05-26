@@ -213,3 +213,17 @@ removeEmailAddress.checkYourAnswersLabel = Business email address
 removeEmailAddress.error.required = Select yes if you want to remove the email address
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
+
+#Check Contact Details
+checkContactDetails.caption = Change registration details
+checkContactDetails.title = Check your business contact details
+checkContactDetails.error.contactNumber = You must provide at least one contact number.
+checkContactDetails.heading.contactNumber = Contact numbers
+checkContactDetails.heading.faxNumber = Fax number
+checkContactDetails.heading.emailAddr = Email address
+checkContactDetails.label.phoneNumber = Phone number
+checkContactDetails.label.mobilePhoneNumber = Mobile number
+checkContactDetails.label.contactNumbers = Contact numbers
+checkContactDetails.message.notProvided = Not provided
+checkContactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
+
