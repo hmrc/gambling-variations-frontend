@@ -101,10 +101,10 @@
             ),
             SummaryListRow(
                 key = Key(
-                    content = messages("contactDetails.heading.faxNumber")
+                    content = messages("contactDetails.heading.emailAddr")
                     ),
                 value = Value(
-                    content = faxNumber
+                    content = emailAddr
                     ),
                 actions =
                 if(faxNumber.isEmpty){
@@ -113,7 +113,7 @@
                             ActionItem(
                                     href = "#",
                                     content = "site.change",
-                                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                                    visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
                                 ),
                             )
                     ))

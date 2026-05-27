@@ -228,8 +228,6 @@ contactDetails.label.contactNumbers = Contact numbers
 contactDetails.message.notProvided = Not provided
 contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
-
-
 faxNumber.title = What is the fax number for this business? - Change registration details
 faxNumber.heading = What is the fax number for this business?
 faxNumber.checkYourAnswersLabel = Fax Number
