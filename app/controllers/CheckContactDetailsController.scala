@@ -43,6 +43,7 @@ class CheckContactDetailsController @Inject() (
       businessEmailAddress <- request.userAnswers.get(BusinessEmailAddressPage)
     } yield {
       Ok(view(phoneNumber, mobilePhoneNumber, faxNumber, businessEmailAddress))
+
     }
     contactNameView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
   }
