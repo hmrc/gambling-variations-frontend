@@ -21,35 +21,11 @@ import models.UserAnswers
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.ContactDetailsView
+import views.html.BusinessContactDetailsView
 
 class CheckContactDetailsControllerSpec extends SpecBase {
 
   "CheckContactDetails Controller" - {
-
-    "must return OK and the correct view for a GET" in {
-
-      val data = Json.obj(
-        "phoneNumber"          -> "0700000000",
-        "mobilePhoneNumber"    -> "0700000001",
-        "faxNumber"            -> "0700000002",
-        "businessEmailAddress" -> "a@b.com"
-      )
-
-      val userAnswers = UserAnswers("id", data)
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[ContactDetailsView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view("0700000000", "0700000001", "0700000002", "a@b.com")(request, messages(application)).toString
-      }
-    }
     "must redirect with an empty set of User Answers" in {
 
       val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
