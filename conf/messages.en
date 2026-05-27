@@ -228,3 +228,13 @@ contactDetails.label.contactNumbers = Contact numbers
 contactDetails.message.notProvided = Not provided
 contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
+
+
+faxNumber.title = What is the fax number for this business? - Change registration details
+faxNumber.heading = What is the fax number for this business?
+faxNumber.checkYourAnswersLabel = Fax Number
+faxNumber.error.required = Enter the fax number for this business
+faxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
+faxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
+faxNumber.error.length = The fax number must be 20 characters or less
+faxNumber.change.hidden = FaxNumber

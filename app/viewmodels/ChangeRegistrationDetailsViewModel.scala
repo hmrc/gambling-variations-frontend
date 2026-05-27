@@ -54,7 +54,7 @@ final case class ChangeRegistrationDetailsViewModel(
       optional(!isGroupMember)(
         TaskListItem(
           messages("changeRegistrationDetails.businessContactDetails"),
-          routes.IndexController.onPageLoad().url,
+          routes.CheckYourAnswersController.onPageLoad().url,
           NoChange
         )
       ),
