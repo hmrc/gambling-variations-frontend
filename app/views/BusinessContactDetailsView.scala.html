@@ -140,7 +140,7 @@
         @govukButton(
         ButtonViewModel(messages("site.continue"))
         .withCssClass("button.govuk-button")
-        .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+        .asLink(if (!phoneNumber.isEmpty) routes.ChangeRegistrationDetailsController.onPageLoad().url)
         )
     </p>
 
