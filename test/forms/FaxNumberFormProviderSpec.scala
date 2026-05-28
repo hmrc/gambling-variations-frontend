@@ -29,7 +29,7 @@ class FaxNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val maxLength = 20
   private val faxNumberCharactersRegex = "^[0-9 ]+$"
-  private val faxNumberFormatRegex = "^0[0-9]{9,10}$"
+  private val faxNumberFormatRegex = "^[0-9]{10,20}$"
 
   private val form = new FaxNumberFormProvider()()
 
@@ -44,7 +44,9 @@ class FaxNumberFormProviderSpec extends StringFieldBehaviours {
         "01632960001",
         "01632 960 001",
         "07700900982",
-        "07700 900 982"
+        "07700 900 982",
+        "01234567890123456789",
+        "12345678901234567890"
       )
     )
 
@@ -61,7 +63,7 @@ class FaxNumberFormProviderSpec extends StringFieldBehaviours {
     }
 
     "not bind invalid format" in {
-      val result = form.bind(Map(fieldName -> "1234567890")).apply(fieldName)
+      val result = form.bind(Map(fieldName -> "123456789")).apply(fieldName)
 
       result.errors must contain only FormError(fieldName, invalidFormatKey, Seq(faxNumberFormatRegex))
     }
