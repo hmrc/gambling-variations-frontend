@@ -104,7 +104,7 @@
                     content = messages("contactDetails.heading.emailAddr")
                     ),
                 value = Value(
-                    content = emailAddr.getOrElse(messages("contactDetails.message.notProvided"))
+                    content = emailAddr
                     ),
                 actions =
                 if(faxNumber.isEmpty){
