@@ -37,7 +37,7 @@
         rows = Seq(
             SummaryListRow(
                     key = Key(
-                        content = messages("contactDetails.heading.contactNumber")
+                        content = messages("contactDetails.heading.contactNumbers")
                     ),
                     value = Value(
                                 content = HtmlContent(Html(
@@ -49,9 +49,8 @@
                                     s"${messages("contactDetails.label.mobilePhoneNumber")}" +
                                     "<br>"+
                                     s"${mobilePhoneNumber}"
-                                    )
-                        )
-                    ),
+                                ))
+                    ).withCssClass("contact-numbers"),
                     actions = Some(Actions(
                         items = Seq(
                             ActionItem(
@@ -69,7 +68,7 @@
                     ),
                 value = Value(
                     content = faxNumber
-                    ),
+                    ).withCssClass("fax-number"),
                 actions =
                 if(faxNumber.isEmpty){
                     Some(Actions(
@@ -105,7 +104,7 @@
                     ),
                 value = Value(
                     content = emailAddr
-                    ),
+                    ).withCssClass("email-address"),
                 actions =
                 if(faxNumber.isEmpty){
                     Some(Actions(

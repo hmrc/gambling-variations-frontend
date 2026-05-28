@@ -21,11 +21,7 @@ import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import models.{BusinessContactDetails, BusinessType, NormalMode}
 import views.html.BusinessContactDetailsView
-import views.html.helper.form
-
-import java.time.LocalDate
 
 class BusinessContactDetailsViewSpec extends SpecBase {
 
@@ -47,8 +43,29 @@ class BusinessContactDetailsViewSpec extends SpecBase {
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title must include(messages(contactDetails.title))
+      doc.title             must include(messages("contactDetails.title"))
+      doc.select("h1").text must include(messages("contactDetails.heading"))
 
+      doc.select(".contact-numbers").text must include(messages("contactDetails.label.phoneNumber"))
+      doc.select(".contact-numbers").text must include(messages("1"))
+      doc.select(".contact-numbers").text must include(messages("contactDetails.label.mobilePhoneNumber"))
+      doc.select(".contact-numbers").text must include(messages("2"))
+      doc.select(".fax-number").text      must include(messages("3"))
+      doc.select(".email-address").text   must include(messages("4"))
+    }
+
+    "must display 'Not provided' when value is not provided" in new Setup {
+
+      val html = view("1", "2", "", "4")(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".contact-numbers").text must include(messages("contactDetails.label.phoneNumber"))
+      doc.select(".contact-numbers").text must include(messages("1"))
+      doc.select(".contact-numbers").text must include(messages("contactDetails.label.mobilePhoneNumber"))
+      doc.select(".contact-numbers").text must include(messages("2"))
+      doc.select(".fax-number").text      must include(messages("contactDetails.message.notProvided"))
+      doc.select(".email-address").text   must include(messages("4"))
     }
 
   }
