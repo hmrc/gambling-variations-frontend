@@ -43,12 +43,12 @@
                                 content = HtmlContent(Html(
                                     s"${messages("contactDetails.label.phoneNumber")}" +
                                     "<br>"+
-                                    s"${phoneNumber.getOrElse(messages("contactDetails.message.notProvided"))}" +
+                                    s"${phoneNumber}" +
                                     "<br>"+
                                     "<br>"+
                                     s"${messages("contactDetails.label.mobilePhoneNumber")}" +
                                     "<br>"+
-                                    s"${mobilePhoneNumber.getOrElse(messages("contactDetails.message.notProvided"))}"
+                                    s"${mobilePhoneNumber}"
                                     )
                         )
                     ),
@@ -68,7 +68,7 @@
                     content = messages("contactDetails.heading.faxNumber")
                     ),
                 value = Value(
-                    content = faxNumber.getOrElse(messages("contactDetails.message.notProvided"))
+                    content = faxNumber
                     ),
                 actions =
                 if(faxNumber.isEmpty){

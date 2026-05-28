@@ -42,18 +42,13 @@ class BusinessContactDetailsViewSpec extends SpecBase {
 
   "BusinessContactDetailsView" - {
     "must show expected values when data is populated" in new Setup {
-      val populatedData: BusinessContactDetails =
-        BusinessContactDetails(
-          mgdRegNumber = "Mr",
-          phoneNumber = Some("John"),
-          mobilePhoneNumber = Some("John"),
-          faxNumber = Some("John"),
-          emailAddr = Some("John"),
-          systemDate = Some(LocalDate.of(1991,1,1),
-      )
-      val html = view(populatedData)
+
+      val html = view("1", "2", "3", "4")(request, messages)
+
       val doc = Jsoup.parse(html.body)
-      
+
+      doc.title must include(messages(contactDetails.title))
+
     }
 
   }
