@@ -21,8 +21,11 @@ import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import models.{BusinessType, NormalMode}
+import models.{BusinessContactDetails, BusinessType, NormalMode}
 import views.html.BusinessContactDetailsView
+import views.html.helper.form
+
+import java.time.LocalDate
 
 class BusinessContactDetailsViewSpec extends SpecBase {
 
@@ -38,6 +41,20 @@ class BusinessContactDetailsViewSpec extends SpecBase {
   }
 
   "BusinessContactDetailsView" - {
+    "must show expected values when data is populated" in new Setup {
+      val populatedData: BusinessContactDetails =
+        BusinessContactDetails(
+          mgdRegNumber = "Mr",
+          phoneNumber = Some("John"),
+          mobilePhoneNumber = Some("John"),
+          faxNumber = Some("John"),
+          emailAddr = Some("John"),
+          systemDate = Some(LocalDate.of(1991,1,1),
+      )
+      val html = view(populatedData)
+      val doc = Jsoup.parse(html.body)
+      
+    }
 
   }
 }
