@@ -42,7 +42,11 @@
                         content = messages("contactDetails.heading.contactNumbers")
                     ),
                     value = Value(
-                                content = HtmlContent(Html(
+                                content =
+                                    {if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
+                                        messages("contactDetails.message.notProvided")
+                                    } else {
+                                    HtmlContent(Html(
                                     s"${messages("contactDetails.label.phoneNumber")}" +
                                     "<br>"+
                                     s"${if (!phoneNumber.isEmpty) phoneNumber else messages("contactDetails.message.notProvided")}" +
@@ -51,8 +55,8 @@
                                     s"${messages("contactDetails.label.mobilePhoneNumber")}" +
                                     "<br>"+
                                     s"${if (!mobilePhoneNumber.isEmpty) mobilePhoneNumber else messages("contactDetails.message.notProvided")}"
-                                ))
-                    ).withCssClass("contact-numbers"),
+                                ))}
+                    }).withCssClass("contact-numbers"),
                     actions = Some(Actions(
                         items = Seq(
                             ActionItem(
