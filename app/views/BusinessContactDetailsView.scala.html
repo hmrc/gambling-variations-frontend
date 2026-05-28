@@ -43,12 +43,12 @@
                                 content = HtmlContent(Html(
                                     s"${messages("contactDetails.label.phoneNumber")}" +
                                     "<br>"+
-                                    s"${phoneNumber}" +
+                                    s"${if (!phoneNumber.isEmpty) phoneNumber else messages("contactDetails.message.notProvided")}" +
                                     "<br>"+
                                     "<br>"+
                                     s"${messages("contactDetails.label.mobilePhoneNumber")}" +
                                     "<br>"+
-                                    s"${mobilePhoneNumber}"
+                                    s"${if (!mobilePhoneNumber.isEmpty) mobilePhoneNumber else messages("contactDetails.message.notProvided")}"
                                 ))
                     ).withCssClass("contact-numbers"),
                     actions = Some(Actions(
@@ -67,7 +67,7 @@
                     content = messages("contactDetails.heading.faxNumber")
                     ),
                 value = Value(
-                    content = faxNumber
+                    content = if (!faxNumber.isEmpty) faxNumber else messages("contactDetails.message.notProvided")
                     ).withCssClass("fax-number"),
                 actions =
                 if(faxNumber.isEmpty){
@@ -103,7 +103,7 @@
                     content = messages("contactDetails.heading.emailAddr")
                     ),
                 value = Value(
-                    content = emailAddr
+                    content = if (!emailAddr.isEmpty) emailAddr else messages("contactDetails.message.notProvided")
                     ).withCssClass("email-address"),
                 actions =
                 if(faxNumber.isEmpty){
