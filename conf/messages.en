@@ -1,4 +1,4 @@
-service.name = Manage your Machine Games Duty
+service.name = Manage your gambling tax
 
 site.back = Back
 site.remove = Remove
@@ -27,8 +27,8 @@ error.title.prefix = Error:
 error.prefix = Error
 error.summary.title = There is a problem
 
-index.title = Manage your Machine Games Duty
-index.heading = Manage your Machine Games Duty
+index.title = Manage your gambling tax
+index.heading = Manage your gambling tax
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 checkYourAnswers.title = Check your answers
@@ -114,7 +114,7 @@ changeRegistrationDetails.readyToSubmit = Ready to submit
 changeRegistrationDetails.notYetStarted = Not yet started
 changeRegistrationDetails.submit = Declare and submit
 changeRegistrationDetails.can-not-start = Cannot start yet
-changeRegistrationDetails.change-registration.link = Cancel and return to manage your Machine Games Duty
+changeRegistrationDetails.change-registration.link = Cancel and return to manage your gambling tax
 
 
 
@@ -126,7 +126,7 @@ declaration.submit = Declare and submit
 
 submit.changes = Submit changes
 
-soleProprietorName.title = 	What is the sole proprietor’s name? - Change registration details - Manage your Machine Games Duty - GOV.UK
+soleProprietorName.title = 	What is the sole proprietor’s name?
 
 soleProprietorName.changeRegistrationDetails = Change registration details
 soleProprietorName.heading = What is the sole proprietor’s name?
@@ -161,7 +161,7 @@ removeTradeName.caption = Change registration details
 removeTradeName.error.required = Select yes if you want to remove the trading name
 removeTradeName.change.hidden = RemoveTradeName
 
-businessTradingName.title = What is the business trading name? - Change registration details
+businessTradingName.title = What is the business trading name?
 businessTradingName.heading = What is the business trading name?
 BusinessTradingNameController.heading.caption = Change registration details
 businessTradingName.checkYourAnswersLabel = What is the business trading name?
@@ -172,35 +172,41 @@ businessTradingName.change.hidden = What is the business trading name?
 businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
 
 # Change Business Name
-changeBusinessName.heading.soleProprietor = What is the sole proprietor''s name?
-changeBusinessName.heading.partnership = What is the partnership''s name?
-changeBusinessName.heading.corporateBody = What is the corporate body''s name?
-changeBusinessName.heading.unincorporatedBody = What is the unincorporated body''s name?
-changeBusinessName.heading.limitedLiabilityPartnership = What is the limited liability partnership''s name?
+changeBusinessName.title.soleproprietor=What is the sole proprietor’s name?
+changeBusinessName.title.partnership=What is the partnership’s name?
+changeBusinessName.title.corporatebody=What is the corporate body’s name?
+changeBusinessName.title.unincorporatedbody=What is the unincorporated body’s name?
+changeBusinessName.title.llp=What is the limited liability partnership’s name?
+
+changeBusinessName.heading.soleproprietor = What is the sole proprietor’s name?
+changeBusinessName.heading.partnership = What is the partnership’s name?
+changeBusinessName.heading.corporatebody = What is the corporate body’s name?
+changeBusinessName.heading.unincorporatedbody = What is the unincorporated body’s name?
+changeBusinessName.heading.llp = What is the limited liability partnership’s name?
 changeBusinessName.caption = Change registration details
 
 changeBusinessName.label = Business name
 
-changeBusinessName.error.required.soleProprietor = Enter the sole proprietor''s name
+changeBusinessName.error.required.soleproprietor = Enter the sole proprietor''s name
 changeBusinessName.error.required.partnership = Enter the partnership''s name
-changeBusinessName.error.required.corporateBody = Enter the corporate body''s name
-changeBusinessName.error.required.unincorporatedBody = Enter the unincorporated body''s name
-changeBusinessName.error.required.limitedLiabilityPartnership = Enter the limited liability partnership''s name
+changeBusinessName.error.required.corporatebody = Enter the corporate body''s name
+changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated body''s name
+changeBusinessName.error.required.llp = Enter the limited liability partnership''s name
 
-changeBusinessName.error.invalid.soleProprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.soleproprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
-changeBusinessName.error.invalid.corporateBody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.unincorporatedBody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.limitedLiabilityPartnership = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.corporatebody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.llp = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
-changeBusinessName.error.length.soleProprietor = The sole proprietor''s name must be 160 characters or less
+changeBusinessName.error.length.soleproprietor = The sole proprietor''s name must be 160 characters or less
 changeBusinessName.error.length.partnership = The partnership''s name must be 34 characters or less
-changeBusinessName.error.length.corporateBody = The corporate body''s name must be 160 characters or less
-changeBusinessName.error.length.unincorporatedBody = The unincorporated body''s name must be 160 characters or less
-changeBusinessName.error.length.limitedLiabilityPartnership = The limited liability partnership''s name must be 160 characters or less
+changeBusinessName.error.length.corporatebody = The corporate body''s name must be 160 characters or less
+changeBusinessName.error.length.unincorporatedbody = The unincorporated body''s name must be 160 characters or less
+changeBusinessName.error.length.llp = The limited liability partnership''s name must be 160 characters or less
 
 
-removeFaxNumber.title = Are you sure you want to remove the fax number? - Change registration details
+removeFaxNumber.title = Are you sure you want to remove the fax number?
 removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
 removeFaxNumber.checkYourAnswersLabel = Fax number
 removeFaxNumber.error.required = Select yes if you want to remove the fax number
@@ -213,3 +219,13 @@ removeEmailAddress.checkYourAnswersLabel = Business email address
 removeEmailAddress.error.required = Select yes if you want to remove the email address
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
+
+
+faxNumber.title = What is the fax number for this business? - Change registration details
+faxNumber.heading = What is the fax number for this business?
+faxNumber.checkYourAnswersLabel = Fax Number
+faxNumber.error.required = Enter the fax number for this business
+faxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
+faxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
+faxNumber.error.length = The fax number must be 20 characters or less
+faxNumber.change.hidden = FaxNumber
