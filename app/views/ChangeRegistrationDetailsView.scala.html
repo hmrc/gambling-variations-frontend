@@ -17,26 +17,26 @@
 @import views.html.components._
 @import viewmodels._
 
-@this(
-layout: templates.Layout,
-govukButton: GovukButton,
-h1: H1,
-h2: H2,
-p: Paragraph,
-link: Link,
-sectionHeader: sectionHeader
-)
+    @this(
+    layout: templates.Layout,
+    govukButton: GovukButton,
+    h1: H1,
+    h2: H2,
+    p: Paragraph,
+    link: Link,
+     caption: Caption
+    )
 
 @(
-vm: ChangeRegistrationDetailsViewModel,
-mgdRegNumber: String,
-managementHomeUrl: String,
-submitUrl: String
+    vm: ChangeRegistrationDetailsViewModel,
+    mgdRegNumber: String,
+    managementHomeUrl: String,
+    submitUrl: String
 )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("changeRegistrationDetails.title"))) {
 
-@sectionHeader(messages("changeRegistrationDetails.heading.caption", mgdRegNumber))
+@caption(messages("changeRegistrationDetails.heading.caption", mgdRegNumber))
 
 @h1("changeRegistrationDetails.heading", classes = "govuk-heading-l")
 

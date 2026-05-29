@@ -62,5 +62,4 @@ class ChangeBusinessNameFormProvider @Inject() extends Mappings {
     )
   }
 
-
 }

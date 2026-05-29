@@ -64,4 +64,3 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
     }
   }
 }
-

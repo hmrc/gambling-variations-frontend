@@ -18,25 +18,24 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.RemoveFaxNumberPage
+import pages.FaxNumberPage
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object RemoveFaxNumberSummary {
+object FaxNumberSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(RemoveFaxNumberPage).map { answer =>
-
-      val value = if (answer) "site.yes" else "site.no"
+    answers.get(FaxNumberPage).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "removeFaxNumber.checkYourAnswersLabel",
-        value = ValueViewModel(value),
+        key   = "faxNumber.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemoveFaxNumberController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("removeFaxNumber.change.hidden"))
+          ActionItemViewModel("site.change", routes.FaxNumberController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("faxNumber.change.hidden"))
         )
       )
     }

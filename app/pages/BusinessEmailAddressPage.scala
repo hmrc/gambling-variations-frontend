@@ -15,21 +15,10 @@
  */
 
 package pages
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+
 import play.api.libs.json.JsPath
 
-class BusinessEmailPageSpec extends AnyFreeSpec with Matchers {
-
-  ".BusinessEmailPage" - {
-
-    "must have the correct toString" in {
-      BusinessEmailPage.toString mustBe "emailAddr"
-    }
-
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "emailAddr"
-      BusinessEmailPage.path mustBe expectedPath
-    }
-  }
+case object BusinessEmailAddressPage extends QuestionPage[String] {
+  override def path: JsPath = JsPath \ toString
+  override def toString: String = "businessEmailAddress"
 }
