@@ -67,11 +67,13 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         val view = application.injector.instanceOf[ChangeBusinessNameView]
 
-        val headingKey = "changeBusinessName.heading.soleProprietor"
+        val headingKey = "changeBusinessName.heading.soleproprietor"
+
+        val titleKey = "changeBusinessName.title.soleproprietor"
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill(businessName), NormalMode, headingKey)(request, messages(application)).toString
+          view(form.fill(businessName), NormalMode, headingKey, titleKey)(request, messages(application)).toString
       }
     }
 
@@ -152,11 +154,13 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        val headingKey = "changeBusinessName.heading.soleProprietor"
+        val headingKey = "changeBusinessName.heading.soleproprietor"
+
+        val titleKey = "changeBusinessName.title.soleproprietor"
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, headingKey)(request, messages(application)).toString
+          view(boundForm, NormalMode, headingKey, titleKey)(request, messages(application)).toString
       }
     }
   }
