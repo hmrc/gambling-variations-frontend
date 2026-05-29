@@ -27,7 +27,6 @@ GET        /change-registration-details                       controllers.Change
 
 GET        /change-registration/check-business-name           controllers.CheckBusinessNameController.onPageLoad()
 
-
 GET       /change-registration/declaration                       controllers.DeclarationController.onPageLoad()
 
 GET       /change-registration-details/sole-proprietor-name                         controllers.SoleProprietorNameController.onPageLoad(mode: Mode = NormalMode)
