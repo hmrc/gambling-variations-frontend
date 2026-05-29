@@ -1,4 +1,4 @@
-service.name = Manage your Machine Games Duty
+service.name = Manage your gambling tax
 
 site.back = Back
 site.remove = Remove
@@ -27,8 +27,8 @@ error.title.prefix = Error:
 error.prefix = Error
 error.summary.title = There is a problem
 
-index.title = Manage your Machine Games Duty
-index.heading = Manage your Machine Games Duty
+index.title = Manage your gambling tax
+index.heading = Manage your gambling tax
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
 checkYourAnswers.title = Check your answers
@@ -114,7 +114,7 @@ changeRegistrationDetails.readyToSubmit = Ready to submit
 changeRegistrationDetails.notYetStarted = Not yet started
 changeRegistrationDetails.submit = Declare and submit
 changeRegistrationDetails.can-not-start = Cannot start yet
-changeRegistrationDetails.change-registration.link = Cancel and return to manage your Machine Games Duty
+changeRegistrationDetails.change-registration.link = Cancel and return to manage your gambling tax
 
 
 
@@ -126,7 +126,7 @@ declaration.submit = Declare and submit
 
 submit.changes = Submit changes
 
-soleProprietorName.title = 	What is the sole proprietor’s name? - Change registration details - Manage your Machine Games Duty - GOV.UK
+soleProprietorName.title = 	What is the sole proprietor’s name?
 
 soleProprietorName.changeRegistrationDetails = Change registration details
 soleProprietorName.heading = What is the sole proprietor’s name?
@@ -161,7 +161,7 @@ removeTradeName.caption = Change registration details
 removeTradeName.error.required = Select yes if you want to remove the trading name
 removeTradeName.change.hidden = RemoveTradeName
 
-businessTradingName.title = What is the business trading name? - Change registration details
+businessTradingName.title = What is the business trading name?
 businessTradingName.heading = What is the business trading name?
 BusinessTradingNameController.heading.caption = Change registration details
 businessTradingName.checkYourAnswersLabel = What is the business trading name?
@@ -206,7 +206,7 @@ changeBusinessName.error.length.unincorporatedbody = The unincorporated body''s 
 changeBusinessName.error.length.llp = The limited liability partnership''s name must be 160 characters or less
 
 
-removeFaxNumber.title = Are you sure you want to remove the fax number? - Change registration details
+removeFaxNumber.title = Are you sure you want to remove the fax number?
 removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
 removeFaxNumber.checkYourAnswersLabel = Fax number
 removeFaxNumber.error.required = Select yes if you want to remove the fax number
