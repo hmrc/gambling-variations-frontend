@@ -24,7 +24,7 @@
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
     govukButton: GovukButton,
-    sectionHeader: sectionHeader
+        caption: Caption
 )
 
 @(form: Form[_], mode: Mode, businessType: BusinessType)(implicit request: Request[_], messages: Messages)
@@ -37,7 +37,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @sectionHeader(messages("BusinessTradingNameController.heading.caption"))
+        @caption(messages("BusinessTradingNameController.heading.caption"))
 
             @govukInput(
                 if (businessType == BusinessType.Soleproprietor) {

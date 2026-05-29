@@ -19,17 +19,17 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-class FaxNumberPageSpec extends AnyFreeSpec with Matchers {
+class BusinessEmailAddressPageSpec extends AnyFreeSpec with Matchers {
 
-  ".FaxNumberPage" - {
+  "BusinessEmailAddressPage" - {
 
     "must have the correct toString" in {
-      FaxNumberPage.toString mustBe "faxNumber"
+      BusinessEmailAddressPage.toString mustBe "businessEmailAddress"
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "businessContactDetails" \ "faxNumber"
-      FaxNumberPage.path mustBe expectedPath
+      val expectedPath: JsPath = JsPath \ "businessEmailAddress"
+      BusinessEmailAddressPage.path mustBe expectedPath
     }
   }
 }

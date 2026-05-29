@@ -17,8 +17,10 @@
 package controllers
 
 import base.SpecBase
+import pages.FaxNumberPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import viewmodels.checkAnswers.FaxNumberSummary
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
 
@@ -37,9 +39,31 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency {
 
         val view = application.injector.instanceOf[CheckYourAnswersView]
         val list = SummaryListViewModel(Seq.empty)
+        val continueUrl = routes.ChangeRegistrationDetailsController.onPageLoad().url
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(list)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(list, continueUrl)(request, messages(application)).toString
+      }
+    }
+
+    "must show the business fax number when it has been provided" in {
+
+      val userAnswers = emptyUserAnswers.set(FaxNumberPage, "01632 960 001").success.value
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[CheckYourAnswersView]
+        val list = SummaryListViewModel(
+          Seq(FaxNumberSummary.row(userAnswers)(messages(application)).value)
+        )
+        val continueUrl = routes.ChangeRegistrationDetailsController.onPageLoad().url
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(list, continueUrl)(request, messages(application)).toString
       }
     }
 
