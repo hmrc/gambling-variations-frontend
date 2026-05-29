@@ -21,14 +21,14 @@
         govukButton: GovukButton,
         h1:H1,
         p:Paragraph,
-        sectionHeader: sectionHeader,
+        caption: Caption,
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("declaration.title"))) {
 
-   @sectionHeader(messages("declaration.heading.caption"))
+   @caption(messages("declaration.heading.caption"))
    @h1("declaration.heading", classes = "govuk-heading-l")
    @p("declaration.p1")
 

@@ -17,75 +17,88 @@
 package controllers
 
 import controllers.actions.*
-import forms.ChangeBusinessNameFormProvider
-import models.{BusinessType, Mode, UserAnswers}
+import forms.RemoveEmailAddressFormProvider
+import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessNamePage, BusinessTypePage}
+import pages.{BusinessEmailAddressPage, RemoveEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChangeBusinessNameView
+import views.html.RemoveEmailAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class ChangeBusinessNameController @Inject() (
+class RemoveEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: ChangeBusinessNameFormProvider,
+  formProvider: RemoveEmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ChangeBusinessNameView
+  view: RemoveEmailAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private def headingKeyFor(businessType: BusinessType): String =
-    s"changeBusinessName.heading.${businessType.toString}"
-
-  private def titleKeyFor(businessType: BusinessType): String =
-    s"changeBusinessName.title.${businessType.toString}"
+  private val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      (
-        for {
-          businessType <- request.userAnswers.get(BusinessTypePage)
-          businessName <- request.userAnswers.get(BusinessNamePage)
-        } yield {
-          val form = formProvider(businessType)
-          val preparedForm = form.fill(businessName)
-          val headingKey = headingKeyFor(businessType)
-          val titleKey = titleKeyFor(businessType)
-          Ok(view(preparedForm, mode, headingKey, titleKey))
+
+      request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
+
+        val preparedForm = request.userAnswers.get(RemoveEmailAddressPage) match {
+          case Some(value) => form.fill(value)
+          case None        => form
         }
-      ) getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
+
+        Ok(view(preparedForm, mode, emailAddress))
+
+      } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      request.userAnswers.get(BusinessTypePage) map { businessType =>
-        val headingKey = headingKeyFor(businessType)
-        val form = formProvider(businessType)
-        val titleKey = titleKeyFor(businessType)
+
+      request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
+
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, headingKey, titleKey))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, emailAddress))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
+              } yield Redirect(
+                navigator.nextPage(RemoveEmailAddressPage, mode, updatedAnswers)
+              )
           )
-      } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+
+      } getOrElse Future.successful(
+        Redirect(routes.SystemErrorController.onPageLoad())
+      )
     }
 
-  private def updateUserAnswers(userAnswers: UserAnswers, newName: String): Try[UserAnswers] =
-    userAnswers.set(BusinessNamePage, newName)
+  private def updateUserAnswers(
+    userAnswers: UserAnswers,
+    value: Boolean
+  ): Try[UserAnswers] = {
+
+    for {
+      ua1 <- userAnswers.set(RemoveEmailAddressPage, value)
+      ua2 <- {
+        if (value) {
+          ua1.remove(BusinessEmailAddressPage)
+        } else {
+          Try(ua1)
+        }
+      }
+    } yield ua2
+  }
 }
