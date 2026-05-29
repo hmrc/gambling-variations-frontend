@@ -24,7 +24,7 @@ import play.api.data.Form
 class FaxNumberFormProvider @Inject() extends Mappings {
 
   private val faxNumberCharactersRegex = "^[0-9 ]+$"
-  private val faxNumberFormatRegex = "^0[0-9]{9,10}$"
+  private val faxNumberFormatRegex = "^[0-9]{10,20}$"
 
   def apply(): Form[String] =
     Form(

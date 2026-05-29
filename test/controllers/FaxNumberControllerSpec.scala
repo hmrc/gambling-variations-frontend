@@ -60,7 +60,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must not populate the view on a GET when the question has previously been answered" in {
+    "must populate the view on a GET when the question has previously been answered" in {
 
       val userAnswers = UserAnswers(userAnswersId).set(FaxNumberPage, "07700900999").success.value
 
@@ -74,7 +74,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("07700900999"), NormalMode)(request, messages(application)).toString
       }
     }
 
