@@ -22,7 +22,7 @@ import models.BusinessType
 import play.api.data.Form
 
 class ChangeBusinessNameFormProvider @Inject() extends Mappings {
-  
+
   private def requiredErrorKeyFor(businessType: BusinessType): String =
     s"changeBusinessName.error.required.${businessType.toString}"
 
@@ -31,7 +31,6 @@ class ChangeBusinessNameFormProvider @Inject() extends Mappings {
 
   private def lengthErrorKeyFor(businessType: BusinessType): String =
     s"changeBusinessName.error.length.${businessType.toString}"
-
 
   def apply(businessType: BusinessType): Form[String] = {
 
