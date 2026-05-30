@@ -64,11 +64,13 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
             "businessName" -> "Test Business Ltd",
             "tradingName"  -> "Test Trader Ltd",
             "businessType" -> 4,
+            "businessContactDetails" -> Json.obj(
+              "faxNumber" -> "+_+_ hdj39783"
+            ),
             "businessContactNumber" -> Json.obj(
               "phoneNumber"  -> "+44 8903928171",
               "mobileNumber" -> "+44 8903928171"
             ),
-            "faxNumber"            -> "+_+_ hdj39783",
             "businessEmailAddress" -> "a@b.com"
           )
 
@@ -104,11 +106,13 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
             ),
             "businessType" -> 1,
             "tradingName"  -> "Test Trader",
+            "businessContactDetails" -> Json.obj(
+              "faxNumber" -> "+_+_ hdj39783"
+            ),
             "businessContactNumber" -> Json.obj(
               "phoneNumber"  -> "+44 8903928171",
               "mobileNumber" -> "+44 8903928171"
             ),
-            "faxNumber"            -> "+_+_ hdj39783",
             "businessEmailAddress" -> "a@b.com"
           )
 

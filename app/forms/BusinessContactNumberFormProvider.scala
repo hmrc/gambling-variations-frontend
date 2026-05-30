@@ -17,6 +17,7 @@
 package forms
 
 import javax.inject.Inject
+
 import forms.mappings.Mappings
 import models.BusinessContactNumber
 import play.api.data.Form
@@ -25,18 +26,16 @@ import play.api.data.validation.*
 
 class BusinessContactNumberFormProvider @Inject() extends Mappings {
 
-  private val phoneNumberRegex = "^[0-9 ]{1,20}$"
+  private val phoneNumberRegex = "^[0-9 ]{10,20}$"
 
   private val phoneConstraint: Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
 
-      if (trimmed.isEmpty)
-        Invalid("businessContactNumber.error.PhoneNumber.required")
-      else if (trimmed.length > 20)
-        Invalid("businessContactNumber.error.PhoneNumber.length")
-      else if (!trimmed.matches(phoneNumberRegex))
-        Invalid("businessContactNumber.error.PhoneNumber.invalid")
+      if (trimmed.length > 20)
+        Invalid("businessContactNumber.error.phoneNumber.length")
+      else if (trimmed.nonEmpty && !trimmed.matches(phoneNumberRegex))
+        Invalid("businessContactNumber.error.phoneNumber.invalidFormat")
       else
         Valid
     }
@@ -44,10 +43,11 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
   private val mobileConstraint: Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
+
       if (trimmed.length > 20)
-        Invalid("businessContactNumber.error.MobileNumber.length")
-      else if (!trimmed.matches(phoneNumberRegex))
-        Invalid("businessContactNumber.error.MobileNumber.invalid")
+        Invalid("businessContactNumber.error.mobileNumber.length")
+      else if (trimmed.nonEmpty && !trimmed.matches(phoneNumberRegex))
+        Invalid("businessContactNumber.error.mobileNumber.invalidFormat")
       else
         Valid
     }
@@ -56,9 +56,11 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "phoneNumber" ->
-          text("businessContactNumber.error.PhoneNumber.required")
-            .transform(_.trim, identity)
-            .verifying(phoneConstraint),
+          optional(
+            text()
+              .transform(_.trim, identity)
+              .verifying(phoneConstraint)
+          ),
         "mobileNumber" ->
           optional(
             text()

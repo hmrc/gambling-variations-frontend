@@ -103,12 +103,13 @@ class DataRequiredActionImpl @Inject() (
     val contactAnswers: Try[UserAnswers] = {
       for {
         ans <- answers
-        updatedAnswers <- setIfDefined(ans,
-                                       contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
-                                         BusinessContactNumber(phone, Some(mobile))
-                                       },
-                                       BusinessContactNumberPage
-                                      )
+        updatedAnswers <- setIfDefined(
+                            ans,
+                            contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
+                              BusinessContactNumber(Some(phone), Some(mobile))
+                            },
+                            BusinessContactNumberPage
+                          )
         updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
         updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
       } yield updatedAnswers

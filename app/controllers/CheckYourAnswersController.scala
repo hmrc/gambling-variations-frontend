@@ -21,6 +21,7 @@ import controllers.actions.{AuthorisedAction, DataRetrievalAction}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.checkAnswers.FaxNumberSummary
 import viewmodels.govuk.summarylist.*
 import views.html.CheckYourAnswersView
 
@@ -34,11 +35,13 @@ class CheckYourAnswersController @Inject() (
     with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData) { implicit request =>
-    request.userAnswers.map { _ =>
+    request.userAnswers.map { answers =>
       val list = SummaryListViewModel(
-        rows = Seq.empty
+        rows = Seq(
+          FaxNumberSummary.row(answers)
+        ).flatten
       )
-      Ok(view(list))
+      Ok(view(list, routes.ChangeRegistrationDetailsController.onPageLoad().url))
     } getOrElse Redirect(routes.JourneyRecoveryController.onPageLoad())
   }
 }

@@ -26,7 +26,7 @@
 
 @(form: Form[models.SoleProprietorName], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("soleProprietorName.title")) {
+@layout(pageTitle = title(form, messages("soleProprietorName.title"), Some("changeRegistrationDetails.title"))) {
 
   @formHelper(action = controllers.routes.SoleProprietorNameController.onSubmit(mode)) {
 

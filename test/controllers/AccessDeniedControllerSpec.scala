@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import controllers.actions.AuthorisedAction
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.AccessDeniedView
@@ -37,7 +36,7 @@ class AccessDeniedControllerSpec extends SpecBase {
 
         val view = application.injector.instanceOf[AccessDeniedView]
 
-        status(result) mustEqual OK
+        status(result) mustEqual 403
         contentAsString(result) must include("Sorry, there is a problem with the service")
         contentAsString(result) must include("Continue to your account")
       }

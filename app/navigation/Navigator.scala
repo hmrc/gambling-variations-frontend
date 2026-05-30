@@ -31,6 +31,8 @@ class Navigator @Inject() () {
     case BusinessNamePage          => userAnswers => routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage        => userAnswers => routes.CheckBusinessNameController.onPageLoad()
     case TradingNamePage           => _ => routes.CheckBusinessNameController.onPageLoad()
+    case FaxNumberPage             => _ => routes.CheckYourAnswersController.onPageLoad()
+    case RemoveFaxNumberPage       => _ => routes.CheckYourAnswersController.onPageLoad()
     case BusinessContactNumberPage => userAnswers => routes.BusinessContactNumberController.onPageLoad(NormalMode)
     case _                         => _ => routes.IndexController.onPageLoad()
   }

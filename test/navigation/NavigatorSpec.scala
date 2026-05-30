@@ -49,6 +49,18 @@ class NavigatorSpec extends SpecBase {
             routes.BusinessContactNumberController.onPageLoad(NormalMode)
         }
 
+        "must go from FaxNumberPage to CheckYourAnswers" in {
+
+          navigator.nextPage(FaxNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckYourAnswersController.onPageLoad()
+        }
+
+        "must go from RemoveFaxNumberPage to CheckYourAnswers" in {
+
+          navigator.nextPage(RemoveFaxNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckYourAnswersController.onPageLoad()
+        }
+
         "a page that doesn't exist in the route map to Index" in {
           navigator.nextPage(RemoveTradeNamePage, NormalMode, UserAnswers("id")) mustBe routes.CheckBusinessNameController.onPageLoad()
         }
