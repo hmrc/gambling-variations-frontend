@@ -72,15 +72,5 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
       )((phone: Option[String], mobile: Option[String]) => BusinessContactNumber(phone, mobile))((b: BusinessContactNumber) =>
         Some((b.phoneNumber, b.mobileNumber))
       )
-//        .verifying(
-//          Constraint[BusinessContactNumber] { data =>
-//            val phone = data.phoneNumber.getOrElse("").trim
-//            val mobile = data.mobileNumber.getOrElse("").trim
-//
-//            if (phone.isEmpty && mobile.isEmpty)
-//              Invalid("businessContactNumber.error.contactRequired")
-//            else Valid
-//          }
-//        )
     )
 }
