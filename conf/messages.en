@@ -231,7 +231,7 @@ faxNumber.error.length = The fax number must be 20 characters or less
 faxNumber.change.hidden = FaxNumber
 
 
-businessContactNumber.title = What are your business contact numbers? - Change registration details
+businessContactNumber.title = What are your business contact numbers?
 businessContactNumber.heading = What are your business contact numbers?
 businessContactNumber.p1 = You must provide at least one contact number.
 businessContactNumber.caption = Change registration details
