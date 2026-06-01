@@ -96,7 +96,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
           view(
             form.fill(
               BusinessContactNumber(
-                "01632 960 001",
+                Some("01632 960 001"),
                 Some("07700900000")
               )
             ),

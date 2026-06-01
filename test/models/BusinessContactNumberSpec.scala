@@ -26,7 +26,7 @@ class BusinessContactNumberSpec extends PlaySpec {
     "serialise to JSON" in {
 
       val model = BusinessContactNumber(
-        phoneNumber  = "01632 960 001",
+        phoneNumber  = Some("01632 960 001"),
         mobileNumber = Some("07700 900000")
       )
 
@@ -46,7 +46,7 @@ class BusinessContactNumberSpec extends PlaySpec {
       )
 
       val expectedModel = BusinessContactNumber(
-        phoneNumber  = "01632 960 001",
+        phoneNumber  = Some("01632 960 001"),
         mobileNumber = Some("07700 900000")
       )
 

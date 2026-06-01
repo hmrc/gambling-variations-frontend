@@ -18,78 +18,87 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
-import play.api.data.FormError
 
 class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
   val form = new BusinessContactNumberFormProvider()()
-
   ".phoneNumber" - {
 
     val fieldName = "phoneNumber"
-    val requiredKey = "businessContactNumber.error.PhoneNumber.required"
-    val lengthKey = "businessContactNumber.error.PhoneNumber.length"
-    val invalidKey = "businessContactNumber.error.PhoneNumber.invalid"
+
+    val lengthKey = "businessContactNumber.error.phoneNumber.length"
+    val invalidKey = "businessContactNumber.error.phoneNumber.invalid"
+    val formatKey = "businessContactNumber.error.phoneNumber.invalidFormat"
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
       Gen.oneOf(
         "01632 960 001",
-        "07700900000",
-        "1234567890",
-        "01234 567 890"
+        "07700 900000",
+        "01234 567890",
+        "01632960001"
       )
     )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    "allow empty phone number (handled by cross-field rule)" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber"  -> "",
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+      result.errors mustBe empty
+    }
 
     "not bind strings longer than 20 characters" in {
-
       val result = form.bind(
         Map(
           fieldName      -> "123456789012345678901",
-          "mobileNumber" -> "07700900000"
+          "mobileNumber" -> "07700 900000"
         )
       )
-
       result.errors.map(_.message) must contain(lengthKey)
     }
 
     "not bind invalid characters" in {
-
       val result = form.bind(
         Map(
           fieldName      -> "abc123",
-          "mobileNumber" -> "07700900000"
+          "mobileNumber" -> "07700 900000"
         )
       )
-
       result.errors.map(_.message) must contain(invalidKey)
     }
 
     "not bind special characters" in {
-
       val result = form.bind(
         Map(
           fieldName      -> "01632-960-001",
-          "mobileNumber" -> "07700900000"
+          "mobileNumber" -> "07700 900000"
         )
       )
-
       result.errors.map(_.message) must contain(invalidKey)
+    }
+
+    "not bind invalid format (too short like 123)" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "123",
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+      result.errors.map(_.message) must contain(formatKey)
     }
   }
 
   ".mobileNumber" - {
 
     val fieldName = "mobileNumber"
-    val lengthKey = "businessContactNumber.error.MobileNumber.length"
-    val invalidKey = "businessContactNumber.error.MobileNumber.invalid"
+
+    val lengthKey = "businessContactNumber.error.mobileNumber.length"
+    val invalidKey = "businessContactNumber.error.mobileNumber.invalid"
+    val formatKey = "businessContactNumber.error.mobileNumber.invalidFormat"
 
     behave like fieldThatBindsValidData(
       form,
@@ -101,52 +110,55 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
       )
     )
 
-    "allow empty mobile number" in {
-
+    "allow empty mobile number (handled by cross-field rule)" in {
       val result = form.bind(
         Map(
           "phoneNumber" -> "01632960001",
           fieldName     -> ""
         )
       )
-
       result.errors mustBe empty
     }
 
     "not bind strings longer than 20 characters" in {
-
       val result = form.bind(
         Map(
           "phoneNumber" -> "01632960001",
           fieldName     -> "123456789012345678901"
         )
       )
-
       result.errors.map(_.message) must contain(lengthKey)
     }
 
     "not bind invalid characters" in {
-
       val result = form.bind(
         Map(
           "phoneNumber" -> "01632960001",
           fieldName     -> "mobile123"
         )
       )
-
       result.errors.map(_.message) must contain(invalidKey)
     }
 
     "not bind special characters" in {
-
       val result = form.bind(
         Map(
           "phoneNumber" -> "01632960001",
           fieldName     -> "07700-900000"
         )
       )
-
       result.errors.map(_.message) must contain(invalidKey)
     }
+
+    "not bind invalid format (too short like 123)" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "123"
+        )
+      )
+      result.errors.map(_.message) must contain(formatKey)
+    }
   }
+
 }
