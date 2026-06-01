@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.SoleProprietorNameFormProvider
+import models.BusinessType.Soleproprietor
 import models.{NormalMode, SoleProprietorName, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers
@@ -75,7 +76,7 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.SoleProprietorNameController.onPageLoad(NormalMode).url)
+          val request = FakeRequest(GET, routes.ChangeBusinessNameController.onPageLoad(NormalMode, Soleproprietor).url)
           val controller = application.injector.instanceOf[SoleProprietorNameController]
           val result = call(controller.onPageLoad(NormalMode), request)
           val view = application.injector.instanceOf[SoleProprietorNameView]
@@ -90,7 +91,7 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = Some(populatedAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.SoleProprietorNameController.onPageLoad(NormalMode).url)
+          val request = FakeRequest(GET, routes.ChangeBusinessNameController.onPageLoad(NormalMode, Soleproprietor).url)
           val controller = application.injector.instanceOf[SoleProprietorNameController]
           val result = call(controller.onPageLoad(NormalMode), request)
           val view = application.injector.instanceOf[SoleProprietorNameView]
@@ -124,7 +125,7 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            FakeRequest(POST, routes.SoleProprietorNameController.onSubmit(NormalMode).url)
+            FakeRequest(POST, routes.ChangeBusinessNameController.onSubmit(NormalMode, Soleproprietor).url)
               .withFormUrlEncodedBody(validData.toSeq*)
           val controller = application.injector.instanceOf[SoleProprietorNameController]
 
@@ -141,7 +142,7 @@ class SoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            FakeRequest(POST, routes.SoleProprietorNameController.onSubmit(NormalMode).url)
+            FakeRequest(POST, routes.ChangeBusinessNameController.onSubmit(NormalMode, Soleproprietor).url)
               .withFormUrlEncodedBody(
                 "title"      -> "",
                 "firstName"  -> "",

@@ -25,11 +25,11 @@
         caption: Caption
 )
 
-@(form: Form[_], mode: Mode, headingKey: String, titleKey: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, businessType: BusinessType, headingKey: String, titleKey: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages(titleKey), Some("changeRegistrationDetails.title"))) {
 
-    @formHelper(action = routes.ChangeBusinessNameController.onSubmit(), Symbol("autoComplete") -> "on") {
+    @formHelper(action = routes.ChangeBusinessNameController.onSubmit(NormalMode, businessType), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
