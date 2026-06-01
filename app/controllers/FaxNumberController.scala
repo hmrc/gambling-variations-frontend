@@ -47,8 +47,11 @@ class FaxNumberController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers
+      .get(FaxNumberPage)
+      .fold(form)(form.fill)
 
-    Ok(view(form, mode))
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
