@@ -34,7 +34,8 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         "phoneNumber"            -> "07000000000",
         "mobilePhoneNumber"      -> "07000000000",
         "businessContactDetails" -> Json.obj("faxNumber" -> "07000000000"),
-        "businessEmailAddress"   -> "a@b.com"
+        "businessEmailAddress"   -> "a@b.com",
+        "isPopulated"            -> true
       )
 
       val userAnswers = UserAnswers("id-number", data)
@@ -47,7 +48,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessContactDetailsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("07000000000", "07000000000", "07000000000", "a@b.com")(request, messages(application)).toString
+        contentAsString(result) mustEqual view("07000000000", "07000000000", "07000000000", "a@b.com", true)(request, messages(application)).toString
       }
     }
 

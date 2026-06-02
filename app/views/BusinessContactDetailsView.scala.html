@@ -26,7 +26,7 @@
        govukSummaryList : GovukSummaryList
 )
 
-@(phoneNumber: String, mobilePhoneNumber:String, faxNumber:String, emailAddr:String)(implicit request: Request[_], messages: Messages)
+@(phoneNumber: String, mobilePhoneNumber:String, faxNumber:String, emailAddr:String, uaIsPopulated: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
 
@@ -142,6 +142,9 @@
             )
         ))
     )
+    @if(uaIsPopulated) {
+        @paragraph(messages("contactDetails.message.requiredToSubmit"))
+    }
     <p class="govuk-body">
         @govukButton(
         ButtonViewModel(messages("site.continue"))

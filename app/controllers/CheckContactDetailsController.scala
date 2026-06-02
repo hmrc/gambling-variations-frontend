@@ -17,11 +17,12 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessEmailAddressPage, FaxNumberPage, MobilePhoneNumberPage, PhoneNumberPage}
+import pages.{BusinessEmailAddressPage, FaxNumberPage, MobilePhoneNumberPage, PhoneNumberPage, PopulatedFlagPage}
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessContactDetailsView
 
@@ -30,6 +31,7 @@ class CheckContactDetailsController @Inject() (
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactDetailsView
 ) extends FrontendBaseController
@@ -42,8 +44,11 @@ class CheckContactDetailsController @Inject() (
       faxNumber            <- request.userAnswers.get(FaxNumberPage)
       businessEmailAddress <- request.userAnswers.get(BusinessEmailAddressPage)
     } yield {
-      Ok(view(phoneNumber, mobilePhoneNumber, faxNumber, businessEmailAddress))
+      val populatedFlag = request.userAnswers.get(PopulatedFlagPage).getOrElse(false)
+      Ok(view(phoneNumber, mobilePhoneNumber, faxNumber, businessEmailAddress, populatedFlag))
     }
+    val flagIfPopulated = request.userAnswers.set(PopulatedFlagPage, true).getOrElse(request.userAnswers)
+    sessionRepository.set(flagIfPopulated)
     contactDetailsView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
   }
 }
