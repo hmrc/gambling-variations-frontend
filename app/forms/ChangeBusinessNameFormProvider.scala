@@ -42,7 +42,7 @@ class ChangeBusinessNameFormProvider @Inject() extends Mappings {
       case BusinessType.Partnership =>
         (
           34,
-          """^[A-Za-z0-9&'(),!\/ -]+$"""
+          """^[A-Za-z0-9&'().,!\/ -]+$"""
         )
 
       case _ =>

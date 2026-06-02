@@ -17,19 +17,19 @@
 package controllers
 
 import controllers.actions.*
-import forms.ChangeBusinessNameFormProvider
-import models.{BusinessType, Mode, UserAnswers}
+import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
+import models.BusinessType.Soleproprietor
+import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.{BusinessNamePage, BusinessTypePage}
+import pages.{BusinessNamePage, BusinessTypePage, SoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChangeBusinessNameView
+import views.html.{ChangeBusinessNameView, SoleProprietorNameView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class ChangeBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
@@ -39,8 +39,10 @@ class ChangeBusinessNameController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   formProvider: ChangeBusinessNameFormProvider,
+  soleProprietorFormProvider: SoleProprietorNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ChangeBusinessNameView
+  view: ChangeBusinessNameView,
+  soleProprietorView: SoleProprietorNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -51,41 +53,58 @@ class ChangeBusinessNameController @Inject() (
   private def titleKeyFor(businessType: BusinessType): String =
     s"changeBusinessName.title.${businessType.toString}"
 
-  def onPageLoad(mode: Mode): Action[AnyContent] =
+  def onPageLoad(mode: Mode, businessType: BusinessType): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
       (
-        for {
-          businessType <- request.userAnswers.get(BusinessTypePage)
-          businessName <- request.userAnswers.get(BusinessNamePage)
-        } yield {
-          val form = formProvider(businessType)
-          val preparedForm = form.fill(businessName)
-          val headingKey = headingKeyFor(businessType)
-          val titleKey = titleKeyFor(businessType)
-          Ok(view(preparedForm, mode, headingKey, titleKey))
+        request.userAnswers.get(BusinessTypePage) flatMap {
+          case Soleproprietor =>
+            request.userAnswers.get(SoleProprietorPage) map { soleProprietorName =>
+              val form = soleProprietorFormProvider()
+              val preparedForm = request.userAnswers.get(SoleProprietorPage).fold(form)(form.fill)
+              Ok(soleProprietorView(preparedForm, mode))
+            }
+          case businessType =>
+            request.userAnswers.get(BusinessNamePage) map { businessName =>
+              val form = formProvider(businessType)
+              val preparedForm = form.fill(businessName)
+              val headingKey = headingKeyFor(businessType)
+              val titleKey = titleKeyFor(businessType)
+              Ok(view(preparedForm, mode, businessType, headingKey, titleKey))
+            }
         }
       ) getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
     }
 
-  def onSubmit(mode: Mode): Action[AnyContent] =
+  def onSubmit(mode: Mode, businessType: BusinessType): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      request.userAnswers.get(BusinessTypePage) map { businessType =>
-        val headingKey = headingKeyFor(businessType)
-        val form = formProvider(businessType)
-        val titleKey = titleKeyFor(businessType)
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, headingKey, titleKey))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
-          )
+      request.userAnswers.get(BusinessTypePage) map {
+        case Soleproprietor =>
+          soleProprietorFormProvider()
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(soleProprietorView(formWithErrors, mode))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
+            )
+        case businessType => {
+          val headingKey = headingKeyFor(businessType)
+          val titleKey = titleKeyFor(businessType)
+
+          formProvider(businessType)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType, headingKey, titleKey))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNamePage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
+            )
+        }
       } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
     }
 
-  private def updateUserAnswers(userAnswers: UserAnswers, newName: String): Try[UserAnswers] =
-    userAnswers.set(BusinessNamePage, newName)
 }

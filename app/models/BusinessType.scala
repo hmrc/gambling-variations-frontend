@@ -18,6 +18,7 @@ package models
 
 import play.api.i18n.Messages
 import play.api.libs.json.*
+import play.api.mvc.JavascriptLiteral
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
@@ -68,4 +69,8 @@ object BusinessType extends Enumerable.Implicits {
 
   implicit val format: Format[BusinessType] =
     Format(reads, writes)
+
+  implicit val jsLiteral: JavascriptLiteral[BusinessType] = new JavascriptLiteral[BusinessType] {
+    override def to(value: BusinessType): String = value.toString
+  }
 }

@@ -29,15 +29,33 @@ GET        /change-registration/check-business-name           controllers.CheckB
 
 GET       /change-registration/declaration                       controllers.DeclarationController.onPageLoad()
 
-GET       /change-registration-details/sole-proprietor-name                         controllers.SoleProprietorNameController.onPageLoad(mode: Mode = NormalMode)
-POST      /change-registration-details/sole-proprietor-name                         controllers.SoleProprietorNameController.onSubmit(mode: Mode = NormalMode)
-GET       /change-registration-details/change-sole-proprietor-name                  controllers.SoleProprietorNameController.onPageLoad(mode: Mode = CheckMode)
-POST      /change-registration-details/change-sole-proprietor-name                  controllers.SoleProprietorNameController.onSubmit(mode: Mode = CheckMode)
-
-GET    /change-registration-details/change-business-name     controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode)
-POST   /change-registration-details/change-business-name   controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
+
+GET       /change-registration-details/business-name/sole-proprietor-name                         controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Soleproprietor)
+POST      /change-registration-details/business-name/sole-proprietor-name                         controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Soleproprietor)
+GET       /change-registration-details/business-name/change-sole-proprietor-name                  controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Soleproprietor)
+POST      /change-registration-details/business-name/change-sole-proprietor-name                  controllers.ChangeBusinessNameController.onSubmit(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Soleproprietor)
+
+GET         /change-registration-details/business-name/corporate-body                            controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Corporatebody)
+POST        /change-registration-details/business-name/corporate-body                            controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Corporatebody)
+POST        /change-registration-details/business-name/change-corporate-body                  controllers.ChangeBusinessNameController.onSubmit(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Corporatebody)
+GET         /change-registration-details/business-name/change-corporate-body                  controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Corporatebody)
+
+GET         /change-registration-details/business-name/partnership                            controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Partnership)
+POST        /change-registration-details/business-name/partnership                            controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Partnership)
+POST        /change-registration-details/business-name/change-partnership                  controllers.ChangeBusinessNameController.onSubmit(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Partnership)
+GET         /change-registration-details/business-name/change-partnership                  controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Partnership)
+
+GET         /change-registration-details/business-name/unincorporated-body                            controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Unincorporatedbody)
+POST        /change-registration-details/business-name/unincorporated-body                            controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Unincorporatedbody)
+POST        /change-registration-details/business-name/change-unincorporated-body                  controllers.ChangeBusinessNameController.onSubmit(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Unincorporatedbody)
+GET         /change-registration-details/business-name/change-unincorporated-body                  controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Unincorporatedbody)
+
+GET         /change-registration-details/business-name/limited-liability-partnership                            controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership)
+POST        /change-registration-details/business-name/limited-liability-partnership                            controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership)
+POST        /change-registration-details/business-name/change-limited-liability-partnership                  controllers.ChangeBusinessNameController.onSubmit(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership)
+GET         /change-registration-details/business-name/change-limited-liability-partnership                  controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership)
 
 GET        /change-registration-details/remove-trading-name                         controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/remove-trading-name                         controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
@@ -64,3 +82,8 @@ GET        /change-registration-details/business-contact-details/fax-number     
 POST       /change-registration-details/business-contact-details/fax-number                     controllers.FaxNumberController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/business-contact-details/change-fax-number              controllers.FaxNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-contact-details/change-fax-number              controllers.FaxNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/business-contact-details/contact-numbers                        controllers.BusinessContactNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-contact-details/contact-numbers                        controllers.BusinessContactNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onSubmit(mode: Mode = CheckMode)

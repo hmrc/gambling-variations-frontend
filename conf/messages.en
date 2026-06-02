@@ -242,3 +242,34 @@ faxNumber.error.invalid.format = The fax number must be in the correct format, l
 faxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
 faxNumber.error.length = The fax number must be 20 characters or less
 faxNumber.change.hidden = FaxNumber
+
+
+businessContactNumber.title = What are your business contact numbers?
+businessContactNumber.heading = What are your business contact numbers?
+businessContactNumber.p1 = You must provide at least one contact number.
+businessContactNumber.caption = Change registration details
+
+businessContactNumber.phoneNumber = Phone number
+businessContactNumber.mobileNumber = Mobile number
+
+businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
+
+# Phone errors
+businessContactNumber.error.phoneNumber.required = Enter the phone number for this business
+businessContactNumber.error.phoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
+businessContactNumber.error.phoneNumber.length = The phone number must be 20 characters or less
+
+# Mobile errors
+businessContactNumber.error.mobileNumber.required = Enter the mobile number for this business
+businessContactNumber.error.mobileNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
+businessContactNumber.error.mobileNumber.length = The mobile number must be 20 characters or less
+
+# Change link hidden text
+businessContactNumber.phoneNumber.change.hidden = phone number
+businessContactNumber.mobileNumber.change.hidden = mobile number
+
+# Cross-field error (IMPORTANT - ADD THIS)
+businessContactNumber.error.contactRequired = Enter at least one contact number for this business
+
+businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
+businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
