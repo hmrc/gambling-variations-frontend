@@ -260,3 +260,15 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
+
+associatedRegistrationNumbers.title = Associated registration numbers
+associatedRegistrationNumbers.heading = Associated registration numbers
+associatedRegistrationNumbers.radios = Do you want to add another registration number?
+associatedRegistrationNumbers.caption = Change registration details
+associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
+associatedRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+associatedRegistrationNumbers.yesLabel = Yes, add another number
+associatedRegistrationNumbers.noLabel = No, return to check your trading details
+associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
+associatedRegistrationNumbers.error.required = Select yes if associatedRegistrationNumbers
+associatedRegistrationNumbers.change.hidden = AssociatedRegistrationNumbers

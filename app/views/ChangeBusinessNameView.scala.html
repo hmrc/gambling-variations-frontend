@@ -27,7 +27,7 @@
 
 @(form: Form[_], mode: Mode, businessType: BusinessType, headingKey: String, titleKey: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages(titleKey), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = title(form, messages(titleKey), Some(messages("changeRegistrationDetails.title")))) {
 
     @formHelper(action = routes.ChangeBusinessNameController.onSubmit(NormalMode, businessType), Symbol("autoComplete") -> "on") {
 
