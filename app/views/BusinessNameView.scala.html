@@ -30,7 +30,7 @@
 
 @(businessType: BusinessType, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("businessName.title"))) {
+@layout(pageTitle = titleNoForm(messages("businessName.title"), Some(messages("changeRegistrationDetails.title")))) {
 
 
 @caption(messages("businessName.caption"))
