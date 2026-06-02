@@ -260,3 +260,18 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
+
+businessTradeClass.title = What is the business trade class?
+businessTradeClass.heading = What is the business trade class?
+businessTradeClass.adultGamingCentre = Adult gaming centre
+businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
+businessTradeClass.bingopromoter = Bingo promoter
+businessTradeClass.bookmakerorbettingactivities = Bookmaker or betting activities
+businessTradeClass.casino = Casino
+businessTradeClass.club = Club
+businessTradeClass.familyentertainmentcentre = Family entertainment centre
+businessTradeClass.publichouse = Public house
+businessTradeClass.other = Other
+businessTradeClass.checkYourAnswersLabel = What is the business trade class?
+businessTradeClass.error.required = Select the trade class for this business
+businessTradeClass.change.hidden = What is the business trade class?
