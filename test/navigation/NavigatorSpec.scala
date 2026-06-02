@@ -43,6 +43,12 @@ class NavigatorSpec extends SpecBase {
             routes.CheckBusinessNameController.onPageLoad()
         }
 
+        "must go from BusinessContactNumberPage to next page" in { // update it later
+
+          navigator.nextPage(BusinessContactNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.BusinessContactNumberController.onPageLoad(NormalMode)
+        }
+
         "must go from FaxNumberPage to CheckYourAnswers" in {
 
           navigator.nextPage(FaxNumberPage, NormalMode, UserAnswers("id")) mustBe
