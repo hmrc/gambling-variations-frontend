@@ -16,8 +16,9 @@
 
 package controllers
 import base.SpecBase
+import connectors.GamblingConnector
 import forms.BusinessTradingNameFormProvider
-import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, NormalMode, UserAnswers}
+import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when

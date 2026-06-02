@@ -20,6 +20,8 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.{Address, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails}
 import models.BusinessType.Unincorporatedbody
+import models.BusinessType.Unincorporatedbody
+import models.{BusinessContactDetails, BusinessDetails, BusinessNameDetails, MgdCertificate}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers

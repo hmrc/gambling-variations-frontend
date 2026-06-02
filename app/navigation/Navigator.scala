@@ -37,14 +37,17 @@ class Navigator @Inject() () {
     case BusinessContactNumberPage => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessEmailAddressPage  => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessTradeClassPage    => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
+    case BusinessEmailAddressPage  => _ => routes.ChangeEmailAddressController.onPageLoad(NormalMode)
+    case SeasonalBusinessPage      => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case _                         => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage      => userAnswers => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage         => userAnswers => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage       => userAnswers => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessEmailAddressPage => userAnswers => routes.CheckContactDetailsController.onPageLoad()
+    case RemoveTradeNamePage      => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessNamePage         => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage       => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessEmailAddressPage => _ => routes.CheckContactDetailsController.onPageLoad()
+    case SeasonalBusinessPage     => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
     case _                        => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
