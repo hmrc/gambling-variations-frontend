@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.ChangeBusinessNameFormProvider
+import models.BusinessType.Partnership
 import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -40,7 +41,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new ChangeBusinessNameFormProvider()
 
-  val businessType: BusinessType = BusinessType.values.head
+  val businessType: BusinessType = BusinessType.Partnership
   val businessName = "Test Business"
 
   val form = formProvider(businessType)
@@ -51,7 +52,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
   )
 
   lazy val changeBusinessNameRoute =
-    routes.ChangeBusinessNameController.onPageLoad().url
+    routes.ChangeBusinessNameController.onPageLoad(NormalMode, Partnership).url
 
   "ChangeBusinessName Controller" - {
 
@@ -67,13 +68,13 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         val view = application.injector.instanceOf[ChangeBusinessNameView]
 
-        val headingKey = "changeBusinessName.heading.soleproprietor"
+        val headingKey = "changeBusinessName.heading.partnership"
 
-        val titleKey = "changeBusinessName.title.soleproprietor"
+        val titleKey = "changeBusinessName.title.partnership"
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill(businessName), NormalMode, headingKey, titleKey)(request, messages(application)).toString
+          view(form.fill(businessName), NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
       }
     }
 
@@ -154,13 +155,13 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        val headingKey = "changeBusinessName.heading.soleproprietor"
+        val headingKey = "changeBusinessName.heading.partnership"
 
-        val titleKey = "changeBusinessName.title.soleproprietor"
+        val titleKey = "changeBusinessName.title.partnership"
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, headingKey, titleKey)(request, messages(application)).toString
+          view(boundForm, NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
       }
     }
   }

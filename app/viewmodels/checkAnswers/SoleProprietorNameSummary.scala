@@ -17,6 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
+import models.BusinessType.Soleproprietor
 import models.{CheckMode, UserAnswers}
 import pages.SoleProprietorPage
 import play.api.i18n.Messages
@@ -47,7 +48,7 @@ object SoleProprietorNameSummary {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.SoleProprietorNameController.onPageLoad(CheckMode).url
+            routes.ChangeBusinessNameController.onPageLoad(CheckMode, Soleproprietor).url
           ).withVisuallyHiddenText(messages("soleProprietorName.change.hidden"))
         )
       )

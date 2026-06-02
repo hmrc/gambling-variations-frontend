@@ -42,11 +42,11 @@ class CheckBusinessNameController @Inject() (
       businessName <- request.userAnswers.get(BusinessNamePage)
       businessType <- request.userAnswers.get(BusinessTypePage)
     } yield {
-      Ok(view(businessType.toString, businessName, request.userAnswers.get(TradingNamePage)))
+      Ok(view(businessType, businessName, request.userAnswers.get(TradingNamePage)))
     }
 
     val soleProprietorView: Option[Result] = request.userAnswers.get(SoleProprietorPage).map { soleProprietor =>
-      Ok(view(BusinessType.Soleproprietor.toString, soleProprietor.fullName, request.userAnswers.get(TradingNamePage)))
+      Ok(view(BusinessType.Soleproprietor, soleProprietor.fullName, request.userAnswers.get(TradingNamePage)))
     }
 
     businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())

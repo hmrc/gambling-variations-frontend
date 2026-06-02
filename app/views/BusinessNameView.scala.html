@@ -28,7 +28,7 @@
         govukSummaryList : GovukSummaryList
 )
 
-@(businessType: String, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
+@(businessType: BusinessType, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("businessName.title"), Some(messages("changeRegistrationDetails.title")))) {
 
@@ -40,7 +40,7 @@
         rows = Seq(
             SummaryListRow(
                 key = Key(
-                    content = messages("businessName.name", messages("businessType." + businessType)
+                    content = messages("businessName.name", messages("businessType." + businessType.toString)
                     )),
                 value = Value(
                     content = businessName
@@ -48,9 +48,9 @@
                 actions = Some(Actions(
                     items = Seq(
                         ActionItem(
-                            href = controllers.routes.ChangeBusinessNameController.onPageLoad().url(),
+                            href = controllers.routes.ChangeBusinessNameController.onPageLoad(NormalMode, businessType).url(),
                             content = "site.change",
-                            visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType)))
+                            visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType.toString)))
                             )
                     )
                 ))
