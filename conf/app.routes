@@ -32,10 +32,10 @@ GET       /change-registration/declaration                       controllers.Dec
 GET        /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
 
-GET       /change-registration-details/business-name/sole-proprietor-name                         controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Soleproprietor)
-POST      /change-registration-details/business-name/sole-proprietor-name                         controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Soleproprietor)
-GET       /change-registration-details/business-name/change-sole-proprietor-name                  controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Soleproprietor)
-POST      /change-registration-details/business-name/change-sole-proprietor-name                  controllers.ChangeBusinessNameController.onSubmit(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Soleproprietor)
+GET       /change-registration-details/business-name/sole-proprietor                         controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Soleproprietor)
+POST      /change-registration-details/business-name/sole-proprietor                         controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Soleproprietor)
+GET       /change-registration-details/business-name/change-sole-proprietor                  controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Soleproprietor)
+POST      /change-registration-details/business-name/change-sole-proprietor                  controllers.ChangeBusinessNameController.onSubmit(mode: Mode = CheckMode, businessType: BusinessType = BusinessType.Soleproprietor)
 
 GET         /change-registration-details/business-name/corporate-body                            controllers.ChangeBusinessNameController.onPageLoad(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Corporatebody)
 POST        /change-registration-details/business-name/corporate-body                            controllers.ChangeBusinessNameController.onSubmit(mode: Mode = NormalMode, businessType: BusinessType = BusinessType.Corporatebody)
