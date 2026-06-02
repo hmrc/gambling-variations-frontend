@@ -92,7 +92,6 @@ class ChangeBusinessNameController @Inject() (
         case businessType => {
           val headingKey = headingKeyFor(businessType)
           val titleKey = titleKeyFor(businessType)
-
           formProvider(businessType)
             .bindFromRequest()
             .fold(
