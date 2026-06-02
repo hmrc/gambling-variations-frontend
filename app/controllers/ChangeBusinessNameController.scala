@@ -42,7 +42,7 @@ class ChangeBusinessNameController @Inject() (
   soleProprietorFormProvider: SoleProprietorNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeBusinessNameView,
-  soleproprietorView: SoleProprietorNameView
+  soleProprietorView: SoleProprietorNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -61,7 +61,7 @@ class ChangeBusinessNameController @Inject() (
             request.userAnswers.get(SoleProprietorPage) map { soleProprietorName =>
               val form = soleProprietorFormProvider()
               val preparedForm = request.userAnswers.get(SoleProprietorPage).fold(form)(form.fill)
-              Ok(soleproprietorView(preparedForm, mode))
+              Ok(soleProprietorView(preparedForm, mode))
             }
           case businessType =>
             request.userAnswers.get(BusinessNamePage) map { businessName =>
@@ -82,7 +82,7 @@ class ChangeBusinessNameController @Inject() (
           soleProprietorFormProvider()
             .bindFromRequest()
             .fold(
-              formWithErrors => Future.successful(BadRequest(soleproprietorView(formWithErrors, mode))),
+              formWithErrors => Future.successful(BadRequest(soleProprietorView(formWithErrors, mode))),
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
@@ -92,6 +92,7 @@ class ChangeBusinessNameController @Inject() (
         case businessType => {
           val headingKey = headingKeyFor(businessType)
           val titleKey = titleKeyFor(businessType)
+
           formProvider(businessType)
             .bindFromRequest()
             .fold(
