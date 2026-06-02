@@ -48,6 +48,8 @@
                 label = LabelViewModel(messages("businessContactNumber.phoneNumber"))
             )
             .withWidth(Fixed20)
+            .withAttribute("autocomplete" -> "tel")
+            .withAttribute("inputmode", "tel")
         )
 
         @govukInput(
@@ -56,6 +58,8 @@
                 label = LabelViewModel(messages("businessContactNumber.mobileNumber"))
             )
             .withWidth(Fixed20)
+            .withAttribute("autocomplete" -> "tel")
+            .withAttribute("inputmode", "tel")
         )
 
         @govukButton(
