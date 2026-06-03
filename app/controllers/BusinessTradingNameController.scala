@@ -20,13 +20,13 @@ import controllers.actions.*
 import forms.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.TradingNamePage
+import pages.{BusinessTypePage, IsFlaggedPage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessTradingNameView
-import pages.BusinessTypePage
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -71,6 +71,7 @@ class BusinessTradingNameController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IsFlaggedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
       )
