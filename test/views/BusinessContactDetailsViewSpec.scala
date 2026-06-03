@@ -39,7 +39,7 @@ class BusinessContactDetailsViewSpec extends SpecBase {
   "BusinessContactDetailsView" - {
     "must show expected values when data is populated" in new Setup {
 
-      val html = view("1", "2", "3", "4", true)(request, messages)
+      val html = view(Some("1"), Some("2"), "3", "4", true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -56,7 +56,7 @@ class BusinessContactDetailsViewSpec extends SpecBase {
 
     "must display 'Not provided' when value is not provided" in new Setup {
 
-      val html = view("1", "2", "", "4", false)(request, messages)
+      val html = view(Some("1"), Some("2"), "", "4", false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 

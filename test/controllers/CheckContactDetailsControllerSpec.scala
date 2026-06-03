@@ -26,11 +26,10 @@ import views.html.BusinessContactDetailsView
 class CheckContactDetailsControllerSpec extends SpecBase {
 
   "CheckContactDetails Controller" - {
-    // currently failing but not sure why
     "must return OK and the correct view for a GET" in {
 
       val data = Json.obj(
-        "businessContactNumber"  -> Json.obj("phoneNumber" -> "07000000000", "mobileNumber" -> "07000000000"),
+        "businessContactNumber"  -> Json.obj("phoneNumber" -> Some("07000000000"), "mobileNumber" -> Some("07000000000")),
         "businessContactDetails" -> Json.obj("faxNumber" -> "07000000000"),
         "businessEmailAddress"   -> "a@b.com",
         "flag"                   -> false
@@ -46,7 +45,9 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessContactDetailsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("07000000000", "07000000000", "07000000000", "a@b.com", false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(Some("07000000000"), Some("07000000000"), "07000000000", "a@b.com", false)(request,
+                                                                                                                          messages(application)
+                                                                                                                         ).toString
       }
     }
 

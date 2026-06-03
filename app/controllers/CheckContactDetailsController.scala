@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, FaxNumberPage, IsFlaggedPage}
+import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, ContactDetailsSubmittedPage, FaxNumberPage}
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -36,14 +36,14 @@ class CheckContactDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(IsFlaggedPage).getOrElse(false)
+    val flag = request.userAnswers.get(ContactDetailsSubmittedPage).getOrElse(false)
     val contactDetailsView: Option[Result] = for {
       businessContactNumber <- request.userAnswers.get(BusinessContactNumberPage)
       faxNumber             <- request.userAnswers.get(FaxNumberPage)
       businessEmailAddress  <- request.userAnswers.get(BusinessEmailAddressPage)
     } yield {
       Ok(
-        view(businessContactNumber.phoneNumber.getOrElse(""), businessContactNumber.mobileNumber.getOrElse(""), faxNumber, businessEmailAddress, flag)
+        view(businessContactNumber.phoneNumber, businessContactNumber.mobileNumber, faxNumber, businessEmailAddress, flag)
       )
     }
     contactDetailsView getOrElse Redirect(routes.SystemErrorController.onPageLoad())

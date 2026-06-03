@@ -26,7 +26,7 @@
        govukSummaryList : GovukSummaryList
 )
 
-@(phoneNumber: String, mobilePhoneNumber:String, faxNumber:String, emailAddr:String, isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
+@(phoneNumber: Option[String], mobilePhoneNumber:Option[String], faxNumber:String, emailAddr:String, isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
 
