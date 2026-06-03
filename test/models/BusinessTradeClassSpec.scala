@@ -32,10 +32,9 @@ class BusinessTradeClassSpec extends AnyFreeSpec with Matchers with ScalaCheckPr
 
       val gen = Gen.oneOf(BusinessTradeClass.values.toSeq)
 
-      forAll(gen) {
-        businessTradeClass =>
+      forAll(gen) { businessTradeClass =>
 
-          JsString(businessTradeClass.toString).validate[BusinessTradeClass].asOpt.value mustEqual businessTradeClass
+        JsString(businessTradeClass.toString).validate[BusinessTradeClass].asOpt.value mustEqual businessTradeClass
       }
     }
 
@@ -43,10 +42,9 @@ class BusinessTradeClassSpec extends AnyFreeSpec with Matchers with ScalaCheckPr
 
       val gen = arbitrary[String] suchThat (!BusinessTradeClass.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
+      forAll(gen) { invalidValue =>
 
-          JsString(invalidValue).validate[BusinessTradeClass] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[BusinessTradeClass] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,10 +52,9 @@ class BusinessTradeClassSpec extends AnyFreeSpec with Matchers with ScalaCheckPr
 
       val gen = Gen.oneOf(BusinessTradeClass.values.toSeq)
 
-      forAll(gen) {
-        businessTradeClass =>
+      forAll(gen) { businessTradeClass =>
 
-          Json.toJson(businessTradeClass) mustEqual JsString(businessTradeClass.toString)
+        Json.toJson(businessTradeClass) mustEqual JsString(businessTradeClass.toString)
       }
     }
   }
