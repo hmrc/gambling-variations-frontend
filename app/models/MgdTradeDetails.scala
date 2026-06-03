@@ -22,8 +22,8 @@ import java.time.LocalDate
 
 case class MgdTradeDetails(
   mgdRegNumber: String,
-  isBusinessSeasonal: Option[Boolean],
-  businessTradeClass: Option[BusinessTradeClass],
+  isBusinessSeasonal: Boolean,
+  businessTradeClass: BusinessTradeClass,
   businessActivityDesc: Option[String],
   previousMgdRegistrationNumbers: Option[Seq[String]],
   associatedMgdRegistrationNumbers: Option[Seq[String]],

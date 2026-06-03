@@ -51,12 +51,13 @@ class DataRequiredActionImpl @Inject() (
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
           gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
             gamblingConnector.getMgdTradeDetails(request.mgdRegNum) flatMap { mgdContactDetails =>
+
               val answers = UserAnswers(request.mgdRegNum)
 
               val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
-              val finalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
+              val businessContactDetailsAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
 
-              finalAnswers.map { ua =>
+              businessContactDetailsAnswers.map { ua =>
                 logger.info("User Answers not found. Saving User Answers")
                 sessionRepository.set(ua) map {
                   case true =>
@@ -100,6 +101,7 @@ class DataRequiredActionImpl @Inject() (
         } yield c
     }
   }
+
   private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
     val contactAnswers: Try[UserAnswers] = {
       for {
@@ -116,6 +118,10 @@ class DataRequiredActionImpl @Inject() (
       } yield updatedAnswers
     }
     contactAnswers
+  }
+
+  private def setMgdTradeDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
+    ???
   }
 }
 

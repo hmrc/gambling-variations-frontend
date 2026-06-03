@@ -67,9 +67,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
             "businessName" -> "Test Business Ltd",
             "tradingName"  -> "Test Trader Ltd",
             "businessType" -> 4,
-            "businessContactDetails" -> Json.obj(
-              "faxNumber" -> "+_+_ hdj39783"
-            ),
+            "faxNumber"    -> "+_+_ hdj39783",
             "businessContactNumber" -> Json.obj(
               "phoneNumber"  -> "+44 8903928171",
               "mobileNumber" -> "+44 8903928171"
@@ -110,9 +108,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
             ),
             "businessType" -> 1,
             "tradingName"  -> "Test Trader",
-            "businessContactDetails" -> Json.obj(
-              "faxNumber" -> "+_+_ hdj39783"
-            ),
+            "faxNumber"    -> "+_+_ hdj39783",
             "businessContactNumber" -> Json.obj(
               "phoneNumber"  -> "+44 8903928171",
               "mobileNumber" -> "+44 8903928171"
@@ -276,8 +272,8 @@ object DataRequiredActionSpec {
 
   val mgdTradeDetails: MgdTradeDetails = MgdTradeDetails(
     mgdRegNumber         = "XRM00000000574",
-    isBusinessSeasonal   = Some(true),
-    businessTradeClass   = Some(BusinessTradeClass.Casino),
+    isBusinessSeasonal   = true,
+    businessTradeClass   = BusinessTradeClass.Casino,
     businessActivityDesc = Some("Description"),
     previousMgdRegistrationNumbers = Some(
       Seq(
