@@ -17,12 +17,11 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, FaxNumberPage, IsFlaggedPage, MobilePhoneNumberPage, PhoneNumberPage}
+import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, FaxNumberPage, IsFlaggedPage}
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessContactDetailsView
 
@@ -31,7 +30,6 @@ class CheckContactDetailsController @Inject() (
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactDetailsView
 ) extends FrontendBaseController

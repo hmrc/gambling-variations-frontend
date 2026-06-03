@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import models.UserAnswers
-import pages.{BusinessEmailAddressPage, FaxNumberPage, MobilePhoneNumberPage, PhoneNumberPage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -31,11 +30,10 @@ class CheckContactDetailsControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val data = Json.obj(
-        "phoneNumber"            -> "07000000000",
-        "mobilePhoneNumber"      -> "07000000000",
+        "businessContactNumber"  -> Json.obj("phoneNumber" -> "07000000000", "mobileNumber" -> "07000000000"),
         "businessContactDetails" -> Json.obj("faxNumber" -> "07000000000"),
         "businessEmailAddress"   -> "a@b.com",
-        "isPopulated"            -> true
+        "flag"                   -> false
       )
 
       val userAnswers = UserAnswers("id-number", data)
@@ -48,7 +46,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessContactDetailsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view("07000000000", "07000000000", "07000000000", "a@b.com", true)(request, messages(application)).toString
+        contentAsString(result) mustEqual view("07000000000", "07000000000", "07000000000", "a@b.com", false)(request, messages(application)).toString
       }
     }
 
