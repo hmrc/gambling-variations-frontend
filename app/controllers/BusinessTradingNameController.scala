@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessTypePage, IsFlaggedPage, TradingNamePage}
+import pages.{BusinessContactDetailsFlagPage, BusinessTypePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -71,7 +71,7 @@ class BusinessTradingNameController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IsFlaggedPage, true))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessContactDetailsFlagPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
       )
