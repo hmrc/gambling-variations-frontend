@@ -45,23 +45,10 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessContactDetailsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(Some("07000000000"), Some("07000000000"), "07000000000", "a@b.com", false)(request,
-                                                                                                                          messages(application)
-                                                                                                                         ).toString
-      }
-    }
-
-    "must redirect with an empty set of User Answers" in {
-
-      val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
-
-      running(application) {
-        val request = FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        contentAsString(result) mustEqual view(Some("07000000000"), Some("07000000000"), Some("07000000000"), Some("a@b.com"), false)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 

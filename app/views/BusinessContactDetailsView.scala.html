@@ -26,7 +26,7 @@
        govukSummaryList : GovukSummaryList
 )
 
-@(phoneNumber: Option[String], mobilePhoneNumber:Option[String], faxNumber:String, emailAddr:String, isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
+@(phoneNumber: Option[String], mobilePhoneNumber:Option[String], faxNumber:Option[String], emailAddr:Option[String], isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
 
@@ -73,7 +73,7 @@
                     content = messages("contactDetails.heading.faxNumber")
                     ),
                 value = Value(
-                    content = if (!faxNumber.isEmpty) faxNumber else messages("contactDetails.message.notProvided")
+                    content = faxNumber getOrElse messages("contactDetails.message.notProvided")
                     ).withCssClass("fax-number"),
                 actions =
                 if(faxNumber.isEmpty){
@@ -109,7 +109,7 @@
                     content = messages("contactDetails.heading.emailAddr")
                     ),
                 value = Value(
-                    content = if (!emailAddr.isEmpty) emailAddr else messages("contactDetails.message.notProvided")
+                    content = emailAddr getOrElse messages("contactDetails.message.notProvided")
                     ).withCssClass("email-address"),
                 actions =
                 if(faxNumber.isEmpty){

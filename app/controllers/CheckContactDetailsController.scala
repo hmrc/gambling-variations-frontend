@@ -21,7 +21,7 @@ import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, ContactDetail
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessContactDetailsView
 
@@ -37,15 +37,14 @@ class CheckContactDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
     val flag = request.userAnswers.get(ContactDetailsSubmittedPage).getOrElse(false)
-    val contactDetailsView: Option[Result] = for {
-      businessContactNumber <- request.userAnswers.get(BusinessContactNumberPage)
-      faxNumber             <- request.userAnswers.get(FaxNumberPage)
-      businessEmailAddress  <- request.userAnswers.get(BusinessEmailAddressPage)
-    } yield {
-      Ok(
-        view(businessContactNumber.phoneNumber, businessContactNumber.mobileNumber, faxNumber, businessEmailAddress, flag)
+    Ok(
+      view(
+        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
+        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.mobileNumber),
+        request.userAnswers.get(FaxNumberPage),
+        request.userAnswers.get(BusinessEmailAddressPage),
+        flag
       )
-    }
-    contactDetailsView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
+    )
   }
 }
