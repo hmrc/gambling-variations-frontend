@@ -21,7 +21,7 @@ import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.{BusinessContactDetailsFlagPage, BusinessNamePage, BusinessTypePage, SoleProprietorPage}
+import pages.{BusinessNamePage, BusinessNameSubmittedPage, BusinessTypePage, SoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -86,7 +86,7 @@ class ChangeBusinessNameController @Inject() (
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessContactDetailsFlagPage, true))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameSubmittedPage, true))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
             )
@@ -101,7 +101,7 @@ class ChangeBusinessNameController @Inject() (
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNamePage, value))
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessContactDetailsFlagPage, true))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameSubmittedPage, true))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
             )

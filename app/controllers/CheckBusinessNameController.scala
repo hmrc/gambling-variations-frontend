@@ -37,7 +37,7 @@ class CheckBusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(BusinessContactDetailsFlagPage).getOrElse(false)
+    val flag = request.userAnswers.get(BusinessNameSubmittedPage).getOrElse(false)
     val businessNameView: Option[Result] = for {
       businessName <- request.userAnswers.get(BusinessNamePage)
       businessType <- request.userAnswers.get(BusinessTypePage)

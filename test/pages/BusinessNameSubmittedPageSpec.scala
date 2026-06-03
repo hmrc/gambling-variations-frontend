@@ -19,18 +19,18 @@ package pages
 import play.api.libs.json.JsPath
 import org.scalatestplus.play.PlaySpec
 
-class BusinessContactDetailsFlagPageSpec extends PlaySpec {
+class BusinessNameSubmittedPageSpec extends PlaySpec {
 
-  "BusinessContactDetailsFlagPage" must {
+  "BusinessNameSubmittedPage" must {
 
     "have the correct path" in {
 
-      BusinessContactNumberPage.path mustEqual (JsPath \ "isPopulated")
+      BusinessNameSubmittedPage.path mustEqual (JsPath \ "isPopulated")
     }
 
     "have the correct toString value" in {
 
-      BusinessContactNumberPage.toString mustEqual "isPopulated"
+      BusinessNameSubmittedPage.toString mustEqual "isPopulated"
     }
   }
 }
