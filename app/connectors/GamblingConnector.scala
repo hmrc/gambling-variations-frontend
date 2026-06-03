@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{BusinessContactDetails, BusinessDetails, EntityName, MgdCertificate}
+import models.{BusinessContactDetails, BusinessDetails, EntityName, MgdCertificate, MgdTradeDetails}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -45,7 +45,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
             response.json
               .validate[MgdCertificate]
               .fold(
-                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                errors => throw new RuntimeException(s"Invalid JSON Get Certificate: $errors"),
                 cert => cert
               )
 
@@ -69,7 +69,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
             response.json
               .validate[EntityName]
               .fold(
-                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                errors => throw new RuntimeException(s"Invalid JSON Business Name: $errors"),
                 entity => entity
               )
 
@@ -93,7 +93,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
             response.json
               .validate[BusinessDetails]
               .fold(
-                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                errors => throw new RuntimeException(s"Invalid JSON Business Details: $errors"),
                 details => details
               )
 
@@ -105,6 +105,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
         }
       }
   }
+
   def getBusinessContactDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[BusinessContactDetails] = {
     http
       .get(url"$baseUrl/business-contact-details/mgd/$mgdRegNumber")
@@ -116,13 +117,37 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
             response.json
               .validate[BusinessContactDetails]
               .fold(
-                errors => throw new RuntimeException(s"Invalid JSON: $errors"),
+                errors => throw new RuntimeException(s"Invalid JSON Business Contact Details: $errors"),
                 details => details
               )
 
           case status =>
             throw UpstreamErrorResponse(
               s"Unexpected status while fetching Business Contact Details: $status",
+              status
+            )
+        }
+      }
+  }
+
+  def getMgdTradeDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[MgdTradeDetails] = {
+    http
+      .get(url"$baseUrl/mgd-and-trade-details/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[MgdTradeDetails]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON Mgd Trade Details: $errors"),
+                details => details
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Mgd Trade Details: $status",
               status
             )
         }

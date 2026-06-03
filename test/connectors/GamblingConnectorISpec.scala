@@ -18,8 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.BusinessType.Unincorporatedbody
-import models.{BusinessContactDetails, BusinessDetails, BusinessNameDetails, MgdCertificate}
+import models.{BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, MgdCertificate, MgdTradeDetails}
 import models.BusinessType.Unincorporatedbody
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -33,6 +32,8 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext
 
 class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
+
+  import GamblingConnectorISpec.*
 
   given ExecutionContext = ExecutionContext.global
   given HeaderCarrier = HeaderCarrier()
@@ -59,11 +60,9 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   private lazy val connector =
     app.injector.instanceOf[GamblingConnector]
 
-  private val mgdRegNumber = "XWM00000001762"
-
   "GamblingConnector.getCertificate" should {
 
-    "return certificate when backend returns 200" ignore {
+    "return certificate when backend returns 200" in {
 
       val responseJson =
         Json.obj(
@@ -323,7 +322,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       )
 
       recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getBusinessName(mgdRegNumber)
+        connector.getBusinessContactDetails(mgdRegNumber)
       }
     }
 
@@ -337,4 +336,79 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     )
 
   }
+
+  "GamblingConnector.getMgdTradeDetails" should {
+
+    "return mgdTradeDetails when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "XRM00000000574",
+           |  "isBusinessSeasonal": 1,
+           |  "businessTradeClass": 6,
+           |  "businessActivityDesc": "Description",
+           |  "previousMgdRegistrationNumbers": ["XWM00000001774", "XDM00000001309", ""],
+           |  "associatedMgdRegistrationNumbers": ["XXM00000000723", "XQM00000001196", ""],
+           |  "systemDate": "2026-05-31"
+           |
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/mgd-and-trade-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getMgdTradeDetails(mgdRegNumber).futureValue mustBe mgdTradeDetails
+    }
+
+    "return NotFound when backend returns UpstreamErrorResponse" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/mgd-and-trade-details/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getMgdTradeDetails(mgdRegNumber)
+      }
+    }
+
+  }
+}
+
+object GamblingConnectorISpec {
+
+  private val mgdRegNumber = "XWM00000001762"
+
+  val businessContactDetails: BusinessContactDetails = BusinessContactDetails(
+    mgdRegNumber      = "ABC12345678901",
+    phoneNumber       = Some("+44 8903928171"),
+    mobilePhoneNumber = Some("+44 8903928171"),
+    faxNumber         = Some("+_+_ hdj39783"),
+    emailAddr         = Some("a@b.com"),
+    systemDate        = Some(LocalDate.of(1991, 1, 1))
+  )
+
+  val mgdTradeDetails: MgdTradeDetails = MgdTradeDetails(
+    mgdRegNumber         = "XRM00000000574",
+    isBusinessSeasonal   = Some(true),
+    businessTradeClass   = Some(BusinessTradeClass.Casino),
+    businessActivityDesc = Some("Description"),
+    previousMgdRegistrationNumbers = Some(
+      Seq(
+        "XWM00000001774",
+        "XDM00000001309",
+        ""
+      )
+    ),
+    associatedMgdRegistrationNumbers = Some(
+      Seq(
+        "XXM00000000723",
+        "XQM00000001196",
+        ""
+      )
+    ),
+    systemDate = Some(LocalDate.of(2026, 5, 31))
+  )
+
 }
