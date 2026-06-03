@@ -31,8 +31,8 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
 import scala.util.Try
+import scala.util.control.NonFatal
 
 class DataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
@@ -50,22 +50,24 @@ class DataRequiredActionImpl @Inject() (
 
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
           gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
-            val answers = UserAnswers(request.mgdRegNum)
+            gamblingConnector.getMgdTradeDetails(request.mgdRegNum) flatMap { mgdContactDetails =>
+              val answers = UserAnswers(request.mgdRegNum)
 
-            val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
-            val finalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
+              val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
+              val finalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
 
-            finalAnswers.map { ua =>
-              logger.info("User Answers not found. Saving User Answers")
-              sessionRepository.set(ua) map {
-                case true =>
-                  logger.info("User Answers saved.")
-                  Right(DataRequest(request.request, request.mgdRegNum, ua))
-                case false =>
-                  logger.info("User Answers failed.")
-                  Left(Redirect(routes.SystemErrorController.onPageLoad()))
-              }
-            } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+              finalAnswers.map { ua =>
+                logger.info("User Answers not found. Saving User Answers")
+                sessionRepository.set(ua) map {
+                  case true =>
+                    logger.info("User Answers saved.")
+                    Right(DataRequest(request.request, request.mgdRegNum, ua))
+                  case false =>
+                    logger.info("User Answers failed.")
+                    Left(Redirect(routes.SystemErrorController.onPageLoad()))
+                }
+              } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+            }
           }
         } recover { case NonFatal(e) =>
           logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
