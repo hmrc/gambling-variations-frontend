@@ -18,7 +18,7 @@ package pages
 
 import play.api.libs.json.JsPath
 
-case object PopulatedFlagPage extends QuestionPage[Boolean] {
+case object IsFlaggedPage extends QuestionPage[Boolean] {
   override def path: JsPath = JsPath \ toString
   override def toString: String = "isPopulated"
 }

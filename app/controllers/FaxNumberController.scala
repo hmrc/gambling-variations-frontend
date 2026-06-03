@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.FaxNumberPage
+import pages.{FaxNumberPage, IsFlaggedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -63,6 +63,7 @@ class FaxNumberController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FaxNumberPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IsFlaggedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(FaxNumberPage, mode, updatedAnswers))
       )

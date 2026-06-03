@@ -80,7 +80,7 @@
                     Some(Actions(
                         items = Seq(
                             ActionItem(
-                                    href = "#",
+                                    href = routes.FaxNumberController.onPageLoad(NormalMode).url,
                                     content = "site.change",
                                     visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
                                 ),
@@ -90,12 +90,12 @@
                 Some(Actions(
                     items = Seq(
                         ActionItem(
-                            href = "#",
+                            href = routes.FaxNumberController.onPageLoad(NormalMode).url,
                             content = "site.change",
                             visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
                             ),
                         ActionItem(
-                            href = "#",
+                            href = routes.FaxNumberController.onPageLoad(NormalMode).url,
                             content = "site.remove",
                             visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
                             ),
