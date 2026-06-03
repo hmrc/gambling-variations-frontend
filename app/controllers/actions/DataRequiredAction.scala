@@ -50,7 +50,6 @@ class DataRequiredActionImpl @Inject() (
 
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
           gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
-
             val answers = UserAnswers(request.mgdRegNum)
 
             val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
