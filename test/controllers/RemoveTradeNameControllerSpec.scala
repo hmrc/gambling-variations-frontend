@@ -75,8 +75,6 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
             val result = route(application, request).value
 
-            val view = application.injector.instanceOf[RemoveTradeNameView]
-
             status(result) mustEqual SEE_OTHER
             redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
           }

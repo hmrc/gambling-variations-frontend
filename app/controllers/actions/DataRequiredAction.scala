@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, BusinessContactNumber, BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
+import models.{BusinessContactDetails, BusinessContactNumber, BusinessNameDetails, BusinessType, EntityName, MgdTradeDetails, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
@@ -31,8 +31,8 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
 import scala.util.Try
+import scala.util.control.NonFatal
 
 class DataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
@@ -50,22 +50,27 @@ class DataRequiredActionImpl @Inject() (
 
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
           gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
-            val answers = UserAnswers(request.mgdRegNum)
+            gamblingConnector.getMgdTradeDetails(request.mgdRegNum) flatMap { mgdContactDetails =>
 
-            val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
-            val finalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
+              val answers = UserAnswers(request.mgdRegNum)
 
-            finalAnswers.map { ua =>
-              logger.info("User Answers not found. Saving User Answers")
-              sessionRepository.set(ua) map {
-                case true =>
-                  logger.info("User Answers saved.")
-                  Right(DataRequest(request.request, request.mgdRegNum, ua))
-                case false =>
-                  logger.info("User Answers failed.")
-                  Left(Redirect(routes.SystemErrorController.onPageLoad()))
-              }
-            } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+              (for {
+                updatedAnswers <- setBusinessName(entityName, answers)
+                updatedAnswers <- setBusinessContactDetails(contact, updatedAnswers)
+                updatedAnswers <- setMgdTradeDetails(mgdContactDetails, updatedAnswers)
+              } yield {
+                logger.info("User Answers not found. Saving User Answers")
+                sessionRepository.set(updatedAnswers) map {
+                  case true =>
+                    logger.info("User Answers saved.")
+                    Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
+                  case false =>
+                    logger.info("User Answers failed.")
+                    Left(Redirect(routes.SystemErrorController.onPageLoad()))
+                }
+              }) getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+
+            }
           }
         } recover { case NonFatal(e) =>
           logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
@@ -83,37 +88,47 @@ class DataRequiredActionImpl @Inject() (
     }
 
   private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Business Name")
     entity match {
       case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
         for {
-          a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
-          b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
-          c <- setIfDefined(b, tradingName, TradingNamePage)
-        } yield c
+          updatedAnswers <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
+          updatedAnswers <- updatedAnswers.set(BusinessTypePage, BusinessType.Soleproprietor)
+          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
+        } yield updatedAnswers
       case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
         for {
-          a <- answers.set(BusinessNamePage, businessName)
-          b <- a.set(BusinessTypePage, businessType)
-          c <- setIfDefined(b, tradingName, TradingNamePage)
-        } yield c
+          updatedAnswers <- answers.set(BusinessNamePage, businessName)
+          updatedAnswers <- updatedAnswers.set(BusinessTypePage, businessType)
+          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
+        } yield updatedAnswers
     }
   }
-  private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
-    val contactAnswers: Try[UserAnswers] = {
-      for {
-        ans <- answers
-        updatedAnswers <- setIfDefined(
-                            ans,
-                            contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
-                              BusinessContactNumber(Some(phone), Some(mobile))
-                            },
-                            BusinessContactNumberPage
-                          )
-        updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
-        updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
-      } yield updatedAnswers
-    }
-    contactAnswers
+
+  private def setBusinessContactDetails(contact: BusinessContactDetails, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Business Contact Details")
+    for {
+      updatedAnswers <- setIfDefined(
+                          answers,
+                          contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
+                            BusinessContactNumber(Some(phone), Some(mobile))
+                          },
+                          BusinessContactNumberPage
+                        )
+      updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
+    } yield updatedAnswers
+  }
+
+  private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Mgd Trade Details")
+    for {
+      updatedAnswers <- answers.set(IsSeasonalBusinessPage, mgdTradeDetails.isBusinessSeasonal)
+      updatedAnswers <- updatedAnswers.set(BusinessTradeClassPage, mgdTradeDetails.businessTradeClass)
+      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessActivityDesc, OtherTradeClassPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.previousMgdRegistrationNumbers, PreviousRegistrationNumbersPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.associatedMgdRegistrationNumbers, AssociatedRegistrationNumbersPage)
+    } yield updatedAnswers
   }
 }
 
