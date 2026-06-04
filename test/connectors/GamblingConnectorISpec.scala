@@ -391,8 +391,8 @@ object GamblingConnectorISpec {
 
   val mgdTradeDetails: MgdTradeDetails = MgdTradeDetails(
     mgdRegNumber         = "XRM00000000574",
-    isBusinessSeasonal   = true,
-    businessTradeClass   = BusinessTradeClass.Casino,
+    isBusinessSeasonal   = Some(true),
+    businessTradeClass   = Some(BusinessTradeClass.Casino),
     businessActivityDesc = Some("Description"),
     previousMgdRegistrationNumbers = Some(
       Seq(
