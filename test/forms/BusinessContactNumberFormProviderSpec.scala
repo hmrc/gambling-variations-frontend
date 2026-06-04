@@ -29,12 +29,13 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
     val lengthKey = "businessContactNumber.error.phoneNumber.length"
     val invalidKey = "businessContactNumber.error.phoneNumber.invalid"
-    val formatKey = "businessContactNumber.error.phoneNumber.invalidFormat"
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
       Gen.oneOf(
+        "1",
+        "123",
         "01632 960 001",
         "07700 900000",
         "01234 567890",
@@ -50,6 +51,28 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
           "mobileNumber" -> "07700 900000"
         )
       )
+      result.errors mustBe empty
+    }
+
+    "bind phone numbers with a single digit" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "1",
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+
+      result.errors mustBe empty
+    }
+
+    "bind phone numbers with fewer than 10 digits" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "123",
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+
       result.errors mustBe empty
     }
 
@@ -107,28 +130,6 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
       result.errors.map(_.message) must contain(invalidKey)
     }
-
-    "not bind phone numbers with fewer than 10 digits" in {
-      val result = form.bind(
-        Map(
-          fieldName      -> "123456790",
-          "mobileNumber" -> "07700 900000"
-        )
-      )
-
-      result.errors.map(_.message) must contain(formatKey)
-    }
-
-    "not bind invalid format (too short like 123)" in {
-      val result = form.bind(
-        Map(
-          fieldName      -> "123",
-          "mobileNumber" -> "07700 900000"
-        )
-      )
-
-      result.errors.map(_.message) must contain(formatKey)
-    }
   }
 
   ".mobileNumber" - {
@@ -137,12 +138,13 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
 
     val lengthKey = "businessContactNumber.error.mobileNumber.length"
     val invalidKey = "businessContactNumber.error.mobileNumber.invalid"
-    val formatKey = "businessContactNumber.error.mobileNumber.invalidFormat"
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
       Gen.oneOf(
+        "1",
+        "123",
         "07700 900000",
         "07123456789",
         "01234 567890",
@@ -155,6 +157,28 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
         Map(
           "phoneNumber" -> "01632960001",
           fieldName     -> ""
+        )
+      )
+
+      result.errors mustBe empty
+    }
+
+    "bind mobile numbers with a single digit" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "1"
+        )
+      )
+
+      result.errors mustBe empty
+    }
+
+    "bind mobile numbers with fewer than 10 digits" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "123"
         )
       )
 
@@ -214,28 +238,6 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
       )
 
       result.errors.map(_.message) must contain(invalidKey)
-    }
-
-    "not bind mobile numbers with fewer than 10 digits" in {
-      val result = form.bind(
-        Map(
-          "phoneNumber" -> "01632960001",
-          fieldName     -> "123456780"
-        )
-      )
-
-      result.errors.map(_.message) must contain(formatKey)
-    }
-
-    "not bind invalid format (too short like 123)" in {
-      val result = form.bind(
-        Map(
-          "phoneNumber" -> "01632960001",
-          fieldName     -> "123"
-        )
-      )
-
-      result.errors.map(_.message) must contain(formatKey)
     }
   }
 }

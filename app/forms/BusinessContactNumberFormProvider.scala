@@ -25,7 +25,6 @@ import play.api.data.validation.*
 
 class BusinessContactNumberFormProvider @Inject() extends Mappings {
 
-  private val MinDigits = 10
   private val MaxDigits = 20
   private val AllowedCharsRegex = "^[0-9 ]+$"
 
@@ -43,8 +42,7 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
         Invalid("businessContactNumber.error.phoneNumber.invalid")
       } else if (digits > MaxDigits) {
         Invalid("businessContactNumber.error.phoneNumber.length")
-      } else if (digits < MinDigits) {
-        Invalid("businessContactNumber.error.phoneNumber.invalidFormat")
+
       } else {
         Valid
       }
@@ -61,8 +59,6 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
         Invalid("businessContactNumber.error.mobileNumber.invalid")
       } else if (digits > MaxDigits) {
         Invalid("businessContactNumber.error.mobileNumber.length")
-      } else if (digits < MinDigits) {
-        Invalid("businessContactNumber.error.mobileNumber.invalidFormat")
       } else {
         Valid
       }
