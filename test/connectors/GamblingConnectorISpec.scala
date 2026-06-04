@@ -64,21 +64,20 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
     "return certificate when backend returns 200" in {
 
-      val responseJson =
-        Json.obj(
-          "mgdRegNumber"         -> mgdRegNumber,
-          "groupReg"             -> "N",
-          "businessName"         -> "Test Business Ltd",
-          "tradingName"          -> "Test Trader Ltd",
-          "groupMembers"         -> JsArray(),
-          "partMembers"          -> JsArray(),
-          "returnPeriodEndDates" -> JsArray()
-        )
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "$mgdRegNumber",
+           |  "businessName": "Test Business Ltd",
+           |  "tradingName": "Test Trader Ltd",
+           |  "groupReg": "N",
+           |  "groupMembers": [],
+           |  "partMembers": [],
+           |  "returnPeriodEndDates": []
+           |}""".stripMargin
 
       wireMockServer.stubFor(
         get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
-          .willReturn(okJson(responseJson.toString()))
-      )
+          .willReturn(okJson(jsonAsString)))
 
       connector.getCertificate(mgdRegNumber).futureValue mustBe certificate
     }

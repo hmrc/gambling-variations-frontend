@@ -68,8 +68,8 @@ class DataRequiredActionImpl @Inject() (
                     logger.info("User Answers failed.")
                     Left(Redirect(routes.SystemErrorController.onPageLoad()))
                 }
-
               }) getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+
             }
           }
         } recover { case NonFatal(e) =>
@@ -88,6 +88,7 @@ class DataRequiredActionImpl @Inject() (
     }
 
   private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Business Name")
     entity match {
       case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
         for {
@@ -105,6 +106,7 @@ class DataRequiredActionImpl @Inject() (
   }
 
   private def setBusinessContactDetails(contact: BusinessContactDetails, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Business Contact Details")
     for {
       updatedAnswers <- setIfDefined(
                           answers,
@@ -119,6 +121,7 @@ class DataRequiredActionImpl @Inject() (
   }
 
   private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Mgd Trade Details")
     for {
       updatedAnswers <- answers.set(IsSeasonalBusinessPage, mgdTradeDetails.isBusinessSeasonal)
       updatedAnswers <- updatedAnswers.set(BusinessTradeClassPage, mgdTradeDetails.businessTradeClass)
