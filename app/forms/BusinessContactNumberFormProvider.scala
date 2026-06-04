@@ -25,33 +25,47 @@ import play.api.data.validation.*
 
 class BusinessContactNumberFormProvider @Inject() extends Mappings {
 
-  private val MaxLength = 20
+  private val MinDigits = 10
+  private val MaxDigits = 20
   private val AllowedCharsRegex = "^[0-9 ]+$"
-  private val DigitsOnlyRegex = "^[0-9]{10,11}$"
 
-  private def isValidFormat(number: String): Boolean =
-    number.replaceAll(" ", "").matches(DigitsOnlyRegex)
+  private def digitCount(number: String): Int =
+    number.replaceAll(" ", "").length
 
   private val phoneConstraint: Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
+      val digits = digitCount(trimmed)
 
-      if (trimmed.isEmpty) Valid
-      else if (trimmed.length > MaxLength) Invalid("businessContactNumber.error.phoneNumber.length")
-      else if (!trimmed.matches(AllowedCharsRegex)) Invalid("businessContactNumber.error.phoneNumber.invalid")
-      else if (!isValidFormat(trimmed)) Invalid("businessContactNumber.error.phoneNumber.invalidFormat")
-      else Valid
+      if (trimmed.isEmpty) {
+        Valid
+      } else if (!trimmed.matches(AllowedCharsRegex)) {
+        Invalid("businessContactNumber.error.phoneNumber.invalid")
+      } else if (digits > MaxDigits) {
+        Invalid("businessContactNumber.error.phoneNumber.length")
+      } else if (digits < MinDigits) {
+        Invalid("businessContactNumber.error.phoneNumber.invalidFormat")
+      } else {
+        Valid
+      }
     }
 
   private val mobileConstraint: Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
+      val digits = digitCount(trimmed)
 
-      if (trimmed.isEmpty) Valid
-      else if (trimmed.length > MaxLength) Invalid("businessContactNumber.error.mobileNumber.length")
-      else if (!trimmed.matches(AllowedCharsRegex)) Invalid("businessContactNumber.error.mobileNumber.invalid")
-      else if (!isValidFormat(trimmed)) Invalid("businessContactNumber.error.mobileNumber.invalidFormat")
-      else Valid
+      if (trimmed.isEmpty) {
+        Valid
+      } else if (!trimmed.matches(AllowedCharsRegex)) {
+        Invalid("businessContactNumber.error.mobileNumber.invalid")
+      } else if (digits > MaxDigits) {
+        Invalid("businessContactNumber.error.mobileNumber.length")
+      } else if (digits < MinDigits) {
+        Invalid("businessContactNumber.error.mobileNumber.invalidFormat")
+      } else {
+        Valid
+      }
     }
 
   def apply(): Form[BusinessContactNumber] =
