@@ -36,7 +36,7 @@ class BusinessTradingNameController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessNameDataRequiredAction,
   formProvider: BusinessTradingNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessTradingNameView

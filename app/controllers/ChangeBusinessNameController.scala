@@ -37,7 +37,7 @@ class ChangeBusinessNameController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessNameDataRequiredAction,
   formProvider: ChangeBusinessNameFormProvider,
   soleProprietorFormProvider: SoleProprietorNameFormProvider,
   val controllerComponents: MessagesControllerComponents,

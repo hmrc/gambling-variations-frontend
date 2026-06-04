@@ -36,7 +36,7 @@ class BusinessContactNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessContactDetailsDataRequiredAction,
   formProvider: BusinessContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactNumberView

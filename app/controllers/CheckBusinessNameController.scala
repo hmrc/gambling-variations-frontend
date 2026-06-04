@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{AuthorisedAction, DataRequiredAction, DataRetrievalAction}
+import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
 import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -31,7 +31,7 @@ class CheckBusinessNameController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessNameDataRequiredAction,
   view: BusinessNameView
 )() extends FrontendBaseController
     with I18nSupport {
