@@ -16,14 +16,14 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.*
 
 import java.time.LocalDate
 
 case class MgdTradeDetails(
   mgdRegNumber: String,
-  isBusinessSeasonal: Option[Boolean],
-  businessTradeClass: Option[BusinessTradeClass],
+  isBusinessSeasonal: Boolean,
+  businessTradeClass: BusinessTradeClass,
   businessActivityDesc: Option[String],
   previousMgdRegistrationNumbers: Option[Seq[String]],
   associatedMgdRegistrationNumbers: Option[Seq[String]],
@@ -31,6 +31,19 @@ case class MgdTradeDetails(
 )
 
 object MgdTradeDetails {
+
+  implicit val intToBoolean: Format[Boolean] = Format(
+    Reads {
+      case JsNumber(1) => JsSuccess(true)
+      case JsNumber(0) => JsSuccess(false)
+      case value       => JsError(s"Cannot parse number to boolean with value of $value")
+    },
+    Writes {
+      case true  => JsNumber(1)
+      case false => JsNumber(0)
+    }
+  )
+
   implicit val format: OFormat[MgdTradeDetails] =
     Json.format[MgdTradeDetails]
 }
