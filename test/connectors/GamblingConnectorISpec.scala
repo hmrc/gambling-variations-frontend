@@ -77,7 +77,8 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
       wireMockServer.stubFor(
         get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
-          .willReturn(okJson(jsonAsString)))
+          .willReturn(okJson(jsonAsString))
+      )
 
       connector.getCertificate(mgdRegNumber).futureValue mustBe certificate
     }
