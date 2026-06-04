@@ -63,7 +63,7 @@ class RemoveTradeNameController @Inject() (
           value =>
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameSubmittedPage, true))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
         )
