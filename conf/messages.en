@@ -220,6 +220,19 @@ removeEmailAddress.error.required = Select yes if you want to remove the email a
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
 
+#Check Contact Details
+contactDetails.caption = Change registration details
+contactDetails.title = Check your business contact details
+contactDetails.heading = Check your business contact details
+contactDetails.error.contactNumber = You must provide at least one contact number.
+contactDetails.heading.contactNumbers = Contact numbers
+contactDetails.heading.faxNumber = Fax number
+contactDetails.heading.emailAddr = Email address
+contactDetails.label.phoneNumber = Phone number
+contactDetails.label.mobilePhoneNumber = Mobile number
+contactDetails.label.contactNumbers = Contact numbers
+contactDetails.message.notProvided = Not provided
+contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 faxNumber.title = What is the fax number for this business? - Change registration details
 faxNumber.heading = What is the fax number for this business?
