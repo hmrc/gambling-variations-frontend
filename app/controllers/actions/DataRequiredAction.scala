@@ -123,8 +123,8 @@ class DataRequiredActionImpl @Inject() (
   private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Mgd Trade Details")
     for {
-      updatedAnswers <- answers.set(IsSeasonalBusinessPage, mgdTradeDetails.isBusinessSeasonal)
-      updatedAnswers <- updatedAnswers.set(BusinessTradeClassPage, mgdTradeDetails.businessTradeClass)
+      updatedAnswers <- setIfDefined(answers, mgdTradeDetails.isBusinessSeasonal, IsSeasonalBusinessPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessTradeClass, BusinessTradeClassPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessActivityDesc, OtherTradeClassPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.previousMgdRegistrationNumbers, PreviousRegistrationNumbersPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.associatedMgdRegistrationNumbers, AssociatedRegistrationNumbersPage)
