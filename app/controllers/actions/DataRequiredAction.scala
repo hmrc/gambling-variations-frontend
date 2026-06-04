@@ -50,27 +50,25 @@ class DataRequiredActionImpl @Inject() (
 
         gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
           gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
-            gamblingConnector.getMgdTradeDetails(request.mgdRegNum) flatMap { mgdContactDetails =>
 
-              val answers = UserAnswers(request.mgdRegNum)
+            val answers = UserAnswers(request.mgdRegNum)
 
-              (for {
-                updatedAnswers <- setBusinessName(entityName, answers)
-                updatedAnswers <- setBusinessContactDetails(contact, updatedAnswers)
-                updatedAnswers <- setMgdTradeDetails(mgdContactDetails, updatedAnswers)
-              } yield {
-                logger.info("User Answers not found. Saving User Answers")
-                sessionRepository.set(updatedAnswers) map {
-                  case true =>
-                    logger.info("User Answers saved.")
-                    Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
-                  case false =>
-                    logger.info("User Answers failed.")
-                    Left(Redirect(routes.SystemErrorController.onPageLoad()))
-                }
-              }) getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+            (for {
+              updatedAnswers <- setBusinessName(entityName, answers)
+              updatedAnswers <- setBusinessContactDetails(contact, updatedAnswers)
+              // updatedAnswers <- setMgdTradeDetails(mgdContactDetails, updatedAnswers)
+            } yield {
+              logger.info("User Answers not found. Saving User Answers")
+              sessionRepository.set(updatedAnswers) map {
+                case true =>
+                  logger.info("User Answers saved.")
+                  Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
+                case false =>
+                  logger.info("User Answers failed.")
+                  Left(Redirect(routes.SystemErrorController.onPageLoad()))
+              }
+            }) getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
 
-            }
           }
         } recover { case NonFatal(e) =>
           logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)

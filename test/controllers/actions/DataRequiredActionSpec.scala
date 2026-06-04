@@ -72,12 +72,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
               "phoneNumber"  -> "+44 8903928171",
               "mobileNumber" -> "+44 8903928171"
             ),
-            "businessEmailAddress"          -> "a@b.com",
-            "isSeasonBusiness"              -> true,
-            "businessTradeClass"            -> 6,
-            "otherTradeClass"               -> "Description",
-            "previousRegistrationNumbers"   -> Json.arr("XWM00000001774", "XDM00000001309", ""),
-            "associatedRegistrationNumbers" -> Json.arr("XXM00000000723", "XQM00000001196", "")
+            "businessEmailAddress" -> "a@b.com"
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -118,12 +113,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
               "phoneNumber"  -> "+44 8903928171",
               "mobileNumber" -> "+44 8903928171"
             ),
-            "businessEmailAddress"          -> "a@b.com",
-            "isSeasonBusiness"              -> true,
-            "businessTradeClass"            -> 6,
-            "otherTradeClass"               -> "Description",
-            "previousRegistrationNumbers"   -> Json.arr("XWM00000001774", "XDM00000001309", ""),
-            "associatedRegistrationNumbers" -> Json.arr("XXM00000000723", "XQM00000001196", "")
+            "businessEmailAddress" -> "a@b.com"
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
