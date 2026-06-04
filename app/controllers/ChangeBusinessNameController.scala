@@ -86,7 +86,7 @@ class ChangeBusinessNameController @Inject() (
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameSubmittedPage, true))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
             )
@@ -101,7 +101,7 @@ class ChangeBusinessNameController @Inject() (
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNamePage, value))
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameSubmittedPage, true))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
             )

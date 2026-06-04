@@ -71,7 +71,7 @@ class BusinessTradingNameController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
       )
