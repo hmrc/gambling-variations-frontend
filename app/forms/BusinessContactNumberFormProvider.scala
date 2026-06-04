@@ -25,7 +25,7 @@ import play.api.data.validation.*
 
 class BusinessContactNumberFormProvider @Inject() extends Mappings {
 
-  private val MinDigits = 11
+  private val MinDigits = 10
   private val MaxDigits = 20
   private val AllowedCharsRegex = "^[0-9 ]+$"
 

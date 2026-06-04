@@ -108,10 +108,10 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
       result.errors.map(_.message) must contain(invalidKey)
     }
 
-    "not bind phone numbers with fewer than 11 digits" in {
+    "not bind phone numbers with fewer than 10 digits" in {
       val result = form.bind(
         Map(
-          fieldName      -> "1234567890",
+          fieldName      -> "123456790",
           "mobileNumber" -> "07700 900000"
         )
       )
@@ -216,11 +216,11 @@ class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
       result.errors.map(_.message) must contain(invalidKey)
     }
 
-    "not bind mobile numbers with fewer than 11 digits" in {
+    "not bind mobile numbers with fewer than 10 digits" in {
       val result = form.bind(
         Map(
           "phoneNumber" -> "01632960001",
-          fieldName     -> "1234567890"
+          fieldName     -> "123456780"
         )
       )
 
