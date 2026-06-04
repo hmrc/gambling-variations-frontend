@@ -49,12 +49,12 @@
                                     HtmlContent(Html(
                                     s"${messages("contactDetails.label.phoneNumber")}" +
                                     "<br>"+
-                                    s"${if (!phoneNumber.isEmpty) phoneNumber else messages("contactDetails.message.notProvided")}" +
+                                    s"${phoneNumber getOrElse messages("contactDetails.message.notProvided")}" +
                                     "<br>"+
                                     "<br>"+
                                     s"${messages("contactDetails.label.mobilePhoneNumber")}" +
                                     "<br>"+
-                                    s"${if (!mobilePhoneNumber.isEmpty) mobilePhoneNumber else messages("contactDetails.message.notProvided")}"
+                                    s"${mobilePhoneNumber getOrElse messages("contactDetails.message.notProvided")}"
                                 ))}
                     }).withCssClass("contact-numbers"),
                     actions = Some(Actions(
