@@ -28,7 +28,7 @@
         govukSummaryList : GovukSummaryList
 )
 
-@(businessType: BusinessType, businessName: String, tradingName: Option[String])(implicit request: Request[_], messages: Messages)
+@(businessType: BusinessType, businessName: String, tradingName: Option[String], businessNameSubmitted: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("businessName.title"), Some(messages("changeRegistrationDetails.title")))) {
 
@@ -100,7 +100,9 @@
             )
         ))
     )
-
+    @if(businessNameSubmitted) {
+        @paragraph(messages("businessName.message.requiredToSubmit"))
+    }
     <p class="govuk-body">
         @govukButton(
             ButtonViewModel(messages("site.continue"))

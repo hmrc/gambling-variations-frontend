@@ -51,7 +51,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
           val view = application.injector.instanceOf[BusinessNameView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(Soleproprietor, "Mr Test Fella", None)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(Soleproprietor, "Mr Test Fella", None, false)(request, messages(application)).toString
         }
       }
       "when partnership" in {
@@ -73,7 +73,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
           val view = application.injector.instanceOf[BusinessNameView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(BusinessType.Partnership, "Test Business Ltd", None)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(BusinessType.Partnership, "Test Business Ltd", None, false)(request, messages(application)).toString
         }
       }
     }
