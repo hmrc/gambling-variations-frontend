@@ -73,13 +73,13 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
             Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
           case false =>
             logger.info("User Answers failed.")
-            Left(Redirect(routes.AccessDeniedController.onPageLoad()))
+            Left(Redirect(routes.SystemErrorController.onPageLoad()))
         }
-      } getOrElse Future.successful(Left(Redirect(routes.IndexController.onPageLoad())))
+      } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
 
     } recover { case NonFatal(e) =>
       logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
-      Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+      Left(Redirect(routes.SystemErrorController.onPageLoad()))
     }
   }
 

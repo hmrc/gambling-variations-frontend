@@ -48,9 +48,9 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[BusinessNameDataRequiredAction].to[BusinessNameDataRequiredAction],
-        bind[BusinessContactDetailsDataRequiredAction].to[FakeBusinessContactDetailsDataRequiredAction],
-        bind[MgdTradeDetailsDataRequiredAction].to[MgdTradeDetailsDataRequiredAction],
+        bind[BusinessNameDataRequiredAction].to[BusinessNameDataRequiredActionImpl],
+        bind[BusinessContactDetailsDataRequiredAction].to[BusinessContactDetailsDataRequiredActionImpl],
+        bind[MgdTradeDetailsDataRequiredAction].to[MgdTradeDetailsDataRequiredActionImpl],
         bind[AuthorisedAction].to[FakeAuthorisedAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )

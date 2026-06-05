@@ -21,15 +21,16 @@ import forms.RemoveEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{BusinessEmailAddressPage, RemoveEmailAddressPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.RemoveEmailAddressView
-import org.mockito.Mockito.{verify, when}
+
 import scala.concurrent.Future
 
 class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
@@ -37,10 +38,9 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   private val email = "test@test.com"
 
   private val baseAnswers =
-    UserAnswers(userAnswersId)
-      .set(BusinessEmailAddressPage, email)
-      .success
-      .value
+    UserAnswers(userAnswersId, Json.obj(
+      "businessEmailAddress" -> email,
+      "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> "XX")))
 
   val formProvider = new RemoveEmailAddressFormProvider()
   val form = formProvider()
