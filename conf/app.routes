@@ -87,3 +87,8 @@ GET        /change-registration-details/business-contact-details/contact-numbers
 POST       /change-registration-details/business-contact-details/contact-numbers                        controllers.BusinessContactNumberController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/change-trading-details/remove-previous-registration-number                 controllers.RemovePreviousRegNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/change-trading-details/remove-previous-registration-number                 controllers.RemovePreviousRegNumberController.onSubmit(mode: Mode = CheckMode)
