@@ -47,10 +47,11 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
-        bind[BusinessNameDataRequiredAction].to[BusinessNameDataRequiredActionImpl],
-        bind[BusinessContactDetailsDataRequiredAction].to[BusinessContactDetailsDataRequiredActionImpl],
         bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[AuthorisedAction].to[FakeIdentifierAction],
+        bind[BusinessNameDataRequiredAction].to[BusinessNameDataRequiredAction],
+        bind[BusinessContactDetailsDataRequiredAction].to[FakeBusinessContactDetailsDataRequiredAction],
+        bind[MgdTradeDetailsDataRequiredAction].to[MgdTradeDetailsDataRequiredAction],
+        bind[AuthorisedAction].to[FakeAuthorisedAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
 

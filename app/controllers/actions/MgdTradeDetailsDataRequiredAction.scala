@@ -101,4 +101,4 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
   }
 }
 
-trait MgdTradeDetailsDataRequiredAction extends DataRequiredAction
+trait MgdTradeDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

@@ -23,7 +23,7 @@ import models.{BusinessContactDetails, BusinessContactNumber, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
-import play.api.mvc.Result
+import play.api.mvc.{ActionRefiner, Result}
 import play.api.mvc.Results.Redirect
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
@@ -73,13 +73,13 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
             Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
           case false =>
             logger.info("User Answers failed.")
-            Left(Redirect(routes.SystemErrorController.onPageLoad()))
+            Left(Redirect(routes.AccessDeniedController.onPageLoad()))
         }
-      } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
+      } getOrElse Future.successful(Left(Redirect(routes.IndexController.onPageLoad())))
 
     } recover { case NonFatal(e) =>
       logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
-      Left(Redirect(routes.SystemErrorController.onPageLoad()))
+      Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
     }
   }
 
@@ -106,4 +106,4 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
 
 }
 
-trait BusinessContactDetailsDataRequiredAction extends DataRequiredAction
+trait BusinessContactDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

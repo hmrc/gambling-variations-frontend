@@ -114,4 +114,4 @@ class BusinessNameDataRequiredActionImpl @Inject() (
 
 }
 
-trait BusinessNameDataRequiredAction extends DataRequiredAction
+trait BusinessNameDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

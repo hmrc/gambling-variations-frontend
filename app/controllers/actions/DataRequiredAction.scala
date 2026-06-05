@@ -17,17 +17,14 @@
 package controllers.actions
 
 import connectors.GamblingConnector
+import controllers.routes
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
-import pages.*
 import play.api.Logging
-import play.api.libs.json.Writes
 import play.api.mvc.{ActionRefiner, Result}
-import repositories.SessionRepository
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class DataRequiredActionImpl @Inject() ()(implicit val executionContext: ExecutionContext) extends DataRequiredAction with Logging {
 
