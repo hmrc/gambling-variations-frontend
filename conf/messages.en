@@ -220,6 +220,13 @@ removeEmailAddress.error.required = Select yes if you want to remove the email a
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
 
+removeAssociatedRegNumber.title = Are you sure you want to remove the associated registration number?
+removeAssociatedRegNumber.heading = Are you sure you want to remove the associated registration number {0}?
+removeAssociatedRegNumber.checkYourAnswersLabel = removeAssociatedRegNumber
+removeAssociatedRegNumber.error.required = Select yes if you want to remove the associated registration number
+removeAssociatedRegNumber.change.hidden = remove associated registration number
+removeAssociatedRegNumber.heading.caption = Change registration details
+
 #Check Contact Details
 contactDetails.caption = Change registration details
 contactDetails.title = Check your business contact details
