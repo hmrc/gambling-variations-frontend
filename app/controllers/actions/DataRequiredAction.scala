@@ -29,12 +29,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class DataRequiredActionImpl @Inject() (
-  val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
-)(implicit val executionContext: ExecutionContext)
-    extends DataRequiredAction
-    with Logging {
+class DataRequiredActionImpl @Inject() ()(implicit val executionContext: ExecutionContext) extends DataRequiredAction with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
     request.userAnswers match {

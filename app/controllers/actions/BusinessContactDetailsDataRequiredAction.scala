@@ -23,8 +23,8 @@ import models.{BusinessContactDetails, BusinessContactNumber, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
+import play.api.mvc.Result
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
