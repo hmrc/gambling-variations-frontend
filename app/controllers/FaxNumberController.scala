@@ -63,7 +63,7 @@ class FaxNumberController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FaxNumberPage, value))
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(FaxNumberPage, mode, updatedAnswers))
       )

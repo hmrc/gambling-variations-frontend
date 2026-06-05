@@ -88,6 +88,7 @@ businessName.notProvided = Not provided
 businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
+businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 
 
