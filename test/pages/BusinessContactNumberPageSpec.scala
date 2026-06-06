@@ -16,7 +16,7 @@
 
 package pages
 
-import models.BusinessContactNumber
+import models.ContactNumber
 import play.api.libs.json.JsPath
 import play.api.libs.json.Json
 import org.scalatestplus.play.PlaySpec
@@ -37,9 +37,9 @@ class BusinessContactNumberPageSpec extends PlaySpec {
 
     "be able to read and write BusinessContactNumber values" in {
 
-      val value = BusinessContactNumber(
-        phoneNumber  = Some("01632 960 001"),
-        mobileNumber = Some("07700 900000")
+      val value = ContactNumber(
+        phoneNumber       = Some("01632 960 001"),
+        mobilePhoneNumber = Some("07700 900000")
       )
 
       val json = Json.obj(
@@ -48,7 +48,7 @@ class BusinessContactNumberPageSpec extends PlaySpec {
 
       BusinessContactNumberPage.path
         .asSingleJson(json)
-        .validate[BusinessContactNumber]
+        .validate[ContactNumber]
         .get mustEqual value
     }
   }

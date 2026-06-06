@@ -53,7 +53,7 @@ class BusinessNameDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(BusinessNameMgdRegNumPage) map { _ =>
+        userAnswers.get(BusinessNameSectionPage) map { _ =>
           logger.info(s"MgdRegNum found for Business Name with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
@@ -97,14 +97,14 @@ class BusinessNameDataRequiredActionImpl @Inject() (
     entity match {
       case SoleProprietorNameDetails(mgdRegNum, title, firstName, middleName, lastName, tradingName, _, _) =>
         for {
-          updatedAnswers <- answers.set(BusinessNameMgdRegNumPage, mgdRegNum)
+          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
           updatedAnswers <- updatedAnswers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
           updatedAnswers <- updatedAnswers.set(BusinessTypePage, BusinessType.Soleproprietor)
           updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
         } yield updatedAnswers
       case BusinessNameDetails(mgdRegNum, businessName, businessType, tradingName, _) =>
         for {
-          updatedAnswers <- answers.set(BusinessNameMgdRegNumPage, mgdRegNum)
+          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
           updatedAnswers <- updatedAnswers.set(BusinessNamePage, businessName)
           updatedAnswers <- updatedAnswers.set(BusinessTypePage, businessType)
           updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)

@@ -19,12 +19,12 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, ContactNumber, UserAnswers}
+import models.{BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
-import play.api.mvc.{ActionRefiner, Result}
 import play.api.mvc.Results.Redirect
+import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
@@ -34,11 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
 
-class BusinessContactDetailsDataRequiredActionImpl @Inject() (
+class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
   val gamblingConnector: GamblingConnector
 )(implicit val executionContext: ExecutionContext)
-    extends BusinessContactDetailsDataRequiredAction
+    extends CorrespondenceDetailsDataRequiredAction
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
@@ -53,9 +53,13 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(BusinessContactDetailsSectionPage) map { _ =>
+        userAnswers.get(CorrespondenceDetailsSectionPage) map { _ =>
+          logger.info(s"MgdRegNum found for Correspondence Details with id ${userAnswers.id}")
+
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
         } getOrElse {
+          logger.info(s"User Answers found with id ${userAnswers.id}")
+
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           saveUserAnswersToSessionAndRedirect(userAnswers, request)
         }
@@ -63,9 +67,9 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
   }
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getBusinessContactDetails(answers.id) flatMap { contact =>
+    gamblingConnector.getBusinessName(answers.id) flatMap { entityName =>
 
-      setBusinessContactDetails(contact, answers) map { updatedAnswers =>
+      setBusinessName(entityName, answers) map { updatedAnswers =>
         logger.info("User Answers not found. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
@@ -88,22 +92,26 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
       userAnswers.set(page, value)
     }
 
-  private def setBusinessContactDetails(contact: BusinessContactDetails, answers: UserAnswers): Try[UserAnswers] = {
-    logger.info("Setting User Answers for Business Contact Details")
-    for {
-      updatedAnswers <- answers.set(BusinessContactDetailsSectionPage, contact.mgdRegNumber)
-      updatedAnswers <- setIfDefined(
-                          updatedAnswers,
-                          contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
-                            ContactNumber(Some(phone), Some(mobile))
-                          },
-                          BusinessContactNumberPage
-                        )
-      updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
-    } yield updatedAnswers
+  private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Business Name")
+    entity match {
+      case SoleProprietorNameDetails(mgdRegNum, title, firstName, middleName, lastName, tradingName, _, _) =>
+        for {
+          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
+          updatedAnswers <- updatedAnswers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
+          updatedAnswers <- updatedAnswers.set(BusinessTypePage, BusinessType.Soleproprietor)
+          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
+        } yield updatedAnswers
+      case BusinessNameDetails(mgdRegNum, businessName, businessType, tradingName, _) =>
+        for {
+          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
+          updatedAnswers <- updatedAnswers.set(BusinessNamePage, businessName)
+          updatedAnswers <- updatedAnswers.set(BusinessTypePage, businessType)
+          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
+        } yield updatedAnswers
+    }
   }
 
 }
 
-trait BusinessContactDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+trait CorrespondenceDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

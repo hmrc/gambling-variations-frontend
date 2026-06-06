@@ -61,8 +61,8 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
           "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> "ABC12345678901"),
           "faxNumber"                     -> "+_+_ hdj39783",
           "businessContactNumber" -> Json.obj(
-            "phoneNumber"  -> "+44 8903928171",
-            "mobileNumber" -> "+44 8903928171"
+            "phoneNumber"       -> "+44 8903928171",
+            "mobilePhoneNumber" -> "+44 8903928171"
           ),
           "businessEmailAddress" -> "a@b.com"
         )
@@ -167,8 +167,8 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
             ),
             "faxNumber" -> "+_+_ hdj39783",
             "businessContactNumber" -> Json.obj(
-              "phoneNumber"  -> "+44 8903928171",
-              "mobileNumber" -> "+44 8903928171"
+              "phoneNumber"       -> "+44 8903928171",
+              "mobilePhoneNumber" -> "+44 8903928171"
             ),
             "businessEmailAddress" -> "a@b.com"
           )

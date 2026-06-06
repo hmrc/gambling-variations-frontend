@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import models.ContactNumber
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.arbitrary
+import play.api.libs.json.JsPath
 
-trait ModelGenerators {
+case object CorrespondenceDetailsSectionPage extends QuestionPage[String] {
 
-  implicit lazy val arbitraryBusinessContactNumber: Arbitrary[ContactNumber] =
-    Arbitrary {
-      for {
-        phoneNumber <- arbitrary[Option[String]]
-        mobileOpt   <- arbitrary[Option[String]]
-      } yield ContactNumber(
-        phoneNumber       = phoneNumber,
-        mobilePhoneNumber = mobileOpt
-      )
-    }
+  override def path: JsPath = JsPath \ "correspondenceDetailsSectionPage" \ toString
+
+  override def toString: String = "mgdRegNum"
 }
