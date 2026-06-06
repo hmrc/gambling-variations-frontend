@@ -28,6 +28,12 @@ class CheckBusinessNameControllerSpec extends SpecBase {
 
   "BusinessName Controller" - {
 
+    val noAnswers = UserAnswers(userAnswersId,
+                                Json.obj(
+                                  "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+                                )
+                               )
+
     "must return OK and the correct view for a GET" - {
       "when sole proprietor" in {
 
@@ -36,7 +42,8 @@ class CheckBusinessNameControllerSpec extends SpecBase {
             "title"     -> "Mr",
             "firstName" -> "Test",
             "lastName"  -> "Fella"
-          )
+          ),
+          "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
         )
 
         val userAnswers = UserAnswers("id", data)
@@ -57,8 +64,9 @@ class CheckBusinessNameControllerSpec extends SpecBase {
       "when partnership" in {
 
         val data = Json.obj(
-          "businessName" -> "Test Business Ltd",
-          "businessType" -> 4
+          "businessName"        -> "Test Business Ltd",
+          "businessType"        -> 4,
+          "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
         )
 
         val userAnswers = UserAnswers("id", data)
@@ -80,7 +88,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
 
     "must redirect with an empty set of User Answers" in {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)

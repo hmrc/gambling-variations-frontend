@@ -38,9 +38,12 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   private val email = "test@test.com"
 
   private val baseAnswers =
-    UserAnswers(userAnswersId, Json.obj(
-      "businessEmailAddress" -> email,
-      "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> "XX")))
+    UserAnswers(userAnswersId,
+                Json.obj(
+                  "businessEmailAddress"          -> email,
+                  "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+                )
+               )
 
   val formProvider = new RemoveEmailAddressFormProvider()
   val form = formProvider()

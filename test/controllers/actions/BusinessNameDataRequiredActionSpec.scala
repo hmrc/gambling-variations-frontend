@@ -45,8 +45,6 @@ class BusinessNameDataRequiredActionSpec extends SpecBase with MockitoSugar {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
-  val mgdRegNum = "GAM0000000001"
-
   "BusinessName DataRequiredAction" - {
 
     "when there is no User Answers in the cache" - {

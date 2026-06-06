@@ -48,8 +48,11 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
   val data = Json.obj(
     BusinessTypePage.toString -> businessType.code,
-    BusinessNamePage.toString -> businessName
+    BusinessNamePage.toString -> businessName,
+    "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
+
+  val noAnswers = UserAnswers(userAnswersId, Json.obj("businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)))
 
   lazy val changeBusinessNameRoute =
     routes.ChangeBusinessNameController.onPageLoad(NormalMode, Partnership).url
@@ -84,7 +87,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         "when GET" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
           running(application) {
             val request = FakeRequest(GET, changeBusinessNameRoute)
@@ -98,7 +101,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
         "when POST" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
           running(application) {
             val request =
