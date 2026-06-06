@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
+import models.{CorrespondenceDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
@@ -67,9 +67,9 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
   }
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getBusinessName(answers.id) flatMap { entityName =>
+    gamblingConnector.getCorrespondenceDetails(answers.id) flatMap { correspondenceDetails =>
 
-      setBusinessName(entityName, answers) map { updatedAnswers =>
+      setCorrespondenceDetails(correspondenceDetails, answers) map { updatedAnswers =>
         logger.info("User Answers not found. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
@@ -92,24 +92,18 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
       userAnswers.set(page, value)
     }
 
-  private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
-    logger.info("Setting User Answers for Business Name")
-    entity match {
-      case SoleProprietorNameDetails(mgdRegNum, title, firstName, middleName, lastName, tradingName, _, _) =>
-        for {
-          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
-          updatedAnswers <- updatedAnswers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
-          updatedAnswers <- updatedAnswers.set(BusinessTypePage, BusinessType.Soleproprietor)
-          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
-        } yield updatedAnswers
-      case BusinessNameDetails(mgdRegNum, businessName, businessType, tradingName, _) =>
-        for {
-          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
-          updatedAnswers <- updatedAnswers.set(BusinessNamePage, businessName)
-          updatedAnswers <- updatedAnswers.set(BusinessTypePage, businessType)
-          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
-        } yield updatedAnswers
-    }
+  private def setCorrespondenceDetails(correspondenceDetails: CorrespondenceDetails, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Correspondence Details")
+    for {
+      updatedAnswers <- answers.set(CorrespondenceDetailsSectionPage, correspondenceDetails.mgdRegNumber)
+      updatedAnswers <- updatedAnswers.set(CorrespondenceNamePage, correspondenceDetails.nameLine1)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.nameLine2, CorrespondenceAdditionalNamePage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.correspondenceAddress, CorrespondenceAddressPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.additionalInformation, CorrespondenceAdditionalInformationPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.contactNumber, CorrespondenceContactNumberPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.faxNumber, CorrespondenceFaxNumberPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.emailAddr, CorrespondenceEmailPage)
+    } yield updatedAnswers
   }
 
 }
