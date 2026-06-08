@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, UserAnswers}
+import models.{Address, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdTradeDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -35,16 +35,16 @@ import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
+class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
-  import BusinessContactDetailsDataRequiredActionSpec.*
+  import CorrespondenceDetailsDataRequiredActionSpec.*
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
-      extends BusinessContactDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
+      extends CorrespondenceDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
-  "BusinessContactDetails DataRequiredAction" - {
+  "CorrespondenceDetails DataRequiredAction" - {
 
     "when there is no User Answers in the cache" - {
 
@@ -54,17 +54,28 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
+        when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetails)
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> "ABC12345678901"),
-          "faxNumber"                     -> "+_+_ hdj39783",
-          "businessContactNumber" -> Json.obj(
-            "phoneNumber"       -> "+44 8903928171",
-            "mobilePhoneNumber" -> "+44 8903928171"
+          "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
+          "correspondenceName"           -> "ABC ltd",
+          "correspondenceAdditionalName" -> "XX",
+          "correspondenceAddress" -> Json.obj(
+            "address1" -> "add1",
+            "address2" -> "add2",
+            "address3" -> "add3",
+            "address4" -> "add4",
+            "postcode" -> "NE11NE",
+            "country"  -> "UK"
           ),
-          "businessEmailAddress" -> "a@b.com"
+          "correspondenceAdditionalInformation" -> "Upstairs",
+          "correspondenceContactNumber" -> Json.obj(
+            "phoneNumber"       -> "0123456789",
+            "mobilePhoneNumber" -> "0123456780"
+          ),
+          "correspondenceFaxNumber" -> "0123456799",
+          "correspondenceEmail"     -> "abc@email.com"
         )
 
         val result: Either[Result, DataRequest[AnyContent]] =
@@ -78,7 +89,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
           req.userAnswers.id mustBe expected.userAnswers.id
         }
         verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
+        verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
       }
 
       "redirect to SystemError " - {
@@ -87,7 +98,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
+          when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetails)
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -95,16 +106,16 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
 
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
+          verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
         }
 
-        "getBusinessContactDetails throws an exception" in {
+        "getMgdTradeDetails throws an exception" in {
 
           val request = FakeRequest()
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future.failed(
+          when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future.failed(
             UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR)
           )
           val action = new Harness(sessionRepository, gamblingConnector)
@@ -130,7 +141,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "businessContactDetailsSection" -> Json.obj(
+            "correspondenceDetailsSection" -> Json.obj(
               "mgdRegNum" -> "ABC12345678901"
             )
           )
@@ -146,7 +157,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
             req.userAnswers.id mustBe expected.userAnswers.id
           }
           verify(sessionRepository, never).set(any())
-          verify(gamblingConnector, never).getBusinessContactDetails(any())(any())
+          verify(gamblingConnector, never).getMgdTradeDetails(any())(any())
 
         }
         "with call to backend" in {
@@ -155,22 +166,31 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
+          when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetails)
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val updatedSessionData = Json.obj(
             "businessNameSection" -> Json.obj(
               "mgdRegNum" -> "ABC12345678901"
             ),
-            "businessContactDetailsSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
+            "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
+            "correspondenceName"           -> "ABC ltd",
+            "correspondenceAdditionalName" -> "XX",
+            "correspondenceAddress" -> Json.obj(
+              "address1" -> "add1",
+              "address2" -> "add2",
+              "address3" -> "add3",
+              "address4" -> "add4",
+              "postcode" -> "NE11NE",
+              "country"  -> "UK"
             ),
-            "faxNumber" -> "+_+_ hdj39783",
-            "businessContactNumber" -> Json.obj(
-              "phoneNumber"       -> "+44 8903928171",
-              "mobilePhoneNumber" -> "+44 8903928171"
+            "correspondenceAdditionalInformation" -> "Upstairs",
+            "correspondenceContactNumber" -> Json.obj(
+              "phoneNumber"       -> "0123456789",
+              "mobilePhoneNumber" -> "0123456780"
             ),
-            "businessEmailAddress" -> "a@b.com"
+            "correspondenceFaxNumber" -> "0123456799",
+            "correspondenceEmail"     -> "abc@email.com"
           )
 
           val existingUserAnswers = UserAnswers(mgdRegNum,
@@ -192,7 +212,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
             req.userAnswers.id mustBe expected.userAnswers.id
           }
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
+          verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
 
         }
       }
@@ -202,13 +222,24 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
   }
 }
 
-object BusinessContactDetailsDataRequiredActionSpec {
-  val businessContactDetailsModel: BusinessContactDetails = BusinessContactDetails(
-    mgdRegNumber      = "ABC12345678901",
-    phoneNumber       = Some("+44 8903928171"),
-    mobilePhoneNumber = Some("+44 8903928171"),
-    faxNumber         = Some("+_+_ hdj39783"),
-    emailAddr         = Some("a@b.com"),
-    systemDate        = Some(LocalDate.of(1991, 1, 1))
+object CorrespondenceDetailsDataRequiredActionSpec {
+  val correspondenceDetails: CorrespondenceDetails = CorrespondenceDetails(
+    mgdRegNumber = "XWM00000001770",
+    nameLine1    = "ABC ltd",
+    nameLine2    = Some("XX"),
+    correspondenceAddress = Some(
+      Address(
+        "add1",
+        Some("add2"),
+        Some("add3"),
+        Some("add4"),
+        Some("NE11NE"),
+        Some("UK")
+      )
+    ),
+    additionalInformation = Some("Upstairs"),
+    contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
+    faxNumber             = Some("0123456799"),
+    emailAddr             = Some("abc@email.com")
   )
 }

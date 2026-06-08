@@ -30,7 +30,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
 
       val data = Json.obj(
         "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "businessContactNumber"         -> Json.obj("phoneNumber" -> "07000000000", "mobileNumber" -> "07000000000"),
+        "businessContactNumber"         -> Json.obj("phoneNumber" -> "07000000000", "mobilePhoneNumber" -> "07000000000"),
         "faxNumber"                     -> "07000000000",
         "businessEmailAddress"          -> "a@b.com",
         "flag"                          -> false

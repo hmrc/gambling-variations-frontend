@@ -53,7 +53,7 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(MgdTradeDetailsMgdRegNumPage) map { _ =>
+        userAnswers.get(MgdTradeDetailsSectionPage) map { _ =>
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
         } getOrElse {
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -91,7 +91,7 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
   private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Mgd Trade Details")
     for {
-      updatedAnswers <- answers.set(MgdTradeDetailsMgdRegNumPage, mgdTradeDetails.mgdRegNumber)
+      updatedAnswers <- answers.set(MgdTradeDetailsSectionPage, mgdTradeDetails.mgdRegNumber)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.isBusinessSeasonal, IsSeasonalBusinessPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessTradeClass, BusinessTradeClassPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessActivityDesc, OtherTradeClassPage)

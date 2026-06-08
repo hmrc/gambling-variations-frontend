@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.BusinessContactNumberFormProvider
-import models.{BusinessContactNumber, NormalMode, UserAnswers}
+import models.{ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessContactDetailsMgdRegNumPage, BusinessContactNumberPage}
+import pages.{BusinessContactDetailsSectionPage, BusinessContactNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -43,8 +43,8 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
   val data = Json.obj(
     BusinessContactNumberPage.toString -> Json.obj(
-      "phoneNumber"  -> "01632 960 001",
-      "mobileNumber" -> "07700900000"
+      "phoneNumber"       -> "01632 960 001",
+      "mobilePhoneNumber" -> "07700900000"
     ),
     "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
   )
@@ -100,7 +100,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustEqual
           view(
             form.fill(
-              BusinessContactNumber(
+              ContactNumber(
                 Some("01632 960 001"),
                 Some("07700900000")
               )

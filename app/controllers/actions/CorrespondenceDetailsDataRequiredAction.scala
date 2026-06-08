@@ -19,12 +19,12 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, ContactNumber, UserAnswers}
+import models.{CorrespondenceDetails, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
-import play.api.mvc.{ActionRefiner, Result}
 import play.api.mvc.Results.Redirect
+import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
@@ -34,11 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
 
-class BusinessContactDetailsDataRequiredActionImpl @Inject() (
+class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
   val gamblingConnector: GamblingConnector
 )(implicit val executionContext: ExecutionContext)
-    extends BusinessContactDetailsDataRequiredAction
+    extends CorrespondenceDetailsDataRequiredAction
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
@@ -53,9 +53,13 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(BusinessContactDetailsSectionPage) map { _ =>
+        userAnswers.get(CorrespondenceDetailsSectionPage) map { _ =>
+          logger.info(s"MgdRegNum found for Correspondence Details with id ${userAnswers.id}")
+
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
         } getOrElse {
+          logger.info(s"User Answers found with id ${userAnswers.id}")
+
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           saveUserAnswersToSessionAndRedirect(userAnswers, request)
         }
@@ -63,9 +67,9 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
   }
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getBusinessContactDetails(answers.id) flatMap { contact =>
+    gamblingConnector.getCorrespondenceDetails(answers.id) flatMap { correspondenceDetails =>
 
-      setBusinessContactDetails(contact, answers) map { updatedAnswers =>
+      setCorrespondenceDetails(correspondenceDetails, answers) map { updatedAnswers =>
         logger.info("User Answers not found. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
@@ -88,22 +92,20 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
       userAnswers.set(page, value)
     }
 
-  private def setBusinessContactDetails(contact: BusinessContactDetails, answers: UserAnswers): Try[UserAnswers] = {
-    logger.info("Setting User Answers for Business Contact Details")
+  private def setCorrespondenceDetails(correspondenceDetails: CorrespondenceDetails, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Setting User Answers for Correspondence Details")
     for {
-      updatedAnswers <- answers.set(BusinessContactDetailsSectionPage, contact.mgdRegNumber)
-      updatedAnswers <- setIfDefined(
-                          updatedAnswers,
-                          contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
-                            ContactNumber(Some(phone), Some(mobile))
-                          },
-                          BusinessContactNumberPage
-                        )
-      updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
+      updatedAnswers <- answers.set(CorrespondenceDetailsSectionPage, correspondenceDetails.mgdRegNumber)
+      updatedAnswers <- updatedAnswers.set(CorrespondenceNamePage, correspondenceDetails.nameLine1)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.nameLine2, CorrespondenceAdditionalNamePage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.correspondenceAddress, CorrespondenceAddressPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.additionalInformation, CorrespondenceAdditionalInformationPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.contactNumber, CorrespondenceContactNumberPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.faxNumber, CorrespondenceFaxNumberPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.emailAddr, CorrespondenceEmailPage)
     } yield updatedAnswers
   }
 
 }
 
-trait BusinessContactDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+trait CorrespondenceDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
