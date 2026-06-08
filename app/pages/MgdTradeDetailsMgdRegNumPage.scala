@@ -18,9 +18,9 @@ package pages
 
 import play.api.libs.json.JsPath
 
-case object IsSeasonalBusinessPage extends QuestionPage[Boolean] {
+case object MgdTradeDetailsMgdRegNumPage extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "mgdTradeDetailsSection" \ toString
 
-  override def toString: String = "isBusinessSeasonal"
+  override def toString: String = "mgdRegNum"
 }

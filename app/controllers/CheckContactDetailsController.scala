@@ -29,7 +29,7 @@ class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessContactDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactDetailsView
 ) extends FrontendBaseController
