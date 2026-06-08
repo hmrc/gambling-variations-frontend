@@ -41,8 +41,8 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   private val wireMockServer = new WireMockServer(0)
 
   override def beforeAll(): Unit = {
-    wireMockServer.start()
     configureFor("localhost", wireMockServer.port())
+    wireMockServer.start()
   }
 
   override def afterAll(): Unit =

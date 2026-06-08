@@ -58,24 +58,24 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "correspondenceDetailsSection"        -> Json.obj("mgdRegNum" -> "XWM00000001770"),
-          "correspondenceName"            -> "ABC ltd",
-          "correspondenceAdditionalName"            -> "XX",
-          "correspondenceAddress"               -> Json.obj(
-           "address1" -> "add1",
-           "address2" -> "add2",
-           "address3" -> "add3",
-           "address4" -> "add4",
-           "postcode" -> "NE11NE",
-            "country" -> "UK"
+          "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
+          "correspondenceName"           -> "ABC ltd",
+          "correspondenceAdditionalName" -> "XX",
+          "correspondenceAddress" -> Json.obj(
+            "address1" -> "add1",
+            "address2" -> "add2",
+            "address3" -> "add3",
+            "address4" -> "add4",
+            "postcode" -> "NE11NE",
+            "country"  -> "UK"
           ),
           "correspondenceAdditionalInformation" -> "Upstairs",
           "correspondenceContactNumber" -> Json.obj(
-            "phoneNumber" -> "0123456789",
+            "phoneNumber"       -> "0123456789",
             "mobilePhoneNumber" -> "0123456780"
           ),
           "correspondenceFaxNumber" -> "0123456799",
-          "correspondenceEmail" -> "abc@email.com"
+          "correspondenceEmail"     -> "abc@email.com"
         )
 
         val result: Either[Result, DataRequest[AnyContent]] =
@@ -174,7 +174,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
               "mgdRegNum" -> "ABC12345678901"
             ),
             "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
-            "correspondenceName" -> "ABC ltd",
+            "correspondenceName"           -> "ABC ltd",
             "correspondenceAdditionalName" -> "XX",
             "correspondenceAddress" -> Json.obj(
               "address1" -> "add1",
@@ -182,15 +182,15 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
               "address3" -> "add3",
               "address4" -> "add4",
               "postcode" -> "NE11NE",
-              "country" -> "UK"
+              "country"  -> "UK"
             ),
             "correspondenceAdditionalInformation" -> "Upstairs",
             "correspondenceContactNumber" -> Json.obj(
-              "phoneNumber" -> "0123456789",
+              "phoneNumber"       -> "0123456789",
               "mobilePhoneNumber" -> "0123456780"
             ),
             "correspondenceFaxNumber" -> "0123456799",
-            "correspondenceEmail" -> "abc@email.com"
+            "correspondenceEmail"     -> "abc@email.com"
           )
 
           val existingUserAnswers = UserAnswers(mgdRegNum,
