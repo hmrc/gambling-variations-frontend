@@ -31,9 +31,8 @@ class ChangeEmailAddressFormProvider @Inject() extends Mappings {
       "emailAddress" -> text("emailAddress.error.required")
         .transform[String](_.trim, identity)
         .verifying(maxLength(70, "emailAddress.error.length"))
-        .verifying(
-          regexp(emailRegex, "emailAddress.error.invalid")
-        )
+        .verifying(regexp(emailRegex, "emailAddress.error.invalid"))
     )
 }
+
 
