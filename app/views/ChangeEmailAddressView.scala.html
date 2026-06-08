@@ -29,7 +29,7 @@
 
 @layout(pageTitle = title(form, messages("emailAddress.title"))) {
 
-    @formHelper(action = routes.ChangeEmailAddressController.onSubmit(mode)) {
+    @formHelper(action = routes.ChangeEmailAddressController.onSubmit(mode)), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -45,6 +45,7 @@
                 label = LabelViewModel(messages("emailAddress.heading")).asPageHeading(LabelSize.Large)
             )
             .withWidth(Fixed20)
+            .withAttribute("autocomplete" -> "value")
         )
 
         @govukButton(
