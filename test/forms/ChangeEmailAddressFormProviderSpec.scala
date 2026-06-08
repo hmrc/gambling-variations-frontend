@@ -28,12 +28,9 @@ class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
 
   private val maxLength = 70
 
-  private val validEmails = Seq(
-    "name@example.com",
-    "john_doe-123@test.co.uk",
-    "a.b-c_d@example-domain.com",
-    "USER_123@test.com"
-  )
+  private val emailRegex =
+    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
+
 
   private val form = new ChangeEmailAddressFormProvider()()
 
@@ -44,13 +41,44 @@ class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      Gen.oneOf(validEmails)
+      Gen.oneOf(
+        "name@example.com",
+        "john_doe-123@test.co.uk",
+        "a.b-c_d@example-domain.com",
+        "USER_123@test.com"
+      )
     )
 
     "trim surrounding whitespace" in {
       val result = form.bind(Map(fieldName -> "   name@example.com   ")).value
       result.value mustBe "name@example.com"
     }
+
+    s"not bind strings longer than $maxLength characters" in {
+      val tooLong = ("a" * (maxLength - 8)) + "@test.com"
+      val result = form.bind(Map(fieldName -> tooLong)).apply(fieldName)
+
+      result.errors must contain(FormError(fieldName, lengthKey, Seq(maxLength)))
+    }
+
+
+    "not bind invalid email formats" in {
+      val invalids = Seq(
+        "plainaddress",
+        "missingatsign.com",
+        "missingdomain@",
+        "@missinglocal.com",
+        "bad!chars@test.com",
+        "two@@ats.com",
+        "spaces are not allowed@test.com"
+      )
+
+      invalids.foreach { email =>
+        val result = form.bind(Map(fieldName -> email)).apply(fieldName)
+        result.errors must contain only FormError(fieldName, invalidKey, Seq(emailRegex))
+      }
+    }
+
 
     behave like mandatoryField(
       form,
@@ -59,4 +87,5 @@ class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
     )
   }
 }
+
 
