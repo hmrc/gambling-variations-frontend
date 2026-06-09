@@ -36,7 +36,7 @@ class BusinessTradeClassController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: MgdTradeDetailsDataRequiredAction,
   formProvider: BusinessTradeClassFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessTradeClassView

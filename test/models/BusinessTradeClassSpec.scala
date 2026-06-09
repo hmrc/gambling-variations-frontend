@@ -16,46 +16,87 @@
 
 package models
 
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.OptionValues
-import play.api.libs.json.{JsError, JsString, Json}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.*
 
-class BusinessTradeClassSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class BusinessTradeClassSpec extends AnyWordSpec with Matchers {
 
-  "BusinessTradeClass" - {
+  "BusinessTradeClass.fromCode" should {
 
-    "must deserialise valid values" in {
+    "return correct BusinessTradeClass for valid codes" in {
+      BusinessTradeClass.fromCode(1) shouldBe Some(BusinessTradeClass.Amusementorgamingmachinesupplier)
+      BusinessTradeClass.fromCode(2) shouldBe Some(BusinessTradeClass.Adultgamingcentre)
+      BusinessTradeClass.fromCode(3) shouldBe Some(BusinessTradeClass.Familyentertainmentcentre)
+      BusinessTradeClass.fromCode(4) shouldBe Some(BusinessTradeClass.BookmakerOrBettingActivities)
+      BusinessTradeClass.fromCode(5) shouldBe Some(BusinessTradeClass.Bingopromoter)
+      BusinessTradeClass.fromCode(6) shouldBe Some(BusinessTradeClass.Casino)
+      BusinessTradeClass.fromCode(7) shouldBe Some(BusinessTradeClass.Publichouse)
+      BusinessTradeClass.fromCode(8) shouldBe Some(BusinessTradeClass.Club)
+      BusinessTradeClass.fromCode(9) shouldBe Some(BusinessTradeClass.Other)
+    }
 
-      val gen = Gen.oneOf(BusinessTradeClass.values.toSeq)
+    "return None for invalid codes" in {
+      BusinessTradeClass.fromCode(0)  shouldBe None
+      BusinessTradeClass.fromCode(16) shouldBe None
+      BusinessTradeClass.fromCode(-1) shouldBe None
+    }
+  }
 
-      forAll(gen) { businessTradeClass =>
+  "BusinessTradeClass Reads" should {
 
-        JsString(businessTradeClass.toString).validate[BusinessTradeClass].asOpt.value mustEqual businessTradeClass
+    "deserialize valid codes to BusinessTradeClass" in {
+      Json.fromJson[BusinessTradeClass](JsNumber(1)) shouldBe JsSuccess(BusinessTradeClass.Amusementorgamingmachinesupplier)
+      Json.fromJson[BusinessTradeClass](JsNumber(2)) shouldBe JsSuccess(BusinessTradeClass.Adultgamingcentre)
+      Json.fromJson[BusinessTradeClass](JsNumber(3)) shouldBe JsSuccess(BusinessTradeClass.Familyentertainmentcentre)
+      Json.fromJson[BusinessTradeClass](JsNumber(4)) shouldBe JsSuccess(BusinessTradeClass.BookmakerOrBettingActivities)
+      Json.fromJson[BusinessTradeClass](JsNumber(5)) shouldBe JsSuccess(BusinessTradeClass.Bingopromoter)
+      Json.fromJson[BusinessTradeClass](JsNumber(6)) shouldBe JsSuccess(BusinessTradeClass.Casino)
+      Json.fromJson[BusinessTradeClass](JsNumber(7)) shouldBe JsSuccess(BusinessTradeClass.Publichouse)
+      Json.fromJson[BusinessTradeClass](JsNumber(8)) shouldBe JsSuccess(BusinessTradeClass.Club)
+      Json.fromJson[BusinessTradeClass](JsNumber(9)) shouldBe JsSuccess(BusinessTradeClass.Other)
+    }
+
+    "fail for invalid codes" in {
+      val result = Json.fromJson[BusinessTradeClass](JsNumber(99))
+
+      result.isError shouldBe true
+      result match {
+        case JsError(errors) =>
+          errors.head._2.head.message shouldBe "Invalid Business Trade Class"
+        case _ => fail("Expected JsError")
       }
     }
 
-    "must fail to deserialise invalid values" in {
-
-      val gen = arbitrary[String] suchThat (!BusinessTradeClass.values.map(_.toString).contains(_))
-
-      forAll(gen) { invalidValue =>
-
-        JsString(invalidValue).validate[BusinessTradeClass] mustEqual JsError("error.invalid")
-      }
+    "fail for non-numeric JSON" in {
+      Json.fromJson[BusinessTradeClass](JsString("abc")).isError shouldBe true
+      Json.fromJson[BusinessTradeClass](JsBoolean(true)).isError shouldBe true
     }
+  }
 
-    "must serialise" in {
+  "BusinessTradeClass Writes" should {
 
-      val gen = Gen.oneOf(BusinessTradeClass.values.toSeq)
-
-      forAll(gen) { businessTradeClass =>
-
-        Json.toJson(businessTradeClass) mustEqual JsString(businessTradeClass.toString)
-      }
+    "serialize BusinessTradeClass to numeric JSON code" in {
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Amusementorgamingmachinesupplier) shouldBe JsNumber(1)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Adultgamingcentre)                shouldBe JsNumber(2)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Familyentertainmentcentre)        shouldBe JsNumber(3)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.BookmakerOrBettingActivities)     shouldBe JsNumber(4)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Bingopromoter)                    shouldBe JsNumber(5)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Casino)                           shouldBe JsNumber(6)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Publichouse)                      shouldBe JsNumber(7)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Club)                             shouldBe JsNumber(8)
+      Json.toJson[BusinessTradeClass](BusinessTradeClass.Other)                            shouldBe JsNumber(9)
     }
+  }
+
+  "BusinessTradeClass Format" should {
+
+    "round-trip correctly (write then read)" in
+      BusinessTradeClass.values.foreach { bt =>
+        val json = Json.toJson[BusinessTradeClass](bt)
+        val result = json.validate[BusinessTradeClass]
+
+        result shouldBe JsSuccess(bt)
+      }
   }
 }

@@ -25,49 +25,7 @@ import java.time.LocalDate
 
 class MgdCertificateSpec extends AnyWordSpec with Matchers {
 
-  private val sampleCertificate = MgdCertificate(
-    mgdRegNumber       = "XYZ00000000001",
-    registrationDate   = Some(LocalDate.of(2024, 1, 1)),
-    individualName     = Some("John Doe"),
-    businessName       = Some("Test Business"),
-    tradingName        = None,
-    repMemName         = None,
-    busAddrLine1       = Some("Line 1"),
-    busAddrLine2       = None,
-    busAddrLine3       = None,
-    busAddrLine4       = None,
-    busPostcode        = Some("AB1 2CD"),
-    busCountry         = Some("UK"),
-    busAdi             = None,
-    repMemLine1        = None,
-    repMemLine2        = None,
-    repMemLine3        = None,
-    repMemLine4        = None,
-    repMemPostcode     = None,
-    repMemAdi          = None,
-    typeOfBusiness     = Some(Corporatebody),
-    businessTradeClass = Some(1),
-    noOfPartners       = Some(2),
-    groupReg           = false,
-    noOfGroupMems      = None,
-    dateCertIssued     = Some(LocalDate.of(2024, 2, 1)),
-    partMembers = Seq(
-      PartnerMember(
-        namesOfPartMems    = "Partner A",
-        solePropTitle      = Some("Mr"),
-        solePropFirstName  = Some("A"),
-        solePropMiddleName = None,
-        solePropLastName   = Some("Smith"),
-        typeOfBusiness     = Soleproprietor
-      )
-    ),
-    groupMembers = Seq(
-      GroupMember("Group A")
-    ),
-    returnPeriodEndDates = Seq(
-      ReturnPeriodEndDate(LocalDate.of(2024, 3, 31))
-    )
-  )
+  import MgdCertificateSpec.*
 
   "MgdCertificate JSON format" should {
 
@@ -75,7 +33,7 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
       val json = Json.toJson(sampleCertificate)
 
       (json \ "mgdRegNumber").as[String] mustBe "XYZ00000000001"
-      (json \ "groupReg").as[Boolean] mustBe false
+      (json \ "groupReg").as[String] mustBe "N"
 
       (json \ "partMembers").as[Seq[PartnerMember]].size mustBe 1
       (json \ "groupMembers").as[Seq[GroupMember]].size mustBe 1
@@ -163,4 +121,50 @@ class MgdCertificateSpec extends AnyWordSpec with Matchers {
       parsed mustBe sampleCertificate
     }
   }
+}
+
+object MgdCertificateSpec {
+  private val sampleCertificate = MgdCertificate(
+    mgdRegNumber       = "XYZ00000000001",
+    registrationDate   = Some(LocalDate.of(2024, 1, 1)),
+    individualName     = Some("John Doe"),
+    businessName       = Some("Test Business"),
+    tradingName        = None,
+    repMemName         = None,
+    busAddrLine1       = Some("Line 1"),
+    busAddrLine2       = None,
+    busAddrLine3       = None,
+    busAddrLine4       = None,
+    busPostcode        = Some("AB1 2CD"),
+    busCountry         = Some("UK"),
+    busAdi             = None,
+    repMemLine1        = None,
+    repMemLine2        = None,
+    repMemLine3        = None,
+    repMemLine4        = None,
+    repMemPostcode     = None,
+    repMemAdi          = None,
+    typeOfBusiness     = Some(Corporatebody),
+    businessTradeClass = Some(1),
+    noOfPartners       = Some(2),
+    groupReg           = false,
+    noOfGroupMems      = None,
+    dateCertIssued     = Some(LocalDate.of(2024, 2, 1)),
+    partMembers = Seq(
+      PartnerMember(
+        namesOfPartMems    = "Partner A",
+        solePropTitle      = Some("Mr"),
+        solePropFirstName  = Some("A"),
+        solePropMiddleName = None,
+        solePropLastName   = Some("Smith"),
+        typeOfBusiness     = Soleproprietor
+      )
+    ),
+    groupMembers = Seq(
+      GroupMember("Group A")
+    ),
+    returnPeriodEndDates = Seq(
+      ReturnPeriodEndDate(LocalDate.of(2024, 3, 31))
+    )
+  )
 }

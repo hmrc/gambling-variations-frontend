@@ -28,7 +28,7 @@ class FaxNumberPageSpec extends AnyFreeSpec with Matchers {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "businessContactDetails" \ "faxNumber"
+      val expectedPath: JsPath = JsPath \ "faxNumber"
       FaxNumberPage.path mustBe expectedPath
     }
   }

@@ -88,6 +88,7 @@ businessName.notProvided = Not provided
 businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
+businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 
 
@@ -220,6 +221,19 @@ removeEmailAddress.error.required = Select yes if you want to remove the email a
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
 
+#Check Contact Details
+contactDetails.caption = Change registration details
+contactDetails.title = Check your business contact details
+contactDetails.heading = Check your business contact details
+contactDetails.error.contactNumber = You must provide at least one contact number.
+contactDetails.heading.contactNumbers = Contact numbers
+contactDetails.heading.faxNumber = Fax number
+contactDetails.heading.emailAddr = Email address
+contactDetails.label.phoneNumber = Phone number:
+contactDetails.label.mobilePhoneNumber = Mobile number:
+contactDetails.label.contactNumbers = Contact numbers
+contactDetails.message.notProvided = Not provided
+contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 faxNumber.title = What is the fax number for this business? - Change registration details
 faxNumber.heading = What is the fax number for this business?
@@ -236,8 +250,8 @@ businessContactNumber.heading = What are your business contact numbers?
 businessContactNumber.p1 = You must provide at least one contact number.
 businessContactNumber.caption = Change registration details
 
-businessContactNumber.phoneNumber = Phone number
-businessContactNumber.mobileNumber = Mobile number
+businessContactNumber.phoneNumber = Phone number:
+businessContactNumber.mobileNumber = Mobile number:
 
 businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
 

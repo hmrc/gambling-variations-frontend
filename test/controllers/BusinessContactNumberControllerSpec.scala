@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.BusinessContactNumberFormProvider
-import models.{BusinessContactNumber, NormalMode, UserAnswers}
+import models.{ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.BusinessContactNumberPage
+import pages.{BusinessContactDetailsSectionPage, BusinessContactNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -41,18 +41,23 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new BusinessContactNumberFormProvider()
   val form = formProvider()
 
+  val data = Json.obj(
+    BusinessContactNumberPage.toString -> Json.obj(
+      "phoneNumber"       -> "01632 960 001",
+      "mobilePhoneNumber" -> "07700900000"
+    ),
+    "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+  )
+
+  val noAnswers = Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+
   lazy val businessContactNumberRoute =
     routes.BusinessContactNumberController.onPageLoad(NormalMode).url
 
   val userAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj(
-        BusinessContactNumberPage.toString -> Json.obj(
-          "phoneNumber"  -> "01632 960 001",
-          "mobileNumber" -> "07700900000"
-        )
-      )
+      data
     )
 
   "BusinessContactNumber Controller" - {
@@ -60,7 +65,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
 
       running(application) {
 
@@ -95,7 +100,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustEqual
           view(
             form.fill(
-              BusinessContactNumber(
+              ContactNumber(
                 Some("01632 960 001"),
                 Some("07700900000")
               )
@@ -113,7 +118,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers)))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -139,7 +144,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
     "must return Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
 
       running(application) {
 

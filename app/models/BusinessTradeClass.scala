@@ -17,22 +17,25 @@
 package models
 
 import play.api.i18n.Messages
+import play.api.libs.json.{Format, JsError, JsNumber, JsSuccess, Reads, Writes}
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
-sealed trait BusinessTradeClass
+sealed trait BusinessTradeClass {
+  def code: Int
+}
 
 object BusinessTradeClass extends Enumerable.Implicits {
 
-  case object Adultgamingcentre                extends WithName("adultGamingCentre") with BusinessTradeClass
-  case object Amusementorgamingmachinesupplier extends WithName("amusementOrGamingMachineSupplier") with BusinessTradeClass
-  case object Bingopromoter                    extends WithName("bingopromoter") with BusinessTradeClass
-  case object BookmakerOrBettingActivities     extends WithName("bookmakerorbettingactivities") with BusinessTradeClass
-  case object Casino                           extends WithName("casino") with BusinessTradeClass
-  case object Club                             extends WithName("club") with BusinessTradeClass
-  case object Familyentertainmentcentre        extends WithName("familyentertainmentcentre") with BusinessTradeClass
-  case object Publichouse                      extends WithName("publichouse") with BusinessTradeClass
-  case object Other                            extends WithName("other") with BusinessTradeClass
+  case object Amusementorgamingmachinesupplier extends WithName("amusementOrGamingMachineSupplier") with BusinessTradeClass { val code = 1 }
+  case object Adultgamingcentre                extends WithName("adultGamingCentre") with BusinessTradeClass { val code = 2 }
+  case object Familyentertainmentcentre        extends WithName("familyentertainmentcentre") with BusinessTradeClass { val code = 3 }
+  case object BookmakerOrBettingActivities     extends WithName("bookmakerorbettingactivities") with BusinessTradeClass { val code = 4 }
+  case object Bingopromoter                    extends WithName("bingopromoter") with BusinessTradeClass { val code = 5 }
+  case object Casino                           extends WithName("casino") with BusinessTradeClass { val code = 6 }
+  case object Publichouse                      extends WithName("publichouse") with BusinessTradeClass { val code = 7 }
+  case object Club                             extends WithName("club") with BusinessTradeClass { val code = 8 }
+  case object Other                            extends WithName("other") with BusinessTradeClass { val code = 9 }
 
   val values: Seq[BusinessTradeClass] = Seq(
     Adultgamingcentre,
@@ -53,6 +56,24 @@ object BusinessTradeClass extends Enumerable.Implicits {
       id      = Some(s"value_$index")
     )
   }
+
+  def fromCode(code: Int): Option[BusinessTradeClass] =
+    values.find(_.code == code)
+
+  implicit val reads: Reads[BusinessTradeClass] =
+    Reads { json =>
+      json.validate[Int].flatMap { code =>
+        fromCode(code)
+          .map(JsSuccess(_))
+          .getOrElse(JsError("Invalid Business Trade Class"))
+      }
+    }
+
+  implicit val writes: Writes[BusinessTradeClass] =
+    Writes(bt => JsNumber(bt.code))
+
+  implicit val format: Format[BusinessTradeClass] =
+    Format(reads, writes)
 
   implicit val enumerable: Enumerable[BusinessTradeClass] =
     Enumerable(values.map(v => v.toString -> v)*)
