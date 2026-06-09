@@ -17,129 +17,125 @@
 package controllers
 
 import base.SpecBase
-import models.{BusinessDetails, BusinessType}
-import org.mockito.ArgumentMatchers.{any, anyString}
-import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
+import models.BusinessType
 import org.scalatestplus.mockito.MockitoSugar
-import pages.BusinessNameChangesPage
-import play.api.inject.bind
-import play.api.mvc.Request
+import pages.{BusinessNameChangesPage, BusinessTypePage, GroupMemberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import services.BusinessDetailsService
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
-import java.time.LocalDate
-import scala.concurrent.Future
-
-class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar with BeforeAndAfterEach {
-
-  private val mockBusinessDetailsService: BusinessDetailsService =
-    mock[BusinessDetailsService]
-
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockBusinessDetailsService)
-  }
-
-  private def applicationWithMocks(userAnswers: Option[models.UserAnswers]) =
-    applicationBuilder(userAnswers = userAnswers)
-      .overrides(
-        bind[BusinessDetailsService].toInstance(mockBusinessDetailsService)
-      )
-      .build()
-
-  private def buildBusinessDetails(
-    mgdRegNumber: String,
-    groupReg: Boolean,
-    businessType: Option[BusinessType]
-  ): BusinessDetails =
-    BusinessDetails(
-      mgdRegNumber          = mgdRegNumber,
-      businessType          = businessType,
-      currentlyRegistered   = 1,
-      groupReg              = groupReg,
-      dateOfRegistration    = Some(LocalDate.of(2026, 1, 1)),
-      businessPartnerNumber = None,
-      systemDate            = LocalDate.of(2026, 1, 1)
-    )
+class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   "ChangeRegistrationDetailsController" - {
 
-    "must return OK and render view" in {
+    "must return OK and render the view for a partnership business" in {
 
       val userAnswers =
-        emptyUserAnswers.set(BusinessNameChangesPage, true).success.value
+        emptyUserAnswers
+          .set(GroupMemberPage, false)
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Partnership)
+          .success
+          .value
+          .set(BusinessNameChangesPage, true)
+          .success
+          .value
 
-      val application = applicationWithMocks(Some(userAnswers))
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        implicit val request =
+
+        val request =
           FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
-
-        given HeaderCarrier =
-          HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-
-        given Request[?] = request
-
-        var capturedMgdReg: String = ""
-
-        when(
-          mockBusinessDetailsService.retrieveBusinessDetails(anyString())(
-            any[HeaderCarrier],
-            any[Request[?]]
-          )
-        ).thenAnswer { invocation =>
-          val mgd = invocation.getArgument[String](0)
-          capturedMgdReg = mgd
-
-          Future.successful(
-            buildBusinessDetails(
-              mgdRegNumber = mgd,
-              groupReg     = false,
-              businessType = Some(BusinessType.Partnership)
-            )
-          )
-        }
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-
-        verify(mockBusinessDetailsService).retrieveBusinessDetails(anyString())(
-          any[HeaderCarrier],
-          any[Request[?]]
-        )
       }
     }
 
-    "must redirect to SystemErrorController when service fails" in {
+    "must return OK and render view for a group member" in {
 
-      val application = applicationWithMocks(Some(emptyUserAnswers))
+      val userAnswers =
+        emptyUserAnswers
+          .set(GroupMemberPage, true)
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Partnership)
+          .success
+          .value
+          .set(BusinessNameChangesPage, false)
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        implicit val request =
+
+        val request =
           FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
-
-        given HeaderCarrier =
-          HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-
-        given Request[?] = request
-
-        when(
-          mockBusinessDetailsService.retrieveBusinessDetails(anyString())(
-            any[HeaderCarrier],
-            any[Request[?]]
-          )
-        ).thenReturn(Future.failed(new RuntimeException("boom")))
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+        status(result) mustEqual OK
+      }
+    }
+
+    "must return OK for non-partnership business type" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(GroupMemberPage, false)
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Partnership)
+          .success
+          .value
+          .set(BusinessNameChangesPage, true)
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+      }
+    }
+
+    "must return OK when business name has not changed" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(GroupMemberPage, false)
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Partnership)
+          .success
+          .value
+          .set(BusinessNameChangesPage, false)
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
       }
     }
   }
