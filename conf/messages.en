@@ -108,7 +108,6 @@ changeRegistrationDetails.returnPeriod = Return periods
 changeRegistrationDetails.partnerDetails = Partner details
 changeRegistrationDetails.groupMemberDetails = Group member details
 changeRegistrationDetails.controllingBodyDetails = Controlling body details
-changeRegistrationDetails.disbandMGDGroup = Disband MGD group
 changeRegistrationDetails.licences = Licences
 changeRegistrationDetails.premises = Premises
 changeRegistrationDetails.readyToSubmit = Ready to submit
