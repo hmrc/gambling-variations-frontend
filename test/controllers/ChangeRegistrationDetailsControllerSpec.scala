@@ -138,5 +138,33 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
         status(result) mustEqual OK
       }
     }
+
+    "must redirect to SystemErrorController when GroupMemberPage is missing" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(BusinessTypePage, BusinessType.Partnership)
+          .success
+          .value
+          .set(BusinessNameChangesPage, true)
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
   }
 }
