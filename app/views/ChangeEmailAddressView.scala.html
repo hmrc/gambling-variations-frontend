@@ -40,12 +40,12 @@
         </span>
 
         @govukInput(
-            InputViewModel(
-                field = form("emailAddress"),
-                label = LabelViewModel(messages("emailAddress.heading")).asPageHeading(LabelSize.Large)
-            )
-            .withWidth(Fixed20)
-            .withAttribute("autocomplete" -> "value")
+        InputViewModel(
+            field = form("emailAddress"),
+            label = LabelViewModel(messages("emailAddress.heading")).asPageHeading(LabelSize.Large)
+        )
+        .withWidth(Fixed20)
+        .withAttribute("autocomplete" -> "email")
         )
 
         @govukButton(
