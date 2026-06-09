@@ -274,3 +274,32 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
+
+
+
+checkTradingDetails.caption = Change registration details
+checkTradingDetails.title = Check your trading details
+checkTradingDetails.heading = Check your trading details
+checkTradingDetails.heading.caption = Change registration details
+checkTradingDetails.businessTradeClass.checkYourAnswersLabel = Trade class
+checkTradingDetails.businessTradeClass.change.hidden = trade class
+checkTradingDetails.seasonalBusiness.checkYourAnswersLabel = Seasonal business
+checkTradingDetails.seasonalBusiness.change.hidden = seasonal business
+checkTradingDetails.previousRegistrationNumbers.p1 = If any previous MGD registrations were allocated to your business, you can provide 3 registration numbers.
+checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel = Previous MGD registration numbers
+checkTradingDetails.previousRegistrationNumbers.change.hidden = previous MGD registration numbers
+
+checkTradingDetails.associatedRegistrationNumbers.p1 = If any MGD registrations are associated with your business, you can provide 3 registration numbers.
+checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel = Associated MGD registration numbers
+checkTradingDetails.associatedRegistrationNumbers.change.hidden = associated MGD registration numbers
+
+businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
+businessTradeClass.adultGamingCentre = Adult gaming centre
+businessTradeClass.familyentertainmentcentre = Family entertainment centre
+businessTradeClass.bookmakerorbettingactivities = Bookmaker or betting activities
+businessTradeClass.bingopromoter = Bingo promoter
+businessTradeClass.casino = Casino
+businessTradeClass.publichouse = Public house
+businessTradeClass.club = Club
+businessTradeClass.other = Other
+
