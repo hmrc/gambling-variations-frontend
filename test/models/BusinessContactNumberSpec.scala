@@ -25,14 +25,14 @@ class BusinessContactNumberSpec extends PlaySpec {
 
     "serialise to JSON" in {
 
-      val model = BusinessContactNumber(
-        phoneNumber  = Some("01632 960 001"),
-        mobileNumber = Some("07700 900000")
+      val model = ContactNumber(
+        phoneNumber       = Some("01632 960 001"),
+        mobilePhoneNumber = Some("07700 900000")
       )
 
       val expectedJson = Json.obj(
-        "phoneNumber"  -> "01632 960 001",
-        "mobileNumber" -> "07700 900000"
+        "phoneNumber"       -> "01632 960 001",
+        "mobilePhoneNumber" -> "07700 900000"
       )
 
       Json.toJson(model) mustEqual expectedJson
@@ -41,16 +41,16 @@ class BusinessContactNumberSpec extends PlaySpec {
     "deserialise from JSON" in {
 
       val json = Json.obj(
-        "phoneNumber"  -> "01632 960 001",
-        "mobileNumber" -> "07700 900000"
+        "phoneNumber"       -> "01632 960 001",
+        "mobilePhoneNumber" -> "07700 900000"
       )
 
-      val expectedModel = BusinessContactNumber(
-        phoneNumber  = Some("01632 960 001"),
-        mobileNumber = Some("07700 900000")
+      val expectedModel = ContactNumber(
+        phoneNumber       = Some("01632 960 001"),
+        mobilePhoneNumber = Some("07700 900000")
       )
 
-      json.validate[BusinessContactNumber] mustEqual JsSuccess(expectedModel)
+      json.validate[ContactNumber] mustEqual JsSuccess(expectedModel)
     }
   }
 }

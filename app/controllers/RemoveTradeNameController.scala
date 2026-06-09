@@ -37,7 +37,7 @@ class RemoveTradeNameController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessNameDataRequiredAction,
   formProvider: RemoveTradeNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveTradeNameView

@@ -27,14 +27,15 @@ import viewmodels.checkAnswers.tradingdetails.*
 import viewmodels.govuk.summarylist.*
 import views.html.CheckTradingDetailsView
 
-class CheckTradingDetailsController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               authorised: AuthorisedAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: CheckTradingDetailsView
-                                             ) extends FrontendBaseController with I18nSupport {
+class CheckTradingDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  authorised: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckTradingDetailsView
+) extends FrontendBaseController
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
     (authorised andThen getData andThen requireData) { implicit request =>
@@ -42,20 +43,18 @@ class CheckTradingDetailsController @Inject()(
       val list = SummaryListViewModel(
         rows = Seq(
           BusinessTradeClassSummary.row(request.userAnswers),
-          IsSeasonalBusinessSummary.row(request.userAnswers),
+          IsSeasonalBusinessSummary.row(request.userAnswers)
         ).flatten
       )
 
       val listPreviousMgdRegNo = SummaryListViewModel(
         rows = Seq(
           PreviousRegistrationNumbersSummary.row(request.userAnswers)
-
         ).flatten
       )
       val listAssociatedMgdRegNo = SummaryListViewModel(
         rows = Seq(
           AssociatedRegistrationNumbersSummary.row(request.userAnswers)
-
         ).flatten
       )
 

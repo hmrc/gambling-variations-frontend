@@ -229,8 +229,8 @@ contactDetails.error.contactNumber = You must provide at least one contact numbe
 contactDetails.heading.contactNumbers = Contact numbers
 contactDetails.heading.faxNumber = Fax number
 contactDetails.heading.emailAddr = Email address
-contactDetails.label.phoneNumber = Phone number
-contactDetails.label.mobilePhoneNumber = Mobile number
+contactDetails.label.phoneNumber = Phone number:
+contactDetails.label.mobilePhoneNumber = Mobile number:
 contactDetails.label.contactNumbers = Contact numbers
 contactDetails.message.notProvided = Not provided
 contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
@@ -250,8 +250,8 @@ businessContactNumber.heading = What are your business contact numbers?
 businessContactNumber.p1 = You must provide at least one contact number.
 businessContactNumber.caption = Change registration details
 
-businessContactNumber.phoneNumber = Phone number
-businessContactNumber.mobileNumber = Mobile number
+businessContactNumber.phoneNumber = Phone number:
+businessContactNumber.mobileNumber = Mobile number:
 
 businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
 
@@ -274,6 +274,7 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
+
 
 
 

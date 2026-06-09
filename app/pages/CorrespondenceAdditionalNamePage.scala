@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.*
+import play.api.libs.json.JsPath
 
-case class BusinessContactNumber(phoneNumber: Option[String], mobileNumber: Option[String])
+case object CorrespondenceAdditionalNamePage extends QuestionPage[String] {
 
-object BusinessContactNumber {
+  override def path: JsPath = JsPath \ toString
 
-  implicit val format: OFormat[BusinessContactNumber] = Json.format
+  override def toString: String = "correspondenceAdditionalName"
 }

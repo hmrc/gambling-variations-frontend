@@ -29,10 +29,11 @@ class CheckContactDetailsControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val data = Json.obj(
-        "businessContactNumber" -> Json.obj("phoneNumber" -> Some("07000000000"), "mobileNumber" -> Some("07000000000")),
-        "faxNumber"             -> "07000000000",
-        "businessEmailAddress"  -> "a@b.com",
-        "flag"                  -> false
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+        "businessContactNumber"         -> Json.obj("phoneNumber" -> "07000000000", "mobilePhoneNumber" -> "07000000000"),
+        "faxNumber"                     -> "07000000000",
+        "businessEmailAddress"          -> "a@b.com",
+        "flag"                          -> false
       )
 
       val userAnswers = UserAnswers("id-number", data)
