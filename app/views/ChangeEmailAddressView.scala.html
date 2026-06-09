@@ -29,7 +29,7 @@
 
 @layout(pageTitle = title(form, messages("emailAddress.title"))) {
 
-    @formHelper(action = routes.ChangeEmailAddressController.onSubmit(mode)), Symbol("autoComplete") -> "on") {
+    @formHelper(action = routes.ChangeEmailAddressController.onSubmit(mode), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -40,13 +40,13 @@
         </span>
 
         @govukInput(
-        InputViewModel(
-            field = form("emailAddress"),
-            label = LabelViewModel(messages("emailAddress.heading")).asPageHeading(LabelSize.Large)
-        )
-        .withWidth(Fixed20)
-        .withAttribute("autocomplete" -> "email")
-        )
+            InputViewModel(
+                field = form("emailAddress"),
+                label = LabelViewModel(messages("emailAddress.heading")).asPageHeading(LabelSize.Large)
+            )
+            .withWidth(Fixed20)
+            .withAttribute("autocomplete" -> "email")
+            )
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))
