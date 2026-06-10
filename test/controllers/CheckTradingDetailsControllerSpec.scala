@@ -17,27 +17,115 @@
 package controllers
 
 import base.SpecBase
+import models.BusinessTradeClass
+import pages.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.CheckTradingDetailsView
 
 class CheckTradingDetailsControllerSpec extends SpecBase {
 
-  "CheckTradingDetails Controller" - {
+  private val filledUserAnswers =
+    emptyUserAnswers
+      .set(GroupMemberPage, false)
+      .success
+      .value
+      .set(BusinessTradeClassPage, BusinessTradeClass.Casino)
+      .success
+      .value
+      .set(IsSeasonalBusinessPage, true)
+      .success
+      .value
+      .set(PreviousRegistrationNumbersPage, Seq("MGD123", "MGD456"))
+      .success
+      .value
+      .set(AssociatedRegistrationNumbersPage, Seq("ASS789"))
+      .success
+      .value
 
-    "must return OK and the correct view for a GET" in {
+  "CheckTradingDetailsController" - {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+    "must return OK for a GET request" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(filledUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+
+        val request =
+          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[CheckTradingDetailsView]
-
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+      }
+    }
+
+    "must show trade class section when user is NOT a group member" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(filledUserAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+
+        val content =
+          contentAsString(route(application, request).value)
+
+        content must include("Trade class")
+        content must include("Casino")
+      }
+    }
+
+    "must show all sections when user is NOT a group member" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(filledUserAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+
+        val content =
+          contentAsString(route(application, request).value)
+
+        content must include("Trade class")
+        content must include("Seasonal business")
+        content must include("Yes")
+
+        content must include("Previous MGD registration numbers")
+        content must include("MGD123")
+        content must include("MGD456")
+
+        content must include("Associated MGD registration numbers")
+        content must include("ASS789")
+      }
+    }
+
+    "must hide trade class section when user IS a group member" in {
+
+      val groupMemberUserAnswers =
+        filledUserAnswers
+          .set(GroupMemberPage, true)
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(groupMemberUserAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+
+        val content =
+          contentAsString(route(application, request).value)
+
+        content must not include "Trade class"
+        content must not include "Description of business activity"
+        content must not include "Casino"
       }
     }
   }
