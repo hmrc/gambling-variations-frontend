@@ -117,7 +117,7 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
 
       taskMessages must contain allOf (
         "Controlling body details",
-        "Group member details",
+        "Group member details"
       )
 
       taskMessages must not contain

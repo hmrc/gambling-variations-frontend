@@ -303,3 +303,6 @@ businessTradeClass.publichouse = Public house
 businessTradeClass.club = Club
 businessTradeClass.other = Other
 
+checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
+checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
+

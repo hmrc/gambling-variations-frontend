@@ -43,6 +43,7 @@ class CheckTradingDetailsController @Inject() (
       val list = SummaryListViewModel(
         rows = Seq(
           BusinessTradeClassSummary.row(request.userAnswers),
+          OtherBusinessTradeClassDescriptionSummary.row(request.userAnswers),
           IsSeasonalBusinessSummary.row(request.userAnswers)
         ).flatten
       )
