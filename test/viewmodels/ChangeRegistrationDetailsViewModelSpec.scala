@@ -37,7 +37,6 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
           "changeRegistrationDetails.tradingDetails"         -> "Trading details",
           "changeRegistrationDetails.returnPeriod"           -> "Return period",
           "changeRegistrationDetails.partnerDetails"         -> "Partner details",
-          "changeRegistrationDetails.disbandMGDGroup"        -> "Disband MGD group",
           "changeRegistrationDetails.premises"               -> "Premises",
           "changeRegistrationDetails.licences"               -> "Licences"
         )
@@ -119,7 +118,6 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
       taskMessages must contain allOf (
         "Controlling body details",
         "Group member details",
-        "Disband MGD group"
       )
 
       taskMessages must not contain
