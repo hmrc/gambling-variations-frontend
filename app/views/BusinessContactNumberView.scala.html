@@ -32,7 +32,7 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("businessContactNumber.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("businessContactNumber.title"), Some("changeRegistrationDetails.title"))) {
 
     @formHelper(action = routes.BusinessContactNumberController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 

@@ -28,13 +28,15 @@
 
 @(phoneNumber: Option[String], mobilePhoneNumber:Option[String], faxNumber:Option[String], emailAddr:Option[String], isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
+@layout(pageTitle = titleNoForm(messages("contactDetails.title")), Some("changeRegistrationDetails.title")) {
 
     @caption(messages("contactDetails.caption"))
     @h1("contactDetails.heading", classes="govuk-heading-l")
+
     @if(phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
         @paragraph(messages("contactDetails.error.contactNumber"))
     }
+
     @govukSummaryList(SummaryList(
         rows = Seq(
             SummaryListRow(
@@ -46,17 +48,18 @@
                                     {if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
                                         messages("contactDetails.message.notProvided")
                                     } else {
-                                    HtmlContent(Html(
-                                    s"${messages("contactDetails.label.phoneNumber")}" +
-                                    "<br>"+
-                                    s"${phoneNumber getOrElse messages("contactDetails.message.notProvided")}" +
-                                    "<br>"+
-                                    "<br>"+
-                                    s"${messages("contactDetails.label.mobilePhoneNumber")}" +
-                                    "<br>"+
-                                    s"${mobilePhoneNumber getOrElse messages("contactDetails.message.notProvided")}"
-                                ))}
-                    }).withCssClass("contact-numbers"),
+                                        HtmlContent(Html(
+                                            s"${messages("contactDetails.label.phoneNumber")}" +
+                                            "<br>"+
+                                            s"${phoneNumber getOrElse messages("contactDetails.message.notProvided")}" +
+                                            "<br>"+
+                                            "<br>"+
+                                            s"${messages("contactDetails.label.mobilePhoneNumber")}" +
+                                            "<br>"+
+                                            s"${mobilePhoneNumber getOrElse messages("contactDetails.message.notProvided")}"
+                                        ))
+                                    }
+                        }).withCssClass("contact-numbers"),
                     actions = Some(Actions(
                         items = Seq(
                             ActionItem(
@@ -128,12 +131,12 @@
                         ActionItem(
                             href = "#",
                             content = "site.change",
-                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                            visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
                             ),
                         ActionItem(
                             href = "#",
                             content = "site.remove",
-                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                            visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
                             ),
                         ),
                 classes = "govuk-summary-list__actions govuk-!-width-one-third"
