@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.*
+import pages.GroupMemberPage
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,10 +41,23 @@ class CheckTradingDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (authorised andThen getData andThen requireData) { implicit request =>
 
+      val isGroupMember =
+        request.userAnswers.get(GroupMemberPage).getOrElse(false)
+
+      val tradeClassRows =
+        if (isGroupMember) {
+          Nil
+        } else {
+          Seq(
+            BusinessTradeClassSummary.row(request.userAnswers),
+            OtherBusinessTradeClassDescriptionSummary.row(request.userAnswers)
+          ).flatten
+        }
+
+      val listTradClass = SummaryListViewModel(tradeClassRows)
+
       val list = SummaryListViewModel(
         rows = Seq(
-          BusinessTradeClassSummary.row(request.userAnswers),
-          OtherBusinessTradeClassDescriptionSummary.row(request.userAnswers),
           IsSeasonalBusinessSummary.row(request.userAnswers)
         ).flatten
       )
@@ -59,6 +73,6 @@ class CheckTradingDetailsController @Inject() (
         ).flatten
       )
 
-      Ok(view(list, listPreviousMgdRegNo, listAssociatedMgdRegNo))
+      Ok(view(listTradClass, list, listPreviousMgdRegNo, listAssociatedMgdRegNo))
     }
 }
