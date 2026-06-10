@@ -21,7 +21,7 @@ import models.UserAnswers
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.BusinessContactDetailsView
+import views.html.checkBusinessContactDetails.BusinessContactDetailsView
 
 class CheckContactDetailsControllerSpec extends SpecBase {
 

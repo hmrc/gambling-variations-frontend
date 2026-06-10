@@ -52,13 +52,13 @@ class NavigatorSpec extends SpecBase {
         "must go from FaxNumberPage to CheckYourAnswers" in {
 
           navigator.nextPage(FaxNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.CheckYourAnswersController.onPageLoad()
+            routes.CheckContactDetailsController.onPageLoad()
         }
 
         "must go from RemoveFaxNumberPage to CheckYourAnswers" in {
 
           navigator.nextPage(RemoveFaxNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.CheckYourAnswersController.onPageLoad()
+            routes.CheckContactDetailsController.onPageLoad()
         }
 
         "a page that doesn't exist in the route map to Index" in {
