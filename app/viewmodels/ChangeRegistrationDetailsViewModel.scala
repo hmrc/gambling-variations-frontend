@@ -100,13 +100,6 @@ final case class ChangeRegistrationDetailsViewModel(
           NoChange
         )
       ),
-      optional(isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.disbandMGDGroup"),
-          "group-member-details",
-          NoChange
-        )
-      ),
       optional(!isGroupMember)(
         TaskListItem(
           messages("changeRegistrationDetails.premises"),
