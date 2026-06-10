@@ -132,7 +132,7 @@ class BusinessDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
         val data = Json.obj(
           BusinessTypePage.toString -> BusinessType.Partnership.code,
-          GroupMemberPage.toString -> true
+          GroupMemberPage.toString  -> true
         )
 
         val existing =
