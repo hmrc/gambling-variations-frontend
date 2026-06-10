@@ -70,7 +70,6 @@ POST       /change-registration-details/business-contact-details/remove-fax-numb
 GET        /change-registration-details/change-business-contact-details/remove-fax-number      controllers.RemoveFaxNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/change-business-contact-details/remove-fax-number      controllers.RemoveFaxNumberController.onSubmit(mode: Mode = CheckMode)
 
-
 GET        /change-registration-details/business-contact-details/remove-email-address           controllers.RemoveEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-contact-details/remove-email-address           controllers.RemoveEmailAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/change-business-contact-details/remove-email-address    controllers.RemoveEmailAddressController.onPageLoad(mode: Mode = CheckMode)
@@ -88,3 +87,8 @@ GET        /change-registration-details/business-contact-details/contact-numbers
 POST       /change-registration-details/business-contact-details/contact-numbers                        controllers.BusinessContactNumberController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-business-trade-class                  controllers.BusinessTradeClassController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/trading-details/change-business-trade-class                  controllers.BusinessTradeClassController.onSubmit(mode: Mode = CheckMode)

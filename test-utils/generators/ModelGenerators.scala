@@ -16,11 +16,16 @@
 
 package generators
 
-import models.ContactNumber
-import org.scalacheck.Arbitrary
+import models.{BusinessTradeClass, ContactNumber}
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryBusinessTradeClass: Arbitrary[BusinessTradeClass] =
+    Arbitrary {
+      Gen.oneOf(BusinessTradeClass.values)
+    }
 
   implicit lazy val arbitraryBusinessContactNumber: Arbitrary[ContactNumber] =
     Arbitrary {
