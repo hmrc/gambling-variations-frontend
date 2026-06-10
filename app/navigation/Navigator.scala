@@ -27,14 +27,15 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage       => userAnswers => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage          => userAnswers => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage        => userAnswers => routes.CheckBusinessNameController.onPageLoad()
+    case RemoveTradeNamePage       => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessNamePage          => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage        => _ => routes.CheckBusinessNameController.onPageLoad()
     case TradingNamePage           => _ => routes.CheckBusinessNameController.onPageLoad()
     case FaxNumberPage             => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage       => _ => routes.CheckContactDetailsController.onPageLoad()
-    case BusinessContactNumberPage => userAnswers => routes.BusinessContactNumberController.onPageLoad(NormalMode)
-    case BusinessTradeClassPage    => userAnswers => routes.BusinessTradeClassController.onPageLoad(NormalMode)
+    case RemoveEmailAddressPage    => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessContactNumberPage => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessTradeClassPage    => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
     case _                         => _ => routes.IndexController.onPageLoad()
   }
 
