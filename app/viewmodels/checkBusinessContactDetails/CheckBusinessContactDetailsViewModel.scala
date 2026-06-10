@@ -129,7 +129,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               ),
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.RemoveEmailAddressController.onPageLoad(NormalMode).url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               )
