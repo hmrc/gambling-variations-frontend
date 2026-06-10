@@ -60,16 +60,20 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(BusinessTypePage) map { _ =>
+        (for {
+          _ <- userAnswers.get(GroupMemberPage)
+          _ <- userAnswers.get(BusinessTypePage)
+        } yield {
           Future.successful(
             Right(DataRequest(request.request, request.mgdRegNum, userAnswers))
           )
-        } getOrElse {
+        }) getOrElse {
           given HeaderCarrier =
             HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
           populateAndSave(userAnswers, request)
         }
+
     }
   }
 
