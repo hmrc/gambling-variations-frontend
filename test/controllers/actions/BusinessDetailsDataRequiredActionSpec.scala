@@ -128,10 +128,15 @@ class BusinessDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
     "when user answers already exist" - {
 
-      "must return DataRequest WITHOUT calling connector if BusinessType already present" in {
+      "must return DataRequest WITHOUT calling connector if BusinessType and GroupMember already present" in {
+
+        val data = Json.obj(
+          BusinessTypePage.toString -> BusinessType.Partnership.code,
+          GroupMemberPage.toString -> true
+        )
 
         val existing =
-          UserAnswers(mgdRegNum).set(BusinessTypePage, BusinessType.Partnership).success.value
+          UserAnswers(mgdRegNum, data)
 
         val request = FakeRequest()
 
