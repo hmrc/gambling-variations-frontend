@@ -17,7 +17,8 @@
 package viewmodels.govuk
 
 import play.twirl.api.Html
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
+import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 import viewmodels.LegendSize
 
@@ -61,6 +62,18 @@ trait FieldsetFluency {
       legend
         .copy(isPageHeading = true)
         .withCssClass(size.toString)
+
+    def withCaption(caption: String): Legend = {
+      val headingText = legend.content match {
+        case Text(text)        => text
+        case HtmlContent(html) => html
+        case Empty             => Empty
+      }
+      val newContent = HtmlContent(
+        s"""<span class="govuk-caption-l">$caption</span><h1 class="govuk-fieldset__heading">$headingText</h1>"""
+      )
+      legend.copy(content = newContent)
+    }
 
     def withCssClass(newClass: String): Legend =
       legend.copy(classes = s"${legend.classes} $newClass")

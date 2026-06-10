@@ -35,11 +35,12 @@
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
-        @caption(messages("businessTradeClass.heading.caption"))
         @govukRadios(
             RadiosViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("businessTradeClass.heading")).asPageHeading(),
+                legend = LegendViewModel(messages("businessTradeClass.heading"))
+                    .withCaption(messages("businessTradeClass.heading.caption"))
+                    .withCssClass("govuk-fieldset__legend--l"),
                 items  = BusinessTradeClass.options
             )
         )
