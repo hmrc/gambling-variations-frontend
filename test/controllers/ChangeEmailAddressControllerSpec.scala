@@ -62,7 +62,7 @@ class ChangeEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(EmailAddressPage, "01632 960 001").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(EmailAddressPage, "validEmail@example.com").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
