@@ -63,18 +63,6 @@ trait FieldsetFluency {
         .copy(isPageHeading = true)
         .withCssClass(size.toString)
 
-    def withCaption(caption: String): Legend = {
-      val headingText = legend.content match {
-        case Text(text)        => text
-        case HtmlContent(html) => html
-        case Empty             => Empty
-      }
-      val newContent = HtmlContent(
-        s"""<span class="govuk-caption-l">$caption</span><h1 class="govuk-fieldset__heading">$headingText</h1>"""
-      )
-      legend.copy(content = newContent)
-    }
-
     def withCssClass(newClass: String): Legend =
       legend.copy(classes = s"${legend.classes} $newClass")
   }
