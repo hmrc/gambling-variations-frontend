@@ -16,9 +16,6 @@
 
 package models
 
-import models.BusinessTradeClass.{reads, writes}
-import models.BusinessType.{reads, writes}
-import models.CorrespondenceDetails.{reads, writes}
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.*
 
