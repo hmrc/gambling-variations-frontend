@@ -36,7 +36,7 @@ class ChangeEmailAddressController @Inject() (
                                                navigator: Navigator,
                                                authorise: AuthorisedAction,
                                                getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
+                                               requireData: BusinessContactDetailsDataRequiredAction,
                                                formProvider: ChangeEmailAddressFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: ChangeEmailAddressView
