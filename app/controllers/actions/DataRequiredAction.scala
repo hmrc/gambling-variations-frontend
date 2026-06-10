@@ -16,8 +16,6 @@
 
 package controllers.actions
 
-import connectors.GamblingConnector
-import controllers.routes
 import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
 import play.api.Logging

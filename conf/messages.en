@@ -277,6 +277,7 @@ businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must 
 
 businessTradeClass.title = What is the business trade class?
 businessTradeClass.heading = What is the business trade class?
+businessTradeClass.heading.caption = Change registration details
 businessTradeClass.adultGamingCentre = Adult gaming centre
 businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
 businessTradeClass.bingopromoter = Bingo promoter
