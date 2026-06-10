@@ -30,7 +30,7 @@
 
 @layout(pageTitle = title(form, messages("businessTradeClass.title"), Some("changeRegistrationDetails.title"))) {
 
-    @formHelper(action = routes.BusinessTradeClassController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.BusinessTradeClassController.onSubmit(mode)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
@@ -44,7 +44,7 @@
                     .asPageHeading(LegendSize.Large)
                     .withCssClass("govuk-fieldset__legend--l"),
                 items  = BusinessTradeClass.options
-            )
+            ).withAttribute("autocomplete" -> "value")
         )
 
         @govukButton(
