@@ -29,7 +29,7 @@
 
 @(phoneNumber: Option[String], mobilePhoneNumber:Option[String], faxNumber:Option[String], emailAddr:Option[String], isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("contactDetails.title")), Some("changeRegistrationDetails.title")) {
+@layout(pageTitle = titleNoForm(messages("contactDetails.title"), Some("changeRegistrationDetails.title"))) {
 
     @caption(messages("contactDetails.caption"))
     @h1("contactDetails.heading", classes="govuk-heading-l")
