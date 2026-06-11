@@ -24,7 +24,6 @@ import play.api.data.Form
 class FaxNumberFormProvider @Inject() extends Mappings {
 
   private val faxNumberCharactersRegex = "^[0-9 ]+$"
-  private val faxNumberFormatRegex = "^[0-9]{10,20}$"
 
   def apply(): Form[String] =
     Form(
@@ -33,6 +32,5 @@ class FaxNumberFormProvider @Inject() extends Mappings {
         .verifying(maxLength(20, "faxNumber.error.length"))
         .verifying(regexp(faxNumberCharactersRegex, "faxNumber.error.invalid.characters"))
         .transform[String](_.replace(" ", ""), identity)
-        .verifying(regexp(faxNumberFormatRegex, "faxNumber.error.invalid.format"))
     )
 }

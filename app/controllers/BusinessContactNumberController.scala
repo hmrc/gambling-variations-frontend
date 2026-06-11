@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions.*
 import forms.BusinessContactNumberFormProvider
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.BusinessContactNumberPage
@@ -28,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessContactNumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessContactNumberController @Inject() (
@@ -36,7 +36,7 @@ class BusinessContactNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessContactDetailsDataRequiredAction,
   formProvider: BusinessContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactNumberView

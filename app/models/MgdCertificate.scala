@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat, Writes}
+import play.api.libs.json.{Format, JsError, JsString, JsSuccess, Json, OFormat, Reads, Writes}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -86,7 +86,21 @@ final case class MgdCertificate(
 )
 
 object MgdCertificate {
+
   private val fmt = DateTimeFormatter.ISO_LOCAL_DATE
+
+  implicit val stringToBoolean: Format[Boolean] = Format(
+    Reads {
+      case JsString("Y") => JsSuccess(true)
+      case JsString("N") => JsSuccess(false)
+      case value         => JsError(s"Cannot parse string to boolean with value of $value")
+    },
+    Writes {
+      case true  => JsString("Y")
+      case false => JsString("N")
+    }
+  )
+
   implicit val localDateWrites: Writes[LocalDate] =
     Writes.temporalWrites[LocalDate, DateTimeFormatter](fmt)
 

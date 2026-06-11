@@ -43,22 +43,28 @@ class NavigatorSpec extends SpecBase {
             routes.CheckBusinessNameController.onPageLoad()
         }
 
-        "must go from BusinessContactNumberPage to next page" in { // update it later
+        "must go from BusinessContactNumberPage to next page" in {
 
           navigator.nextPage(BusinessContactNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.BusinessContactNumberController.onPageLoad(NormalMode)
+            routes.CheckContactDetailsController.onPageLoad()
+        }
+
+        "must go from EmailAddressPage to next page" in {
+
+          navigator.nextPage(BusinessEmailAddressPage, NormalMode, UserAnswers("id")) mustBe
+            routes.ChangeEmailAddressController.onPageLoad(NormalMode)
         }
 
         "must go from FaxNumberPage to CheckYourAnswers" in {
 
           navigator.nextPage(FaxNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.CheckYourAnswersController.onPageLoad()
+            routes.CheckContactDetailsController.onPageLoad()
         }
 
         "must go from RemoveFaxNumberPage to CheckYourAnswers" in {
 
           navigator.nextPage(RemoveFaxNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.CheckYourAnswersController.onPageLoad()
+            routes.CheckContactDetailsController.onPageLoad()
         }
 
         "a page that doesn't exist in the route map to Index" in {

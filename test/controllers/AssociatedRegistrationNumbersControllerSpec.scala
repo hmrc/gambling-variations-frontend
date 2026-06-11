@@ -23,11 +23,12 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AssociatedRegistrationNumbersPage
+import pages.AddAssociatedRegistrationNumberPage
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.AssociatedRegistrationNumbersView
 
@@ -40,13 +41,20 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
   val formProvider = new AssociatedRegistrationNumbersFormProvider()
   val form = formProvider()
 
+  val data = Json.obj(
+    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+  )
+
+  private val baseUserAnswers =
+    UserAnswers(userAnswersId, data)
+
   lazy val associatedRegistrationNumbersRoute = routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
 
   "AssociatedRegistrationNumbers Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
@@ -62,7 +70,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(AssociatedRegistrationNumbersPage, true).success.value
+      val userAnswers = baseUserAnswers.set(AddAssociatedRegistrationNumberPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +93,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -106,7 +114,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request =

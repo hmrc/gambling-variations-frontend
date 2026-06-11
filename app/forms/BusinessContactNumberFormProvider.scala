@@ -18,43 +18,53 @@ package forms
 
 import javax.inject.Inject
 import forms.mappings.Mappings
-import models.BusinessContactNumber
+import models.ContactNumber
 import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.data.validation.*
 
 class BusinessContactNumberFormProvider @Inject() extends Mappings {
 
-  private val MaxLength = 20
+  private val MaxDigits = 20
   private val AllowedCharsRegex = "^[0-9 ]+$"
-  private val DigitsOnlyRegex = "^[0-9]{10,11}$"
 
-  private def isValidFormat(number: String): Boolean =
-    number.replaceAll(" ", "").matches(DigitsOnlyRegex)
+  private def digitCount(number: String): Int =
+    number.replaceAll(" ", "").length
 
   private val phoneConstraint: Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
+      val digits = digitCount(trimmed)
 
-      if (trimmed.isEmpty) Valid
-      else if (trimmed.length > MaxLength) Invalid("businessContactNumber.error.phoneNumber.length")
-      else if (!trimmed.matches(AllowedCharsRegex)) Invalid("businessContactNumber.error.phoneNumber.invalid")
-      else if (!isValidFormat(trimmed)) Invalid("businessContactNumber.error.phoneNumber.invalidFormat")
-      else Valid
+      if (trimmed.isEmpty) {
+        Valid
+      } else if (!trimmed.matches(AllowedCharsRegex)) {
+        Invalid("businessContactNumber.error.phoneNumber.invalid")
+      } else if (digits > MaxDigits) {
+        Invalid("businessContactNumber.error.phoneNumber.length")
+
+      } else {
+        Valid
+      }
     }
 
   private val mobileConstraint: Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
+      val digits = digitCount(trimmed)
 
-      if (trimmed.isEmpty) Valid
-      else if (trimmed.length > MaxLength) Invalid("businessContactNumber.error.mobileNumber.length")
-      else if (!trimmed.matches(AllowedCharsRegex)) Invalid("businessContactNumber.error.mobileNumber.invalid")
-      else if (!isValidFormat(trimmed)) Invalid("businessContactNumber.error.mobileNumber.invalidFormat")
-      else Valid
+      if (trimmed.isEmpty) {
+        Valid
+      } else if (!trimmed.matches(AllowedCharsRegex)) {
+        Invalid("businessContactNumber.error.mobileNumber.invalid")
+      } else if (digits > MaxDigits) {
+        Invalid("businessContactNumber.error.mobileNumber.length")
+      } else {
+        Valid
+      }
     }
 
-  def apply(): Form[BusinessContactNumber] =
+  def apply(): Form[ContactNumber] =
     Form(
       mapping(
         "phoneNumber" ->
@@ -69,8 +79,8 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
               .transform(_.trim, identity)
               .verifying(mobileConstraint)
           )
-      )((phone: Option[String], mobile: Option[String]) => BusinessContactNumber(phone, mobile))((b: BusinessContactNumber) =>
-        Some((b.phoneNumber, b.mobileNumber))
+      )((phone: Option[String], mobile: Option[String]) => ContactNumber(phone, mobile))((b: ContactNumber) =>
+        Some((b.phoneNumber, b.mobilePhoneNumber))
       )
     )
 }

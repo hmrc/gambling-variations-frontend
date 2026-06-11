@@ -24,6 +24,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{FaxNumberPage, RemoveFaxNumberPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -36,10 +37,12 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   private val faxNumber = "123456789"
 
   private val baseAnswers =
-    UserAnswers(userAnswersId)
-      .set(FaxNumberPage, faxNumber)
-      .success
-      .value
+    UserAnswers(userAnswersId,
+                Json.obj(
+                  FaxNumberPage.toString          -> faxNumber,
+                  "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+                )
+               )
 
   val formProvider = new RemoveFaxNumberFormProvider()
   val form = formProvider()

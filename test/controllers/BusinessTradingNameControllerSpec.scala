@@ -30,6 +30,7 @@ import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessTradingNameView
 import connectors.GamblingConnector
+import play.api.libs.json.Json
 
 import scala.concurrent.Future
 
@@ -43,8 +44,13 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
   lazy val businessTradingNameRoute =
     routes.BusinessTradingNameController.onPageLoad(NormalMode).url
 
+  val data = Json.obj(
+    BusinessTypePage.toString -> BusinessType.Partnership.code,
+    "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+  )
+
   private val baseUserAnswers =
-    emptyUserAnswers.set(BusinessTypePage, BusinessType.Partnership).success.value
+    UserAnswers(userAnswersId, data)
 
   "BusinessTradingName Controller" - {
 
@@ -158,111 +164,5 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must populate answers from connector when no existing data is found for a GET" in {
-
-      val mockConnector = mock[GamblingConnector]
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockConnector.getBusinessName(any())(any()))
-        .thenReturn(
-          Future.successful(
-            BusinessNameDetails(
-              mgdRegNum    = "safeId",
-              businessName = "Test Business Ltd",
-              businessType = BusinessType.Partnership,
-              tradingName  = None,
-              systemDate   = None
-            )
-          )
-        )
-      when(mockConnector.getBusinessContactDetails(any())(any()))
-        .thenReturn(
-          Future.successful(
-            BusinessContactDetails(
-              mgdRegNumber      = "safeId",
-              phoneNumber       = None,
-              mobilePhoneNumber = None,
-              faxNumber         = None,
-              emailAddr         = None,
-              systemDate        = None
-            )
-          )
-        )
-
-      when(mockSessionRepository.set(any()))
-        .thenReturn(Future.successful(true))
-
-      val application =
-        applicationBuilder(userAnswers = None)
-          .overrides(
-            bind[GamblingConnector].toInstance(mockConnector),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
-
-      running(application) {
-
-        val request = FakeRequest(GET, businessTradingNameRoute)
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-      }
-    }
-
-    "must populate answers from connector when no existing data is found for a POST" in {
-
-      val mockConnector = mock[GamblingConnector]
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockConnector.getBusinessName(any())(any()))
-        .thenReturn(
-          Future.successful(
-            BusinessNameDetails(
-              mgdRegNum    = "safeId",
-              businessName = "Test Business Ltd",
-              businessType = BusinessType.Partnership,
-              tradingName  = None,
-              systemDate   = None
-            )
-          )
-        )
-      when(mockConnector.getBusinessContactDetails(any())(any()))
-        .thenReturn(
-          Future.successful(
-            BusinessContactDetails(
-              mgdRegNumber      = "safeId",
-              phoneNumber       = None,
-              mobilePhoneNumber = None,
-              faxNumber         = None,
-              emailAddr         = None,
-              systemDate        = None
-            )
-          )
-        )
-
-      when(mockSessionRepository.set(any()))
-        .thenReturn(Future.successful(true))
-
-      val application =
-        applicationBuilder(userAnswers = None)
-          .overrides(
-            bind[GamblingConnector].toInstance(mockConnector),
-            bind[SessionRepository].toInstance(mockSessionRepository),
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
-          )
-          .build()
-
-      running(application) {
-
-        val request =
-          FakeRequest(POST, businessTradingNameRoute)
-            .withFormUrlEncodedBody("value" -> "ABC Ltd")
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-      }
-    }
   }
 }

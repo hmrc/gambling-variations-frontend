@@ -18,27 +18,26 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.AssociatedRegistrationNumbersPage
+import pages.AddAssociatedRegistrationNumberPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object AssociatedRegistrationNumbersSummary  {
+object AssociatedRegistrationNumbersSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AssociatedRegistrationNumbersPage).map {
-      answer =>
+    answers.get(AddAssociatedRegistrationNumberPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "associatedRegistrationNumbers.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("associatedRegistrationNumbers.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "associatedRegistrationNumbers.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("associatedRegistrationNumbers.change.hidden"))
         )
+      )
     }
 }

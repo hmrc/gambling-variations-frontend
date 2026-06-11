@@ -16,20 +16,25 @@
 
 package generators
 
-import models.BusinessContactNumber
-import org.scalacheck.Arbitrary
+import models.{BusinessTradeClass, ContactNumber}
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryBusinessContactNumber: Arbitrary[BusinessContactNumber] =
+  implicit lazy val arbitraryBusinessTradeClass: Arbitrary[BusinessTradeClass] =
+    Arbitrary {
+      Gen.oneOf(BusinessTradeClass.values)
+    }
+
+  implicit lazy val arbitraryBusinessContactNumber: Arbitrary[ContactNumber] =
     Arbitrary {
       for {
         phoneNumber <- arbitrary[Option[String]]
         mobileOpt   <- arbitrary[Option[String]]
-      } yield BusinessContactNumber(
-        phoneNumber  = phoneNumber,
-        mobileNumber = mobileOpt
+      } yield ContactNumber(
+        phoneNumber       = phoneNumber,
+        mobilePhoneNumber = mobileOpt
       )
     }
 }

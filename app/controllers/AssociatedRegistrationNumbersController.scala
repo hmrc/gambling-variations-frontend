@@ -16,12 +16,12 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.AssociatedRegistrationNumbersPage
+import pages.AddAssociatedRegistrationNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,43 +30,43 @@ import views.html.AssociatedRegistrationNumbersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AssociatedRegistrationNumbersController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         navigator: Navigator,
-                                         authorise: AuthorisedAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: AssociatedRegistrationNumbersFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: AssociatedRegistrationNumbersView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AssociatedRegistrationNumbersController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: MgdTradeDetailsDataRequiredAction,
+  formProvider: AssociatedRegistrationNumbersFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: AssociatedRegistrationNumbersView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(AssociatedRegistrationNumbersPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    val preparedForm = request.userAnswers.get(AddAssociatedRegistrationNumberPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AssociatedRegistrationNumbersPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AssociatedRegistrationNumbersPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
       )
   }
 }

@@ -16,106 +16,29 @@
 
 package controllers.actions
 
-import connectors.GamblingConnector
-import controllers.routes
+import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, BusinessContactNumber, BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
-import pages.*
 import play.api.Logging
-import play.api.libs.json.Writes
-import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
-import repositories.SessionRepository
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
-import scala.util.Try
 
-class DataRequiredActionImpl @Inject() (
-  val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
-)(implicit val executionContext: ExecutionContext)
-    extends DataRequiredAction
-    with Logging {
+class DataRequiredActionImpl @Inject() ()(implicit val executionContext: ExecutionContext) extends DataRequiredAction with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
     request.userAnswers match {
       case None =>
         logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
 
-        given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+        Future.successful(Right(DataRequest(request.request, request.mgdRegNum, UserAnswers(request.mgdRegNum))))
 
-        gamblingConnector.getBusinessName(request.mgdRegNum) flatMap { entityName =>
-          gamblingConnector.getBusinessContactDetails(request.mgdRegNum) flatMap { contact =>
-
-            val answers = UserAnswers(request.mgdRegNum)
-
-            val businessNameAnswers: Try[UserAnswers] = setBusinessName(entityName, answers)
-            val finalAnswers: Try[UserAnswers] = setBusinessContactDetails(contact, businessNameAnswers)
-
-            finalAnswers.map { ua =>
-              logger.info("User Answers not found. Saving User Answers")
-              sessionRepository.set(ua) map {
-                case true =>
-                  logger.info("User Answers saved.")
-                  Right(DataRequest(request.request, request.mgdRegNum, ua))
-                case false =>
-                  logger.info("User Answers failed.")
-                  Left(Redirect(routes.SystemErrorController.onPageLoad()))
-              }
-            } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
-          }
-        } recover { case NonFatal(e) =>
-          logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
-          Left(Redirect(routes.SystemErrorController.onPageLoad()))
-        }
       case Some(data) =>
         logger.info(s"User Answers found with id ${data.id}")
         Future.successful(Right(DataRequest(request.request, request.mgdRegNum, data)))
     }
   }
 
-  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
-    optional.fold(Try(userAnswers)) { value =>
-      userAnswers.set(page, value)
-    }
-
-  private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
-    entity match {
-      case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
-        for {
-          a <- answers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
-          b <- a.set(BusinessTypePage, BusinessType.Soleproprietor)
-          c <- setIfDefined(b, tradingName, TradingNamePage)
-        } yield c
-      case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
-        for {
-          a <- answers.set(BusinessNamePage, businessName)
-          b <- a.set(BusinessTypePage, businessType)
-          c <- setIfDefined(b, tradingName, TradingNamePage)
-        } yield c
-    }
-  }
-  private def setBusinessContactDetails(contact: BusinessContactDetails, answers: Try[UserAnswers]): Try[UserAnswers] = {
-    val contactAnswers: Try[UserAnswers] = {
-      for {
-        ans <- answers
-        updatedAnswers <- setIfDefined(
-                            ans,
-                            contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
-                              BusinessContactNumber(Some(phone), Some(mobile))
-                            },
-                            BusinessContactNumberPage
-                          )
-        updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
-        updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
-      } yield updatedAnswers
-    }
-    contactAnswers
-  }
 }
 
 trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

@@ -23,24 +23,19 @@ import pages.*
 import play.api.Logging
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
-import services.BusinessDetailsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.*
 import views.html.ChangeRegistrationDetailsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  businessDetailsRequired: BusinessDetailsDataRequiredAction,
   appConfig: FrontendAppConfig,
-  businessDetailsService: BusinessDetailsService,
-  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeRegistrationDetailsView
 )(implicit ec: ExecutionContext)
@@ -49,79 +44,62 @@ class ChangeRegistrationDetailsController @Inject() (
     with Logging {
 
   def onPageLoad: Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
+    (authorise andThen getData andThen businessDetailsRequired).async { implicit request =>
 
-      val mgdRegNumber = request.mgdRegNum
+      implicit val msgs: Messages = messagesApi.preferred(request)
 
-      businessDetailsService
-        .retrieveBusinessDetails(mgdRegNumber)
-        .flatMap { businessDetails =>
+      val result =
+        request.userAnswers
+          .get(GroupMemberPage)
+          .map { isGroupMember =>
 
-          val updatedAnswers =
-            for {
-              groupUpdated <- request.userAnswers.set(GroupMemberPage, businessDetails.groupReg)
+            val isPartnership =
+              request.userAnswers
+                .get(BusinessTypePage)
+                .contains(BusinessType.Partnership)
 
-              finalAnswers <- businessDetails.businessType match {
-                                case Some(bt) => groupUpdated.set(BusinessTypePage, bt)
-                                case None     => Success(groupUpdated)
-                              }
-            } yield finalAnswers
+            val businessNameChanged =
+              request.userAnswers
+                .get(BusinessNameChangesPage)
+                .getOrElse(false)
 
-          updatedAnswers match {
+            val licencesChanged = false
+            val premisesExists = false
+            val premisesTriggered = licencesChanged
 
-            case Success(userAnswers) =>
-              sessionRepository.set(userAnswers).map { _ =>
+            val submitUrl =
+              routes.DeclarationController.onPageLoad().url
 
-                implicit val msgs: Messages = messagesApi.preferred(request)
+            val vm =
+              ChangeRegistrationDetailsViewModel(
+                mgdRegNumber        = request.mgdRegNum,
+                managementHomeUrl   = appConfig.gamblingManagementHomeUrl,
+                isGroupMember       = isGroupMember,
+                isPartnership       = isPartnership,
+                businessNameChanged = businessNameChanged,
+                licencesChanged     = licencesChanged,
+                premisesExists      = premisesExists,
+                premisesTriggered   = premisesTriggered,
+                submitUrl           = submitUrl
+              )
 
-                val isGroupMember =
-                  businessDetails.groupReg
-
-                val isPartnership =
-                  businessDetails.businessType.contains(BusinessType.Partnership)
-
-                val businessNameChanged =
-                  request.userAnswers
-                    .get(BusinessNameChangesPage)
-                    .getOrElse(false)
-
-                val licencesChanged = false
-                val premisesExists = false
-                val premisesTriggered = licencesChanged
-
-                val submitUrl =
-                  routes.DeclarationController.onPageLoad().url
-
-                val vm =
-                  ChangeRegistrationDetailsViewModel(
-                    mgdRegNumber        = mgdRegNumber,
-                    managementHomeUrl   = appConfig.gamblingManagementHomeUrl,
-                    isGroupMember       = isGroupMember,
-                    isPartnership       = isPartnership,
-                    businessNameChanged = businessNameChanged,
-                    licencesChanged     = licencesChanged,
-                    premisesExists      = premisesExists,
-                    premisesTriggered   = premisesTriggered,
-                    submitUrl           = submitUrl
-                  )
-
-                Ok(
-                  view(
-                    vm,
-                    mgdRegNumber,
-                    appConfig.gamblingManagementHomeUrl,
-                    submitUrl
-                  )
-                )
-              }
-
-            case Failure(ex) =>
-              Future.failed(ex)
+            Ok(
+              view(
+                vm,
+                request.mgdRegNum,
+                appConfig.gamblingManagementHomeUrl,
+                submitUrl
+              )
+            )
           }
-        }
-        .recover { case ex =>
-          logger.error(s"Failed to load business details for $mgdRegNumber", ex)
-          Redirect(controllers.routes.SystemErrorController.onPageLoad())
-        }
+          .getOrElse {
+            logger.error(
+              s"Missing GroupMemberPage for MGD registration number ${request.mgdRegNum}"
+            )
+
+            Redirect(routes.SystemErrorController.onPageLoad())
+          }
+
+      Future.successful(result)
     }
 }
