@@ -23,14 +23,13 @@ import play.api.data.FormError
 class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey = "emailAddress.error.required"
-  private val lengthKey   = "emailAddress.error.length"
-  private val invalidKey  = "emailAddress.error.invalid"
+  private val lengthKey = "emailAddress.error.length"
+  private val invalidKey = "emailAddress.error.invalid"
 
   private val maxLength = 70
 
   private val emailRegex =
     """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
-
 
   private val form = new ChangeEmailAddressFormProvider()()
 
@@ -61,7 +60,6 @@ class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
       result.errors must contain(FormError(fieldName, lengthKey, Seq(maxLength)))
     }
 
-
     "not bind invalid email formats" in {
       val invalids = Seq(
         "plainaddress",
@@ -79,7 +77,6 @@ class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
       }
     }
 
-
     behave like mandatoryField(
       form,
       fieldName,
@@ -87,5 +84,3 @@ class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
     )
   }
 }
-
-

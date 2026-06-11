@@ -15,141 +15,41 @@
  *@
 
 @import views.html.components.*
+@import viewmodels.CheckBusinessContactDetailsViewModel
 
 @this(
-       layout: templates.Layout,
-       govukButton: GovukButton,
-       caption: Caption,
-       h1:H1,
-       link: Link,
-       paragraph: Paragraph,
-       govukSummaryList : GovukSummaryList
+        layout: templates.Layout,
+        govukButton: GovukButton,
+        caption: Caption,
+        h1:H1,
+        link: Link,
+        paragraph: Paragraph,
+        govukSummaryList : GovukSummaryList
 )
 
 @(phoneNumber: Option[String], mobilePhoneNumber:Option[String], faxNumber:Option[String], emailAddr:Option[String], isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("contactDetails.title"))) {
+@layout(pageTitle = titleNoForm(messages("contactDetails.title"), Some("changeRegistrationDetails.title"))) {
 
     @caption(messages("contactDetails.caption"))
     @h1("contactDetails.heading", classes="govuk-heading-l")
+
     @if(phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
         @paragraph(messages("contactDetails.error.contactNumber"))
     }
+
     @govukSummaryList(SummaryList(
-        rows = Seq(
-            SummaryListRow(
-                    key = Key(
-                        content = messages("contactDetails.heading.contactNumbers")
-                    ),
-                    value = Value(
-                                content =
-                                    {if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
-                                        messages("contactDetails.message.notProvided")
-                                    } else {
-                                    HtmlContent(Html(
-                                    s"${messages("contactDetails.label.phoneNumber")}" +
-                                    "<br>"+
-                                    s"${phoneNumber getOrElse messages("contactDetails.message.notProvided")}" +
-                                    "<br>"+
-                                    "<br>"+
-                                    s"${messages("contactDetails.label.mobilePhoneNumber")}" +
-                                    "<br>"+
-                                    s"${mobilePhoneNumber getOrElse messages("contactDetails.message.notProvided")}"
-                                ))}
-                    }).withCssClass("contact-numbers"),
-                    actions = Some(Actions(
-                        items = Seq(
-                            ActionItem(
-                                href = "#",
-                                content = "site.change",
-                                visuallyHiddenText = Some(messages("contactDetails.label.contactNumbers"))
-                            ),
-                        ),
-                    classes = "govuk-summary-list__actions govuk-!-width-one-third"
-                    ))
-                ),
-            SummaryListRow(
-                key = Key(
-                    content = messages("contactDetails.heading.faxNumber")
-                    ),
-                value = Value(
-                    content = faxNumber getOrElse messages("contactDetails.message.notProvided")
-                    ).withCssClass("fax-number"),
-                actions =
-                if(faxNumber.isEmpty){
-                    Some(Actions(
-                        items = Seq(
-                            ActionItem(
-                                    href = routes.FaxNumberController.onPageLoad(NormalMode).url,
-                                    content = "site.change",
-                                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
-                                ),
-                            )
-                    ))
-                } else {
-                Some(Actions(
-                    items = Seq(
-                        ActionItem(
-                            href = routes.FaxNumberController.onPageLoad(NormalMode).url,
-                            content = "site.change",
-                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
-                            ),
-                        ActionItem(
-                            href = "#",
-                            content = "site.remove",
-                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
-                            ),
-                        ),
-                classes = "govuk-summary-list__actions govuk-!-width-one-third"
-                ))
-                }
-            ),
-            SummaryListRow(
-                key = Key(
-                    content = messages("contactDetails.heading.emailAddr")
-                    ),
-                value = Value(
-                    content = emailAddr getOrElse messages("contactDetails.message.notProvided")
-                    ).withCssClass("email-address"),
-                actions =
-                if(faxNumber.isEmpty){
-                    Some(Actions(
-                        items = Seq(
-                            ActionItem(
-                                    href = "#",
-                                    content = "site.change",
-                                    visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
-                                ),
-                            )
-                    ))
-                } else {
-                Some(Actions(
-                    items = Seq(
-                        ActionItem(
-                            href = "#",
-                            content = "site.change",
-                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
-                            ),
-                        ActionItem(
-                            href = "#",
-                            content = "site.remove",
-                            visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
-                            ),
-                        ),
-                classes = "govuk-summary-list__actions govuk-!-width-one-third"
-                ))
-                }
-            )
-        ))
-    )
+        rows = CheckBusinessContactDetailsViewModel(phoneNumber, mobilePhoneNumber, faxNumber, emailAddr).summaryList
+    ))
+
     @if(isFlagged) {
         @paragraph(messages("contactDetails.message.requiredToSubmit"))
     }
     <p class="govuk-body">
         @govukButton(
         ButtonViewModel(messages("site.continue"))
-        .withCssClass("button.govuk-button")
-        .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+            .withCssClass("button.govuk-button")
+            .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
         )
     </p>
 

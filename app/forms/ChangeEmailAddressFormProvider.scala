@@ -34,5 +34,3 @@ class ChangeEmailAddressFormProvider @Inject() extends Mappings {
         .verifying(regexp(emailRegex, "emailAddress.error.invalid"))
     )
 }
-
-
