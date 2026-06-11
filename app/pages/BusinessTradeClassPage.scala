@@ -36,6 +36,6 @@ case object BusinessTradeClassPage extends QuestionPage[BusinessTradeClass] {
         super.cleanup(value, userAnswers)
 
       case _ =>
-        userAnswers.remove(OtherBusinessTradeClassDescriptionPage)
+        userAnswers.remove(OtherTradeClassPage)
     }
 }

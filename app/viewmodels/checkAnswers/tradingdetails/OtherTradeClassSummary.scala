@@ -18,16 +18,16 @@ package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.{BusinessTradeClassPage, OtherBusinessTradeClassDescriptionPage}
+import pages.OtherTradeClassPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object OtherBusinessTradeClassDescriptionSummary {
+object OtherTradeClassSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(OtherBusinessTradeClassDescriptionPage).map { answer =>
+    answers.get(OtherTradeClassPage).map { answer =>
       SummaryListRowViewModel(
         key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
         value = ValueViewModel(answer),

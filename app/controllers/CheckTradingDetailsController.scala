@@ -32,14 +32,14 @@ class CheckTradingDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  mgdTradDetailsRequireData: MgdTradeDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckTradingDetailsView
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
-    (authorised andThen getData andThen requireData) { implicit request =>
+    (authorised andThen getData andThen mgdTradDetailsRequireData) { implicit request =>
 
       val isGroupMember =
         request.userAnswers.get(GroupMemberPage).getOrElse(false)
@@ -50,7 +50,7 @@ class CheckTradingDetailsController @Inject() (
         } else {
           Seq(
             BusinessTradeClassSummary.row(request.userAnswers),
-            OtherBusinessTradeClassDescriptionSummary.row(request.userAnswers)
+            OtherTradeClassSummary.row(request.userAnswers)
           ).flatten
         }
 
@@ -62,16 +62,29 @@ class CheckTradingDetailsController @Inject() (
         ).flatten
       )
 
-      val listPreviousMgdRegNo = SummaryListViewModel(
-        rows = Seq(
-          PreviousRegistrationNumbersSummary.row(request.userAnswers)
-        ).flatten
-      )
-      val listAssociatedMgdRegNo = SummaryListViewModel(
-        rows = Seq(
-          AssociatedRegistrationNumbersSummary.row(request.userAnswers)
-        ).flatten
-      )
+      val previousMgdRows =
+        if (isGroupMember) {
+          Nil
+        } else {
+          Seq(
+            PreviousRegistrationNumbersSummary.row(request.userAnswers)
+          ).flatten
+        }
+
+      val associatedMgdRows =
+        if (isGroupMember) {
+          Nil
+        } else {
+          Seq(
+            AssociatedRegistrationNumbersSummary.row(request.userAnswers)
+          ).flatten
+        }
+
+      val listPreviousMgdRegNo =
+        SummaryListViewModel(previousMgdRows)
+
+      val listAssociatedMgdRegNo =
+        SummaryListViewModel(associatedMgdRows)
 
       Ok(view(listTradClass, list, listPreviousMgdRegNo, listAssociatedMgdRegNo))
     }

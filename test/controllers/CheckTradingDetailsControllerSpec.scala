@@ -26,6 +26,9 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
 
   private val filledUserAnswers =
     emptyUserAnswers
+      .set(MgdTradeDetailsSectionPage, "MGD999999")
+      .success
+      .value
       .set(GroupMemberPage, false)
       .success
       .value
@@ -54,7 +57,8 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
         val request =
           FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
 
-        val result = route(application, request).value
+        val result =
+          route(application, request).value
 
         status(result) mustEqual OK
       }
@@ -104,7 +108,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
       }
     }
 
-    "must hide trade class section when user IS a group member" in {
+    "must hide trade class and MGD registration sections when user IS a group member" in {
 
       val groupMemberUserAnswers =
         filledUserAnswers
@@ -126,6 +130,15 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
         content must not include "Trade class"
         content must not include "Description of business activity"
         content must not include "Casino"
+
+        content must not include "Previous MGD registration numbers"
+        content must not include "MGD123"
+        content must not include "MGD456"
+
+        content must not include "Associated MGD registration numbers"
+        content must not include "ASS789"
+
+        content must include("Seasonal business")
       }
     }
   }

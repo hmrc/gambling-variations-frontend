@@ -19,13 +19,13 @@ package viewmodels.checkAnswers.tradingdetails
 import base.SpecBase
 import controllers.routes
 import models.CheckMode
-import pages.OtherBusinessTradeClassDescriptionPage
+import pages.OtherTradeClassPage
 import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-class OtherBusinessTradeClassDescriptionSummarySpec extends SpecBase {
+class OtherTradeClassSummarySpec extends SpecBase {
 
   private val app: Application = applicationBuilder().build()
 
@@ -35,7 +35,7 @@ class OtherBusinessTradeClassDescriptionSummarySpec extends SpecBase {
 
     "must return None when no answer exists" in {
 
-      OtherBusinessTradeClassDescriptionSummary.row(emptyUserAnswers) mustBe None
+      OtherTradeClassSummary.row(emptyUserAnswers) mustBe None
     }
 
     "must return a row when an answer exists" in {
@@ -44,11 +44,11 @@ class OtherBusinessTradeClassDescriptionSummarySpec extends SpecBase {
 
       val answers =
         emptyUserAnswers
-          .set(OtherBusinessTradeClassDescriptionPage, description)
+          .set(OtherTradeClassPage, description)
           .success
           .value
 
-      OtherBusinessTradeClassDescriptionSummary.row(answers) mustBe Some(
+      OtherTradeClassSummary.row(answers) mustBe Some(
         SummaryListRowViewModel(
           key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
           value = ValueViewModel(description),

@@ -28,7 +28,7 @@
 
 @(listTradClass: SummaryList, list: SummaryList, previousMgdList: SummaryList, associatedMgdList: SummaryList)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("checkTradingDetails.title"))) {
+@layout(pageTitle = titleNoForm(messages("checkTradingDetails.title"), Some(messages("changeRegistrationDetails.title")))) {
 
  @caption(messages("checkTradingDetails.heading.caption"))
  @h1("checkTradingDetails.heading")
@@ -37,12 +37,15 @@
   
  @govukSummaryList(list)
 
- @p("checkTradingDetails.previousRegistrationNumbers.p1")
- @govukSummaryList(previousMgdList)
+ @if(previousMgdList.rows.nonEmpty) {
+  @p("checkTradingDetails.previousRegistrationNumbers.p1")
+  @govukSummaryList(previousMgdList)
+ }
 
- @p("checkTradingDetails.associatedRegistrationNumbers.p1")
- @govukSummaryList(associatedMgdList)
-
+ @if(associatedMgdList.rows.nonEmpty) {
+  @p("checkTradingDetails.associatedRegistrationNumbers.p1")
+  @govukSummaryList(associatedMgdList)
+ }
 
  @govukButton(
   ButtonViewModel(messages("site.continue"))

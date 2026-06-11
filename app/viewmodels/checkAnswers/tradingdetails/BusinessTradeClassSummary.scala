@@ -36,7 +36,7 @@ object BusinessTradeClassSummary {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.FaxNumberController.onPageLoad(CheckMode).url
+            routes.BusinessTradeClassController.onPageLoad(CheckMode).url
           ).withVisuallyHiddenText(messages("checkTradingDetails.businessTradeClass.change.hidden"))
         )
       )
