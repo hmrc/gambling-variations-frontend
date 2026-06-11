@@ -231,7 +231,9 @@ contactDetails.heading.faxNumber = Fax number
 contactDetails.heading.emailAddr = Email address
 contactDetails.label.phoneNumber = Phone number:
 contactDetails.label.mobilePhoneNumber = Mobile number:
+contactDetails.label.faxNumber = Fax number
 contactDetails.label.contactNumbers = Contact numbers
+contactDetails.label.emailAddr = Email address
 contactDetails.message.notProvided = Not provided
 contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 

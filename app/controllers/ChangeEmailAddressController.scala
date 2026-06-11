@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.ChangeEmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.EmailAddressPage
+import pages.BusinessEmailAddressPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,7 +48,7 @@ class ChangeEmailAddressController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(EmailAddressPage)
+      .get(BusinessEmailAddressPage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
@@ -62,9 +62,9 @@ class ChangeEmailAddressController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EmailAddressPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(EmailAddressPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
       )
   }
 }

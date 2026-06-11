@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{Address, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdTradeDetails, UserAnswers}
+import models.{Address, ContactNumber, CorrespondenceDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,7 +31,6 @@ import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
-import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
