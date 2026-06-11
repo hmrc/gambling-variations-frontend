@@ -17,189 +17,40 @@
 package controllers.actions
 
 import base.SpecBase
-import connectors.GamblingConnector
-import models.BusinessType.{Partnership, Soleproprietor}
+import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, BusinessNameDetails, BusinessTradeClass, MgdTradeDetails, SoleProprietorNameDetails, UserAnswers}
-import org.mockito.ArgumentMatchers.*
-import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
-import play.api.mvc.Results.*
 import play.api.mvc.{AnyContent, Result}
 import play.api.test.FakeRequest
-import repositories.SessionRepository
-import uk.gov.hmrc.http.UpstreamErrorResponse
 
-import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRequiredActionSpec extends SpecBase with MockitoSugar {
 
-  import DataRequiredActionSpec.*
-
-  class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
-      extends DataRequiredActionImpl(sessionRepository, gamblingConnector) {
+  class Harness() extends DataRequiredActionImpl() {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
-
-  val mgdRegNum = "GAM0000000001"
 
   "Data Required Action" - {
 
     "when there is no User Answers in the cache" - {
 
-      "return the request with a populated User Answers with data from the certificate" - {
-        "when business" in {
+      "return the request with a populated User Answers" in {
 
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future(mgdTradeDetails)
-          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
-          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
-          val action = new Harness(sessionRepository, gamblingConnector)
+        val request = FakeRequest()
+        val action = new Harness()
 
-          val data = Json.obj(
-            "businessName" -> "Test Business Ltd",
-            "tradingName"  -> "Test Trader Ltd",
-            "businessType" -> 4,
-            "faxNumber"    -> "+_+_ hdj39783",
-            "businessContactNumber" -> Json.obj(
-              "phoneNumber"  -> "+44 8903928171",
-              "mobileNumber" -> "+44 8903928171"
-            ),
-            "businessEmailAddress" -> "a@b.com"
-          )
+        val result: Either[Result, DataRequest[AnyContent]] =
+          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
 
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, Json.obj()))
 
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
-
-          result.map { req =>
-            req.request mustBe expected.request
-            req.userAnswers.data mustBe expected.userAnswers.data
-            req.userAnswers.id mustBe expected.userAnswers.id
-          }
-          verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getBusinessName(any())(any())
-          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
-        }
-        "when sole proprietor" in {
-
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future(mgdTradeDetails)
-          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
-          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
-          val action = new Harness(sessionRepository, gamblingConnector)
-
-          val data = Json.obj(
-            "soleProprietor" -> Json.obj(
-              "title"     -> "Mr",
-              "firstName" -> "Test",
-              "lastName"  -> "Fella"
-            ),
-            "businessType" -> 1,
-            "tradingName"  -> "Test Trader",
-            "faxNumber"    -> "+_+_ hdj39783",
-            "businessContactNumber" -> Json.obj(
-              "phoneNumber"  -> "+44 8903928171",
-              "mobileNumber" -> "+44 8903928171"
-            ),
-            "businessEmailAddress" -> "a@b.com"
-          )
-
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
-
-          result.map { req =>
-            req.request mustBe expected.request
-            req.userAnswers.data mustBe expected.userAnswers.data
-            req.userAnswers.id mustBe expected.userAnswers.id
-          }
-          verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getBusinessName(any())(any())
-          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
-        }
-      }
-
-      "redirect to SystemError " - {
-        "User Answers cannot be saved" in {
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future(mgdTradeDetails)
-          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
-          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
-          val action = new Harness(sessionRepository, gamblingConnector)
-
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-          result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
-          verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getBusinessName(any())(any())
-          verify(gamblingConnector, times(1)).getBusinessContactDetails(any())(any())
-        }
-
-        "getBusinessName throws an exception" in {
-
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR))
-          val action = new Harness(sessionRepository, gamblingConnector)
-
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-          result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
-
-        }
-
-        "getBusinessContactDetails throws an exception" in {
-
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR))
-          val action = new Harness(sessionRepository, gamblingConnector)
-
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-          result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
-
-        }
-
-        "getMgdTradeDetails throws an exception" in {
-
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
-          when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
-          when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR))
-          val action = new Harness(sessionRepository, gamblingConnector)
-
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-          result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
-
+        result.map { req =>
+          req.request mustBe expected.request
+          req.userAnswers.data mustBe expected.userAnswers.data
+          req.userAnswers.id mustBe expected.userAnswers.id
         }
       }
 
@@ -210,11 +61,7 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
       "return the request with a populated User Answers without call to backend" in {
 
         val request = FakeRequest()
-        val sessionRepository = mock[SessionRepository]
-        val gamblingConnector = mock[GamblingConnector]
-        when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getCertificate(any())(any())) thenReturn Future(soleProprietorModel)
-        val action = new Harness(sessionRepository, gamblingConnector)
+        val action = new Harness()
 
         val data = Json.obj(
           "businessName" -> "Test Business Ltd",
@@ -231,65 +78,10 @@ class DataRequiredActionSpec extends SpecBase with MockitoSugar {
           req.userAnswers.data mustBe expected.userAnswers.data
           req.userAnswers.id mustBe expected.userAnswers.id
         }
-        verify(sessionRepository, never).set(any())
-        verify(gamblingConnector, never).getCertificate(any())(any())
 
       }
 
     }
 
   }
-}
-
-object DataRequiredActionSpec {
-  val businessNameModel: BusinessNameDetails = BusinessNameDetails(
-    mgdRegNum    = "ABC12345678901",
-    businessName = "Test Business Ltd",
-    businessType = Partnership,
-    tradingName  = Some("Test Trader Ltd"),
-    systemDate   = Some(LocalDate.of(1991, 1, 1))
-  )
-
-  val soleProprietorModel: SoleProprietorNameDetails = SoleProprietorNameDetails(
-    mgdRegNum    = "ABC12345678901",
-    title        = "Mr",
-    firstName    = "Test",
-    middleName   = None,
-    lastName     = "Fella",
-    systemDate   = Some(LocalDate.of(1991, 1, 1)),
-    tradingName  = Some("Test Trader"),
-    businessType = Soleproprietor
-  )
-
-  val businessContactDetailsModel: BusinessContactDetails = BusinessContactDetails(
-    mgdRegNumber      = "ABC12345678901",
-    phoneNumber       = Some("+44 8903928171"),
-    mobilePhoneNumber = Some("+44 8903928171"),
-    faxNumber         = Some("+_+_ hdj39783"),
-    emailAddr         = Some("a@b.com"),
-    systemDate        = Some(LocalDate.of(1991, 1, 1))
-  )
-
-  val mgdTradeDetails: MgdTradeDetails = MgdTradeDetails(
-    mgdRegNumber         = "XRM00000000574",
-    isBusinessSeasonal   = Some(true),
-    businessTradeClass   = Some(BusinessTradeClass.Casino),
-    businessActivityDesc = Some("Description"),
-    previousMgdRegistrationNumbers = Some(
-      Seq(
-        "XWM00000001774",
-        "XDM00000001309",
-        ""
-      )
-    ),
-    associatedMgdRegistrationNumbers = Some(
-      Seq(
-        "XXM00000000723",
-        "XQM00000001196",
-        ""
-      )
-    ),
-    systemDate = Some(LocalDate.of(2026, 5, 31))
-  )
-
 }

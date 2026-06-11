@@ -29,7 +29,7 @@ class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessContactDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactDetailsView
 ) extends FrontendBaseController
@@ -40,7 +40,7 @@ class CheckContactDetailsController @Inject() (
     Ok(
       view(
         request.userAnswers.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
-        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.mobileNumber),
+        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
         request.userAnswers.get(FaxNumberPage),
         request.userAnswers.get(BusinessEmailAddressPage),
         flag

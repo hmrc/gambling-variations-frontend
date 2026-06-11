@@ -25,6 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.FaxNumberPage
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -39,6 +40,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new FaxNumberFormProvider()
   val form = formProvider()
+  val noAnswers = UserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)))
 
   lazy val faxNumberRoute = routes.FaxNumberController.onPageLoad(NormalMode).url
 
@@ -46,7 +48,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, faxNumberRoute)
@@ -62,7 +64,12 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(FaxNumberPage, "07700900999").success.value
+      val data = Json.obj(
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId),
+        FaxNumberPage.toString          -> "07700900999"
+      )
+
+      val userAnswers = UserAnswers(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +92,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -106,7 +113,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request =

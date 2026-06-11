@@ -40,8 +40,14 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new RemoveTradeNameFormProvider()
   val form = formProvider()
   val tradingName = "Test Trader"
+
   val data = Json.obj(
-    "tradingName" -> "Test Trader"
+    "tradingName"         -> "Test Trader",
+    "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+  )
+
+  val noAnswers = Json.obj(
+    "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
 
   lazy val removeTradeNameRoute = routes.RemoveTradeNameController.onPageLoad().url
@@ -68,7 +74,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       "to Check Business Name when no Trading Name exists" - {
         "when GET" in {
 
-          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
 
           running(application) {
             val request = FakeRequest(GET, removeTradeNameRoute)
@@ -83,7 +89,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
         "when POST" in {
 
           val application =
-            applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+            applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
 
           running(application) {
             val request =

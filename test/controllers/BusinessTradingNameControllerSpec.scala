@@ -17,7 +17,7 @@
 package controllers
 import base.SpecBase
 import forms.BusinessTradingNameFormProvider
-import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, NormalMode}
+import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -30,6 +30,7 @@ import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessTradingNameView
 import connectors.GamblingConnector
+import play.api.libs.json.Json
 
 import scala.concurrent.Future
 
@@ -43,8 +44,13 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
   lazy val businessTradingNameRoute =
     routes.BusinessTradingNameController.onPageLoad(NormalMode).url
 
+  val data = Json.obj(
+    BusinessTypePage.toString -> BusinessType.Partnership.code,
+    "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+  )
+
   private val baseUserAnswers =
-    emptyUserAnswers.set(BusinessTypePage, BusinessType.Partnership).success.value
+    UserAnswers(userAnswersId, data)
 
   "BusinessTradingName Controller" - {
 
