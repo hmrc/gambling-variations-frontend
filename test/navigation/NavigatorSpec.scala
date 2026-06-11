@@ -52,7 +52,7 @@ class NavigatorSpec extends SpecBase {
         "must go from EmailAddressPage to next page" in {
 
           navigator.nextPage(BusinessEmailAddressPage, NormalMode, UserAnswers("id")) mustBe
-            routes.ChangeEmailAddressController.onPageLoad(NormalMode)
+            routes.CheckContactDetailsController.onPageLoad()
         }
 
         "must go from FaxNumberPage to CheckYourAnswers" in {

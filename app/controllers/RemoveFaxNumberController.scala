@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveFaxNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{FaxNumberPage, RemoveFaxNumberPage}
+import pages.{ContactDetailsSubmittedPage, FaxNumberPage, RemoveFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -91,14 +91,14 @@ class RemoveFaxNumberController @Inject() (
   ): Try[UserAnswers] = {
 
     for {
-      ua1 <- userAnswers.set(RemoveFaxNumberPage, value)
-      ua2 <- {
+      ua <- userAnswers.set(ContactDetailsSubmittedPage, true)
+      ua1 <- {
         if (value) {
-          ua1.remove(FaxNumberPage)
+          ua.remove(FaxNumberPage)
         } else {
-          Try(ua1)
+          Try(ua)
         }
       }
-    } yield ua2
+    } yield ua1
   }
 }
