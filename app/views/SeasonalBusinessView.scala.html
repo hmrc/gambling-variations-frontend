@@ -37,7 +37,7 @@
 
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("value"),
+                field = form("isSeasonalBusiness"),
                 legend = LegendViewModel(messages("seasonalBusiness.heading")).asPageHeading()
             ).withHint(HintViewModel(messages("seasonalBusiness.paragraph")))
         )

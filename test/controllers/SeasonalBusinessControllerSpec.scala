@@ -23,11 +23,11 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.SeasonalBusinessPage
+import pages.{IsSeasonalBusinessPage, MgdTradeDetailsSectionPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.SeasonalBusinessView
 
@@ -42,11 +42,14 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val seasonalBusinessRoute = routes.SeasonalBusinessController.onPageLoad(NormalMode).url
 
+  private val baseUserAnswers =
+    UserAnswers(userAnswersId).set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
+
   "SeasonalBusiness Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, seasonalBusinessRoute)
@@ -62,7 +65,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(SeasonalBusinessPage, true).success.value
+      val userAnswers = baseUserAnswers.set(IsSeasonalBusinessPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +88,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -95,7 +98,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("isSeasonalBusiness", "true"))
 
         val result = route(application, request).value
 
@@ -106,14 +109,14 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody(("isSeasonalBusiness", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("isSeasonalBusiness" -> ""))
 
         val view = application.injector.instanceOf[SeasonalBusinessView]
 
@@ -145,7 +148,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("isSeasonalBusiness", "true"))
 
         val result = route(application, request).value
 

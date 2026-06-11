@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class IsSeasonalBusinessPageSpec extends AnyFreeSpec with Matchers {
 
-class SeasonalBusinessFormProvider @Inject() extends Mappings {
+  ".IsSeasonalBusinessPage" - {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "isSeasonalBusiness" -> boolean("seasonalBusiness.error.required")
-    )
+    "must have the correct toString" in {
+      IsSeasonalBusinessPage.toString mustBe "isBusinessSeasonal"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "isBusinessSeasonal"
+      IsSeasonalBusinessPage.path mustBe expectedPath
+    }
+  }
 }

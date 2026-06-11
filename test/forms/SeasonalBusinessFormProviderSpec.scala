@@ -26,9 +26,9 @@ class SeasonalBusinessFormProviderSpec extends BooleanFieldBehaviours {
 
   val form = new SeasonalBusinessFormProvider()()
 
-  ".value" - {
+  ".isSeasonalBusiness" - {
 
-    val fieldName = "value"
+    val fieldName = "isSeasonalBusiness"
 
     behave like booleanField(
       form,

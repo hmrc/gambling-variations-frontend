@@ -23,7 +23,7 @@ import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessEmailAddressPage, RemoveEmailAddressPage}
+import pages.RemoveEmailAddressPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

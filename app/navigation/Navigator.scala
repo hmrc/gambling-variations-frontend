@@ -18,6 +18,7 @@ package navigation
 
 import controllers.routes
 import models.*
+import models.BusinessType.Soleproprietor
 import pages.*
 import play.api.mvc.Call
 
@@ -29,7 +30,7 @@ class Navigator @Inject() () {
   private val normalRoutes: Page => UserAnswers => Call = {
     case RemoveTradeNamePage       => _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage          => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage        => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage        => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
     case TradingNamePage           => _ => routes.CheckBusinessNameController.onPageLoad()
     case FaxNumberPage             => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage       => _ => routes.CheckContactDetailsController.onPageLoad()
@@ -37,17 +38,16 @@ class Navigator @Inject() () {
     case BusinessContactNumberPage => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessEmailAddressPage  => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessTradeClassPage    => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
-    case BusinessEmailAddressPage  => _ => routes.ChangeEmailAddressController.onPageLoad(NormalMode)
-    case SeasonalBusinessPage      => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
+    case IsSeasonalBusinessPage    => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case _                         => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
     case RemoveTradeNamePage      => _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage         => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage       => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessEmailAddressPage => _ => routes.CheckContactDetailsController.onPageLoad()
-    case SeasonalBusinessPage     => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
+    case SoleProprietorPage       => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
+    case BusinessEmailAddressPage => _ => routes.ChangeEmailAddressController.onPageLoad(CheckMode)
+    case IsSeasonalBusinessPage   => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
     case _                        => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 

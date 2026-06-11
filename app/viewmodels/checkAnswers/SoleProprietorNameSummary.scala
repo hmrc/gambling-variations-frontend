@@ -48,7 +48,7 @@ object SoleProprietorNameSummary {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.ChangeBusinessNameController.onPageLoad(CheckMode, Soleproprietor).url
+            routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode).url
           ).withVisuallyHiddenText(messages("soleProprietorName.change.hidden"))
         )
       )

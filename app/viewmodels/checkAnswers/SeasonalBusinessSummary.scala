@@ -18,27 +18,26 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.SeasonalBusinessPage
+import pages.IsSeasonalBusinessPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object SeasonalBusinessSummary  {
+object SeasonalBusinessSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(SeasonalBusinessPage).map {
-      answer =>
+    answers.get(IsSeasonalBusinessPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "seasonalBusiness.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.SeasonalBusinessController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("seasonalBusiness.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "seasonalBusiness.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.SeasonalBusinessController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("seasonalBusiness.change.hidden"))
         )
+      )
     }
 }

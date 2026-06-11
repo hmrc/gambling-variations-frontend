@@ -16,22 +16,20 @@
 
 package controllers
 import base.SpecBase
-import connectors.GamblingConnector
 import forms.BusinessTradingNameFormProvider
-import models.{BusinessContactDetails, BusinessNameDetails, BusinessType, NormalMode}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{BusinessTypePage, TradingNamePage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessTradingNameView
-import connectors.GamblingConnector
-import play.api.libs.json.Json
 
 import scala.concurrent.Future
 

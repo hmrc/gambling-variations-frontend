@@ -38,7 +38,7 @@ class SoleProprietorNameViewSpec extends SpecBase {
       doc.select(".govuk-caption-l").text mustEqual messages("soleProprietorName.changeRegistrationDetails")
       doc.select("h1").text mustEqual messages("soleProprietorName.heading")
 
-      doc.select("form").attr("action") mustEqual controllers.routes.ChangeBusinessNameController.onSubmit(NormalMode, Soleproprietor).url
+      doc.select("form").attr("action") mustEqual controllers.routes.ChangeBusinessNameController.onSubmit(Soleproprietor, NormalMode).url
 
       doc.select("label[for=title]").text mustEqual messages("soleProprietorName.title.label")
       doc.select("label[for=firstName]").text mustEqual messages("soleProprietorName.firstName.label")

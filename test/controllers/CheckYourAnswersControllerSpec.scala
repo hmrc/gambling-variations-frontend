@@ -17,10 +17,10 @@
 package controllers
 
 import base.SpecBase
-import pages.FaxNumberPage
+import pages.{FaxNumberPage, IsSeasonalBusinessPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import viewmodels.checkAnswers.FaxNumberSummary
+import viewmodels.checkAnswers.{FaxNumberSummary, SeasonalBusinessSummary}
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
 
@@ -59,6 +59,27 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency {
         val view = application.injector.instanceOf[CheckYourAnswersView]
         val list = SummaryListViewModel(
           Seq(FaxNumberSummary.row(userAnswers)(messages(application)).value)
+        )
+        val continueUrl = routes.ChangeRegistrationDetailsController.onPageLoad().url
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(list, continueUrl)(request, messages(application)).toString
+      }
+    }
+
+    "must show whether this is a seasonal business when it has been provided" in {
+
+      val userAnswers = emptyUserAnswers.set(IsSeasonalBusinessPage, true).success.value
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[CheckYourAnswersView]
+        val list = SummaryListViewModel(
+          Seq(SeasonalBusinessSummary.row(userAnswers)(messages(application)).value)
         )
         val continueUrl = routes.ChangeRegistrationDetailsController.onPageLoad().url
 

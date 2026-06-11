@@ -85,6 +85,5 @@ class JourneyRecoveryControllerSpec extends SpecBase {
       }
     }
 
-    def verifySessionRecovery(): Unit = {}
   }
 }
