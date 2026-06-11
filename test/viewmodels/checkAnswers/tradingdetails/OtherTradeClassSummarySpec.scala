@@ -18,8 +18,8 @@ package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
 import controllers.routes
-import models.CheckMode
-import pages.OtherTradeClassPage
+import models.{BusinessTradeClass, CheckMode}
+import pages.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
@@ -31,19 +31,22 @@ class OtherTradeClassSummarySpec extends SpecBase {
 
   implicit val msgs: Messages = messages(app)
 
-  "OtherBusinessTradeClassDescriptionSummary.row" - {
+  "OtherTradeClassSummary.row" - {
 
     "must return None when no answer exists" in {
 
       OtherTradeClassSummary.row(emptyUserAnswers) mustBe None
     }
 
-    "must return a row when an answer exists" in {
+    "must return a row when BusinessTradeClass is Other and an answer exists" in {
 
       val description = "Mobile gaming arcade operator"
 
       val answers =
         emptyUserAnswers
+          .set(BusinessTradeClassPage, BusinessTradeClass.Other)
+          .success
+          .value
           .set(OtherTradeClassPage, description)
           .success
           .value
@@ -55,13 +58,27 @@ class OtherTradeClassSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
+              routes.BusinessTradeClassController.onPageLoad(CheckMode).url // change it
             ).withVisuallyHiddenText(
               msgs("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
             )
           )
         )
       )
+    }
+
+    "must return None when BusinessTradeClass is not Other" in {
+
+      val answers =
+        emptyUserAnswers
+          .set(BusinessTradeClassPage, BusinessTradeClass.Casino)
+          .success
+          .value
+          .set(OtherTradeClassPage, "Mobile gaming arcade operator")
+          .success
+          .value
+
+      OtherTradeClassSummary.row(answers) mustBe None
     }
   }
 }

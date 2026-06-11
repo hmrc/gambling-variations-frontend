@@ -23,20 +23,29 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
+import pages.BusinessTradeClassPage
+import models.BusinessTradeClass
 
 object OtherTradeClassSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(OtherTradeClassPage).map { answer =>
-      SummaryListRowViewModel(
-        key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
-        value = ValueViewModel(answer),
-        actions = Seq(
-          ActionItemViewModel(
-            "site.change",
-            routes.FaxNumberController.onPageLoad(CheckMode).url // change it
-          ).withVisuallyHiddenText(messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden"))
-        )
-      )
-    }
+    answers
+      .get(BusinessTradeClassPage)
+      .collect { case BusinessTradeClass.Other =>
+        answers.get(OtherTradeClassPage).map { answer =>
+          SummaryListRowViewModel(
+            key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
+            value = ValueViewModel(answer),
+            actions = Seq(
+              ActionItemViewModel(
+                "site.change",
+                routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+              ).withVisuallyHiddenText(
+                messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
+              )
+            )
+          )
+        }
+      }
+      .flatten
 }
