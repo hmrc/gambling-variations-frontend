@@ -20,6 +20,8 @@ import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.AssociatedRegistrationNumbersPage
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
@@ -28,24 +30,51 @@ object AssociatedRegistrationNumbersSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     Some {
-      val value =
-        answers
-          .get(AssociatedRegistrationNumbersPage)
-          .filter(_.nonEmpty)
-          .map(_.mkString(", "))
-          .getOrElse(messages("site.notProvided"))
+
+      val numbers =
+        answers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
+
+      val value = numbers.size match {
+
+        case 0 =>
+          ValueViewModel(messages("site.notProvided"))
+
+        case 1 =>
+          ValueViewModel(numbers.head)
+
+        case 2 | 3 =>
+          ValueViewModel(
+            HtmlContent(
+              HtmlFormat.raw(
+                s"""<ul class="govuk-list govuk-list--bullet">
+                   |${numbers.map(n => s"<li>$n</li>").mkString}
+                   |</ul>""".stripMargin
+              )
+            )
+          )
+
+        case _ =>
+          ValueViewModel(numbers.mkString(", "))
+      }
+
+      val actions =
+        if (numbers.size == 3) {
+          Seq.empty
+        } else {
+          Seq(
+            ActionItemViewModel(
+              "site.change",
+              routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+            ).withVisuallyHiddenText(
+              messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
+            )
+          )
+        }
 
       SummaryListRowViewModel(
-        key   = "checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel",
-        value = ValueViewModel(value),
-        actions = Seq(
-          ActionItemViewModel(
-            "site.change",
-            routes.FaxNumberController.onPageLoad(CheckMode).url
-          ).withVisuallyHiddenText(
-            messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
-          )
-        )
+        key     = "checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel",
+        value   = value,
+        actions = actions
       )
     }
 }

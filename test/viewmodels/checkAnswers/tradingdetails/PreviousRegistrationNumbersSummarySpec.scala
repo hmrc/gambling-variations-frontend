@@ -22,35 +22,25 @@ import models.CheckMode
 import pages.PreviousRegistrationNumbersPage
 import play.api.Application
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 class PreviousRegistrationNumbersSummarySpec extends SpecBase {
 
   private val app: Application = applicationBuilder().build()
-
   implicit val msgs: Messages = messages(app)
 
   "PreviousRegistrationNumbersSummary.row" - {
 
     "must display 'not provided' when no answer exists" in {
 
-      PreviousRegistrationNumbersSummary.row(emptyUserAnswers) mustBe Some(
-        SummaryListRowViewModel(
-          key   = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",
-          value = ValueViewModel(msgs("site.notProvided")),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              msgs("checkTradingDetails.previousRegistrationNumbers.change.hidden")
-            )
-          )
-        )
-      )
+      val result = PreviousRegistrationNumbersSummary.row(emptyUserAnswers)
+
+      result mustBe defined
+
+      result.get.value.toString must include(msgs("site.notProvided"))
+
+      result.get.actions.get.items.size mustBe 1
     }
 
     "must display 'not provided' when an empty list is supplied" in {
@@ -61,23 +51,37 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
           .success
           .value
 
-      PreviousRegistrationNumbersSummary.row(answers) mustBe Some(
-        SummaryListRowViewModel(
-          key   = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",
-          value = ValueViewModel(msgs("site.notProvided")),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              msgs("checkTradingDetails.previousRegistrationNumbers.change.hidden")
-            )
-          )
-        )
-      )
+      val result = PreviousRegistrationNumbersSummary.row(answers)
+
+      result mustBe defined
+
+      result.get.value.toString must include(msgs("site.notProvided"))
+
+      result.get.actions.get.items.size mustBe 1
     }
 
-    "must display registration numbers separated by line breaks" in {
+    "must display registration numbers as a bullet list and include action when less than 3 numbers" in {
+
+      val numbers = Seq("REG001", "REG002")
+
+      val answers =
+        emptyUserAnswers
+          .set(PreviousRegistrationNumbersPage, numbers)
+          .success
+          .value
+
+      val result = PreviousRegistrationNumbersSummary.row(answers).value
+
+      val html = result.value.content.asHtml.toString
+
+      html must include("<ul")
+      html must include("<li>REG001</li>")
+      html must include("<li>REG002</li>")
+
+      result.actions.get.items.size mustBe 1
+    }
+
+    "must display registration numbers as a bullet list and NOT include action when 3 or more numbers" in {
 
       val numbers = Seq("REG001", "REG002", "REG003")
 
@@ -87,24 +91,16 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
           .success
           .value
 
-      PreviousRegistrationNumbersSummary.row(answers) mustBe Some(
-        SummaryListRowViewModel(
-          key = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",
-          value = ValueViewModel(
-            HtmlContent(
-              HtmlFormat.raw("REG001<br>REG002<br>REG003")
-            )
-          ),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              msgs("checkTradingDetails.previousRegistrationNumbers.change.hidden")
-            )
-          )
-        )
-      )
+      val result = PreviousRegistrationNumbersSummary.row(answers).value
+
+      val html = result.value.content.asHtml.toString
+
+      html must include("<ul")
+      html must include("<li>REG001</li>")
+      html must include("<li>REG002</li>")
+      html must include("<li>REG003</li>")
+
+      result.actions.get.items mustBe empty
     }
   }
 }

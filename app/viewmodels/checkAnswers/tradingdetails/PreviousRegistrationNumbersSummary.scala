@@ -31,32 +31,42 @@ object PreviousRegistrationNumbersSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     Some {
 
+      val numbers =
+        answers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
+
       val value =
-        answers
-          .get(PreviousRegistrationNumbersPage)
-          .filter(_.nonEmpty)
-          .map(numbers =>
-            ValueViewModel(
-              HtmlContent(
-                HtmlFormat.raw(numbers.mkString("<br>"))
+        if (numbers.nonEmpty) {
+          ValueViewModel(
+            HtmlContent(
+              HtmlFormat.raw(
+                s"""<ul class="govuk-list govuk-list--bullet">
+                   |${numbers.map(n => s"<li>$n</li>").mkString}
+                   |</ul>""".stripMargin
               )
             )
           )
-          .getOrElse(
-            ValueViewModel(messages("site.notProvided"))
+        } else {
+          ValueViewModel(messages("site.notProvided"))
+        }
+
+      val actions =
+        if (numbers.size >= 3) {
+          Seq.empty
+        } else {
+          Seq(
+            ActionItemViewModel(
+              "site.change",
+              routes.FaxNumberController.onPageLoad(CheckMode).url
+            ).withVisuallyHiddenText(
+              messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
+            )
           )
+        }
 
       SummaryListRowViewModel(
-        key   = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",
-        value = value,
-        actions = Seq(
-          ActionItemViewModel(
-            "site.change",
-            routes.FaxNumberController.onPageLoad(CheckMode).url
-          ).withVisuallyHiddenText(
-            messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
-          )
-        )
+        key     = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",
+        value   = value,
+        actions = actions
       )
     }
 }

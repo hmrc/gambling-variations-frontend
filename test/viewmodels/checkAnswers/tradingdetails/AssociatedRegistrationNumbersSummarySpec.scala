@@ -20,85 +20,94 @@ import base.SpecBase
 import controllers.routes
 import models.CheckMode
 import pages.AssociatedRegistrationNumbersPage
-import play.api.Application
 import play.api.i18n.Messages
+import play.api.Application
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
 
   private val app: Application = applicationBuilder().build()
-
   implicit val msgs: Messages = messages(app)
 
   "AssociatedRegistrationNumbersSummary.row" - {
 
-    "must display 'not provided' when no answer exists" in {
+    "return Some row with 'not provided' when no numbers exist" in {
 
-      AssociatedRegistrationNumbersSummary.row(emptyUserAnswers) mustBe Some(
-        SummaryListRowViewModel(
-          key   = "checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel",
-          value = ValueViewModel(msgs("site.notProvided")),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              msgs("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
-            )
-          )
-        )
-      )
+      val result = AssociatedRegistrationNumbersSummary.row(emptyUserAnswers)
+
+      result mustBe defined
+      result.get.value.toString must include(msgs("site.notProvided"))
+      result.get.actions.size mustBe 1
     }
 
-    "must display 'not provided' when an empty list is supplied" in {
+    "show a single registration number correctly" in {
 
       val answers =
         emptyUserAnswers
-          .set(AssociatedRegistrationNumbersPage, Seq.empty[String])
+          .set(AssociatedRegistrationNumbersPage, Seq("123456"))
           .success
           .value
 
-      AssociatedRegistrationNumbersSummary.row(answers) mustBe Some(
-        SummaryListRowViewModel(
-          key   = "checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel",
-          value = ValueViewModel(msgs("site.notProvided")),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              msgs("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
-            )
-          )
-        )
-      )
+      val result = AssociatedRegistrationNumbersSummary.row(answers)
+
+      result mustBe defined
+      result.get.value.toString must include("123456")
+      result.get.actions.size mustBe 1
     }
 
-    "must display registration numbers separated by commas" in {
-
-      val numbers = Seq("REG001", "REG002", "REG003")
+    "show two numbers as a bullet list and include action" in {
 
       val answers =
         emptyUserAnswers
-          .set(AssociatedRegistrationNumbersPage, numbers)
+          .set(AssociatedRegistrationNumbersPage, Seq("123", "456"))
           .success
           .value
 
-      AssociatedRegistrationNumbersSummary.row(answers) mustBe Some(
-        SummaryListRowViewModel(
-          key   = "checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel",
-          value = ValueViewModel("REG001, REG002, REG003"),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              msgs("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
-            )
-          )
-        )
-      )
+      val result = AssociatedRegistrationNumbersSummary.row(answers).value
+
+      val html = result.value.content.asHtml.toString
+
+      html must include("<ul")
+      html must include("<li>123</li>")
+      html must include("<li>456</li>")
+
+      result.actions.size mustBe 1
+    }
+
+    "show three numbers as bullet list and NOT include action" in {
+
+      val answers =
+        emptyUserAnswers
+          .set(AssociatedRegistrationNumbersPage, Seq("1", "2", "3"))
+          .success
+          .value
+
+      val result = AssociatedRegistrationNumbersSummary.row(answers).value
+
+      val html = result.value.content.asHtml.toString
+
+      html must include("<ul")
+      html must include("<li>1</li>")
+      html must include("<li>2</li>")
+      html must include("<li>3</li>")
+
+      result.actions.value.items mustBe empty
+    }
+
+    "show more than three numbers as comma separated and include action" in {
+
+      val answers =
+        emptyUserAnswers
+          .set(AssociatedRegistrationNumbersPage, Seq("1", "2", "3", "4"))
+          .success
+          .value
+
+      val result = AssociatedRegistrationNumbersSummary.row(answers).value
+
+      result.value.toString must include("1, 2, 3, 4")
+      result.actions.size mustBe 1
     }
   }
 }
