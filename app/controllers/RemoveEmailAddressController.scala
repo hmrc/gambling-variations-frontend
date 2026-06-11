@@ -37,7 +37,7 @@ class RemoveEmailAddressController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessContactDetailsDataRequiredAction,
   formProvider: RemoveEmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveEmailAddressView

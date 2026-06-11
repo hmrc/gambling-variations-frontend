@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.*
+import javax.inject.Inject
 
-case class BusinessContactNumber(phoneNumber: Option[String], mobileNumber: Option[String])
+import forms.mappings.Mappings
+import play.api.data.Form
 
-object BusinessContactNumber {
+class ChangeEmailAddressFormProvider @Inject() extends Mappings {
 
-  implicit val format: OFormat[BusinessContactNumber] = Json.format
+  private val emailRegex =
+    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
+
+  def apply(): Form[String] =
+    Form(
+      "emailAddress" -> text("emailAddress.error.required")
+        .transform[String](_.trim, identity)
+        .verifying(maxLength(70, "emailAddress.error.length"))
+        .verifying(regexp(emailRegex, "emailAddress.error.invalid"))
+    )
 }

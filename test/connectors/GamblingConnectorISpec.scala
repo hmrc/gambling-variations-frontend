@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.{BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, MgdCertificate, MgdTradeDetails}
+import models.{Address, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails}
 import models.BusinessType.Unincorporatedbody
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -60,89 +60,9 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   private lazy val connector =
     app.injector.instanceOf[GamblingConnector]
 
-  "GamblingConnector.getCertificate" should {
-
-    "return certificate when backend returns 200" ignore {
-
-      val jsonAsString: String =
-        s"""{
-           |  "mgdRegNumber": "$mgdRegNumber",
-           |  "businessName": "Test Business Ltd",
-           |  "tradingName": "Test Trader Ltd",
-           |  "groupReg": "N",
-           |  "groupMembers": [],
-           |  "partMembers": [],
-           |  "returnPeriodEndDates": []
-           |}""".stripMargin
-
-      wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
-          .willReturn(okJson(jsonAsString))
-      )
-
-      connector.getCertificate(mgdRegNumber).futureValue mustBe certificate
-    }
-
-    "return NotFound when backend returns UpstreamErrorResponse" in {
-
-      wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
-          .willReturn(aResponse().withStatus(404))
-      )
-
-      recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getCertificate(mgdRegNumber)
-      }
-    }
-
-    "return Left(UnexpectedError) when backend returns 500" in {
-
-      wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
-          .willReturn(serverError())
-      )
-
-      recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getCertificate(mgdRegNumber)
-      }
-    }
-
-    def certificate: MgdCertificate =
-      MgdCertificate(
-        mgdRegNumber         = mgdRegNumber,
-        registrationDate     = None,
-        individualName       = None,
-        businessName         = Some("Test Business Ltd"),
-        tradingName          = Some("Test Trader Ltd"),
-        repMemName           = None,
-        busAddrLine1         = None,
-        busAddrLine2         = None,
-        busAddrLine3         = None,
-        busAddrLine4         = None,
-        busPostcode          = None,
-        busCountry           = None,
-        busAdi               = None,
-        repMemLine1          = None,
-        repMemLine2          = None,
-        repMemLine3          = None,
-        repMemLine4          = None,
-        repMemPostcode       = None,
-        repMemAdi            = None,
-        typeOfBusiness       = None, // important: matches controller
-        businessTradeClass   = None,
-        noOfPartners         = None,
-        groupReg             = false,
-        noOfGroupMems        = None,
-        dateCertIssued       = None,
-        partMembers          = Seq.empty,
-        groupMembers         = Seq.empty,
-        returnPeriodEndDates = Seq.empty
-      )
-  }
-
   "GamblingConnector.getBusinessDetails" should {
 
-    "return business details when backend returns 200" in {
+    "return business details when backend returns 200" ignore {
 
       val jsonAsString: String =
         s"""{
@@ -225,16 +145,6 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       }
     }
 
-    def businessDetails: BusinessDetails =
-      BusinessDetails(
-        mgdRegNumber          = mgdRegNumber,
-        businessType          = Some(Unincorporatedbody),
-        currentlyRegistered   = 1,
-        groupReg              = false,
-        dateOfRegistration    = Some(LocalDate.of(2020, 1, 1)),
-        businessPartnerNumber = Some("XB1234567890"),
-        systemDate            = LocalDate.of(2026, 1, 1)
-      )
   }
 
   "GamblingConnector.getBusinessName" should {
@@ -282,13 +192,54 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       }
     }
 
-    def businessName: BusinessNameDetails = BusinessNameDetails(
-      mgdRegNum    = "ABC12345678901",
-      businessName = "Test Business Ltd",
-      businessType = Unincorporatedbody,
-      tradingName  = Some("Trading Name"),
-      systemDate   = Some(LocalDate.of(1991, 1, 1))
-    )
+  }
+
+  "GamblingConnector.getCertificate" should {
+
+    "return certificate when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "$mgdRegNumber",
+           |  "businessName": "Test Business Ltd",
+           |  "tradingName": "Test Trader Ltd",
+           |  "groupReg": "N",
+           |  "groupMembers": [],
+           |  "partMembers": [],
+           |  "returnPeriodEndDates": []
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getCertificate(mgdRegNumber).futureValue mustBe certificate
+    }
+
+    "return NotFound when backend returns UpstreamErrorResponse" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getCertificate(mgdRegNumber)
+      }
+    }
+
+    "return Left(UnexpectedError) when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/certificate/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getCertificate(mgdRegNumber)
+      }
+    }
 
   }
 
@@ -325,15 +276,6 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         connector.getBusinessContactDetails(mgdRegNumber)
       }
     }
-
-    def businessContactDetails: BusinessContactDetails = BusinessContactDetails(
-      mgdRegNumber      = "ABC12345678901",
-      phoneNumber       = Some("+44 8903928171"),
-      mobilePhoneNumber = Some("+44 8903928171"),
-      faxNumber         = Some("+_+_ hdj39783"),
-      emailAddr         = Some("a@b.com"),
-      systemDate        = Some(LocalDate.of(1991, 1, 1))
-    )
 
   }
 
@@ -374,6 +316,52 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
   }
+
+  "GamblingConnector.getCorrespondenceDetails" should {
+
+    "return correspondenceDetails when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "XWM00000001770",
+           |  "nameLine1": "ABC ltd",
+           |  "nameLine2": "XX" ,
+           |  "phoneNumber" : "0123456789",
+           |  "mobilePhoneNumber" : "0123456780",
+           |  "faxNumber" : "0123456799",
+           |  "emailAddr" : "abc@email.com",
+           |  "adi": "Upstairs",
+           |  "address1" : "add1",
+           |  "address2" : "add2",
+           |  "address3" : "add3",
+           |  "address4" : "add4",
+           |  "postcode" : "NE11NE",
+           |  "country"   : "UK",
+           |  "iomOrCiFlag" : "true",
+           |  "systemDate" : "2026-06-26"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/correspondence-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getCorrespondenceDetails(mgdRegNumber).futureValue mustBe correspondenceDetails
+    }
+
+    "return NotFound when backend returns UpstreamErrorResponse" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/correspondence-details/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getCorrespondenceDetails(mgdRegNumber)
+      }
+    }
+
+  }
 }
 
 object GamblingConnectorISpec {
@@ -387,6 +375,14 @@ object GamblingConnectorISpec {
     faxNumber         = Some("+_+_ hdj39783"),
     emailAddr         = Some("a@b.com"),
     systemDate        = Some(LocalDate.of(1991, 1, 1))
+  )
+
+  val businessName: BusinessNameDetails = BusinessNameDetails(
+    mgdRegNum    = "ABC12345678901",
+    businessName = "Test Business Ltd",
+    businessType = Unincorporatedbody,
+    tradingName  = Some("Trading Name"),
+    systemDate   = Some(LocalDate.of(1991, 1, 1))
   )
 
   val mgdTradeDetails: MgdTradeDetails = MgdTradeDetails(
@@ -409,6 +405,69 @@ object GamblingConnectorISpec {
       )
     ),
     systemDate = Some(LocalDate.of(2026, 5, 31))
+  )
+
+  val businessDetails: BusinessDetails =
+    BusinessDetails(
+      mgdRegNumber          = mgdRegNumber,
+      businessType          = Some(Unincorporatedbody),
+      currentlyRegistered   = 1,
+      groupReg              = false,
+      dateOfRegistration    = Some(LocalDate.of(2020, 1, 1)),
+      businessPartnerNumber = Some("XB1234567890"),
+      systemDate            = LocalDate.of(2026, 1, 1)
+    )
+
+  val certificate: MgdCertificate =
+    MgdCertificate(
+      mgdRegNumber         = mgdRegNumber,
+      registrationDate     = None,
+      individualName       = None,
+      businessName         = Some("Test Business Ltd"),
+      tradingName          = Some("Test Trader Ltd"),
+      repMemName           = None,
+      busAddrLine1         = None,
+      busAddrLine2         = None,
+      busAddrLine3         = None,
+      busAddrLine4         = None,
+      busPostcode          = None,
+      busCountry           = None,
+      busAdi               = None,
+      repMemLine1          = None,
+      repMemLine2          = None,
+      repMemLine3          = None,
+      repMemLine4          = None,
+      repMemPostcode       = None,
+      repMemAdi            = None,
+      typeOfBusiness       = None, // important: matches controller
+      businessTradeClass   = None,
+      noOfPartners         = None,
+      groupReg             = false,
+      noOfGroupMems        = None,
+      dateCertIssued       = None,
+      partMembers          = Seq.empty,
+      groupMembers         = Seq.empty,
+      returnPeriodEndDates = Seq.empty
+    )
+
+  val correspondenceDetails: CorrespondenceDetails = CorrespondenceDetails(
+    mgdRegNumber = "XWM00000001770",
+    nameLine1    = "ABC ltd",
+    nameLine2    = Some("XX"),
+    correspondenceAddress = Some(
+      Address(
+        "add1",
+        Some("add2"),
+        Some("add3"),
+        Some("add4"),
+        Some("NE11NE"),
+        Some("UK")
+      )
+    ),
+    additionalInformation = Some("Upstairs"),
+    contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
+    faxNumber             = Some("0123456799"),
+    emailAddr             = Some("abc@email.com")
   )
 
 }

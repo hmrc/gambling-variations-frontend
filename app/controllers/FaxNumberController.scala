@@ -36,7 +36,7 @@ class FaxNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessContactDetailsDataRequiredAction,
   formProvider: FaxNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: FaxNumberView
@@ -63,7 +63,7 @@ class FaxNumberController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FaxNumberPage, value))
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(FaxNumberPage, mode, updatedAnswers))
       )

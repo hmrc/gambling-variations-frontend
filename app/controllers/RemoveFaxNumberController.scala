@@ -37,7 +37,7 @@ class RemoveFaxNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessContactDetailsDataRequiredAction,
   formProvider: RemoveFaxNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveFaxNumberView

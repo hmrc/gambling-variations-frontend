@@ -17,6 +17,7 @@
 package viewmodels
 
 import controllers.routes
+import models.NormalMode
 import play.api.i18n.Messages
 
 final case class ChangeRegistrationDetailsViewModel(
@@ -54,7 +55,7 @@ final case class ChangeRegistrationDetailsViewModel(
       optional(!isGroupMember)(
         TaskListItem(
           messages("changeRegistrationDetails.businessContactDetails"),
-          routes.CheckYourAnswersController.onPageLoad().url,
+          routes.BusinessContactNumberController.onPageLoad(NormalMode).url,
           NoChange
         )
       ),
@@ -97,13 +98,6 @@ final case class ChangeRegistrationDetailsViewModel(
         TaskListItem(
           messages("changeRegistrationDetails.partnerDetails"),
           routes.IndexController.onPageLoad().url,
-          NoChange
-        )
-      ),
-      optional(isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.disbandMGDGroup"),
-          "group-member-details",
           NoChange
         )
       ),

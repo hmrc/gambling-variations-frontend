@@ -88,6 +88,7 @@ businessName.notProvided = Not provided
 businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
+businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 
 
@@ -107,7 +108,6 @@ changeRegistrationDetails.returnPeriod = Return periods
 changeRegistrationDetails.partnerDetails = Partner details
 changeRegistrationDetails.groupMemberDetails = Group member details
 changeRegistrationDetails.controllingBodyDetails = Controlling body details
-changeRegistrationDetails.disbandMGDGroup = Disband MGD group
 changeRegistrationDetails.licences = Licences
 changeRegistrationDetails.premises = Premises
 changeRegistrationDetails.readyToSubmit = Ready to submit
@@ -163,7 +163,7 @@ removeTradeName.change.hidden = RemoveTradeName
 
 businessTradingName.title = What is the business trading name?
 businessTradingName.heading = What is the business trading name?
-BusinessTradingNameController.heading.caption = Change registration details
+businessTradingName.heading.caption = Change registration details
 businessTradingName.checkYourAnswersLabel = What is the business trading name?
 businessTradingName.error.required = Enter the business trading name
 businessTradingName.error.invalid = The business trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
@@ -235,9 +235,11 @@ contactDetails.error.contactNumber = You must provide at least one contact numbe
 contactDetails.heading.contactNumbers = Contact numbers
 contactDetails.heading.faxNumber = Fax number
 contactDetails.heading.emailAddr = Email address
-contactDetails.label.phoneNumber = Phone number
-contactDetails.label.mobilePhoneNumber = Mobile number
+contactDetails.label.phoneNumber = Phone number:
+contactDetails.label.mobilePhoneNumber = Mobile number:
+contactDetails.label.faxNumber = Fax number
 contactDetails.label.contactNumbers = Contact numbers
+contactDetails.label.emailAddr = Email address
 contactDetails.message.notProvided = Not provided
 contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
@@ -250,14 +252,21 @@ faxNumber.error.invalid.characters = The fax number must only include numbers 0 
 faxNumber.error.length = The fax number must be 20 characters or less
 faxNumber.change.hidden = FaxNumber
 
+emailAddress.title = What is the email address for this business? - Change registration details
+emailAddress.heading = What is the email address for this business?
+emailAddress.checkYourAnswersLabel = Email Address
+emailAddress.error.required = Enter an email address for this business
+emailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+emailAddress.error.length = The email address must be 70 characters or less
+
 
 businessContactNumber.title = What are your business contact numbers?
 businessContactNumber.heading = What are your business contact numbers?
 businessContactNumber.p1 = You must provide at least one contact number.
 businessContactNumber.caption = Change registration details
 
-businessContactNumber.phoneNumber = Phone number
-businessContactNumber.mobileNumber = Mobile number
+businessContactNumber.phoneNumber = Phone number:
+businessContactNumber.mobileNumber = Mobile number:
 
 businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
 
@@ -280,3 +289,19 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
+
+businessTradeClass.title = What is the business trade class?
+businessTradeClass.heading = What is the business trade class?
+businessTradeClass.heading.caption = Change registration details
+businessTradeClass.adultGamingCentre = Adult gaming centre
+businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
+businessTradeClass.bingopromoter = Bingo promoter
+businessTradeClass.bookmakerorbettingactivities = Bookmaker or betting activities
+businessTradeClass.casino = Casino
+businessTradeClass.club = Club
+businessTradeClass.familyentertainmentcentre = Family entertainment centre
+businessTradeClass.publichouse = Public house
+businessTradeClass.other = Other
+businessTradeClass.checkYourAnswersLabel = What is the business trade class?
+businessTradeClass.error.required = Select the trade class for this business
+businessTradeClass.change.hidden = What is the business trade class?

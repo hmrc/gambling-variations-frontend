@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{BusinessContactDetails, BusinessDetails, EntityName, MgdCertificate, MgdTradeDetails}
+import models.{BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -140,6 +140,30 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
           case OK =>
             response.json
               .validate[MgdTradeDetails]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON Mgd Trade Details: $errors"),
+                details => details
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Mgd Trade Details: $status",
+              status
+            )
+        }
+      }
+  }
+
+  def getCorrespondenceDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[CorrespondenceDetails] = {
+    http
+      .get(url"$baseUrl/correspondence-details/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[CorrespondenceDetails]
               .fold(
                 errors => throw new RuntimeException(s"Invalid JSON Mgd Trade Details: $errors"),
                 details => details

@@ -18,7 +18,7 @@ package forms
 
 import javax.inject.Inject
 import forms.mappings.Mappings
-import models.BusinessContactNumber
+import models.ContactNumber
 import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.data.validation.*
@@ -64,7 +64,7 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
       }
     }
 
-  def apply(): Form[BusinessContactNumber] =
+  def apply(): Form[ContactNumber] =
     Form(
       mapping(
         "phoneNumber" ->
@@ -79,8 +79,8 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
               .transform(_.trim, identity)
               .verifying(mobileConstraint)
           )
-      )((phone: Option[String], mobile: Option[String]) => BusinessContactNumber(phone, mobile))((b: BusinessContactNumber) =>
-        Some((b.phoneNumber, b.mobileNumber))
+      )((phone: Option[String], mobile: Option[String]) => ContactNumber(phone, mobile))((b: ContactNumber) =>
+        Some((b.phoneNumber, b.mobilePhoneNumber))
       )
     )
 }
