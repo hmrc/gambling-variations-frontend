@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package viewmodels.checkBusinessContactDetails
+package viewmodels
 
 import models.NormalMode
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
-import viewmodels.govuk.all.FluentValue
-import viewmodels.implicits.stringToText
+import viewmodels.govuk.all.{FluentValue, stringToText}
 
 case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
                                                 mobilePhoneNumber: Option[String],
@@ -112,7 +111,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.ChangeEmailAddressController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               )
@@ -124,7 +123,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.ChangeEmailAddressController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               ),
