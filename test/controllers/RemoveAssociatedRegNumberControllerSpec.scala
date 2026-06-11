@@ -25,6 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.RemoveAssociatedRegNumberPage
 import play.api.inject.bind
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -41,12 +42,22 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
   val form = formProvider()
 
   lazy val removeAssociatedRegNumberRoute = routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
+  private val assocRegSeq = Some(Seq("XYM00000000", "b", "c"))
+  private val baseAnswers =
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        "associatedRegistrationNumbers" -> assocRegSeq,
+        "sequenceIndexOfRegNumber"      -> 0,
+        "mgdTradeDetailsSection"        -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+    )
 
   "RemoveAssociatedRegNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, removeAssociatedRegNumberRoute)
@@ -56,7 +67,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
         val view = application.injector.instanceOf[RemoveAssociatedRegNumberView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, "XYM00000000")(request, messages(application)).toString
       }
     }
 
@@ -64,7 +75,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
 
       val userAnswers = UserAnswers(userAnswersId).set(RemoveAssociatedRegNumberPage, true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, removeAssociatedRegNumberRoute)
@@ -74,7 +85,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "XYM00000000")(request, messages(application)).toString
       }
     }
 
@@ -120,7 +131,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, "")(request, messages(application)).toString
       }
     }
 

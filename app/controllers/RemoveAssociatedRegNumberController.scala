@@ -18,10 +18,12 @@ package controllers
 
 import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
+
 import javax.inject.Inject
-import models.Mode
+import models.{Mode, UserAnswers}
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.RemoveAssociatedRegNumberPage
+import pages.{AssociatedRegistrationNumbersPage, ContactDetailsSubmittedPage, RemoveAssociatedRegNumberPage, SeqIndexOfRegNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveAssociatedRegNumberView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class RemoveAssociatedRegNumberController @Inject() (
   override val messagesApi: MessagesApi,
@@ -36,7 +39,7 @@ class RemoveAssociatedRegNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: MgdTradeDetailsDataRequiredAction,
   formProvider: RemoveAssociatedRegNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveAssociatedRegNumberView
@@ -49,24 +52,53 @@ class RemoveAssociatedRegNumberController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(RemoveAssociatedRegNumberPage) match {
-      case None        => form
       case Some(value) => form.fill(value)
+      case None        => form
     }
 
-    Ok(view(preparedForm, mode))
+    val mgdRegNumber: String = {
+      for {
+        index                <- request.userAnswers.get(SeqIndexOfRegNoPage)
+        sequenceOfRegNumbers <- request.userAnswers.get(AssociatedRegistrationNumbersPage)
+      } yield sequenceOfRegNumbers(index)
+    }.getOrElse("XGM1237912732")
+
+    Ok(view(preparedForm, mode, mgdRegNumber))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, "Remove Associated Registration Number"))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveAssociatedRegNumberPage, value))
+            updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
       )
   }
+
+  private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
+    for {
+      ua1 <- userAnswers.set(RemoveAssociatedRegNumberPage, value)
+      ua2 <- {
+        if (value) {
+          ua1.get(AssociatedRegistrationNumbersPage) match {
+            case Some(sequence) =>
+              ua1.get(SeqIndexOfRegNoPage) match {
+                case Some(indexFound) =>
+                  ua1.set(AssociatedRegistrationNumbersPage, sequence.patch(indexFound, Nil, 1))
+                case None => Try(ua1)
+              }
+            case None => Try(ua1)
+          }
+        } else {
+          Try(ua1)
+        }
+      }
+    } yield ua2
+  }
+
 }
