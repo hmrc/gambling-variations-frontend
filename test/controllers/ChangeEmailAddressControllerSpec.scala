@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.EmailAddressPage
+import pages.BusinessEmailAddressPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -72,8 +72,8 @@ class ChangeEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId),
-        EmailAddressPage.toString       -> "validEmail@example.com"
+        "businessContactDetailsSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
+        BusinessEmailAddressPage.toString -> "validEmail@example.com"
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)

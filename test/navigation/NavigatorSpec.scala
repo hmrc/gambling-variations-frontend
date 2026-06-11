@@ -51,7 +51,7 @@ class NavigatorSpec extends SpecBase {
 
         "must go from EmailAddressPage to next page" in {
 
-          navigator.nextPage(EmailAddressPage, NormalMode, UserAnswers("id")) mustBe
+          navigator.nextPage(BusinessEmailAddressPage, NormalMode, UserAnswers("id")) mustBe
             routes.ChangeEmailAddressController.onPageLoad(NormalMode)
         }
 
