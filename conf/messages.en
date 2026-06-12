@@ -330,3 +330,10 @@ correspondenceFaxNumber.error.required = Enter the fax number for correspondence
 correspondenceFaxNumber.error.length = The fax number for correspondence must be 20 characters or less
 correspondenceFaxNumber.change.hidden = What fax number should we use for correspondence?
 
+
+otherTradeClass.title = What is your business trade class? - Change registration details
+otherTradeClass.heading = What is your business trade class?
+otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+otherTradeClass.checkYourAnswersLabel = What is your business trade class?
+otherTradeClass.error.required = Enter your business trade class
+otherTradeClass.error.invalid = Your business trade class must be in the correct format
