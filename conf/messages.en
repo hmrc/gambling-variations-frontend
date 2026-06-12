@@ -258,8 +258,8 @@ businessContactNumber.heading = What are your business contact numbers?
 businessContactNumber.p1 = You must provide at least one contact number.
 businessContactNumber.caption = Change registration details
 
-businessContactNumber.phoneNumber = Phone number:
-businessContactNumber.mobileNumber = Mobile number:
+businessContactNumber.phoneNumber = Phone number
+businessContactNumber.mobileNumber = Mobile number
 
 businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
 
