@@ -298,3 +298,10 @@ businessTradeClass.other = Other
 businessTradeClass.checkYourAnswersLabel = What is the business trade class?
 businessTradeClass.error.required = Select the trade class for this business
 businessTradeClass.change.hidden = What is the business trade class?
+
+otherTradeClass.title = What is your business trade class? - Change registration details
+otherTradeClass.heading = What is your business trade class?
+otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+otherTradeClass.checkYourAnswersLabel = What is your business trade class?
+otherTradeClass.error.required = Enter your business trade class
+otherTradeClass.error.invalid = Your business trade class must be in the correct format
