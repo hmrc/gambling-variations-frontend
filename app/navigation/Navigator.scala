@@ -35,8 +35,8 @@ class Navigator @Inject() () {
     case RemoveFaxNumberPage       => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveEmailAddressPage    => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessContactNumberPage => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessEmailAddressPage  => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessTradeClassPage    => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
-    case BusinessEmailAddressPage  => _ => routes.ChangeEmailAddressController.onPageLoad(NormalMode)
     case _                         => _ => routes.IndexController.onPageLoad()
   }
 
@@ -44,7 +44,7 @@ class Navigator @Inject() () {
     case RemoveTradeNamePage      => userAnswers => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage         => userAnswers => routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage       => userAnswers => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessEmailAddressPage => userAnswers => routes.ChangeEmailAddressController.onPageLoad(CheckMode)
+    case BusinessEmailAddressPage => userAnswers => routes.CheckContactDetailsController.onPageLoad()
     case _                        => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
