@@ -21,9 +21,8 @@ import forms.RemoveAssociatedRegNumberFormProvider
 
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
-import models.requests.DataRequest
 import navigation.Navigator
-import pages.{AssociatedRegistrationNumbersPage, ContactDetailsSubmittedPage, RemoveAssociatedRegNumberPage, SeqIndexOfRegNoPage}
+import pages.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -58,9 +57,8 @@ class RemoveAssociatedRegNumberController @Inject() (
 
     val mgdRegNumber: String = {
       for {
-        index                <- request.userAnswers.get(SeqIndexOfRegNoPage)
-        sequenceOfRegNumbers <- request.userAnswers.get(AssociatedRegistrationNumbersPage)
-      } yield sequenceOfRegNumbers(index)
+        chosenRegNumber <- request.userAnswers.get(ChosenAssociatedRegNumberPage)
+      } yield chosenRegNumber
     }.getOrElse("")
 
     if (mgdRegNumber.nonEmpty) {
@@ -71,16 +69,18 @@ class RemoveAssociatedRegNumberController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, "Remove Associated Registration Number"))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
-      )
+    request.userAnswers.get(ChosenAssociatedRegNumberPage).map { chosenRegNumber =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, chosenRegNumber))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
+        )
+    } getOrElse Future.successful(Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()))
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
@@ -88,20 +88,14 @@ class RemoveAssociatedRegNumberController @Inject() (
       ua1 <- userAnswers.set(RemoveAssociatedRegNumberPage, value)
       ua2 <- {
         if (value) {
-          ua1.get(AssociatedRegistrationNumbersPage) match {
-            case Some(sequence) =>
-              ua1.get(SeqIndexOfRegNoPage) match {
-                case Some(indexFound) =>
-                  ua1.set(AssociatedRegistrationNumbersPage, sequence.patch(indexFound, Nil, 1))
-                case None => Try(ua1)
-              }
-            case None => Try(ua1)
-          }
+          val chosenRegNumber = ua1.get(ChosenAssociatedRegNumberPage).getOrElse("")
+          val associatedRegNumbers = ua1.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
+          val updatedSequence = associatedRegNumbers.filterNot(_ == chosenRegNumber)
+          ua1.set(AssociatedRegistrationNumbersPage, updatedSequence)
         } else {
           Try(ua1)
         }
       }
     } yield ua2
   }
-
 }

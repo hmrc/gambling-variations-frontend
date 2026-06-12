@@ -23,7 +23,6 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.RemoveAssociatedRegNumberPage
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -48,7 +47,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
       userAnswersId,
       Json.obj(
         "associatedRegistrationNumbers" -> assocRegSeq,
-        "sequenceIndexOfRegNumber"      -> 0,
+        "chosenAssociatedRegNumber"     -> "XYM00000000",
         "mgdTradeDetailsSection"        -> Json.obj("mgdRegNum" -> userAnswersId)
       )
     )
@@ -94,6 +93,21 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, removeAssociatedRegNumberRoute)
+            .withFormUrlEncodedBody(("value", ""))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
       }
     }
 
