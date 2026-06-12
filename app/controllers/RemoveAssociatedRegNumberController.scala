@@ -61,7 +61,7 @@ class RemoveAssociatedRegNumberController @Inject() (
         index                <- request.userAnswers.get(SeqIndexOfRegNoPage)
         sequenceOfRegNumbers <- request.userAnswers.get(AssociatedRegistrationNumbersPage)
       } yield sequenceOfRegNumbers(index)
-    }.getOrElse("XGM1237912732")
+    }.getOrElse("")
 
     Ok(view(preparedForm, mode, mgdRegNumber))
   }
