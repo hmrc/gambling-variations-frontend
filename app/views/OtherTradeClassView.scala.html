@@ -14,7 +14,7 @@
 
 @layout(pageTitle = title(form, messages("otherTradeClass.title"))) {
 
-    @formHelper(action = routes.OtherTradeClassController.onSubmit(mode)) {
+@formHelper(action = routes.OtherTradeClassController.onSubmit(mode)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -24,16 +24,22 @@
                 @messages("changeRegistrationDetails.title")
         </span>
 
+
+        <h1 class="govuk-heading-l">
+                @messages("otherTradeClass.heading")
+        </h1>
+
+        <span class="govuk-caption-l govuk-!-margin-bottom-4">
+                @messages("otherTradeClass.caption")
+        </span>
+
+
         @govukCharacterCount(
             CharacterCount(
             id = "otherTradeClass",
             name = "otherTradeClass",
             maxLength = 300,
-            label = LabelViewModel(
-            messages("otherTradeClass.heading")
-            )
-            .asPageHeading(LabelSize.Large)
-            .withCaption(messages("otherTradeClass.caption")),
+            label = LabelViewModel(""),
             value = form("otherTradeClass").value
             ).withErrorMessage(
             form("otherTradeClass").error.map(e =>
