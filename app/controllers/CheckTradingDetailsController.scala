@@ -30,6 +30,7 @@ class CheckTradingDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
+  businessDetailsDataRequiredAction: BusinessDetailsDataRequiredAction,
   mgdTradDetailsRequireData: MgdTradeDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckTradingDetailsView
@@ -37,7 +38,7 @@ class CheckTradingDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
-    (authorised andThen getData andThen mgdTradDetailsRequireData) { implicit request =>
+    (authorised andThen getData andThen businessDetailsDataRequiredAction andThen mgdTradDetailsRequireData) { implicit request =>
 
       val vm =
         CheckTradingDetailsViewModel.from(request.userAnswers)

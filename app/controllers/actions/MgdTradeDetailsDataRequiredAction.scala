@@ -18,7 +18,7 @@ package controllers.actions
 
 import connectors.GamblingConnector
 import controllers.routes
-import models.requests.{DataRequest, OptionalDataRequest}
+import models.requests.DataRequest
 import models.{MgdTradeDetails, UserAnswers}
 import pages.*
 import play.api.Logging
@@ -41,42 +41,30 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
     extends MgdTradeDetailsDataRequiredAction
     with Logging {
 
-  override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
-    request.userAnswers match {
-      case None =>
-        logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
-
-        given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-        val answers = UserAnswers(request.mgdRegNum)
-        saveUserAnswersToSessionAndRedirect(answers, request)
-
-      case Some(userAnswers) =>
-        logger.info(s"User Answers found with id ${userAnswers.id}")
-
-        userAnswers.get(MgdTradeDetailsSectionPage) map { _ =>
-          Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
-          given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-          saveUserAnswersToSessionAndRedirect(userAnswers, request)
-        }
+  override protected def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+    // DataRequest guarantees userAnswers exists
+    if (request.userAnswers.get(MgdTradeDetailsSectionPage).isDefined) {
+      Future.successful(Right(request))
+    } else {
+      given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+      saveUserAnswersToSessionAndRedirect(request.userAnswers, request)
     }
   }
 
-  private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getMgdTradeDetails(answers.id) flatMap { mgdContactDetails =>
-
+  private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: DataRequest[A])(using
+    HeaderCarrier
+  ): Future[Either[Result, DataRequest[A]]] = {
+    gamblingConnector.getMgdTradeDetails(answers.id).flatMap { mgdContactDetails =>
       setMgdTradeDetails(mgdContactDetails, answers) map { updatedAnswers =>
-        logger.info("User Answers not found. Saving User Answers")
-        sessionRepository.set(updatedAnswers) map {
+        logger.info("Saving User Answers for Mgd Trade Details")
+        sessionRepository.set(updatedAnswers).map {
           case true =>
-            logger.info("User Answers saved.")
             Right(DataRequest(request.request, request.mgdRegNum, updatedAnswers))
           case false =>
-            logger.info("User Answers failed.")
+            logger.error("Failed to persist User Answers")
             Left(Redirect(routes.SystemErrorController.onPageLoad()))
         }
       } getOrElse Future.successful(Left(Redirect(routes.SystemErrorController.onPageLoad())))
-
     } recover { case NonFatal(e) =>
       logger.warn(s"Unable to populate User Answers for id ${request.mgdRegNum}", e)
       Left(Redirect(routes.SystemErrorController.onPageLoad()))
@@ -89,7 +77,7 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
     }
 
   private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
-    logger.info("Setting User Answers for Mgd Trade Details")
+    logger.info("Mapping Mgd Trade Details into User Answers")
     for {
       updatedAnswers <- answers.set(MgdTradeDetailsSectionPage, mgdTradeDetails.mgdRegNumber)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.isBusinessSeasonal, IsSeasonalBusinessPage)
@@ -101,4 +89,5 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
   }
 }
 
-trait MgdTradeDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+// Updated trait
+trait MgdTradeDetailsDataRequiredAction extends ActionRefiner[DataRequest, DataRequest]

@@ -39,7 +39,7 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
   implicit val mat: Materializer = Materializer.createMaterializer(actorSystem)
 
   val userAnswersId: String = "id"
-  val mgdRegNum: String = "id"
+  val mgdRegNum: String = "XRM00000000574"
 
   def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
 
