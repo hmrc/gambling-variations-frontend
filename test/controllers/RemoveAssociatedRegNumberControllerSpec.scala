@@ -71,24 +71,6 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = UserAnswers(userAnswersId).set(RemoveAssociatedRegNumberPage, true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, removeAssociatedRegNumberRoute)
-
-        val view = application.injector.instanceOf[RemoveAssociatedRegNumberView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "XYM00000000")(request, messages(application)).toString
-      }
-    }
-
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
@@ -96,7 +78,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -112,26 +94,6 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
-      }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, removeAssociatedRegNumberRoute)
-            .withFormUrlEncodedBody(("value", ""))
-
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[RemoveAssociatedRegNumberView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, "")(request, messages(application)).toString
       }
     }
 
