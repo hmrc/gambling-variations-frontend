@@ -63,7 +63,11 @@ class RemoveAssociatedRegNumberController @Inject() (
       } yield sequenceOfRegNumbers(index)
     }.getOrElse("")
 
-    Ok(view(preparedForm, mode, mgdRegNumber))
+    if (mgdRegNumber.nonEmpty) {
+      Ok(view(preparedForm, mode, mgdRegNumber))
+    } else {
+      Redirect(routes.SystemErrorController.onPageLoad().url)
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
