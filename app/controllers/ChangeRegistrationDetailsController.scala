@@ -38,8 +38,7 @@ class ChangeRegistrationDetailsController @Inject() (
   appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeRegistrationDetailsView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+)() extends FrontendBaseController
     with I18nSupport
     with Logging {
 

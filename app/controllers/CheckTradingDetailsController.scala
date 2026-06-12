@@ -17,7 +17,6 @@
 package controllers
 
 import controllers.actions.*
-import pages.GroupMemberPage
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -25,7 +24,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.*
 import viewmodels.checkAnswers.tradingdetails.*
-import viewmodels.govuk.summarylist.*
 import views.html.CheckTradingDetailsView
 
 class CheckTradingDetailsController @Inject() (
@@ -41,51 +39,16 @@ class CheckTradingDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (authorised andThen getData andThen mgdTradDetailsRequireData) { implicit request =>
 
-      val isGroupMember =
-        request.userAnswers.get(GroupMemberPage).getOrElse(false)
+      val vm =
+        CheckTradingDetailsViewModel.from(request.userAnswers)
 
-      val tradeClassRows =
-        if (isGroupMember) {
-          Nil
-        } else {
-          Seq(
-            BusinessTradeClassSummary.row(request.userAnswers),
-            OtherTradeClassSummary.row(request.userAnswers)
-          ).flatten
-        }
-
-      val listTradClass = SummaryListViewModel(tradeClassRows)
-
-      val list = SummaryListViewModel(
-        rows = Seq(
-          IsSeasonalBusinessSummary.row(request.userAnswers)
-        ).flatten
+      Ok(
+        view(
+          vm.tradeClass,
+          vm.seasonalBusiness,
+          vm.previousMgd,
+          vm.associatedMgd
+        )
       )
-
-      val previousMgdRows =
-        if (isGroupMember) {
-          Nil
-        } else {
-          Seq(
-            PreviousRegistrationNumbersSummary.row(request.userAnswers)
-          ).flatten
-        }
-
-      val associatedMgdRows =
-        if (isGroupMember) {
-          Nil
-        } else {
-          Seq(
-            AssociatedRegistrationNumbersSummary.row(request.userAnswers)
-          ).flatten
-        }
-
-      val listPreviousMgdRegNo =
-        SummaryListViewModel(previousMgdRows)
-
-      val listAssociatedMgdRegNo =
-        SummaryListViewModel(associatedMgdRows)
-
-      Ok(view(listTradClass, list, listPreviousMgdRegNo, listAssociatedMgdRegNo))
     }
 }
