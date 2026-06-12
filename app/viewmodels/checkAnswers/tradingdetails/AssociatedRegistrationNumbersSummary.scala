@@ -57,19 +57,14 @@ object AssociatedRegistrationNumbersSummary {
           ValueViewModel(numbers.mkString(", "))
       }
 
-      val actions =
-        if (numbers.size == 3) {
-          Seq.empty
-        } else {
-          Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.BusinessTradeClassController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
-            )
-          )
-        }
+      val actions = Seq(
+        ActionItemViewModel(
+          "site.change",
+          routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+        ).withVisuallyHiddenText(
+          messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
+        )
+      )
 
       SummaryListRowViewModel(
         key     = "checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel",

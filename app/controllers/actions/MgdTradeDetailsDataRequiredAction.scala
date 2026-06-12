@@ -89,5 +89,4 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
   }
 }
 
-// Updated trait
 trait MgdTradeDetailsDataRequiredAction extends ActionRefiner[DataRequest, DataRequest]

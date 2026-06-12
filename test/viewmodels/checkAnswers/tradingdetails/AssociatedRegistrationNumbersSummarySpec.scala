@@ -34,7 +34,6 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
   "AssociatedRegistrationNumbersSummary.row" - {
 
     "return Some row with 'not provided' when no numbers exist" in {
-
       val result = AssociatedRegistrationNumbersSummary.row(emptyUserAnswers)
 
       result mustBe defined
@@ -43,7 +42,6 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
     }
 
     "show a single registration number correctly" in {
-
       val answers =
         emptyUserAnswers
           .set(AssociatedRegistrationNumbersPage, Seq("123456"))
@@ -58,7 +56,6 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
     }
 
     "show two numbers as a bullet list and include action" in {
-
       val answers =
         emptyUserAnswers
           .set(AssociatedRegistrationNumbersPage, Seq("123", "456"))
@@ -66,7 +63,6 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
           .value
 
       val result = AssociatedRegistrationNumbersSummary.row(answers).value
-
       val html = result.value.content.asHtml.toString
 
       html must include("<ul")
@@ -76,8 +72,7 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
       result.actions.size mustBe 1
     }
 
-    "show three numbers as bullet list and NOT include action" in {
-
+    "show three numbers as a bullet list and include action" in {
       val answers =
         emptyUserAnswers
           .set(AssociatedRegistrationNumbersPage, Seq("1", "2", "3"))
@@ -85,7 +80,6 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
           .value
 
       val result = AssociatedRegistrationNumbersSummary.row(answers).value
-
       val html = result.value.content.asHtml.toString
 
       html must include("<ul")
@@ -93,11 +87,10 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
       html must include("<li>2</li>")
       html must include("<li>3</li>")
 
-      result.actions.value.items mustBe empty
+      result.actions.size mustBe 1
     }
 
     "show more than three numbers as comma separated and include action" in {
-
       val answers =
         emptyUserAnswers
           .set(AssociatedRegistrationNumbersPage, Seq("1", "2", "3", "4"))
