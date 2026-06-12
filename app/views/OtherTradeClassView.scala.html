@@ -1,5 +1,5 @@
 @import viewmodels.LabelSize
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.charactercount.CharCount
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.charactercount.CharacterCount
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.label.LabelViewModel
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
 
@@ -26,7 +26,7 @@
         </span>
 
         @govukCharacterCount(
-            CharCount(
+            CharacterCount(
             id = "otherTradeClass",
             name = "otherTradeClass",
             maxLength = 300,
