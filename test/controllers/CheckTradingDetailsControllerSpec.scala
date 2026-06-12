@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import models.BusinessTradeClass
+import models.BusinessType
 import pages.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -30,6 +31,9 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
       .success
       .value
       .set(GroupMemberPage, false)
+      .success
+      .value
+      .set(BusinessTypePage, BusinessType.Soleproprietor)
       .success
       .value
       .set(BusinessTradeClassPage, BusinessTradeClass.Casino)
