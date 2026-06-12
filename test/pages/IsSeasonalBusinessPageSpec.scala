@@ -16,21 +16,21 @@
 
 package pages
 
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
-import org.scalatestplus.play.PlaySpec
 
-class ContactDetailsSubmittedPageSpec extends PlaySpec {
+class IsSeasonalBusinessPageSpec extends AnyFreeSpec with Matchers {
 
-  "ContactDetailsSubmittedPage" must {
+  ".IsSeasonalBusinessPage" - {
 
-    "have the correct path" in {
-
-      ContactDetailsSubmittedPage.path mustEqual (JsPath \ "businessContactDetailsSection" \ "submitted")
+    "must have the correct toString" in {
+      IsSeasonalBusinessPage.toString mustBe "isBusinessSeasonal"
     }
 
-    "have the correct toString value" in {
-
-      ContactDetailsSubmittedPage.toString mustEqual "submitted"
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "isBusinessSeasonal"
+      IsSeasonalBusinessPage.path mustBe expectedPath
     }
   }
 }

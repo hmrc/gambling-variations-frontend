@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveEmailAddressFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessEmailAddressPage, RemoveEmailAddressPage}
+import pages.{BusinessEmailAddressPage, ContactDetailsSubmittedPage, RemoveEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -91,14 +91,14 @@ class RemoveEmailAddressController @Inject() (
   ): Try[UserAnswers] = {
 
     for {
-      ua1 <- userAnswers.set(RemoveEmailAddressPage, value)
-      ua2 <- {
+      ua <- userAnswers.set(ContactDetailsSubmittedPage, true)
+      ua1 <- {
         if (value) {
-          ua1.remove(BusinessEmailAddressPage)
+          ua.remove(BusinessEmailAddressPage)
         } else {
-          Try(ua1)
+          Try(ua)
         }
       }
-    } yield ua2
+    } yield ua1
   }
 }

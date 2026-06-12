@@ -21,7 +21,7 @@ import controllers.actions.{AuthorisedAction, DataRetrievalAction}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.FaxNumberSummary
+import viewmodels.checkAnswers.{FaxNumberSummary, SeasonalBusinessSummary}
 import viewmodels.govuk.summarylist.*
 import views.html.CheckYourAnswersView
 
@@ -38,7 +38,8 @@ class CheckYourAnswersController @Inject() (
     request.userAnswers.map { answers =>
       val list = SummaryListViewModel(
         rows = Seq(
-          FaxNumberSummary.row(answers)
+          FaxNumberSummary.row(answers),
+          SeasonalBusinessSummary.row(answers)
         ).flatten
       )
       Ok(view(list, routes.ChangeRegistrationDetailsController.onPageLoad().url))

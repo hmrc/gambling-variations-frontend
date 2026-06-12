@@ -14,23 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
-import org.scalatestplus.play.PlaySpec
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-class ContactDetailsSubmittedPageSpec extends PlaySpec {
+class SeasonalBusinessFormProviderSpec extends BooleanFieldBehaviours {
 
-  "ContactDetailsSubmittedPage" must {
+  val requiredKey = "seasonalBusiness.error.required"
+  val invalidKey = "error.boolean"
 
-    "have the correct path" in {
+  val form = new SeasonalBusinessFormProvider()()
 
-      ContactDetailsSubmittedPage.path mustEqual (JsPath \ "businessContactDetailsSection" \ "submitted")
-    }
+  ".isSeasonalBusiness" - {
 
-    "have the correct toString value" in {
+    val fieldName = "isSeasonalBusiness"
 
-      ContactDetailsSubmittedPage.toString mustEqual "submitted"
-    }
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }
