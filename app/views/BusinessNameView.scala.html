@@ -48,7 +48,7 @@
                 actions = Some(Actions(
                     items = Seq(
                         ActionItem(
-                            href = controllers.routes.ChangeBusinessNameController.onPageLoad(NormalMode, businessType).url(),
+                            href = controllers.routes.ChangeBusinessNameController.onPageLoad(businessType, NormalMode).url(),
                             content = "site.change",
                             visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType.toString)))
                             )
@@ -111,6 +111,3 @@
     </p>
 
 }
-
-
-

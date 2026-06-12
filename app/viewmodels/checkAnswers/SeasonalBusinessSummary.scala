@@ -17,39 +17,26 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.BusinessType.Soleproprietor
 import models.{CheckMode, UserAnswers}
-import pages.SoleProprietorPage
+import pages.IsSeasonalBusinessPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object SoleProprietorNameSummary {
+object SeasonalBusinessSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(SoleProprietorPage).map { answer =>
+    answers.get(IsSeasonalBusinessPage).map { answer =>
 
-      val value = List(
-        answer.title,
-        answer.firstName,
-        answer.middleName.getOrElse(""),
-        answer.lastName
-      ).map(_.trim)
-        .filter(_.nonEmpty)
-        .map(HtmlFormat.escape(_).toString)
-        .mkString("<br/>")
+      val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "soleProprietorName.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlContent(value)),
+        key   = "seasonalBusiness.checkYourAnswersLabel",
+        value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel(
-            "site.change",
-            routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode).url
-          ).withVisuallyHiddenText(messages("soleProprietorName.change.hidden"))
+          ActionItemViewModel("site.change", routes.SeasonalBusinessController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("seasonalBusiness.change.hidden"))
         )
       )
     }

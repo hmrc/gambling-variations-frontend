@@ -55,7 +55,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
   val noAnswers = UserAnswers(userAnswersId, Json.obj("businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)))
 
   lazy val changeBusinessNameRoute =
-    routes.ChangeBusinessNameController.onPageLoad(NormalMode, Partnership).url
+    routes.ChangeBusinessNameController.onPageLoad(Partnership, NormalMode).url
 
   "ChangeBusinessName Controller" - {
 

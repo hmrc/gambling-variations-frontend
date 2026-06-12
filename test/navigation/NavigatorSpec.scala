@@ -43,6 +43,12 @@ class NavigatorSpec extends SpecBase {
             routes.CheckBusinessNameController.onPageLoad()
         }
 
+        "must go from SoleProprietorPage to the normal mode sole proprietor page" in {
+
+          navigator.nextPage(SoleProprietorPage, NormalMode, UserAnswers("id")) mustBe
+            routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor, NormalMode)
+        }
+
         "must go from BusinessContactNumberPage to next page" in {
 
           navigator.nextPage(BusinessContactNumberPage, NormalMode, UserAnswers("id")) mustBe
@@ -52,7 +58,7 @@ class NavigatorSpec extends SpecBase {
         "must go from EmailAddressPage to next page" in {
 
           navigator.nextPage(BusinessEmailAddressPage, NormalMode, UserAnswers("id")) mustBe
-            routes.ChangeEmailAddressController.onPageLoad(NormalMode)
+            routes.CheckContactDetailsController.onPageLoad()
         }
 
         "must go from FaxNumberPage to CheckYourAnswers" in {
@@ -65,6 +71,12 @@ class NavigatorSpec extends SpecBase {
 
           navigator.nextPage(RemoveFaxNumberPage, NormalMode, UserAnswers("id")) mustBe
             routes.CheckContactDetailsController.onPageLoad()
+        }
+
+        "must go from IsSeasonalBusinessPage to the normal mode seasonal business page" in {
+
+          navigator.nextPage(IsSeasonalBusinessPage, NormalMode, UserAnswers("id")) mustBe
+            routes.SeasonalBusinessController.onPageLoad(NormalMode)
         }
 
         "a page that doesn't exist in the route map to Index" in {
@@ -86,6 +98,18 @@ class NavigatorSpec extends SpecBase {
 
           case object UnknownPage extends Page
           navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad()
+        }
+
+        "must go from IsSeasonalBusinessPage to CheckYourAnswers" in {
+
+          navigator.nextPage(IsSeasonalBusinessPage, CheckMode, UserAnswers("id")) mustBe
+            routes.SeasonalBusinessController.onPageLoad(CheckMode)
+        }
+
+        "must go from SoleProprietorPage to the check mode sole proprietor page" in {
+
+          navigator.nextPage(SoleProprietorPage, CheckMode, UserAnswers("id")) mustBe
+            routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor, CheckMode)
         }
       }
 

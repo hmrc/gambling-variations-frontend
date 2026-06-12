@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
-import org.scalatestplus.play.PlaySpec
+import javax.inject.Inject
 
-class ContactDetailsSubmittedPageSpec extends PlaySpec {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  "ContactDetailsSubmittedPage" must {
+class SeasonalBusinessFormProvider @Inject() extends Mappings {
 
-    "have the correct path" in {
-
-      ContactDetailsSubmittedPage.path mustEqual (JsPath \ "businessContactDetailsSection" \ "submitted")
-    }
-
-    "have the correct toString value" in {
-
-      ContactDetailsSubmittedPage.toString mustEqual "submitted"
-    }
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "isSeasonalBusiness" -> boolean("seasonalBusiness.error.required")
+    )
 }

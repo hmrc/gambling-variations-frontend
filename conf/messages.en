@@ -213,7 +213,7 @@ removeFaxNumber.error.required = Select yes if you want to remove the fax number
 removeFaxNumber.change.hidden = remove fax number
 removeFaxNumber.heading.caption = Change registration details
 
-removeEmailAddress.title = Are you sure you want to remove the email address? - Change registration details
+removeEmailAddress.title = Are you sure you want to remove the email address?
 removeEmailAddress.heading = Are you sure you want to remove the email address {0}?
 removeEmailAddress.checkYourAnswersLabel = Business email address
 removeEmailAddress.error.required = Select yes if you want to remove the email address
@@ -243,7 +243,7 @@ contactDetails.label.emailAddr = Email address
 contactDetails.message.notProvided = Not provided
 contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
-faxNumber.title = What is the fax number for this business? - Change registration details
+faxNumber.title = What is the fax number for this business?
 faxNumber.heading = What is the fax number for this business?
 faxNumber.checkYourAnswersLabel = Fax Number
 faxNumber.error.required = Enter the fax number for this business
@@ -305,3 +305,11 @@ businessTradeClass.other = Other
 businessTradeClass.checkYourAnswersLabel = What is the business trade class?
 businessTradeClass.error.required = Select the trade class for this business
 businessTradeClass.change.hidden = What is the business trade class?
+
+
+seasonalBusiness.title = Is this a seasonal business?
+seasonalBusiness.heading = Is this a seasonal business?
+seasonalBusiness.paragraph = A seasonal business has periods where it does not trade. If you operate a seasonal business, you must submit nil returns for any periods that you are not trading.
+seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
+seasonalBusiness.error.required = Select yes if this is a seasonal business
+seasonalBusiness.change.hidden = Is this a seasonal business?

@@ -18,16 +18,16 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.{BusinessDetails, BusinessType, UserAnswers}
 import models.requests.{DataRequest, OptionalDataRequest}
+import models.{BusinessDetails, BusinessType, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
+import play.api.mvc.Result
 import play.api.mvc.Results.*
-import play.api.mvc.{AnyContent, Result}
 import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.http.UpstreamErrorResponse
