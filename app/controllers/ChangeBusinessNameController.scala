@@ -53,7 +53,7 @@ class ChangeBusinessNameController @Inject() (
   private def titleKeyFor(businessType: BusinessType): String =
     s"changeBusinessName.title.${businessType.toString}"
 
-  def onPageLoad(mode: Mode, businessType: BusinessType): Action[AnyContent] =
+  def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
       (
         request.userAnswers.get(BusinessTypePage) flatMap {
@@ -75,7 +75,7 @@ class ChangeBusinessNameController @Inject() (
       ) getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
     }
 
-  def onSubmit(mode: Mode, businessType: BusinessType): Action[AnyContent] =
+  def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(BusinessTypePage) map {
         case Soleproprietor =>
