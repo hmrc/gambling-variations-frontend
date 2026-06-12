@@ -55,16 +55,9 @@ class RemovePreviousRegNumberController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    val mgdRegNumber: String = {
-      for {
-        chosenRegNumber <- request.userAnswers.get(ChosenPreviousRegNumberPage)
-      } yield chosenRegNumber
-    }.getOrElse("")
-
-    if (mgdRegNumber.nonEmpty) {
-      Ok(view(preparedForm, mode, mgdRegNumber))
-    } else {
-      Redirect(routes.SystemErrorController.onPageLoad().url)
+    request.userAnswers.get(ChosenPreviousRegNumberPage) match {
+      case Some(number) => Ok(view(preparedForm, mode, number))
+      case None         => Redirect(routes.SystemErrorController.onPageLoad().url)
     }
   }
 
@@ -88,10 +81,16 @@ class RemovePreviousRegNumberController @Inject() (
       ua1 <- userAnswers.set(RemovePreviousRegNumberPage, value)
       ua2 <- {
         if (value) {
-          val chosenRegNumber = ua1.get(ChosenPreviousRegNumberPage).getOrElse("")
-          val associatedRegNumbers = ua1.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
-          val updatedSequence = associatedRegNumbers.filterNot(_ == chosenRegNumber)
-          ua1.set(PreviousRegistrationNumbersPage, updatedSequence)
+          ua1.get(ChosenPreviousRegNumberPage) match {
+            case Some(prevRegNo) =>
+              ua1.get(PreviousRegistrationNumbersPage).match {
+                case Some(prevRegNoSeq) =>
+                  val updatedSequence = prevRegNoSeq.filterNot(_ == prevRegNo)
+                  ua1.set(PreviousRegistrationNumbersPage, updatedSequence)
+                case None => Try(ua1)
+              }
+            case None => Try(ua1)
+          }
         } else {
           Try(ua1)
         }
