@@ -25,7 +25,7 @@
     caption: Caption
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, mgdRegNumber: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("removePreviousRegNumber.title"))) {
 
@@ -38,7 +38,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("removePreviousRegNumber.heading")).asPageHeading(viewmodels.LegendSize.Large)
+                legend = LegendViewModel(messages("removePreviousRegNumber.heading", mgdRegNumber)).asPageHeading(viewmodels.LegendSize.Large)
             )
         )
 

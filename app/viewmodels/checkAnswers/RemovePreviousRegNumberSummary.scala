@@ -21,24 +21,23 @@ import models.{CheckMode, UserAnswers}
 import pages.RemovePreviousRegNumberPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object RemovePreviousRegNumberSummary  {
+object RemovePreviousRegNumberSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(RemovePreviousRegNumberPage).map {
-      answer =>
+    answers.get(RemovePreviousRegNumberPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "removePreviousRegNumber.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.RemovePreviousRegNumberController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("removePreviousRegNumber.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "removePreviousRegNumber.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.RemovePreviousRegNumberController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("removePreviousRegNumber.change.hidden"))
         )
+      )
     }
 }
