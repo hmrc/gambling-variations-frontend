@@ -14,7 +14,8 @@
  * limitations under the License.
  *@
 
-@import views.html.components.Paragraph
+@import views.html.components._
+@import viewmodels.LegendSize
 
 @this(
     layout: templates.Layout,
@@ -22,7 +23,8 @@
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     paragraph: Paragraph,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -35,11 +37,15 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @caption(messages("seasonalBusiness.heading.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("isSeasonalBusiness"),
-                legend = LegendViewModel(messages("seasonalBusiness.heading")).asPageHeading()
-            ).withHint(HintViewModel(messages("seasonalBusiness.paragraph")))
+                field = form("isBusinessSeasonal"),
+                legend = LegendViewModel(messages("seasonalBusiness.heading")).asPageHeading(LegendSize.Large),
+            ).withHint(
+                HintViewModel(messages("seasonalBusiness.paragraph"))
+                    .withCssClass("govuk-body")
+            )
         )
 
         @govukButton(
