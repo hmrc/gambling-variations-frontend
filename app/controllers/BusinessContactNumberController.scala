@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.BusinessContactNumberPage
+import pages.{BusinessContactNumberPage, ContactDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -82,7 +82,8 @@ class BusinessContactNumberController @Inject() (
             updatedAnswers <- Future.fromTry(
                                 request.userAnswers.set(BusinessContactNumberPage, value)
                               )
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsSubmittedPage, true))
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(
             navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
           )

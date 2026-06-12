@@ -18,6 +18,7 @@ package viewmodels
 
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import controllers.routes
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.Helpers.stubMessagesApi
 import org.scalatest.OptionValues.*
@@ -80,6 +81,7 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
 
       tasks.find(_.name == "Business name").value.status mustBe ReadyToSubmit
       tasks.find(_.name == "Licences").value.status mustBe ReadyToSubmit
+      tasks.find(_.name == "Trading details").value.url mustBe routes.IndexController.onPageLoad().url
     }
 
     "include partnership task when isPartnership is true" in {

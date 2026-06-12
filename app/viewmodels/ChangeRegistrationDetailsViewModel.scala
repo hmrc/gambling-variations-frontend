@@ -17,7 +17,6 @@
 package viewmodels
 
 import controllers.routes
-import models.NormalMode
 import play.api.i18n.Messages
 
 final case class ChangeRegistrationDetailsViewModel(
@@ -55,7 +54,7 @@ final case class ChangeRegistrationDetailsViewModel(
       optional(!isGroupMember)(
         TaskListItem(
           messages("changeRegistrationDetails.businessContactDetails"),
-          routes.BusinessContactNumberController.onPageLoad(NormalMode).url,
+          routes.CheckContactDetailsController.onPageLoad().url,
           NoChange
         )
       ),
