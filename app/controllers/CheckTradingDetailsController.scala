@@ -25,6 +25,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.*
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
+import pages.TradingDetailsChangeFlagPage
 
 class CheckTradingDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -40,6 +41,7 @@ class CheckTradingDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (authorised andThen getData andThen businessDetailsDataRequiredAction andThen mgdTradDetailsRequireData) { implicit request =>
 
+      val showChangeMessage = request.userAnswers.get(TradingDetailsChangeFlagPage).contains(true)
       val vm =
         CheckTradingDetailsViewModel.from(request.userAnswers)
 
@@ -48,7 +50,8 @@ class CheckTradingDetailsController @Inject() (
           vm.tradeClass,
           vm.seasonalBusiness,
           vm.previousMgd,
-          vm.associatedMgd
+          vm.associatedMgd,
+          showChangeMessage
         )
       )
     }

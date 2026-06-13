@@ -26,7 +26,7 @@
         caption: Caption
 )
 
-@(listTradClass: SummaryList, list: SummaryList, previousMgdList: SummaryList, associatedMgdList: SummaryList)(implicit request: Request[_], messages: Messages)
+@(listTradClass: SummaryList, list: SummaryList, previousMgdList: SummaryList, associatedMgdList: SummaryList, showChangeMessage: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkTradingDetails.title"), Some(messages("changeRegistrationDetails.title")))) {
 
@@ -47,6 +47,7 @@
   @govukSummaryList(associatedMgdList)
  }
 
+ @p("checkTradingDetails.submit.p1")
  @govukButton(
   ButtonViewModel(messages("site.continue"))
   .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)

@@ -21,7 +21,7 @@ import forms.BusinessTradeClassFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.BusinessTradeClassPage
+import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -68,6 +68,7 @@ class BusinessTradeClassController @Inject() (
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
         )

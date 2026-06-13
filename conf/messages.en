@@ -339,4 +339,4 @@ businessTradeClass.other = Other
 
 checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
 checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
-
+checkTradingDetails.submit.p1 = You must continue to the change registration details page to submit any changes.
