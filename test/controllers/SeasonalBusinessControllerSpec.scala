@@ -18,19 +18,19 @@ package controllers
 
 import base.SpecBase
 import forms.SeasonalBusinessFormProvider
-import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import models.{BusinessType, NormalMode, UserAnswers}
+import navigation.FakeNavigator
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{IsSeasonalBusinessPage, MgdTradeDetailsSectionPage}
+import pages.{BusinessTypePage, GroupMemberPage, IsSeasonalBusinessPage, MgdTradeDetailsSectionPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.SeasonalBusinessView
-
+import navigation.Navigator
 import scala.concurrent.Future
 
 class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
@@ -40,51 +40,68 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new SeasonalBusinessFormProvider()
   val form = formProvider()
 
-  lazy val seasonalBusinessRoute = routes.SeasonalBusinessController.onPageLoad(NormalMode).url
+  lazy val seasonalBusinessRoute =
+    routes.SeasonalBusinessController.onPageLoad(NormalMode).url
 
   private val baseUserAnswers =
-    UserAnswers(userAnswersId).set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
+    UserAnswers(userAnswersId)
+      .set(MgdTradeDetailsSectionPage, mgdRegNum)
+      .success
+      .value
+      .set(GroupMemberPage, false)
+      .success
+      .value
+      .set(BusinessTypePage, BusinessType.Soleproprietor)
+      .success
+      .value
+
+  private val answeredUserAnswers =
+    baseUserAnswers
+      .set(IsSeasonalBusinessPage, true)
+      .success
+      .value
 
   "SeasonalBusiness Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and render page for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, seasonalBusinessRoute)
 
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[SeasonalBusinessView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+
+        contentAsString(result) mustEqual
+          view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on GET when answer exists" in {
 
-      val userAnswers = baseUserAnswers.set(IsSeasonalBusinessPage, true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(answeredUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, seasonalBusinessRoute)
 
+        val result = route(application, request).value
         val view = application.injector.instanceOf[SeasonalBusinessView]
 
-        val result = route(application, request).value
-
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+
+        contentAsString(result) mustEqual
+          view(form.fill(true), NormalMode)(request, messages(application)).toString
       }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect to next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
-
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
@@ -98,38 +115,43 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isSeasonalBusiness", "true"))
+            .withFormUrlEncodedBody("isSeasonalBusiness" -> "true")
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result) mustBe Some(onwardRoute.url)
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must return BAD REQUEST when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isSeasonalBusiness", ""))
-
-        val boundForm = form.bind(Map("isSeasonalBusiness" -> ""))
-
-        val view = application.injector.instanceOf[SeasonalBusinessView]
+            .withFormUrlEncodedBody("isSeasonalBusiness" -> "")
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+
+        val view = application.injector.instanceOf[SeasonalBusinessView]
+
+        contentAsString(result) mustEqual
+          view(form.bind(Map("isSeasonalBusiness" -> "")), NormalMode)(
+            request,
+            messages(application)
+          ).toString
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to System Error page when no user answers on GET" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request = FakeRequest(GET, seasonalBusinessRoute)
@@ -137,23 +159,24 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result) mustBe Some(routes.SystemErrorController.onPageLoad().url)
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to System Error page when no user answers on POST" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isSeasonalBusiness", "true"))
+            .withFormUrlEncodedBody("isSeasonalBusiness" -> "true")
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result) mustBe Some(routes.SystemErrorController.onPageLoad().url)
       }
     }
   }

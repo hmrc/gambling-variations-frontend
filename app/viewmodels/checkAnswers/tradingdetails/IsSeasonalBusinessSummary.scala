@@ -14,35 +14,29 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.BusinessTradeClassPage
+import pages.IsSeasonalBusinessPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object BusinessTradeClassSummary {
+object IsSeasonalBusinessSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(BusinessTradeClassPage).map { answer =>
-
-      val value = ValueViewModel(
-        HtmlContent(
-          HtmlFormat.escape(messages(s"businessTradeClass.$answer"))
-        )
-      )
+    answers.get(IsSeasonalBusinessPage).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "businessTradeClass.checkYourAnswersLabel",
-        value = value,
+        key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
+        value = ValueViewModel(if (answer) messages("site.yes") else messages("site.no")),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.BusinessTradeClassController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("businessTradeClass.change.hidden"))
+          ActionItemViewModel(
+            "site.change",
+            routes.FaxNumberController.onPageLoad(CheckMode).url
+          ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
         )
       )
     }

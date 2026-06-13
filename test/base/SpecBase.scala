@@ -39,7 +39,7 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
   implicit val mat: Materializer = Materializer.createMaterializer(actorSystem)
 
   val userAnswersId: String = "id"
-  val mgdRegNum: String = "id"
+  val mgdRegNum: String = "XRM00000000574"
 
   def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
 
@@ -52,6 +52,7 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
         bind[BusinessNameDataRequiredAction].to[BusinessNameDataRequiredActionImpl],
         bind[BusinessContactDetailsDataRequiredAction].to[BusinessContactDetailsDataRequiredActionImpl],
         bind[MgdTradeDetailsDataRequiredAction].to[MgdTradeDetailsDataRequiredActionImpl],
+        bind[BusinessDetailsDataRequiredAction].to[BusinessDetailsDataRequiredActionImpl],
         bind[CorrespondenceDetailsDataRequiredAction].to[CorrespondenceDetailsDataRequiredActionImpl],
         bind[AuthorisedAction].to[FakeAuthorisedAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))

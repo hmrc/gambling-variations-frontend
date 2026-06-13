@@ -48,6 +48,7 @@ class Navigator @Inject() () {
     case SoleProprietorPage       => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
     case BusinessEmailAddressPage => _ => routes.ChangeEmailAddressController.onPageLoad(CheckMode)
     case IsSeasonalBusinessPage   => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
+    case BusinessTradeClassPage   => userAnswers => routes.CheckTradingDetailsController.onPageLoad()
     case _                        => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 

@@ -10,6 +10,7 @@ site.start = Start now
 site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
+site.notProvided = Not provided
 
 date.day = Day
 date.month = Month
@@ -306,3 +307,36 @@ seasonalBusiness.paragraph = A seasonal business has periods where it does not t
 seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
 seasonalBusiness.error.required = Select yes if this is a seasonal business
 seasonalBusiness.change.hidden = Is this a seasonal business?
+
+
+
+
+checkTradingDetails.caption = Change registration details
+checkTradingDetails.title = Check your trading details
+checkTradingDetails.heading = Check your trading details
+checkTradingDetails.heading.caption = Change registration details
+checkTradingDetails.businessTradeClass.checkYourAnswersLabel = Trade class
+checkTradingDetails.businessTradeClass.change.hidden = trade class
+checkTradingDetails.seasonalBusiness.checkYourAnswersLabel = Seasonal business
+checkTradingDetails.seasonalBusiness.change.hidden = seasonal business
+checkTradingDetails.previousRegistrationNumbers.p1 = If any previous MGD registrations were allocated to your business, you can provide 3 registration numbers.
+checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel = Previous MGD registration numbers
+checkTradingDetails.previousRegistrationNumbers.change.hidden = previous MGD registration numbers
+
+checkTradingDetails.associatedRegistrationNumbers.p1 = If any MGD registrations are associated with your business, you can provide 3 registration numbers.
+checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel = Associated MGD registration numbers
+checkTradingDetails.associatedRegistrationNumbers.change.hidden = associated MGD registration numbers
+
+businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
+businessTradeClass.adultGamingCentre = Adult gaming centre
+businessTradeClass.familyentertainmentcentre = Family entertainment centre
+businessTradeClass.bookmakerorbettingactivities = Bookmaker or betting activities
+businessTradeClass.bingopromoter = Bingo promoter
+businessTradeClass.casino = Casino
+businessTradeClass.publichouse = Public house
+businessTradeClass.club = Club
+businessTradeClass.other = Other
+
+checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
+checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
+checkTradingDetails.submit.p1 = You must continue to the change registration details page to submit any changes.

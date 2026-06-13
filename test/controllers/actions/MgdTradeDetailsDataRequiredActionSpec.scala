@@ -18,7 +18,8 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.requests.{DataRequest, OptionalDataRequest}
+import controllers.routes
+import models.requests.DataRequest
 import models.{BusinessTradeClass, MgdTradeDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
@@ -29,7 +30,8 @@ import play.api.mvc.Results.*
 import play.api.mvc.{AnyContent, Result}
 import play.api.test.FakeRequest
 import repositories.SessionRepository
-import uk.gov.hmrc.http.UpstreamErrorResponse
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import pages.MgdTradeDetailsSectionPage
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,183 +43,165 @@ class MgdTradeDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
       extends MgdTradeDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
-    def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
+
+    def callRefine(request: DataRequest[AnyContent]) =
+      refine(request)
   }
 
-  "MgdTradeDetails DataRequiredAction" - {
+  "MgdTradeDetailsDataRequiredAction" - {
 
-    "when there is no User Answers in the cache" - {
+    "when MgdTradeDetailsSectionPage is missing" - {
 
-      "return the request with a populated User Answers with data from the certificate" in {
+      "populates UserAnswers from connector and persists them" in {
 
-        val request = FakeRequest()
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
-        when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future(mgdTradeDetails)
+
+        when(gamblingConnector.getMgdTradeDetails(any())(any[HeaderCarrier]))
+          .thenReturn(Future.successful(mgdTradeDetails))
+
+        when(sessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
+
+        val request = FakeRequest()
+        val existingUserAnswers = UserAnswers(mgdRegNum, Json.obj()) // Use mgdRegNum here
+
         val action = new Harness(sessionRepository, gamblingConnector)
 
-        val data = Json.obj(
-          "mgdTradeDetailsSection"        -> Json.obj("mgdRegNum" -> "XRM00000000574"),
-          "isBusinessSeasonal"            -> true,
-          "businessTradeClass"            -> 6,
-          "otherTradeClass"               -> "Description",
-          "previousRegistrationNumbers"   -> Json.arr("XWM00000001774", "XDM00000001309", ""),
-          "associatedRegistrationNumbers" -> Json.arr("XXM00000000723", "XQM00000001196", "")
-        )
+        val result =
+          action.callRefine(DataRequest(request, mgdRegNum, existingUserAnswers)).futureValue
 
-        val result: Either[Result, DataRequest[AnyContent]] =
-          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+        result mustBe a[Right[_, _]]
+        val Right(dataRequest) = result
 
-        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+        dataRequest.userAnswers.id mustBe mgdRegNum
+        dataRequest.userAnswers.get(MgdTradeDetailsSectionPage) mustBe Some(mgdRegNum)
 
-        result.map { req =>
-          req.request mustBe expected.request
-          req.userAnswers.data mustBe expected.userAnswers.data
-          req.userAnswers.id mustBe expected.userAnswers.id
-        }
+        verify(gamblingConnector, times(1)).getMgdTradeDetails(any())(any[HeaderCarrier])
         verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getMgdTradeDetails(any())(any())
       }
 
-      "redirect to SystemError " - {
-        "User Answers cannot be saved" in {
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future(mgdTradeDetails)
-          val action = new Harness(sessionRepository, gamblingConnector)
+      "redirects to SystemError when sessionRepository.set returns false" in {
 
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
+        val sessionRepository = mock[SessionRepository]
+        val gamblingConnector = mock[GamblingConnector]
 
-          result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
-          verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getMgdTradeDetails(any())(any())
-        }
+        when(gamblingConnector.getMgdTradeDetails(any())(any[HeaderCarrier]))
+          .thenReturn(Future.successful(mgdTradeDetails))
 
-        "getMgdTradeDetails throws an exception" in {
+        when(sessionRepository.set(any()))
+          .thenReturn(Future.successful(false))
 
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future.failed(
-            UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR)
-          )
-          val action = new Harness(sessionRepository, gamblingConnector)
+        val request = FakeRequest()
+        val action = new Harness(sessionRepository, gamblingConnector)
 
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-          result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
-
-        }
-      }
-
-    }
-
-    "when there are User Answers in the cache" - {
-
-      "return the request with a populated User Answers" - {
-        "without call to backend" in {
-
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          val action = new Harness(sessionRepository, gamblingConnector)
-
-          val data = Json.obj(
-            "mgdTradeDetailsSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
+        val result =
+          action
+            .callRefine(
+              DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, Json.obj()))
             )
-          )
+            .futureValue
 
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(UserAnswers(mgdRegNum, data)))).futureValue
-
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
-
-          result.map { req =>
-            req.request mustBe expected.request
-            req.userAnswers.data mustBe expected.userAnswers.data
-            req.userAnswers.id mustBe expected.userAnswers.id
-          }
-          verify(sessionRepository, never).set(any())
-          verify(gamblingConnector, never).getMgdTradeDetails(any())(any())
-
-        }
-        "with call to backend" in {
-
-          val request = FakeRequest()
-          val sessionRepository = mock[SessionRepository]
-          val gamblingConnector = mock[GamblingConnector]
-          when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getMgdTradeDetails(any())(any())) thenReturn Future(mgdTradeDetails)
-          val action = new Harness(sessionRepository, gamblingConnector)
-
-          val updatedSessionData = Json.obj(
-            "businessNameSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            ),
-            "mgdTradeDetailsSection"        -> Json.obj("mgdRegNum" -> "XRM00000000574"),
-            "isBusinessSeasonal"            -> true,
-            "businessTradeClass"            -> 6,
-            "otherTradeClass"               -> "Description",
-            "previousRegistrationNumbers"   -> Json.arr("XWM00000001774", "XDM00000001309", ""),
-            "associatedRegistrationNumbers" -> Json.arr("XXM00000000723", "XQM00000001196", "")
-          )
-
-          val existingUserAnswers = UserAnswers(mgdRegNum,
-                                                Json.obj(
-                                                  "businessNameSection" -> Json.obj(
-                                                    "mgdRegNum" -> "ABC12345678901"
-                                                  )
-                                                )
-                                               )
-
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(existingUserAnswers))).futureValue
-
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, updatedSessionData))
-
-          result.map { req =>
-            req.request mustBe expected.request
-            req.userAnswers.data mustBe expected.userAnswers.data
-            req.userAnswers.id mustBe expected.userAnswers.id
-          }
-          verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getMgdTradeDetails(any())(any())
-
-        }
+        result mustBe Left(Redirect(routes.SystemErrorController.onPageLoad()))
+        verify(sessionRepository, times(1)).set(any())
       }
 
+      "redirects to SystemError when connector fails" in {
+
+        val sessionRepository = mock[SessionRepository]
+        val gamblingConnector = mock[GamblingConnector]
+
+        when(gamblingConnector.getMgdTradeDetails(any())(any[HeaderCarrier]))
+          .thenReturn(Future.failed(UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR)))
+
+        val request = FakeRequest()
+        val action = new Harness(sessionRepository, gamblingConnector)
+
+        val result =
+          action
+            .callRefine(
+              DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, Json.obj()))
+            )
+            .futureValue
+
+        result mustBe Left(Redirect(routes.SystemErrorController.onPageLoad()))
+        verify(sessionRepository, never).set(any())
+      }
     }
 
+    "when MgdTradeDetailsSectionPage is already present" - {
+
+      "returns request immediately and does not call dependencies" in {
+
+        val sessionRepository = mock[SessionRepository]
+        val gamblingConnector = mock[GamblingConnector]
+
+        val cachedUserAnswers =
+          UserAnswers(mgdRegNum, Json.obj())
+            .set(MgdTradeDetailsSectionPage, mgdRegNum)
+            .success
+            .value
+
+        val request = FakeRequest()
+        val action = new Harness(sessionRepository, gamblingConnector)
+
+        val result =
+          action.callRefine(DataRequest(request, mgdRegNum, cachedUserAnswers)).futureValue
+
+        result mustBe a[Right[_, _]]
+        val Right(dataRequest) = result
+
+        dataRequest.userAnswers mustBe cachedUserAnswers
+        verify(sessionRepository, never).set(any())
+        verify(gamblingConnector, never).getMgdTradeDetails(any())(any())
+      }
+
+      "still allows enrichment if other sections exist but trade details missing" in {
+
+        val sessionRepository = mock[SessionRepository]
+        val gamblingConnector = mock[GamblingConnector]
+
+        when(gamblingConnector.getMgdTradeDetails(any())(any[HeaderCarrier]))
+          .thenReturn(Future.successful(mgdTradeDetails))
+
+        when(sessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
+
+        val partial =
+          UserAnswers(mgdRegNum, Json.obj("businessNameSection" -> Json.obj("foo" -> "bar"))) // Use mgdRegNum here
+
+        val request = FakeRequest()
+
+        val action = new Harness(sessionRepository, gamblingConnector)
+
+        val result =
+          action.callRefine(DataRequest(request, mgdRegNum, partial)).futureValue
+
+        result mustBe a[Right[_, _]]
+        val Right(dataRequest) = result
+
+        // Assert enrichment happened correctly
+        dataRequest.userAnswers.id mustBe mgdRegNum
+        dataRequest.userAnswers.get(MgdTradeDetailsSectionPage) mustBe Some(mgdRegNum)
+
+        verify(gamblingConnector, times(1)).getMgdTradeDetails(any())(any[HeaderCarrier])
+        verify(sessionRepository, times(1)).set(any())
+      }
+    }
   }
 }
 
 object MgdTradeDetailsDataRequiredActionSpec {
+
+  val mgdRegNum = "XRM00000000574"
+
   val mgdTradeDetails: MgdTradeDetails = MgdTradeDetails(
-    mgdRegNumber         = "XRM00000000574",
-    isBusinessSeasonal   = Some(true),
-    businessTradeClass   = Some(BusinessTradeClass.Casino),
-    businessActivityDesc = Some("Description"),
-    previousMgdRegistrationNumbers = Some(
-      Seq(
-        "XWM00000001774",
-        "XDM00000001309",
-        ""
-      )
-    ),
-    associatedMgdRegistrationNumbers = Some(
-      Seq(
-        "XXM00000000723",
-        "XQM00000001196",
-        ""
-      )
-    ),
-    systemDate = Some(LocalDate.of(2026, 5, 31))
+    mgdRegNumber                     = mgdRegNum,
+    isBusinessSeasonal               = Some(true),
+    businessTradeClass               = Some(BusinessTradeClass.Casino),
+    businessActivityDesc             = Some("Description"),
+    previousMgdRegistrationNumbers   = Some(Seq("XWM00000001774", "XDM00000001309", "")),
+    associatedMgdRegistrationNumbers = Some(Seq("XXM00000000723", "XQM00000001196", "")),
+    systemDate                       = Some(LocalDate.of(2026, 5, 31))
   )
 }
