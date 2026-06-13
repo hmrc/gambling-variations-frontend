@@ -47,7 +47,10 @@
   @govukSummaryList(associatedMgdList)
  }
 
- @p("checkTradingDetails.submit.p1")
+ @if(showChangeMessage) {
+  @p("checkTradingDetails.submit.p1")
+ }
+
  @govukButton(
   ButtonViewModel(messages("site.continue"))
   .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
