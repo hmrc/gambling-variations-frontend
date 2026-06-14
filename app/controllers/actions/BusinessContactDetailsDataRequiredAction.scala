@@ -99,7 +99,7 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
                           },
                           BusinessContactNumberPage
                         )
-      updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, FaxNumberPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, BusinessFaxNumberPage)
       updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
     } yield updatedAnswers
   }

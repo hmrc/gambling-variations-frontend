@@ -224,7 +224,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
 object CorrespondenceDetailsDataRequiredActionSpec {
   val correspondenceDetails: CorrespondenceDetails = CorrespondenceDetails(
     mgdRegNumber = "XWM00000001770",
-    nameLine1    = "ABC ltd",
+    nameLine1    = Some("ABC ltd"),
     nameLine2    = Some("XX"),
     correspondenceAddress = Some(
       Address(

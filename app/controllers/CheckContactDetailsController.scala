@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, ContactDetailsSubmittedPage, FaxNumberPage}
+import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsSubmittedPage}
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -41,7 +41,7 @@ class CheckContactDetailsController @Inject() (
       view(
         request.userAnswers.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
         request.userAnswers.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
-        request.userAnswers.get(FaxNumberPage),
+        request.userAnswers.get(BusinessFaxNumberPage),
         request.userAnswers.get(BusinessEmailAddressPage),
         flag
       )

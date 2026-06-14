@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.FaxNumberPage
+import pages.BusinessFaxNumberPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -28,7 +28,7 @@ import viewmodels.implicits.*
 object FaxNumberSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(FaxNumberPage).map { answer =>
+    answers.get(BusinessFaxNumberPage).map { answer =>
 
       SummaryListRowViewModel(
         key   = "faxNumber.checkYourAnswersLabel",
