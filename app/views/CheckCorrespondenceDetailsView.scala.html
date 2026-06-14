@@ -29,17 +29,17 @@
 
 @(checkCorrespondenceDetailsViewModel: CheckCorrespondenceDetailsViewModel)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("contactDetails.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = titleNoForm(messages("checkCorrespondenceDetails.title"), Some("changeRegistrationDetails.title"))) {
 
-    @caption(messages("contactDetails.caption"))
-    @h1("contactDetails.heading", classes="govuk-heading-l")
+    @caption(messages("checkCorrespondenceDetails.caption"))
+    @h1("checkCorrespondenceDetails.heading", classes="govuk-heading-l")
 
     @govukSummaryList(SummaryList(
         rows = checkCorrespondenceDetailsViewModel.summaryList
     ))
 
     @if(checkCorrespondenceDetailsViewModel.isSubmitted) {
-        @paragraph(messages("contactDetails.message.requiredToSubmit"))
+        @paragraph(messages("checkCorrespondenceDetails.message.requiredToSubmit"))
     }
     <p class="govuk-body">
         @govukButton(

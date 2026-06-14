@@ -44,7 +44,7 @@ class CheckCorrespondenceDetailsController @Inject() (
           request.userAnswers.get(CorrespondenceNamePage),
           request.userAnswers.get(AddCorrespondenceAdditionalNamePage),
           request.userAnswers.get(CorrespondenceAdditionalNamePage),
-          request.userAnswers.get(CorrespondenceAddressPage),
+          request.userAnswers.get(CorrespondenceAddressUkPage) orElse request.userAnswers.get(CorrespondenceAddressNonUkPage),
           request.userAnswers.get(AddCorrespondenceAdditionalInformationPage),
           request.userAnswers.get(CorrespondenceAdditionalInformationPage),
           request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),

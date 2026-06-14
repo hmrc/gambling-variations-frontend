@@ -77,6 +77,7 @@ POST       /change-registration-details/change-business-contact-details/remove-e
 
 
 GET        /change-registration-details/business-contact-details/check                          controllers.CheckContactDetailsController.onPageLoad()
+GET        /change-registration-details/correspondence-details/check                            controllers.CheckCorrespondenceDetailsController.onPageLoad()
 
 GET        /change-registration-details/business-contact-details/fax-number                     controllers.FaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-contact-details/fax-number                     controllers.FaxNumberController.onSubmit(mode: Mode = NormalMode)
