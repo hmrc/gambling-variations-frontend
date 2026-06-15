@@ -67,6 +67,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode, "XYM00000000")(request, messages(application)).toString
+
       }
     }
 

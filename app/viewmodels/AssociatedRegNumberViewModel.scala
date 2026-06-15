@@ -35,7 +35,7 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
       case Some(associatedRegNums) =>
         val rows: Seq[SummaryListRow] = for (assocReg <- associatedRegNums) yield {
           SummaryListRow(
-            key = Key(content = assocReg, classes = "associated-registration-number govuk-!-font-weight-regular"),
+            key = Key(content = assocReg, classes = "govuk-!-font-weight-regular"),
             actions = Some(
               Actions(
                 items = Seq(

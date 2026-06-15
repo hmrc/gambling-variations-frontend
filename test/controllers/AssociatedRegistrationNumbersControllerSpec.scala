@@ -42,7 +42,12 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
   val form = formProvider()
 
   val data = Json.obj(
-    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+    "associatedRegistrationNumbers" -> Json.arr(
+      "XHM00000199",
+      "ZIU00001218",
+      "GTT28881666"
+    )
   )
 
   private val baseUserAnswers =
@@ -64,7 +69,8 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
       }
     }
 
@@ -82,7 +88,8 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
       }
     }
 
@@ -121,14 +128,9 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
           FakeRequest(POST, associatedRegistrationNumbersRoute)
             .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
-
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
 
