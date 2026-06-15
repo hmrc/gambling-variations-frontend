@@ -21,7 +21,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, associatedRegistrationNumbersPage, checkRegistrationDetailsPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegistrationNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -52,21 +52,16 @@ class AssociatedRegistrationNumbersController @Inject() (
       case None        => form
       case Some(value) => form.fill(value)
     }
-
-    val associatedRegNumberSeq = request.userAnswers.get(associatedRegistrationNumbersPage) match {
-      case Some(regNumbers) => regNumbers
-      case None             => Redirect(navigator.nextPage(checkRegistrationDetailsPage, mode, request.userAnswers))
-    }
+    val associatedRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(AssociatedRegistrationNumbersPage)
 
     Ok(view(preparedForm, mode, associatedRegNumberSeq))
   }
-
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, request.userAnswers.get(AssociatedRegistrationNumbersPage)))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))

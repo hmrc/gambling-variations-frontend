@@ -15,6 +15,7 @@
  *@
 
 @import views.html.components.{Caption, Paragraph, H1}
+@import viewmodels.AssociatedRegNumberViewModel
 
 @this(
     layout: templates.Layout,
@@ -24,10 +25,11 @@
     govukButton: GovukButton,
     caption: Caption,
     p: Paragraph,
-    h1:H1
+    h1:H1,
+    govukSummaryList : GovukSummaryList
 )
 
-@(form: Form[_], mode: Mode, associatedRegNumbers: Seq[String])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, associatedRegNumbers: Option[Seq[String]])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
 
@@ -40,7 +42,9 @@
         @h1("associatedRegistrationNumbers.heading", classes = "govuk-heading-l")
         @p("associatedRegistrationNumbers.paragraph")
 
-
+        @govukSummaryList(SummaryList(
+        rows = AssociatedRegNumberViewModel(associatedRegNumbers).summaryList
+        ))
 
         @govukRadios(
             RadiosViewModel.yesNo(

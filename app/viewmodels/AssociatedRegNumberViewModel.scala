@@ -25,52 +25,35 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = associatedRegNumberSummaryListRows
 
-
   private def associatedRegNumberSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
     associatedRegNumbers match {
-      case Some(associatedRegNums) => for (assocReg <- associatedRegNums) yield {
-        SummaryListRow(
-          value = Value(
-            content = assocReg,
-            classes = "associated-registration-number"),
-          actions =
-            Some(
+      case Some(associatedRegNums) =>
+        val rows: Seq[SummaryListRow] = for (assocReg <- associatedRegNums) yield {
+
+          SummaryListRow(
+            key = Key(content = assocReg, classes = "associated-registration-number govuk-!-font-weight-regular"),
+            actions = Some(
               Actions(
                 items = Seq(
                   ActionItem(
-                    href = "#",
-                    content = "site.change",
-                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                    href               = "#",
+                    content            = "site.change",
+                    visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   ),
                   ActionItem(
-                    href = "#",
-                    content = "site.remove",
-                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                    href               = "#",
+                    content            = "site.remove",
+                    visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   )
                 ),
-                //            classes = "govuk-summary-list__actions govuk-!-width-one-half"
+                classes = "govuk-summary-list__actions govuk-!-width-one-half"
               )
             )
-        )
-      }
+          )
+        }
+        rows
       case None =>
-        Seq(SummaryListRow(
-          value = Value(
-            content = messages("contactDetails.message.notProvided")
-          ).withCssClass("associated-registration-number"),
-          actions =
-            Some(
-              Actions(
-                items = Seq(
-                  ActionItem(
-                    href = "#",
-                    content = "site.change",
-                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
-                  ),
-                )
-              )
-            )
-        ))
-      }
+        Seq.empty
     }
   }
+}

@@ -293,7 +293,7 @@ associatedRegistrationNumbers.yesLabel = Yes, add another number
 associatedRegistrationNumbers.noLabel = No, return to check your trading details
 associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
 associatedRegistrationNumbers.error.required = Select yes if associatedRegistrationNumbers
-associatedRegistrationNumbers.change.hidden = AssociatedRegistrationNumbers
+associatedRegistrationNumbers.change.hidden =  registration number {0}
 
 
 businessTradeClass.title = What is the business trade class?
