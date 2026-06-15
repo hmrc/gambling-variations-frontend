@@ -35,18 +35,23 @@ object PreviousRegistrationNumbersSummary {
         answers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
 
       val value =
-        if (numbers.nonEmpty) {
-          ValueViewModel(
-            HtmlContent(
-              HtmlFormat.raw(
-                s"""<ul class="govuk-list govuk-list--bullet">
-                   |${numbers.map(n => s"<li>$n</li>").mkString}
-                   |</ul>""".stripMargin
+        numbers match {
+          case Seq() =>
+            ValueViewModel(messages("site.notProvided"))
+
+          case Seq(singleNumber) =>
+            ValueViewModel(singleNumber)
+
+          case multipleNumbers =>
+            ValueViewModel(
+              HtmlContent(
+                HtmlFormat.raw(
+                  s"""<ul class="govuk-list govuk-list--bullet">
+                     |${multipleNumbers.map(n => s"<li>$n</li>").mkString}
+                     |</ul>""".stripMargin
+                )
               )
             )
-          )
-        } else {
-          ValueViewModel(messages("site.notProvided"))
         }
 
       val actions =

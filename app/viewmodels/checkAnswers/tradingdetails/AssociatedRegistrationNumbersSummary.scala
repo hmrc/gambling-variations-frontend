@@ -34,27 +34,24 @@ object AssociatedRegistrationNumbersSummary {
       val numbers =
         answers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
 
-      val value = numbers.size match {
+      val value = numbers match {
 
-        case 0 =>
+        case Seq() =>
           ValueViewModel(messages("site.notProvided"))
 
-        case 1 =>
-          ValueViewModel(numbers.head)
+        case Seq(single) =>
+          ValueViewModel(single)
 
-        case 2 | 3 =>
+        case multiple =>
           ValueViewModel(
             HtmlContent(
               HtmlFormat.raw(
                 s"""<ul class="govuk-list govuk-list--bullet">
-                   |${numbers.map(n => s"<li>$n</li>").mkString}
+                   |${multiple.map(n => s"<li>$n</li>").mkString}
                    |</ul>""".stripMargin
               )
             )
           )
-
-        case _ =>
-          ValueViewModel(numbers.mkString(", "))
       }
 
       val actions = Seq(

@@ -17,14 +17,9 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
-import models.CheckMode
 import pages.AssociatedRegistrationNumbersPage
 import play.api.i18n.Messages
 import play.api.Application
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
 
 class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
 
@@ -55,7 +50,7 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
       result.get.actions.size mustBe 1
     }
 
-    "show two numbers as a bullet list and include action" in {
+    "show multiple numbers as a bullet list and include action" in {
       val answers =
         emptyUserAnswers
           .set(AssociatedRegistrationNumbersPage, Seq("123", "456"))
@@ -68,11 +63,10 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
       html must include("<ul")
       html must include("<li>123</li>")
       html must include("<li>456</li>")
-
       result.actions.size mustBe 1
     }
 
-    "show three numbers as a bullet list and include action" in {
+    "show multiple numbers (three items) as a bullet list and include action" in {
       val answers =
         emptyUserAnswers
           .set(AssociatedRegistrationNumbersPage, Seq("1", "2", "3"))
@@ -86,11 +80,10 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
       html must include("<li>1</li>")
       html must include("<li>2</li>")
       html must include("<li>3</li>")
-
       result.actions.size mustBe 1
     }
 
-    "show more than three numbers as comma separated and include action" in {
+    "show multiple numbers (four items) as a bullet list and include action" in {
       val answers =
         emptyUserAnswers
           .set(AssociatedRegistrationNumbersPage, Seq("1", "2", "3", "4"))
@@ -98,8 +91,13 @@ class AssociatedRegistrationNumbersSummarySpec extends SpecBase {
           .value
 
       val result = AssociatedRegistrationNumbersSummary.row(answers).value
+      val html = result.value.content.asHtml.toString
 
-      result.value.toString must include("1, 2, 3, 4")
+      html must include("<ul")
+      html must include("<li>1</li>")
+      html must include("<li>2</li>")
+      html must include("<li>3</li>")
+      html must include("<li>4</li>")
       result.actions.size mustBe 1
     }
   }
