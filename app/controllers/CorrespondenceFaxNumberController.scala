@@ -22,7 +22,7 @@ import forms.FaxNumberFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.CorrespondenceFaxNumberPage
+import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -66,6 +66,7 @@ class CorrespondenceFaxNumberController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceFaxNumberPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CorrespondenceFaxNumberPage, mode, updatedAnswers))
       )
