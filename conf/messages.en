@@ -220,6 +220,13 @@ removeEmailAddress.error.required = Select yes if you want to remove the email a
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
 
+removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
+removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
+removePreviousRegNumber.checkYourAnswersLabel = removePreviousRegNumber
+removePreviousRegNumber.error.required = Select yes if you want to remove the previous registration number
+removePreviousRegNumber.change.hidden = remove previous registration number
+removePreviousRegNumber.heading.caption = Change registration details
+
 removeAssociatedRegNumber.title = Are you sure you want to remove the associated registration number?
 removeAssociatedRegNumber.heading = Are you sure you want to remove the associated registration number {0}?
 removeAssociatedRegNumber.checkYourAnswersLabel = removeAssociatedRegNumber
@@ -265,8 +272,8 @@ businessContactNumber.heading = What are your business contact numbers?
 businessContactNumber.p1 = You must provide at least one contact number.
 businessContactNumber.caption = Change registration details
 
-businessContactNumber.phoneNumber = Phone number:
-businessContactNumber.mobileNumber = Mobile number:
+businessContactNumber.phoneNumber = Phone number
+businessContactNumber.mobileNumber = Mobile number
 
 businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
 
