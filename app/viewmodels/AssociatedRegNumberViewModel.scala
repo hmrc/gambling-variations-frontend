@@ -23,37 +23,54 @@ import viewmodels.govuk.all.{FluentValue, stringToText}
 
 case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]]) {
 
-  def summaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
-    associatedRegNumberSummaryListRow
-  )
+  def summaryList(implicit messages: Messages): Seq[SummaryListRow] = associatedRegNumberSummaryListRows
 
-  private def associatedRegNumberSummaryListRow(implicit messages: Messages): SummaryListRow = {
 
-      for (assocReg <- associatedRegNumbers) {
+  private def associatedRegNumberSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
+    associatedRegNumbers match {
+      case Some(associatedRegNums) => for (assocReg <- associatedRegNums) yield {
         SummaryListRow(
-        value = Value(
-          content = assocReg getOrElse messages("contactDetails.message.notProvided")
-        ).withCssClass("associated-registration-number"),
-        actions =
-          Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  href = "#",
-                  content = "site.change",
-                  visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+          value = Value(
+            content = assocReg,
+            classes = "associated-registration-number"),
+          actions =
+            Some(
+              Actions(
+                items = Seq(
+                  ActionItem(
+                    href = "#",
+                    content = "site.change",
+                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                  ),
+                  ActionItem(
+                    href = "#",
+                    content = "site.remove",
+                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                  )
                 ),
-                ActionItem(
-                  href = "#",
-                  content = "site.remove",
-                  visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
-                )
-              ),
-              //            classes = "govuk-summary-list__actions govuk-!-width-one-half"
+                //            classes = "govuk-summary-list__actions govuk-!-width-one-half"
+              )
             )
-          )
+        )
       }
-      )
+      case None =>
+        Seq(SummaryListRow(
+          value = Value(
+            content = messages("contactDetails.message.notProvided")
+          ).withCssClass("associated-registration-number"),
+          actions =
+            Some(
+              Actions(
+                items = Seq(
+                  ActionItem(
+                    href = "#",
+                    content = "site.change",
+                    visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
+                  ),
+                )
+              )
+            )
+        ))
+      }
+    }
   }
-
-}
