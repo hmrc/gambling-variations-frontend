@@ -21,10 +21,10 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class SeasonalBusinessFormProvider @Inject() extends Mappings {
+class RemovePreviousRegNumberFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "isBusinessSeasonal" -> boolean("seasonalBusiness.error.required")
+      "value" -> boolean("removePreviousRegNumber.error.required")
     )
 }

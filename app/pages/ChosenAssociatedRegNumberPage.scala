@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
-
-class SeasonalBusinessFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
-    Form(
-      "isBusinessSeasonal" -> boolean("seasonalBusiness.error.required")
-    )
+case object ChosenAssociatedRegNumberPage extends QuestionPage[String] {
+  override def path: JsPath = JsPath \ toString
+  override def toString: String = "chosenAssociatedRegNumber"
 }

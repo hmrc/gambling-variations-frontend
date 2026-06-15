@@ -16,15 +16,30 @@
 
 package forms
 
-import javax.inject.Inject
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class RemovePreviousRegNumberFormProviderSpec extends BooleanFieldBehaviours {
 
-class SeasonalBusinessFormProvider @Inject() extends Mappings {
+  val requiredKey = "removePreviousRegNumber.error.required"
+  val invalidKey = "error.boolean"
 
-  def apply(): Form[Boolean] =
-    Form(
-      "isBusinessSeasonal" -> boolean("seasonalBusiness.error.required")
+  val form = new RemovePreviousRegNumberFormProvider()()
+
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

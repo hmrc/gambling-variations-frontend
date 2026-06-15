@@ -221,6 +221,20 @@ removeEmailAddress.error.required = Select yes if you want to remove the email a
 removeEmailAddress.change.hidden = remove business email address
 removeEmailAddress.heading.caption = Change registration details
 
+removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
+removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
+removePreviousRegNumber.checkYourAnswersLabel = removePreviousRegNumber
+removePreviousRegNumber.error.required = Select yes if you want to remove the previous registration number
+removePreviousRegNumber.change.hidden = remove previous registration number
+removePreviousRegNumber.heading.caption = Change registration details
+
+removeAssociatedRegNumber.title = Are you sure you want to remove the associated registration number?
+removeAssociatedRegNumber.heading = Are you sure you want to remove the associated registration number {0}?
+removeAssociatedRegNumber.checkYourAnswersLabel = removeAssociatedRegNumber
+removeAssociatedRegNumber.error.required = Select yes if you want to remove the associated registration number
+removeAssociatedRegNumber.change.hidden = remove associated registration number
+removeAssociatedRegNumber.heading.caption = Change registration details
+
 #Check Contact Details
 contactDetails.caption = Change registration details
 contactDetails.title = Check your business contact details
@@ -302,6 +316,7 @@ businessTradeClass.change.hidden = What is the business trade class?
 
 
 seasonalBusiness.title = Is this a seasonal business?
+seasonalBusiness.heading.caption = Change registration details
 seasonalBusiness.heading = Is this a seasonal business?
 seasonalBusiness.paragraph = A seasonal business has periods where it does not trade. If you operate a seasonal business, you must submit nil returns for any periods that you are not trading.
 seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
