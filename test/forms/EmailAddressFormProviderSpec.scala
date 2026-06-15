@@ -31,7 +31,7 @@ class EmailAddressFormProviderSpec extends StringFieldBehaviours {
   private val emailRegex =
     """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
 
-  private val form = new EmailAddressFormProvider()()
+  private val form = new EmailAddressFormProvider()("emailAddress")
 
   ".emailAddress" - {
 

@@ -23,34 +23,34 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.BusinessEmailAddressPage
+import pages.CorrespondenceEmailPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessEmailAddressView
+import views.html.CorrespondenceEmailAddressView
 
 import scala.concurrent.Future
 
-class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
+class CorrespondenceEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new EmailAddressFormProvider()
-  val form = formProvider("emailAddress")
+  val form = formProvider("correspondenceEmailAddress")
 
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
 
   lazy val emailAddressRoute =
-    routes.BusinessEmailAddressController.onPageLoad(NormalMode).url
+    routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode).url
 
-  "BusinessEmailAddress Controller" - {
+  "CorrespondenceEmailAddress Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -61,7 +61,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[BusinessEmailAddressView]
+        val view = application.injector.instanceOf[CorrespondenceEmailAddressView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
@@ -72,8 +72,8 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "businessContactDetailsSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
-        BusinessEmailAddressPage.toString -> "validEmail@example.com"
+        "correspondenceDetailsSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
+        CorrespondenceEmailPage.toString -> "validEmail@example.com"
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
@@ -83,7 +83,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request = FakeRequest(GET, emailAddressRoute)
 
-        val view = application.injector.instanceOf[BusinessEmailAddressView]
+        val view = application.injector.instanceOf[CorrespondenceEmailAddressView]
 
         val result = route(application, request).value
 
@@ -129,7 +129,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val boundForm = form.bind(Map("emailAddress" -> ""))
 
-        val view = application.injector.instanceOf[BusinessEmailAddressView]
+        val view = application.injector.instanceOf[CorrespondenceEmailAddressView]
 
         val result = route(application, request).value
 

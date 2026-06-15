@@ -259,7 +259,7 @@ faxNumber.error.invalid.characters = The fax number must only include numbers 0 
 faxNumber.error.length = The fax number must be 20 characters or less
 faxNumber.change.hidden = FaxNumber
 
-emailAddress.title = What is the email address for this business? - Change registration details
+emailAddress.title = What is the email address for this business?
 emailAddress.heading = What is the email address for this business?
 emailAddress.checkYourAnswersLabel = Email Address
 emailAddress.error.required = Enter an email address for this business
@@ -321,3 +321,11 @@ seasonalBusiness.paragraph = A seasonal business has periods where it does not t
 seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
 seasonalBusiness.error.required = Select yes if this is a seasonal business
 seasonalBusiness.change.hidden = Is this a seasonal business?
+
+
+correspondenceEmailAddress.title = What email address should we use for correspondence?
+correspondenceEmailAddress.heading = What email address should we use for correspondence?
+correspondenceEmailAddress.checkYourAnswersLabel = Email Address
+correspondenceEmailAddress.error.required = Enter a correspondence email address for this business
+correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less

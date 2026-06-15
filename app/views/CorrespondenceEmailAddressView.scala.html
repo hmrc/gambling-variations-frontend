@@ -29,9 +29,9 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("emailAddress.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = title(form, messages("correspondenceEmailAddress.title"), Some("changeRegistrationDetails.title"))) {
 
-    @formHelper(action = routes.BusinessEmailAddressController.onSubmit(mode), Symbol("autoComplete") -> "on") {
+    @formHelper(action = routes.CorrespondenceEmailAddressController.onSubmit(mode), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -42,7 +42,7 @@
         @govukInput(
             InputViewModel(
                 field = form("emailAddress"),
-                label = LabelViewModel(messages("emailAddress.heading")).asPageHeading(LabelSize.Large)
+                label = LabelViewModel(messages("correspondenceEmailAddress.heading")).asPageHeading(LabelSize.Large)
             )
             .withWidth(Fixed20)
             .withAttribute("autocomplete" -> "email")
