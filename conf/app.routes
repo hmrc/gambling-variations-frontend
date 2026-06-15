@@ -102,3 +102,8 @@ GET        /change-registration-details/trading-details/seasonal-business       
 POST       /change-registration-details/trading-details/seasonal-business                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/trading-details/change-seasonal-business                  controllers.SeasonalBusinessController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/trading-details/change-seasonal-business                  controllers.SeasonalBusinessController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/change-trading-details/remove-previous-registration-number                 controllers.RemovePreviousRegNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/change-trading-details/remove-previous-registration-number                 controllers.RemovePreviousRegNumberController.onSubmit(mode: Mode = CheckMode)
