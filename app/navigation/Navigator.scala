@@ -44,12 +44,13 @@ class Navigator @Inject() () {
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage      => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage         => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage       => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
-    case BusinessEmailAddressPage => _ => routes.ChangeEmailAddressController.onPageLoad(CheckMode)
-    case IsSeasonalBusinessPage   => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
-    case _                        => _ => routes.CheckYourAnswersController.onPageLoad()
+    case RemoveTradeNamePage               => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessNamePage                  => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage                => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
+    case BusinessEmailAddressPage          => _ => routes.ChangeEmailAddressController.onPageLoad(CheckMode)
+    case IsSeasonalBusinessPage            => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
+    case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
+    case _                                 => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {

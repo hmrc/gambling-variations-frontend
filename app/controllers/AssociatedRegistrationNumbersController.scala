@@ -18,10 +18,11 @@ package controllers
 
 import controllers.actions.*
 import forms.AssociatedRegistrationNumbersFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegistrationNumbersPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -60,6 +61,7 @@ class AssociatedRegistrationNumbersController @Inject() (
 
     Ok(view(preparedForm, mode, associatedRegNumberSeq, associatedRegNumberCount))
   }
+
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
     form
@@ -73,4 +75,13 @@ class AssociatedRegistrationNumbersController @Inject() (
           } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
       )
   }
+
+  def onRedirect(mode: Mode, assocRegNumber: String): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad(mode))
+    }
+
 }

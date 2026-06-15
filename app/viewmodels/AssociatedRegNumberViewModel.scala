@@ -16,10 +16,15 @@
 
 package viewmodels
 
-import models.NormalMode
+import controllers.routes
+import models.{Mode, NormalMode, UserAnswers}
+import pages.ChosenAssociatedRegNumberPage
 import play.api.i18n.Messages
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.{FluentValue, stringToText}
+
+import scala.concurrent.Future
 
 case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]]) {
 
@@ -29,7 +34,6 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
     associatedRegNumbers match {
       case Some(associatedRegNums) =>
         val rows: Seq[SummaryListRow] = for (assocReg <- associatedRegNums) yield {
-
           SummaryListRow(
             key = Key(content = assocReg, classes = "associated-registration-number govuk-!-font-weight-regular"),
             actions = Some(
@@ -41,7 +45,7 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
                     visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   ),
                   ActionItem(
-                    href               = "#",
+                    href               = routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = assocReg).url,
                     content            = "site.remove",
                     visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   )

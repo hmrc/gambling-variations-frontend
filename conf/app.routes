@@ -93,6 +93,7 @@ POST       /change-registration-details/business-contact-details/contact-numbers
 GET        /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onSubmit(mode: Mode = CheckMode)
 
+GET        /change-registration-details/trading-details/associated-registration-numbers-redirect               controllers.AssociatedRegistrationNumbersController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)
 GET        /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/trading-details/change-associated-registration-numbers                  controllers.AssociatedRegistrationNumbersController.onPageLoad(mode: Mode = CheckMode)
