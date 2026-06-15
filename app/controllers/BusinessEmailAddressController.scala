@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import forms.ChangeEmailAddressFormProvider
+import forms.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.{BusinessEmailAddressPage, ContactDetailsSubmittedPage}
@@ -25,21 +25,21 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChangeEmailAddressView
+import views.html.BusinessEmailAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChangeEmailAddressController @Inject() (
+class BusinessEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: ChangeEmailAddressFormProvider,
+  formProvider: EmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ChangeEmailAddressView
+  view: BusinessEmailAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

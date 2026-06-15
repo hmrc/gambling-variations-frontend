@@ -21,7 +21,7 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class ChangeEmailAddressFormProvider @Inject() extends Mappings {
+class EmailAddressFormProvider @Inject() extends Mappings {
 
   private val emailRegex =
     """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
