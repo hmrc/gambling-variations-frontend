@@ -17,29 +17,29 @@
 package controllers
 
 import controllers.actions.*
-import forms.ChangeEmailAddressFormProvider
+import forms.SeasonalBusinessFormProvider
+import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessEmailAddressPage, ContactDetailsSubmittedPage}
+import pages.IsSeasonalBusinessPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChangeEmailAddressView
+import views.html.SeasonalBusinessView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChangeEmailAddressController @Inject() (
+class SeasonalBusinessController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: ChangeEmailAddressFormProvider,
+  requireData: MgdTradeDetailsDataRequiredAction,
+  formProvider: SeasonalBusinessFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ChangeEmailAddressView
+  view: SeasonalBusinessView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,9 +47,11 @@ class ChangeEmailAddressController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(BusinessEmailAddressPage)
-      .fold(form)(form.fill)
+
+    val preparedForm = request.userAnswers.get(IsSeasonalBusinessPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
     Ok(view(preparedForm, mode))
   }
@@ -62,10 +64,9 @@ class ChangeEmailAddressController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(IsSeasonalBusinessPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(IsSeasonalBusinessPage, mode, updatedAnswers))
       )
   }
 }
