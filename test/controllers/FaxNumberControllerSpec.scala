@@ -39,7 +39,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new FaxNumberFormProvider()
-  val form = formProvider()
+  val form = formProvider("formNumber")
   val noAnswers = UserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)))
 
   lazy val faxNumberRoute = routes.FaxNumberController.onPageLoad(NormalMode).url

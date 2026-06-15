@@ -25,12 +25,12 @@ class FaxNumberFormProvider @Inject() extends Mappings {
 
   private val faxNumberCharactersRegex = "^[0-9 ]+$"
 
-  def apply(): Form[String] =
+  def apply(prefix: String): Form[String] =
     Form(
-      "faxNumber" -> text("faxNumber.error.required")
+      "faxNumber" -> text(s"$prefix.error.required")
         .transform[String](_.trim, identity)
-        .verifying(maxLength(20, "faxNumber.error.length"))
-        .verifying(regexp(faxNumberCharactersRegex, "faxNumber.error.invalid.characters"))
+        .verifying(maxLength(20, s"$prefix.error.length"))
+        .verifying(regexp(faxNumberCharactersRegex, s"$prefix.error.invalid.characters"))
         .transform[String](_.replace(" ", ""), identity)
     )
 }

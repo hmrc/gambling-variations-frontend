@@ -15,9 +15,7 @@
  *@
 
 @import viewmodels.InputWidth._
-@import viewmodels.LabelSize
 @import views.html.components.Caption
-
 
 @this(
     layout: templates.Layout,
@@ -30,24 +28,23 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("faxNumber.title"))) {
+@layout(pageTitle = title(form, messages("correspondenceFaxNumber.title"))) {
 
-    @formHelper(action = routes.FaxNumberController.onSubmit(mode)) {
+    @formHelper(action = routes.CorrespondenceFaxNumberController.onSubmit(mode)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
         @caption(
-          messages("changeRegistrationDetails.title")
+            messages("changeRegistrationDetails.title")
         )
 
         @govukInput(
             InputViewModel(
                 field = form("faxNumber"),
-                label = LabelViewModel(messages("faxNumber.heading")).asPageHeading(LabelSize.Large)
+                label = LabelViewModel(messages("correspondenceFaxNumber.heading")).asPageHeading()
             )
-            .withWidth(Fixed20)
         )
 
         @govukButton(
