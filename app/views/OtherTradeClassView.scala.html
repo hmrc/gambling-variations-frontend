@@ -54,11 +54,12 @@
 
         @govukCharacterCount(
             CharacterCount(
-            id           = "otherTradeClass",
-            name         = "otherTradeClass",
-            maxLength    = Some(300),
-            label        = LabelViewModel(""),
-            hint         = Some(Hint(content = Text(messages("otherTradeClass.hint")))),
+            id        = "otherTradeClass",
+            name      = "otherTradeClass",
+            maxLength = Some(300),
+            label     = LabelViewModel(
+            messages("otherTradeClass.textarea.label")
+            ),
             value        = form("otherTradeClass").value,
             errorMessage = form("otherTradeClass").error.map { e =>
             ErrorMessage(content = Text(messages(e.message, e.args:_*)))
