@@ -39,6 +39,7 @@ class Navigator @Inject() () {
     case BusinessEmailAddressPage  => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessTradeClassPage    => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
     case IsSeasonalBusinessPage    => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
+    case CorrespondenceEmailPage   => _ => routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode)
     case _                         => _ => routes.IndexController.onPageLoad()
   }
 
