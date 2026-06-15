@@ -36,7 +36,6 @@ class BusinessTradeClassController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  businessDetailsDataRequiredAction: BusinessDetailsDataRequiredAction,
   mgdTradeDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
   formProvider: BusinessTradeClassFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -48,7 +47,7 @@ class BusinessTradeClassController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen businessDetailsDataRequiredAction andThen mgdTradeDetailsDataRequired) { implicit request =>
+    (authorise andThen getData andThen mgdTradeDetailsDataRequired) { implicit request =>
 
       val preparedForm = request.userAnswers.get(BusinessTradeClassPage) match {
         case None        => form
@@ -59,7 +58,7 @@ class BusinessTradeClassController @Inject() (
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen businessDetailsDataRequiredAction andThen mgdTradeDetailsDataRequired).async { implicit request =>
+    (authorise andThen getData andThen mgdTradeDetailsDataRequired).async { implicit request =>
 
       form
         .bindFromRequest()

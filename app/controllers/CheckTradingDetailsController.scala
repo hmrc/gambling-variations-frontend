@@ -31,15 +31,15 @@ class CheckTradingDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
-  businessDetailsDataRequiredAction: BusinessDetailsDataRequiredAction,
-  mgdTradDetailsRequireData: MgdTradeDetailsDataRequiredAction,
+  checkTradingDetailsDataRequired: CheckTradingDetailsDataRequiredAction,
+  businessDetailsRequiredData: BusinessDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckTradingDetailsView
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
-    (authorised andThen getData andThen businessDetailsDataRequiredAction andThen mgdTradDetailsRequireData) { implicit request =>
+    (authorised andThen getData andThen businessDetailsRequiredData andThen checkTradingDetailsDataRequired) { implicit request =>
 
       val showChangeMessage = request.userAnswers.get(TradingDetailsChangeFlagPage).contains(true)
       val vm =

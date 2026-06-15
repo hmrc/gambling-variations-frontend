@@ -36,7 +36,6 @@ class SeasonalBusinessController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  businessDetailsDataRequiredAction: BusinessDetailsDataRequiredAction,
   mgdTradeDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
   formProvider: SeasonalBusinessFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -48,7 +47,7 @@ class SeasonalBusinessController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen businessDetailsDataRequiredAction andThen mgdTradeDetailsDataRequired) { implicit request =>
+    (authorise andThen getData andThen mgdTradeDetailsDataRequired) { implicit request =>
 
       val preparedForm = request.userAnswers.get(IsSeasonalBusinessPage) match {
         case None        => form
@@ -59,7 +58,7 @@ class SeasonalBusinessController @Inject() (
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen businessDetailsDataRequiredAction andThen mgdTradeDetailsDataRequired).async { implicit request =>
+    (authorise andThen getData andThen mgdTradeDetailsDataRequired).async { implicit request =>
 
       form
         .bindFromRequest()
