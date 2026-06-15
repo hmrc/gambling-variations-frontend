@@ -59,7 +59,7 @@
             maxLength = Some(300),
             label     = LabelViewModel(
             messages("otherTradeClass.textarea.label")
-            ),
+            ).withCssClass("govuk-visually-hidden"),
             value        = form("otherTradeClass").value,
             errorMessage = form("otherTradeClass").error.map { e =>
             ErrorMessage(content = Text(messages(e.message, e.args:_*)))
