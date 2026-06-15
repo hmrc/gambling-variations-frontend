@@ -40,17 +40,19 @@ class SeasonalBusinessViewSpec extends SpecBase {
       doc.select("form").attr("action") mustEqual controllers.routes.SeasonalBusinessController.onSubmit(NormalMode).url
 
       doc.select("input[type=radio]").size mustEqual 2
-      doc.select("input#isSeasonalBusiness").attr("name") mustEqual "isSeasonalBusiness"
-      doc.select("label[for=isSeasonalBusiness]").text mustEqual messages("site.yes")
-      doc.select("input#isSeasonalBusiness-no").attr("name") mustEqual "isSeasonalBusiness"
-      doc.select("label[for=isSeasonalBusiness-no]").text mustEqual messages("site.no")
+      doc.select("input#isBusinessSeasonal").attr("name") mustEqual "isBusinessSeasonal"
+      doc.select("input#isBusinessSeasonal").hasAttr("checked") mustBe false
+      doc.select("label[for=isBusinessSeasonal]").text mustEqual messages("site.yes")
+      doc.select("input#isBusinessSeasonal-no").attr("name") mustEqual "isBusinessSeasonal"
+      doc.select("input#isBusinessSeasonal-no").hasAttr("checked") mustBe false
+      doc.select("label[for=isBusinessSeasonal-no]").text mustEqual messages("site.no")
 
       doc.select("button").text must include(messages("site.continue"))
     }
 
     "must render an error summary when the form has errors" in new Setup {
 
-      val errorForm = form.bind(Map("isSeasonalBusiness" -> ""))
+      val errorForm = form.bind(Map("isBusinessSeasonal" -> ""))
 
       val html = view(errorForm, NormalMode)
       val doc = Jsoup.parse(html.body)

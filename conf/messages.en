@@ -315,6 +315,7 @@ businessTradeClass.change.hidden = What is the business trade class?
 
 
 seasonalBusiness.title = Is this a seasonal business?
+seasonalBusiness.heading.caption = Change registration details
 seasonalBusiness.heading = Is this a seasonal business?
 seasonalBusiness.paragraph = A seasonal business has periods where it does not trade. If you operate a seasonal business, you must submit nil returns for any periods that you are not trading.
 seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
