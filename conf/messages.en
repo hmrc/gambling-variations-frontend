@@ -344,3 +344,4 @@ otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apos
 otherTradeClass.checkYourAnswersLabel = What is your business trade class?
 otherTradeClass.error.required = Enter your business trade class
 otherTradeClass.error.invalid = Your business trade class must be in the correct format
+otherTradeClass.hint = You can enter up to 300 characters
