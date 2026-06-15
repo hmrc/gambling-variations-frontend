@@ -17,13 +17,9 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
-import models.CheckMode
 import pages.PreviousRegistrationNumbersPage
 import play.api.Application
 import play.api.i18n.Messages
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
 
 class PreviousRegistrationNumbersSummarySpec extends SpecBase {
 
@@ -37,9 +33,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       val result = PreviousRegistrationNumbersSummary.row(emptyUserAnswers)
 
       result mustBe defined
-
       result.get.value.toString must include(msgs("site.notProvided"))
-
       result.get.actions.get.items.size mustBe 1
     }
 
@@ -54,13 +48,11 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       val result = PreviousRegistrationNumbersSummary.row(answers)
 
       result mustBe defined
-
       result.get.value.toString must include(msgs("site.notProvided"))
-
       result.get.actions.get.items.size mustBe 1
     }
 
-    "must display registration numbers as a bullet list and include action when less than 3 numbers" in {
+    "must display registration numbers separated by <br> and include action when less than 3 numbers" in {
 
       val numbers = Seq("REG001", "REG002")
 
@@ -71,17 +63,16 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
           .value
 
       val result = PreviousRegistrationNumbersSummary.row(answers).value
-
       val html = result.value.content.asHtml.toString
 
-      html must include("<ul")
-      html must include("<li>REG001</li>")
-      html must include("<li>REG002</li>")
+      html must include("REG001")
+      html must include("REG002")
+      html must include("<br/>")
 
       result.actions.get.items.size mustBe 1
     }
 
-    "must display registration numbers as a bullet list and NOT include action when 3 or more numbers" in {
+    "must display registration numbers separated by <br> and NOT include action when 3 or more numbers" in {
 
       val numbers = Seq("REG001", "REG002", "REG003")
 
@@ -92,13 +83,12 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
           .value
 
       val result = PreviousRegistrationNumbersSummary.row(answers).value
-
       val html = result.value.content.asHtml.toString
 
-      html must include("<ul")
-      html must include("<li>REG001</li>")
-      html must include("<li>REG002</li>")
-      html must include("<li>REG003</li>")
+      html must include("REG001")
+      html must include("REG002")
+      html must include("REG003")
+      html must include("<br/>")
 
       result.actions.get.items mustBe empty
     }

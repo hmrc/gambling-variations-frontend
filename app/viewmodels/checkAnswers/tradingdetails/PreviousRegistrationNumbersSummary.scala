@@ -46,9 +46,7 @@ object PreviousRegistrationNumbersSummary {
             ValueViewModel(
               HtmlContent(
                 HtmlFormat.raw(
-                  s"""<ul class="govuk-list govuk-list--bullet">
-                     |${multipleNumbers.map(n => s"<li>$n</li>").mkString}
-                     |</ul>""".stripMargin
+                  multipleNumbers.mkString("<br/>")
                 )
               )
             )

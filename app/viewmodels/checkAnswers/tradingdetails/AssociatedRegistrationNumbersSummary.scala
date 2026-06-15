@@ -46,9 +46,7 @@ object AssociatedRegistrationNumbersSummary {
           ValueViewModel(
             HtmlContent(
               HtmlFormat.raw(
-                s"""<ul class="govuk-list govuk-list--bullet">
-                   |${multiple.map(n => s"<li>$n</li>").mkString}
-                   |</ul>""".stripMargin
+                multiple.mkString("<br/>")
               )
             )
           )
