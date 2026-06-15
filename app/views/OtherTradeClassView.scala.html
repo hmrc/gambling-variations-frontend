@@ -17,6 +17,7 @@
 @import viewmodels.LabelSize
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.charactercount.CharacterCount
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessage
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 
 @this(
         layout: templates.Layout,
@@ -51,18 +52,19 @@
 
 
 
-            @govukCharacterCount(
-                CharacterCount(
-                id           = "otherTradeClass",
-                name         = "otherTradeClass",
-                maxLength    = Some(300),
-                label        = LabelViewModel(""),
-                value        = form("otherTradeClass").value,
-                errorMessage = form("otherTradeClass").error.map { e =>
-                ErrorMessage(content = Text(messages(e.message, e.args:_*)))
-                }
-                )
+        @govukCharacterCount(
+            CharacterCount(
+            id           = "otherTradeClass",
+            name         = "otherTradeClass",
+            maxLength    = Some(300),
+            label        = LabelViewModel(""),
+            hint         = Some(Hint(content = Text(messages("otherTradeClass.hint")))),
+            value        = form("otherTradeClass").value,
+            errorMessage = form("otherTradeClass").error.map { e =>
+            ErrorMessage(content = Text(messages(e.message, e.args:_*)))
+            }
             )
+        )
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))
