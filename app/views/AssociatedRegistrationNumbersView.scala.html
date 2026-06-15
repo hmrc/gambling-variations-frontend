@@ -53,10 +53,11 @@
                 legend = LegendViewModel(messages("associatedRegistrationNumbers.radios")).withCssClass("govuk-fieldset__legend--m"),
                 yesLabel = messages("associatedRegistrationNumbers.yesLabel"),
                 noLabel = messages("associatedRegistrationNumbers.noLabel")
-            ).withHint(HintViewModel(messages("associatedRegistrationNumbers.hint")))
+            ).withHint(HintViewModel(messages("associatedRegistrationNumbers.hint"))
+            ).withCssClass("assoc-reg-radio-buttons")
         )
         } else {
-            @p("associatedRegistrationNumbers.hint")
+            @p("associatedRegistrationNumbers.hint", extraClasses="assoc-reg-max-limit-reached")
         }
 
         @govukButton(
