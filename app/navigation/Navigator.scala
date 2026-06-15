@@ -28,19 +28,19 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage       => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage          => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage        => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
-    case TradingNamePage           => _ => routes.CheckBusinessNameController.onPageLoad()
-    case FaxNumberPage             => _ => routes.CheckContactDetailsController.onPageLoad()
-    case RemoveFaxNumberPage       => _ => routes.CheckContactDetailsController.onPageLoad()
-    case RemoveEmailAddressPage    => _ => routes.CheckContactDetailsController.onPageLoad()
-    case BusinessContactNumberPage => _ => routes.CheckContactDetailsController.onPageLoad()
-    case BusinessEmailAddressPage  => _ => routes.CheckContactDetailsController.onPageLoad()
-    case BusinessTradeClassPage    => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
-    case IsSeasonalBusinessPage    => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
+    case RemoveTradeNamePage               => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessNamePage                  => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage                => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
+    case TradingNamePage                   => _ => routes.CheckBusinessNameController.onPageLoad()
+    case FaxNumberPage                     => _ => routes.CheckContactDetailsController.onPageLoad()
+    case RemoveFaxNumberPage               => _ => routes.CheckContactDetailsController.onPageLoad()
+    case RemoveEmailAddressPage            => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessContactNumberPage         => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessEmailAddressPage          => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessTradeClassPage            => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
+    case IsSeasonalBusinessPage            => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
-    case _                         => _ => routes.IndexController.onPageLoad()
+    case _                                 => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
