@@ -16,6 +16,7 @@
 
 @import viewmodels.InputWidth._
 @import views.html.components.Caption
+@import viewmodels.LabelSize
 
 @this(
     layout: templates.Layout,
@@ -43,11 +44,12 @@
         @govukInput(
             InputViewModel(
                 field = form("faxNumber"),
-                label = LabelViewModel(messages("correspondenceFaxNumber.heading")).asPageHeading()
-            )
+                label = LabelViewModel(messages("correspondenceFaxNumber.heading")).asPageHeading(LabelSize.Large)
+            ).withWidth(Fixed20)
         )
 
-        @govukButton(
+
+@govukButton(
             ButtonViewModel(messages("site.continue"))
         )
     }

@@ -22,22 +22,21 @@ import pages.CorrespondenceFaxNumberPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object CorrespondenceFaxNumberSummary  {
+object CorrespondenceFaxNumberSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CorrespondenceFaxNumberPage).map {
-      answer =>
+    answers.get(CorrespondenceFaxNumberPage).map { answer =>
 
-        SummaryListRowViewModel(
-          key     = "correspondenceFaxNumber.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer).toString),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("correspondenceFaxNumber.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "correspondenceFaxNumber.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("correspondenceFaxNumber.change.hidden"))
         )
+      )
     }
 }
