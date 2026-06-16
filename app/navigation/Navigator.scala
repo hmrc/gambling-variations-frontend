@@ -40,6 +40,7 @@ class Navigator @Inject() () {
     case BusinessTradeClassPage          => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
     case IsSeasonalBusinessPage          => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case CorrespondenceFaxNumberPage     => _ => routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode)
+    case CorrespondenceEmailPage         => _ => routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode)
     case CorrespondenceContactNumberPage => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case _                               => _ => routes.IndexController.onPageLoad()
   }
@@ -48,7 +49,7 @@ class Navigator @Inject() () {
     case RemoveTradeNamePage         => _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage            => _ => routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage          => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
-    case BusinessEmailAddressPage    => _ => routes.ChangeEmailAddressController.onPageLoad(CheckMode)
+    case BusinessEmailAddressPage    => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
     case IsSeasonalBusinessPage      => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
     case CorrespondenceFaxNumberPage => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case _                           => _ => routes.CheckYourAnswersController.onPageLoad()

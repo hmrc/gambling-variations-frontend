@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import forms.ChangeEmailAddressFormProvider
+import forms.EmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -30,16 +30,16 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.ChangeEmailAddressView
+import views.html.BusinessEmailAddressView
 
 import scala.concurrent.Future
 
-class ChangeEmailAddressControllerSpec extends SpecBase with MockitoSugar {
+class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ChangeEmailAddressFormProvider()
-  val form = formProvider()
+  val formProvider = new EmailAddressFormProvider()
+  val form = formProvider("emailAddress")
 
   val noAnswers =
     UserAnswers(
@@ -48,9 +48,9 @@ class ChangeEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     )
 
   lazy val emailAddressRoute =
-    routes.ChangeEmailAddressController.onPageLoad(NormalMode).url
+    routes.BusinessEmailAddressController.onPageLoad(NormalMode).url
 
-  "ChangeEmailAddress Controller" - {
+  "BusinessEmailAddress Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -61,7 +61,7 @@ class ChangeEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ChangeEmailAddressView]
+        val view = application.injector.instanceOf[BusinessEmailAddressView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
@@ -83,7 +83,7 @@ class ChangeEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request = FakeRequest(GET, emailAddressRoute)
 
-        val view = application.injector.instanceOf[ChangeEmailAddressView]
+        val view = application.injector.instanceOf[BusinessEmailAddressView]
 
         val result = route(application, request).value
 
@@ -129,7 +129,7 @@ class ChangeEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val boundForm = form.bind(Map("emailAddress" -> ""))
 
-        val view = application.injector.instanceOf[ChangeEmailAddressView]
+        val view = application.injector.instanceOf[BusinessEmailAddressView]
 
         val result = route(application, request).value
 
