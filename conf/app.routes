@@ -122,3 +122,5 @@ GET        /change-registration-details/correspondence-details/contact-numbers  
 POST       /change-registration-details/correspondence-details/contact-numbers                        controllers.CorrespondenceContactNumberController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/correspondence-details/change-contact-numbers                  controllers.CorrespondenceContactNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/correspondence-details/change-contact-numbers                  controllers.CorrespondenceContactNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
