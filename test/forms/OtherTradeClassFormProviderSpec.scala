@@ -25,7 +25,6 @@ class OtherTradeClassFormProviderSpec extends StringFieldBehaviours {
   private val requiredKey = "otherTradeClass.error.required"
   private val invalidKey = "otherTradeClass.error.invalid"
 
-
   private val otherTradeClassRegex =
     "^[a-zA-Z0-9\\- '\\s]+$"
 
@@ -45,7 +44,6 @@ class OtherTradeClassFormProviderSpec extends StringFieldBehaviours {
         "they-never-expect-a-4th-valid-example"
       )
     )
-
 
     "not bind invalid formats" in {
       val invalids = Seq(

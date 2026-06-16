@@ -32,5 +32,3 @@ class OtherTradeClassFormProvider @Inject() extends Mappings {
         .verifying(regexp(otherTradeClassRegex, "otherTradeClass.error.invalid"))
     )
 }
-
-
