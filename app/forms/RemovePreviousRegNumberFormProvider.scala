@@ -22,9 +22,14 @@ import forms.mappings.Mappings
 import play.api.data.Form
 
 class RemovePreviousRegNumberFormProvider @Inject() extends Mappings {
+  private val previousRegNumberRegex =
+    """^X[ABCDEFGHJKLMNPQRSTVWXYZ]M[0]{4}[0-9]{7}$"""
 
-  def apply(): Form[Boolean] =
+  def apply(): Form[String] =
     Form(
-      "value" -> boolean("removePreviousRegNumber.error.required")
+      "previousRegistrationNumber" -> text("addPreviousRegistrationNumber.error.required")
+        .transform[String](_.trim, identity)
+        .verifying(maxLength(14, "addPreviousRegistrationNumber.error.invalid"))
+        .verifying(regexp(previousRegNumberRegex, "addPreviousRegistrationNumber.error.invalid"))
     )
 }

@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import forms.AddPreviousRegistrationNumberFormProvider
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,42 +29,41 @@ import views.html.AddPreviousRegistrationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class AddPreviousRegistrationNumberController @Inject() (
-                                               override val messagesApi: MessagesApi,
-                                               sessionRepository: SessionRepository,
-                                               navigator: Navigator,
-                                               authorise: AuthorisedAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: MgdTradeDetailsDataRequiredAction,
-                                               formProvider: AddPreviousRegistrationNumberFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: AddPreviousRegistrationNumberView
-                                             )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: MgdTradeDetailsDataRequiredAction,
+  formProvider: AddPreviousRegistrationNumberFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: AddPreviousRegistrationNumberView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(PreviousRegistrationNumberPage)
+      .get(PreviousRegistrationNumbersPage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
+    val currentSequence = request.userAnswers.get(PreviousRegistrationNumbersPage)
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenPreviousRegNumberPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PreviousRegistrationNumbersPage, value))
-            //this needs to change so that we are adding the number to the array
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PreviousRegistrationNumbersPage, currentSequence +: value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddPreviousRegistrationNumberPage, mode, updatedAnswers))
       )
