@@ -121,7 +121,18 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val twoNumbers = Json.obj(
+        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+        "associatedRegistrationNumbers" -> Json.arr(
+          "XHM00000199",
+          "ZIU00001218"
+        )
+      )
+
+      val twoAnswers =
+        UserAnswers(userAnswersId, twoNumbers)
+
+      val application = applicationBuilder(userAnswers = Some(twoAnswers)).build()
 
       running(application) {
         val request =

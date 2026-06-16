@@ -17,14 +17,9 @@
 package viewmodels
 
 import controllers.routes
-import models.{Mode, NormalMode, UserAnswers}
-import pages.ChosenAssociatedRegNumberPage
 import play.api.i18n.Messages
-import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
-import viewmodels.govuk.all.{FluentValue, stringToText}
-
-import scala.concurrent.Future
+import viewmodels.govuk.all.stringToText
 
 case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]]) {
 
