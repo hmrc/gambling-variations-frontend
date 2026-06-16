@@ -83,7 +83,7 @@ class AssociatedRegistrationNumbersController @Inject() (
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
+          } yield Redirect("#")
       )
   }
 
