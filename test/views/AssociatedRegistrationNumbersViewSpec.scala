@@ -63,8 +63,8 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
       doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
 
       doc.select(".associated-reg-number-ZIU00001218").text must include("ZIU00001218")
-      doc.select(".assoc-reg-radio-buttons").text must include(messages("associatedRegistrationNumbers.yesLabel"))
-      doc.select(".assoc-reg-radio-buttons").text must include(messages("associatedRegistrationNumbers.noLabel"))
+      doc.select(".assoc-reg-radio-buttons").text           must include(messages("associatedRegistrationNumbers.yesLabel"))
+      doc.select(".assoc-reg-radio-buttons").text           must include(messages("associatedRegistrationNumbers.noLabel"))
     }
 
     "must show max limit message when 3 numbers are present" in new Setup {
@@ -73,12 +73,11 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title             must include(messages("associatedRegistrationNumbers.title"))
-      doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
+      doc.title                                             must include(messages("associatedRegistrationNumbers.title"))
+      doc.select("h1").text                                 must include(messages("associatedRegistrationNumbers.heading"))
       doc.select(".associated-reg-number-XHM00000199").text must include("XHM00000199")
-      doc.select(".assoc-reg-max-limit-reached").text must include(messages("associatedRegistrationNumbers.hint"))
+      doc.select(".assoc-reg-max-limit-reached").text       must include(messages("associatedRegistrationNumbers.hint"))
     }
-
 
   }
 }
