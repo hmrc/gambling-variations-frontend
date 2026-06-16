@@ -36,7 +36,7 @@ class SeasonalBusinessController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: MgdTradeDetailsDataRequiredAction,
+  mgdTradeDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
   formProvider: SeasonalBusinessFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: SeasonalBusinessView
@@ -46,27 +46,29 @@ class SeasonalBusinessController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen mgdTradeDetailsDataRequired) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(IsSeasonalBusinessPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+      val preparedForm = request.userAnswers.get(IsSeasonalBusinessPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, mode))
     }
 
-    Ok(view(preparedForm, mode))
-  }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen mgdTradeDetailsDataRequired).async { implicit request =>
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(IsSeasonalBusinessPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(IsSeasonalBusinessPage, mode, updatedAnswers))
-      )
-  }
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(IsSeasonalBusinessPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(IsSeasonalBusinessPage, mode, updatedAnswers))
+        )
+    }
 }

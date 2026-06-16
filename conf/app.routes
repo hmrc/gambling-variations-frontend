@@ -118,6 +118,8 @@ POST       /change-registration-details/trading-details/remove-associated-regist
 GET        /change-registration-details/change-trading-details/remove-associated-registration-number                 controllers.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/change-trading-details/remove-associated-registration-number                 controllers.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = CheckMode)
 
+GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
+
 GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/trading-details/change-other-business-trade-class                  controllers.OtherTradeClassController.onPageLoad(mode: Mode = CheckMode)
