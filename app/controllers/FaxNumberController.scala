@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessFaxNumberPage, BusinessContactDetailsSubmittedPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

@@ -323,7 +323,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.FaxNumberController.onPageLoad(NormalMode).url,
+                href               = "#",
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber"))
               )
@@ -335,12 +335,12 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.FaxNumberController.onPageLoad(NormalMode).url,
+                href               = controllers.routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber"))
               ),
               ActionItem(
-                href               = controllers.routes.RemoveFaxNumberController.onPageLoad(NormalMode).url,
+                href               = "#",
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber"))
               )
@@ -392,7 +392,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.ChangeEmailAddressController.onPageLoad(NormalMode).url,
+                href               = controllers.routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr"))
               )
@@ -404,12 +404,12 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.ChangeEmailAddressController.onPageLoad(NormalMode).url,
+                href               = controllers.routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr"))
               ),
               ActionItem(
-                href               = controllers.routes.RemoveEmailAddressController.onPageLoad(NormalMode).url,
+                href               = "#",
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr"))
               )
