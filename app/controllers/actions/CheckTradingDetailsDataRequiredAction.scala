@@ -103,16 +103,25 @@ class CheckTradingDetailsDataRequiredActionImpl @Inject() (
     details: MgdTradeDetails,
     answers: UserAnswers
   ): Try[UserAnswers] = {
-
     logger.info("Mapping MgdTradeDetails into UserAnswers")
+
+    val previousRegs =
+      details.previousMgdRegistrationNumbers
+        .map(_.map(_.trim).filter(_.nonEmpty))
+        .filter(_.nonEmpty)
+
+    val associatedRegs =
+      details.associatedMgdRegistrationNumbers
+        .map(_.map(_.trim).filter(_.nonEmpty))
+        .filter(_.nonEmpty)
 
     for {
       updatedAnswers <- answers.set(MgdTradeDetailsSectionPage, details.mgdRegNumber)
       updatedAnswers <- setIfDefined(updatedAnswers, details.isBusinessSeasonal, IsSeasonalBusinessPage)
       updatedAnswers <- setIfDefined(updatedAnswers, details.businessTradeClass, BusinessTradeClassPage)
       updatedAnswers <- setIfDefined(updatedAnswers, details.businessActivityDesc, OtherTradeClassPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, details.previousMgdRegistrationNumbers, PreviousRegistrationNumbersPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, details.associatedMgdRegistrationNumbers, AssociatedRegistrationNumbersPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, previousRegs, PreviousRegistrationNumbersPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, associatedRegs, AssociatedRegistrationNumbersPage)
     } yield updatedAnswers
   }
 
