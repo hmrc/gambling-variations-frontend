@@ -16,21 +16,21 @@
 
 package pages
 
-import play.api.libs.json.JsPath
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.JsPath
 
-class ContactDetailsSubmittedPageSpec extends PlaySpec {
+class CorrespondenceDetailsSubmittedPageSpec extends PlaySpec {
 
-  "ContactDetailsSubmittedPage" must {
+  "CorrespondenceDetailsSubmitted" must {
 
     "have the correct path" in {
 
-      ContactDetailsSubmittedPage.path mustEqual (JsPath \ "businessContactDetailsSection" \ "submitted")
+      CorrespondenceDetailsSubmittedPage.path mustEqual (JsPath \ "correspondenceDetailsSection" \ "submitted")
     }
 
     "have the correct toString value" in {
 
-      ContactDetailsSubmittedPage.toString mustEqual "submitted"
+      CorrespondenceDetailsSubmittedPage.toString mustEqual "submitted"
     }
   }
 }
