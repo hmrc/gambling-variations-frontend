@@ -366,9 +366,6 @@ correspondenceEmailAddress.checkYourAnswersLabel = Email Address
 correspondenceEmailAddress.error.required = Enter a correspondence email address for this business
 correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
-checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
-checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
-checkTradingDetails.submit.p1 = You must continue to the change registration details page to submit any changes.
 
 otherTradeClass.title = What is your business trade class? - Change registration details
 otherTradeClass.heading = What is your business trade class?
