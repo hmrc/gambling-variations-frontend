@@ -122,3 +122,5 @@ GET        /change-registration-details/correspondence-details/email-address    
 POST       /change-registration-details/correspondence-details/email-address                     controllers.CorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/correspondence-details/change-email-address              controllers.CorrespondenceEmailAddressController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/correspondence-details/change-email-address              controllers.CorrespondenceEmailAddressController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
