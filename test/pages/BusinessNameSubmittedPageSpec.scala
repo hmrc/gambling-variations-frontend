@@ -25,12 +25,12 @@ class BusinessNameSubmittedPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      BusinessNameSubmittedPage.path mustEqual (JsPath \ "isPopulated")
+      BusinessNameSubmittedPage.path mustEqual (JsPath \ "businessNameSection" \ "submitted")
     }
 
     "have the correct toString value" in {
 
-      BusinessNameSubmittedPage.toString mustEqual "isPopulated"
+      BusinessNameSubmittedPage.toString mustEqual "submitted"
     }
   }
 }

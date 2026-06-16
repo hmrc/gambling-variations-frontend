@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactNumberPage, BusinessEmailAddressPage, ContactDetailsSubmittedPage, FaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, FaxNumberPage}
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -36,7 +36,7 @@ class CheckContactDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(ContactDetailsSubmittedPage).getOrElse(false)
+    val flag = request.userAnswers.get(BusinessContactDetailsSubmittedPage).getOrElse(false)
     Ok(
       view(
         request.userAnswers.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
