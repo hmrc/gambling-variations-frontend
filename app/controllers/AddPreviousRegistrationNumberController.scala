@@ -16,24 +16,57 @@
 
 package controllers
 
-import controllers.actions._
-import javax.inject.Inject
+import controllers.actions.*
+import forms.AddPreviousRegistrationNumberFormProvider
+import models.Mode
+import navigation.Navigator
+import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AddPreviousRegistrationNumberView
 
-class AddPreviousRegistrationNumberController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       authorise: AuthorisedAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: MgdTradeDetailsDataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: AddPreviousRegistrationNumberView
-                                     ) extends FrontendBaseController with I18nSupport {
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request =>
-      Ok(view())
+class AddPreviousRegistrationNumberController @Inject() (
+                                               override val messagesApi: MessagesApi,
+                                               sessionRepository: SessionRepository,
+                                               navigator: Navigator,
+                                               authorise: AuthorisedAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: MgdTradeDetailsDataRequiredAction,
+                                               formProvider: AddPreviousRegistrationNumberFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: AddPreviousRegistrationNumberView
+                                             )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
+    with I18nSupport {
+
+  val form = formProvider()
+
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers
+      .get(PreviousRegistrationNumberPage)
+      .fold(form)(form.fill)
+
+    Ok(view(preparedForm, mode))
+  }
+
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        value =>
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenPreviousRegNumberPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PreviousRegistrationNumbersPage, value))
+            //this needs to change so that we are adding the number to the array
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(AddPreviousRegistrationNumberPage, mode, updatedAnswers))
+      )
   }
 }
