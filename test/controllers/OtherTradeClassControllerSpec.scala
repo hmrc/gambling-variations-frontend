@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import controllers.actions.{OtherTradeClassDataRequiredAction, OtherTradeClassDataRequiredActionImpl}
 import forms.OtherTradeClassFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -72,7 +73,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId),
+        "otherTradeClassSection" -> Json.obj("mgdRegNum" -> userAnswersId),
         OtherTradeClassPage.toString    -> "valid trade class"
       )
 
@@ -141,7 +142,13 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to SystemError for a GET if no session exists" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[OtherTradeClassDataRequiredAction]
+              .to[OtherTradeClassDataRequiredActionImpl]
+          )
+          .build()
 
       running(application) {
         val request = FakeRequest(GET, otherTradeClassRoute)
@@ -156,7 +163,13 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to SystemError for a POST if no session exists" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[OtherTradeClassDataRequiredAction]
+              .to[OtherTradeClassDataRequiredActionImpl]
+          )
+          .build()
 
       running(application) {
         val request =

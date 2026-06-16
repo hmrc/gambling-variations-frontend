@@ -36,7 +36,7 @@ class OtherTradeClassController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: OtherTradeClassDataRequiredAction,
   formProvider: OtherTradeClassFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: OtherTradeClassView
