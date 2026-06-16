@@ -16,42 +16,66 @@
 
 package controllers
 
+import connectors.GamblingConnector
 import controllers.actions.*
-
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.*
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages.TradingDetailsChangeFlagPage
+import pages.{GroupMemberPage, TradingDetailsChangeFlagPage}
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckTradingDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
-  checkTradingDetailsDataRequired: CheckTradingDetailsDataRequiredAction,
-  businessDetailsRequiredData: BusinessDetailsDataRequiredAction,
+  checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
+  gamblingConnector: GamblingConnector,
   val controllerComponents: MessagesControllerComponents,
   view: CheckTradingDetailsView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
-    (authorised andThen getData andThen businessDetailsRequiredData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
-      val showChangeMessage = request.userAnswers.get(TradingDetailsChangeFlagPage).contains(true)
-      val vm =
-        CheckTradingDetailsViewModel.from(request.userAnswers)
+      val showChangeMessage: Boolean =
+        request.userAnswers
+          .get(TradingDetailsChangeFlagPage)
+          .contains(true)
 
-      Ok(
-        view(
-          vm.list,
-          vm.previousMgd,
-          vm.associatedMgd,
-          showChangeMessage
+      val isGroupMemberF: Future[Boolean] =
+        request.userAnswers.get(GroupMemberPage) match {
+
+          case Some(value) =>
+            Future.successful(value)
+
+          case None =>
+            gamblingConnector
+              .getBusinessDetails(request.mgdRegNum)
+              .map(_.groupReg)
+        }
+
+      isGroupMemberF.map { isGroupMember =>
+
+        val vm =
+          CheckTradingDetailsViewModel.from(
+            request.userAnswers,
+            isGroupMember
+          )
+
+        Ok(
+          view(
+            vm.list,
+            vm.previousMgd,
+            vm.associatedMgd,
+            showChangeMessage
+          )
         )
-      )
+      }
     }
 }

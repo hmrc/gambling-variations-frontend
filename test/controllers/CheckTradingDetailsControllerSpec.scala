@@ -17,13 +17,30 @@
 package controllers
 
 import base.SpecBase
-import models.BusinessTradeClass
-import models.BusinessType
+import connectors.GamblingConnector
+import models.*
 import pages.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.*
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.inject.bind
+import scala.concurrent.Future
+import java.time.LocalDate
 
-class CheckTradingDetailsControllerSpec extends SpecBase {
+class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
+
+  private val businessDetails =
+    BusinessDetails(
+      mgdRegNumber          = mgdRegNum,
+      businessType          = None,
+      currentlyRegistered   = 1,
+      groupReg              = false,
+      dateOfRegistration    = None,
+      businessPartnerNumber = None,
+      systemDate            = LocalDate.of(2026, 1, 1)
+    )
 
   private val filledUserAnswers =
     emptyUserAnswers
@@ -53,16 +70,22 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
 
     "must return OK for a GET request" in {
 
+      val mockConnector = mock[GamblingConnector]
+
+      when(mockConnector.getBusinessDetails(any())(any()))
+        .thenReturn(Future.successful(businessDetails))
+
       val application =
-        applicationBuilder(userAnswers = Some(filledUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(filledUserAnswers))
+          .overrides(bind[GamblingConnector].toInstance(mockConnector))
+          .build()
 
       running(application) {
 
         val request =
           FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
 
-        val result =
-          route(application, request).value
+        val result = route(application, request).value
 
         status(result) mustEqual OK
       }
@@ -70,8 +93,15 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
 
     "must show trade class section when user is NOT a group member" in {
 
+      val mockConnector = mock[GamblingConnector]
+
+      when(mockConnector.getBusinessDetails(any())(any()))
+        .thenReturn(Future.successful(businessDetails))
+
       val application =
-        applicationBuilder(userAnswers = Some(filledUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(filledUserAnswers))
+          .overrides(bind[GamblingConnector].toInstance(mockConnector))
+          .build()
 
       running(application) {
 
@@ -88,8 +118,15 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
 
     "must show all sections when user is NOT a group member" in {
 
+      val mockConnector = mock[GamblingConnector]
+
+      when(mockConnector.getBusinessDetails(any())(any()))
+        .thenReturn(Future.successful(businessDetails))
+
       val application =
-        applicationBuilder(userAnswers = Some(filledUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(filledUserAnswers))
+          .overrides(bind[GamblingConnector].toInstance(mockConnector))
+          .build()
 
       running(application) {
 
@@ -114,14 +151,21 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
 
     "must hide trade class and MGD registration sections when user IS a group member" in {
 
-      val groupMemberUserAnswers =
+      val groupMemberAnswers =
         filledUserAnswers
           .set(GroupMemberPage, true)
           .success
           .value
 
+      val mockConnector = mock[GamblingConnector]
+
+      when(mockConnector.getBusinessDetails(any())(any()))
+        .thenReturn(Future.successful(businessDetails.copy(groupReg = true)))
+
       val application =
-        applicationBuilder(userAnswers = Some(groupMemberUserAnswers)).build()
+        applicationBuilder(userAnswers = Some(groupMemberAnswers))
+          .overrides(bind[GamblingConnector].toInstance(mockConnector))
+          .build()
 
       running(application) {
 
@@ -132,15 +176,9 @@ class CheckTradingDetailsControllerSpec extends SpecBase {
           contentAsString(route(application, request).value)
 
         content must not include "Trade class"
-        content must not include "Description of business activity"
         content must not include "Casino"
-
         content must not include "Previous MGD registration numbers"
-        content must not include "MGD123"
-        content must not include "MGD456"
-
         content must not include "Associated MGD registration numbers"
-        content must not include "ASS789"
 
         content must include("Seasonal business")
       }

@@ -39,7 +39,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
           .value
 
       val result =
-        CheckTradingDetailsViewModel.from(answers)
+        CheckTradingDetailsViewModel.from(answers, isGroupMember = true)
 
       result.list.rows mustBe Nil
       result.previousMgd.rows mustBe Nil
@@ -58,7 +58,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
           .value
 
       val result =
-        CheckTradingDetailsViewModel.from(answers)
+        CheckTradingDetailsViewModel.from(answers, isGroupMember = false)
 
       result.list.rows.nonEmpty mustBe true
     }
@@ -78,7 +78,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
           .value
 
       val result =
-        CheckTradingDetailsViewModel.from(answers)
+        CheckTradingDetailsViewModel.from(answers, isGroupMember = false)
 
       result.list.rows.size mustBe 2
     }
@@ -95,7 +95,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
           .value
 
       val result =
-        CheckTradingDetailsViewModel.from(answers)
+        CheckTradingDetailsViewModel.from(answers, isGroupMember = false)
 
       result.list.rows.size mustBe 1
     }
