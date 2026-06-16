@@ -77,13 +77,13 @@ class AssociatedRegistrationNumbersController @Inject() (
             Future
               .successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount)))
           } else {
-            Future.successful(Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, request.userAnswers)))
+            Future.successful(Redirect("#"))
           },
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect("#")
+          } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
       )
   }
 
