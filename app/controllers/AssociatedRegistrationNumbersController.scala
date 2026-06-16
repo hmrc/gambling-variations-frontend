@@ -73,7 +73,7 @@ class AssociatedRegistrationNumbersController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors =>
-          if (associatedRegNumberCount == 0) {
+          if (associatedRegNumberCount < 3) {
             Future
               .successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount)))
           } else {
