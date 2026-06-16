@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2026 HM Revenue & Customs
  *
@@ -16,4 +17,19 @@
 
 package forms
 
-class AddPreviousRegistrationNumberFormProvider {}
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
+
+class AddPreviousRegistrationNumberFormProvider @Inject() extends Mappings {
+  private val previousRegNumberRegex =
+    """^X[ABCDEFGHJKLMNPQRSTVWXYZ]M[0]{4}[0-9]{7}$"""
+
+  def apply(): Form[String] =
+    Form(
+      "previousRegistrationNumber" -> text("addPreviousRegistrationNumber.error.required")
+        .transform[String](_.trim, identity)
+        .verifying(maxLength(14, "addPreviousRegistrationNumber.error.invalid"))
+        .verifying(regexp(previousRegNumberRegex, "addPreviousRegistrationNumber.error.invalid"))
+    )
+}

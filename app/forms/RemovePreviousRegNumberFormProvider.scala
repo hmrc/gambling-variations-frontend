@@ -17,19 +17,13 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
 
 class RemovePreviousRegNumberFormProvider @Inject() extends Mappings {
-  private val previousRegNumberRegex =
-    """^X[ABCDEFGHJKLMNPQRSTVWXYZ]M[0]{4}[0-9]{7}$"""
 
-  def apply(): Form[String] =
+  def apply(): Form[Boolean] =
     Form(
-      "previousRegistrationNumber" -> text("addPreviousRegistrationNumber.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(14, "addPreviousRegistrationNumber.error.invalid"))
-        .verifying(regexp(previousRegNumberRegex, "addPreviousRegistrationNumber.error.invalid"))
+      "value" -> boolean("removePreviousRegNumber.error.required")
     )
 }
