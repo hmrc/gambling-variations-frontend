@@ -16,8 +16,6 @@
 
 package viewmodels
 
-
-
 import controllers.routes
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
@@ -27,7 +25,6 @@ import org.scalatest.matchers.must.Matchers
 import pages.AssociatedRegistrationNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-
 
 class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 
@@ -58,8 +55,7 @@ class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
       result.head.key.content mustEqual Text("XHM00000199")
       result(1).key.content mustEqual Text("ZIU00001218")
       result(2).key.content mustEqual Text("GTT28881666")
-      result.head.actions.get.items(1).href mustEqual routes.
-        AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = "XHM00000199").url
+      result.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = "XHM00000199").url
     }
   }
 }
