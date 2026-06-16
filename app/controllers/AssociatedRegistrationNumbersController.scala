@@ -63,11 +63,22 @@ class AssociatedRegistrationNumbersController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val associatedRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(AssociatedRegistrationNumbersPage)
+    val associatedRegNumberCount: Int = associatedRegNumberSeq match {
+      case Some(sequence) => sequence.length
+      case None           => 0
+    }
 
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, request.userAnswers.get(AssociatedRegistrationNumbersPage), 0))),
+        formWithErrors =>
+          if (associatedRegNumberCount == 0) {
+            Future
+              .successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount)))
+          } else {
+            Future.successful(Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, request.userAnswers)))
+          },
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
