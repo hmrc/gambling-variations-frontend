@@ -14,42 +14,30 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.BusinessType.Soleproprietor
 import models.{CheckMode, UserAnswers}
-import pages.SoleProprietorPage
+import pages.BusinessTradeClassPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object SoleProprietorNameSummary {
+object BusinessTradeClassSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(SoleProprietorPage).map { answer =>
-
-      val value = List(
-        answer.title,
-        answer.firstName,
-        answer.middleName.getOrElse(""),
-        answer.lastName
-      ).map(_.trim)
-        .filter(_.nonEmpty)
-        .map(HtmlFormat.escape(_).toString)
-        .mkString("<br/>")
-
+    answers.get(BusinessTradeClassPage).map { answer =>
       SummaryListRowViewModel(
-        key   = "soleProprietorName.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlContent(value)),
+        key = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
+        value = ValueViewModel(
+          messages(s"businessTradeClass.${answer.toString}")
+        ),
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode).url
-          ).withVisuallyHiddenText(messages("soleProprietorName.change.hidden"))
+            routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+          ).withVisuallyHiddenText(messages("checkTradingDetails.businessTradeClass.change.hidden"))
         )
       )
     }

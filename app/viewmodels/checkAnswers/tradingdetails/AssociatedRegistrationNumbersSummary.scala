@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.BusinessTradeClassPage
+import pages.AssociatedRegistrationNumbersPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -26,24 +26,45 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object BusinessTradeClassSummary {
+object AssociatedRegistrationNumbersSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(BusinessTradeClassPage).map { answer =>
+    Some {
 
-      val value = ValueViewModel(
-        HtmlContent(
-          HtmlFormat.escape(messages(s"businessTradeClass.$answer"))
+      val numbers =
+        answers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
+
+      val value = numbers match {
+
+        case Seq() =>
+          ValueViewModel(messages("site.notProvided"))
+
+        case Seq(single) =>
+          ValueViewModel(single)
+
+        case multiple =>
+          ValueViewModel(
+            HtmlContent(
+              HtmlFormat.raw(
+                multiple.mkString("<br/>")
+              )
+            )
+          )
+      }
+
+      val actions = Seq(
+        ActionItemViewModel(
+          "site.change",
+          routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+        ).withVisuallyHiddenText(
+          messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
         )
       )
 
       SummaryListRowViewModel(
-        key   = "businessTradeClass.checkYourAnswersLabel",
-        value = value,
-        actions = Seq(
-          ActionItemViewModel("site.change", routes.BusinessTradeClassController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("businessTradeClass.change.hidden"))
-        )
+        key     = "checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel",
+        value   = value,
+        actions = actions
       )
     }
 }

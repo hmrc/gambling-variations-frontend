@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class BusinessContactDetailsSubmittedPageSpec extends PlaySpec {
 
-class FaxNumberFormProvider @Inject() extends Mappings {
+  "ContactDetailsSubmittedPage" must {
 
-  private val faxNumberCharactersRegex = "^[0-9 ]+$"
+    "have the correct path" in {
 
-  def apply(prefix: String): Form[String] =
-    Form(
-      "faxNumber" -> text(s"$prefix.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(20, s"$prefix.error.length"))
-        .verifying(regexp(faxNumberCharactersRegex, s"$prefix.error.invalid.characters"))
-        .transform[String](_.replace(" ", ""), identity)
-    )
+      BusinessContactDetailsSubmittedPage.path mustEqual (JsPath \ "businessContactDetailsSection" \ "submitted")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessContactDetailsSubmittedPage.toString mustEqual "submitted"
+    }
+  }
 }

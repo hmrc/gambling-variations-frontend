@@ -18,78 +18,92 @@ package controllers
 
 import base.SpecBase
 import forms.BusinessTradeClassFormProvider
-import models.{BusinessTradeClass, NormalMode, UserAnswers}
+import models.{BusinessTradeClass, BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.BusinessTradeClassPage
+import pages.{BusinessTradeClassPage, BusinessTypePage, GroupMemberPage, MgdTradeDetailsSectionPage}
 import play.api.inject.bind
-import play.api.libs.json.Json
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessTradeClassView
-
+import play.api.mvc.Call
 import scala.concurrent.Future
 
 class BusinessTradeClassControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val businessTradeClassRoute = routes.BusinessTradeClassController.onPageLoad(NormalMode).url
+  lazy val businessTradeClassRoute =
+    routes.BusinessTradeClassController.onPageLoad(NormalMode).url
 
   val formProvider = new BusinessTradeClassFormProvider()
   val form = formProvider()
 
-  val data = Json.obj(
-    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-  )
-
   private val baseUserAnswers =
-    UserAnswers(userAnswersId, data)
+    UserAnswers(userAnswersId)
+      .set(MgdTradeDetailsSectionPage, mgdRegNum)
+      .success
+      .value
+      .set(GroupMemberPage, false)
+      .success
+      .value
+      .set(BusinessTypePage, BusinessType.Soleproprietor)
+      .success
+      .value
+
+  private val answeredUserAnswers =
+    baseUserAnswers
+      .set(BusinessTradeClassPage, BusinessTradeClass.Casino)
+      .success
+      .value
 
   "BusinessTradeClass Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and render page for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, businessTradeClassRoute)
 
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[BusinessTradeClassView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+
+        contentAsString(result) mustEqual
+          view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly on GET when answer exists" in {
 
-      val userAnswers = baseUserAnswers.set(BusinessTradeClassPage, BusinessTradeClass.values.head).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(answeredUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, businessTradeClassRoute)
 
+        val result = route(application, request).value
         val view = application.injector.instanceOf[BusinessTradeClassView]
 
-        val result = route(application, request).value
-
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(BusinessTradeClass.values.head), NormalMode)(request, messages(application)).toString
+
+        contentAsString(result) mustEqual
+          view(form.fill(BusinessTradeClass.Casino), NormalMode)(
+            request,
+            messages(application)
+          ).toString
       }
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
-
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
@@ -103,7 +117,9 @@ class BusinessTradeClassControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, businessTradeClassRoute)
-            .withFormUrlEncodedBody(("value", BusinessTradeClass.values.head.toString))
+            .withFormUrlEncodedBody(
+              "value" -> BusinessTradeClass.values.head.toString
+            )
 
         val result = route(application, request).value
 
@@ -112,29 +128,33 @@ class BusinessTradeClassControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must return BAD REQUEST when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
         val request =
           FakeRequest(POST, businessTradeClassRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
-
-        val boundForm = form.bind(Map("value" -> "invalid value"))
-
-        val view = application.injector.instanceOf[BusinessTradeClassView]
+            .withFormUrlEncodedBody("value" -> "invalid value")
 
         val result = route(application, request).value
+        val view = application.injector.instanceOf[BusinessTradeClassView]
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+
+        contentAsString(result) mustEqual
+          view(form.bind(Map("value" -> "invalid value")), NormalMode)(
+            request,
+            messages(application)
+          ).toString
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to System Error page when no user answers on GET" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request = FakeRequest(GET, businessTradeClassRoute)
@@ -146,19 +166,21 @@ class BusinessTradeClassControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to System Error page when no user answers on POST" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application =
+        applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request =
           FakeRequest(POST, businessTradeClassRoute)
-            .withFormUrlEncodedBody(("value", BusinessTradeClass.values.head.toString))
+            .withFormUrlEncodedBody(
+              "value" -> BusinessTradeClass.values.head.toString
+            )
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }

@@ -103,6 +103,11 @@ POST       /change-registration-details/trading-details/seasonal-business       
 GET        /change-registration-details/trading-details/change-seasonal-business                  controllers.SeasonalBusinessController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/trading-details/change-seasonal-business                  controllers.SeasonalBusinessController.onSubmit(mode: Mode = CheckMode)
 
+GET        /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/correspondence-details/change-fax-number                  controllers.CorrespondenceFaxNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/correspondence-details/change-fax-number                  controllers.CorrespondenceFaxNumberController.onSubmit(mode: Mode = CheckMode)
+
 GET        /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/change-trading-details/remove-previous-registration-number                 controllers.RemovePreviousRegNumberController.onPageLoad(mode: Mode = CheckMode)
@@ -112,3 +117,5 @@ GET        /change-registration-details/trading-details/remove-associated-regist
 POST       /change-registration-details/trading-details/remove-associated-registration-number                      controllers.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/change-trading-details/remove-associated-registration-number                 controllers.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/change-trading-details/remove-associated-registration-number                 controllers.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()

@@ -17,20 +17,10 @@
 package pages
 
 import play.api.libs.json.JsPath
-import org.scalatestplus.play.PlaySpec
 
-class ContactDetailsSubmittedPageSpec extends PlaySpec {
+case object OtherBusinessTradeClassDescriptionPage extends QuestionPage[String] {
 
-  "ContactDetailsSubmittedPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    "have the correct path" in {
-
-      ContactDetailsSubmittedPage.path mustEqual (JsPath \ "businessContactDetailsSection" \ "submitted")
-    }
-
-    "have the correct toString value" in {
-
-      ContactDetailsSubmittedPage.toString mustEqual "submitted"
-    }
-  }
+  override def toString: String = "otherBusinessTradeClassDescription"
 }
