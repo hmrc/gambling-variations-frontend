@@ -14,28 +14,23 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.{BusinessTradeClass, UserAnswers}
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-import scala.util.Try
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object BusinessTradeClassPage extends QuestionPage[BusinessTradeClass] {
+class EmailAddressFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
+  private val emailRegex =
+    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
 
-  override def toString: String = "businessTradeClass"
-
-  override def cleanup(
-    value: Option[BusinessTradeClass],
-    userAnswers: UserAnswers
-  ): Try[UserAnswers] =
-    value match {
-      case Some(BusinessTradeClass.Other) =>
-        super.cleanup(value, userAnswers)
-
-      case _ =>
-        userAnswers.remove(OtherTradeClassPage)
-    }
+  def apply(prefix: String): Form[String] =
+    Form(
+      "emailAddress" -> text(s"$prefix.error.required")
+        .transform[String](_.trim, identity)
+        .verifying(maxLength(70, s"$prefix.error.length"))
+        .verifying(regexp(emailRegex, s"$prefix.error.invalid"))
+    )
 }

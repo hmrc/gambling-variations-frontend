@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+case object OtherBusinessTradeClassDescriptionPage extends QuestionPage[String] {
 
-class ChangeEmailAddressFormProvider @Inject() extends Mappings {
+  override def path: JsPath = JsPath \ toString
 
-  private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
-
-  def apply(): Form[String] =
-    Form(
-      "emailAddress" -> text("emailAddress.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(70, "emailAddress.error.length"))
-        .verifying(regexp(emailRegex, "emailAddress.error.invalid"))
-    )
+  override def toString: String = "otherBusinessTradeClassDescription"
 }
