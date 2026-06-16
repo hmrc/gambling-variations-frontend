@@ -321,3 +321,12 @@ seasonalBusiness.paragraph = A seasonal business has periods where it does not t
 seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
 seasonalBusiness.error.required = Select yes if this is a seasonal business
 seasonalBusiness.change.hidden = Is this a seasonal business?
+
+addPreviousRegistrationNumber.title = addPreviousRegistrationNumber
+addPreviousRegistrationNumber.heading = addPreviousRegistrationNumber
+
+seasonalBusiness.title = seasonalBusiness
+seasonalBusiness.heading = seasonalBusiness
+seasonalBusiness.checkYourAnswersLabel = seasonalBusiness
+seasonalBusiness.error.required = Select yes if seasonalBusiness
+seasonalBusiness.change.hidden = SeasonalBusiness
