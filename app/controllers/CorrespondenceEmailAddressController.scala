@@ -17,38 +17,38 @@
 package controllers
 
 import controllers.actions.*
-import forms.ChangeEmailAddressFormProvider
+import forms.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage}
+import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChangeEmailAddressView
+import views.html.CorrespondenceEmailAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChangeEmailAddressController @Inject() (
+class CorrespondenceEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: ChangeEmailAddressFormProvider,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: EmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ChangeEmailAddressView
+  view: CorrespondenceEmailAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form = formProvider("correspondenceEmailAddress")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(BusinessEmailAddressPage)
+      .get(CorrespondenceEmailPage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
@@ -62,10 +62,10 @@ class ChangeEmailAddressController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceEmailPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CorrespondenceEmailPage, mode, updatedAnswers))
       )
   }
 }

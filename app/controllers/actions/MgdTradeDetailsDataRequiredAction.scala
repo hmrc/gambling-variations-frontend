@@ -90,13 +90,23 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
 
   private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Mgd Trade Details")
+    val previousRegs =
+      mgdTradeDetails.previousMgdRegistrationNumbers
+        .map(_.map(_.trim).filter(_.nonEmpty))
+        .filter(_.nonEmpty)
+
+    val associatedRegs =
+      mgdTradeDetails.associatedMgdRegistrationNumbers
+        .map(_.map(_.trim).filter(_.nonEmpty))
+        .filter(_.nonEmpty)
+
     for {
       updatedAnswers <- answers.set(MgdTradeDetailsSectionPage, mgdTradeDetails.mgdRegNumber)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.isBusinessSeasonal, IsSeasonalBusinessPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessTradeClass, BusinessTradeClassPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessActivityDesc, OtherTradeClassPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.previousMgdRegistrationNumbers, PreviousRegistrationNumbersPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.associatedMgdRegistrationNumbers, AssociatedRegistrationNumbersPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, previousRegs, PreviousRegistrationNumbersPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, associatedRegs, AssociatedRegistrationNumbersPage)
     } yield updatedAnswers
   }
 }

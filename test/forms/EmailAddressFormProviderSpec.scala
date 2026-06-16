@@ -20,7 +20,7 @@ import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
+class EmailAddressFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey = "emailAddress.error.required"
   private val lengthKey = "emailAddress.error.length"
@@ -31,7 +31,7 @@ class ChangeEmailAddressFormProviderSpec extends StringFieldBehaviours {
   private val emailRegex =
     """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
 
-  private val form = new ChangeEmailAddressFormProvider()()
+  private val form = new EmailAddressFormProvider()("emailAddress")
 
   ".emailAddress" - {
 
