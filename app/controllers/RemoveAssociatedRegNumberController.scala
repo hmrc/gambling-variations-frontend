@@ -71,7 +71,7 @@ class RemoveAssociatedRegNumberController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(AssociatedRegistrationNumbersPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )
     } getOrElse Future.successful(Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)))
   }
