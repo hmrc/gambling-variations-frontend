@@ -19,7 +19,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-class AddAssociatedRegistrationNumberPageSpec extends AnyFreeSpec with Matchers{
+class AddAssociatedRegistrationNumberPageSpec extends AnyFreeSpec with Matchers {
   "AddAssociatedRegistrationNumbersPage" - {
 
     "must have the correct toString" in {

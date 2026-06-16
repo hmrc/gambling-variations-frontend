@@ -124,11 +124,6 @@ POST       /change-registration-details/trading-details/remove-associated-regist
 GET        /change-registration-details/change-trading-details/remove-associated-registration-number                 controllers.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/change-trading-details/remove-associated-registration-number                 controllers.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = CheckMode)
 
-GET        /associatedRegistrationNumbers                        controllers.AssociatedRegistrationNumbersController.onPageLoad(mode: Mode = NormalMode)
-POST       /associatedRegistrationNumbers                        controllers.AssociatedRegistrationNumbersController.onSubmit(mode: Mode = NormalMode)
-GET        /changeAssociatedRegistrationNumbers                  controllers.AssociatedRegistrationNumbersController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeAssociatedRegistrationNumbers                  controllers.AssociatedRegistrationNumbersController.onSubmit(mode: Mode = CheckMode)
-
 GET        /seasonalBusiness                        controllers.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
 POST       /seasonalBusiness                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
 GET        /changeSeasonalBusiness                  controllers.SeasonalBusinessController.onPageLoad(mode: Mode = CheckMode)

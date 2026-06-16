@@ -306,7 +306,7 @@ associatedRegistrationNumbers.paragraph = Any changes you make to your registrat
 associatedRegistrationNumbers.yesLabel = Yes, add another number
 associatedRegistrationNumbers.noLabel = No, return to check your trading details
 associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
-associatedRegistrationNumbers.error.required = Select yes if associatedRegistrationNumbers
+associatedRegistrationNumbers.error.required = Select yes if you want to add another associated registration number
 associatedRegistrationNumbers.change.hidden =  registration number {0}
 
 
@@ -342,13 +342,6 @@ correspondenceFaxNumber.error.invalid.characters = The fax number for correspond
 correspondenceFaxNumber.error.required = Enter the fax number for correspondence
 correspondenceFaxNumber.error.length = The fax number for correspondence must be 20 characters or less
 correspondenceFaxNumber.change.hidden = What fax number should we use for correspondence?
-
-
-associatedRegistrationNumbers.title = associatedRegistrationNumbers
-associatedRegistrationNumbers.heading = associatedRegistrationNumbers
-associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
-associatedRegistrationNumbers.error.required = Select yes if associatedRegistrationNumbers
-associatedRegistrationNumbers.change.hidden = AssociatedRegistrationNumbers
 
 seasonalBusiness.title = seasonalBusiness
 seasonalBusiness.heading = seasonalBusiness
