@@ -18,38 +18,41 @@ package controllers
 
 import controllers.actions.*
 import forms.FaxNumberFormProvider
+
+import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessFaxNumberPage, BusinessContactDetailsSubmittedPage}
+import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.FaxNumberView
+import views.html.CorrespondenceFaxNumberView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FaxNumberController @Inject() (
+class CorrespondenceFaxNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
   formProvider: FaxNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: FaxNumberView
+  view: CorrespondenceFaxNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider("faxNumber")
+  val form = formProvider("correspondenceFaxNumber")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(BusinessFaxNumberPage)
-      .fold(form)(form.fill)
+
+    val preparedForm = request.userAnswers.get(CorrespondenceFaxNumberPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
     Ok(view(preparedForm, mode))
   }
@@ -62,10 +65,10 @@ class FaxNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessFaxNumberPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceFaxNumberPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessFaxNumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CorrespondenceFaxNumberPage, mode, updatedAnswers))
       )
   }
 }

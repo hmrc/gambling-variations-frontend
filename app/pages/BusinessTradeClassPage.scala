@@ -16,12 +16,26 @@
 
 package pages
 
-import models.BusinessTradeClass
+import models.{BusinessTradeClass, UserAnswers}
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object BusinessTradeClassPage extends QuestionPage[BusinessTradeClass] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "businessTradeClass"
+
+  override def cleanup(
+    value: Option[BusinessTradeClass],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    value match {
+      case Some(BusinessTradeClass.Other) =>
+        super.cleanup(value, userAnswers)
+
+      case _ =>
+        userAnswers.remove(OtherTradeClassPage)
+    }
 }

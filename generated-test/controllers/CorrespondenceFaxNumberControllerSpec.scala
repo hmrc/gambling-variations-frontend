@@ -1,62 +1,42 @@
-/*
- * Copyright 2026 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package controllers
 
 import base.SpecBase
-import forms.SeasonalBusinessFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{IsSeasonalBusinessPage, MgdTradeDetailsSectionPage}
+import pages.CorrespondenceFaxNumberPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.*
+import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.SeasonalBusinessView
+import views.html.CorrespondenceFaxNumberView
 
 import scala.concurrent.Future
 
-class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
+class CorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SeasonalBusinessFormProvider()
+  val formProvider = new CorrespondenceFaxNumberFormProvider()
   val form = formProvider()
 
-  lazy val seasonalBusinessRoute = routes.SeasonalBusinessController.onPageLoad(NormalMode).url
+  lazy val correspondenceFaxNumberRoute = routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode).url
 
-  private val baseUserAnswers =
-    UserAnswers(userAnswersId).set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
-
-  "SeasonalBusiness Controller" - {
+  "CorrespondenceFaxNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, seasonalBusinessRoute)
+        val request = FakeRequest(GET, correspondenceFaxNumberRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[SeasonalBusinessView]
+        val view = application.injector.instanceOf[CorrespondenceFaxNumberView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
@@ -65,19 +45,19 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = baseUserAnswers.set(IsSeasonalBusinessPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(CorrespondenceFaxNumberPage, "answer").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, seasonalBusinessRoute)
+        val request = FakeRequest(GET, correspondenceFaxNumberRoute)
 
-        val view = application.injector.instanceOf[SeasonalBusinessView]
+        val view = application.injector.instanceOf[CorrespondenceFaxNumberView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -88,7 +68,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(baseUserAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -97,8 +77,8 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isBusinessSeasonal", "true"))
+          FakeRequest(POST, correspondenceFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", "answer"))
 
         val result = route(application, request).value
 
@@ -109,16 +89,16 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isBusinessSeasonal", ""))
+          FakeRequest(POST, correspondenceFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form.bind(Map("isBusinessSeasonal" -> ""))
+        val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[SeasonalBusinessView]
+        val view = application.injector.instanceOf[CorrespondenceFaxNumberView]
 
         val result = route(application, request).value
 
@@ -132,12 +112,12 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, seasonalBusinessRoute)
+        val request = FakeRequest(GET, correspondenceFaxNumberRoute)
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
       }
     }
 
@@ -147,13 +127,13 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isBusinessSeasonal", "true"))
+          FakeRequest(POST, correspondenceFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", "answer"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
       }
     }
   }

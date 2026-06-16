@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.RemoveAssociatedRegNumberPage
+import pages.BusinessTradeClassPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object RemoveAssociatedRegNumberSummary {
+object BusinessTradeClassSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(RemoveAssociatedRegNumberPage).map { answer =>
-
-      val value = if (answer) "site.yes" else "site.no"
-
+    answers.get(BusinessTradeClassPage).map { answer =>
       SummaryListRowViewModel(
-        key   = "removeAssociatedRegNumber.checkYourAnswersLabel",
-        value = ValueViewModel(value),
+        key = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
+        value = ValueViewModel(
+          messages(s"businessTradeClass.${answer.toString}")
+        ),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemoveAssociatedRegNumberController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("removeAssociatedRegNumber.change.hidden"))
+          ActionItemViewModel(
+            "site.change",
+            routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+          ).withVisuallyHiddenText(messages("checkTradingDetails.businessTradeClass.change.hidden"))
         )
       )
     }

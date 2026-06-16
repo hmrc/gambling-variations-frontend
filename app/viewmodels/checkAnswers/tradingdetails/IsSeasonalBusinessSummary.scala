@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.RemovePreviousRegNumberPage
+import pages.IsSeasonalBusinessPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object RemovePreviousRegNumberSummary {
+object IsSeasonalBusinessSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(RemovePreviousRegNumberPage).map { answer =>
-
-      val value = if (answer) "site.yes" else "site.no"
+    answers.get(IsSeasonalBusinessPage).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "removePreviousRegNumber.checkYourAnswersLabel",
-        value = ValueViewModel(value),
+        key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
+        value = ValueViewModel(if (answer) messages("site.yes") else messages("site.no")),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemovePreviousRegNumberController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("removePreviousRegNumber.change.hidden"))
+          ActionItemViewModel(
+            "site.change",
+            routes.FaxNumberController.onPageLoad(CheckMode).url
+          ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
         )
       )
     }

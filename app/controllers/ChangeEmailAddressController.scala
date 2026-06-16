@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.ChangeEmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessEmailAddressPage, ContactDetailsSubmittedPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -63,7 +63,7 @@ class ChangeEmailAddressController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
       )
