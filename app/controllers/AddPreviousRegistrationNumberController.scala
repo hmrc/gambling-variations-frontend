@@ -17,10 +17,11 @@
 package controllers
 
 import controllers.actions.*
+import forms.BusinessContactNumberFormProvider
+import models.Mode
 import forms.AddPreviousRegistrationNumberFormProvider
-import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage}
+import pages.{AddPreviousRegistrationNumberPage, PreviousRegistrationNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,7 +30,6 @@ import views.html.AddPreviousRegistrationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class AddPreviousRegistrationNumberController @Inject() (
   override val messagesApi: MessagesApi,
@@ -39,31 +39,27 @@ class AddPreviousRegistrationNumberController @Inject() (
   getData: DataRetrievalAction,
   requireData: MgdTradeDetailsDataRequiredAction,
   formProvider: AddPreviousRegistrationNumberFormProvider,
-  val controllerComponents: MessagesControllerComponents,
   view: AddPreviousRegistrationNumberView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport {
-
+extends FrontendBaseController
+with I18nSupport{
   val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(PreviousRegistrationNumbersPage)
-      .fold(form)(form.fill)
-
-    Ok(view(preparedForm, mode))
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {implicit request =>
+    Ok(view(form, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val currentSequence = request.userAnswers.get(PreviousRegistrationNumbersPage)
+    val currentSequence: Seq[String] = request.userAnswers.get(PreviousRegistrationNumbersPage) match {
+      case Some(sequence) => sequence
+      case None           => Seq.empty
+    }
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PreviousRegistrationNumbersPage, currentSequence +: value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PreviousRegistrationNumbersPage, currentSequence.appended(value)))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddPreviousRegistrationNumberPage, mode, updatedAnswers))
       )

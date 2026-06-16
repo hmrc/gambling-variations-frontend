@@ -125,7 +125,10 @@ POST       /change-registration-details/correspondence-details/change-email-addr
 
 GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
 
-GET        /addPreviousRegistrationNumber                       controllers.AddPreviousRegistrationNumberController.onPageLoad()
+GET        /change-registration-details/trading-details/add-previous-registration-number                       controllers.AddPreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST        /change-registration-details/trading-details/add-previous-registration-number                       controllers.AddPreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+GET        /change-registration-details/change-trading-details/add-previous-registration-number                       controllers.AddPreviousRegistrationNumberController.onPageLoad(mode: Mode = CheckMode)
+POST        /change-registration-details/change-trading-details/add-previous-registration-number                       controllers.AddPreviousRegistrationNumberController.onPageLoad(mode: Mode = CheckMode)
 
 GET        /seasonalBusiness                        controllers.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
 POST       /seasonalBusiness                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
