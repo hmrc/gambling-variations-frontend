@@ -19,14 +19,11 @@ package viewmodels.checkAnswers.tradingdetails
 import models.UserAnswers
 import pages.GroupMemberPage
 import play.api.i18n.Messages
-
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
-
 import viewmodels.govuk.summarylist.SummaryListViewModel
 
 case class CheckTradingDetailsViewModel(
-  tradeClass: SummaryList,
-  seasonalBusiness: SummaryList,
+  list: SummaryList,
   previousMgd: SummaryList,
   associatedMgd: SummaryList
 )
@@ -39,14 +36,18 @@ object CheckTradingDetailsViewModel {
       userAnswers.get(GroupMemberPage).contains(true)
 
     val tradeClassRows =
-      if (isGroupMember) {
-        Nil
-      } else {
-        Seq(
-          BusinessTradeClassSummary.row(userAnswers),
-          OtherTradeClassSummary.row(userAnswers)
-        ).flatten
-      }
+      (
+        if (isGroupMember) {
+          Nil
+        } else {
+          Seq(
+            BusinessTradeClassSummary.row(userAnswers),
+            OtherTradeClassSummary.row(userAnswers)
+          ).flatten
+        }
+      ) ++ Seq(
+        IsSeasonalBusinessSummary.row(userAnswers)
+      ).flatten
 
     val previousMgdRows =
       if (isGroupMember) {
@@ -67,12 +68,7 @@ object CheckTradingDetailsViewModel {
       }
 
     CheckTradingDetailsViewModel(
-      tradeClass = SummaryListViewModel(tradeClassRows),
-      seasonalBusiness = SummaryListViewModel(
-        Seq(
-          IsSeasonalBusinessSummary.row(userAnswers)
-        ).flatten
-      ),
+      list          = SummaryListViewModel(tradeClassRows),
       previousMgd   = SummaryListViewModel(previousMgdRows),
       associatedMgd = SummaryListViewModel(associatedMgdRows)
     )

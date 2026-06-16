@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import models.{BusinessTradeClass, NormalMode}
+import models.BusinessTradeClass
 import pages.*
 import play.api.Application
 import play.api.i18n.Messages
@@ -41,7 +41,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       val result =
         CheckTradingDetailsViewModel.from(answers)
 
-      result.tradeClass.rows mustBe Nil
+      result.list.rows mustBe Nil
       result.previousMgd.rows mustBe Nil
       result.associatedMgd.rows mustBe Nil
     }
@@ -60,7 +60,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       val result =
         CheckTradingDetailsViewModel.from(answers)
 
-      result.tradeClass.rows.nonEmpty mustBe true
+      result.list.rows.nonEmpty mustBe true
     }
 
     "must include the other trade class row when trade class is Other" in {
@@ -80,7 +80,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       val result =
         CheckTradingDetailsViewModel.from(answers)
 
-      result.tradeClass.rows.size mustBe 2
+      result.list.rows.size mustBe 2
     }
 
     "must not include the other trade class row when trade class is not Other" in {
@@ -97,7 +97,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       val result =
         CheckTradingDetailsViewModel.from(answers)
 
-      result.tradeClass.rows.size mustBe 1
+      result.list.rows.size mustBe 1
     }
   }
 }

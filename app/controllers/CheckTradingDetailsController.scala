@@ -47,8 +47,7 @@ class CheckTradingDetailsController @Inject() (
 
       Ok(
         view(
-          vm.tradeClass,
-          vm.seasonalBusiness,
+          vm.list,
           vm.previousMgd,
           vm.associatedMgd,
           showChangeMessage
