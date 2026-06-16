@@ -79,6 +79,12 @@ class NavigatorSpec extends SpecBase {
             routes.SeasonalBusinessController.onPageLoad(NormalMode)
         }
 
+        "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
+
+          navigator.nextPage(AssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.AssociatedRegNumberController.onPageLoad(NormalMode)
+        }
+
         "a page that doesn't exist in the route map to Index" in {
           navigator.nextPage(RemoveTradeNamePage, NormalMode, UserAnswers("id")) mustBe routes.CheckBusinessNameController.onPageLoad()
         }
@@ -104,6 +110,12 @@ class NavigatorSpec extends SpecBase {
 
           navigator.nextPage(IsSeasonalBusinessPage, CheckMode, UserAnswers("id")) mustBe
             routes.SeasonalBusinessController.onPageLoad(CheckMode)
+        }
+
+        "must go from AssociatedRegNumberPage to the check mode associated registration number page" in {
+
+          navigator.nextPage(AssociatedRegNumberPage, CheckMode, UserAnswers("id")) mustBe
+            routes.AssociatedRegNumberController.onPageLoad(CheckMode)
         }
 
         "must go from SoleProprietorPage to the check mode sole proprietor page" in {
