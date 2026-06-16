@@ -27,7 +27,7 @@
 
 @(form: Form[_], mode: Mode, mgdRegNumber: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removePreviousRegNumber.title"))) {
+@layout(pageTitle = title(form, messages("removePreviousRegNumber.title"), Some("changeRegistrationDetails.title"))) {
 
     @formHelper(action = routes.RemovePreviousRegNumberController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
