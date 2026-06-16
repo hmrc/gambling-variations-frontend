@@ -260,7 +260,7 @@ faxNumber.error.invalid.characters = The fax number must only include numbers 0 
 faxNumber.error.length = The fax number must be 20 characters or less
 faxNumber.change.hidden = FaxNumber
 
-emailAddress.title = What is the email address for this business? - Change registration details
+emailAddress.title = What is the email address for this business?
 emailAddress.heading = What is the email address for this business?
 emailAddress.checkYourAnswersLabel = Email Address
 emailAddress.error.required = Enter an email address for this business
@@ -314,7 +314,6 @@ businessTradeClass.checkYourAnswersLabel = What is the business trade class?
 businessTradeClass.error.required = Select the trade class for this business
 businessTradeClass.change.hidden = What is the business trade class?
 
-
 seasonalBusiness.title = Is this a seasonal business?
 seasonalBusiness.heading.caption = Change registration details
 seasonalBusiness.heading = Is this a seasonal business?
@@ -330,10 +329,6 @@ correspondenceFaxNumber.error.invalid.characters = The fax number for correspond
 correspondenceFaxNumber.error.required = Enter the fax number for correspondence
 correspondenceFaxNumber.error.length = The fax number for correspondence must be 20 characters or less
 correspondenceFaxNumber.change.hidden = What fax number should we use for correspondence?
-
-
-
-
 
 checkTradingDetails.caption = Change registration details
 checkTradingDetails.title = Check your trading details
@@ -351,6 +346,10 @@ checkTradingDetails.associatedRegistrationNumbers.p1 = If any MGD registrations 
 checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel = Associated MGD registration numbers
 checkTradingDetails.associatedRegistrationNumbers.change.hidden = associated MGD registration numbers
 
+checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
+checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
+checkTradingDetails.submit.p1 = You must continue to the change registration details page to submit any changes.
+
 businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
 businessTradeClass.adultGamingCentre = Adult gaming centre
 businessTradeClass.familyentertainmentcentre = Family entertainment centre
@@ -361,6 +360,12 @@ businessTradeClass.publichouse = Public house
 businessTradeClass.club = Club
 businessTradeClass.other = Other
 
+correspondenceEmailAddress.title = What email address should we use for correspondence?
+correspondenceEmailAddress.heading = What email address should we use for correspondence?
+correspondenceEmailAddress.checkYourAnswersLabel = Email Address
+correspondenceEmailAddress.error.required = Enter a correspondence email address for this business
+correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
 checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
 checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
 checkTradingDetails.submit.p1 = You must continue to the change registration details page to submit any changes.
