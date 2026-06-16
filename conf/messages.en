@@ -335,6 +335,15 @@ seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
 seasonalBusiness.error.required = Select yes if this is a seasonal business
 seasonalBusiness.change.hidden = Is this a seasonal business?
 
+correspondenceFaxNumber.title = What fax number should we use for correspondence?
+correspondenceFaxNumber.heading = What fax number should we use for correspondence?
+correspondenceFaxNumber.checkYourAnswersLabel = What fax number should we use for correspondence?
+correspondenceFaxNumber.error.invalid.characters = The fax number for correspondence must only include numbers 0 to 9 and spaces
+correspondenceFaxNumber.error.required = Enter the fax number for correspondence
+correspondenceFaxNumber.error.length = The fax number for correspondence must be 20 characters or less
+correspondenceFaxNumber.change.hidden = What fax number should we use for correspondence?
+
+
 associatedRegistrationNumbers.title = associatedRegistrationNumbers
 associatedRegistrationNumbers.heading = associatedRegistrationNumbers
 associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
