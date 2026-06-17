@@ -22,7 +22,7 @@ import play.api.libs.json.Json
 import base.SpecBase
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.PreviousRegistrationNumbersPage
+import pages.{PreviousRegistrationNumbersPage, UnsubmittedPreviousRegistrationNumbersPage}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
@@ -35,7 +35,9 @@ class PreviousRegNumberViewModelSpec extends SpecBase with Matchers {
         "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
         "previousRegistrationNumbers" -> Json.arr(
           "XHM00000199",
-          "ZIU00001218",
+          "ZIU00001218"
+        ),
+        "unsubmittedPreviousRegNumbers" -> Json.arr(
           "GTT28881666"
         )
       )
@@ -43,6 +45,7 @@ class PreviousRegNumberViewModelSpec extends SpecBase with Matchers {
         UserAnswers(userAnswersId, data)
 
       val previousRegNumbers = baseUserAnswers.get(PreviousRegistrationNumbersPage)
+      val unsubmittedPreviousRegNumbers = baseUserAnswers.get(UnsubmittedPreviousRegistrationNumbersPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
@@ -50,12 +53,12 @@ class PreviousRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val result = PreviousRegNumberViewModel(previousRegNumbers).summaryList
+      val result = PreviousRegNumberViewModel(previousRegNumbers, unsubmittedPreviousRegNumbers).summaryList
 
       result.head.key.content mustEqual Text("XHM00000199")
       result(1).key.content mustEqual Text("ZIU00001218")
       result(2).key.content mustEqual Text("GTT28881666")
-      result.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = "XHM00000199").url
+      result(2).actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = "GTT28881666").url
     }
   }
 }

@@ -45,7 +45,9 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
     "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
     "previousRegistrationNumbers" -> Json.arr(
       "XHM00000199",
-      "ZIU00001218",
+      "ZIU00001218"
+    ),
+    "unsubmittedPreviousRegNumbers" -> Json.arr(
       "GTT28881666"
     )
   )
@@ -70,7 +72,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 3)(request, messages(application)).toString
       }
     }
 
@@ -89,7 +91,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 3)(request, messages(application)).toString
       }
     }
 

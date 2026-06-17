@@ -43,7 +43,7 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
   "PreviousRegistrationNumbersView" - {
     "must show expected values when data is populated" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), None, 3)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -55,7 +55,7 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
 
     "must show radio buttons when less than 3 numbers" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), 2)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), None, 2)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -69,7 +69,7 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
 
     "must show max limit message when 3 numbers are present" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 3)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
