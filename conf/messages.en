@@ -397,3 +397,10 @@ correspondenceEmailAddress.error.required = Enter a correspondence email address
 correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
 
+otherTradeClass.title = What is your business trade class? - Change registration details
+otherTradeClass.heading = What is your business trade class?
+otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+otherTradeClass.checkYourAnswersLabel = What is your business trade class?
+otherTradeClass.error.required = Enter your business trade class
+otherTradeClass.error.invalid = Your business trade class must be in the correct format
+otherTradeClass.textarea.label = You can enter up to 300 characters
