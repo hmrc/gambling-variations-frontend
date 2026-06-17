@@ -130,3 +130,13 @@ GET        /change-registration-details/correspondence-details/change-email-addr
 POST       /change-registration-details/correspondence-details/change-email-address              controllers.CorrespondenceEmailAddressController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
+
+GET        /seasonalBusiness                        controllers.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
+POST       /seasonalBusiness                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSeasonalBusiness                  controllers.SeasonalBusinessController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSeasonalBusiness                  controllers.SeasonalBusinessController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-other-business-trade-class                  controllers.OtherTradeClassController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/trading-details/change-other-business-trade-class                  controllers.OtherTradeClassController.onSubmit(mode: Mode = CheckMode)
