@@ -56,28 +56,34 @@ trait RadiosFluency {
 
     def yesNo(
       field: Field,
-      legend: Legend
+      legend: Legend,
+      yesLabel: String = "site.yes",
+      noLabel: String = "site.no"
     )(implicit messages: Messages): Radios =
       yesNo(
         field    = field,
-        fieldset = FieldsetViewModel(legend)
+        fieldset = FieldsetViewModel(legend),
+        yesLabel = yesLabel,
+        noLabel  = noLabel
       )
 
     def yesNo(
       field: Field,
-      fieldset: Fieldset
+      fieldset: Fieldset,
+      yesLabel: String,
+      noLabel: String
     )(implicit messages: Messages): Radios = {
 
       val items = Seq(
         RadioItem(
           id      = Some(field.id),
           value   = Some("true"),
-          content = Text(messages("site.yes"))
+          content = Text(messages(yesLabel))
         ),
         RadioItem(
           id      = Some(s"${field.id}-no"),
           value   = Some("false"),
-          content = Text(messages("site.no"))
+          content = Text(messages(noLabel))
         )
       )
 

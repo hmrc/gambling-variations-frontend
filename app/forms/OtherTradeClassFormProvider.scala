@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object OtherTradeClassPage extends QuestionPage[String] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ toString
+class OtherTradeClassFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "otherTradeClass"
+  private val otherTradeClassRegex =
+    "^[a-zA-Z0-9\\- '\\s]+$"
+
+  def apply(): Form[String] =
+    Form(
+      "otherTradeClass" -> text("otherTradeClass.error.required")
+        .verifying(regexp(otherTradeClassRegex, "otherTradeClass.error.invalid"))
+    )
 }

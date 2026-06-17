@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object OtherTradeClassPage extends QuestionPage[String] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ toString
+class AssociatedRegistrationNumbersFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "otherTradeClass"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("associatedRegistrationNumbers.error.required")
+    )
 }
