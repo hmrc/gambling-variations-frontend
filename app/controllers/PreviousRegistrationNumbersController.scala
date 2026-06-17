@@ -17,11 +17,12 @@
 package controllers
 
 import controllers.actions.*
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import forms.PreviousRegistrationNumbersFormProvider
-import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage}
+import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegistrationNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -53,19 +54,29 @@ class PreviousRegistrationNumbersController @Inject() (
       case Some(value) => form.fill(value)
     }
     val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
+    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegistrationNumbersPage)
     val previousRegNumberCount: Int = previousRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
+      case Some(sequence) =>
+        unsubmittedPreviousRegNumberSeq match {
+          case Some(unsubmittedSequence) => sequence.length + unsubmittedSequence.length
+          case None                      => sequence.length
+        }
+      case None => 0
     }
 
-    Ok(view(preparedForm, mode, previousRegNumberSeq, previousRegNumberCount))
+    Ok(view(preparedForm, mode, previousRegNumberSeq, unsubmittedPreviousRegNumberSeq, previousRegNumberCount))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
+    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegistrationNumbersPage)
     val previousRegNumberCount: Int = previousRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
+      case Some(sequence) =>
+        unsubmittedPreviousRegNumberSeq match {
+          case Some(unsubmittedSequence) => sequence.length + unsubmittedSequence.length
+          case None                      => sequence.length
+        }
+      case None => 0
     }
 
     form
@@ -74,7 +85,7 @@ class PreviousRegistrationNumbersController @Inject() (
         formWithErrors =>
           if (previousRegNumberCount < 3) {
             Future
-              .successful(BadRequest(view(formWithErrors, mode, previousRegNumberSeq, previousRegNumberCount)))
+              .successful(BadRequest(view(formWithErrors, mode, previousRegNumberSeq, unsubmittedPreviousRegNumberSeq, previousRegNumberCount)))
           } else {
             Future.successful(Redirect("#"))
           },

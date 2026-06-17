@@ -18,39 +18,52 @@ package viewmodels
 
 import controllers.routes
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.stringToText
 
-case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]]) {
+case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]], unsubmittedPreviousRegNumbers: Option[Seq[String]]) {
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = previousRegNumberSummaryListRows
 
+  private def unsubmittedRegNumberSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
+    unsubmittedPreviousRegNumbers match {
+      case Some(newPrevRegNumbers) =>
+        for (newPrevReg <- newPrevRegNumbers) yield {
+          SummaryListRow(
+            key = Key(content = Text(newPrevReg), classes = s"previous-reg-number previous-reg-number-$newPrevReg govuk-!-font-weight-regular"),
+            actions = Some(
+              Actions(
+                classes = "govuk-summary-list__actions govuk-!-width-one-half",
+                items = Seq(
+                  ActionItem(
+                    href               = "#",
+                    content            = Text(messages("site.change")),
+                    visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", newPrevReg))
+                  ),
+                  ActionItem(
+                    href               = routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = newPrevReg).url,
+                    content            = Text(messages("site.remove")),
+                    visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", newPrevReg))
+                  )
+                )
+              )
+            )
+          )
+        }
+      case None => Seq.empty
+    }
+  }
   private def previousRegNumberSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
     previousRegNumbers match {
       case Some(previousRegNums) =>
         val rows: Seq[SummaryListRow] = for (prevReg <- previousRegNums) yield {
           SummaryListRow(
-            key = Key(content = prevReg, classes = s"previous-reg-number previous-reg-number-$prevReg govuk-!-font-weight-regular"),
-            actions = Some(
-              Actions(
-                items = Seq(
-                  ActionItem(
-                    href               = "#",
-                    content            = "site.change",
-                    visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", prevReg))
-                  ),
-                  ActionItem(
-                    href               = routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = prevReg).url,
-                    content            = "site.remove",
-                    visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", prevReg))
-                  )
-                ),
-                classes = "govuk-summary-list__actions govuk-!-width-one-half"
-              )
-            )
+            key     = Key(content = prevReg, classes = s"previous-reg-number previous-reg-number-$prevReg govuk-!-font-weight-regular"),
+            actions = Some(Actions(classes = "govuk-summary-list__actions govuk-!-width-one-half"))
           )
         }
-        rows
+        rows ++ unsubmittedRegNumberSummaryListRows
       case None =>
         Seq.empty
     }
