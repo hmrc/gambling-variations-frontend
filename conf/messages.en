@@ -298,6 +298,19 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
 
+associatedRegistrationNumbers.title = Associated registration numbers
+associatedRegistrationNumbers.heading = Associated registration numbers
+associatedRegistrationNumbers.radios = Do you want to add another registration number?
+associatedRegistrationNumbers.caption = Change registration details
+associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
+associatedRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+associatedRegistrationNumbers.yesLabel = Yes, add another number
+associatedRegistrationNumbers.noLabel = No, return to check your trading details
+associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
+associatedRegistrationNumbers.error.required = Select yes if you want to add another associated registration number
+associatedRegistrationNumbers.change.hidden =  registration number {0}
+
+
 businessTradeClass.title = What is the business trade class?
 businessTradeClass.heading = What is the business trade class?
 businessTradeClass.heading.caption = Change registration details
@@ -345,6 +358,11 @@ checkTradingDetails.previousRegistrationNumbers.change.hidden = previous MGD reg
 checkTradingDetails.associatedRegistrationNumbers.p1 = If any MGD registrations are associated with your business, you can provide 3 registration numbers.
 checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel = Associated MGD registration numbers
 checkTradingDetails.associatedRegistrationNumbers.change.hidden = associated MGD registration numbers
+seasonalBusiness.title = seasonalBusiness
+seasonalBusiness.heading = seasonalBusiness
+seasonalBusiness.checkYourAnswersLabel = seasonalBusiness
+seasonalBusiness.error.required = Select yes if seasonalBusiness
+seasonalBusiness.change.hidden = SeasonalBusiness
 
 checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
 checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity

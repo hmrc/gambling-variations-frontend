@@ -93,6 +93,12 @@ POST       /change-registration-details/business-contact-details/contact-numbers
 GET        /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-contact-details/change-contact-numbers                  controllers.BusinessContactNumberController.onSubmit(mode: Mode = CheckMode)
 
+GET        /change-registration-details/trading-details/associated-registration-numbers-redirect               controllers.AssociatedRegistrationNumbersController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)
+GET        /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-associated-registration-numbers                  controllers.AssociatedRegistrationNumbersController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/trading-details/change-associated-registration-numbers                  controllers.AssociatedRegistrationNumbersController.onSubmit(mode: Mode = CheckMode)
+
 GET        /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/trading-details/change-business-trade-class                  controllers.BusinessTradeClassController.onPageLoad(mode: Mode = CheckMode)
@@ -124,6 +130,11 @@ GET        /change-registration-details/correspondence-details/change-email-addr
 POST       /change-registration-details/correspondence-details/change-email-address              controllers.CorrespondenceEmailAddressController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
+
+GET        /seasonalBusiness                        controllers.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
+POST       /seasonalBusiness                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSeasonalBusiness                  controllers.SeasonalBusinessController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSeasonalBusiness                  controllers.SeasonalBusinessController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
