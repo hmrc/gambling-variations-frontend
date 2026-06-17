@@ -18,22 +18,27 @@ package forms
 
 import javax.inject.Inject
 
-import forms.mappings.Mappings
+import forms.mappings.{ChecksumConstraints, Mappings}
 import play.api.data.Form
+import utils.ChecksumValidator
 
-class AssociatedRegNumberFormProvider @Inject() extends Mappings {
-
-  private val associatedRegNumberCharactersRegex = "^[A-Z0-9]+$"
-  private val associatedRegNumberFormatRegex = "^X[A-Z]M000[0-9]{8}$"
+class AssociatedRegNumberFormProvider @Inject() extends Mappings with ChecksumConstraints {
 
   def apply(): Form[String] =
     Form(
       "associatedRegNumber" -> text("associatedRegNumber.error.required")
-        .transform[String](_.trim.toUpperCase, identity)
+        .transform[String](_.filterNot(_.isWhitespace).toUpperCase, identity)
         .verifying(
           firstError(
-            regexp(associatedRegNumberCharactersRegex, "associatedRegNumber.error.invalid.characters"),
-            regexp(associatedRegNumberFormatRegex, "associatedRegNumber.error.invalid.format")
+            regexp(ChecksumValidator.mgdrnCharactersRegex, "associatedRegNumber.error.invalid.characters"),
+            regexp(ChecksumValidator.mgdrnFormatRegex, "associatedRegNumber.error.invalid.format"),
+            modulo23Checksum(
+              ChecksumValidator.mgdrnFormatRegex,
+              ChecksumValidator.mgdrnChecksumWeights,
+              ChecksumValidator.mgdrnCheckCharacterIndex,
+              ChecksumValidator.mgdrnChecksumLookup,
+              "associatedRegNumber.error.invalidReference"
+            )
           )
         )
     )

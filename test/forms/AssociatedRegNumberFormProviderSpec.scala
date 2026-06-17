@@ -24,6 +24,7 @@ class AssociatedRegNumberFormProviderSpec extends StringFieldBehaviours {
   val requiredKey = "associatedRegNumber.error.required"
   val invalidCharactersKey = "associatedRegNumber.error.invalid.characters"
   val invalidFormatKey = "associatedRegNumber.error.invalid.format"
+  val invalidReferenceKey = "associatedRegNumber.error.invalidReference"
 
   val form = new AssociatedRegNumberFormProvider()()
 
@@ -32,15 +33,15 @@ class AssociatedRegNumberFormProviderSpec extends StringFieldBehaviours {
     val fieldName = "associatedRegNumber"
 
     "bind a valid associated registration number" in {
-      val result = form.bind(Map(fieldName -> "XAM00001234567"))
+      val result = form.bind(Map(fieldName -> "XRM00000000574"))
 
-      result.value.value mustEqual "XAM00001234567"
+      result.value.value mustEqual "XRM00000000574"
     }
 
-    "trim and uppercase a valid associated registration number" in {
-      val result = form.bind(Map(fieldName -> " xam00001234567 "))
+    "remove whitespaces and uppercase a valid associated registration number" in {
+      val result = form.bind(Map(fieldName -> " xrm 0000 0000574 "))
 
-      result.value.value mustEqual "XAM00001234567"
+      result.value.value mustEqual "XRM00000000574"
     }
 
     behave like mandatoryField(
@@ -58,13 +59,25 @@ class AssociatedRegNumberFormProviderSpec extends StringFieldBehaviours {
     "not bind an associated registration number that does not start with X" in {
       val result = form.bind(Map(fieldName -> "MAX6666444555")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-Z]M000[0-9]{8}$"))
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-HJ-NP-TV-Z]M[0-9]{11}$"))
     }
 
     "not bind an associated registration number that does not have M as the third character" in {
       val result = form.bind(Map(fieldName -> "XAX00001234567")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-Z]M000[0-9]{8}$"))
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-HJ-NP-TV-Z]M[0-9]{11}$"))
+    }
+
+    "not bind an associated registration number with an excluded check character" in {
+      val result = form.bind(Map(fieldName -> "XIM00000000574")).apply(fieldName)
+
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-HJ-NP-TV-Z]M[0-9]{11}$"))
+    }
+
+    "not bind an associated registration number with an invalid checksum" in {
+      val result = form.bind(Map(fieldName -> "XAM00001234567")).apply(fieldName)
+
+      result.errors must contain only FormError(fieldName, invalidReferenceKey)
     }
   }
 }

@@ -101,7 +101,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, associatedRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
         val result = route(application, request).value
 
@@ -119,7 +119,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers =
         requiredUserAnswers
-          .set(AssociatedRegistrationNumbersPage, Seq("XAM00000000001"))
+          .set(AssociatedRegistrationNumbersPage, Seq("XDM00000001309"))
           .success
           .value
 
@@ -133,15 +133,15 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, associatedRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(AssociatedRegistrationNumbersPage).value mustEqual Seq(
-          "XAM00000000001",
-          "XAM00001234567"
+          "XDM00000001309",
+          "XRM00000000574"
         )
       }
     }
@@ -150,7 +150,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers =
         requiredUserAnswers
-          .set(AssociatedRegistrationNumbersPage, Seq("XAM00001234567"))
+          .set(AssociatedRegistrationNumbersPage, Seq("XRM00000000574"))
           .success
           .value
 
@@ -159,9 +159,9 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, associatedRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
-        val boundForm = form.fill("XAM00001234567").withError(fieldName, "associatedRegNumber.error.duplicate")
+        val boundForm = form.fill("XRM00000000574").withError(fieldName, "associatedRegNumber.error.duplicate")
         val view = application.injector.instanceOf[AssociatedRegNumberView]
         val result = route(application, request).value
 
@@ -227,7 +227,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, associatedRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
         val result = route(application, request).value
 
