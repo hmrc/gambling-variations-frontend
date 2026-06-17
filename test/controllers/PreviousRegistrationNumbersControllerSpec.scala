@@ -36,7 +36,7 @@ import scala.concurrent.Future
 
 class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute = Call("GET", "#")
 
   val formProvider = new PreviousRegistrationNumbersFormProvider
   val form = formProvider()
