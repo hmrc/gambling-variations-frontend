@@ -39,6 +39,7 @@ class AddPreviousRegistrationNumberController @Inject() (
   getData: DataRetrievalAction,
   requireData: MgdTradeDetailsDataRequiredAction,
   formProvider: AddPreviousRegistrationNumberFormProvider,
+  val controllerComponents: MessagesControllerComponents,
   view: AddPreviousRegistrationNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
