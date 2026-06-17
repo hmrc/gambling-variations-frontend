@@ -41,10 +41,10 @@ class AddPreviousRegistrationNumberController @Inject() (
   formProvider: AddPreviousRegistrationNumberFormProvider,
   view: AddPreviousRegistrationNumberView
 )(implicit ec: ExecutionContext)
-extends FrontendBaseController
-with I18nSupport{
+    extends FrontendBaseController
+    with I18nSupport {
   val form = formProvider()
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     Ok(view(form, mode))
   }
 
