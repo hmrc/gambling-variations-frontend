@@ -31,17 +31,17 @@ import views.html.PreviousRegistrationNumbersView
 import scala.concurrent.{ExecutionContext, Future}
 
 class PreviousRegistrationNumbersController @Inject() (
-                                                          override val messagesApi: MessagesApi,
-                                                          sessionRepository: SessionRepository,
-                                                          navigator: Navigator,
-                                                          authorise: AuthorisedAction,
-                                                          getData: DataRetrievalAction,
-                                                          requireData: MgdTradeDetailsDataRequiredAction,
-                                                          formProvider: PreviousRegistrationNumbersFormProvider,
-                                                          val controllerComponents: MessagesControllerComponents,
-                                                          view: PreviousRegistrationNumbersView
-                                                        )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: MgdTradeDetailsDataRequiredAction,
+  formProvider: PreviousRegistrationNumbersFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PreviousRegistrationNumbersView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()

@@ -10,7 +10,7 @@ import pages.CorrespondenceFaxNumberPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.CorrespondenceFaxNumberView
 

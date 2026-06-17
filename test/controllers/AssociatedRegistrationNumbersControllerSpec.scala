@@ -145,7 +145,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to SystemError for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -159,7 +159,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to SystemError for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
