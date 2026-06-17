@@ -65,7 +65,7 @@ class ContactNumberFormProviderSpec extends StringFieldBehaviours {
       result.errors mustBe empty
     }
 
-    "bind phone numbers with fewer than 20 digits" in {
+    "bind phone numbers with fewer than 10 digits" in {
       val result = form.bind(
         Map(
           fieldName      -> "123",
@@ -87,27 +87,26 @@ class ContactNumberFormProviderSpec extends StringFieldBehaviours {
       result.errors mustBe empty
     }
 
-    "not bind phone numbers with more than 20 digits" - {
-      "no trim" in {
-        val result = form.bind(
-          Map(
-            fieldName      -> "123456789012345678901",
-            "mobileNumber" -> "07700 900000"
-          )
+    "bind phone numbers with spaces when digit count is 20" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "12345 67890 12345 67890",
+          "mobileNumber" -> "07700 900000"
         )
+      )
 
-        result.errors.map(_.message) must contain(lengthKey)
-      }
-      "trim" in {
-        val result = form.bind(
-          Map(
-            fieldName      -> "12345 67890 12345 67890",
-            "mobileNumber" -> "07700 900000"
-          )
+      result.errors mustBe empty
+    }
+
+    "not bind phone numbers with more than 20 digits" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "123456789012345678901",
+          "mobileNumber" -> "07700 900000"
         )
+      )
 
-        result.errors.map(_.message) must contain(lengthKey)
-      }
+      result.errors.map(_.message) must contain(lengthKey)
     }
 
     "not bind invalid characters" in {
@@ -197,27 +196,26 @@ class ContactNumberFormProviderSpec extends StringFieldBehaviours {
       result.errors mustBe empty
     }
 
-    "not bind mobile numbers with more than 20 digits" - {
-      "no trim" in {
-        val result = form.bind(
-          Map(
-            "phoneNumber" -> "01632960001",
-            fieldName     -> "123456789012345678901"
-          )
+    "bind mobile numbers with spaces when digit count is 20" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "12345 67890 12345 67890"
         )
+      )
 
-        result.errors.map(_.message) must contain(lengthKey)
-      }
-      "trim" in {
-        val result = form.bind(
-          Map(
-            "phoneNumber" -> "01632960001",
-            fieldName     -> "12345 67890 12345 67890"
-          )
+      result.errors mustBe empty
+    }
+
+    "not bind mobile numbers with more than 20 digits" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "123456789012345678901"
         )
+      )
 
-        result.errors.map(_.message) must contain(lengthKey)
-      }
+      result.errors.map(_.message) must contain(lengthKey)
     }
 
     "not bind invalid characters" in {

@@ -28,13 +28,13 @@ class ContactNumberFormProvider @Inject() extends Mappings {
   private val MaxDigits = 20
   private val AllowedCharsRegex = "^[0-9 ]+$"
 
-  private def digitCount(str: String): Int =
-    str.length
+  private def digitCount(number: String): Int =
+    number.replaceAll(" ", "").length
 
   private def phoneConstraint(prefix: String): Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
-      val digits = digitCount(value)
+      val digits = digitCount(trimmed)
 
       if (trimmed.isEmpty) {
         Valid
@@ -51,7 +51,7 @@ class ContactNumberFormProvider @Inject() extends Mappings {
   private def mobileConstraint(prefix: String): Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
-      val digits = digitCount(value)
+      val digits = digitCount(trimmed)
 
       if (trimmed.isEmpty) {
         Valid
