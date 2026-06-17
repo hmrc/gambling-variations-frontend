@@ -392,8 +392,10 @@ addPreviousRegistrationNumber.hint = It is 14 characters long and starts with an
 addPreviousRegistrationNumber.error.required = Enter your previous registration number
 addPreviousRegistrationNumber.error.invalidFormat = Your previous registration number must be in the correct format
 
-seasonalBusiness.title = seasonalBusiness
-seasonalBusiness.heading = seasonalBusiness
-seasonalBusiness.checkYourAnswersLabel = seasonalBusiness
-seasonalBusiness.error.required = Select yes if seasonalBusiness
-seasonalBusiness.change.hidden = SeasonalBusiness
+otherTradeClass.title = What is your business trade class? - Change registration details
+otherTradeClass.heading = What is your business trade class?
+otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+otherTradeClass.checkYourAnswersLabel = What is your business trade class?
+otherTradeClass.error.required = Enter your business trade class
+otherTradeClass.error.invalid = Your business trade class must be in the correct format
+otherTradeClass.textarea.label = You can enter up to 300 characters
