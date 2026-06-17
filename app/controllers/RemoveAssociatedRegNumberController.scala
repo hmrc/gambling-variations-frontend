@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
 
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -73,7 +73,7 @@ class RemoveAssociatedRegNumberController @Inject() (
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )
-    } getOrElse Future.successful(Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()))
+    } getOrElse Future.successful(Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)))
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
