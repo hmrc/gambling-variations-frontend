@@ -298,6 +298,18 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
 
+previousRegistrationNumbers.title = Previous registration numbers
+previousRegistrationNumbers.heading = Previous registration numbers
+previousRegistrationNumbers.radios = Do you want to add another registration number?
+previousRegistrationNumbers.caption = Change registration details
+previousRegistrationNumbers.hint = You can only add up to 3 registration numbers
+previousRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+previousRegistrationNumbers.yesLabel = Yes, add another number
+previousRegistrationNumbers.noLabel = No, return to check your trading details
+previousRegistrationNumbers.checkYourAnswersLabel = previousRegistrationNumbers
+previousRegistrationNumbers.error.required = Select yes if you want to add another previous registration number
+previousRegistrationNumbers.change.hidden =  registration number {0}
+
 associatedRegistrationNumbers.title = Associated registration numbers
 associatedRegistrationNumbers.heading = Associated registration numbers
 associatedRegistrationNumbers.radios = Do you want to add another registration number?
@@ -384,3 +396,5 @@ correspondenceEmailAddress.checkYourAnswersLabel = Email Address
 correspondenceEmailAddress.error.required = Enter a correspondence email address for this business
 correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
+previousRegistrationNumbers.title = previousRegistrationNumbers
+previousRegistrationNumbers.heading = previousRegistrationNumbers
