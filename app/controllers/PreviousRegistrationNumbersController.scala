@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import forms.PreviousRegistrationNumbersFormProvider
-import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegistrationNumbersPage}
+import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -55,7 +55,7 @@ class PreviousRegistrationNumbersController @Inject() (
     }
     val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
 
-    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegistrationNumbersPage)
+    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegNumbersPage)
 
     val submittedRegNumbersCount: Int = previousRegNumberSeq match {
       case Some(sequence) => sequence.length
@@ -72,7 +72,7 @@ class PreviousRegistrationNumbersController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
-    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegistrationNumbersPage)
+    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegNumbersPage)
     val submittedRegNumbersCount: Int = previousRegNumberSeq match {
       case Some(sequence) => sequence.length
       case None           => 0

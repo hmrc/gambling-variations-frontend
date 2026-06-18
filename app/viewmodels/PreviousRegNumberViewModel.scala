@@ -18,7 +18,7 @@ package viewmodels
 
 import controllers.routes
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.stringToText
 

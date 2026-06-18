@@ -23,12 +23,12 @@ class UnsubmittedPrevRegNumbersPageSpec extends AnyFreeSpec with Matchers {
   "UnsubmittedPreviousRegistrationNumbersPage" - {
 
     "must have the correct toString" in {
-      UnsubmittedPreviousRegistrationNumbersPage.toString mustBe "unsubmittedPreviousRegNumbers"
+      UnsubmittedPreviousRegNumbersPage.toString mustBe "unsubmittedPreviousRegNumbers"
     }
 
     "must have a path corresponding to its name" in {
       val expectedPath: JsPath = JsPath \ "unsubmittedPreviousRegNumbers"
-      UnsubmittedPreviousRegistrationNumbersPage.path mustBe expectedPath
+      UnsubmittedPreviousRegNumbersPage.path mustBe expectedPath
     }
   }
 }

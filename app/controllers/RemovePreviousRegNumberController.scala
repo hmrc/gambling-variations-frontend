@@ -22,7 +22,7 @@ import forms.RemovePreviousRegNumberFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ChosenPreviousRegNumberPage, RemovePreviousRegNumberPage, UnsubmittedPreviousRegistrationNumbersPage}
+import pages.{ChosenPreviousRegNumberPage, RemovePreviousRegNumberPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -83,10 +83,10 @@ class RemovePreviousRegNumberController @Inject() (
         if (value) {
           ua1.get(ChosenPreviousRegNumberPage) match {
             case Some(prevRegNo) =>
-              ua1.get(UnsubmittedPreviousRegistrationNumbersPage).match {
+              ua1.get(UnsubmittedPreviousRegNumbersPage).match {
                 case Some(prevRegNoSeq) =>
                   val updatedSequence = prevRegNoSeq.filterNot(_ == prevRegNo)
-                  ua1.set(UnsubmittedPreviousRegistrationNumbersPage, updatedSequence)
+                  ua1.set(UnsubmittedPreviousRegNumbersPage, updatedSequence)
                 case None => Try(ua1)
               }
             case None => Try(ua1)
