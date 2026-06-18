@@ -54,7 +54,7 @@
         @if(previousRegNumberCount < 3) {
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("value"),
+                field = form("addPreviousRegistrationNumber"),
                 legend = LegendViewModel(messages("previousRegistrationNumbers.radios")).withCssClass("govuk-fieldset__legend--m"),
                 yesLabel = messages("previousRegistrationNumbers.yesLabel"),
                 noLabel = messages("previousRegistrationNumbers.noLabel")

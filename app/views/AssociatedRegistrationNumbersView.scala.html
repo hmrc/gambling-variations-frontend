@@ -49,7 +49,7 @@
         @if(associatedRegNumberCount < 3) {
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("value"),
+                field = form("addAssociatedRegistrationNumber"),
                 legend = LegendViewModel(messages("associatedRegistrationNumbers.radios")).withCssClass("govuk-fieldset__legend--m"),
                 yesLabel = messages("associatedRegistrationNumbers.yesLabel"),
                 noLabel = messages("associatedRegistrationNumbers.noLabel")
