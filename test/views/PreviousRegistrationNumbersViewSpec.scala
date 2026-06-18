@@ -43,7 +43,7 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
   "PreviousRegistrationNumbersView" - {
     "must show expected values when data is populated" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), None, 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -51,25 +51,42 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
       doc.select("h1").text must include(messages("previousRegistrationNumbers.heading"))
 
       doc.select(".previous-reg-number-XHM00000199").text must include("XHM00000199")
+      doc.select(".previous-reg-number-ZIU00001218").text must include("ZIU00001218")
+      doc.select(".previous-reg-number-GTT28881666").text must include("GTT28881666")
     }
 
     "must show radio buttons when less than 3 numbers" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), None, 2)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), None, 2, 0)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title             must include(messages("previousRegistrationNumbers.title"))
-      doc.select("h1").text must include(messages("previousRegistrationNumbers.heading"))
+      doc.select(".prev-reg-radio-buttons").text must include(messages("previousRegistrationNumbers.yesLabel"))
+      doc.select(".prev-reg-radio-buttons").text must include(messages("previousRegistrationNumbers.noLabel"))
+    }
 
-      doc.select(".previous-reg-number-ZIU00001218").text must include("ZIU00001218")
-      doc.select(".prev-reg-radio-buttons").text          must include(messages("previousRegistrationNumbers.yesLabel"))
-      doc.select(".prev-reg-radio-buttons").text          must include(messages("previousRegistrationNumbers.noLabel"))
+    "must show pluralised H2 when unsubmitted previous numbers are present" in new Setup {
+
+      val html =
+        view(form, NormalMode, None, Some(Seq("ABC0000001", "XYZ00000001")), 0, 2)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select("h2").text must include(messages("previousRegistrationNumbers.unsubmitted", "s"))
+    }
+
+    "must show singular H2 when one unsubmitted previous number is present" in new Setup {
+
+      val html = view(form, NormalMode, None, Some(Seq("ABC0000001")), 0, 1)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select("h2").text must include(messages("previousRegistrationNumbers.unsubmitted", ""))
     }
 
     "must show max limit message when 3 numbers are present" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 

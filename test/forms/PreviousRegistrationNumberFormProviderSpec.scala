@@ -19,16 +19,16 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class AssociatedRegistrationNumbersFormProviderSpec extends BooleanFieldBehaviours {
+class PreviousRegistrationNumberFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "associatedRegistrationNumbers.error.required"
+  val requiredKey = "previousRegistrationNumbers.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new AssociatedRegistrationNumbersFormProvider()()
+  val form = new PreviousRegistrationNumbersFormProvider()()
 
-  ".addAssociatedRegistrationNumber" - {
+  ".addPreviousRegistrationNumber" - {
 
-    val fieldName = "addAssociatedRegistrationNumber"
+    val fieldName = "addPreviousRegistrationNumber"
 
     behave like booleanField(
       form,

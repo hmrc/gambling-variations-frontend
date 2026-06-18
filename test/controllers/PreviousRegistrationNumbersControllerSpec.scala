@@ -72,7 +72,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 3)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1)(request, messages(application)).toString
       }
     }
 
@@ -91,7 +91,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 3)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1)(request, messages(application)).toString
       }
     }
 

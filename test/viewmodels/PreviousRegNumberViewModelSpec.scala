@@ -53,12 +53,13 @@ class PreviousRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val result = PreviousRegNumberViewModel(previousRegNumbers, unsubmittedPreviousRegNumbers).summaryList
+      val submitted = PreviousRegNumberViewModel(previousRegNumbers, None).submittedRegNumbersSummaryListRows
+      val unsubmitted = PreviousRegNumberViewModel(None, unsubmittedPreviousRegNumbers).unsubmittedRegNumbersSummaryListRows
 
-      result.head.key.content mustEqual Text("XHM00000199")
-      result(1).key.content mustEqual Text("ZIU00001218")
-      result(2).key.content mustEqual Text("GTT28881666")
-      result(2).actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = "GTT28881666").url
+      submitted.head.key.content mustEqual Text("XHM00000199")
+      submitted(1).key.content mustEqual Text("ZIU00001218")
+      unsubmitted.head.key.content mustEqual Text("GTT28881666")
+      unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = "GTT28881666").url
     }
   }
 }
