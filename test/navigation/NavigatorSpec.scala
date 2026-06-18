@@ -114,5 +114,18 @@ class NavigatorSpec extends SpecBase {
       }
 
     }
+
+    "must go from PreviousRegNumberPage to the normal mode associated registration number page" in {
+
+      navigator.nextPage(PreviousRegNumberPage, NormalMode, UserAnswers("id")) mustBe
+        routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+    }
+
+
+    "must go from PreviousRegNumberPage to the check mode associated registration number page" in {
+
+      navigator.nextPage(PreviousRegNumberPage, CheckMode, UserAnswers("id")) mustBe
+        routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    }
   }
 }

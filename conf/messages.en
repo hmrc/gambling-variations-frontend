@@ -403,3 +403,15 @@ otherTradeClass.error.required = Enter your business trade class
 otherTradeClass.error.invalid = Your business trade class must be in the correct format
 otherTradeClass.textarea.label = You can enter up to 300 characters
 
+previousRegNumber.title = What is your previous registration number?
+previousRegNumber.heading = What is your previous registration number?
+previousRegNumber.heading.caption = Change registration details
+previousRegNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
+previousRegNumber.checkYourAnswersLabel = Associated registration number
+previousRegNumber.error.required = Enter your previous registration number
+previousRegNumber.error.invalid.characters = Associated registration number must only include letters a to z and numbers 0 to 9
+previousRegNumber.error.invalid.format = Associated registration number must be in the correct format
+previousRegNumber.error.invalidReference = Enter a real previous registration number
+previousRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
+previousRegNumber.change.hidden = previous registration number
+

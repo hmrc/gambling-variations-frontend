@@ -44,6 +44,7 @@ class Navigator @Inject() () {
     case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
     case CorrespondenceEmailPage           => _ => routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode)
     case CorrespondenceContactNumberPage   => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
+    case PreviousRegNumberPage     => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
     case _                                 => _ => routes.IndexController.onPageLoad()
   }
 
@@ -56,6 +57,7 @@ class Navigator @Inject() () {
     case CorrespondenceFaxNumberPage       => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
     case OtherTradeClassPage               => _ => routes.OtherTradeClassController.onPageLoad(CheckMode)
+    case PreviousRegNumberPage     => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
     case _                                 => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
