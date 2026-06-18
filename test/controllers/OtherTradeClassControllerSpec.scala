@@ -73,8 +73,8 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "otherTradeClassSection" -> Json.obj("mgdRegNum" -> userAnswersId),
-        OtherTradeClassPage.toString    -> "valid trade class"
+        "otherTradeClassSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
+        OtherTradeClassPage.toString -> "valid trade class"
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
