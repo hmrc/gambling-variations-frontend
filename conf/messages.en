@@ -309,6 +309,8 @@ previousRegistrationNumbers.noLabel = No, return to check your trading details
 previousRegistrationNumbers.checkYourAnswersLabel = previousRegistrationNumbers
 previousRegistrationNumbers.error.required = Select yes if you want to add another previous registration number
 previousRegistrationNumbers.change.hidden =  registration number {0}
+previousRegistrationNumbers.submitted = Submitted registration number{0}
+previousRegistrationNumbers.unsubmitted = Registration number{0} ready to submit
 
 associatedRegistrationNumbers.title = Associated registration numbers
 associatedRegistrationNumbers.heading = Associated registration numbers

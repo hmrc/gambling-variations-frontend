@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import views.html.components.{Caption, Paragraph, H1}
+@import views.html.components.{Caption, Paragraph, H1, H2}
 @import viewmodels.PreviousRegNumberViewModel
 
 @this(
@@ -26,6 +26,7 @@
     caption: Caption,
     p: Paragraph,
     h1:H1,
+    h2: H2,
     govukSummaryList : GovukSummaryList
 )
 
@@ -33,7 +34,8 @@
     mode: Mode,
     previousRegNumbers: Option[Seq[String]],
     unsubmittedPreviousRegNumbers: Option[Seq[String]],
-    previousRegNumberCount: Int,
+    submittedRegNumbersCount: Int,
+    unsubmittedRegNumbersCount: Int,
     )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("previousRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
@@ -47,11 +49,29 @@
         @h1(messages("previousRegistrationNumbers.heading"), classes = "govuk-heading-l")
         @p("previousRegistrationNumbers.paragraph")
 
-        @govukSummaryList(SummaryList(
-        rows = PreviousRegNumberViewModel(previousRegNumbers, unsubmittedPreviousRegNumbers).summaryList
-        ))
+        @if(submittedRegNumbersCount > 1 && unsubmittedRegNumbersCount > 0){
+                @h2(messages("previousRegistrationNumbers.submitted", "s"))
+            } else if (submittedRegNumbersCount > 0 && unsubmittedRegNumbersCount > 0) {
+                @h2(messages("previousRegistrationNumbers.submitted", ""))
+            }
+        @if(previousRegNumbers.isDefined) {
+            @govukSummaryList(SummaryList(
+                rows = PreviousRegNumberViewModel(previousRegNumbers, None).submittedRegNumbersSummaryListRows
+                ))
+            }
 
-        @if(previousRegNumberCount < 3) {
+        @if(unsubmittedRegNumbersCount > 0){
+                @h2(messages("previousRegistrationNumbers.submitted", ""))
+            } else if (unsubmittedRegNumbersCount > 1){
+                @h2(messages("previousRegistrationNumbers.submitted", "s"))
+            }
+        @if(unsubmittedPreviousRegNumbers.isDefined) {
+            @govukSummaryList(SummaryList(
+                rows = PreviousRegNumberViewModel(None, unsubmittedPreviousRegNumbers).unsubmittedRegNumbersSummaryListRows
+                ))
+            }
+
+        @if(submittedRegNumbersCount + unsubmittedRegNumbersCount < 3) {
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("addPreviousRegistrationNumber"),

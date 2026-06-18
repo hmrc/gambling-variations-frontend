@@ -24,9 +24,8 @@ import viewmodels.govuk.all.stringToText
 
 case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]], unsubmittedPreviousRegNumbers: Option[Seq[String]]) {
 
-  def summaryList(implicit messages: Messages): Seq[SummaryListRow] = previousRegNumberSummaryListRows
+  def unsubmittedRegNumbersSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
 
-  private def unsubmittedRegNumberSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
     unsubmittedPreviousRegNumbers match {
       case Some(newPrevRegNumbers) =>
         for (newPrevReg <- newPrevRegNumbers) yield {
@@ -54,7 +53,8 @@ case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]], u
       case None => Seq.empty
     }
   }
-  private def previousRegNumberSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
+
+  def submittedRegNumbersSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
     previousRegNumbers match {
       case Some(previousRegNums) =>
         val rows: Seq[SummaryListRow] = for (prevReg <- previousRegNums) yield {
@@ -63,9 +63,10 @@ case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]], u
             actions = Some(Actions(classes = "govuk-summary-list__actions govuk-!-width-one-half"))
           )
         }
-        rows ++ unsubmittedRegNumberSummaryListRows
+        rows ++ unsubmittedRegNumbersSummaryListRows
       case None =>
         Seq.empty
     }
   }
+
 }

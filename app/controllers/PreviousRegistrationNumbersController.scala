@@ -54,38 +54,52 @@ class PreviousRegistrationNumbersController @Inject() (
       case Some(value) => form.fill(value)
     }
     val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
+
     val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegistrationNumbersPage)
-    val previousRegNumberCount: Int = previousRegNumberSeq match {
-      case Some(sequence) =>
-        unsubmittedPreviousRegNumberSeq match {
-          case Some(unsubmittedSequence) => sequence.length + unsubmittedSequence.length
-          case None                      => sequence.length
-        }
-      case None => 0
+
+    val submittedRegNumbersCount: Int = previousRegNumberSeq match {
+      case Some(sequence) => sequence.length
+      case None           => 0
     }
 
-    Ok(view(preparedForm, mode, previousRegNumberSeq, unsubmittedPreviousRegNumberSeq, previousRegNumberCount))
+    val unsubmittedRegNumbersCount: Int = unsubmittedPreviousRegNumberSeq match {
+      case Some(sequence) => sequence.length
+      case None           => 0
+    }
+
+    Ok(view(preparedForm, mode, previousRegNumberSeq, unsubmittedPreviousRegNumberSeq, submittedRegNumbersCount, unsubmittedRegNumbersCount))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
     val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegistrationNumbersPage)
-    val previousRegNumberCount: Int = previousRegNumberSeq match {
-      case Some(sequence) =>
-        unsubmittedPreviousRegNumberSeq match {
-          case Some(unsubmittedSequence) => sequence.length + unsubmittedSequence.length
-          case None                      => sequence.length
-        }
-      case None => 0
+    val submittedRegNumbersCount: Int = previousRegNumberSeq match {
+      case Some(sequence) => sequence.length
+      case None           => 0
+    }
+
+    val unsubmittedRegNumbersCount: Int = unsubmittedPreviousRegNumberSeq match {
+      case Some(sequence) => sequence.length
+      case None           => 0
     }
 
     form
       .bindFromRequest()
       .fold(
         formWithErrors =>
-          if (previousRegNumberCount < 3) {
+          if (submittedRegNumbersCount + unsubmittedRegNumbersCount < 3) {
             Future
-              .successful(BadRequest(view(formWithErrors, mode, previousRegNumberSeq, unsubmittedPreviousRegNumberSeq, previousRegNumberCount)))
+              .successful(
+                BadRequest(
+                  view(formWithErrors,
+                       mode,
+                       previousRegNumberSeq,
+                       unsubmittedPreviousRegNumberSeq,
+                       submittedRegNumbersCount,
+                       unsubmittedRegNumbersCount
+                      )
+                )
+              )
           } else {
             Future.successful(Redirect("#"))
           },
