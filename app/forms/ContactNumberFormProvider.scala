@@ -23,7 +23,7 @@ import play.api.data.Form
 import play.api.data.Forms.*
 import play.api.data.validation.*
 
-class BusinessContactNumberFormProvider @Inject() extends Mappings {
+class ContactNumberFormProvider @Inject() extends Mappings {
 
   private val MaxDigits = 20
   private val AllowedCharsRegex = "^[0-9 ]+$"
@@ -31,7 +31,7 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
   private def digitCount(number: String): Int =
     number.replaceAll(" ", "").length
 
-  private val phoneConstraint: Constraint[String] =
+  private def phoneConstraint(prefix: String): Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
       val digits = digitCount(trimmed)
@@ -39,16 +39,16 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
       if (trimmed.isEmpty) {
         Valid
       } else if (!trimmed.matches(AllowedCharsRegex)) {
-        Invalid("businessContactNumber.error.phoneNumber.invalid")
+        Invalid(s"$prefix.error.phoneNumber.invalid")
       } else if (digits > MaxDigits) {
-        Invalid("businessContactNumber.error.phoneNumber.length")
+        Invalid(s"$prefix.error.phoneNumber.length")
 
       } else {
         Valid
       }
     }
 
-  private val mobileConstraint: Constraint[String] =
+  private def mobileConstraint(prefix: String): Constraint[String] =
     Constraint { value =>
       val trimmed = value.trim
       val digits = digitCount(trimmed)
@@ -56,28 +56,28 @@ class BusinessContactNumberFormProvider @Inject() extends Mappings {
       if (trimmed.isEmpty) {
         Valid
       } else if (!trimmed.matches(AllowedCharsRegex)) {
-        Invalid("businessContactNumber.error.mobileNumber.invalid")
+        Invalid(s"$prefix.error.mobileNumber.invalid")
       } else if (digits > MaxDigits) {
-        Invalid("businessContactNumber.error.mobileNumber.length")
+        Invalid(s"$prefix.error.mobileNumber.length")
       } else {
         Valid
       }
     }
 
-  def apply(): Form[ContactNumber] =
+  def apply(prefix: String): Form[ContactNumber] =
     Form(
       mapping(
         "phoneNumber" ->
           optional(
             text()
               .transform(_.trim, identity)
-              .verifying(phoneConstraint)
+              .verifying(phoneConstraint(prefix))
           ),
         "mobileNumber" ->
           optional(
             text()
               .transform(_.trim, identity)
-              .verifying(mobileConstraint)
+              .verifying(mobileConstraint(prefix))
           )
       )((phone: Option[String], mobile: Option[String]) => ContactNumber(phone, mobile))((b: ContactNumber) =>
         Some((b.phoneNumber, b.mobilePhoneNumber))

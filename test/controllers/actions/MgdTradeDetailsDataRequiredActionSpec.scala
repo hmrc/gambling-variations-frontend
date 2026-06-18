@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
 import play.api.mvc.Results.*
-import play.api.mvc.{AnyContent, Result}
+import play.api.mvc.Result
 import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.http.UpstreamErrorResponse

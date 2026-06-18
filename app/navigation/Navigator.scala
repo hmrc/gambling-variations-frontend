@@ -42,6 +42,7 @@ class Navigator @Inject() () {
     case OtherTradeClassPage               => _ => routes.OtherTradeClassController.onPageLoad(NormalMode)
     case CorrespondenceFaxNumberPage       => _ => routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode)
     case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
+    case CorrespondenceContactNumberPage   => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case CorrespondenceEmailPage           => _ => routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode)
     case _                                 => _ => routes.IndexController.onPageLoad()
   }
