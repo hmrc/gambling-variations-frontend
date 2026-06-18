@@ -60,10 +60,10 @@
                 ))
             }
 
-        @if(unsubmittedRegNumbersCount > 0){
-                @h2(messages("previousRegistrationNumbers.submitted", ""))
+        @if(unsubmittedRegNumbersCount == 1 ){
+                @h2(messages("previousRegistrationNumbers.unsubmitted", ""))
             } else if (unsubmittedRegNumbersCount > 1){
-                @h2(messages("previousRegistrationNumbers.submitted", "s"))
+                @h2(messages("previousRegistrationNumbers.unsubmitted", "s"))
             }
         @if(unsubmittedPreviousRegNumbers.isDefined) {
             @govukSummaryList(SummaryList(
