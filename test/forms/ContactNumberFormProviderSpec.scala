@@ -19,9 +19,9 @@ package forms
 import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 
-class BusinessContactNumberFormProviderSpec extends StringFieldBehaviours {
+class ContactNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val form = new BusinessContactNumberFormProvider()()
+  val form = new ContactNumberFormProvider()("businessContactNumber")
 
   ".phoneNumber" - {
 

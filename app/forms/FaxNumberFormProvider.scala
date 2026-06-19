@@ -17,20 +17,36 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
 class FaxNumberFormProvider @Inject() extends Mappings {
 
   private val faxNumberCharactersRegex = "^[0-9 ]+$"
+  private val MaxDigits = 20
+
+  private def digitCount(number: String): Int =
+    number.replaceAll(" ", "").length
 
   def apply(prefix: String): Form[String] =
     Form(
       "faxNumber" -> text(s"$prefix.error.required")
         .transform[String](_.trim, identity)
-        .verifying(maxLength(20, s"$prefix.error.length"))
+        .verifying(maxLength(prefix))
         .verifying(regexp(faxNumberCharactersRegex, s"$prefix.error.invalid.characters"))
         .transform[String](_.replace(" ", ""), identity)
     )
+
+  def maxLength(prefix: String): Constraint[String] =
+    Constraint { value =>
+      val trimmed = value.trim
+      val digits = digitCount(trimmed)
+
+      if (digits > MaxDigits) {
+        Invalid(s"$prefix.error.length", MaxDigits)
+      } else {
+        Valid
+      }
+    }
 }

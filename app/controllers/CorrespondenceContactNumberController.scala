@@ -20,37 +20,37 @@ import controllers.actions.*
 import forms.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage}
+import pages.{CorrespondenceContactNumberPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.BusinessContactNumberView
+import views.html.CorrespondenceContactNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessContactNumberController @Inject() (
+class CorrespondenceContactNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
   formProvider: ContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: BusinessContactNumberView
+  view: CorrespondenceContactNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("businessContactNumber")
+  private val form = formProvider("correspondenceContactNumber")
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
       val preparedForm = request.userAnswers
-        .get(BusinessContactNumberPage)
+        .get(CorrespondenceContactNumberPage)
         .map(form.fill)
         .getOrElse(form)
 
@@ -69,7 +69,7 @@ class BusinessContactNumberController @Inject() (
         ) {
           boundForm.withError(
             "phoneNumber",
-            "businessContactNumber.error.phoneNumber.required"
+            "correspondenceContactNumber.error.phoneNumber.required"
           )
         } else {
           boundForm
@@ -80,12 +80,12 @@ class BusinessContactNumberController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(
-                                request.userAnswers.set(BusinessContactNumberPage, value)
+                                request.userAnswers.set(CorrespondenceContactNumberPage, value)
                               )
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(
-            navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
+            navigator.nextPage(CorrespondenceContactNumberPage, mode, updatedAnswers)
           )
       )
     }

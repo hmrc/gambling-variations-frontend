@@ -275,7 +275,6 @@ businessContactNumber.caption = Change registration details
 
 businessContactNumber.phoneNumber = Phone number
 businessContactNumber.mobileNumber = Mobile number
-
 businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
 
 # Phone errors
@@ -297,6 +296,19 @@ businessContactNumber.error.contactRequired = Enter at least one contact number 
 
 businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
 businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
+
+associatedRegistrationNumbers.title = Associated registration numbers
+associatedRegistrationNumbers.heading = Associated registration numbers
+associatedRegistrationNumbers.radios = Do you want to add another registration number?
+associatedRegistrationNumbers.caption = Change registration details
+associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
+associatedRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+associatedRegistrationNumbers.yesLabel = Yes, add another number
+associatedRegistrationNumbers.noLabel = No, return to check your trading details
+associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
+associatedRegistrationNumbers.error.required = Select yes if you want to add another associated registration number
+associatedRegistrationNumbers.change.hidden =  registration number {0}
+
 
 businessTradeClass.title = What is the business trade class?
 businessTradeClass.heading = What is the business trade class?
@@ -360,6 +372,22 @@ businessTradeClass.publichouse = Public house
 businessTradeClass.club = Club
 businessTradeClass.other = Other
 
+correspondenceContactNumber.title = What contact numbers should we use for correspondence?
+correspondenceContactNumber.heading = What contact numbers should we use for correspondence?
+correspondenceContactNumber.p1 = You must provide at least one contact number.
+correspondenceContactNumber.caption = Change registration details
+correspondenceContactNumber.phoneNumber = Phone number
+correspondenceContactNumber.mobileNumber = Mobile number
+
+# Phone errors
+correspondenceContactNumber.error.phoneNumber.required = Enter the correspondence phone number
+correspondenceContactNumber.error.phoneNumber.invalid = The correspondence phone number must only include numbers 0 to 9 and spaces
+correspondenceContactNumber.error.phoneNumber.length = The correspondence phone number must be 20 characters or less
+
+# Mobile errors
+correspondenceContactNumber.error.mobileNumber.required = Enter the correspondence mobile number
+correspondenceContactNumber.error.mobileNumber.invalid = The correspondence mobile number must only include numbers 0 to 9 and spaces
+correspondenceContactNumber.error.mobileNumber.length = The correspondence mobile number must be 20 characters or less
 checkCorrespondenceDetails.caption = Change registration details
 checkCorrespondenceDetails.title = Check your correspondence details
 checkCorrespondenceDetails.heading = Check your correspondence details
@@ -396,3 +424,13 @@ correspondenceEmailAddress.checkYourAnswersLabel = Email Address
 correspondenceEmailAddress.error.required = Enter a correspondence email address for this business
 correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
+
+otherTradeClass.title = What is your business trade class? - Change registration details
+otherTradeClass.heading = What is your business trade class?
+otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+otherTradeClass.checkYourAnswersLabel = What is your business trade class?
+otherTradeClass.error.required = Enter your business trade class
+otherTradeClass.error.invalid = Your business trade class must be in the correct format
+otherTradeClass.textarea.label = You can enter up to 300 characters
+
+

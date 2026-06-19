@@ -17,57 +17,79 @@
 package controllers
 
 import base.SpecBase
-import forms.RemoveAssociatedRegNumberFormProvider
+import forms.AssociatedRegistrationNumbersFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.AddAssociatedRegistrationNumberPage
 import play.api.inject.bind
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.RemoveAssociatedRegNumberView
+import views.html.AssociatedRegistrationNumbersView
 
 import scala.concurrent.Future
 
-class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
+class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RemoveAssociatedRegNumberFormProvider()
+  val formProvider = new AssociatedRegistrationNumbersFormProvider()
   val form = formProvider()
 
-  lazy val removeAssociatedRegNumberRoute = routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
-  private val assocRegSeq = Some(Seq("XYM00000000", "b", "c"))
-  private val baseAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "associatedRegistrationNumbers" -> assocRegSeq,
-        "chosenAssociatedRegNumber"     -> "XYM00000000",
-        "mgdTradeDetailsSection"        -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+  val data = Json.obj(
+    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+    "associatedRegistrationNumbers" -> Json.arr(
+      "XHM00000199",
+      "ZIU00001218",
+      "GTT28881666"
     )
+  )
 
-  "RemoveAssociatedRegNumber Controller" - {
+  private val baseUserAnswers =
+    UserAnswers(userAnswersId, data)
+
+  lazy val associatedRegistrationNumbersRoute = routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
+
+  "AssociatedRegistrationNumbers Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, removeAssociatedRegNumberRoute)
+        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[RemoveAssociatedRegNumberView]
+        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, "XYM00000000")(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
+      }
+    }
 
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = baseUserAnswers.set(AddAssociatedRegistrationNumberPage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
+
+        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
       }
     }
 
@@ -78,7 +100,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers))
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -87,7 +109,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
 
       running(application) {
         val request =
-          FakeRequest(POST, removeAssociatedRegNumberRoute)
+          FakeRequest(POST, associatedRegistrationNumbersRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -99,11 +121,22 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(baseAnswers)).build()
+      val twoNumbers = Json.obj(
+        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+        "associatedRegistrationNumbers" -> Json.arr(
+          "XHM00000199",
+          "ZIU00001218"
+        )
+      )
+
+      val twoAnswers =
+        UserAnswers(userAnswersId, twoNumbers)
+
+      val application = applicationBuilder(userAnswers = Some(twoAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, removeAssociatedRegNumberRoute)
+          FakeRequest(POST, associatedRegistrationNumbersRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val result = route(application, request).value
@@ -112,12 +145,12 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
       }
     }
 
-    "must redirect to System Error for a GET if no existing data is found" in {
+    "must redirect to Journey Recovery for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, removeAssociatedRegNumberRoute)
+        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
 
         val result = route(application, request).value
 
@@ -126,13 +159,13 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
       }
     }
 
-    "must redirect to System Error for a POST if no existing data is found" in {
+    "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, removeAssociatedRegNumberRoute)
+          FakeRequest(POST, associatedRegistrationNumbersRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value

@@ -15,12 +15,21 @@
  */
 
 package pages
-
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case object OtherTradeClassPage extends QuestionPage[String] {
+class AssociatedRegistrationNumbersPageSpec extends AnyFreeSpec with Matchers {
+  "AssociatedRegistrationNumbersPage" - {
 
-  override def path: JsPath = JsPath \ toString
+    "must have the correct toString" in {
+      AssociatedRegistrationNumbersPage.toString mustBe "associatedRegistrationNumbers"
+    }
 
-  override def toString: String = "otherTradeClass"
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "associatedRegistrationNumbers"
+      AssociatedRegistrationNumbersPage.path mustBe expectedPath
+    }
+  }
 }
