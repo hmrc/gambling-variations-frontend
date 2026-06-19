@@ -22,7 +22,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.stringToText
 
-case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]], unsubmittedPreviousRegNumbers: Option[Seq[String]]) {
+case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]] = None, unsubmittedPreviousRegNumbers: Option[Seq[String]] = None) {
 
   def unsubmittedRegNumbersSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
 
