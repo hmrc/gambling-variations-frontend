@@ -26,9 +26,9 @@ import pages.{PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-class PreviousRegNumberViewModelSpec extends SpecBase with Matchers {
+class UnsubmittedRegNumberViewModelSpec extends SpecBase with Matchers {
 
-  "PreviousRegNumberViewModel" - {
+  "UnsubmittedRegNumberViewModel" - {
 
     "must populate correct view" in {
       val data = Json.obj(
@@ -53,10 +53,11 @@ class PreviousRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val submitted = PreviousRegNumberViewModel(previousRegNumbers).summaryList
 
-      submitted.head.key.content mustEqual Text("XHM00000199")
-      submitted(1).key.content mustEqual Text("ZIU00001218")
+      val unsubmitted = UnsubmittedRegNumberViewModel(unsubmittedPreviousRegNumbers).summaryList
+
+      unsubmitted.head.key.content mustEqual Text("GTT28881666")
+      unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = "GTT28881666").url
     }
   }
 }
