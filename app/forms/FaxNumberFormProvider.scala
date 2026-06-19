@@ -26,6 +26,9 @@ class FaxNumberFormProvider @Inject() extends Mappings {
   private val faxNumberCharactersRegex = "^[0-9 ]+$"
   private val MaxDigits = 20
 
+  private def digitCount(number: String): Int =
+    number.replaceAll(" ", "").length
+
   def apply(prefix: String): Form[String] =
     Form(
       "faxNumber" -> text(s"$prefix.error.required")
@@ -35,9 +38,10 @@ class FaxNumberFormProvider @Inject() extends Mappings {
 
   def maxLength(prefix: String): Constraint[String] =
     Constraint { value =>
+      val trimmed = value.trim
+      val digits = digitCount(trimmed)
 
-      val length = value.length
-      if (length > MaxDigits) {
+      if (digits > MaxDigits) {
         Invalid(s"$prefix.error.length", MaxDigits)
       } else {
         Valid
