@@ -44,7 +44,6 @@ class UnsubmittedRegNumberViewModelSpec extends SpecBase with Matchers {
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 
-      val previousRegNumbers = baseUserAnswers.get(PreviousRegistrationNumbersPage)
       val unsubmittedPreviousRegNumbers = baseUserAnswers.get(UnsubmittedPreviousRegNumbersPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
