@@ -36,6 +36,7 @@
     unsubmittedPreviousRegNumbers: Option[Seq[String]],
     submittedRegNumbersCount: Int,
     unsubmittedRegNumbersCount: Int,
+    prevRegNumbersUpdated: Boolean
     )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("previousRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
@@ -47,12 +48,15 @@
         }
         @caption(messages("previousRegistrationNumbers.caption"))
         @h1(messages("previousRegistrationNumbers.heading"), classes = "govuk-heading-l")
-        @p("previousRegistrationNumbers.paragraph")
+
+        @if(prevRegNumbersUpdated) {
+            @p("previousRegistrationNumbers.paragraph", extraClasses="must-be-submitted-message")
+        }
 
         @if(submittedRegNumbersCount > 1 && unsubmittedRegNumbersCount > 0){
-                @h2(messages("previousRegistrationNumbers.submitted", "s"))
+                @h2(messages("previousRegistrationNumbers.submitted", ""), classes = "govuk-heading-m submitted-heading")
             } else if (submittedRegNumbersCount > 0 && unsubmittedRegNumbersCount > 0) {
-                @h2(messages("previousRegistrationNumbers.submitted", ""))
+                @h2(messages("previousRegistrationNumbers.submitted", "s"), classes = "govuk-heading-m submitted-heading")
             }
         @if(previousRegNumbers.isDefined) {
             @govukSummaryList(SummaryList(
@@ -60,11 +64,12 @@
                 ))
             }
 
-        @if(unsubmittedRegNumbersCount == 1 ){
-                @h2(messages("previousRegistrationNumbers.unsubmitted", ""))
-            } else if (unsubmittedRegNumbersCount > 1){
-                @h2(messages("previousRegistrationNumbers.unsubmitted", "s"))
+        @if(unsubmittedRegNumbersCount > 0 &&  unsubmittedRegNumbersCount < 2 && submittedRegNumbersCount > 0 ){
+                @h2(messages("previousRegistrationNumbers.unsubmitted", ""), classes = "govuk-heading-m ready-to-submit-heading")
+            } else if (unsubmittedRegNumbersCount > 1 && submittedRegNumbersCount > 0){
+                @h2(messages("previousRegistrationNumbers.unsubmitted", "s"), classes = "govuk-heading-m ready-to-submit-heading")
             }
+
         @if(unsubmittedPreviousRegNumbers.isDefined) {
             @govukSummaryList(SummaryList(
                 rows = UnsubmittedRegNumberViewModel(unsubmittedPreviousRegNumbers).summaryList

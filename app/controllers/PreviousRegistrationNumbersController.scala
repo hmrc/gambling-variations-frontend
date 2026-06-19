@@ -23,7 +23,7 @@ import forms.PreviousRegistrationNumbersFormProvider
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -67,6 +67,9 @@ class PreviousRegistrationNumbersController @Inject() (
       unsubmitted = request.userAnswers.get(UnsubmittedPreviousRegNumbersPage)
     )
 
+  private def prevRegNumbersUpdated(request: DataRequest[?]): Boolean =
+    request.userAnswers.get(PreviousRegNumbersUpdatedPage).fold(false)(_ => true)
+
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -76,23 +79,30 @@ class PreviousRegistrationNumbersController @Inject() (
           .fold(form)(form.fill)
 
       val regNumbers = registrationNumbers(request)
+      val regNumbersUpdated = prevRegNumbersUpdated(request)
 
-      Ok(
-        view(
-          preparedForm,
-          mode,
-          regNumbers.submitted,
-          regNumbers.unsubmitted,
-          regNumbers.submittedCount,
-          regNumbers.unsubmittedCount
+      if (regNumbers.submittedCount == 3) {
+        Redirect(routes.SystemErrorController.onPageLoad())
+      } else {
+        Ok(
+          view(
+            preparedForm,
+            mode,
+            regNumbers.submitted,
+            regNumbers.unsubmitted,
+            regNumbers.submittedCount,
+            regNumbers.unsubmittedCount,
+            regNumbersUpdated
+          )
         )
-      )
+      }
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
       val regNumbers = registrationNumbers(request)
+      val regNumbersUpdated = prevRegNumbersUpdated(request)
 
       form
         .bindFromRequest()
@@ -107,7 +117,8 @@ class PreviousRegistrationNumbersController @Inject() (
                     regNumbers.submitted,
                     regNumbers.unsubmitted,
                     regNumbers.submittedCount,
-                    regNumbers.unsubmittedCount
+                    regNumbers.unsubmittedCount,
+                    regNumbersUpdated
                   )
                 )
               )

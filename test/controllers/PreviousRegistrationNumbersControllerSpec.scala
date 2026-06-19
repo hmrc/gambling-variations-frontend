@@ -23,7 +23,6 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddPreviousRegistrationNumberPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -42,6 +41,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
   val form = formProvider()
 
   val data = Json.obj(
+    "updated"                -> false,
     "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
     "previousRegistrationNumbers" -> Json.arr(
       "XHM00000199",
@@ -52,8 +52,21 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
     )
   )
 
+  val dataAlreadySubmitted = Json.obj(
+    "updated"                -> true,
+    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+    "previousRegistrationNumbers" -> Json.arr(
+      "XHM00000199",
+      "ZIU00001218",
+      "HMN290182098"
+    )
+  )
+
   private val baseUserAnswers =
     UserAnswers(userAnswersId, data)
+
+  private val alreadySubmittedInUa =
+    UserAnswers(userAnswersId, dataAlreadySubmitted)
 
   lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode).url
 
@@ -72,26 +85,22 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1, true)(request,
+                                                                                                                messages(application)
+                                                                                                               ).toString
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must redirect to  SystemError if 3 submitted numbers are found" in {
 
-      val userAnswers = baseUserAnswers.set(AddPreviousRegistrationNumberPage, true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(alreadySubmittedInUa)).build()
 
       running(application) {
         val request = FakeRequest(GET, previousRegistrationNumbersRoute)
 
-        val view = application.injector.instanceOf[PreviousRegistrationNumbersView]
-
         val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1)(request, messages(application)).toString
+        status(result) mustEqual SEE_OTHER
       }
     }
 
