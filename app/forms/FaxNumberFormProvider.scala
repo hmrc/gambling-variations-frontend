@@ -26,7 +26,6 @@ class FaxNumberFormProvider @Inject() extends Mappings {
   private val faxNumberCharactersRegex = "^[0-9 ]+$"
   private val MaxDigits = 20
 
-
   def apply(prefix: String): Form[String] =
     Form(
       "faxNumber" -> text(s"$prefix.error.required")
