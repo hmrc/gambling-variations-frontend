@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, FaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,7 +48,7 @@ class FaxNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(FaxNumberPage)
+      .get(BusinessFaxNumberPage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
@@ -62,10 +62,10 @@ class FaxNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(FaxNumberPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessFaxNumberPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(FaxNumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(BusinessFaxNumberPage, mode, updatedAnswers))
       )
   }
 }

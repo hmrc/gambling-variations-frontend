@@ -53,14 +53,14 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
         val sessionRepository = mock[SessionRepository]
         val gamblingConnector = mock[GamblingConnector]
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetails)
+        when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetailsUk)
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
           "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
           "correspondenceName"           -> "ABC ltd",
           "correspondenceAdditionalName" -> "XX",
-          "correspondenceAddress" -> Json.obj(
+          "correspondenceAddressUk" -> Json.obj(
             "address1" -> "add1",
             "address2" -> "add2",
             "address3" -> "add3",
@@ -97,7 +97,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetails)
+          when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetailsUk)
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -165,7 +165,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
           when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetails)
+          when(gamblingConnector.getCorrespondenceDetails(any())(any())) thenReturn Future(correspondenceDetailsNonUk)
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val updatedSessionData = Json.obj(
@@ -175,13 +175,12 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
             "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
             "correspondenceName"           -> "ABC ltd",
             "correspondenceAdditionalName" -> "XX",
-            "correspondenceAddress" -> Json.obj(
+            "correspondenceAddressNonUk" -> Json.obj(
               "address1" -> "add1",
               "address2" -> "add2",
               "address3" -> "add3",
               "address4" -> "add4",
-              "postcode" -> "NE11NE",
-              "country"  -> "UK"
+              "country"  -> "Spain"
             ),
             "correspondenceAdditionalInformation" -> "Upstairs",
             "correspondenceContactNumber" -> Json.obj(
@@ -222,9 +221,9 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
 }
 
 object CorrespondenceDetailsDataRequiredActionSpec {
-  val correspondenceDetails: CorrespondenceDetails = CorrespondenceDetails(
+  val correspondenceDetailsUk: CorrespondenceDetails = CorrespondenceDetails(
     mgdRegNumber = "XWM00000001770",
-    nameLine1    = "ABC ltd",
+    nameLine1    = Some("ABC ltd"),
     nameLine2    = Some("XX"),
     correspondenceAddress = Some(
       Address(
@@ -234,6 +233,26 @@ object CorrespondenceDetailsDataRequiredActionSpec {
         Some("add4"),
         Some("NE11NE"),
         Some("UK")
+      )
+    ),
+    additionalInformation = Some("Upstairs"),
+    contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
+    faxNumber             = Some("0123456799"),
+    emailAddr             = Some("abc@email.com")
+  )
+
+  val correspondenceDetailsNonUk: CorrespondenceDetails = CorrespondenceDetails(
+    mgdRegNumber = "XWM00000001770",
+    nameLine1    = Some("ABC ltd"),
+    nameLine2    = Some("XX"),
+    correspondenceAddress = Some(
+      Address(
+        "add1",
+        Some("add2"),
+        Some("add3"),
+        Some("add4"),
+        None,
+        Some("Spain")
       )
     ),
     additionalInformation = Some("Upstairs"),

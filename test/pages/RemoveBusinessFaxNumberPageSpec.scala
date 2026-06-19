@@ -16,9 +16,20 @@
 
 package pages
 
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-case object MobilePhoneNumberPage extends QuestionPage[String] {
-  override def path: JsPath = JsPath \ toString
-  override def toString: String = "mobilePhoneNumber"
+class RemoveBusinessFaxNumberPageSpec extends AnyFreeSpec with Matchers {
+
+  ".RemoveFaxNumberPage" - {
+    "must have the correct toString" in {
+      RemoveFaxNumberPage.toString mustBe "removeFaxNumber"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "removeFaxNumber"
+      RemoveFaxNumberPage.path mustBe expectedPath
+    }
+  }
 }

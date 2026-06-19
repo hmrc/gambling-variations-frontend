@@ -96,9 +96,14 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
     logger.info("Setting User Answers for Correspondence Details")
     for {
       updatedAnswers <- answers.set(CorrespondenceDetailsSectionPage, correspondenceDetails.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.set(CorrespondenceNamePage, correspondenceDetails.nameLine1)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.nameLine1, CorrespondenceNamePage)
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.nameLine2, CorrespondenceAdditionalNamePage)
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.correspondenceAddress, CorrespondenceAddressPage)
+      updatedAnswers <- {
+        correspondenceDetails.correspondenceAddress.flatMap(_.postcode) match {
+          case Some(_) => setIfDefined(updatedAnswers, correspondenceDetails.correspondenceAddress, CorrespondenceAddressUkPage)
+          case None    => setIfDefined(updatedAnswers, correspondenceDetails.correspondenceAddress, CorrespondenceAddressNonUkPage)
+        }
+      }
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.additionalInformation, CorrespondenceAdditionalInformationPage)
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.contactNumber, CorrespondenceContactNumberPage)
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.faxNumber, CorrespondenceFaxNumberPage)

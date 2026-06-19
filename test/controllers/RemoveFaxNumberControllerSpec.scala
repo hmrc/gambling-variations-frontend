@@ -22,7 +22,7 @@ import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{FaxNumberPage, RemoveFaxNumberPage}
+import pages.{BusinessFaxNumberPage, RemoveFaxNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -39,7 +39,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   private val baseAnswers =
     UserAnswers(userAnswersId,
                 Json.obj(
-                  FaxNumberPage.toString          -> faxNumber,
+                  BusinessFaxNumberPage.toString  -> faxNumber,
                   "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
                 )
                )
