@@ -32,7 +32,7 @@ class Navigator @Inject() () {
     case BusinessNamePage                  => _ => routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage                => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
     case TradingNamePage                   => _ => routes.CheckBusinessNameController.onPageLoad()
-    case FaxNumberPage                     => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessFaxNumberPage             => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage               => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveEmailAddressPage            => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessContactNumberPage         => _ => routes.CheckContactDetailsController.onPageLoad()
@@ -41,8 +41,10 @@ class Navigator @Inject() () {
     case IsSeasonalBusinessPage            => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case OtherTradeClassPage               => _ => routes.OtherTradeClassController.onPageLoad(NormalMode)
     case CorrespondenceFaxNumberPage       => _ => routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode)
+    case AssociatedRegNumberPage           => _ => routes.AssociatedRegNumberController.onPageLoad(NormalMode)
     case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
     case CorrespondenceEmailPage           => _ => routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode)
+    case CorrespondenceContactNumberPage   => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case _                                 => _ => routes.IndexController.onPageLoad()
   }
 
@@ -53,6 +55,7 @@ class Navigator @Inject() () {
     case BusinessEmailAddressPage          => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
     case IsSeasonalBusinessPage            => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
     case CorrespondenceFaxNumberPage       => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
+    case AssociatedRegNumberPage           => _ => routes.AssociatedRegNumberController.onPageLoad(CheckMode)
     case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
     case OtherTradeClassPage               => _ => routes.OtherTradeClassController.onPageLoad(CheckMode)
     case _                                 => _ => routes.CheckYourAnswersController.onPageLoad()

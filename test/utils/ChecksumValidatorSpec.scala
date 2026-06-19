@@ -14,22 +14,29 @@
  * limitations under the License.
  */
 
-package pages
+package utils
+
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.JsPath
 
-class PhoneNumberPageSpec extends AnyFreeSpec with Matchers {
+class ChecksumValidatorSpec extends AnyFreeSpec with Matchers {
 
-  ".PhoneNumberPage" - {
+  "isValidMgdrn" - {
 
-    "must have the correct toString" in {
-      PhoneNumberPage.toString mustBe "phoneNumber"
+    "return true for a blank value" in {
+      ChecksumValidator.isValidMgdrn("") mustBe true
     }
 
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "phoneNumber"
-      PhoneNumberPage.path mustBe expectedPath
+    "return true when the format and checksum are valid" in {
+      ChecksumValidator.isValidMgdrn("XRM00000000574") mustBe true
+    }
+
+    "return false when the format is invalid" in {
+      ChecksumValidator.isValidMgdrn("XIM00000000574") mustBe false
+    }
+
+    "return false when the checksum is invalid" in {
+      ChecksumValidator.isValidMgdrn("XAM00001234567") mustBe false
     }
   }
 }

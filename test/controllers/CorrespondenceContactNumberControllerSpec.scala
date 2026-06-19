@@ -23,36 +23,36 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.BusinessContactNumberPage
+import pages.CorrespondenceContactNumberPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessContactNumberView
+import views.html.CorrespondenceContactNumberView
 
 import scala.concurrent.Future
 
-class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
+class CorrespondenceContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ContactNumberFormProvider()
-  val form = formProvider("businessContactNumber")
+  val form = formProvider("correspondenceContactNumber")
 
   val data = Json.obj(
-    BusinessContactNumberPage.toString -> Json.obj(
+    CorrespondenceContactNumberPage.toString -> Json.obj(
       "phoneNumber"       -> "01632 960 001",
       "mobilePhoneNumber" -> "07700900000"
     ),
-    "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+    "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
   )
 
-  val noAnswers = Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+  val noAnswers = Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
 
-  lazy val businessContactNumberRoute =
-    routes.BusinessContactNumberController.onPageLoad(NormalMode).url
+  lazy val correspondenceContactNumberRoute =
+    routes.CorrespondenceContactNumberController.onPageLoad(NormalMode).url
 
   val userAnswers =
     UserAnswers(
@@ -60,7 +60,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       data
     )
 
-  "BusinessContactNumber Controller" - {
+  "CorrespondenceContact Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -69,9 +69,9 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
 
-        val request = FakeRequest(GET, businessContactNumberRoute)
+        val request = FakeRequest(GET, correspondenceContactNumberRoute)
 
-        val view = application.injector.instanceOf[BusinessContactNumberView]
+        val view = application.injector.instanceOf[CorrespondenceContactNumberView]
 
         val result = route(application, request).value
 
@@ -89,9 +89,9 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
 
-        val request = FakeRequest(GET, businessContactNumberRoute)
+        val request = FakeRequest(GET, correspondenceContactNumberRoute)
 
-        val view = application.injector.instanceOf[BusinessContactNumberView]
+        val view = application.injector.instanceOf[CorrespondenceContactNumberView]
 
         val result = route(application, request).value
 
@@ -128,7 +128,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, businessContactNumberRoute)
+          FakeRequest(POST, correspondenceContactNumberRoute)
             .withFormUrlEncodedBody(
               ("phoneNumber", "01632 960 001"),
               ("mobileNumber", "07700900000")
@@ -149,7 +149,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, businessContactNumberRoute)
+          FakeRequest(POST, correspondenceContactNumberRoute)
             .withFormUrlEncodedBody(
               ("phoneNumber", "invalid"),
               ("mobileNumber", "invalid")
@@ -163,7 +163,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
             )
           )
 
-        val view = application.injector.instanceOf[BusinessContactNumberView]
+        val view = application.injector.instanceOf[CorrespondenceContactNumberView]
 
         val result = route(application, request).value
 
@@ -181,7 +181,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
 
-        val request = FakeRequest(GET, businessContactNumberRoute)
+        val request = FakeRequest(GET, correspondenceContactNumberRoute)
 
         val result = route(application, request).value
 
@@ -200,7 +200,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, businessContactNumberRoute)
+          FakeRequest(POST, correspondenceContactNumberRoute)
             .withFormUrlEncodedBody(
               ("phoneNumber", "01632 960 001"),
               ("mobileNumber", "07700900000")

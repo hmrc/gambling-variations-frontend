@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import pages.{FaxNumberPage, IsSeasonalBusinessPage}
+import pages.{BusinessFaxNumberPage, IsSeasonalBusinessPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import viewmodels.checkAnswers.{FaxNumberSummary, SeasonalBusinessSummary}
@@ -48,7 +48,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency {
 
     "must show the business fax number when it has been provided" in {
 
-      val userAnswers = emptyUserAnswers.set(FaxNumberPage, "01632 960 001").success.value
+      val userAnswers = emptyUserAnswers.set(BusinessFaxNumberPage, "01632 960 001").success.value
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {

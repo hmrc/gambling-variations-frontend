@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-package pages
+package forms.mappings
 
-import models.Address
-import play.api.libs.json.JsPath
+import play.api.data.validation.{Constraint, Invalid, Valid}
+import utils.ChecksumValidator
 
-case object CorrespondenceAddressPage extends QuestionPage[Address] {
+trait ChecksumConstraints {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "correspondenceAddress"
+  protected def modulo23Checksum(
+    formatRegex: String,
+    weights: IndexedSeq[Int],
+    checkCharacterIndex: Int,
+    lookup: String,
+    errorKey: String
+  ): Constraint[String] =
+    Constraint { input =>
+      if (ChecksumValidator.isValidModulo23(input, formatRegex, weights, checkCharacterIndex, lookup)) {
+        Valid
+      } else {
+        Invalid(errorKey)
+      }
+    }
 }
