@@ -107,7 +107,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
               ActionItem(
                 href               = "#",
                 content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalCorrespondenceName"))
+                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden"))
               )
             ),
             classes = "govuk-summary-list__actions govuk-!-width-one-third"
