@@ -19,9 +19,10 @@ package controllers
 import controllers.actions.*
 
 import javax.inject.Inject
-import models.Mode
-import navigation.Navigator
 import forms.PreviousRegistrationNumbersFormProvider
+import models.Mode
+import models.requests.DataRequest
+import navigation.Navigator
 import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,78 +46,105 @@ class PreviousRegistrationNumbersController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  private val MaxPreviousRegistrationNumbers = 3
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  private val form = formProvider()
 
-    val preparedForm = request.userAnswers.get(AddPreviousRegistrationNumberPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
-    val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
-
-    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegNumbersPage)
-
-    val submittedRegNumbersCount: Int = previousRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
-    }
-
-    val unsubmittedRegNumbersCount: Int = unsubmittedPreviousRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
-    }
-
-    Ok(view(preparedForm, mode, previousRegNumberSeq, unsubmittedPreviousRegNumberSeq, submittedRegNumbersCount, unsubmittedRegNumbersCount))
+  private case class RegistrationNumbers(
+    submitted: Option[Seq[String]],
+    unsubmitted: Option[Seq[String]]
+  ) {
+    val submittedCount: Int = submitted.fold(0)(_.size)
+    val unsubmittedCount: Int = unsubmitted.fold(0)(_.size)
+    val totalCount: Int = submittedCount + unsubmittedCount
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val previousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(PreviousRegistrationNumbersPage)
-    val unsubmittedPreviousRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(UnsubmittedPreviousRegNumbersPage)
-    val submittedRegNumbersCount: Int = previousRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
+  private def registrationNumbers(
+    request: DataRequest[?]
+  ): RegistrationNumbers =
+    RegistrationNumbers(
+      submitted   = request.userAnswers.get(PreviousRegistrationNumbersPage),
+      unsubmitted = request.userAnswers.get(UnsubmittedPreviousRegNumbersPage)
+    )
+
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+
+      val preparedForm =
+        request.userAnswers
+          .get(AddPreviousRegistrationNumberPage)
+          .fold(form)(form.fill)
+
+      val regNumbers = registrationNumbers(request)
+
+      Ok(
+        view(
+          preparedForm,
+          mode,
+          regNumbers.submitted,
+          regNumbers.unsubmitted,
+          regNumbers.submittedCount,
+          regNumbers.unsubmittedCount
+        )
+      )
     }
 
-    val unsubmittedRegNumbersCount: Int = unsubmittedPreviousRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
-    }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors =>
-          if (submittedRegNumbersCount + unsubmittedRegNumbersCount < 3) {
-            Future
-              .successful(
+      val regNumbers = registrationNumbers(request)
+
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            if (regNumbers.totalCount < MaxPreviousRegistrationNumbers) {
+              Future.successful(
                 BadRequest(
-                  view(formWithErrors,
-                       mode,
-                       previousRegNumberSeq,
-                       unsubmittedPreviousRegNumberSeq,
-                       submittedRegNumbersCount,
-                       unsubmittedRegNumbersCount
-                      )
+                  view(
+                    formWithErrors,
+                    mode,
+                    regNumbers.submitted,
+                    regNumbers.unsubmitted,
+                    regNumbers.submittedCount,
+                    regNumbers.unsubmittedCount
+                  )
                 )
               )
-          } else {
-            Future.successful(Redirect("#"))
-          },
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPreviousRegistrationNumberPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddPreviousRegistrationNumberPage, mode, updatedAnswers))
-      )
-  }
+            } else {
+              Future.successful(Redirect("#"))
+            },
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(
+                                  request.userAnswers.set(
+                                    AddPreviousRegistrationNumberPage,
+                                    value
+                                  )
+                                )
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(
+              navigator.nextPage(
+                AddPreviousRegistrationNumberPage,
+                mode,
+                updatedAnswers
+              )
+            )
+        )
+    }
 
   def onRedirect(mode: Mode, prevRegNumber: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenPreviousRegNumberPage, prevRegNumber))
-        _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.RemovePreviousRegNumberController.onPageLoad(mode))
+        updatedAnswers <- Future.fromTry(
+                            request.userAnswers.set(
+                              ChosenPreviousRegNumberPage,
+                              prevRegNumber
+                            )
+                          )
+        _ <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(
+        routes.RemovePreviousRegNumberController.onPageLoad(mode)
+      )
     }
-
 }

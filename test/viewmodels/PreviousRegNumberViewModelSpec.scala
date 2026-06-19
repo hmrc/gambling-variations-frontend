@@ -22,7 +22,7 @@ import play.api.libs.json.Json
 import base.SpecBase
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.{PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
+import pages.PreviousRegistrationNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
