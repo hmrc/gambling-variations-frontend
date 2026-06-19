@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveFaxNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, FaxNumberPage, RemoveFaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, RemoveFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -50,7 +50,7 @@ class RemoveFaxNumberController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-      request.userAnswers.get(FaxNumberPage) map { faxNumber =>
+      request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
 
         val preparedForm = request.userAnswers.get(RemoveFaxNumberPage) match {
           case Some(value) => form.fill(value)
@@ -65,7 +65,7 @@ class RemoveFaxNumberController @Inject() (
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      request.userAnswers.get(FaxNumberPage) map { faxNumber =>
+      request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
 
         form
           .bindFromRequest()
@@ -94,7 +94,7 @@ class RemoveFaxNumberController @Inject() (
       ua <- userAnswers.set(BusinessContactDetailsSubmittedPage, true)
       ua1 <- {
         if (value) {
-          ua.remove(FaxNumberPage)
+          ua.remove(BusinessFaxNumberPage)
         } else {
           Try(ua)
         }

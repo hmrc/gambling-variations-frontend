@@ -16,9 +16,12 @@
 
 package pages
 
+import models.Address
 import play.api.libs.json.JsPath
 
-case object MobilePhoneNumberPage extends QuestionPage[String] {
+case object CorrespondenceAddressNonUkPage extends QuestionPage[Address] {
+
   override def path: JsPath = JsPath \ toString
-  override def toString: String = "mobilePhoneNumber"
+
+  override def toString: String = "correspondenceAddressNonUk"
 }
