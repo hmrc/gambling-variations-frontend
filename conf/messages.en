@@ -403,3 +403,16 @@ otherTradeClass.error.required = Enter your business trade class
 otherTradeClass.error.invalid = Your business trade class must be in the correct format
 otherTradeClass.textarea.label = You can enter up to 300 characters
 
+
+
+associatedRegNumber.title = What is your associated registration number?
+associatedRegNumber.heading = What is your associated registration number?
+associatedRegNumber.heading.caption = Change registration details
+associatedRegNumber.hint = It is 14 characters long and starts with an X, like XRM00000000574
+associatedRegNumber.checkYourAnswersLabel = Associated registration number
+associatedRegNumber.error.required = Enter your associated registration number
+associatedRegNumber.error.invalid.characters = Associated registration number must only include letters a to z and numbers 0 to 9
+associatedRegNumber.error.invalid.format = Associated registration number must be in the correct format
+associatedRegNumber.error.invalidReference = Enter a real associated registration number
+associatedRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
+associatedRegNumber.change.hidden = associated registration number
