@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.FaxNumberPage
+import pages.BusinessFaxNumberPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -66,7 +66,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       val data = Json.obj(
         "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId),
-        FaxNumberPage.toString          -> "07700900999"
+        BusinessFaxNumberPage.toString  -> "07700900999"
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)

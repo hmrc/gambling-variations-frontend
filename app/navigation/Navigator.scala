@@ -32,7 +32,7 @@ class Navigator @Inject() () {
     case BusinessNamePage                  => _ => routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage                => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
     case TradingNamePage                   => _ => routes.CheckBusinessNameController.onPageLoad()
-    case FaxNumberPage                     => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessFaxNumberPage             => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage               => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveEmailAddressPage            => _ => routes.CheckContactDetailsController.onPageLoad()
     case BusinessContactNumberPage         => _ => routes.CheckContactDetailsController.onPageLoad()
