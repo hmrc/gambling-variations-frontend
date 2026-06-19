@@ -392,3 +392,9 @@ otherTradeClass.checkYourAnswersLabel = What is your business trade class?
 otherTradeClass.error.required = Enter your business trade class
 otherTradeClass.error.invalid = Your business trade class must be in the correct format
 otherTradeClass.textarea.label = You can enter up to 300 characters
+
+removeCorrespondenceEmailAddress.title = Are you sure you want to remove the correspondence email address?
+removeCorrespondenceEmailAddress.heading = Are you sure you want to remove the correspondence email address {0}?
+removeCorrespondenceEmailAddress.checkYourAnswersLabel = removeCorrespondenceEmailAddress
+removeCorrespondenceEmailAddress.error.required = Select yes if you want to remove the correspondence email address
+
