@@ -19,7 +19,7 @@ package utils
 object ChecksumValidator {
 
   val mgdrnCharactersRegex: String = "^[A-Z0-9]+$"
-  val mgdrnFormatRegex: String = "^X[A-HJ-NP-TV-Z]M[0-9]{11}$"
+  val mgdrnFormatRegex: String = "^X[A-HJ-NP-TV-Z]M[0]{4}[0-9]{7}$"
   val mgdrnChecksumWeights: IndexedSeq[Int] = IndexedSeq(0, 0, 9, 10, 11, 12, 13, 8, 7, 6, 5, 4, 3, 2)
   val mgdrnChecksumLookup: String = "ABCDEFGHXJKLMNYPQRSTZVW"
   val mgdrnCheckCharacterIndex: Int = 1

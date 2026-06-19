@@ -35,6 +35,10 @@ class ChecksumValidatorSpec extends AnyFreeSpec with Matchers {
       ChecksumValidator.isValidMgdrn("XIM00000000574") mustBe false
     }
 
+    "return false when the numeric section does not start with four zeroes" in {
+      ChecksumValidator.isValidMgdrn("XRM12340000574") mustBe false
+    }
+
     "return false when the checksum is invalid" in {
       ChecksumValidator.isValidMgdrn("XAM00001234567") mustBe false
     }
