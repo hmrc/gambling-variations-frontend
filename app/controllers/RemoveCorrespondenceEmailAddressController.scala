@@ -50,7 +50,6 @@ class RemoveCorrespondenceEmailAddressController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val correspondenceEmail = request.userAnswers.get(CorrespondenceEmailPage)
-    println("...................." + correspondenceEmail)
     val preparedForm = request.userAnswers.get(RemoveCorrespondenceEmailAddressPage) match {
       case None        => form
       case Some(value) => form.fill(value)
