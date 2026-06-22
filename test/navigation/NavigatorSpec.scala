@@ -43,6 +43,18 @@ class NavigatorSpec extends SpecBase {
             routes.CheckBusinessNameController.onPageLoad()
         }
 
+        "must go from CorrespondenceEmailPage to CheckCorrespondenceDetails page" in {
+
+          navigator.nextPage(CorrespondenceEmailPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
+        "must go from RemoveCorrespondenceEmailAddressPage to CheckCorrespondenceDetails page" in {
+
+          navigator.nextPage(RemoveCorrespondenceEmailAddressPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
         "must go from SoleProprietorPage to the normal mode sole proprietor page" in {
 
           navigator.nextPage(SoleProprietorPage, NormalMode, UserAnswers("id")) mustBe
@@ -63,7 +75,7 @@ class NavigatorSpec extends SpecBase {
 
         "must go from FaxNumberPage to CheckYourAnswers" in {
 
-          navigator.nextPage(FaxNumberPage, NormalMode, UserAnswers("id")) mustBe
+          navigator.nextPage(BusinessFaxNumberPage, NormalMode, UserAnswers("id")) mustBe
             routes.CheckContactDetailsController.onPageLoad()
         }
 
@@ -77,6 +89,12 @@ class NavigatorSpec extends SpecBase {
 
           navigator.nextPage(IsSeasonalBusinessPage, NormalMode, UserAnswers("id")) mustBe
             routes.SeasonalBusinessController.onPageLoad(NormalMode)
+        }
+
+        "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
+
+          navigator.nextPage(AssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.AssociatedRegNumberController.onPageLoad(NormalMode)
         }
 
         "a page that doesn't exist in the route map to Index" in {
@@ -104,6 +122,12 @@ class NavigatorSpec extends SpecBase {
 
           navigator.nextPage(IsSeasonalBusinessPage, CheckMode, UserAnswers("id")) mustBe
             routes.SeasonalBusinessController.onPageLoad(CheckMode)
+        }
+
+        "must go from AssociatedRegNumberPage to the check mode associated registration number page" in {
+
+          navigator.nextPage(AssociatedRegNumberPage, CheckMode, UserAnswers("id")) mustBe
+            routes.AssociatedRegNumberController.onPageLoad(CheckMode)
         }
 
         "must go from SoleProprietorPage to the check mode sole proprietor page" in {

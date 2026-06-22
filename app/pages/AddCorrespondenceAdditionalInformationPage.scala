@@ -15,20 +15,12 @@
  */
 
 package pages
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+
 import play.api.libs.json.JsPath
 
-class AssociatedRegistrationNumbersPageSpec extends AnyFreeSpec with Matchers {
-  "AssociatedRegistrationNumbersPage" - {
+case object AddCorrespondenceAdditionalInformationPage extends QuestionPage[Boolean] {
 
-    "must have the correct toString" in {
-      AssociatedRegistrationNumbersPage.toString mustBe "associatedRegistrationNumbers"
-    }
+  override def path: JsPath = JsPath \ toString
 
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "associatedRegistrationNumbers"
-      AssociatedRegistrationNumbersPage.path mustBe expectedPath
-    }
-  }
+  override def toString: String = "addCorrespondenceAdditionalInformation"
 }

@@ -17,30 +17,30 @@
 package controllers
 
 import controllers.actions.*
-import forms.RemoveFaxNumberFormProvider
+import forms.RemoveCorrespondenceFaxNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, RemoveFaxNumberPage}
+import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage, RemoveCorrespondenceFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.RemoveFaxNumberView
+import views.html.RemoveCorrespondenceFaxNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class RemoveFaxNumberController @Inject() (
+class RemoveCorrespondenceFaxNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: RemoveFaxNumberFormProvider,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: RemoveCorrespondenceFaxNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: RemoveFaxNumberView
+  view: RemoveCorrespondenceFaxNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -50,14 +50,14 @@ class RemoveFaxNumberController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-      request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
+      request.userAnswers.get(CorrespondenceFaxNumberPage) map { correspondenceFaxNumber =>
 
-        val preparedForm = request.userAnswers.get(RemoveFaxNumberPage) match {
+        val preparedForm = request.userAnswers.get(RemoveCorrespondenceFaxNumberPage) match {
           case Some(value) => form.fill(value)
           case None        => form
         }
 
-        Ok(view(preparedForm, mode, faxNumber))
+        Ok(view(preparedForm, mode, correspondenceFaxNumber))
 
       } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
     }
@@ -65,18 +65,18 @@ class RemoveFaxNumberController @Inject() (
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
+      request.userAnswers.get(CorrespondenceFaxNumberPage) map { correspondenceFaxNumber =>
 
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, faxNumber))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, correspondenceFaxNumber))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
-                navigator.nextPage(RemoveFaxNumberPage, mode, updatedAnswers)
+                navigator.nextPage(RemoveCorrespondenceFaxNumberPage, mode, updatedAnswers)
               )
           )
 
@@ -91,10 +91,10 @@ class RemoveFaxNumberController @Inject() (
   ): Try[UserAnswers] = {
 
     for {
-      ua <- userAnswers.set(BusinessContactDetailsSubmittedPage, true)
+      ua <- userAnswers.set(CorrespondenceDetailsSubmittedPage, true)
       ua1 <- {
         if (value) {
-          ua.remove(BusinessFaxNumberPage)
+          ua.remove(CorrespondenceFaxNumberPage)
         } else {
           Try(ua)
         }

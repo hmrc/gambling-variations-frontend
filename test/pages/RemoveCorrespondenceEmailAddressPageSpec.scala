@@ -16,11 +16,21 @@
 
 package pages
 
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-case object FaxNumberPage extends QuestionPage[String] {
+class RemoveCorrespondenceEmailAddressPageSpec extends AnyFreeSpec with Matchers {
 
-  override def path: JsPath = JsPath \ toString
+  ".RemoveCorrespondenceEmailAddressPage" - {
 
-  override def toString: String = "faxNumber"
+    "must have the correct toString" in {
+      RemoveCorrespondenceEmailAddressPage.toString mustBe "removeCorrespondenceEmailAddress"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "removeCorrespondenceEmailAddress"
+      RemoveCorrespondenceEmailAddressPage.path mustBe expectedPath
+    }
+  }
 }

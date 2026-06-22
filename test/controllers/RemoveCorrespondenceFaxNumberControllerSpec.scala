@@ -17,40 +17,41 @@
 package controllers
 
 import base.SpecBase
-import forms.RemoveFaxNumberFormProvider
+import forms.RemoveCorrespondenceFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessFaxNumberPage, RemoveFaxNumberPage}
+import pages.{CorrespondenceFaxNumberPage, RemoveCorrespondenceFaxNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.RemoveFaxNumberView
+import views.html.RemoveCorrespondenceFaxNumberView
 
 import scala.concurrent.Future
 
-class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
+class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
-  private val faxNumber = "123456789"
+  private val correspondenceFaxNumber = "123456789"
 
   private val baseAnswers =
-    UserAnswers(userAnswersId,
-                Json.obj(
-                  BusinessFaxNumberPage.toString  -> faxNumber,
-                  "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-                )
-               )
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        CorrespondenceFaxNumberPage.toString -> correspondenceFaxNumber,
+        "correspondenceDetailsSection"       -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+    )
 
-  val formProvider = new RemoveFaxNumberFormProvider()
+  val formProvider = new RemoveCorrespondenceFaxNumberFormProvider()
   val form = formProvider()
 
-  lazy val removeFaxNumberRoute =
-    routes.RemoveFaxNumberController.onPageLoad(NormalMode).url
+  lazy val removeCorrespondenceFaxNumberRoute =
+    routes.RemoveCorrespondenceFaxNumberController.onPageLoad(NormalMode).url
 
-  "RemoveFaxNumber Controller" - {
+  "removeCorrespondenceFaxNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -59,16 +60,16 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
 
-        val request = FakeRequest(GET, removeFaxNumberRoute)
+        val request = FakeRequest(GET, removeCorrespondenceFaxNumberRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[RemoveFaxNumberView]
+        val view = application.injector.instanceOf[RemoveCorrespondenceFaxNumberView]
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form, NormalMode, faxNumber)(request, messages(application)).toString
+          view(form, NormalMode, correspondenceFaxNumber)(request, messages(application)).toString
       }
     }
 
@@ -76,7 +77,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers =
         baseAnswers
-          .set(RemoveFaxNumberPage, true)
+          .set(RemoveCorrespondenceFaxNumberPage, true)
           .success
           .value
 
@@ -85,16 +86,16 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
 
-        val request = FakeRequest(GET, removeFaxNumberRoute)
+        val request = FakeRequest(GET, removeCorrespondenceFaxNumberRoute)
 
-        val view = application.injector.instanceOf[RemoveFaxNumberView]
+        val view = application.injector.instanceOf[RemoveCorrespondenceFaxNumberView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(form.fill(true), NormalMode, faxNumber)(request, messages(application)).toString
+          view(form.fill(true), NormalMode, correspondenceFaxNumber)(request, messages(application)).toString
       }
     }
 
@@ -115,7 +116,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, removeFaxNumberRoute)
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -132,19 +133,19 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, removeFaxNumberRoute)
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[RemoveFaxNumberView]
+        val view = application.injector.instanceOf[RemoveCorrespondenceFaxNumberView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, faxNumber)(request, messages(application)).toString
+          view(boundForm, NormalMode, correspondenceFaxNumber)(request, messages(application)).toString
       }
     }
 
@@ -155,7 +156,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
 
-        val request = FakeRequest(GET, removeFaxNumberRoute)
+        val request = FakeRequest(GET, removeCorrespondenceFaxNumberRoute)
 
         val result = route(application, request).value
 
@@ -174,7 +175,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, removeFaxNumberRoute)
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -193,7 +194,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
 
-        val request = FakeRequest(GET, removeFaxNumberRoute)
+        val request = FakeRequest(GET, removeCorrespondenceFaxNumberRoute)
 
         val result = route(application, request).value
 
@@ -212,7 +213,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, removeFaxNumberRoute)
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value

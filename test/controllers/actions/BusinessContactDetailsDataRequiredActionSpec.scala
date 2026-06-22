@@ -59,7 +59,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
 
         val data = Json.obj(
           "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> "ABC12345678901"),
-          "faxNumber"                     -> "+_+_ hdj39783",
+          "businessFaxNumber"             -> "+_+_ hdj39783",
           "businessContactNumber" -> Json.obj(
             "phoneNumber"       -> "+44 8903928171",
             "mobilePhoneNumber" -> "+44 8903928171"
@@ -165,7 +165,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
             "businessContactDetailsSection" -> Json.obj(
               "mgdRegNum" -> "ABC12345678901"
             ),
-            "faxNumber" -> "+_+_ hdj39783",
+            "businessFaxNumber" -> "+_+_ hdj39783",
             "businessContactNumber" -> Json.obj(
               "phoneNumber"       -> "+44 8903928171",
               "mobilePhoneNumber" -> "+44 8903928171"

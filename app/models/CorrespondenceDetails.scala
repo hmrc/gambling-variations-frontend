@@ -21,7 +21,7 @@ import play.api.libs.json.*
 
 case class CorrespondenceDetails(
   mgdRegNumber: String,
-  nameLine1: String,
+  nameLine1: Option[String],
   nameLine2: Option[String],
   correspondenceAddress: Option[Address],
   additionalInformation: Option[String],
@@ -36,7 +36,7 @@ object CorrespondenceDetails {
 
   implicit val reads: Reads[CorrespondenceDetails] = (
     (__ \ "mgdRegNumber").read[String] and
-      (__ \ "nameLine1").read[String] and
+      (__ \ "nameLine1").readNullable[String] and
       (__ \ "nameLine2").readNullable[String].map(_.filter(_.nonEmpty)) and
       Address.reads.map(Some(_): Option[Address]).orElse(Reads.pure(None)) and
       (__ \ "adi").readNullable[String].map(_.filter(_.nonEmpty)) and

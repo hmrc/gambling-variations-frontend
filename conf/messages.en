@@ -235,6 +235,13 @@ removeAssociatedRegNumber.error.required = Select yes if you want to remove the 
 removeAssociatedRegNumber.change.hidden = remove associated registration number
 removeAssociatedRegNumber.heading.caption = Change registration details
 
+removeCorrespondenceFaxNumber.title = Are you sure you want to remove the correspondence fax number?
+removeCorrespondenceFaxNumber.heading = Are you sure you want to remove the correspondence fax number {0}?
+removeCorrespondenceFaxNumber.checkYourAnswersLabel = removeCorrespondenceFaxNumber
+removeCorrespondenceFaxNumber.error.required = Select yes if you want to remove the correspondence fax number
+removeCorrespondenceFaxNumber.change.hidden = remove correspondence fax number
+removeCorrespondenceFaxNumber.heading.caption = Change registration details
+
 #Check Contact Details
 contactDetails.caption = Change registration details
 contactDetails.title = Check your business contact details
@@ -388,6 +395,47 @@ correspondenceContactNumber.error.phoneNumber.length = The correspondence phone 
 correspondenceContactNumber.error.mobileNumber.required = Enter the correspondence mobile number
 correspondenceContactNumber.error.mobileNumber.invalid = The correspondence mobile number must only include numbers 0 to 9 and spaces
 correspondenceContactNumber.error.mobileNumber.length = The correspondence mobile number must be 20 characters or less
+checkCorrespondenceDetails.caption = Change registration details
+checkCorrespondenceDetails.title = Check your correspondence details
+checkCorrespondenceDetails.heading = Check your correspondence details
+checkCorrespondenceDetails.heading.contactNumbers = Correspondence contact numbers
+checkCorrespondenceDetails.label.contactNumbers = Contact numbers
+checkCorrespondenceDetails.label.contactNumbers.hidden = contact numbers
+checkCorrespondenceDetails.heading.correspondenceName = Correspondence name
+checkCorrespondenceDetails.label.correspondenceName = Correspondence name
+checkCorrespondenceDetails.label.correspondenceName.hidden = correspondence name
+checkCorrespondenceDetails.heading.correspondenceAddress = Correspondence address
+checkCorrespondenceDetails.label.correspondenceAddress = Correspondence address
+checkCorrespondenceDetails.label.correspondenceAddress.hidden = correspondence address
+checkCorrespondenceDetails.heading.addAdditionalCorrespondenceName = Add additional name for correspondence?
+checkCorrespondenceDetails.label.addAdditionalCorrespondenceName = Add additional name for correspondence?
+checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden = add additional name for correspondence
+checkCorrespondenceDetails.heading.additionalCorrespondenceName = Additional correspondence name
+checkCorrespondenceDetails.label.additionalCorrespondenceName = Additional correspondence name
+checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden = additional correspondence name
+checkCorrespondenceDetails.heading.addAdditionalInformation = Add additional information for correspondence address?
+checkCorrespondenceDetails.label.addAdditionalInformation = Add additional information for correspondence address?
+checkCorrespondenceDetails.label.addAdditionalInformation.hidden = add additional information for correspondence address
+checkCorrespondenceDetails.heading.additionalCorrespondenceInformation = Correspondence address additional information
+checkCorrespondenceDetails.label.additionalCorrespondenceInformation = Correspondence address additional information
+checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden = correspondence address additional information
+checkCorrespondenceDetails.heading.addFaxNumber = Add fax number for correspondence?
+checkCorrespondenceDetails.label.addFaxNumber = Add fax number for correspondence?
+checkCorrespondenceDetails.label.addFaxNumber.hidden = add fax number for correspondence?
+checkCorrespondenceDetails.heading.faxNumber = Correspondence fax number
+checkCorrespondenceDetails.label.faxNumber = Correspondence fax number
+checkCorrespondenceDetails.label.faxNumber.hidden = correspondence fax number
+checkCorrespondenceDetails.heading.addEmailAddress = Add email address for correspondence?
+checkCorrespondenceDetails.label.addEmailAddress = Add email address for correspondence?
+checkCorrespondenceDetails.label.addEmailAddress.hidden = add email address for correspondence
+checkCorrespondenceDetails.heading.emailAddr = Correspondence email address
+checkCorrespondenceDetails.label.emailAddr = Correspondence email address
+checkCorrespondenceDetails.label.emailAddr.hidden = correspondence email address
+checkCorrespondenceDetails.label.phoneNumber = Phone number:
+checkCorrespondenceDetails.label.mobilePhoneNumber = Mobile number:
+checkCorrespondenceDetails.message.notProvided = Not provided
+checkCorrespondenceDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
+
 correspondenceEmailAddress.title = What email address should we use for correspondence?
 correspondenceEmailAddress.heading = What email address should we use for correspondence?
 correspondenceEmailAddress.checkYourAnswersLabel = Email Address
@@ -414,4 +462,24 @@ previousRegNumber.error.invalid.format = Associated registration number must be 
 previousRegNumber.error.invalidReference = Enter a real previous registration number
 previousRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
 previousRegNumber.change.hidden = previous registration number
+
+
+
+associatedRegNumber.title = What is your associated registration number?
+associatedRegNumber.heading = What is your associated registration number?
+associatedRegNumber.heading.caption = Change registration details
+associatedRegNumber.hint = It is 14 characters long and starts with an X, like XRM00000000574
+associatedRegNumber.checkYourAnswersLabel = Associated registration number
+associatedRegNumber.error.required = Enter your associated registration number
+associatedRegNumber.error.invalid.characters = Associated registration number must only include letters a to z and numbers 0 to 9
+associatedRegNumber.error.invalid.format = Associated registration number must be in the correct format
+associatedRegNumber.error.invalidReference = Enter a real associated registration number
+associatedRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
+associatedRegNumber.change.hidden = associated registration number
+
+
+removeCorrespondenceEmailAddress.title = Are you sure you want to remove the correspondence email address?
+removeCorrespondenceEmailAddress.heading = Are you sure you want to remove the correspondence email address {0}?
+removeCorrespondenceEmailAddress.checkYourAnswersLabel = removeCorrespondenceEmailAddress
+removeCorrespondenceEmailAddress.error.required = Select yes if you want to remove the correspondence email address
 

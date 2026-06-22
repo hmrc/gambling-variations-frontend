@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-package pages
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.JsPath
+package forms.mappings
 
-class PhoneNumberPageSpec extends AnyFreeSpec with Matchers {
+import play.api.data.validation.{Constraint, Invalid, Valid}
+import utils.ChecksumValidator
 
-  ".PhoneNumberPage" - {
+trait ChecksumConstraints {
 
-    "must have the correct toString" in {
-      PhoneNumberPage.toString mustBe "phoneNumber"
+  protected def modulo23Checksum(
+    formatRegex: String,
+    weights: IndexedSeq[Int],
+    checkCharacterIndex: Int,
+    lookup: String,
+    errorKey: String
+  ): Constraint[String] =
+    Constraint { input =>
+      if (ChecksumValidator.isValidModulo23(input, formatRegex, weights, checkCharacterIndex, lookup)) {
+        Valid
+      } else {
+        Invalid(errorKey)
+      }
     }
-
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "phoneNumber"
-      PhoneNumberPage.path mustBe expectedPath
-    }
-  }
 }
