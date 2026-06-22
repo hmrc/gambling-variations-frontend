@@ -32,17 +32,17 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
 class RemoveCorrespondenceFaxNumberController @Inject() (
-                                            override val messagesApi: MessagesApi,
-                                            sessionRepository: SessionRepository,
-                                            navigator: Navigator,
-                                            authorise: AuthorisedAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: CorrespondenceDetailsDataRequiredAction,
-                                            formProvider: RemoveCorrespondenceFaxNumberFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: RemoveCorrespondenceFaxNumberView
-                                          )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: RemoveCorrespondenceFaxNumberFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RemoveCorrespondenceFaxNumberView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
@@ -86,9 +86,9 @@ class RemoveCorrespondenceFaxNumberController @Inject() (
     }
 
   private def updateUserAnswers(
-                                 userAnswers: UserAnswers,
-                                 value: Boolean
-                               ): Try[UserAnswers] = {
+    userAnswers: UserAnswers,
+    value: Boolean
+  ): Try[UserAnswers] = {
 
     for {
       ua <- userAnswers.set(CorrespondenceDetailsSubmittedPage, true)
