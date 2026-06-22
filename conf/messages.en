@@ -235,6 +235,13 @@ removeAssociatedRegNumber.error.required = Select yes if you want to remove the 
 removeAssociatedRegNumber.change.hidden = remove associated registration number
 removeAssociatedRegNumber.heading.caption = Change registration details
 
+removeCorrespondenceFaxNumber.title = Are you sure you want to remove the correspondence fax number?
+removeCorrespondenceFaxNumber.heading = Are you sure you want to remove the correspondence fax number {0}?
+removeCorrespondenceFaxNumber.checkYourAnswersLabel = removeCorrespondenceFaxNumber
+removeCorrespondenceFaxNumber.error.required = Select yes if you want to remove the correspondence fax number
+removeCorrespondenceFaxNumber.change.hidden = remove correspondence fax number
+removeCorrespondenceFaxNumber.heading.caption = Change registration details
+
 #Check Contact Details
 contactDetails.caption = Change registration details
 contactDetails.title = Check your business contact details
