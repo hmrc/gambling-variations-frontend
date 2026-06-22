@@ -62,6 +62,26 @@ class ChangeRegistrationDetailsController @Inject() (
                 .get(BusinessNameChangesPage)
                 .getOrElse(false)
 
+            val businessAddressChanged =
+              request.userAnswers
+                .get(BusinessNameChangesPage)
+                .getOrElse(false)
+
+            val contactDetailsChanged =
+              request.userAnswers
+                .get(ContactDetailsChangesPage)
+                .getOrElse(false)
+
+            val correspondenceDetailsChanged =
+              request.userAnswers
+                .get(CorrespondenceDetailsChangesPage)
+                .getOrElse(false)
+
+            val tradingDetailsChanged =
+              request.userAnswers
+                .get(TradingDetailsChanges)
+                .getOrElse(false)
+
             val licencesChanged = false
             val premisesExists = false
             val premisesTriggered = licencesChanged
@@ -71,15 +91,19 @@ class ChangeRegistrationDetailsController @Inject() (
 
             val vm =
               ChangeRegistrationDetailsViewModel(
-                mgdRegNumber        = request.mgdRegNum,
-                managementHomeUrl   = appConfig.gamblingManagementHomeUrl,
-                isGroupMember       = isGroupMember,
-                isPartnership       = isPartnership,
-                businessNameChanged = businessNameChanged,
-                licencesChanged     = licencesChanged,
-                premisesExists      = premisesExists,
-                premisesTriggered   = premisesTriggered,
-                submitUrl           = submitUrl
+                mgdRegNumber                 = request.mgdRegNum,
+                managementHomeUrl            = appConfig.gamblingManagementHomeUrl,
+                isGroupMember                = isGroupMember,
+                isPartnership                = isPartnership,
+                businessNameChanged          = businessNameChanged,
+                businessAddressChanged       = businessAddressChanged,
+                contactDetailsChanged        = contactDetailsChanged,
+                correspondenceDetailsChanged = correspondenceDetailsChanged,
+                tradingDetailsChanged        = tradingDetailsChanged,
+                licencesChanged              = licencesChanged,
+                premisesExists               = premisesExists,
+                premisesTriggered            = premisesTriggered,
+                submitUrl                    = submitUrl
               )
 
             Ok(
