@@ -18,6 +18,7 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
+import utils.ChecksumValidator
 
 class AssociatedRegNumberFormProviderSpec extends StringFieldBehaviours {
 
@@ -59,19 +60,19 @@ class AssociatedRegNumberFormProviderSpec extends StringFieldBehaviours {
     "not bind an associated registration number that does not start with X" in {
       val result = form.bind(Map(fieldName -> "MAX6666444555")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-HJ-NP-TV-Z]M[0-9]{11}$"))
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq(ChecksumValidator.mgdrnFormatRegex))
     }
 
     "not bind an associated registration number that does not have M as the third character" in {
       val result = form.bind(Map(fieldName -> "XAX00001234567")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-HJ-NP-TV-Z]M[0-9]{11}$"))
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq(ChecksumValidator.mgdrnFormatRegex))
     }
 
     "not bind an associated registration number with an excluded check character" in {
       val result = form.bind(Map(fieldName -> "XIM00000000574")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-HJ-NP-TV-Z]M[0-9]{11}$"))
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq(ChecksumValidator.mgdrnFormatRegex))
     }
 
     "not bind an associated registration number with an invalid checksum" in {
