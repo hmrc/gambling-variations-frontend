@@ -43,6 +43,12 @@ class NavigatorSpec extends SpecBase {
             routes.CheckBusinessNameController.onPageLoad()
         }
 
+        "must go from CorrespondenceEmailPage to CheckCorrespondenceDetails page" in {
+
+          navigator.nextPage(CorrespondenceEmailPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
         "must go from RemoveCorrespondenceEmailAddressPage to CheckCorrespondenceDetails page" in {
 
           navigator.nextPage(RemoveCorrespondenceEmailAddressPage, NormalMode, UserAnswers("id")) mustBe
