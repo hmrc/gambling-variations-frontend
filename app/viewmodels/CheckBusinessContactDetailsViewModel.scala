@@ -62,7 +62,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
         content = messages("contactDetails.heading.faxNumber")
       ),
       value = Value(
-        content = faxNumberContent
+        content = faxNumber getOrElse messages("contactDetails.message.notProvided")
       ).withCssClass("fax-number"),
       actions = if (faxNumber.isEmpty) {
         Some(
@@ -156,16 +156,6 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
             s"${mobilePhoneNumber getOrElse messages("contactDetails.message.notProvided")}"
         )
       )
-    }
-  }
-
-  private def faxNumberContent(implicit messages: Messages): Content = {
-    faxNumber match {
-      case None => messages("contactDetails.message.notProvided")
-      case Some(content) =>
-        HtmlContent(
-          s"""<span style="white-space: pre-wrap">$content</span>"""
-        )
     }
   }
 
