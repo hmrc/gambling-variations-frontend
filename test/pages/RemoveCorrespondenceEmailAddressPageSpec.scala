@@ -15,20 +15,22 @@
  */
 
 package pages
+
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-class AssociatedRegistrationNumbersPageSpec extends AnyFreeSpec with Matchers {
-  "AssociatedRegistrationNumbersPage" - {
+class RemoveCorrespondenceEmailAddressPageSpec extends AnyFreeSpec with Matchers {
+
+  ".RemoveCorrespondenceEmailAddressPage" - {
 
     "must have the correct toString" in {
-      AssociatedRegistrationNumbersPage.toString mustBe "associatedRegistrationNumbers"
+      RemoveCorrespondenceEmailAddressPage.toString mustBe "removeCorrespondenceEmailAddress"
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "associatedRegistrationNumbers"
-      AssociatedRegistrationNumbersPage.path mustBe expectedPath
+      val expectedPath: JsPath = JsPath \ "removeCorrespondenceEmailAddress"
+      RemoveCorrespondenceEmailAddressPage.path mustBe expectedPath
     }
   }
 }

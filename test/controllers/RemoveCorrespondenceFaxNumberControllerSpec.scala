@@ -37,12 +37,13 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
   private val correspondenceFaxNumber = "123456789"
 
   private val baseAnswers =
-    UserAnswers(userAnswersId,
-                Json.obj(
-                  CorrespondenceFaxNumberPage.toString          -> correspondenceFaxNumber,
-                  "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-                )
-               )
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        CorrespondenceFaxNumberPage.toString -> correspondenceFaxNumber,
+        "correspondenceDetailsSection"       -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+    )
 
   val formProvider = new RemoveCorrespondenceFaxNumberFormProvider()
   val form = formProvider()

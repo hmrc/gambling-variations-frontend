@@ -409,7 +409,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr.hidden"))
               ),
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.RemoveCorrespondenceEmailAddressController.onPageLoad().url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr.hidden"))
               )
