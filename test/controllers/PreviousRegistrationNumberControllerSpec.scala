@@ -37,19 +37,19 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
   val formProvider = new PreviousRegistrationNumberFormProvider()
   val form = formProvider()
-  val fieldName = "previousRegNumber"
+  val fieldName = "previousRegistrationNumber"
   val requiredUserAnswers = emptyUserAnswers.set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
 
-  lazy val previousRegNumberRoute = routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
+  lazy val previousRegistrationNumberRoute = routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
 
-  "PreviousRegNumber Controller" - {
+  "PreviousRegistrationNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(requiredUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, previousRegNumberRoute)
+        val request = FakeRequest(GET, previousRegistrationNumberRoute)
 
         val result = route(application, request).value
 
@@ -74,7 +74,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, previousRegNumberRoute)
+        val request = FakeRequest(GET, previousRegistrationNumberRoute)
 
         val view = application.injector.instanceOf[PreviousRegistrationNumberView]
 
@@ -100,13 +100,13 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, previousRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+          FakeRequest(POST, previousRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual previousRegNumberRoute
+        redirectLocation(result).value mustEqual previousRegistrationNumberRoute
       }
     }
 
@@ -119,7 +119,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers =
         requiredUserAnswers
-          .set(PreviousRegistrationNumbersPage, Seq("XAM00000000001"))
+          .set(PreviousRegistrationNumbersPage, Seq("XDM00000001309"))
           .success
           .value
 
@@ -132,16 +132,16 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, previousRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+          FakeRequest(POST, previousRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(PreviousRegistrationNumbersPage).value mustEqual Seq(
-          "XAM00000000001",
-          "XAM00001234567"
+          "XDM00000001309",
+          "XRM00000000574"
         )
       }
     }
@@ -150,7 +150,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers =
         requiredUserAnswers
-          .set(PreviousRegistrationNumbersPage, Seq("XAM00001234567"))
+          .set(PreviousRegistrationNumbersPage, Seq("XRM00000000574"))
           .success
           .value
 
@@ -158,10 +158,10 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, previousRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+          FakeRequest(POST, previousRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
-        val boundForm = form.fill("XAM00001234567").withError(fieldName, "previousRegNumber.error.duplicate")
+        val boundForm = form.fill("XRM00000000574").withError(fieldName, "previousRegistrationNumber.error.duplicate")
         val view = application.injector.instanceOf[PreviousRegistrationNumberView]
         val result = route(application, request).value
 
@@ -176,7 +176,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, previousRegNumberRoute)
+          FakeRequest(POST, previousRegistrationNumberRoute)
             .withFormUrlEncodedBody((fieldName, ""))
 
         val boundForm = form.bind(Map(fieldName -> ""))
@@ -203,7 +203,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
           .build()
 
       running(application) {
-        val request = FakeRequest(GET, previousRegNumberRoute)
+        val request = FakeRequest(GET, previousRegistrationNumberRoute)
 
         val result = route(application, request).value
 
@@ -226,8 +226,8 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, previousRegNumberRoute)
-            .withFormUrlEncodedBody((fieldName, "XAM00001234567"))
+          FakeRequest(POST, previousRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
 
         val result = route(application, request).value
 

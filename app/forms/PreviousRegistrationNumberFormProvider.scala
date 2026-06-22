@@ -18,22 +18,27 @@ package forms
 
 import javax.inject.Inject
 
-import forms.mappings.Mappings
+import forms.mappings.{ChecksumConstraints, Mappings}
 import play.api.data.Form
+import utils.ChecksumValidator
 
-class PreviousRegistrationNumberFormProvider @Inject() extends Mappings {
-
-  private val previousRegNumberCharactersRegex = "^[A-Z0-9]+$"
-  private val previousRegNumberFormatRegex = "^X[A-Z]M000[0-9]{8}$"
+class PreviousRegistrationNumberFormProvider @Inject() extends Mappings with ChecksumConstraints {
 
   def apply(): Form[String] =
     Form(
-      "previousRegNumber" -> text("previousRegNumber.error.required")
+      "previousRegistrationNumber" -> text("previousRegistrationNumber.error.required")
         .transform[String](_.filterNot(_.isWhitespace).toUpperCase, identity)
         .verifying(
           firstError(
-            regexp(previousRegNumberCharactersRegex, "previousRegNumber.error.invalid.characters"),
-            regexp(previousRegNumberFormatRegex, "previousRegNumber.error.invalid.format")
+            regexp(ChecksumValidator.mgdrnCharactersRegex, "previousRegistrationNumber.error.invalid.characters"),
+            regexp(ChecksumValidator.mgdrnFormatRegex, "previousRegistrationNumber.error.invalid.format"),
+            modulo23Checksum(
+              ChecksumValidator.mgdrnFormatRegex,
+              ChecksumValidator.mgdrnChecksumWeights,
+              ChecksumValidator.mgdrnCheckCharacterIndex,
+              ChecksumValidator.mgdrnChecksumLookup,
+              "previousRegistrationNumber.error.invalidReference"
+            )
           )
         )
     )

@@ -46,7 +46,7 @@ class PreviousRegistrationNumberController @Inject() (
     with I18nSupport {
 
   val form: Form[String] = formProvider()
-  private val fieldName = "previousRegNumber"
+  private val fieldName = "previousRegistrationNumber"
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -64,16 +64,16 @@ class PreviousRegistrationNumberController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        previousRegNumber => {
-          val currentPreviousRegNumbers = request.userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
+        previousRegistrationNumber => {
+          val currentPreviousRegistrationNumbers = request.userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
 
-          if (currentPreviousRegNumbers.contains(previousRegNumber)) {
+          if (currentPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
             Future.successful(
-              BadRequest(view(form.fill(previousRegNumber).withError(fieldName, "previousRegNumber.error.duplicate"), mode))
+              BadRequest(view(form.fill(previousRegistrationNumber).withError(fieldName, "previousRegistrationNumber.error.duplicate"), mode))
             )
           } else {
             for {
-              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, previousRegNumber))
+              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, previousRegistrationNumber))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(routes.PreviousRegistrationNumberController.onPageLoad(mode))
           }
@@ -81,18 +81,18 @@ class PreviousRegistrationNumberController @Inject() (
       )
   }
 
-  private def updateUserAnswers(userAnswers: UserAnswers, previousRegNumber: String): Try[UserAnswers] = {
-    val currentPreviousRegNumbers = userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
-    val updatedPreviousRegNumbers =
-      if (currentPreviousRegNumbers.contains(previousRegNumber)) {
-        currentPreviousRegNumbers
+  private def updateUserAnswers(userAnswers: UserAnswers, previousRegistrationNumber: String): Try[UserAnswers] = {
+    val currentPreviousRegistrationNumbers = userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
+    val updatedPreviousRegistrationNumbers =
+      if (currentPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
+        currentPreviousRegistrationNumbers
       } else {
-        currentPreviousRegNumbers :+ previousRegNumber
+        currentPreviousRegistrationNumbers :+ previousRegistrationNumber
       }
 
     for {
-      updatedAnswers <- userAnswers.set(PreviousRegNumberPage, previousRegNumber)
-      updatedAnswers <- updatedAnswers.set(PreviousRegistrationNumbersPage, updatedPreviousRegNumbers)
+      updatedAnswers <- userAnswers.set(PreviousRegNumberPage, previousRegistrationNumber)
+      updatedAnswers <- updatedAnswers.set(PreviousRegistrationNumbersPage, updatedPreviousRegistrationNumbers)
     } yield updatedAnswers
   }
 }

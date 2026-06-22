@@ -18,29 +18,31 @@ package forms
 
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
+import utils.ChecksumValidator
 
 class PreviousRegistrationNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "previousRegNumber.error.required"
-  val invalidCharactersKey = "previousRegNumber.error.invalid.characters"
-  val invalidFormatKey = "previousRegNumber.error.invalid.format"
+  val requiredKey = "previousRegistrationNumber.error.required"
+  val invalidCharactersKey = "previousRegistrationNumber.error.invalid.characters"
+  val invalidFormatKey = "previousRegistrationNumber.error.invalid.format"
+  val invalidReferenceKey = "previousRegistrationNumber.error.invalidReference"
 
   val form = new PreviousRegistrationNumberFormProvider()()
 
-  ".previousRegNumber" - {
+  ".previousRegistrationNumber" - {
 
-    val fieldName = "previousRegNumber"
+    val fieldName = "previousRegistrationNumber"
 
     "bind a valid previous registration number" in {
-      val result = form.bind(Map(fieldName -> "XGM00001234567"))
+      val result = form.bind(Map(fieldName -> "XRM00000000574"))
 
-      result.value.value mustEqual "XGM00001234567"
+      result.value.value mustEqual "XRM00000000574"
     }
 
     "remove whitespaces and uppercase a valid previous registration number" in {
-      val result = form.bind(Map(fieldName -> " xgm 0000 1234567 "))
+      val result = form.bind(Map(fieldName -> " xrm 0000 0000574 "))
 
-      result.value.value mustEqual "XGM00001234567"
+      result.value.value mustEqual "XRM00000000574"
     }
 
     behave like mandatoryField(
@@ -58,13 +60,25 @@ class PreviousRegistrationNumberFormProviderSpec extends StringFieldBehaviours {
     "not bind an previous registration number that does not start with X" in {
       val result = form.bind(Map(fieldName -> "MAX6666444555")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-Z]M000[0-9]{8}$"))
+      result.errors must contain only FormError(fieldName, invalidFormatKey,Seq(ChecksumValidator.mgdrnFormatRegex))
     }
 
     "not bind an previous registration number that does not have M as the third character" in {
       val result = form.bind(Map(fieldName -> "XAX00001234567")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq("^X[A-Z]M000[0-9]{8}$"))
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq(ChecksumValidator.mgdrnFormatRegex))
+    }
+
+    "not bind an previous registration number with an excluded check character" in {
+      val result = form.bind(Map(fieldName -> "XIM00000000574")).apply(fieldName)
+
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq(ChecksumValidator.mgdrnFormatRegex))
+    }
+
+    "not bind an previous registration number with an invalid checksum" in {
+      val result = form.bind(Map(fieldName -> "XAM00001234567")).apply(fieldName)
+
+      result.errors must contain only FormError(fieldName, invalidReferenceKey)
     }
   }
 }
