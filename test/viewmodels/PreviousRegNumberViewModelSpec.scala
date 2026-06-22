@@ -16,7 +16,6 @@
 
 package viewmodels
 
-import controllers.routes
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import base.SpecBase
