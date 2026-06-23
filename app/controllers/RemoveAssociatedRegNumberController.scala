@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
 import models.{Mode, NormalMode, UserAnswers}
 import navigation.Navigator
-import pages.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
+import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -69,6 +69,7 @@ class RemoveAssociatedRegNumberController @Inject() (
           value =>
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )
