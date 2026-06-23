@@ -43,19 +43,21 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
   "AssociatedRegistrationNumbersView" - {
     "must show expected values when data is populated" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, isFlagged = true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
       doc.title             must include(messages("associatedRegistrationNumbers.title"))
       doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
-
+      doc.select("p").text must include(
+        messages("Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.")
+      )
       doc.select(".associated-reg-number-XHM00000199").text must include("XHM00000199")
     }
 
     "must show radio buttons when less than 3 numbers" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), 2)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), 2, true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -69,7 +71,7 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
 
     "must show max limit message when 3 numbers are present" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
