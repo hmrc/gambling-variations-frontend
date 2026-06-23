@@ -55,7 +55,7 @@
 
         @if(submittedRegNumbersCount > 1 && unsubmittedRegNumbersCount > 0){
                 @h2(messages("associatedRegistrationNumbers.submitted", "s"), classes = "govuk-heading-m submitted-heading")
-            } else if (submittedRegNumbersCount > 0 && unsubmittedRegNumbersCount > 0) {
+            } else if (submittedRegNumbersCount > 0) {
                 @h2(messages("associatedRegistrationNumbers.submitted", ""), classes = "govuk-heading-m submitted-heading")
             }
         @if(submittedRegNumbersCount > 0) {
