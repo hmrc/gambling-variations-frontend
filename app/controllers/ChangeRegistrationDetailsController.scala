@@ -18,7 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.*
-import models.BusinessType
+import models.{BusinessType, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
@@ -79,7 +79,7 @@ class ChangeRegistrationDetailsController @Inject() (
 
             val tradingDetailsChanged =
               request.userAnswers
-                .get(TradingDetailsChanges)
+                .get(TradingDetailsChangesPage)
                 .getOrElse(false)
 
             val licencesChanged = false

@@ -17,34 +17,49 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
+import repositories.SessionRepository
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.BusinessContactDetailsView
+import views.html.CheckContactDetailsView
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
+  sessionRepository: SessionRepository,
   requireData: BusinessContactDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: BusinessContactDetailsView
-) extends FrontendBaseController
+  view: CheckContactDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(BusinessContactDetailsSubmittedPage).getOrElse(false)
+    val ua = request.userAnswers
+
+    val flag = ua.get(BusinessContactDetailsSubmittedPage).getOrElse(false)
     Ok(
       view(
-        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
-        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
-        request.userAnswers.get(BusinessFaxNumberPage),
-        request.userAnswers.get(BusinessEmailAddressPage),
+        ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
+        ua.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
+        ua.get(BusinessFaxNumberPage),
+        ua.get(BusinessEmailAddressPage),
         flag
       )
     )
   }
+
+  def onRedirect(): Action[AnyContent] =
+    (authorised andThen getData andThen requireData).async { implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactDetailsChangesPage, true))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+    }
 }

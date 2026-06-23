@@ -76,6 +76,7 @@ GET        /change-registration-details/business-contact-details/change-remove-e
 POST       /change-registration-details/business-contact-details/change-remove-email-address   controllers.RemoveEmailAddressController.onSubmit(mode: Mode = CheckMode)
 
 
+GET        /change-registration-details/business-contact-details/check-redirect                 controllers.CheckContactDetailsController.onRedirect()
 GET        /change-registration-details/business-contact-details/check                          controllers.CheckContactDetailsController.onPageLoad()
 GET        /change-registration-details/correspondence-details/check                            controllers.CheckCorrespondenceDetailsController.onPageLoad()
 
@@ -135,6 +136,7 @@ POST       /change-registration-details/correspondence-details/contact-numbers  
 GET        /change-registration-details/correspondence-details/change-contact-numbers                  controllers.CorrespondenceContactNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/correspondence-details/change-contact-numbers                  controllers.CorrespondenceContactNumberController.onSubmit(mode: Mode = CheckMode)
 
+GET        /change-registration-details/trading-details/check-redirect                       controllers.CheckTradingDetailsController.onRedirect()
 GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
 
 GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
