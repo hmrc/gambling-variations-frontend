@@ -58,7 +58,7 @@
             } else if (submittedRegNumbersCount > 0 && unsubmittedRegNumbersCount > 0) {
                 @h2(messages("previousRegistrationNumbers.submitted", ""), classes = "govuk-heading-m submitted-heading")
             }
-        @if(previousRegNumbers.isDefined) {
+        @if(previousRegNumbersCount > 0) {
             @govukSummaryList(SummaryList(
                 rows = PreviousRegNumberViewModel(previousRegNumbers).summaryList
                 ))
@@ -70,7 +70,7 @@
                 @h2(messages("previousRegistrationNumbers.unsubmitted", "s"), classes = "govuk-heading-m ready-to-submit-heading")
             }
 
-        @if(unsubmittedPreviousRegNumbers.isDefined) {
+        @if(unsubmittedRegNumbersCount > 0) {
             @govukSummaryList(SummaryList(
                 rows = UnsubmittedRegNumberViewModel(unsubmittedPreviousRegNumbers).summaryList
                 ))
