@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{BusinessNameDataRequiredAction, *}
+import controllers.actions.*
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
@@ -109,7 +109,7 @@ class ChangeBusinessNameController @Inject() (
       } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
     }
   def onRedirect(): Action[AnyContent] =
-    (authorise andThen getData andThen BusinessNameDataRequiredAction).async { implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameChangesPage, true))
         _              <- sessionRepository.set(updatedAnswers)

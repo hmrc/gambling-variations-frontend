@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions.*
 import pages.*
+import repositories.SessionRepository
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -25,15 +26,18 @@ import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckCorrespondenceDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
+  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: CheckCorrespondenceDetailsView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
@@ -58,4 +62,12 @@ class CheckCorrespondenceDetailsController @Inject() (
       )
     )
   }
+
+  def onRedirect(): Action[AnyContent] =
+    (authorised andThen getData andThen requireData).async { implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceDetailsChangesPage, true))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+    }
 }
