@@ -58,7 +58,7 @@
             } else if (submittedRegNumbersCount > 0 && unsubmittedRegNumbersCount > 0) {
                 @h2(messages("previousRegistrationNumbers.submitted", ""), classes = "govuk-heading-m submitted-heading")
             }
-        @if(previousRegNumbersCount > 0) {
+        @if(submittedRegNumbersCount > 0) {
             @govukSummaryList(SummaryList(
                 rows = PreviousRegNumberViewModel(previousRegNumbers).summaryList
                 ))
