@@ -66,25 +66,42 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
       doc.select(".prev-reg-radio-buttons").text must include(messages("previousRegistrationNumbers.noLabel"))
     }
 
-    "must show pluralised H2s when unsubmitted previous numbers are present" in new Setup {
+    "must show pluralised H2 when unsubmitted previous numbers are present" in new Setup {
 
       val html =
         view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001", "XYZ00000001")), 1, 2, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".submitted-heading").text       must include(messages("previousRegistrationNumbers.submitted", "s"))
       doc.select(".ready-to-submit-heading").text must include(messages("previousRegistrationNumbers.unsubmitted", "s"))
     }
 
-    "must show singular H2s when one unsubmitted previous number is present" in new Setup {
+    "must show pluralised H2 when previous numbers are present" in new Setup {
+
+      val html =
+        view(form, NormalMode, Some(Seq("ABC0000001", "XYZ00000001")), Some(Seq("A")), 2, 1, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".submitted-heading").text must include(messages("previousRegistrationNumbers.submitted", "s"))
+    }
+
+    "must show singular H2 when one unsubmitted previous number is present" in new Setup {
 
       val html = view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001")), 1, 1, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".submitted-heading").text       must include(messages("previousRegistrationNumbers.submitted", ""))
       doc.select(".ready-to-submit-heading").text must include(messages("previousRegistrationNumbers.unsubmitted", ""))
+    }
+
+    "must show singular H2s when one previous number is present" in new Setup {
+
+      val html = view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001")), 1, 1, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".submitted-heading").text must include(messages("previousRegistrationNumbers.submitted", ""))
     }
 
     "must show max limit message when 3 numbers are present" in new Setup {

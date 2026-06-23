@@ -19,7 +19,6 @@ package forms
 import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.Forms.optional
 import play.api.data.validation.{Constraint, Invalid, Valid}
 
 class FaxNumberFormProvider @Inject() extends Mappings {
