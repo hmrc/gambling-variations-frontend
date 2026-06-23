@@ -9,3 +9,9 @@
 .js-enabled .js-visible {
   display: inline-block !important;
 }
+
+@media (min-width: 40.0625em) {
+  .correspondence-actions{
+    width: 24%;
+  }
+}
