@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+case object UnsubmittedAssociatedRegNumbersPage extends QuestionPage[Seq[String]] {
 
-class AssociatedRegistrationNumbersFormProvider @Inject() extends Mappings {
+  override def path: JsPath = JsPath \ toString
 
-  def apply(): Form[Boolean] =
-    Form(
-      "addAssociatedRegistrationNumber" -> boolean("associatedRegistrationNumbers.error.required")
-    )
+  override def toString: String = "unsubmittedAssociatedRegNumbers"
 }

@@ -26,7 +26,7 @@ import pages.AssociatedRegistrationNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
+class AssociatedRegNumbersViewModelSpec extends SpecBase with Matchers {
 
   "AssociatedRegNumberViewModel" - {
 
@@ -50,7 +50,7 @@ class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val result = AssociatedRegNumberViewModel(associatedRegNumbers).summaryList
+      val result = AssociatedRegNumbersViewModel(associatedRegNumbers).summaryList
 
       result.head.key.content mustEqual Text("XHM00000199")
       result(1).key.content mustEqual Text("ZIU00001218")

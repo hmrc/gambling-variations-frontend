@@ -17,12 +17,13 @@
 package controllers
 
 import controllers.actions.*
-import forms.AssociatedRegistrationNumbersFormProvider
 
 import javax.inject.Inject
+import forms.AssociatedRegistrationNumbersFormProvider
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumbersUpdatedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,54 +46,116 @@ class AssociatedRegistrationNumbersController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  private val MaxAssociatedRegistrationNumbers = 3
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  private val form = formProvider()
 
-    val preparedForm = request.userAnswers.get(AddAssociatedRegistrationNumberPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
-    val associatedRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(AssociatedRegistrationNumbersPage)
-    val associatedRegNumberCount: Int = associatedRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
-    }
-
-    Ok(view(preparedForm, mode, associatedRegNumberSeq, associatedRegNumberCount))
+  private case class RegistrationNumbers(
+    submitted: Option[Seq[String]],
+    unsubmitted: Option[Seq[String]]
+  ) {
+    val submittedCount: Int = submitted.fold(0)(_.size)
+    val unsubmittedCount: Int = unsubmitted.fold(0)(_.size)
+    val totalCount: Int = submittedCount + unsubmittedCount
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val associatedRegNumberSeq: Option[Seq[String]] = request.userAnswers.get(AssociatedRegistrationNumbersPage)
-    val associatedRegNumberCount: Int = associatedRegNumberSeq match {
-      case Some(sequence) => sequence.length
-      case None           => 0
+  private def registrationNumbers(
+    request: DataRequest[?]
+  ): RegistrationNumbers =
+    RegistrationNumbers(
+      submitted   = request.userAnswers.get(AssociatedRegistrationNumbersPage),
+      unsubmitted = request.userAnswers.get(UnsubmittedAssociatedRegNumbersPage)
+    )
+
+  private def associatedRegNumbersUpdated(request: DataRequest[?]): Boolean =
+    request.userAnswers.get(AssociatedRegNumbersUpdatedPage).fold(false)(_ => true)
+
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+
+      val preparedForm =
+        request.userAnswers
+          .get(AddAssociatedRegistrationNumberPage)
+          .fold(form)(form.fill)
+
+      val regNumbers = registrationNumbers(request)
+      val regNumbersUpdated = associatedRegNumbersUpdated(request)
+
+      if (regNumbers.submittedCount == 3) {
+        Redirect(routes.SystemErrorController.onPageLoad())
+      } else {
+        Ok(
+          view(
+            preparedForm,
+            mode,
+            regNumbers.submitted,
+            regNumbers.unsubmitted,
+            regNumbers.submittedCount,
+            regNumbers.unsubmittedCount,
+            regNumbersUpdated
+          )
+        )
+      }
     }
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors =>
-          if (associatedRegNumberCount < 3) {
-            Future
-              .successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount)))
-          } else {
-            Future.successful(Redirect("#"))
-          },
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
-      )
-  }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+
+      val regNumbers = registrationNumbers(request)
+      val regNumbersUpdated = associatedRegNumbersUpdated(request)
+
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            if (regNumbers.totalCount < MaxAssociatedRegistrationNumbers) {
+              Future.successful(
+                BadRequest(
+                  view(
+                    formWithErrors,
+                    mode,
+                    regNumbers.submitted,
+                    regNumbers.unsubmitted,
+                    regNumbers.submittedCount,
+                    regNumbers.unsubmittedCount,
+                    regNumbersUpdated
+                  )
+                )
+              )
+            } else {
+              Future.successful(Redirect("#"))
+            },
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(
+                                  request.userAnswers.set(
+                                    AddAssociatedRegistrationNumberPage,
+                                    value
+                                  )
+                                )
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(
+              navigator.nextPage(
+                AddAssociatedRegistrationNumberPage,
+                mode,
+                updatedAnswers
+              )
+            )
+        )
+    }
 
   def onRedirect(mode: Mode, assocRegNumber: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
-        _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad(mode))
+        updatedAnswers <- Future.fromTry(
+                            request.userAnswers.set(
+                              ChosenAssociatedRegNumberPage,
+                              assocRegNumber
+                            )
+                          )
+        _ <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(
+        routes.RemoveAssociatedRegNumberController.onPageLoad(mode)
+      )
     }
-
 }

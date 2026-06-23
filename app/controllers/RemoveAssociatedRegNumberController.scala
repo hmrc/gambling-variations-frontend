@@ -18,7 +18,9 @@ package controllers
 
 import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
-import models.{Mode, NormalMode, UserAnswers}
+
+import javax.inject.Inject
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -27,7 +29,6 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveAssociatedRegNumberView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -50,8 +51,8 @@ class RemoveAssociatedRegNumberController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(RemoveAssociatedRegNumberPage) match {
-      case Some(value) => form.fill(value)
       case None        => form
+      case Some(value) => form.fill(value)
     }
 
     request.userAnswers.get(ChosenAssociatedRegNumberPage) match {
@@ -72,7 +73,7 @@ class RemoveAssociatedRegNumberController @Inject() (
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )
-    } getOrElse Future.successful(Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)))
+    } getOrElse Future.successful(Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()))
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {

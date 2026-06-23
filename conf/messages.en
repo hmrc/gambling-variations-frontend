@@ -464,7 +464,8 @@ associatedRegNumber.error.invalid.format = Associated registration number must b
 associatedRegNumber.error.invalidReference = Enter a real associated registration number
 associatedRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
 associatedRegNumber.change.hidden = associated registration number
-
+associatedRegNumber.submitted = Submitted registration number{0}
+associatedRegNumber.unsubmitted = Registration number{0} ready to submit
 
 removeCorrespondenceEmailAddress.title = Are you sure you want to remove the correspondence email address?
 removeCorrespondenceEmailAddress.heading = Are you sure you want to remove the correspondence email address {0}?
