@@ -315,6 +315,8 @@ associatedRegistrationNumbers.noLabel = No, return to check your trading details
 associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
 associatedRegistrationNumbers.error.required = Select yes if you want to add another associated registration number
 associatedRegistrationNumbers.change.hidden =  registration number {0}
+associatedRegistrationNumbers.submitted = Submitted registration number{0}
+associatedRegistrationNumbers.unsubmitted = Registration number{0} ready to submit
 
 
 businessTradeClass.title = What is the business trade class?
@@ -464,8 +466,7 @@ associatedRegNumber.error.invalid.format = Associated registration number must b
 associatedRegNumber.error.invalidReference = Enter a real associated registration number
 associatedRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
 associatedRegNumber.change.hidden = associated registration number
-associatedRegNumber.submitted = Submitted registration number{0}
-associatedRegNumber.unsubmitted = Registration number{0} ready to submit
+
 
 removeCorrespondenceEmailAddress.title = Are you sure you want to remove the correspondence email address?
 removeCorrespondenceEmailAddress.heading = Are you sure you want to remove the correspondence email address {0}?

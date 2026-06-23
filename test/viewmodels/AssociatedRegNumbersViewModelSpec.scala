@@ -22,27 +22,29 @@ import play.api.libs.json.Json
 import base.SpecBase
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.AssociatedRegistrationNumbersPage
+import pages.UnsubmittedAssociatedRegNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 class AssociatedRegNumbersViewModelSpec extends SpecBase with Matchers {
 
-  "AssociatedRegNumberViewModel" - {
+  "AssociatedRegNumbersViewModel" - {
 
     "must populate correct view" in {
       val data = Json.obj(
         "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
         "associatedRegistrationNumbers" -> Json.arr(
           "XHM00000199",
-          "ZIU00001218",
+          "ZIU00001218"
+        ),
+        "unsubmittedAssociatedRegNumbers" -> Json.arr(
           "GTT28881666"
         )
       )
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 
-      val associatedRegNumbers = baseUserAnswers.get(AssociatedRegistrationNumbersPage)
+      val unsubmittedAssociatedRegNumbers = baseUserAnswers.get(UnsubmittedAssociatedRegNumbersPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
@@ -50,12 +52,12 @@ class AssociatedRegNumbersViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val result = AssociatedRegNumbersViewModel(associatedRegNumbers).summaryList
+      val unsubmitted = AssociatedRegNumbersViewModel(unsubmittedAssociatedRegNumbers).summaryList
 
-      result.head.key.content mustEqual Text("XHM00000199")
-      result(1).key.content mustEqual Text("ZIU00001218")
-      result(2).key.content mustEqual Text("GTT28881666")
-      result.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = "XHM00000199").url
+      unsubmitted.head.key.content mustEqual Text("GTT28881666")
+      unsubmitted.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersController
+        .onRedirect(assocRegNumber = "GTT28881666")
+        .url
     }
   }
 }

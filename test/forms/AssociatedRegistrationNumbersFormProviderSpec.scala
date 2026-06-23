@@ -26,9 +26,9 @@ class AssociatedRegistrationNumbersFormProviderSpec extends BooleanFieldBehaviou
 
   val form = new AssociatedRegistrationNumbersFormProvider()()
 
-  ".value" - {
+  ".addAssociatedRegistrationNumber" - {
 
-    val fieldName = "value"
+    val fieldName = "addAssociatedRegistrationNumber"
 
     behave like booleanField(
       form,

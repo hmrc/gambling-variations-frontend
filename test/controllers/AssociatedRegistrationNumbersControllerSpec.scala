@@ -23,7 +23,6 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddAssociatedRegistrationNumberPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -36,22 +35,38 @@ import scala.concurrent.Future
 
 class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute = Call("GET", "#")
 
-  val formProvider = new AssociatedRegistrationNumbersFormProvider()
+  val formProvider = new AssociatedRegistrationNumbersFormProvider
   val form = formProvider()
 
   val data = Json.obj(
+    "updated"                -> false,
+    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+    "associatedRegistrationNumbers" -> Json.arr(
+      "XHM00000199",
+      "ZIU00001218"
+    ),
+    "unsubmittedAssociatedRegNumbers" -> Json.arr(
+      "GTT28881666"
+    )
+  )
+
+  val dataAlreadySubmitted = Json.obj(
+    "updated"                -> true,
     "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
     "associatedRegistrationNumbers" -> Json.arr(
       "XHM00000199",
       "ZIU00001218",
-      "GTT28881666"
+      "HMN290182098"
     )
   )
 
   private val baseUserAnswers =
     UserAnswers(userAnswersId, data)
+
+  private val alreadySubmittedInUa =
+    UserAnswers(userAnswersId, dataAlreadySubmitted)
 
   lazy val associatedRegistrationNumbersRoute = routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
 
@@ -70,26 +85,22 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1, true)(request,
+                                                                                                                messages(application)
+                                                                                                               ).toString
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must redirect to  SystemError if 3 submitted numbers are found" in {
 
-      val userAnswers = baseUserAnswers.set(AddAssociatedRegistrationNumberPage, true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(alreadySubmittedInUa)).build()
 
       running(application) {
         val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
 
-        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
-
         val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
+        status(result) mustEqual SEE_OTHER
       }
     }
 
@@ -145,7 +156,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to SystemError for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -159,7 +170,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to SystemError for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 

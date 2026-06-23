@@ -43,33 +43,70 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
   "AssociatedRegistrationNumbersView" - {
     "must show expected values when data is populated" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1, true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
       doc.title             must include(messages("associatedRegistrationNumbers.title"))
       doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
 
+      doc.select(".must-be-submitted-message").text         must include(messages("associatedRegistrationNumbers.paragraph"))
       doc.select(".associated-reg-number-XHM00000199").text must include("XHM00000199")
+      doc.select(".associated-reg-number-ZIU00001218").text must include("ZIU00001218")
+      doc.select(".associated-reg-number-GTT28881666").text must include("GTT28881666")
     }
 
     "must show radio buttons when less than 3 numbers" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), 2)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), None, 2, 0, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title             must include(messages("associatedRegistrationNumbers.title"))
-      doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
+      doc.select(".assoc-reg-radio-buttons").text must include(messages("associatedRegistrationNumbers.yesLabel"))
+      doc.select(".assoc-reg-radio-buttons").text must include(messages("associatedRegistrationNumbers.noLabel"))
+    }
 
-      doc.select(".associated-reg-number-ZIU00001218").text must include("ZIU00001218")
-      doc.select(".assoc-reg-radio-buttons").text           must include(messages("associatedRegistrationNumbers.yesLabel"))
-      doc.select(".assoc-reg-radio-buttons").text           must include(messages("associatedRegistrationNumbers.noLabel"))
+    "must show pluralised H2 when unsubmitted associated numbers are present" in new Setup {
+
+      val html =
+        view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001", "XYZ00000001")), 1, 2, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".ready-to-submit-heading").text must include(messages("associatedRegistrationNumbers.unsubmitted", "s"))
+    }
+
+    "must show pluralised H2 when associated numbers are present" in new Setup {
+
+      val html =
+        view(form, NormalMode, Some(Seq("ABC0000001", "XYZ00000001")), Some(Seq("A")), 2, 1, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".submitted-heading").text must include(messages("associatedRegistrationNumbers.submitted", "s"))
+    }
+
+    "must show singular H2 when one unsubmitted associated number is present" in new Setup {
+
+      val html = view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001")), 1, 1, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".ready-to-submit-heading").text must include(messages("associatedRegistrationNumbers.unsubmitted", ""))
+    }
+
+    "must show singular H2s when one associated number is present" in new Setup {
+
+      val html = view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001")), 1, 1, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".submitted-heading").text must include(messages("associatedRegistrationNumbers.submitted", ""))
     }
 
     "must show max limit message when 3 numbers are present" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
