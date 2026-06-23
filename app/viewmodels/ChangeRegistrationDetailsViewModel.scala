@@ -86,7 +86,7 @@ final case class ChangeRegistrationDetailsViewModel(
       Some(
         TaskListItem(
           messages("changeRegistrationDetails.tradingDetails"),
-          routes.IndexController.onPageLoad().url,
+          routes.CheckTradingDetailsController.onPageLoad().url,
           status(tradingDetailsChanged)
         )
       ),
