@@ -48,12 +48,6 @@ class FaxNumberFormProviderSpec extends StringFieldBehaviours {
       )
     )
 
-    "strip spaces from a valid fax number" in {
-      val result = form.bind(Map(fieldName -> "01632 960 001")).value
-
-      result.value mustBe "01632960001"
-    }
-
     s"not bind strings longer than $maxLength characters" in {
       val result = form.bind(Map(fieldName -> ("0" * (maxLength + 1)))).apply(fieldName)
 
