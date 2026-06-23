@@ -22,7 +22,7 @@ import forms.RemoveAssociatedRegNumberFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
+import pages.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -81,16 +81,22 @@ class RemoveAssociatedRegNumberController @Inject() (
       ua1 <- userAnswers.set(RemoveAssociatedRegNumberPage, value)
       ua2 <- {
         if (value) {
-          ua1.get(ChosenAssociatedRegNumberPage) match {
-            case Some(assocRegNo) =>
+          ua1
+            .get(ChosenAssociatedRegNumberPage)
+            .fold(Try(ua1))(assocRegNo =>
               ua1.get(AssociatedRegistrationNumbersPage).match {
                 case Some(assocRegNoSeq) =>
                   val updatedSequence = assocRegNoSeq.filterNot(_ == assocRegNo)
                   ua1.set(AssociatedRegistrationNumbersPage, updatedSequence)
+                  ua1.get(UnsubmittedAssociatedRegNumbersPage).match {
+                    case Some(unsubmittedSeq) =>
+                      val updatedSequence = unsubmittedSeq.filterNot(_ == assocRegNo)
+                      ua1.set(UnsubmittedAssociatedRegNumbersPage, updatedSequence)
+                    case None => Try(ua1)
+                  }
                 case None => Try(ua1)
               }
-            case None => Try(ua1)
-          }
+            )
         } else {
           Try(ua1)
         }
