@@ -11,7 +11,7 @@
 }
 
 @media (min-width: 40.0625em) {
-  .correspondence-actions{
-    width: 24%;
+  .govuk-summary-list__actions {
+    width: auto !important;
   }
 }
