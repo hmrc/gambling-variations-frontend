@@ -266,7 +266,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         Actions(
           items = Seq(
             ActionItem(
-              href               = "#",
+              href               = controllers.routes.CorrespondenceContactNumberController.onPageLoad(NormalMode).url,
               content            = "site.change",
               visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.contactNumbers.hidden"))
             )
@@ -332,7 +332,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
               ),
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.RemoveCorrespondenceFaxNumberController.onPageLoad(NormalMode).url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
               )
