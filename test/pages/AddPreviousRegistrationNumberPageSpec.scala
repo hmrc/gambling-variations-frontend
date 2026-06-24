@@ -27,7 +27,7 @@ class AddPreviousRegistrationNumberPageSpec extends AnyFreeSpec with Matchers {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "addPreviousRegistrationNumber"
+      val expectedPath: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ "addPreviousRegistrationNumber"
       AddPreviousRegistrationNumberPage.path mustBe expectedPath
     }
   }

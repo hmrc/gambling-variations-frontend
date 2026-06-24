@@ -22,6 +22,7 @@ import javax.inject.Inject
 import forms.PreviousRegistrationNumbersFormProvider
 import models.Mode
 import models.requests.DataRequest
+import models.RegistrationNumbers
 import navigation.Navigator
 import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -50,15 +51,6 @@ class PreviousRegistrationNumbersController @Inject() (
 
   private val form = formProvider()
 
-  private case class RegistrationNumbers(
-    submitted: Option[Seq[String]],
-    unsubmitted: Option[Seq[String]]
-  ) {
-    val submittedCount: Int = submitted.fold(0)(_.size)
-    val unsubmittedCount: Int = unsubmitted.fold(0)(_.size)
-    val totalCount: Int = submittedCount + unsubmittedCount
-  }
-
   private def registrationNumbers(
     request: DataRequest[?]
   ): RegistrationNumbers =
@@ -68,7 +60,7 @@ class PreviousRegistrationNumbersController @Inject() (
     )
 
   private def prevRegNumbersUpdated(request: DataRequest[?]): Boolean =
-    request.userAnswers.get(PreviousRegNumbersUpdatedPage).fold(false)(_ => true)
+    request.userAnswers.get(PreviousRegNumbersUpdatedPage).getOrElse(false)
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -88,10 +80,7 @@ class PreviousRegistrationNumbersController @Inject() (
           view(
             preparedForm,
             mode,
-            regNumbers.submitted,
-            regNumbers.unsubmitted,
-            regNumbers.submittedCount,
-            regNumbers.unsubmittedCount,
+            regNumbers,
             regNumbersUpdated
           )
         )
@@ -114,10 +103,7 @@ class PreviousRegistrationNumbersController @Inject() (
                   view(
                     formWithErrors,
                     mode,
-                    regNumbers.submitted,
-                    regNumbers.unsubmitted,
-                    regNumbers.submittedCount,
-                    regNumbers.unsubmittedCount,
+                    regNumbers,
                     regNumbersUpdated
                   )
                 )

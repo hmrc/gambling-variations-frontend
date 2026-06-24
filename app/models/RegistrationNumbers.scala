@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import javax.inject.Inject
-
-import forms.mappings.Mappings
-import play.api.data.Form
-
-class PreviousRegistrationNumbersFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
-    Form(
-      "addPreviousRegistrationNumber" -> boolean("previousRegistrationNumbers.error.required")
-    )
+case class RegistrationNumbers(
+  submitted: Option[Seq[String]],
+  unsubmitted: Option[Seq[String]]
+) {
+  val submittedCount: Int = submitted.fold(0)(_.size)
+  val unsubmittedCount: Int = unsubmitted.fold(0)(_.size)
+  val totalCount: Int = submittedCount + unsubmittedCount
 }

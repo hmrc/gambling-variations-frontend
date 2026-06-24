@@ -26,19 +26,24 @@ import pages.UnsubmittedPreviousRegNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
-class UnsubmittedRegNumberViewModelSpec extends SpecBase with Matchers {
+class UnsubmittedPrevRegNumberViewModelSpec extends SpecBase with Matchers {
 
   "UnsubmittedRegNumberViewModel" - {
 
     "must populate correct view" in {
       val data = Json.obj(
-        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "previousRegistrationNumbers" -> Json.arr(
-          "XHM00000199",
-          "ZIU00001218"
-        ),
-        "unsubmittedPreviousRegNumbers" -> Json.arr(
-          "GTT28881666"
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> mgdRegNum,
+          "previousRegNumbersSection" -> Json.obj(
+            "previousRegistrationNumbers" -> Json.arr(
+              "XHM00000199",
+              "ZIU00001218"
+            ),
+            "unsubmittedPreviousRegNumbers" -> Json.arr(
+              "GTT28881666"
+            ),
+            "updated" -> true
+          )
         )
       )
       val baseUserAnswers =
@@ -52,7 +57,7 @@ class UnsubmittedRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val unsubmitted = UnsubmittedRegNumberViewModel(unsubmittedPreviousRegNumbers).summaryList
+      val unsubmitted = UnsubmittedPrevRegNumberViewModel(unsubmittedPreviousRegNumbers).summaryList
 
       unsubmitted.head.key.content mustEqual Text("GTT28881666")
       unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = "GTT28881666").url

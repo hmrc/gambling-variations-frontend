@@ -18,7 +18,7 @@ package views
 
 import base.SpecBase
 import forms.PreviousRegistrationNumbersFormProvider
-import models.NormalMode
+import models.{NormalMode, RegistrationNumbers}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
@@ -43,7 +43,8 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
   "PreviousRegistrationNumbersView" - {
     "must show expected values when data is populated" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1, true)(request, messages)
+      val html =
+        view(form, NormalMode, RegistrationNumbers(Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666"))), true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -58,7 +59,7 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
 
     "must show radio buttons when less than 3 numbers" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), None, 2, 0, false)(request, messages)
+      val html = view(form, NormalMode, RegistrationNumbers(Some(Seq("XHM00000199", "ZIU00001218")), None), false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -69,44 +70,45 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
     "must show pluralised H2 when unsubmitted previous numbers are present" in new Setup {
 
       val html =
-        view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001", "XYZ00000001")), 1, 2, false)(request, messages)
+        view(form, NormalMode, RegistrationNumbers(Some(Seq("A")), Some(Seq("ABC0000001", "XYZ00000001"))), false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".ready-to-submit-heading").text must include(messages("previousRegistrationNumbers.unsubmitted", "s"))
+      doc.select(".ready-to-submit-heading").text must include(messages("previousRegistrationNumbers.unsubmitted.plural"))
     }
 
     "must show pluralised H2 when previous numbers are present" in new Setup {
 
       val html =
-        view(form, NormalMode, Some(Seq("ABC0000001", "XYZ00000001")), Some(Seq("A")), 2, 1, false)(request, messages)
+        view(form, NormalMode, RegistrationNumbers(Some(Seq("ABC0000001", "XYZ00000001")), Some(Seq("A"))), false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".submitted-heading").text must include(messages("previousRegistrationNumbers.submitted", "s"))
+      doc.select(".submitted-heading").text must include(messages("previousRegistrationNumbers.submitted.plural"))
     }
 
     "must show singular H2 when one unsubmitted previous number is present" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001")), 1, 1, false)(request, messages)
+      val html = view(form, NormalMode, RegistrationNumbers(Some(Seq("A")), Some(Seq("ABC0000001"))), false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".ready-to-submit-heading").text must include(messages("previousRegistrationNumbers.unsubmitted", ""))
+      doc.select(".ready-to-submit-heading").text must include(messages("previousRegistrationNumbers.unsubmitted"))
     }
 
     "must show singular H2s when one previous number is present" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("A")), Some(Seq("ABC0000001")), 1, 1, false)(request, messages)
+      val html = view(form, NormalMode, RegistrationNumbers(Some(Seq("A")), Some(Seq("ABC0000001"))), false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".submitted-heading").text must include(messages("previousRegistrationNumbers.submitted", ""))
+      doc.select(".submitted-heading").text must include(messages("previousRegistrationNumbers.submitted"))
     }
 
     "must show max limit message when 3 numbers are present" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1, false)(request, messages)
+      val html =
+        view(form, NormalMode, RegistrationNumbers(Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666"))), false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 

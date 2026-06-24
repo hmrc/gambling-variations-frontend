@@ -20,7 +20,7 @@ import play.api.libs.json.JsPath
 
 case object RemovePreviousRegNumberPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ toString
 
   override def toString: String = "removePreviousRegNumber"
 }
