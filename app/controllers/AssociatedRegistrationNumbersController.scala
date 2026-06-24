@@ -23,7 +23,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegNumbersUpdatedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegNumbersUpdatedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -72,7 +72,6 @@ class AssociatedRegistrationNumbersController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-
       val preparedForm =
         request.userAnswers
           .get(AddAssociatedRegistrationNumberPage)
@@ -89,18 +88,15 @@ class AssociatedRegistrationNumbersController @Inject() (
           regNumbers.unsubmitted,
           regNumbers.submittedCount,
           regNumbers.unsubmittedCount,
-          regNumbersUpdated,
-          flag
+          regNumbersUpdated
         )
       )
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-
       val regNumbers = registrationNumbers(request)
       val regNumbersUpdated = associatedRegNumbersUpdated(request)
-    val flag = request.userAnswers.get(AssociatedRegNumberSubmittedPage).getOrElse(false)
 
       form
         .bindFromRequest()

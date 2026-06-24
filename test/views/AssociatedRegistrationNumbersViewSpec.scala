@@ -43,14 +43,13 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
   "AssociatedRegistrationNumbersView" - {
     "must show expected values when data is populated" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, None, true)(request, messages)
+      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), None, 3, 0, true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title             must include(messages("associatedRegistrationNumbers.title"))
-      doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
-      doc.select("p").text must include(
-        doc.select(".must-be-submitted-message").text         must include(messages("associatedRegistrationNumbers.paragraph"))
+      doc.title                                             must include(messages("associatedRegistrationNumbers.title"))
+      doc.select("h1").text                                 must include(messages("associatedRegistrationNumbers.heading"))
+      doc.select("p").text                                  must include(messages("associatedRegistrationNumbers.paragraph"))
       doc.select(".associated-reg-number-XHM00000199").text must include("XHM00000199")
       doc.select(".associated-reg-number-ZIU00001218").text must include("ZIU00001218")
       doc.select(".associated-reg-number-GTT28881666").text must include("GTT28881666")
