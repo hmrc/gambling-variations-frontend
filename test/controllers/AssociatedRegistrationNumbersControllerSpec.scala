@@ -65,9 +65,6 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
   private val baseUserAnswers =
     UserAnswers(userAnswersId, data)
 
-  private val alreadySubmittedInUa =
-    UserAnswers(userAnswersId, dataAlreadySubmitted)
-
   lazy val associatedRegistrationNumbersRoute = routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
 
   "AssociatedRegistrationNumbers Controller" - {
