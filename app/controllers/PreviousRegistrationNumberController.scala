@@ -33,16 +33,16 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
 class PreviousRegistrationNumberController @Inject() (
-                                                override val messagesApi: MessagesApi,
-                                                sessionRepository: SessionRepository,
-                                                authorise: AuthorisedAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: MgdTradeDetailsDataRequiredAction,
-                                                formProvider: PreviousRegistrationNumberFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: PreviousRegistrationNumberView
-                                              )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: MgdTradeDetailsDataRequiredAction,
+  formProvider: PreviousRegistrationNumberFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PreviousRegistrationNumberView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   val form: Form[String] = formProvider()

@@ -145,7 +145,6 @@ class NavigatorSpec extends SpecBase {
         routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
     }
 
-
     "must go from PreviousRegNumberPage to the check mode previous registration number page" in {
 
       navigator.nextPage(PreviousRegNumberPage, CheckMode, UserAnswers("id")) mustBe

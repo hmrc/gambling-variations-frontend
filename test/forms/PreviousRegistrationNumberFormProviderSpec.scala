@@ -60,7 +60,7 @@ class PreviousRegistrationNumberFormProviderSpec extends StringFieldBehaviours {
     "not bind an previous registration number that does not start with X" in {
       val result = form.bind(Map(fieldName -> "MAX6666444555")).apply(fieldName)
 
-      result.errors must contain only FormError(fieldName, invalidFormatKey,Seq(ChecksumValidator.mgdrnFormatRegex))
+      result.errors must contain only FormError(fieldName, invalidFormatKey, Seq(ChecksumValidator.mgdrnFormatRegex))
     }
 
     "not bind an previous registration number that does not have M as the third character" in {
