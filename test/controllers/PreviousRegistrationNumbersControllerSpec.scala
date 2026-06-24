@@ -77,6 +77,8 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
     UserAnswers(userAnswersId, dataAlreadySubmitted)
 
   lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode).url
+  lazy val previousRegNumbersRedirectRoute = routes.PreviousRegistrationNumbersController.onRedirect("ABC").url
+  lazy val removePrevRegNumberRoute = routes.RemovePreviousRegNumberController.onPageLoad(NormalMode).url
 
   "PreviousRegistrationNumbers Controller" - {
 
@@ -179,6 +181,30 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to remove prev reg number on submission" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(GET, previousRegNumbersRedirectRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        redirectLocation(result).value mustEqual removePrevRegNumberRoute
       }
     }
 
