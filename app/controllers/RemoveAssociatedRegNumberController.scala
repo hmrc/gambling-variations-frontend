@@ -20,9 +20,9 @@ import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
 
 import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import navigation.Navigator
-import pages.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
+import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -51,8 +51,8 @@ class RemoveAssociatedRegNumberController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(RemoveAssociatedRegNumberPage) match {
-      case None        => form
       case Some(value) => form.fill(value)
+      case None        => form
     }
 
     request.userAnswers.get(ChosenAssociatedRegNumberPage) match {
@@ -71,6 +71,7 @@ class RemoveAssociatedRegNumberController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(updateLoadedAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updateNewAnswers(updatedAnswers, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )

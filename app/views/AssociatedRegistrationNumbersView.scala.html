@@ -36,7 +36,8 @@
     unsubmittedAssociatedRegNumbers: Option[Seq[String]],
     submittedRegNumbersCount: Int,
     unsubmittedRegNumbersCount: Int,
-    assocRegNumbersUpdated: Boolean
+    assocRegNumbersUpdated: Boolean,
+    isFlagged: Boolean
     )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
@@ -48,6 +49,10 @@
         }
         @caption(messages("associatedRegistrationNumbers.caption"))
         @h1(messages("associatedRegistrationNumbers.heading"), classes = "govuk-heading-l")
+
+        @if(isFlagged) {
+            @p(messages("associatedRegistrationNumbers.paragraph"))
+        }
 
         @if(assocRegNumbersUpdated) {
             @p("associatedRegistrationNumbers.paragraph", extraClasses="must-be-submitted-message")
