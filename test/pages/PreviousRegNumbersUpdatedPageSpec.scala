@@ -23,11 +23,11 @@ class PreviousRegNumbersUpdatedPageSpec extends AnyFreeSpec with Matchers {
   "PreviousRegNumbersUpdatedPage" - {
 
     "must have the correct toString" in {
-      PreviousRegNumbersUpdatedPage.toString mustBe "previousRegistrationNumbers"
+      PreviousRegNumbersUpdatedPage.toString mustBe "updated"
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \  "previousRegNumbersUpdated"
+      val expectedPath: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ "updated"
       PreviousRegNumbersUpdatedPage.path mustBe expectedPath
     }
   }
