@@ -17,9 +17,9 @@
 package models
 
 case class RegistrationNumbers(
-                                submitted: Option[Seq[String]],
-                                unsubmitted: Option[Seq[String]]
-                              ) {
+  submitted: Option[Seq[String]],
+  unsubmitted: Option[Seq[String]]
+) {
   val submittedCount: Int = submitted.fold(0)(_.size)
   val unsubmittedCount: Int = unsubmitted.fold(0)(_.size)
   val totalCount: Int = submittedCount + unsubmittedCount
