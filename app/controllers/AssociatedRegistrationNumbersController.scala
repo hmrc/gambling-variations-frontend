@@ -22,7 +22,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,7 +48,7 @@ class AssociatedRegistrationNumbersController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
+    val flag = request.userAnswers.get(AssociatedRegNumberSubmittedPage).getOrElse(false)
     val preparedForm = request.userAnswers.get(AddAssociatedRegistrationNumberPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -59,7 +59,7 @@ class AssociatedRegistrationNumbersController @Inject() (
       case None           => 0
     }
 
-    Ok(view(preparedForm, mode, associatedRegNumberSeq, associatedRegNumberCount))
+    Ok(view(preparedForm, mode, associatedRegNumberSeq, associatedRegNumberCount, flag))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -68,6 +68,7 @@ class AssociatedRegistrationNumbersController @Inject() (
       case Some(sequence) => sequence.length
       case None           => 0
     }
+    val flag = request.userAnswers.get(AssociatedRegNumberSubmittedPage).getOrElse(false)
 
     form
       .bindFromRequest()
@@ -75,7 +76,7 @@ class AssociatedRegistrationNumbersController @Inject() (
         formWithErrors =>
           if (associatedRegNumberCount < 3) {
             Future
-              .successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount)))
+              .successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, flag)))
           } else {
             Future.successful(Redirect("#"))
           },

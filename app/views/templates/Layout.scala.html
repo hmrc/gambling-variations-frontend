@@ -26,7 +26,8 @@
     hmrcTimeoutDialog: HmrcTimeoutDialog,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     alphaBanner: StandardAlphaBanner,
-    hmrcStandardPage: HmrcStandardPage
+    hmrcStandardPage: HmrcStandardPage,
+    stylesheets: Stylesheets,
 )
 
 @(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = true, showHmrcBanner: Boolean = false)(contentBlock: Html)(implicit rh: RequestHeader, messages: Messages)
@@ -46,6 +47,7 @@
             language            = Some(messages.lang.code)
         ))
     }
+    @stylesheets()
 }
 
 @content = {

@@ -70,14 +70,13 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, false)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseUserAnswers.set(AddAssociatedRegistrationNumberPage, true).success.value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
@@ -89,7 +88,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3)(request, messages(application)).toString
+          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, false)(request, messages(application)).toString
       }
     }
 

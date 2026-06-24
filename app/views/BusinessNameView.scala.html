@@ -50,7 +50,7 @@
                         ActionItem(
                             href = controllers.routes.ChangeBusinessNameController.onPageLoad(businessType, NormalMode).url(),
                             content = "site.change",
-                            visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType.toString)))
+                            visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType.toString).toLowerCase))
                             )
                     )
                 ))
@@ -76,7 +76,7 @@
                             ActionItem(
                                 href = controllers.routes.BusinessTradingNameController.onPageLoad(NormalMode).url(),
                                 content = "site.change",
-                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.tradingName")))
+                                visuallyHiddenText = Some(messages("businessName.tradingName.hidden"))
                                 )
                             )
                     ))
@@ -86,12 +86,12 @@
                         ActionItem(
                             href = controllers.routes.BusinessTradingNameController.onPageLoad(NormalMode).url(),
                             content = "site.change",
-                            visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.tradingName")))
+                            visuallyHiddenText = Some(messages("businessName.tradingName.hidden"))
                                 ),
                             ActionItem(
                                 href = controllers.routes.RemoveTradeNameController.onPageLoad().url(),
                                 content = "site.remove",
-                                visuallyHiddenText = Some(tradingName.getOrElse(messages("businessName.tradingName")))
+                                visuallyHiddenText = Some(messages("businessName.tradingName.hidden"))
                                 )
                             ),
                 classes = "govuk-summary-list__actions govuk-!-width-one-third"
