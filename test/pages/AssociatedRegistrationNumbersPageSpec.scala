@@ -27,7 +27,7 @@ class AssociatedRegistrationNumbersPageSpec extends AnyFreeSpec with Matchers {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "associatedRegistrationNumbers"
+      val expectedPath: JsPath = JsPath \ "mgdTradeDetailsSection" \ "associatedRegNumbersSection" \ "associatedRegistrationNumbers"
       AssociatedRegistrationNumbersPage.path mustBe expectedPath
     }
   }

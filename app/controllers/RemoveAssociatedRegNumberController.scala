@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
 
 import javax.inject.Inject
-import models.{Mode, NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{AssociatedRegNumbersUpdatedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}

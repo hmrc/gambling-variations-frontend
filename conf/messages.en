@@ -316,8 +316,10 @@ associatedRegistrationNumbers.noLabel = No, return to check your trading details
 associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
 associatedRegistrationNumbers.error.required = Select yes if you want to add another associated registration number
 associatedRegistrationNumbers.change.hidden =  registration number {0}
-associatedRegistrationNumbers.submitted = Submitted registration number{0}
-associatedRegistrationNumbers.unsubmitted = Registration number{0} ready to submit
+associatedRegistrationNumbers.submitted = Submitted registration number
+associatedRegistrationNumbers.submitted.plural = Submitted registration numbers
+associatedRegistrationNumbers.unsubmitted = Registration number ready to submit
+associatedRegistrationNumbers.unsubmitted.plural = Registration numbers ready to submit
 
 
 businessTradeClass.title = What is the business trade class?

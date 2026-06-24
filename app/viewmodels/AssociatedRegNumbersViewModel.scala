@@ -26,7 +26,7 @@ case class AssociatedRegNumbersViewModel(associatedRegNumbers: Option[Seq[String
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = {
     associatedRegNumbers match {
       case Some(newAssocRegNumbers) =>
-        for (newAssocReg <- newAssocRegNumbers) yield {
+        newAssocRegNumbers.map(newAssocReg =>
           SummaryListRow(
             key = Key(content = Text(newAssocReg), classes = s"associated-reg-number associated-reg-number-$newAssocReg govuk-!-font-weight-regular"),
             actions = Some(
@@ -47,7 +47,7 @@ case class AssociatedRegNumbersViewModel(associatedRegNumbers: Option[Seq[String
               )
             )
           )
-        }
+        )
       case None => Seq.empty
     }
   }

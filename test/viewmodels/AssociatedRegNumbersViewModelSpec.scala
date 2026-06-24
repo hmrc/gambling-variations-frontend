@@ -32,15 +32,21 @@ class AssociatedRegNumbersViewModelSpec extends SpecBase with Matchers {
 
     "must populate correct view" in {
       val data = Json.obj(
-        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "associatedRegistrationNumbers" -> Json.arr(
-          "XHM00000199",
-          "ZIU00001218"
-        ),
-        "unsubmittedAssociatedRegNumbers" -> Json.arr(
-          "GTT28881666"
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> mgdRegNum,
+          "associatedRegNumbersSection" -> Json.obj(
+            "associatedRegistrationNumbers" -> Json.arr(
+              "XHM00000199",
+              "ZIU00001218"
+            ),
+            "unsubmittedAssociatedRegNumbers" -> Json.arr(
+              "GTT28881666"
+            ),
+            "updated" -> true
+          )
         )
       )
+
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 

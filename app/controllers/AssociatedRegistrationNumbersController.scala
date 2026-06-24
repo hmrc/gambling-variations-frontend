@@ -20,10 +20,10 @@ import controllers.actions.*
 
 import javax.inject.Inject
 import forms.AssociatedRegistrationNumbersFormProvider
-import models.Mode
+import models.{Mode, RegistrationNumbers}
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegNumbersUpdatedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumbersUpdatedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, UnsubmittedAssociatedRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -50,15 +50,6 @@ class AssociatedRegistrationNumbersController @Inject() (
 
   private val form = formProvider()
 
-  private case class RegistrationNumbers(
-    submitted: Option[Seq[String]],
-    unsubmitted: Option[Seq[String]]
-  ) {
-    val submittedCount: Int = submitted.fold(0)(_.size)
-    val unsubmittedCount: Int = unsubmitted.fold(0)(_.size)
-    val totalCount: Int = submittedCount + unsubmittedCount
-  }
-
   private def registrationNumbers(
     request: DataRequest[?]
   ): RegistrationNumbers =
@@ -84,10 +75,7 @@ class AssociatedRegistrationNumbersController @Inject() (
         view(
           preparedForm,
           mode,
-          regNumbers.submitted,
-          regNumbers.unsubmitted,
-          regNumbers.submittedCount,
-          regNumbers.unsubmittedCount,
+          regNumbers,
           regNumbersUpdated
         )
       )
@@ -108,10 +96,7 @@ class AssociatedRegistrationNumbersController @Inject() (
                   view(
                     formWithErrors,
                     mode,
-                    regNumbers.submitted,
-                    regNumbers.unsubmitted,
-                    regNumbers.submittedCount,
-                    regNumbers.unsubmittedCount,
+                    regNumbers,
                     regNumbersUpdated
                   )
                 )

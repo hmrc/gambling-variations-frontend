@@ -16,6 +16,7 @@
 
 @import views.html.components.{Caption, Paragraph, H1, H2}
 @import viewmodels.AssociatedRegNumbersViewModel
+@import models.RegistrationNumbers
 
 @this(
     layout: templates.Layout,
@@ -31,12 +32,7 @@
 )
 
 @(form: Form[_],
-    mode: Mode,
-    associatedRegNumbers: Option[Seq[String]],
-    unsubmittedAssociatedRegNumbers: Option[Seq[String]],
-    submittedRegNumbersCount: Int,
-    unsubmittedRegNumbersCount: Int,
-    assocRegNumbersUpdated: Boolean,
+    mode: Mode, regNumbers: RegistrationNumbers, assocRegNumbersUpdated: Boolean,
     )(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
@@ -53,30 +49,30 @@
             @p("associatedRegistrationNumbers.paragraph", extraClasses="must-be-submitted-message")
         }
 
-        @if(submittedRegNumbersCount > 1 && unsubmittedRegNumbersCount > 0){
-                @h2(messages("associatedRegistrationNumbers.submitted", "s"), classes = "govuk-heading-m submitted-heading")
-            } else if (submittedRegNumbersCount > 0) {
-                @h2(messages("associatedRegistrationNumbers.submitted", ""), classes = "govuk-heading-m submitted-heading")
+        @if(regNumbers.submittedCount > 1 && regNumbers.unsubmittedCount > 0){
+                @h2(messages("associatedRegistrationNumbers.submitted.plural"), classes = "govuk-heading-m submitted-heading")
+            } else if (regNumbers.submittedCount > 0) {
+                @h2(messages("associatedRegistrationNumbers.submitted"), classes = "govuk-heading-m submitted-heading")
             }
-        @if(submittedRegNumbersCount > 0) {
+        @if(regNumbers.submittedCount > 0) {
             @govukSummaryList(SummaryList(
-                rows = AssociatedRegNumbersViewModel(associatedRegNumbers).summaryList
+                rows = AssociatedRegNumbersViewModel(regNumbers.submitted).summaryList
                 ))
             }
 
-        @if(unsubmittedRegNumbersCount > 0 &&  unsubmittedRegNumbersCount < 2 && submittedRegNumbersCount > 0 ){
-                @h2(messages("associatedRegistrationNumbers.unsubmitted", ""), classes = "govuk-heading-m ready-to-submit-heading")
-            } else if (unsubmittedRegNumbersCount > 1 && submittedRegNumbersCount > 0){
-                @h2(messages("associatedRegistrationNumbers.unsubmitted", "s"), classes = "govuk-heading-m ready-to-submit-heading")
+        @if(regNumbers.unsubmittedCount > 0 &&  regNumbers.unsubmittedCount < 2 && regNumbers.submittedCount > 0 ){
+                @h2(messages("associatedRegistrationNumbers.unsubmitted"), classes = "govuk-heading-m ready-to-submit-heading")
+            } else if (regNumbers.unsubmittedCount > 1 && regNumbers.submittedCount > 0){
+                @h2(messages("associatedRegistrationNumbers.unsubmitted.plural"), classes = "govuk-heading-m ready-to-submit-heading")
             }
 
-        @if(unsubmittedRegNumbersCount > 0) {
+        @if(regNumbers.unsubmittedCount > 0) {
             @govukSummaryList(SummaryList(
-                rows = AssociatedRegNumbersViewModel(unsubmittedAssociatedRegNumbers).summaryList
+                rows = AssociatedRegNumbersViewModel(regNumbers.unsubmitted).summaryList
                 ))
             }
 
-        @if(submittedRegNumbersCount + unsubmittedRegNumbersCount < 3) {
+        @if(regNumbers.submittedCount + regNumbers.unsubmittedCount < 3) {
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("addAssociatedRegistrationNumber"),

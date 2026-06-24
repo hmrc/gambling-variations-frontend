@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.AssociatedRegistrationNumbersFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{NormalMode, RegistrationNumbers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -41,24 +41,32 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
   val form = formProvider()
 
   val data = Json.obj(
-    "updated"                -> true,
-    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-    "associatedRegistrationNumbers" -> Json.arr(
-      "XHM00000199",
-      "ZIU00001218"
-    ),
-    "unsubmittedAssociatedRegNumbers" -> Json.arr(
-      "GTT28881666"
+    "mgdTradeDetailsSection" -> Json.obj(
+      "mgdRegNum" -> mgdRegNum,
+      "associatedRegNumbersSection" -> Json.obj(
+        "associatedRegistrationNumbers" -> Json.arr(
+          "XHM00000199",
+          "ZIU00001218"
+        ),
+        "unsubmittedAssociatedRegNumbers" -> Json.arr(
+          "GTT28881666"
+        ),
+        "updated" -> true
+      )
     )
   )
 
   val dataAlreadySubmitted = Json.obj(
-    "updated"                -> true,
-    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-    "associatedRegistrationNumbers" -> Json.arr(
-      "XHM00000199",
-      "ZIU00001218",
-      "HMN290182098"
+    "mgdTradeDetailsSection" -> Json.obj(
+      "mgdRegNum" -> mgdRegNum,
+      "associatedRegNumbersSection" -> Json.obj(
+        "associatedRegistrationNumbers" -> Json.arr(
+          "XHM00000199",
+          "ZIU00001218",
+          "HMN290182098"
+        ),
+        "updated" -> true
+      )
     )
   )
 
@@ -82,9 +90,11 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666")), 2, 1, true)(request,
-                                                                                                                messages(application)
-                                                                                                               ).toString
+          view(form,
+               NormalMode,
+               RegistrationNumbers(submitted = Some(Seq("XHM00000199", "ZIU00001218")), unsubmitted = Some(Seq("GTT28881666"))),
+               true
+              )(request, messages(application)).toString
       }
     }
 
@@ -117,10 +127,14 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val twoNumbers = Json.obj(
-        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "associatedRegistrationNumbers" -> Json.arr(
-          "XHM00000199",
-          "ZIU00001218"
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> mgdRegNum,
+          "associatedRegNumbersSection" -> Json.obj(
+            "associatedRegistrationNumbers" -> Json.arr(
+              "XHM00000199",
+              "ZIU00001218"
+            )
+          )
         )
       )
 
