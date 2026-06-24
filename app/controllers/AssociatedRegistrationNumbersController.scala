@@ -80,10 +80,7 @@ class AssociatedRegistrationNumbersController @Inject() (
 
       val regNumbers = registrationNumbers(request)
       val regNumbersUpdated = associatedRegNumbersUpdated(request)
-
-      if (regNumbers.submittedCount == 3) {
-        Redirect(routes.SystemErrorController.onPageLoad())
-      } else {
+      
         Ok(
           view(
             preparedForm,
