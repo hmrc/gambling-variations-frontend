@@ -68,7 +68,7 @@ class AssociatedRegistrationNumbersController @Inject() (
     )
 
   private def associatedRegNumbersUpdated(request: DataRequest[?]): Boolean =
-    request.userAnswers.get(AssociatedRegNumbersUpdatedPage).fold(false)(_ => true)
+    request.userAnswers.get(AssociatedRegNumbersUpdatedPage).getOrElse(false)
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>

@@ -86,7 +86,7 @@ class RemoveAssociatedRegNumberController @Inject() (
           ua1
             .get(ChosenAssociatedRegNumberPage)
             .fold(Try(ua1))(assocRegNo =>
-              ua1.get(UnsubmittedAssociatedRegNumbersPage).match {
+              ua1.get(UnsubmittedAssociatedRegNumbersPage) match {
                 case Some(assocRegNoSeq) =>
                   val updatedSequence = assocRegNoSeq.filterNot(_ == assocRegNo)
                   ua1.set(UnsubmittedAssociatedRegNumbersPage, updatedSequence)
@@ -108,7 +108,7 @@ class RemoveAssociatedRegNumberController @Inject() (
           ua1
             .get(ChosenAssociatedRegNumberPage)
             .fold(Try(ua1))(assocRegNo =>
-              ua1.get(AssociatedRegistrationNumbersPage).match {
+              ua1.get(AssociatedRegistrationNumbersPage) match {
                 case Some(assocRegNoSeq) =>
                   val updatedSequence = assocRegNoSeq.filterNot(_ == assocRegNo)
                   ua1.set(AssociatedRegistrationNumbersPage, updatedSequence)

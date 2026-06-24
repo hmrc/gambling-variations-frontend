@@ -41,7 +41,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
   val form = formProvider()
 
   val data = Json.obj(
-    "updated"                -> false,
+    "updated"                -> true,
     "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
     "associatedRegistrationNumbers" -> Json.arr(
       "XHM00000199",
