@@ -23,7 +23,6 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddAssociatedRegistrationNumberPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -75,6 +74,8 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
     UserAnswers(userAnswersId, data)
 
   lazy val associatedRegistrationNumbersRoute = routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
+  lazy val associatedRegNumbersRedirectRoute = routes.AssociatedRegistrationNumbersController.onRedirect("ABC").url
+  lazy val removeAssocRegNumberRoute = routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
 
   "AssociatedRegistrationNumbers Controller" - {
 
@@ -122,6 +123,31 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+
+      }
+    }
+
+    "must redirect to change registration details on submission" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(GET, associatedRegNumbersRedirectRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        redirectLocation(result).value mustEqual removeAssocRegNumberRoute
       }
     }
 
