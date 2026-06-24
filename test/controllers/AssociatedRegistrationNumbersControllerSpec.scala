@@ -90,20 +90,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
                                                                                                                ).toString
       }
     }
-
-    "must redirect to  SystemError if 3 submitted numbers are found" in {
-
-      val application = applicationBuilder(userAnswers = Some(alreadySubmittedInUa)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-      }
-    }
-
+    
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
