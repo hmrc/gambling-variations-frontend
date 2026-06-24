@@ -69,14 +69,37 @@ class RemoveAssociatedRegNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, chosenRegNumber))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+              updatedAnswers <- Future.fromTry(updateLoadedAnswers(request.userAnswers, value))
+              updatedAnswers <- Future.fromTry(updateNewAnswers(updatedAnswers, value))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )
     } getOrElse Future.successful(Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()))
   }
 
-  private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
+  private def updateNewAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
+    for {
+      ua1 <- userAnswers.set(RemoveAssociatedRegNumberPage, value)
+      ua2 <- {
+        if (value) {
+          ua1
+            .get(ChosenAssociatedRegNumberPage)
+            .fold(Try(ua1))(assocRegNo =>
+              ua1.get(UnsubmittedAssociatedRegNumbersPage).match {
+                case Some(assocRegNoSeq) =>
+                  val updatedSequence = assocRegNoSeq.filterNot(_ == assocRegNo)
+                  ua1.set(UnsubmittedAssociatedRegNumbersPage, updatedSequence)
+                case None => Try(ua1)
+              }
+            )
+        } else {
+          Try(ua1)
+        }
+      }
+    } yield ua2
+  }
+
+  private def updateLoadedAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
     for {
       ua1 <- userAnswers.set(RemoveAssociatedRegNumberPage, value)
       ua2 <- {
@@ -88,12 +111,6 @@ class RemoveAssociatedRegNumberController @Inject() (
                 case Some(assocRegNoSeq) =>
                   val updatedSequence = assocRegNoSeq.filterNot(_ == assocRegNo)
                   ua1.set(AssociatedRegistrationNumbersPage, updatedSequence)
-                  ua1.get(UnsubmittedAssociatedRegNumbersPage).match {
-                    case Some(unsubmittedSeq) =>
-                      val updatedSequence = unsubmittedSeq.filterNot(_ == assocRegNo)
-                      ua1.set(UnsubmittedAssociatedRegNumbersPage, updatedSequence)
-                    case None => Try(ua1)
-                  }
                 case None => Try(ua1)
               }
             )
