@@ -21,7 +21,7 @@ import forms.AssociatedRegNumberFormProvider
 
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
-import pages.{AssociatedRegNumberPage, AssociatedRegistrationNumbersPage}
+import pages.{AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -74,6 +74,7 @@ class AssociatedRegNumberController @Inject() (
           } else {
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, associatedRegNumber))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(routes.AssociatedRegNumberController.onPageLoad(mode))
           }
