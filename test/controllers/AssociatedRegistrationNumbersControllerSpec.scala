@@ -127,7 +127,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       }
     }
 
-    "must redirect to change registration details on submission" in {
+    "must redirect to remove assoc reg number on submission" in {
 
       val mockSessionRepository = mock[SessionRepository]
 
