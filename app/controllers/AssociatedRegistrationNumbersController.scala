@@ -80,19 +80,18 @@ class AssociatedRegistrationNumbersController @Inject() (
 
       val regNumbers = registrationNumbers(request)
       val regNumbersUpdated = associatedRegNumbersUpdated(request)
-      
-        Ok(
-          view(
-            preparedForm,
-            mode,
-            regNumbers.submitted,
-            regNumbers.unsubmitted,
-            regNumbers.submittedCount,
-            regNumbers.unsubmittedCount,
-            regNumbersUpdated
-          )
+
+      Ok(
+        view(
+          preparedForm,
+          mode,
+          regNumbers.submitted,
+          regNumbers.unsubmitted,
+          regNumbers.submittedCount,
+          regNumbers.unsubmittedCount,
+          regNumbersUpdated
         )
-      }
+      )
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
