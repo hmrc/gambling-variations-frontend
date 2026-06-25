@@ -32,10 +32,8 @@ class FaxNumberFormProvider @Inject() extends Mappings {
   def apply(prefix: String): Form[String] =
     Form(
       "faxNumber" -> text(s"$prefix.error.required")
-        .transform[String](_.trim, identity)
         .verifying(maxLength(prefix))
         .verifying(regexp(faxNumberCharactersRegex, s"$prefix.error.invalid.characters"))
-        .transform[String](_.replace(" ", ""), identity)
     )
 
   def maxLength(prefix: String): Constraint[String] =

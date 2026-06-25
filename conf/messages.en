@@ -85,6 +85,7 @@ businessName.table.paragraph.partnership = If the partnership operates under a d
 businessName.table.paragraph.llp = If the limited liability partnership operates under a different name, you need to add a trading name.
 businessName.table.link = Change
 businessName.tradingName = Trading name
+businessName.tradingName.hidden = trading name
 businessName.notProvided = Not provided
 businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
@@ -450,6 +451,18 @@ otherTradeClass.checkYourAnswersLabel = What is your business trade class?
 otherTradeClass.error.required = Enter your business trade class
 otherTradeClass.error.invalid = Your business trade class must be in the correct format
 otherTradeClass.textarea.label = You can enter up to 300 characters
+
+previousRegistrationNumber.title = What is your previous registration number?
+previousRegistrationNumber.heading = What is your previous registration number?
+previousRegistrationNumber.heading.caption = Change registration details
+previousRegistrationNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
+previousRegistrationNumber.checkYourAnswersLabel = Previous registration number
+previousRegistrationNumber.error.required = Enter your previous registration number
+previousRegistrationNumber.error.invalid.characters = Your previous registration number must only include letters a to z and numbers 0 to 9
+previousRegistrationNumber.error.invalid.format = Your previous registration number must be in the correct format
+previousRegistrationNumber.error.invalidReference = Enter a real previous registration number
+previousRegistrationNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
+previousRegistrationNumber.change.hidden = previous registration number
 
 
 

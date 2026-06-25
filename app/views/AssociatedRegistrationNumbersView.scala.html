@@ -29,7 +29,7 @@
     govukSummaryList : GovukSummaryList
 )
 
-@(form: Form[_], mode: Mode, associatedRegNumbers: Option[Seq[String]], associatedRegNumberCount: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, associatedRegNumbers: Option[Seq[String]], associatedRegNumberCount: Int, isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
 
@@ -40,7 +40,10 @@
         }
         @caption(messages("associatedRegistrationNumbers.caption"))
         @h1(messages("associatedRegistrationNumbers.heading"), classes = "govuk-heading-l")
-        @p("associatedRegistrationNumbers.paragraph")
+
+        @if(isFlagged) {
+            @p(messages("associatedRegistrationNumbers.paragraph"))
+        }
 
         @govukSummaryList(SummaryList(
         rows = AssociatedRegNumberViewModel(associatedRegNumbers).summaryList

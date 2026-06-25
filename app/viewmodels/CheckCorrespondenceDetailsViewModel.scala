@@ -81,8 +81,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceName.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       }
@@ -109,8 +108,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       )
@@ -150,8 +148,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       }
@@ -186,8 +183,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       }
@@ -214,8 +210,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       )
@@ -255,8 +250,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       }
@@ -272,12 +266,11 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         Actions(
           items = Seq(
             ActionItem(
-              href               = "#",
+              href               = controllers.routes.CorrespondenceContactNumberController.onPageLoad(NormalMode).url,
               content            = "site.change",
               visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.contactNumbers.hidden"))
             )
-          ),
-          classes = "govuk-summary-list__actions govuk-!-width-one-third"
+          )
         )
       )
     )
@@ -303,8 +296,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addFaxNumber.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       )
@@ -323,7 +315,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
               )
@@ -340,12 +332,11 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
               ),
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.RemoveCorrespondenceFaxNumberController.onPageLoad(NormalMode).url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       }
@@ -372,8 +363,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addEmailAddress.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       )
@@ -413,8 +403,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr.hidden"))
               )
-            ),
-            classes = "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
         )
       }
