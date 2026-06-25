@@ -24,20 +24,21 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages.{GroupMemberPage, TradingDetailsChangeFlagPage}
+import pages._
+import models._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckTradingDetailsController @Inject() (
-  override val messagesApi: MessagesApi,
-  authorised: AuthorisedAction,
-  getData: DataRetrievalAction,
-  checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
-  gamblingConnector: GamblingConnector,
-  val controllerComponents: MessagesControllerComponents,
-  view: CheckTradingDetailsView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+                                                override val messagesApi: MessagesApi,
+                                                authorised: AuthorisedAction,
+                                                getData: DataRetrievalAction,
+                                                checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
+                                                gamblingConnector: GamblingConnector,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: CheckTradingDetailsView
+                                              )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
@@ -50,10 +51,7 @@ class CheckTradingDetailsController @Inject() (
 
       val isGroupMemberF: Future[Boolean] =
         request.userAnswers.get(GroupMemberPage) match {
-
-          case Some(value) =>
-            Future.successful(value)
-
+          case Some(value) => Future.successful(value)
           case None =>
             gamblingConnector
               .getBusinessDetails(request.mgdRegNum)
@@ -76,6 +74,57 @@ class CheckTradingDetailsController @Inject() (
             showChangeMessage
           )
         )
+      }
+    }
+
+  def onPreviousRegNumbers: Action[AnyContent] =
+    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+
+      val previousRegsExist =
+        CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).previousMgd.rows.nonEmpty
+
+      if (previousRegsExist) {
+        Redirect(routes.PreviousRegistrationNumberController.onPageLoad(NormalMode))
+      } else {
+        Redirect(routes.PreviousRegistrationNumberController.onPageLoad(NormalMode))
+      }
+    }
+
+
+  def onAssociatedRegNumbers: Action[AnyContent] =
+    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+
+      val associatedRegsExist =
+        CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).associatedMgd.rows.nonEmpty
+
+      if (associatedRegsExist) {
+        Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode))
+      } else {
+        Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode))
+      }
+    }
+
+  def onContinue: Action[AnyContent] =
+    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+
+      val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
+      val seasonalOpt   = request.userAnswers.get(SeasonalBusinessPage)
+      val otherDescOpt  = request.userAnswers.get(OtherTradeClassPage)
+
+      if (tradeClassOpt.isEmpty) {
+        Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+      }
+
+      else if (seasonalOpt.isEmpty) {
+        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+      }
+
+      else if (tradeClassOpt.contains(BusinessTradeClass.Other) && otherDescOpt.isEmpty) {
+        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+      }
+
+      else {
+        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
       }
     }
 }
