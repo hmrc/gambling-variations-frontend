@@ -62,12 +62,4 @@ class CheckCorrespondenceDetailsController @Inject() (
       )
     )
   }
-
-  def onRedirect(): Action[AnyContent] =
-    (authorised andThen getData andThen requireData).async { implicit request =>
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceDetailsChangesPage, true))
-        _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad().url)
-    }
 }

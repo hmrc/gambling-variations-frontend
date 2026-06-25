@@ -19,6 +19,7 @@ package controllers
 import controllers.actions.*
 import forms.EmailAddressFormProvider
 import models.Mode
+import utils.HasChanged
 import navigation.Navigator
 import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -61,9 +62,12 @@ class BusinessEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val ua = request.userAnswers
+          val hasChanged = HasChanged.check(value, BusinessContactDetailsChanges, ua)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
+            updatedAnswers <- Future.fromTry(ua.set(BusinessEmailAddressPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsChanges, hasChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
       )
