@@ -22,7 +22,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, TradingDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -83,6 +83,7 @@ class AssociatedRegistrationNumbersController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
       )

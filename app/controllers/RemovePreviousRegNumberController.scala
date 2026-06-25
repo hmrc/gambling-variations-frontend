@@ -22,7 +22,7 @@ import forms.RemovePreviousRegNumberFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage, RemovePreviousRegNumberPage}
+import pages.{ChosenPreviousRegNumberPage, PreviousRegistrationNumbersPage, RemovePreviousRegNumberPage, TradingDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -70,6 +70,7 @@ class RemovePreviousRegNumberController @Inject() (
           value =>
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsSubmittedPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemovePreviousRegNumberPage, mode, updatedAnswers))
         )

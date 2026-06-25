@@ -21,7 +21,7 @@ import forms.PreviousRegistrationNumberFormProvider
 
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
-import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersPage}
+import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersPage, TradingDetailsSubmittedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -74,6 +74,7 @@ class PreviousRegistrationNumberController @Inject() (
           } else {
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, previousRegistrationNumber))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsSubmittedPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(routes.PreviousRegistrationNumberController.onPageLoad(mode))
           }
