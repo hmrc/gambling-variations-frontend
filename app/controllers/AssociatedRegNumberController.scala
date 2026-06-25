@@ -21,7 +21,7 @@ import forms.AssociatedRegNumberFormProvider
 
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
-import pages.{AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage}
+import pages.{AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, UnsubmittedAssociatedRegNumbersPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -66,7 +66,6 @@ class AssociatedRegNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         associatedRegNumber => {
           val currentAssociatedRegNumbers = request.userAnswers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
-
           if (currentAssociatedRegNumbers.contains(associatedRegNumber)) {
             Future.successful(
               BadRequest(view(form.fill(associatedRegNumber).withError(fieldName, "associatedRegNumber.error.duplicate"), mode))
@@ -76,24 +75,23 @@ class AssociatedRegNumberController @Inject() (
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, associatedRegNumber))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(routes.AssociatedRegNumberController.onPageLoad(mode))
+            } yield Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(mode))
           }
         }
       )
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, associatedRegNumber: String): Try[UserAnswers] = {
-    val currentAssociatedRegNumbers = userAnswers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
+    val currentAssociatedRegNumbers = userAnswers.get(UnsubmittedAssociatedRegNumbersPage).getOrElse(Seq.empty)
     val updatedAssociatedRegNumbers =
       if (currentAssociatedRegNumbers.contains(associatedRegNumber)) {
         currentAssociatedRegNumbers
       } else {
         currentAssociatedRegNumbers :+ associatedRegNumber
       }
-
     for {
       updatedAnswers <- userAnswers.set(AssociatedRegNumberPage, associatedRegNumber)
-      updatedAnswers <- updatedAnswers.set(AssociatedRegistrationNumbersPage, updatedAssociatedRegNumbers)
+      updatedAnswers <- updatedAnswers.set(UnsubmittedAssociatedRegNumbersPage, updatedAssociatedRegNumbers)
     } yield updatedAnswers
   }
 }
