@@ -52,7 +52,7 @@ class IsSeasonalBusinessSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
+              routes.SeasonalBusinessController.onPageLoad(CheckMode).url
             ).withVisuallyHiddenText(
               messagesApi("checkTradingDetails.seasonalBusiness.change.hidden")
             )
@@ -76,7 +76,7 @@ class IsSeasonalBusinessSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
+              routes.SeasonalBusinessController.onPageLoad(CheckMode).url
             ).withVisuallyHiddenText(
               messagesApi("checkTradingDetails.seasonalBusiness.change.hidden")
             )
