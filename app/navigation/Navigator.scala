@@ -40,15 +40,16 @@ class Navigator @Inject() () {
     case BusinessTradeClassPage               => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
     case IsSeasonalBusinessPage               => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case OtherTradeClassPage                  => _ => routes.OtherTradeClassController.onPageLoad(NormalMode)
-    case CorrespondenceFaxNumberPage          => _ => routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode)
     case AssociatedRegNumberPage              => _ => routes.AssociatedRegNumberController.onPageLoad(NormalMode)
-    case RemoveCorrespondenceFaxNumberPage    => _ => routes.RemoveCorrespondenceFaxNumberController.onPageLoad(NormalMode)
     case AssociatedRegistrationNumbersPage    => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
+    case CorrespondenceContactNumberPage      => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceFaxNumberPage          => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceEmailPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceFaxNumberPage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceEmailAddressPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case PreviousRegNumberPage                => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
     case RemoveAssociatedRegNumberPage        => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
     case RemovePreviousRegNumberPage          => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
-    case CorrespondenceEmailPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceContactNumberPage      => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
-    case RemoveCorrespondenceEmailAddressPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                    => _ => routes.IndexController.onPageLoad()
   }
 
@@ -63,6 +64,7 @@ class Navigator @Inject() () {
     case RemoveCorrespondenceFaxNumberPage => _ => routes.RemoveCorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
     case OtherTradeClassPage               => _ => routes.OtherTradeClassController.onPageLoad(CheckMode)
+    case PreviousRegNumberPage             => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
     case _                                 => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
