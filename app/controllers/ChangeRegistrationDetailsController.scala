@@ -64,7 +64,7 @@ class ChangeRegistrationDetailsController @Inject() (
 
             val businessAddressChanged =
               request.userAnswers
-                .get(BusinessNameChangesPage)
+                .get(BusinessAddressChangesPage)
                 .getOrElse(false)
 
             val contactDetailsChanged =

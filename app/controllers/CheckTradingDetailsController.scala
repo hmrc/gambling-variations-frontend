@@ -18,6 +18,7 @@ package controllers
 
 import connectors.GamblingConnector
 import controllers.actions.*
+
 import javax.inject.Inject
 import repositories.SessionRepository
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -25,7 +26,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages.{GroupMemberPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.{GroupMemberPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage, TradingDetailsSubmittedPage}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -83,6 +84,7 @@ class CheckTradingDetailsController @Inject() (
 
   def onRedirect(): Action[AnyContent] =
     (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
+      val hasChanged: Boolean = request.userAnswers.get(TradingDetailsSubmittedPage).getOrElse(false)
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingDetailsChangesPage, true))
         _              <- sessionRepository.set(updatedAnswers)
