@@ -22,7 +22,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -83,6 +83,8 @@ class AssociatedRegistrationNumbersController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.remove(AssociatedRegNumberPage))
+            updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
       )
@@ -94,6 +96,16 @@ class AssociatedRegistrationNumbersController @Inject() (
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
         _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad(mode))
+    }
+
+  def onChangeRedirect(mode: Mode, assocRegNumber: String): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(
+                            request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber)
+                          )
+        _ <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad(mode))
     }
 
 }

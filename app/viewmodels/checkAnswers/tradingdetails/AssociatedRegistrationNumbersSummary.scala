@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import pages.AssociatedRegistrationNumbersPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -55,7 +55,7 @@ object AssociatedRegistrationNumbersSummary {
       val actions = Seq(
         ActionItemViewModel(
           "site.change",
-          routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+          routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
         ).withVisuallyHiddenText(
           messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
         )

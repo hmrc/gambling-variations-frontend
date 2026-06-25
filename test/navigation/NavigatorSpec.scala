@@ -127,7 +127,7 @@ class NavigatorSpec extends SpecBase {
         "must go from AssociatedRegNumberPage to the check mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, CheckMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegNumberController.onPageLoad(CheckMode)
+            routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
         }
 
         "must go from SoleProprietorPage to the check mode sole proprietor page" in {
