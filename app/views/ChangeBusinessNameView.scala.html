@@ -44,12 +44,8 @@
             ).withAttribute("autocomplete" -> "value")
         )
 
-        <p class="govuk-body">
-            @govukButton(
-                ButtonViewModel(messages("site.continue"))
-                    .withCssClass("button.govuk-button")
-                    .asLink(routes.ChangeBusinessNameController.onRedirect().url)
-            )
-    </p>
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
     }
 }

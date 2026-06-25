@@ -21,7 +21,7 @@ import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.{BusinessNameChangesPage, BusinessNamePage, BusinessNameSubmittedPage, BusinessTypePage, SoleProprietorPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessNameChangesPage, BusinessNamePage, BusinessNameSubmittedPage, BusinessTypePage, SoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -107,12 +107,5 @@ class ChangeBusinessNameController @Inject() (
             )
         }
       } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
-    }
-  def onRedirect(): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameChangesPage, true))
-        _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad().url)
     }
 }

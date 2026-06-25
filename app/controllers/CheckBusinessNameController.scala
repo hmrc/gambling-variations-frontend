@@ -19,12 +19,14 @@ package controllers
 import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
 import pages.*
+import repositories.SessionRepository
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessNameView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
@@ -32,8 +34,10 @@ class CheckBusinessNameController @Inject() (
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessNameDataRequiredAction,
+  sessionRepository: SessionRepository,
   view: BusinessNameView
-)() extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
@@ -52,5 +56,14 @@ class CheckBusinessNameController @Inject() (
     businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
 
   }
+
+  def onRedirect(): Action[AnyContent] =
+    (authorised andThen getData andThen requireData).async { implicit request =>
+      val hasChanged: Boolean = request.userAnswers.get(BusinessNameSubmittedPage).getOrElse(false)
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameChangesPage, hasChanged))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+    }
 
 }
