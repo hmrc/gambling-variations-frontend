@@ -51,7 +51,7 @@
         }
 
         @if(regNumbers.submittedCount > 1 && regNumbers.unsubmittedCount > 0){
-                @h2(messages("previousRegistrationNumbers.submitted.plural"), classes = "govuk-heading-m submitted-heading")
+                @h2(messages("regNumbers.submitted.plural"), classes = "govuk-heading-m submitted-heading")
             } else if (regNumbers.submittedCount > 0) {
                 @h2(messages("previousRegistrationNumbers.submitted"), classes = "govuk-heading-m submitted-heading")
             }
