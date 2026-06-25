@@ -29,7 +29,7 @@ class OtherTradeClassFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "otherTradeClass" -> text("otherTradeClass.error.required")
-        .verifying(maxLength(300, ""))
+        .verifying(maxLength(300, "otherTradeClass.error.length"))
         .verifying(regexp(otherTradeClassRegex, "otherTradeClass.error.invalid"))
     )
 }
