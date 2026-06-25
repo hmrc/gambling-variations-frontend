@@ -436,6 +436,7 @@ checkCorrespondenceDetails.label.phoneNumber = Phone number:
 checkCorrespondenceDetails.label.mobilePhoneNumber = Mobile number:
 checkCorrespondenceDetails.message.notProvided = Not provided
 checkCorrespondenceDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
+checkCorrespondenceDetails.message.remove = Remove all correspondence details
 
 correspondenceEmailAddress.title = What email address should we use for correspondence?
 correspondenceEmailAddress.heading = What email address should we use for correspondence?
