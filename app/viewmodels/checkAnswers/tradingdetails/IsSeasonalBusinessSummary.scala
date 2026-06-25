@@ -35,7 +35,7 @@ object IsSeasonalBusinessSummary {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.FaxNumberController.onPageLoad(CheckMode).url
+            routes.SeasonalBusinessController.onPageLoad(CheckMode).url
           ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
         )
       )
