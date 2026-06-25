@@ -82,7 +82,7 @@ class AssociatedRegNumberController @Inject() (
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, associatedRegNumber: String): Try[UserAnswers] = {
-    val currentAssociatedRegNumbers = userAnswers.get(UnsubmittedAssociatedRegNumbersPage).getOrElse(Seq.empty)
+    val currentAssociatedRegNumbers = userAnswers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
     val updatedAssociatedRegNumbers =
       if (currentAssociatedRegNumbers.contains(associatedRegNumber)) {
         currentAssociatedRegNumbers
@@ -91,7 +91,7 @@ class AssociatedRegNumberController @Inject() (
       }
     for {
       updatedAnswers <- userAnswers.set(AssociatedRegNumberPage, associatedRegNumber)
-      updatedAnswers <- updatedAnswers.set(UnsubmittedAssociatedRegNumbersPage, updatedAssociatedRegNumbers)
+      updatedAnswers <- updatedAnswers.set(AssociatedRegistrationNumbersPage, updatedAssociatedRegNumbers)
     } yield updatedAnswers
   }
 }
