@@ -49,7 +49,7 @@
             @p("associatedRegistrationNumbers.paragraph", extraClasses="must-be-submitted-message")
         }
 
-        @if(regNumbers.submittedCount > 1 && regNumbers.unsubmittedCount > 0){
+        @if(regNumbers.submittedCount > 1){
                 @h2(messages("associatedRegistrationNumbers.submitted.plural"), classes = "govuk-heading-m submitted-heading")
             } else if (regNumbers.submittedCount > 0) {
                 @h2(messages("associatedRegistrationNumbers.submitted"), classes = "govuk-heading-m submitted-heading")
