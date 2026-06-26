@@ -19,16 +19,16 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-class AssociatedRegistrationNumbersPageSpec extends AnyFreeSpec with Matchers {
-  "AssociatedRegistrationNumbersPage" - {
+class RemoveAssociatedRegNumberPageSpec extends AnyFreeSpec with Matchers {
+  "RemoveAssociatedRegNumberPage" - {
 
     "must have the correct toString" in {
-      AssociatedRegistrationNumbersPage.toString mustBe "associatedRegistrationNumbers"
+      RemoveAssociatedRegNumberPage.toString mustBe "removeAssociatedRegNumber"
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "mgdTradeDetailsSection" \ "associatedRegNumbersSection" \ "associatedRegistrationNumbers"
-      AssociatedRegistrationNumbersPage.path mustBe expectedPath
+      val expectedPath: JsPath = JsPath \ "mgdTradeDetailsSection" \ "associatedRegNumbersSection" \ "removeAssociatedRegNumber"
+      RemoveAssociatedRegNumberPage.path mustBe expectedPath
     }
   }
 }

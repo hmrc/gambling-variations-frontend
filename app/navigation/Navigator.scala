@@ -41,14 +41,15 @@ class Navigator @Inject() () {
     case IsSeasonalBusinessPage               => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case OtherTradeClassPage                  => _ => routes.OtherTradeClassController.onPageLoad(NormalMode)
     case AssociatedRegNumberPage              => _ => routes.AssociatedRegNumberController.onPageLoad(NormalMode)
-    case AssociatedRegistrationNumbersPage    => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
     case CorrespondenceContactNumberPage      => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceFaxNumberPage          => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemovePreviousRegNumberPage          => _ => routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode)
     case PreviousRegNumberPage                => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+    case RemovePreviousRegNumberPage          => _ => routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode)
+    case AssociatedRegistrationNumbersPage    => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
+    case RemoveAssociatedRegNumberPage        => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
     case _                                    => _ => routes.IndexController.onPageLoad()
   }
 
@@ -61,10 +62,11 @@ class Navigator @Inject() () {
     case CorrespondenceFaxNumberPage       => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case AssociatedRegNumberPage           => _ => routes.AssociatedRegNumberController.onPageLoad(CheckMode)
     case RemoveCorrespondenceFaxNumberPage => _ => routes.RemoveCorrespondenceFaxNumberController.onPageLoad(CheckMode)
-    case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
     case OtherTradeClassPage               => _ => routes.OtherTradeClassController.onPageLoad(CheckMode)
-    case RemovePreviousRegNumberPage       => _ => routes.PreviousRegistrationNumbersController.onPageLoad(CheckMode)
     case PreviousRegNumberPage             => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    case RemovePreviousRegNumberPage       => _ => routes.PreviousRegistrationNumbersController.onPageLoad(CheckMode)
+    case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
+    case RemoveAssociatedRegNumberPage     => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
     case _                                 => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
