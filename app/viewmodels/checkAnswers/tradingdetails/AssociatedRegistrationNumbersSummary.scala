@@ -52,10 +52,19 @@ object AssociatedRegistrationNumbersSummary {
           )
       }
 
+      val hasNumbers = numbers.nonEmpty
+
+      val route =
+        if (hasNumbers) {
+          routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
+        } else {
+          routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
+        }
+
       val actions = Seq(
         ActionItemViewModel(
           "site.change",
-          routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
+          route
         ).withVisuallyHiddenText(
           messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
         )
