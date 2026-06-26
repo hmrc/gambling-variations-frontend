@@ -17,7 +17,6 @@
 package viewmodels
 
 import controllers.routes
-import models.NormalMode
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.stringToText

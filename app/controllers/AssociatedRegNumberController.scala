@@ -18,9 +18,7 @@ package controllers
 
 import controllers.actions.*
 import forms.AssociatedRegNumberFormProvider
-
-import javax.inject.Inject
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.*
 import play.api.data.Form
@@ -30,8 +28,8 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AssociatedRegNumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class AssociatedRegNumberController @Inject() (
   override val messagesApi: MessagesApi,

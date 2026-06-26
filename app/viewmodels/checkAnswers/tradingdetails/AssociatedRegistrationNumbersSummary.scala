@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import pages.AssociatedRegistrationNumbersPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
