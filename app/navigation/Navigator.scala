@@ -48,6 +48,8 @@ class Navigator @Inject() () {
     case RemoveCorrespondenceFaxNumberPage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case PreviousRegNumberPage                => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+    case RemoveAssociatedRegNumberPage        => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
+    case RemovePreviousRegNumberPage          => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
     case _                                    => _ => routes.IndexController.onPageLoad()
   }
 

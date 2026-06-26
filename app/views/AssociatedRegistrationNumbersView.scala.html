@@ -45,9 +45,10 @@
             @p(messages("associatedRegistrationNumbers.paragraph"))
         }
 
-        @govukSummaryList(SummaryList(
-        rows = AssociatedRegNumberViewModel(associatedRegNumbers).summaryList
-        ))
+        @if(associatedRegNumberCount > 0) {
+            @govukSummaryList(SummaryList(
+                rows = AssociatedRegNumberViewModel(associatedRegNumbers).summaryList
+            ))}
 
         @if(associatedRegNumberCount < 3) {
         @govukRadios(
@@ -60,7 +61,7 @@
             ).withCssClass("assoc-reg-radio-buttons")
         )
         } else {
-            @p("associatedRegistrationNumbers.hint", extraClasses="assoc-reg-max-limit-reached")
+            @p("associatedRegistrationNumbers.max", extraClasses="assoc-reg-max-limit-reached")
         }
 
         @govukButton(
