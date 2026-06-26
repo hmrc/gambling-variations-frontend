@@ -56,14 +56,4 @@ class CheckBusinessNameController @Inject() (
     businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
 
   }
-
-  def onRedirect(): Action[AnyContent] =
-    (authorised andThen getData andThen requireData).async { implicit request =>
-      val hasChanged: Boolean = request.userAnswers.get(BusinessNameSubmittedPage).getOrElse(false)
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNameChangesPage, hasChanged))
-        _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad().url)
-    }
-
 }

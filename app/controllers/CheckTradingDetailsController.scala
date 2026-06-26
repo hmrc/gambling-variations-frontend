@@ -81,13 +81,4 @@ class CheckTradingDetailsController @Inject() (
         )
       }
     }
-
-  def onRedirect(): Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
-      val hasChanged: Boolean = request.userAnswers.get(TradingDetailsSubmittedPage).getOrElse(false)
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingDetailsChangesPage, true))
-        _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad().url)
-    }
 }
