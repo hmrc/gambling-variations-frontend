@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object RemovePreviousRegNumberPage extends QuestionPage[Boolean] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ toString
+class PreviousRegistrationNumbersFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "removePreviousRegNumber"
+  def apply(): Form[Boolean] =
+    Form(
+      "addPreviousRegistrationNumber" -> boolean("previousRegistrationNumbers.error.required")
+    )
 }
