@@ -18,9 +18,7 @@ package pages
 
 import play.api.libs.json.JsPath
 
-case object RemovePreviousRegNumberPage extends QuestionPage[Boolean] {
-
+case object PreviousRegNumbersUpdatedPage extends QuestionPage[Boolean] {
   override def path: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ toString
-
-  override def toString: String = "removePreviousRegNumber"
+  override def toString: String = "updated"
 }

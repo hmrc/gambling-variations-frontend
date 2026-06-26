@@ -19,27 +19,21 @@ package controllers
 import base.SpecBase
 import forms.AssociatedRegistrationNumbersFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddAssociatedRegistrationNumberPage
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, ChosenAssociatedRegNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.AssociatedRegistrationNumbersView
-import org.mockito.ArgumentCaptor
-import org.mockito.Mockito.{verify, when}
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, ChosenAssociatedRegNumberPage}
 
 import scala.concurrent.Future
 
 class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
-
-  def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new AssociatedRegistrationNumbersFormProvider()
   val form = formProvider()
@@ -56,7 +50,8 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
   private val baseUserAnswers =
     UserAnswers(userAnswersId, data)
 
-  lazy val associatedRegistrationNumbersRoute = routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
+  lazy val associatedRegistrationNumbersRoute =
+    routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
 
   "AssociatedRegistrationNumbers Controller" - {
 
@@ -73,13 +68,24 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, false)(request, messages(application)).toString
+          view(
+            form,
+            NormalMode,
+            Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")),
+            3,
+            false
+          )(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = baseUserAnswers.set(AddAssociatedRegistrationNumberPage, true).success.value
+      val userAnswers =
+        baseUserAnswers
+          .set(AddAssociatedRegistrationNumberPage, true)
+          .success
+          .value
+
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
@@ -91,11 +97,17 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, false)(request, messages(application)).toString
+          view(
+            form.fill(true),
+            NormalMode,
+            Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")),
+            3,
+            false
+          )(request, messages(application)).toString
       }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect to AssociatedRegNumber page when true is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -104,7 +116,6 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       val application =
         applicationBuilder(userAnswers = Some(baseUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -112,16 +123,41 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       running(application) {
         val request =
           FakeRequest(POST, associatedRegistrationNumbersRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(form.fill(true).data.toSeq*)
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must redirect to CheckTradingDetails page when false is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, associatedRegistrationNumbersRoute)
+            .withFormUrlEncodedBody(form.fill(false).data.toSeq*)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.CheckTradingDetailsController.onPageLoad().url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted and there are fewer than 3 associated registration numbers" in {
 
       val twoNumbers = Json.obj(
         "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
@@ -137,9 +173,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       val application = applicationBuilder(userAnswers = Some(twoAnswers)).build()
 
       running(application) {
-        val request =
-          FakeRequest(POST, associatedRegistrationNumbersRoute)
-            .withFormUrlEncodedBody(("value", ""))
+        val request = FakeRequest(POST, associatedRegistrationNumbersRoute)
 
         val result = route(application, request).value
 
@@ -147,7 +181,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to SystemError for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -224,9 +258,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
-        val request =
-          FakeRequest(POST, associatedRegistrationNumbersRoute)
-            .withFormUrlEncodedBody(("value", ""))
+        val request = FakeRequest(POST, associatedRegistrationNumbersRoute)
 
         val result = route(application, request).value
 
@@ -321,7 +353,6 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       val application =
         applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -329,30 +360,32 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       running(application) {
         val request =
           FakeRequest(POST, associatedRegistrationNumbersRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(form.fill(true).data.toSeq*)
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())
 
-        captor.getValue.get(AddAssociatedRegistrationNumberPage).value mustEqual true
-        captor.getValue.get(AssociatedRegNumberPage)       must not be defined
-        captor.getValue.get(ChosenAssociatedRegNumberPage) must not be defined
+        val savedAnswers = captor.getValue
+
+        savedAnswers.get(AddAssociatedRegistrationNumberPage).value mustEqual true
+        savedAnswers.get(AssociatedRegNumberPage)       must not be defined
+        savedAnswers.get(ChosenAssociatedRegNumberPage) must not be defined
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to SystemError for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request =
           FakeRequest(POST, associatedRegistrationNumbersRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(form.fill(true).data.toSeq*)
 
         val result = route(application, request).value
 

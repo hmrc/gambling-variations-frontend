@@ -75,14 +75,14 @@ final case class ChangeRegistrationDetailsViewModel(
       Some(
         TaskListItem(
           messages("changeRegistrationDetails.correspondenceDetails"),
-          routes.IndexController.onPageLoad().url,
+          routes.CheckCorrespondenceDetailsController.onPageLoad().url,
           NoChange
         )
       ),
       Some(
         TaskListItem(
           messages("changeRegistrationDetails.tradingDetails"),
-          routes.IndexController.onPageLoad().url,
+          routes.CheckTradingDetailsController.onPageLoad().url,
           NoChange
         )
       ),
