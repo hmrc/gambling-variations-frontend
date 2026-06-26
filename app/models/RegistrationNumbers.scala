@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import play.api.libs.json.JsPath
-
-case object RemovePreviousRegNumberPage extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ toString
-
-  override def toString: String = "removePreviousRegNumber"
+case class RegistrationNumbers(
+  submitted: Option[Seq[String]],
+  unsubmitted: Option[Seq[String]]
+) {
+  val submittedCount: Int = submitted.fold(0)(_.size)
+  val unsubmittedCount: Int = unsubmitted.fold(0)(_.size)
+  val totalCount: Int = submittedCount + unsubmittedCount
 }
