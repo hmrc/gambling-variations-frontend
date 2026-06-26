@@ -20,9 +20,14 @@ import controllers.actions.*
 import forms.RemovePreviousRegNumberFormProvider
 
 import javax.inject.Inject
+import utils.FlagsUtil.flagIfChanged
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, RemovePreviousRegNumberPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{ChosenPreviousRegNumberPage,
+  PreviousRegNumbersUpdatedPage,
+  RemovePreviousRegNumberPage,
+  TradingDetailsChangesPage,
+  UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -68,9 +73,11 @@ class RemovePreviousRegNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, chosenRegNumber))),
           value =>
+            val hasChanged = flagIfChanged(value, sessionRepository, RemovePreviousRegNumberPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(PreviousRegNumbersUpdatedPage, true))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemovePreviousRegNumberPage, mode, updatedAnswers))
         )

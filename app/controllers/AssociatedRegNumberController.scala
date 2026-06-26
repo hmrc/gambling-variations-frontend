@@ -21,8 +21,9 @@ import forms.AssociatedRegNumberFormProvider
 
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
-import pages.{AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage}
+import pages.{AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, TradingDetailsChangesPage}
 import play.api.data.Form
+import utils.FlagsUtil.flagIfChanged
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -66,15 +67,16 @@ class AssociatedRegNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         associatedRegNumber => {
           val currentAssociatedRegNumbers = request.userAnswers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
-
           if (currentAssociatedRegNumbers.contains(associatedRegNumber)) {
             Future.successful(
               BadRequest(view(form.fill(associatedRegNumber).withError(fieldName, "associatedRegNumber.error.duplicate"), mode))
             )
           } else {
+            val hasChanged = flagIfChanged(associatedRegNumber, sessionRepository, AssociatedRegNumberPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, associatedRegNumber))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(routes.AssociatedRegNumberController.onPageLoad(mode))
           }
