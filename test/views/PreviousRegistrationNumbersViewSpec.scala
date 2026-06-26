@@ -115,7 +115,7 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
       doc.title                                           must include(messages("previousRegistrationNumbers.title"))
       doc.select("h1").text                               must include(messages("previousRegistrationNumbers.heading"))
       doc.select(".previous-reg-number-XHM00000199").text must include("XHM00000199")
-      doc.select(".prev-reg-max-limit-reached").text      must include(messages("previousRegistrationNumbers.hint"))
+      doc.select(".prev-reg-max-limit-reached").text      must include(messages("previousRegistrationNumbers.max"))
     }
 
   }

@@ -310,6 +310,7 @@ previousRegistrationNumbers.heading = Previous registration numbers
 previousRegistrationNumbers.radios = Do you want to add another registration number?
 previousRegistrationNumbers.caption = Change registration details
 previousRegistrationNumbers.hint = You can only add up to 3 registration numbers
+previousRegistrationNumbers.max = You can only add up to 3 registration numbers.
 previousRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
 previousRegistrationNumbers.yesLabel = Yes, add another number
 previousRegistrationNumbers.noLabel = No, return to check your trading details
