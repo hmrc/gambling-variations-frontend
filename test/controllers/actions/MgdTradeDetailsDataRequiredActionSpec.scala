@@ -61,18 +61,20 @@ class MgdTradeDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> "XRM00000000574",
-                                               "previousRegNumbersSection" -> Json.obj(
-                                                 "previousRegistrationNumbers" ->
-                                                   Json.arr("XWM00000001774", "XDM00000001309")
-                                               ),
-                                                "associatedRegNumbersSection" -> Json.obj(
-                                                  "associatedRegistrationNumbers" ->
-                                                    Json.arr("XXM00000000723", "XQM00000001196")
-                                                )),
+          "mgdTradeDetailsSection" -> Json.obj(
+            "mgdRegNum" -> "XRM00000000574",
+            "previousRegNumbersSection" -> Json.obj(
+              "previousRegistrationNumbers" ->
+                Json.arr("XWM00000001774", "XDM00000001309")
+            ),
+            "associatedRegNumbersSection" -> Json.obj(
+              "associatedRegistrationNumbers" ->
+                Json.arr("XXM00000000723", "XQM00000001196")
+            )
+          ),
           "isBusinessSeasonal" -> true,
           "businessTradeClass" -> 6,
-          "otherTradeClass"    -> "Description",
+          "otherTradeClass"    -> "Description"
         )
 
         val result =
@@ -182,20 +184,20 @@ class MgdTradeDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
             "businessNameSection" -> Json.obj(
               "mgdRegNum" -> "ABC12345678901"
             ),
-            "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> "XRM00000000574",
-                                                 "previousRegNumbersSection" -> Json.obj(
-                                                   "previousRegistrationNumbers" ->
-                                                     Json.arr("XWM00000001774", "XDM00000001309")
-                                                 ),
-                                                "associatedRegNumbersSection" -> Json.obj(
-                                                  "associatedRegistrationNumbers" ->
-                                                    Json.arr("XXM00000000723", "XQM00000001196"))
-                                                 ),
+            "mgdTradeDetailsSection" -> Json.obj(
+              "mgdRegNum" -> "XRM00000000574",
+              "previousRegNumbersSection" -> Json.obj(
+                "previousRegistrationNumbers" ->
+                  Json.arr("XWM00000001774", "XDM00000001309")
+              ),
+              "associatedRegNumbersSection" -> Json.obj(
+                "associatedRegistrationNumbers" ->
+                  Json.arr("XXM00000000723", "XQM00000001196")
+              )
+            ),
             "isBusinessSeasonal" -> true,
             "businessTradeClass" -> 6,
-            "otherTradeClass"    -> "Description",
-            "associatedRegistrationNumbers" ->
-              Json.arr("XXM00000000723", "XQM00000001196")
+            "otherTradeClass"    -> "Description"
           )
 
           val existingUserAnswers = UserAnswers(
