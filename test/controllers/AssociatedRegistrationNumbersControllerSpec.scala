@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.AssociatedRegistrationNumbersFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -31,6 +31,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.AssociatedRegistrationNumbersView
+import org.mockito.ArgumentCaptor
+import org.mockito.Mockito.{verify, when}
+import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, ChosenAssociatedRegNumberPage}
 
 import scala.concurrent.Future
 
@@ -155,6 +158,190 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must return OK and show submitted flag as true for a GET when AssociatedRegNumberSubmittedPage is true" in {
+
+      val userAnswers =
+        baseUserAnswers
+          .set(AssociatedRegNumberSubmittedPage, true)
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(
+            form,
+            NormalMode,
+            Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")),
+            3,
+            true
+          )(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and show count as 0 for a GET when there are no associated registration numbers" in {
+
+      val dataWithoutAssociatedNumbers = Json.obj(
+        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+
+      val userAnswers = UserAnswers(userAnswersId, dataWithoutAssociatedNumbers)
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(
+            form,
+            NormalMode,
+            None,
+            0,
+            false
+          )(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to # when invalid data is submitted and there are already 3 associated registration numbers" in {
+
+      val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, associatedRegistrationNumbersRoute)
+            .withFormUrlEncodedBody(("value", ""))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual "#"
+      }
+    }
+
+    "must set the chosen associated registration number and redirect to remove page" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val assocRegNumber = "XHM00000199"
+
+        val request =
+          FakeRequest(
+            GET,
+            routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber).url
+          )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
+
+        val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(captor.capture())
+
+        captor.getValue.get(ChosenAssociatedRegNumberPage).value mustEqual assocRegNumber
+      }
+    }
+
+    "must set the chosen associated registration number and redirect to associated registration number page when changing" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val assocRegNumber = "ZIU00001218"
+
+        val request =
+          FakeRequest(
+            GET,
+            routes.AssociatedRegistrationNumbersController.onChangeRedirect(assocRegNumber).url
+          )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad(CheckMode).url
+
+        val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(captor.capture())
+
+        captor.getValue.get(ChosenAssociatedRegNumberPage).value mustEqual assocRegNumber
+      }
+    }
+
+    "must remove AssociatedRegNumberPage and ChosenAssociatedRegNumberPage when valid data is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers =
+        baseUserAnswers
+          .set(AssociatedRegNumberPage, "XHM00000199")
+          .success
+          .value
+          .set(ChosenAssociatedRegNumberPage, "ZIU00001218")
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, associatedRegistrationNumbersRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+
+        val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(mockSessionRepository).set(captor.capture())
+
+        captor.getValue.get(AddAssociatedRegistrationNumberPage).value mustEqual true
+        captor.getValue.get(AssociatedRegNumberPage)       must not be defined
+        captor.getValue.get(ChosenAssociatedRegNumberPage) must not be defined
       }
     }
 

@@ -49,10 +49,7 @@ class AssociatedRegNumberController @Inject() (
 
   val form: Form[String] = formProvider()
   private val fieldName = "associatedRegNumber"
-
-  // =========================
-  // PAGE LOAD (ADD + CHANGE pre-fill)
-  // =========================
+  
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -67,9 +64,7 @@ class AssociatedRegNumberController @Inject() (
       Ok(view(preparedForm, mode))
     }
 
-  // =========================
-  // SUBMIT (ADD + CHANGE)
-  // =========================
+
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
@@ -85,9 +80,6 @@ class AssociatedRegNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           associatedRegNumber => {
 
-            // =========================
-            // DUPLICATE CHECK (ignore old value if editing)
-            // =========================
             val isDuplicate =
               maybeEditing match {
                 case Some(oldValue) =>
@@ -110,19 +102,13 @@ class AssociatedRegNumberController @Inject() (
             } else {
 
               val updatedList = maybeEditing match {
-
-                // =========================
-                // CHANGE FLOW (replace)
-                // =========================
+                
                 case Some(oldValue) =>
                   existingList.map {
                     case v if v == oldValue => associatedRegNumber
                     case v                  => v
                   }
-
-                // =========================
-                // ADD FLOW (append)
-                // =========================
+                  
                 case None =>
                   existingList :+ associatedRegNumber
               }
