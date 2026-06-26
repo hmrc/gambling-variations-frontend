@@ -26,18 +26,15 @@ import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
 class CheckCorrespondenceDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: CheckCorrespondenceDetailsView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>

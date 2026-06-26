@@ -80,15 +80,15 @@ class BusinessContactNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           val hasChanged = flagIfChanged(value, sessionRepository, BusinessContactNumberPage, ContactDetailsChangesPage)
-           for {
-              updatedAnswers <- Future.fromTry(
-                                  request.userAnswers.set(BusinessContactNumberPage, value)
-                                )
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(
-              navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
+          for {
+            updatedAnswers <- Future.fromTry(
+                                request.userAnswers.set(BusinessContactNumberPage, value)
+                              )
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(
+            navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
           )
       )
     }

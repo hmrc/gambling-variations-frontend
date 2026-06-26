@@ -19,14 +19,12 @@ package controllers
 import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
 import pages.*
-import repositories.SessionRepository
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessNameView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
 class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
@@ -34,10 +32,8 @@ class CheckBusinessNameController @Inject() (
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessNameDataRequiredAction,
-  sessionRepository: SessionRepository,
   view: BusinessNameView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>

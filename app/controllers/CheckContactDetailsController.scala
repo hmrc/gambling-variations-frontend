@@ -17,8 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
-import repositories.SessionRepository
+import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -26,18 +25,14 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CheckContactDetailsView
 
-import scala.concurrent.{ExecutionContext, Future}
-
 class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorised: AuthorisedAction,
   getData: DataRetrievalAction,
-  sessionRepository: SessionRepository,
   requireData: BusinessContactDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckContactDetailsView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>

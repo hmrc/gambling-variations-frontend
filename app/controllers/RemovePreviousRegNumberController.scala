@@ -23,11 +23,7 @@ import javax.inject.Inject
 import utils.FlagsUtil.flagIfChanged
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ChosenPreviousRegNumberPage,
-  PreviousRegNumbersUpdatedPage,
-  RemovePreviousRegNumberPage,
-  TradingDetailsChangesPage,
-  UnsubmittedPreviousRegNumbersPage}
+import pages.{ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, RemovePreviousRegNumberPage, TradingDetailsChangesPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
