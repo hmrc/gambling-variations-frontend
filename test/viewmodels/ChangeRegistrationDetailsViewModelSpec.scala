@@ -81,7 +81,7 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
 
       tasks.find(_.name == "Business name").value.status mustBe ReadyToSubmit
       tasks.find(_.name == "Licences").value.status mustBe ReadyToSubmit
-      tasks.find(_.name == "Trading details").value.url mustBe routes.IndexController.onPageLoad().url
+      tasks.find(_.name == "Trading details").value.url mustBe routes.CheckTradingDetailsController.onPageLoad().url
     }
 
     "include partnership task when isPartnership is true" in {
