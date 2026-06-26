@@ -1,0 +1,94 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.components.{Caption, Paragraph, H1, H2}
+@import viewmodels.{PreviousRegNumberViewModel, UnsubmittedPrevRegNumberViewModel}
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukRadios: GovukRadios,
+    govukButton: GovukButton,
+    caption: Caption,
+    p: Paragraph,
+    h1:H1,
+    h2: H2,
+    govukSummaryList : GovukSummaryList
+)
+
+@(form: Form[_],
+    mode: Mode,
+    regNumbers: RegistrationNumbers,
+    prevRegNumbersUpdated: Boolean
+    )(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("previousRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
+
+    @formHelper(action = routes.PreviousRegistrationNumbersController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form))
+        }
+        @caption(messages("previousRegistrationNumbers.caption"))
+        @h1(messages("previousRegistrationNumbers.heading"), classes = "govuk-heading-l")
+
+        @if(prevRegNumbersUpdated) {
+            @p("previousRegistrationNumbers.paragraph", extraClasses="must-be-submitted-message")
+        }
+
+        @if(regNumbers.submittedCount > 1) {
+                @h2(messages("previousRegistrationNumbers.submitted.plural"), classes = "govuk-heading-m submitted-heading")
+            } else if (regNumbers.submittedCount > 0) {
+                @h2(messages("previousRegistrationNumbers.submitted"), classes = "govuk-heading-m submitted-heading")
+            }
+        @if(regNumbers.submittedCount > 0) {
+            @govukSummaryList(SummaryList(
+                rows = PreviousRegNumberViewModel(regNumbers.submitted).summaryList
+                ))
+            }
+
+        @if(regNumbers.unsubmittedCount > 0 &&  regNumbers.unsubmittedCount < 2 && regNumbers.submittedCount > 0 ){
+                @h2(messages("previousRegistrationNumbers.unsubmitted"), classes = "govuk-heading-m ready-to-submit-heading")
+            } else if (regNumbers.unsubmittedCount > 1 && regNumbers.submittedCount > 0){
+                @h2(messages("previousRegistrationNumbers.unsubmitted.plural"), classes = "govuk-heading-m ready-to-submit-heading")
+            }
+
+        @if(regNumbers.unsubmittedCount > 0) {
+            @govukSummaryList(SummaryList(
+                rows = UnsubmittedPrevRegNumberViewModel(regNumbers.unsubmitted).summaryList
+                ))
+            }
+
+        @if(regNumbers.submittedCount + regNumbers.unsubmittedCount < 3) {
+        @govukRadios(
+            RadiosViewModel.yesNo(
+                field = form("addPreviousRegistrationNumber"),
+                legend = LegendViewModel(messages("previousRegistrationNumbers.radios")).withCssClass("govuk-fieldset__legend--m"),
+                yesLabel = messages("previousRegistrationNumbers.yesLabel"),
+                noLabel = messages("previousRegistrationNumbers.noLabel")
+            ).withHint(HintViewModel(messages("previousRegistrationNumbers.hint"))
+            ).withCssClass("prev-reg-radio-buttons")
+        )
+        } else {
+            @p("previousRegistrationNumbers.max", extraClasses="prev-reg-max-limit-reached")
+        }
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}
