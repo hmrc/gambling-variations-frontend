@@ -49,7 +49,7 @@ class AssociatedRegNumberController @Inject() (
 
   val form: Form[String] = formProvider()
   private val fieldName = "associatedRegNumber"
-  
+
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -63,7 +63,6 @@ class AssociatedRegNumberController @Inject() (
 
       Ok(view(preparedForm, mode))
     }
-
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
@@ -102,13 +101,13 @@ class AssociatedRegNumberController @Inject() (
             } else {
 
               val updatedList = maybeEditing match {
-                
+
                 case Some(oldValue) =>
                   existingList.map {
                     case v if v == oldValue => associatedRegNumber
                     case v                  => v
                   }
-                  
+
                 case None =>
                   existingList :+ associatedRegNumber
               }
