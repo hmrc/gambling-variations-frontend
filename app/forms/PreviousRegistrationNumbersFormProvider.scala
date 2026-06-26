@@ -25,6 +25,6 @@ class PreviousRegistrationNumbersFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "addPreviousRegistrationNumber" -> boolean("associatedRegistrationNumbers.error.required")
+      "addPreviousRegistrationNumber" -> boolean("previousRegistrationNumbers.error.required")
     )
 }
