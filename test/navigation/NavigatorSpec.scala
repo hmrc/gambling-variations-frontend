@@ -85,16 +85,16 @@ class NavigatorSpec extends SpecBase {
             routes.CheckContactDetailsController.onPageLoad()
         }
 
-        "must go from IsSeasonalBusinessPage to the trading details page" in {
+        "must go from IsSeasonalBusinessPage to the normal mode seasonal business page" in {
 
           navigator.nextPage(IsSeasonalBusinessPage, NormalMode, UserAnswers("id")) mustBe
-            routes.CheckTradingDetailsController.onPageLoad()
+            routes.SeasonalBusinessController.onPageLoad(NormalMode)
         }
 
-        "must go from AssociatedRegNumberPage to the trading details page" in {
+        "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.CheckTradingDetailsController.onPageLoad()
+            routes.AssociatedRegNumberController.onPageLoad(NormalMode)
         }
 
         "a page that doesn't exist in the route map to Index" in {
@@ -139,10 +139,10 @@ class NavigatorSpec extends SpecBase {
 
     }
 
-    "must go from PreviousRegNumberPage to the trading details page" in {
+    "must go from PreviousRegNumberPage to the normal mode previous registration number page" in {
 
       navigator.nextPage(PreviousRegNumberPage, NormalMode, UserAnswers("id")) mustBe
-        routes.CheckTradingDetailsController.onPageLoad()
+        routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
     }
 
     "must go from PreviousRegNumberPage to the check mode previous registration number page" in {
