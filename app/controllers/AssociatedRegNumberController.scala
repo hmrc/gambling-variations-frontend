@@ -69,7 +69,9 @@ class AssociatedRegNumberController @Inject() (
         request.userAnswers.get(AssociatedRegistrationNumbersPage).getOrElse(Seq.empty)
 
       val maybeEditing =
-        request.userAnswers.get(ChosenAssociatedRegNumberPage)
+        request.userAnswers
+          .get(ChosenAssociatedRegNumberPage)
+          .filter(existingList.contains)
 
       form
         .bindFromRequest()
@@ -127,6 +129,11 @@ class AssociatedRegNumberController @Inject() (
                                     updatedAnswers.set(
                                       AssociatedRegNumberSubmittedPage,
                                       true
+                                    )
+                                  )
+                updatedAnswers <- Future.fromTry(
+                                    updatedAnswers.remove(
+                                      AssociatedRegNumberPage
                                     )
                                   )
                 _ <- sessionRepository.set(updatedAnswers)

@@ -56,9 +56,9 @@ object AssociatedRegistrationNumbersSummary {
 
       val route =
         if (hasNumbers) {
-          routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
+          routes.AssociatedRegistrationNumbersController.onPageLoad().url
         } else {
-          routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
+          routes.AssociatedRegNumberController.onPageLoad().url
         }
 
       val actions = Seq(

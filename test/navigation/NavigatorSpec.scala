@@ -94,7 +94,7 @@ class NavigatorSpec extends SpecBase {
         "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
+            routes.AssociatedRegistrationNumbersController.onPageLoad()
         }
 
         "a page that doesn't exist in the route map to Index" in {
@@ -127,7 +127,7 @@ class NavigatorSpec extends SpecBase {
         "must go from AssociatedRegNumberPage to the check mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, CheckMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
+            routes.AssociatedRegistrationNumbersController.onPageLoad()
         }
 
         "must go from SoleProprietorPage to the check mode sole proprietor page" in {
