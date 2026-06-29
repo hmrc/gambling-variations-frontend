@@ -17,7 +17,9 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import pages.PreviousRegistrationNumbersPage
+import controllers.routes
+import models.NormalMode
+import pages.PreviousRegistrationNumbersListPage
 import play.api.Application
 import play.api.i18n.Messages
 
@@ -35,13 +37,14 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result mustBe defined
       result.get.value.toString must include(msgs("site.notProvided"))
       result.get.actions.get.items.size mustBe 1
+      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
     }
 
     "must display 'not provided' when an empty list is supplied" in {
 
       val answers =
         emptyUserAnswers
-          .set(PreviousRegistrationNumbersPage, Seq.empty[String])
+          .set(PreviousRegistrationNumbersListPage, Seq.empty[String])
           .success
           .value
 
@@ -50,6 +53,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result mustBe defined
       result.get.value.toString must include(msgs("site.notProvided"))
       result.get.actions.get.items.size mustBe 1
+      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
     }
 
     "must display registration numbers separated by <br> and include action when less than 3 numbers" in {
@@ -58,7 +62,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
 
       val answers =
         emptyUserAnswers
-          .set(PreviousRegistrationNumbersPage, numbers)
+          .set(PreviousRegistrationNumbersListPage, numbers)
           .success
           .value
 
@@ -70,15 +74,16 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       html must include("<br/>")
 
       result.actions.get.items.size mustBe 1
+      result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
     }
 
-    "must display registration numbers separated by <br> and NOT include action when 3 or more numbers" in {
+    "must display registration numbers separated by <br> and include action when 3 or more numbers" in {
 
       val numbers = Seq("REG001", "REG002", "REG003")
 
       val answers =
         emptyUserAnswers
-          .set(PreviousRegistrationNumbersPage, numbers)
+          .set(PreviousRegistrationNumbersListPage, numbers)
           .success
           .value
 
@@ -90,7 +95,8 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       html must include("REG003")
       html must include("<br/>")
 
-      result.actions.get.items mustBe empty
+      result.actions.get.items.size mustBe 1
+      result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
     }
   }
 }

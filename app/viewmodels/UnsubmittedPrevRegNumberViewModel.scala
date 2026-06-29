@@ -34,12 +34,12 @@ case class UnsubmittedPrevRegNumberViewModel(unsubmittedPreviousRegNumbers: Opti
                 classes = "govuk-summary-list__actions govuk-!-width-one-half",
                 items = Seq(
                   ActionItem(
-                    href               = "#",
+                    href               = routes.PreviousRegistrationNumbersListController.onChangeRedirect(prevRegNumber = newPrevReg).url,
                     content            = Text(messages("site.change")),
                     visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", newPrevReg))
                   ),
                   ActionItem(
-                    href               = routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = newPrevReg).url,
+                    href               = routes.PreviousRegistrationNumbersListController.onRedirect(prevRegNumber = newPrevReg).url,
                     content            = Text(messages("site.remove")),
                     visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", newPrevReg))
                   )

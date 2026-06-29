@@ -94,10 +94,12 @@ POST       /change-registration-details/business-contact-details/contact-numbers
 GET        /change-registration-details/business-contact-details/change-contact-numbers            controllers.BusinessContactNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-contact-details/change-contact-numbers            controllers.BusinessContactNumberController.onSubmit(mode: Mode = CheckMode)
 
-GET        /change-registration-details/trading-details/change-associated-registration-numbers-redirect        controllers.AssociatedRegistrationNumbersController.onChangeRedirect(mode: Mode = CheckMode, assocRegNumber: String)
-GET        /change-registration-details/trading-details/associated-registration-numbers-redirect               controllers.AssociatedRegistrationNumbersController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)
-GET        /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-associated-registration-numbers-redirect        controllers.AssociatedRegistrationNumbersListController.onChangeRedirect(mode: Mode = CheckMode, assocRegNumber: String)
+GET        /change-registration-details/trading-details/associated-registration-numbers-redirect               controllers.AssociatedRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)
+GET        /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-associated-registration-numbers                  controllers.AssociatedRegistrationNumbersListController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/trading-details/change-associated-registration-numbers                  controllers.AssociatedRegistrationNumbersListController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
@@ -144,6 +146,8 @@ POST       /change-registration-details/trading-details/change-other-business-tr
 
 GET        /change-registration-details/trading-details/associated-registration-number                         controllers.AssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/associated-registration-number                         controllers.AssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-associated-registration-number                  controllers.AssociatedRegNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/trading-details/change-associated-registration-number                  controllers.AssociatedRegNumberController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/correspondence-details/remove-fax-number                        controllers.RemoveCorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/remove-fax-number                        controllers.RemoveCorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
@@ -153,11 +157,12 @@ POST       /change-registration-details/correspondence-details/remove-fax-number
 GET        /change-registration-details/correspondence-details/remove-email-address                        controllers.RemoveCorrespondenceEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/remove-email-address                        controllers.RemoveCorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/previous-registration-numbers-redirect               controllers.PreviousRegistrationNumbersController.onRedirect(mode: Mode = NormalMode, prevRegNumber: String)
-GET        /change-registration-details/trading-details/previous-registration-numbers                        controllers.PreviousRegistrationNumbersController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/previous-registration-numbers                        controllers.PreviousRegistrationNumbersController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/trading-details/change-previous-registration-numbers                  controllers.PreviousRegistrationNumbersController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/trading-details/change-previous-registration-numbers                  controllers.PreviousRegistrationNumbersController.onSubmit(mode: Mode = CheckMode)
+GET        /change-registration-details/trading-details/change-previous-registration-numbers-redirect         controllers.PreviousRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /change-registration-details/trading-details/previous-registration-numbers-redirect                controllers.PreviousRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /change-registration-details/trading-details/previous-registration-numbers                         controllers.PreviousRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/previous-registration-numbers                         controllers.PreviousRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-previous-registration-numbers                  controllers.PreviousRegistrationNumbersListController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/trading-details/change-previous-registration-numbers                  controllers.PreviousRegistrationNumbersListController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/trading-details/previous-registration-number                 controllers.PreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/previous-registration-number                 controllers.PreviousRegistrationNumberController.onSubmit(mode: Mode = NormalMode)

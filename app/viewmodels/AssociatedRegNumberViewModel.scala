@@ -17,11 +17,12 @@
 package viewmodels
 
 import controllers.routes
+import models.Mode
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.stringToText
 
-case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]]) {
+case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]], mode: Mode) {
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = associatedRegNumberSummaryListRows
 
@@ -35,12 +36,12 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
               Actions(
                 items = Seq(
                   ActionItem(
-                    href               = routes.AssociatedRegistrationNumbersController.onChangeRedirect(assocRegNumber = assocReg).url,
+                    href               = routes.AssociatedRegistrationNumbersListController.onChangeRedirect(assocRegNumber = assocReg).url,
                     content            = "site.change",
                     visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   ),
                   ActionItem(
-                    href               = routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = assocReg).url,
+                    href               = routes.AssociatedRegistrationNumbersListController.onRedirect(assocRegNumber = assocReg).url,
                     content            = "site.remove",
                     visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   )

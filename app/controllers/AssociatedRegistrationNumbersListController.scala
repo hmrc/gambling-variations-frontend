@@ -31,7 +31,7 @@ import views.html.AssociatedRegistrationNumbersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AssociatedRegistrationNumbersController @Inject() (
+class AssociatedRegistrationNumbersListController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -103,7 +103,7 @@ class AssociatedRegistrationNumbersController @Inject() (
                             request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber)
                           )
         _ <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad())
+      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad(mode))
     }
 
 }

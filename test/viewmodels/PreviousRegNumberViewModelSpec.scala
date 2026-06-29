@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 import base.SpecBase
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.PreviousRegistrationNumbersPage
+import pages.PreviousRegistrationNumbersListPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
@@ -48,7 +48,7 @@ class PreviousRegNumberViewModelSpec extends SpecBase with Matchers {
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 
-      val previousRegNumbers = baseUserAnswers.get(PreviousRegistrationNumbersPage)
+      val previousRegNumbers = baseUserAnswers.get(PreviousRegistrationNumbersListPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
