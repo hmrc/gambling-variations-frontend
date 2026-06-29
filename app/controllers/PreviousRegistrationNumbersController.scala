@@ -121,7 +121,7 @@ class PreviousRegistrationNumbersController @Inject() (
                                     value
                                   )
                                 )
-              changed        <- hasChanged
+              changed <- hasChanged
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.set(
                                     TradingDetailsChangesPage,
