@@ -45,7 +45,7 @@ object FlagsUtil {
   ): Future[Boolean] = {
     sessionRepository.get(referencePage).map {
       case Some(savedValue) => savedValue != value
-      case None => true
+      case None             => true
     }
   }
 }
