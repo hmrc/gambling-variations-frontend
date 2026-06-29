@@ -17,7 +17,6 @@
 package viewmodels
 
 import controllers.routes
-import models.NormalMode
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.stringToText
@@ -28,30 +27,32 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
 
   private def associatedRegNumberSummaryListRows(implicit messages: Messages): Seq[SummaryListRow] = {
     associatedRegNumbers match {
-      case Some(newAssocRegNumbers) =>
-        newAssocRegNumbers.map(newAssocReg =>
+      case Some(associatedRegNums) =>
+        val rows: Seq[SummaryListRow] = for (assocReg <- associatedRegNums) yield {
           SummaryListRow(
-            key = Key(content = newAssocReg, classes = s"associated-reg-number associated-reg-number-$newAssocReg govuk-!-font-weight-regular"),
+            key = Key(content = assocReg, classes = s"associated-reg-number associated-reg-number-$assocReg govuk-!-font-weight-regular"),
             actions = Some(
               Actions(
                 items = Seq(
                   ActionItem(
-                    href               = routes.AssociatedRegNumberController.onPageLoad(NormalMode).url,
+                    href               = routes.AssociatedRegistrationNumbersController.onChangeRedirect(assocRegNumber = assocReg).url,
                     content            = "site.change",
-                    visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", newAssocReg))
+                    visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   ),
                   ActionItem(
-                    href               = routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = newAssocReg).url,
+                    href               = routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = assocReg).url,
                     content            = "site.remove",
-                    visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", newAssocReg))
+                    visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   )
                 ),
                 classes = "govuk-summary-list__actions govuk-!-width-one-half"
               )
             )
           )
-        )
-      case None => Seq.empty
+        }
+        rows
+      case None =>
+        Seq.empty
     }
   }
 }
