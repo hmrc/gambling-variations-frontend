@@ -69,11 +69,11 @@ class BusinessTradeClassController @Inject() (
           value =>
             val hasChanged = flagIfChanged(value, sessionRepository, BusinessEmailAddressPage, TradingDetailsChangesPage)
             for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
-                    updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
-                    updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
         )
     }
 }

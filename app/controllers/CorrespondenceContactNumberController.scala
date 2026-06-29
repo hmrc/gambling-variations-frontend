@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.*
 import forms.ContactNumberFormProvider
 import models.Mode
-import navigation.
+import navigation.Navigator
 import repositories.SessionRepository
 import utils.FlagsUtil.flagIfChanged
 import pages.{CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}

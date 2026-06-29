@@ -64,11 +64,11 @@ class BusinessEmailAddressController @Inject() (
         value =>
           val hasChanged = flagIfChanged(value, sessionRepository, BusinessEmailAddressPage, ContactDetailsChangesPage)
           for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
       )
   }
 }

@@ -21,6 +21,7 @@ import forms.AssociatedRegNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.*
+import utils.FlagsUtil.flagIfChanged
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -79,6 +80,10 @@ class AssociatedRegNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           associatedRegNumber => {
 
+            val hasChanged: Boolean =
+              flagIfChanged(associatedRegNumber, sessionRepository,
+                AssociatedRegistrationNumbersPage, TradingDetailsChangesPage)
+
             val isDuplicate =
               maybeEditing match {
                 case Some(oldValue) =>
@@ -134,6 +139,12 @@ class AssociatedRegNumberController @Inject() (
                 updatedAnswers <- Future.fromTry(
                                     updatedAnswers.remove(
                                       AssociatedRegNumberPage
+                                    )
+                                  )
+                updatedAnswers <- Future.fromTry(
+                                    updatedAnswers.set(
+                                      TradingDetailsChangesPage,
+                                      hasChanged
                                     )
                                   )
                 _ <- sessionRepository.set(updatedAnswers)
