@@ -21,6 +21,9 @@ import models.requests.DataRequest
 import pages.QuestionPage
 import repositories.SessionRepository
 
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+
 object FlagsUtil {
   def checkFlag(userAnswers: UserAnswers, changesPage: QuestionPage[Boolean], submittedOnlyPage: QuestionPage[Boolean]): Boolean = {
     val changed = userAnswers.get(changesPage).getOrElse(false)
@@ -29,8 +32,12 @@ object FlagsUtil {
   }
 
   def flagIfChanged[A](value: Any, sessionRepository: SessionRepository, referencePage: QuestionPage[A], changesPage: QuestionPage[Boolean])(implicit
-    request: DataRequest[?]
-  ): Boolean = {
-    !(value == sessionRepository.get(referencePage)) || request.userAnswers.get(changesPage).contains(true)
+    request: DataRequest[?],
+    ec: ExecutionContext
+  ): Future[Boolean] = {
+    val prevValue = sessionRepository.get(referencePage)
+    val flagHasChangedAlready: Boolean = request.userAnswers.get(changesPage).contains(true)
+    val comparedToPrevValue: Future[Boolean] = prevValue.map(_.contains(value))
+    if (flagHasChangedAlready) Future(true) else comparedToPrevValue
   }
 }

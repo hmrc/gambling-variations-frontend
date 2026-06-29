@@ -80,12 +80,13 @@ class AssociatedRegistrationNumbersController @Inject() (
             formWithErrors =>
               Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))),
             value =>
-              val hasChanged: Boolean = flagIfChanged(value, sessionRepository, AssociatedRegistrationNumbersPage, TradingDetailsChangesPage)
+              val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, AssociatedRegistrationNumbersPage, TradingDetailsChangesPage)
               for {
+                changed        <- hasChanged
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(AssociatedRegNumberPage))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, changed))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
           )

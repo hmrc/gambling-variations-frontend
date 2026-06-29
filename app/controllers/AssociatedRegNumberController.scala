@@ -80,7 +80,7 @@ class AssociatedRegNumberController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           associatedRegNumber => {
 
-            val hasChanged: Boolean =
+            val hasChanged: Future[Boolean] =
               flagIfChanged(associatedRegNumber, sessionRepository, AssociatedRegNumberPage, TradingDetailsChangesPage)
 
             val isDuplicate =
@@ -117,6 +117,7 @@ class AssociatedRegNumberController @Inject() (
               }
 
               for {
+                changed        <- hasChanged
                 updatedAnswers <- Future.fromTry(
                                     request.userAnswers.set(
                                       AssociatedRegNumberPage,
@@ -143,7 +144,7 @@ class AssociatedRegNumberController @Inject() (
                 updatedAnswers <- Future.fromTry(
                                     updatedAnswers.set(
                                       TradingDetailsChangesPage,
-                                      hasChanged
+                                      changed
                                     )
                                   )
                 _ <- sessionRepository.set(updatedAnswers)
