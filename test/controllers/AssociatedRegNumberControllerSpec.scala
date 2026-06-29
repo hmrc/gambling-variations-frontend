@@ -40,7 +40,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
   val fieldName = "associatedRegNumber"
   val requiredUserAnswers = emptyUserAnswers.set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
 
-  lazy val associatedRegNumberRoute = routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
+  lazy val associatedRegNumberRoute = routes.AssociatedRegNumberController.onPageLoad().url
 
   "AssociatedRegNumber Controller" - {
 
@@ -106,7 +106,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual associatedRegNumberRoute
+        redirectLocation(result).value mustEqual routes.AssociatedRegistrationNumbersController.onPageLoad().url
       }
     }
 

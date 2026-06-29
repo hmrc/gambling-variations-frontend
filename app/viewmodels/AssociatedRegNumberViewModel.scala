@@ -35,7 +35,7 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
               Actions(
                 items = Seq(
                   ActionItem(
-                    href               = "#",
+                    href               = routes.AssociatedRegistrationNumbersController.onChangeRedirect(assocRegNumber = assocReg).url,
                     content            = "site.change",
                     visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   ),

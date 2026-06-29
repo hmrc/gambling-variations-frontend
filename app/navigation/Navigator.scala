@@ -40,14 +40,16 @@ class Navigator @Inject() () {
     case BusinessTradeClassPage               => _ => routes.BusinessTradeClassController.onPageLoad(NormalMode)
     case IsSeasonalBusinessPage               => _ => routes.SeasonalBusinessController.onPageLoad(NormalMode)
     case OtherTradeClassPage                  => _ => routes.OtherTradeClassController.onPageLoad(NormalMode)
-    case AssociatedRegNumberPage              => _ => routes.AssociatedRegNumberController.onPageLoad(NormalMode)
-    case AssociatedRegistrationNumbersPage    => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode)
+    case AssociatedRegNumberPage              => _ => routes.AssociatedRegistrationNumbersController.onPageLoad()
+    case AssociatedRegistrationNumbersPage    => _ => routes.AssociatedRegistrationNumbersController.onPageLoad()
     case CorrespondenceContactNumberPage      => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceFaxNumberPage          => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemovePreviousRegNumberPage          => _ => routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode)
+    case RemoveAssociatedRegNumberPage        => userAnswers => navigateRemoveAssociatedRegNumberPage(userAnswers)
+    case AddAssociatedRegistrationNumberPage  => userAnswers => navigateAddAssociatedRegistrationNumberPage(userAnswers)
     case PreviousRegNumberPage                => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
     case _                                    => _ => routes.IndexController.onPageLoad()
   }
@@ -59,9 +61,9 @@ class Navigator @Inject() () {
     case BusinessEmailAddressPage          => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
     case IsSeasonalBusinessPage            => _ => routes.SeasonalBusinessController.onPageLoad(CheckMode)
     case CorrespondenceFaxNumberPage       => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
-    case AssociatedRegNumberPage           => _ => routes.AssociatedRegNumberController.onPageLoad(CheckMode)
+    case AssociatedRegNumberPage           => _ => routes.AssociatedRegistrationNumbersController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage => _ => routes.RemoveCorrespondenceFaxNumberController.onPageLoad(CheckMode)
-    case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode)
+    case AssociatedRegistrationNumbersPage => _ => routes.AssociatedRegistrationNumbersController.onPageLoad()
     case OtherTradeClassPage               => _ => routes.OtherTradeClassController.onPageLoad(CheckMode)
     case RemovePreviousRegNumberPage       => _ => routes.PreviousRegistrationNumbersController.onPageLoad(CheckMode)
     case PreviousRegNumberPage             => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
@@ -76,4 +78,21 @@ class Navigator @Inject() () {
         checkRouteMap(page)(userAnswers)
     }
   }
+
+  private def navigateAddAssociatedRegistrationNumberPage(answers: UserAnswers): Call =
+    answers
+      .get(AddAssociatedRegistrationNumberPage)
+      .map {
+        case false => routes.CheckTradingDetailsController.onPageLoad()
+        case true  => routes.AssociatedRegNumberController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateRemoveAssociatedRegNumberPage(answers: UserAnswers): Call =
+    answers
+      .get(AssociatedRegistrationNumbersPage)
+      .filter(_.nonEmpty)
+      .map(_ => routes.AssociatedRegistrationNumbersController.onPageLoad())
+      .getOrElse(routes.CheckTradingDetailsController.onPageLoad())
+
 }
