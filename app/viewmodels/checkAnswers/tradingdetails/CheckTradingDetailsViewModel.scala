@@ -20,7 +20,8 @@ import models.{BusinessTradeClass, UserAnswers}
 import pages.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
-import viewmodels.govuk.all.{ValueViewModel, stringToText}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import viewmodels.govuk.all.ValueViewModel
 import viewmodels.govuk.summarylist.SummaryListViewModel
 
 case class CheckTradingDetailsViewModel(
@@ -35,7 +36,7 @@ object CheckTradingDetailsViewModel {
             userAnswers: UserAnswers,
             isGroupMember: Boolean
           )(implicit messages: Messages): CheckTradingDetailsViewModel = {
-    
+
     if (isGroupMember) {
       val seasonalOnly =
         Seq(IsSeasonalBusinessSummary.row(userAnswers)).flatten
@@ -46,33 +47,37 @@ object CheckTradingDetailsViewModel {
         associatedMgd = SummaryListViewModel(Nil)
       )
     }
-    
+
     val tradeClassRow =
       BusinessTradeClassSummary.row(userAnswers).map { row =>
-        val tradeClassOpt = userAnswers.get(BusinessTradeClassPage)
+        val tc = userAnswers.get(BusinessTradeClassPage)
 
         val fixedValue =
-          tradeClassOpt match {
+          tc match {
             case None => "Not Provided"
-            case Some(BusinessTradeClass.Other) => "Other"
-            case Some(value) => value.toString
+            case Some(BusinessTradeClass.Other) =>
+              messages("businessTradeClass.other")
+            case Some(value) =>
+              messages(s"businessTradeClass.$value")
           }
 
-        row.copy(value = ValueViewModel(fixedValue))
+        row.copy(value = ValueViewModel(Text(fixedValue)))
       }
 
     val otherTradeClassRow =
       OtherTradeClassSummary.row(userAnswers).map { row =>
-        val tradeClassOpt = userAnswers.get(BusinessTradeClassPage)
-        val descOpt       = userAnswers.get(OtherTradeClassPage)
+        val tc   = userAnswers.get(BusinessTradeClassPage)
+        val desc = userAnswers.get(OtherTradeClassPage)
 
         val fixedValue =
-          (tradeClassOpt, descOpt) match {
-            case (Some(BusinessTradeClass.Other), None) => "Not Provided"
-            case _ => row.value
+          (tc, desc) match {
+            case (Some(BusinessTradeClass.Other), None) =>
+              "Not Provided"
+            case _ =>
+              row.value.content.toString
           }
 
-        row.copy(value = ValueViewModel(fixedValue.toString))
+        row.copy(value = ValueViewModel(Text(fixedValue)))
       }
 
     val seasonalRow =
