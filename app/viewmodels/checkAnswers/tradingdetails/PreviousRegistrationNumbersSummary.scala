@@ -59,7 +59,7 @@ object PreviousRegistrationNumbersSummary {
           Seq(
             ActionItemViewModel(
               "site.change",
-              routes.FaxNumberController.onPageLoad(CheckMode).url
+              routes.PreviousRegistrationNumberController.onPageLoad(CheckMode).url
             ).withVisuallyHiddenText(
               messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
             )

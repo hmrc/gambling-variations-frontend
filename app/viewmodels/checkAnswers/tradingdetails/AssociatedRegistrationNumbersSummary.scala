@@ -55,7 +55,7 @@ object AssociatedRegistrationNumbersSummary {
       val actions = Seq(
         ActionItemViewModel(
           "site.change",
-          routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+          routes.AssociatedRegistrationNumbersController.onPageLoad(CheckMode).url
         ).withVisuallyHiddenText(
           messages("checkTradingDetails.associatedRegistrationNumbers.change.hidden")
         )
