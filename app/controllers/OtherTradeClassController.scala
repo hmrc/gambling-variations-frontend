@@ -65,6 +65,7 @@ class OtherTradeClassController @Inject() (
           val hasChanged = flagIfChanged(value, sessionRepository, OtherTradeClassPage, TradingDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
       )

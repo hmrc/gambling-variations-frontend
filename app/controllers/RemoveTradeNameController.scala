@@ -20,7 +20,8 @@ import controllers.actions.*
 import forms.RemoveTradeNameFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessNameSubmittedPage, RemoveTradeNamePage, TradingNamePage}
+import utils.FlagsUtil.flagIfChanged
+import pages.{BusinessNameSubmittedPage, RemoveTradeNamePage, TradingDetailsChangesPage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -61,9 +62,11 @@ class RemoveTradeNameController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
           value =>
+            val hasChanged = flagIfChanged(value, sessionRepository, RemoveTradeNamePage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
         )

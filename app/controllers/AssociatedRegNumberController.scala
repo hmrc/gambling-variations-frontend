@@ -81,8 +81,7 @@ class AssociatedRegNumberController @Inject() (
           associatedRegNumber => {
 
             val hasChanged: Boolean =
-              flagIfChanged(associatedRegNumber, sessionRepository,
-                AssociatedRegNumberPage, TradingDetailsChangesPage)
+              flagIfChanged(associatedRegNumber, sessionRepository, AssociatedRegNumberPage, TradingDetailsChangesPage)
 
             val isDuplicate =
               maybeEditing match {

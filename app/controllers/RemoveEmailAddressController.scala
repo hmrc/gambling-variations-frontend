@@ -20,7 +20,8 @@ import controllers.actions.*
 import forms.RemoveEmailAddressFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, RemoveEmailAddressPage}
+import utils.FlagsUtil.flagIfChanged
+import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage, RemoveEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -72,8 +73,10 @@ class RemoveEmailAddressController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, emailAddress))),
             value =>
+              val hasChanged = flagIfChanged(value, sessionRepository, RemoveEmailAddressPage, ContactDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(RemoveEmailAddressPage, mode, updatedAnswers)

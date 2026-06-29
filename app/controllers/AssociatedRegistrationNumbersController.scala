@@ -77,7 +77,8 @@ class AssociatedRegistrationNumbersController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))),
+            formWithErrors =>
+              Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))),
             value =>
               val hasChanged: Boolean = flagIfChanged(value, sessionRepository, AssociatedRegistrationNumbersPage, TradingDetailsChangesPage)
               for {

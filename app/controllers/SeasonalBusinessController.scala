@@ -18,10 +18,12 @@ package controllers
 
 import controllers.actions.*
 import forms.SeasonalBusinessFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.IsSeasonalBusinessPage
+import utils.FlagsUtil.flagIfChanged
+import pages.{IsSeasonalBusinessPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -65,8 +67,10 @@ class SeasonalBusinessController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
+            val hasChanged = flagIfChanged(value, sessionRepository, IsSeasonalBusinessPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(IsSeasonalBusinessPage, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(IsSeasonalBusinessPage, mode, updatedAnswers))
         )

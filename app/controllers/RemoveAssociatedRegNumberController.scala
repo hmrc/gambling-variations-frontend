@@ -20,7 +20,8 @@ import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
+import utils.FlagsUtil.flagIfChanged
+import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -67,10 +68,12 @@ class RemoveAssociatedRegNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, chosenRegNumber))),
           value =>
+            val hasChanged = flagIfChanged(value, sessionRepository, RemoveAssociatedRegNumberPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
               updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )

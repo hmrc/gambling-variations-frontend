@@ -22,7 +22,8 @@ import forms.RemoveCorrespondenceEmailAddressFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceEmailPage, RemoveCorrespondenceEmailAddressPage}
+import utils.FlagsUtil.flagIfChanged
+import pages.{CorrespondenceDetailsChangesPage, CorrespondenceEmailPage, RemoveCorrespondenceEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -72,16 +73,19 @@ class RemoveCorrespondenceEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, correspondenceEmail.getOrElse("")))),
         value =>
-          val updatedAnswersF = for {
+          val hasChanged =
+            flagIfChanged(value, sessionRepository, RemoveCorrespondenceEmailAddressPage, CorrespondenceDetailsChangesPage)
+          val updatedAnswers = for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrespondenceEmailAddressPage, value))
             cleanedAnswers <- value match {
                                 case true  => Future.fromTry(updatedAnswers.remove(CorrespondenceEmailPage))
                                 case false => Future.successful(updatedAnswers)
                               }
-            _ <- sessionRepository.set(cleanedAnswers)
+            cleanedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceDetailsChangesPage, hasChanged))
+            _              <- sessionRepository.set(cleanedAnswers)
           } yield cleanedAnswers
 
-          updatedAnswersF.map { updatedAnswers =>
+          updatedAnswers.map { updatedAnswers =>
             Redirect(navigator.nextPage(RemoveCorrespondenceEmailAddressPage, mode, updatedAnswers))
           }
       )

@@ -24,7 +24,8 @@ import models.Mode
 import models.requests.DataRequest
 import models.RegistrationNumbers
 import navigation.Navigator
-import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
+import utils.FlagsUtil.flagIfChanged
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -112,11 +113,18 @@ class PreviousRegistrationNumbersController @Inject() (
               Future.successful(Redirect("#"))
             },
           value =>
+            val hasChanged = flagIfChanged(value, sessionRepository, PreviousRegistrationNumbersPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(
                                   request.userAnswers.set(
                                     AddPreviousRegistrationNumberPage,
                                     value
+                                  )
+                                )
+              updatedAnswers <- Future.fromTry(
+                                  updatedAnswers.set(
+                                    TradingDetailsChangesPage,
+                                    hasChanged
                                   )
                                 )
               _ <- sessionRepository.set(updatedAnswers)
