@@ -117,7 +117,6 @@ class AssociatedRegNumberController @Inject() (
               }
 
               for {
-                changed        <- hasChanged
                 updatedAnswers <- Future.fromTry(
                                     request.userAnswers.set(
                                       AssociatedRegNumberPage,
@@ -141,6 +140,7 @@ class AssociatedRegNumberController @Inject() (
                                       AssociatedRegNumberPage
                                     )
                                   )
+                changed <- hasChanged
                 updatedAnswers <- Future.fromTry(
                                     updatedAnswers.set(
                                       TradingDetailsChangesPage,

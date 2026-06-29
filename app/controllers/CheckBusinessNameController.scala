@@ -38,7 +38,7 @@ class CheckBusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val showChangeMessage = checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
+    val showChangeMessage: Boolean = checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
     val businessNameView: Option[Result] = for {
       businessName <- request.userAnswers.get(BusinessNamePage)
       businessType <- request.userAnswers.get(BusinessTypePage)

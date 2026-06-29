@@ -81,7 +81,8 @@ class RemoveCorrespondenceEmailAddressController @Inject() (
                                 case true  => Future.fromTry(updatedAnswers.remove(CorrespondenceEmailPage))
                                 case false => Future.successful(updatedAnswers)
                               }
-            cleanedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceDetailsChangesPage, hasChanged))
+            changed        <- hasChanged
+            cleanedAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, changed))
             _              <- sessionRepository.set(cleanedAnswers)
           } yield cleanedAnswers
 

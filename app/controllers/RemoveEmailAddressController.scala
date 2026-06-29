@@ -73,10 +73,11 @@ class RemoveEmailAddressController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, emailAddress))),
             value =>
-              val hasChanged = flagIfChanged(value, sessionRepository, RemoveEmailAddressPage, ContactDetailsChangesPage)
+              val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, RemoveEmailAddressPage, ContactDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
+                changed        <- hasChanged
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, changed))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(RemoveEmailAddressPage, mode, updatedAnswers)

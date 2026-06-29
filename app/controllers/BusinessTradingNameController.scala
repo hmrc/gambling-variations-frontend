@@ -70,11 +70,12 @@ class BusinessTradingNameController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType))),
         value =>
-          val hasChanged = flagIfChanged(value, sessionRepository, TradingNamePage, BusinessNameChangesPage)
+          val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, TradingNamePage, BusinessNameChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, hasChanged))
+            changed        <- hasChanged
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, changed))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
       )

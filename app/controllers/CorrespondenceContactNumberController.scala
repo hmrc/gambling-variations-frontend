@@ -79,13 +79,14 @@ class CorrespondenceContactNumberController @Inject() (
       validatedForm.fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val hasChanged = flagIfChanged(value, sessionRepository, CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage)
+          val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(
                                 request.userAnswers.set(CorrespondenceContactNumberPage, value)
                               )
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, hasChanged))
+            changed        <- hasChanged
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, changed))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(
             navigator.nextPage(CorrespondenceContactNumberPage, mode, updatedAnswers)
