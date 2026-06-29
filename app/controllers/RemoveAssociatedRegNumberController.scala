@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
-import models.{Mode, NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
