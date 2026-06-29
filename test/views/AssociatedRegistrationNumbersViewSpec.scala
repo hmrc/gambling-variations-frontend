@@ -42,13 +42,18 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
 
   "AssociatedRegistrationNumbersView" - {
     "must show expected values when data is populated" in new Setup {
-
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, isFlagged = true)(request, messages)
+      val seq = Seq("XHM00000199", "ZIU00001218", "GTT28881666")
+      val seqLength = seq.length
+      val html =
+        view(form, NormalMode, Some(seq), seqLength, true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title             must include(messages("associatedRegistrationNumbers.title"))
-      doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
+      doc.title                                             must include(messages("associatedRegistrationNumbers.title"))
+      doc.select("h1").text                                 must include(messages("associatedRegistrationNumbers.heading"))
+      doc.select(".associated-reg-number-XHM00000199").text must include("XHM00000199")
+      doc.select(".associated-reg-number-ZIU00001218").text must include("ZIU00001218")
+      doc.select(".associated-reg-number-GTT28881666").text must include("GTT28881666")
       doc.select("p").text must include(
         messages("Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.")
       )
@@ -57,16 +62,18 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
 
     "must show radio buttons when less than 3 numbers" in new Setup {
 
-      val html = view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218")), 2, true)(request, messages)
+      val seq = Seq("XHM00000199", "ZIU00001218")
+      val seqLength = seq.length
+
+      val html = view(form, NormalMode, Some(seq), seqLength, true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
       doc.title             must include(messages("associatedRegistrationNumbers.title"))
       doc.select("h1").text must include(messages("associatedRegistrationNumbers.heading"))
 
-      doc.select(".associated-reg-number-ZIU00001218").text must include("ZIU00001218")
-      doc.select(".assoc-reg-radio-buttons").text           must include(messages("associatedRegistrationNumbers.yesLabel"))
-      doc.select(".assoc-reg-radio-buttons").text           must include(messages("associatedRegistrationNumbers.noLabel"))
+      doc.select(".assoc-reg-radio-buttons").text must include(messages("associatedRegistrationNumbers.yesLabel"))
+      doc.select(".assoc-reg-radio-buttons").text must include(messages("associatedRegistrationNumbers.noLabel"))
     }
 
     "must show max limit message when 3 numbers are present" in new Setup {
@@ -78,7 +85,7 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
       doc.title                                             must include(messages("associatedRegistrationNumbers.title"))
       doc.select("h1").text                                 must include(messages("associatedRegistrationNumbers.heading"))
       doc.select(".associated-reg-number-XHM00000199").text must include("XHM00000199")
-      doc.select(".assoc-reg-max-limit-reached").text       must include(messages("associatedRegistrationNumbers.hint"))
+      doc.select(".assoc-reg-max-limit-reached").text       must include(messages("associatedRegistrationNumbers.max"))
     }
 
   }
