@@ -39,11 +39,16 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
   val form = formProvider()
 
   val data = Json.obj(
-    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-    "associatedRegistrationNumbers" -> Json.arr(
-      "XHM00000199",
-      "ZIU00001218",
-      "GTT28881666"
+    "mgdTradeDetailsSection" -> Json.obj(
+      "mgdRegNum" -> mgdRegNum,
+      "associatedRegNumbersSection" -> Json.obj(
+        "associatedRegistrationNumbers" -> Json.arr(
+          "XHM00000199",
+          "ZIU00001218",
+          "GTT28881666"
+        ),
+        "updated" -> true
+      )
     )
   )
 
@@ -160,10 +165,14 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
     "must return a Bad Request and errors when invalid data is submitted and there are fewer than 3 associated registration numbers" in {
 
       val twoNumbers = Json.obj(
-        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "associatedRegistrationNumbers" -> Json.arr(
-          "XHM00000199",
-          "ZIU00001218"
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> mgdRegNum,
+          "associatedRegNumbersSection" -> Json.obj(
+            "associatedRegistrationNumbers" -> Json.arr(
+              "XHM00000199",
+              "ZIU00001218"
+            )
+          )
         )
       )
 
