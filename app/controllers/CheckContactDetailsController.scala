@@ -17,9 +17,10 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
 
 import javax.inject.Inject
+import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -38,7 +39,7 @@ class CheckContactDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
     val ua = request.userAnswers
 
-    val flag = ua.get(BusinessContactDetailsSubmittedPage).getOrElse(false)
+    val flag = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
     Ok(
       view(
         ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),

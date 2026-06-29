@@ -31,6 +31,6 @@ object FlagsUtil {
   def flagIfChanged[A](value: Any, sessionRepository: SessionRepository, referencePage: QuestionPage[A], changesPage: QuestionPage[Boolean])(implicit
     request: DataRequest[?]
   ): Boolean = {
-    !(value == sessionRepository.get(referencePage)) || request.userAnswers.get(changesPage).getOrElse(false)
+    !(value == sessionRepository.get(referencePage)) || request.userAnswers.get(changesPage).contains(true)
   }
 }

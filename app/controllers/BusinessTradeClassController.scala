@@ -18,14 +18,16 @@ package controllers
 
 import controllers.actions.*
 import forms.BusinessTradeClassFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage}
+import pages.{BusinessEmailAddressPage, BusinessTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.flagIfChanged
 import views.html.BusinessTradeClassView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -65,11 +67,13 @@ class BusinessTradeClassController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
+            val hasChanged = flagIfChanged(value, sessionRepository, BusinessEmailAddressPage, TradingDetailsChangesPage)
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
+                    updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+                    updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
         )
     }
 }

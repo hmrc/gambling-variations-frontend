@@ -20,11 +20,12 @@ import controllers.actions.*
 import forms.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.flagIfChanged
 import views.html.BusinessEmailAddressView
 
 import javax.inject.Inject
@@ -61,11 +62,13 @@ class BusinessEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val hasChanged = flagIfChanged(value, sessionRepository, BusinessEmailAddressPage, ContactDetailsChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
       )
   }
 }

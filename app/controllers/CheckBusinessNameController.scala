@@ -19,6 +19,7 @@ package controllers
 import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
 import pages.*
+import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -37,7 +38,7 @@ class CheckBusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(BusinessNameSubmittedPage).getOrElse(false)
+    val flag = checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
     val businessNameView: Option[Result] = for {
       businessName <- request.userAnswers.get(BusinessNamePage)
       businessType <- request.userAnswers.get(BusinessTypePage)

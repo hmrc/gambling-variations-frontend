@@ -18,6 +18,7 @@ package controllers
 
 import connectors.GamblingConnector
 import controllers.actions.*
+import utils.FlagsUtil.checkFlag
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -25,7 +26,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages.{GroupMemberPage, TradingDetailsChangeFlagPage}
+import pages.{GroupMemberPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,10 +45,7 @@ class CheckTradingDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
-      val showChangeMessage: Boolean =
-        request.userAnswers
-          .get(TradingDetailsChangeFlagPage)
-          .contains(true)
+      val showChangeMessage: Boolean = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsChangeFlagPage)
 
       val isGroupMemberF: Future[Boolean] =
         request.userAnswers.get(GroupMemberPage) match {

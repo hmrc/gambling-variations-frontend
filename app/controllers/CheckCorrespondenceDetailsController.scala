@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import pages.*
-import repositories.SessionRepository
+import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -54,7 +54,7 @@ class CheckCorrespondenceDetailsController @Inject() (
           request.userAnswers.get(CorrespondenceFaxNumberPage),
           request.userAnswers.get(AddCorrespondenceEmailAddressPage),
           request.userAnswers.get(CorrespondenceEmailPage),
-          request.userAnswers.get(CorrespondenceDetailsSubmittedPage).getOrElse(false)
+          checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage)
         )
       )
     )
