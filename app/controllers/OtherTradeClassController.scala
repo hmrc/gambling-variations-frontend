@@ -20,7 +20,8 @@ import controllers.actions.*
 import forms.OtherTradeClassFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.OtherTradeClassPage
+import utils.FlagsUtil.flagIfChanged
+import pages.{OtherTradeClassPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -61,6 +62,7 @@ class OtherTradeClassController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val hasChanged = flagIfChanged(value, sessionRepository, OtherTradeClassPage, TradingDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
             _              <- sessionRepository.set(updatedAnswers)

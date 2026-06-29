@@ -18,10 +18,11 @@ package controllers
 
 import controllers.actions.*
 import forms.PreviousRegistrationNumberFormProvider
+import utils.FlagsUtil.flagIfChanged
 
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
-import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersPage}
+import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersPage, TradingDetailsChangesPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -65,6 +66,8 @@ class PreviousRegistrationNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         previousRegistrationNumber => {
+          val hasChanged =
+            flagIfChanged(previousRegistrationNumber, sessionRepository, PreviousRegistrationNumbersPage, TradingDetailsChangesPage)
           val currentPreviousRegistrationNumbers = request.userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
 
           if (currentPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
@@ -74,6 +77,7 @@ class PreviousRegistrationNumberController @Inject() (
           } else {
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, previousRegistrationNumber))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(routes.PreviousRegistrationNumberController.onPageLoad(mode))
           }
@@ -82,7 +86,7 @@ class PreviousRegistrationNumberController @Inject() (
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, previousRegistrationNumber: String): Try[UserAnswers] = {
-    val currentPreviousRegistrationNumbers = userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
+    val currentPreviousRegistrationNumbers = userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
     val updatedPreviousRegistrationNumbers =
       if (currentPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
         currentPreviousRegistrationNumbers

@@ -22,7 +22,8 @@ import forms.FaxNumberFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage}
+import utils.FlagsUtil.flagIfChanged
+import pages.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -64,9 +65,11 @@ class CorrespondenceFaxNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val hasChanged = flagIfChanged(value, sessionRepository, CorrespondenceFaxNumberPage, CorrespondenceDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceFaxNumberPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, hasChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CorrespondenceFaxNumberPage, mode, updatedAnswers))
       )
