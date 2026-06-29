@@ -17,78 +17,100 @@
 package controllers
 
 import base.SpecBase
-import forms.AssociatedRegistrationNumbersFormProvider
-import models.{NormalMode, UserAnswers}
+import forms.PreviousRegistrationNumbersFormProvider
+import models.{NormalMode, RegistrationNumbers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddAssociatedRegistrationNumberPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.AssociatedRegistrationNumbersView
+import views.html.PreviousRegistrationNumbersView
 
 import scala.concurrent.Future
 
-class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
+class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "#")
 
-  val formProvider = new AssociatedRegistrationNumbersFormProvider()
+  val formProvider = new PreviousRegistrationNumbersFormProvider
   val form = formProvider()
 
   val data = Json.obj(
-    "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-    "associatedRegistrationNumbers" -> Json.arr(
-      "XHM00000199",
-      "ZIU00001218",
-      "GTT28881666"
+    "mgdTradeDetailsSection" -> Json.obj(
+      "mgdRegNum" -> mgdRegNum,
+      "previousRegNumbersSection" -> Json.obj(
+        "previousRegistrationNumbers" -> Json.arr(
+          "XHM00000199",
+          "ZIU00001218"
+        ),
+        "unsubmittedPreviousRegNumbers" -> Json.arr(
+          "GTT28881666"
+        ),
+        "updated" -> true
+      )
+    )
+  )
+
+  val dataAlreadySubmitted = Json.obj(
+    "mgdTradeDetailsSection" -> Json.obj(
+      "mgdRegNum" -> mgdRegNum,
+      "previousRegNumbersSection" -> Json.obj(
+        "previousRegistrationNumbers" -> Json.arr(
+          "XHM00000199",
+          "ZIU00001218",
+          "HMN290182098"
+        ),
+        "updated" -> true
+      )
     )
   )
 
   private val baseUserAnswers =
     UserAnswers(userAnswersId, data)
 
-  lazy val associatedRegistrationNumbersRoute = routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode).url
+  private val alreadySubmittedInUa =
+    UserAnswers(userAnswersId, dataAlreadySubmitted)
 
-  "AssociatedRegistrationNumbers Controller" - {
+  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode).url
+  lazy val previousRegNumbersRedirectRoute = routes.PreviousRegistrationNumbersController.onRedirect("ABC").url
+  lazy val removePrevRegNumberRoute = routes.RemovePreviousRegNumberController.onPageLoad(NormalMode).url
+
+  "PreviousRegistrationNumbers Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
+        val request = FakeRequest(GET, previousRegistrationNumbersRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
+        val view = application.injector.instanceOf[PreviousRegistrationNumbersView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, false)(request, messages(application)).toString
+          view(form, NormalMode, RegistrationNumbers(Some(Seq("XHM00000199", "ZIU00001218")), Some(Seq("GTT28881666"))), true)(request,
+                                                                                                                               messages(application)
+                                                                                                                              ).toString
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must redirect to  SystemError if 3 submitted numbers are found" in {
 
-      val userAnswers = baseUserAnswers.set(AddAssociatedRegistrationNumberPage, true).success.value
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(alreadySubmittedInUa)).build()
 
       running(application) {
-        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
-
-        val view = application.injector.instanceOf[AssociatedRegistrationNumbersView]
+        val request = FakeRequest(GET, previousRegistrationNumbersRoute)
 
         val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(form, NormalMode, Some(Seq("XHM00000199", "ZIU00001218", "GTT28881666")), 3, false)(request, messages(application)).toString
+        status(result) mustEqual SEE_OTHER
       }
     }
 
@@ -108,7 +130,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
       running(application) {
         val request =
-          FakeRequest(POST, associatedRegistrationNumbersRoute)
+          FakeRequest(POST, previousRegistrationNumbersRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -121,10 +143,14 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val twoNumbers = Json.obj(
-        "mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "associatedRegistrationNumbers" -> Json.arr(
-          "XHM00000199",
-          "ZIU00001218"
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> mgdRegNum,
+          "previousRegNumbersSection" -> Json.obj(
+            "previousRegistrationNumbers" -> Json.arr(
+              "abc",
+              "123"
+            )
+          )
         )
       )
 
@@ -135,7 +161,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
       running(application) {
         val request =
-          FakeRequest(POST, associatedRegistrationNumbersRoute)
+          FakeRequest(POST, previousRegistrationNumbersRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val result = route(application, request).value
@@ -149,12 +175,36 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, associatedRegistrationNumbersRoute)
+        val request = FakeRequest(GET, previousRegistrationNumbersRoute)
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to remove prev reg number on submission" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(GET, previousRegNumbersRedirectRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        redirectLocation(result).value mustEqual removePrevRegNumberRoute
       }
     }
 
@@ -164,7 +214,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
       running(application) {
         val request =
-          FakeRequest(POST, associatedRegistrationNumbersRoute)
+          FakeRequest(POST, previousRegistrationNumbersRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
