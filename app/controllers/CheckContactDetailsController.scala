@@ -39,14 +39,14 @@ class CheckContactDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
     val ua = request.userAnswers
 
-    val flag = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
+    val showChangeMessage = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
     Ok(
       view(
         ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
         ua.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
         ua.get(BusinessFaxNumberPage),
         ua.get(BusinessEmailAddressPage),
-        flag
+        showChangeMessage
       )
     )
   }

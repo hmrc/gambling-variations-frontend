@@ -38,16 +38,16 @@ class CheckBusinessNameController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
+    val showChangeMessage = checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
     val businessNameView: Option[Result] = for {
       businessName <- request.userAnswers.get(BusinessNamePage)
       businessType <- request.userAnswers.get(BusinessTypePage)
     } yield {
-      Ok(view(businessType, businessName, request.userAnswers.get(TradingNamePage), flag))
+      Ok(view(businessType, businessName, request.userAnswers.get(TradingNamePage), showChangeMessage))
     }
 
     val soleProprietorView: Option[Result] = request.userAnswers.get(SoleProprietorPage).map { soleProprietor =>
-      Ok(view(BusinessType.Soleproprietor, soleProprietor.fullName, request.userAnswers.get(TradingNamePage), flag))
+      Ok(view(BusinessType.Soleproprietor, soleProprietor.fullName, request.userAnswers.get(TradingNamePage), showChangeMessage))
     }
 
     businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())

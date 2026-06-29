@@ -61,6 +61,7 @@ class CorrespondenceEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceEmailPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
