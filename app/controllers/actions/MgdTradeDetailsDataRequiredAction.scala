@@ -105,7 +105,7 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.isBusinessSeasonal, IsSeasonalBusinessPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessTradeClass, BusinessTradeClassPage)
       updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessActivityDesc, OtherTradeClassPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, previousRegs, PreviousRegistrationNumbersPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, previousRegs, PreviousRegistrationNumbersListPage)
       updatedAnswers <- setIfDefined(updatedAnswers, associatedRegs, AssociatedRegistrationNumbersPage)
     } yield updatedAnswers
   }

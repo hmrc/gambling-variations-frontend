@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.AssociatedRegistrationNumbersFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -56,7 +56,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
     UserAnswers(userAnswersId, data)
 
   lazy val associatedRegistrationNumbersRoute =
-    routes.AssociatedRegistrationNumbersController.onPageLoad().url
+    routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url
 
   "AssociatedRegistrationNumbers Controller" - {
 
@@ -295,7 +295,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val request =
           FakeRequest(
             GET,
-            routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber).url
+            routes.AssociatedRegistrationNumbersListController.onRedirect(assocRegNumber).url
           )
 
         val result = route(application, request).value
@@ -329,13 +329,13 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val request =
           FakeRequest(
             GET,
-            routes.AssociatedRegistrationNumbersController.onChangeRedirect(assocRegNumber).url
+            routes.AssociatedRegistrationNumbersListController.onChangeRedirect(assocRegNumber).url
           )
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad(CheckMode).url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())
@@ -383,7 +383,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual
-          routes.AssociatedRegNumberController.onPageLoad().url
+          routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())

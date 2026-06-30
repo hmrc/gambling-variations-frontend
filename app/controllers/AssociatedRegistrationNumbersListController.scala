@@ -22,7 +22,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -31,7 +31,7 @@ import views.html.AssociatedRegistrationNumbersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AssociatedRegistrationNumbersController @Inject() (
+class AssociatedRegistrationNumbersListController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -80,6 +80,7 @@ class AssociatedRegistrationNumbersController @Inject() (
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(AssociatedRegNumberPage))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
                 _              <- sessionRepository.set(updatedAnswers)
@@ -92,6 +93,7 @@ class AssociatedRegistrationNumbersController @Inject() (
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
+        updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad(mode))
     }
@@ -99,11 +101,10 @@ class AssociatedRegistrationNumbersController @Inject() (
   def onChangeRedirect(mode: Mode, assocRegNumber: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
-        updatedAnswers <- Future.fromTry(
-                            request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber)
-                          )
-        _ <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad())
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
+        updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad(mode))
     }
 
 }

@@ -21,7 +21,8 @@ import forms.PreviousRegistrationNumberFormProvider
 
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
-import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersPage}
+import navigation.Navigator
+import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -39,6 +40,7 @@ class PreviousRegistrationNumberController @Inject() (
   getData: DataRetrievalAction,
   requireData: MgdTradeDetailsDataRequiredAction,
   formProvider: PreviousRegistrationNumberFormProvider,
+  navigator: Navigator,
   val controllerComponents: MessagesControllerComponents,
   view: PreviousRegistrationNumberView
 )(implicit ec: ExecutionContext)
@@ -64,35 +66,37 @@ class PreviousRegistrationNumberController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        previousRegistrationNumber => {
-          val currentPreviousRegistrationNumbers = request.userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
+        registrationNumber => {
+          val previousRegistrationNumbersList =
+            request.userAnswers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty) ++
+              request.userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
 
-          if (currentPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
+          if (previousRegistrationNumbersList.contains(registrationNumber)) {
             Future.successful(
-              BadRequest(view(form.fill(previousRegistrationNumber).withError(fieldName, "previousRegistrationNumber.error.duplicate"), mode))
+              BadRequest(view(form.fill(registrationNumber).withError(fieldName, "previousRegistrationNumber.error.duplicate"), mode))
             )
           } else {
             for {
-              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, previousRegistrationNumber))
+              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, registrationNumber))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(routes.PreviousRegistrationNumberController.onPageLoad(mode))
+            } yield Redirect(navigator.nextPage(PreviousRegistrationNumbersListPage, mode, updatedAnswers))
           }
         }
       )
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, previousRegistrationNumber: String): Try[UserAnswers] = {
-    val currentPreviousRegistrationNumbers = userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
-    val updatedPreviousRegistrationNumbers =
-      if (currentPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
-        currentPreviousRegistrationNumbers
+    val unsubmittedPreviousRegistrationNumbers = userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
+    val updatedUnsubmittedPreviousRegistrationNumbers =
+      if (unsubmittedPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
+        unsubmittedPreviousRegistrationNumbers
       } else {
-        currentPreviousRegistrationNumbers :+ previousRegistrationNumber
+        unsubmittedPreviousRegistrationNumbers :+ previousRegistrationNumber
       }
 
     for {
       updatedAnswers <- userAnswers.set(PreviousRegNumberPage, previousRegistrationNumber)
-      updatedAnswers <- updatedAnswers.set(PreviousRegistrationNumbersPage, updatedPreviousRegistrationNumbers)
+      updatedAnswers <- updatedAnswers.set(UnsubmittedPreviousRegNumbersPage, updatedUnsubmittedPreviousRegistrationNumbers)
     } yield updatedAnswers
   }
 }

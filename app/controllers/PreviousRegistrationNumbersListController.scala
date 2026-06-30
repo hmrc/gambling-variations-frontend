@@ -24,7 +24,7 @@ import models.Mode
 import models.requests.DataRequest
 import models.RegistrationNumbers
 import navigation.Navigator
-import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersListPage, TradingDetailsChangeFlagPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -33,7 +33,7 @@ import views.html.PreviousRegistrationNumbersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PreviousRegistrationNumbersController @Inject() (
+class PreviousRegistrationNumbersListController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -55,7 +55,7 @@ class PreviousRegistrationNumbersController @Inject() (
     request: DataRequest[?]
   ): RegistrationNumbers =
     RegistrationNumbers(
-      submitted   = request.userAnswers.get(PreviousRegistrationNumbersPage),
+      submitted   = request.userAnswers.get(PreviousRegistrationNumbersListPage),
       unsubmitted = request.userAnswers.get(UnsubmittedPreviousRegNumbersPage)
     )
 
@@ -109,7 +109,7 @@ class PreviousRegistrationNumbersController @Inject() (
                 )
               )
             } else {
-              Future.successful(Redirect("#"))
+              Future.successful(Redirect(routes.CheckTradingDetailsController.onPageLoad()))
             },
           value =>
             for {
@@ -119,7 +119,10 @@ class PreviousRegistrationNumbersController @Inject() (
                                     value
                                   )
                                 )
-              _ <- sessionRepository.set(updatedAnswers)
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(PreviousRegNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenPreviousRegNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+              _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(
                 AddPreviousRegistrationNumberPage,
@@ -128,6 +131,22 @@ class PreviousRegistrationNumbersController @Inject() (
               )
             )
         )
+    }
+
+  def onChangeRedirect(mode: Mode, prevRegNumber: String): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(
+                            request.userAnswers.set(
+                              ChosenPreviousRegNumberPage,
+                              prevRegNumber
+                            )
+                          )
+        updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(
+        routes.PreviousRegistrationNumberController.onPageLoad(mode)
+      )
     }
 
   def onRedirect(mode: Mode, prevRegNumber: String): Action[AnyContent] =
@@ -139,7 +158,8 @@ class PreviousRegistrationNumbersController @Inject() (
                               prevRegNumber
                             )
                           )
-        _ <- sessionRepository.set(updatedAnswers)
+        updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+        _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
         routes.RemovePreviousRegNumberController.onPageLoad(mode)
       )

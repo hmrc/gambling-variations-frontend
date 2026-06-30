@@ -33,7 +33,7 @@ import views.html.PreviousRegistrationNumbersView
 
 import scala.concurrent.Future
 
-class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
+class PreviousRegistrationNumbersListControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "#")
 
@@ -73,11 +73,27 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
   private val baseUserAnswers =
     UserAnswers(userAnswersId, data)
 
+  private val lessThanMaxUserAnswers =
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> mgdRegNum,
+          "previousRegNumbersSection" -> Json.obj(
+            "previousRegistrationNumbers" -> Json.arr(
+              "XHM00000199"
+            ),
+            "updated" -> true
+          )
+        )
+      )
+    )
+
   private val alreadySubmittedInUa =
     UserAnswers(userAnswersId, dataAlreadySubmitted)
 
-  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode).url
-  lazy val previousRegNumbersRedirectRoute = routes.PreviousRegistrationNumbersController.onRedirect("ABC").url
+  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+  lazy val previousRegNumbersRedirectRoute = routes.PreviousRegistrationNumbersListController.onRedirect("ABC").url
   lazy val removePrevRegNumberRoute = routes.RemovePreviousRegNumberController.onPageLoad(NormalMode).url
 
   "PreviousRegistrationNumbers Controller" - {
@@ -121,7 +137,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(baseUserAnswers))
+        applicationBuilder(userAnswers = Some(lessThanMaxUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -131,7 +147,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
       running(application) {
         val request =
           FakeRequest(POST, previousRegistrationNumbersRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("addPreviousRegistrationNumber", "true"))
 
         val result = route(application, request).value
 
