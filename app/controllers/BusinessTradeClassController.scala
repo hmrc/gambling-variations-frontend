@@ -18,8 +18,9 @@ package controllers
 
 import controllers.actions.*
 import forms.BusinessTradeClassFormProvider
+
 import javax.inject.Inject
-import models.Mode
+import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
 import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -66,16 +67,35 @@ class BusinessTradeClassController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(BusinessTradeClassPage, value)
+                  .flatMap(_.set(TradingDetailsChangeFlagPage, true))
+              )
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
-              if (value.toString == "Other") {
-                Redirect(routes.OtherTradeClassController.onPageLoad(mode))
-              } else {
-                Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
-              }
+
+              val next =
+                mode match {
+
+
+                  case NormalMode =>
+                    navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
+
+                  case CheckMode =>
+                    value match {
+
+                      case BusinessTradeClass.Other =>
+                        routes.OtherTradeClassController.onPageLoad(CheckMode)
+
+                      case _ =>
+                        routes.CheckTradingDetailsController.onPageLoad()
+                    }
+                }
+
+              Redirect(next)
             }
         )
     }
+
 }

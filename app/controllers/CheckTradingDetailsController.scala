@@ -108,23 +108,31 @@ class CheckTradingDetailsController @Inject() (
     (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
-      val seasonalOpt   = request.userAnswers.get(SeasonalBusinessPage)
-      val otherDescOpt  = request.userAnswers.get(OtherTradeClassPage)
+      val seasonalOpt = request.userAnswers.get(SeasonalBusinessPage)
+      val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
       if (tradeClassOpt.isEmpty) {
         Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
       }
 
-      else if (seasonalOpt.isEmpty) {
-        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+      if (seasonalOpt.isEmpty) {
+       Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
       }
 
-      else if (tradeClassOpt.contains(BusinessTradeClass.Other) && otherDescOpt.isEmpty) {
-        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+      if (tradeClassOpt.contains(BusinessTradeClass.Other)) {
+
+        val descMissing =
+          otherDescOpt.forall(desc =>
+            desc.trim.isEmpty ||
+              desc.trim.equalsIgnoreCase("Not Provided")
+          )
+
+        if (descMissing) {
+          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+        }
       }
 
-      else {
-        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
-      }
+      Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
     }
+
 }
