@@ -110,29 +110,33 @@ class CheckTradingDetailsController @Inject() (
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
       val seasonalOpt = request.userAnswers.get(SeasonalBusinessPage)
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
+      
+      def stringMissing(opt: Option[String]): Boolean =
+        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not Provided"))
 
-      if (tradeClassOpt.isEmpty) {
+      def tradeClassIsMissing: Boolean = tradeClassOpt match {
+        case None => true
+        case Some(tc: BusinessTradeClass) => false
+        case _ => true
+      }
+
+      def tradeClassIsOther: Boolean = tradeClassOpt match {
+        case Some(BusinessTradeClass.Other) => true
+        case _ => false
+      }
+
+      def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
+
+      if (tradeClassIsMissing) {
         Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+      } else if (seasonalOpt.isEmpty) {
+        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+      } else if (tradeClassIsOther && otherDescIsMissing) {
+        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+      } else {
+        Redirect(routes.CheckTradingDetailsController.onPageLoad())
       }
-
-      if (seasonalOpt.isEmpty) {
-       Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
-      }
-
-      if (tradeClassOpt.contains(BusinessTradeClass.Other)) {
-
-        val descMissing =
-          otherDescOpt.forall(desc =>
-            desc.trim.isEmpty ||
-              desc.trim.equalsIgnoreCase("Not Provided")
-          )
-
-        if (descMissing) {
-          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
-        }
-      }
-
-      Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
     }
+
 
 }
