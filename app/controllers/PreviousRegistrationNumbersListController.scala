@@ -24,7 +24,7 @@ import models.Mode
 import models.requests.DataRequest
 import models.RegistrationNumbers
 import navigation.Navigator
-import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{AddPreviousRegistrationNumberPage, ChosenPreviousRegNumberPage, PreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersListPage, TradingDetailsChangeFlagPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -121,6 +121,7 @@ class PreviousRegistrationNumbersListController @Inject() (
                                 )
               updatedAnswers <- Future.fromTry(updatedAnswers.remove(PreviousRegNumberPage))
               updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenPreviousRegNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(
@@ -141,6 +142,7 @@ class PreviousRegistrationNumbersListController @Inject() (
                               prevRegNumber
                             )
                           )
+        updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _ <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
         routes.PreviousRegistrationNumberController.onPageLoad(mode)
@@ -156,6 +158,7 @@ class PreviousRegistrationNumbersListController @Inject() (
                               prevRegNumber
                             )
                           )
+        updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _ <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
         routes.RemovePreviousRegNumberController.onPageLoad(mode)
