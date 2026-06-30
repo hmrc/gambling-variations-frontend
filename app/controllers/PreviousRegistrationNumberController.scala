@@ -23,7 +23,7 @@ import utils.FlagsUtil.checkIfChanged
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersListPage, TradingDetailsChangesPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -69,7 +69,7 @@ class PreviousRegistrationNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         registrationNumber => {
-          val isChanged: Boolean =checkIfChanged(registrationNumber, request.userAnswers, PreviousRegistrationNumbersListPage)
+          val isChanged: Boolean = checkIfChanged(registrationNumber, request.userAnswers, PreviousRegistrationNumbersListPage)
           val previousRegistrationNumbersList =
             request.userAnswers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty) ++
               request.userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
