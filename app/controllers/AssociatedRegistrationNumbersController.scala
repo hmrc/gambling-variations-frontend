@@ -22,7 +22,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import utils.FlagsUtil.{checkFlag, flagIfChanged}
+import utils.FlagsUtil.{checkFlag, checkIfChanged}
 import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -80,13 +80,12 @@ class AssociatedRegistrationNumbersController @Inject() (
             formWithErrors =>
               Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))),
             value =>
-              val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, AssociatedRegistrationNumbersPage, TradingDetailsChangesPage)
+              val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, AssociatedRegistrationNumbersPage)
               for {
-                changed        <- hasChanged
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(AssociatedRegNumberPage))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, changed))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
           )

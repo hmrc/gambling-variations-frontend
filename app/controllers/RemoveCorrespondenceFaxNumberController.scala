@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveCorrespondenceFaxNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import utils.FlagsUtil.flagIfChanged
+import utils.FlagsUtil.checkIfChanged
 import pages.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage, RemoveCorrespondenceFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -73,12 +73,11 @@ class RemoveCorrespondenceFaxNumberController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, correspondenceFaxNumber))),
             value =>
-              val hasChanged: Future[Boolean] =
-                flagIfChanged(value, sessionRepository, RemoveCorrespondenceFaxNumberPage, CorrespondenceDetailsChangesPage)
+              val hasChanged: Boolean =
+                checkIfChanged(value, request.userAnswers, RemoveCorrespondenceFaxNumberPage)
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                changed        <- hasChanged
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, changed))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, hasChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(RemoveCorrespondenceFaxNumberPage, mode, updatedAnswers)

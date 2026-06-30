@@ -22,7 +22,7 @@ import forms.RemoveCorrespondenceEmailAddressFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import utils.FlagsUtil.flagIfChanged
+import utils.FlagsUtil.checkIfChanged
 import pages.{CorrespondenceDetailsChangesPage, CorrespondenceEmailPage, RemoveCorrespondenceEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -74,15 +74,15 @@ class RemoveCorrespondenceEmailAddressController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, correspondenceEmail.getOrElse("")))),
         value =>
           val hasChanged =
-            flagIfChanged(value, sessionRepository, RemoveCorrespondenceEmailAddressPage, CorrespondenceDetailsChangesPage)
+            checkIfChanged(value, request.userAnswers, RemoveCorrespondenceEmailAddressPage)
           val updatedAnswers = for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrespondenceEmailAddressPage, value))
-            cleanedAnswers <- value match {
-                                case true  => Future.fromTry(updatedAnswers.remove(CorrespondenceEmailPage))
-                                case false => Future.successful(updatedAnswers)
+            cleanedAnswers <- if (value) {
+                                Future.fromTry(updatedAnswers.remove(CorrespondenceEmailPage))
+                              } else {
+                                Future.successful(updatedAnswers)
                               }
-            changed        <- hasChanged
-            cleanedAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, changed))
+            cleanedAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, hasChanged))
             _              <- sessionRepository.set(cleanedAnswers)
           } yield cleanedAnswers
 

@@ -27,7 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.FlagsUtil.flagIfChanged
+import utils.FlagsUtil.checkIfChanged
 import views.html.BusinessTradeClassView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,12 +67,11 @@ class BusinessTradeClassController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
-            val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, BusinessEmailAddressPage, TradingDetailsChangesPage)
+            val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage)
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
-              changed        <- hasChanged
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, changed))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
         )

@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemovePreviousRegNumberFormProvider
 
 import javax.inject.Inject
-import utils.FlagsUtil.flagIfChanged
+import utils.FlagsUtil.checkIfChanged
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, RemovePreviousRegNumberPage, TradingDetailsChangesPage, UnsubmittedPreviousRegNumbersPage}
@@ -69,12 +69,11 @@ class RemovePreviousRegNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, chosenRegNumber))),
           value =>
-            val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, RemovePreviousRegNumberPage, TradingDetailsChangesPage)
+            val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, RemovePreviousRegNumberPage)
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(PreviousRegNumbersUpdatedPage, true))
-              changed        <- hasChanged
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, changed))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemovePreviousRegNumberPage, mode, updatedAnswers))
         )

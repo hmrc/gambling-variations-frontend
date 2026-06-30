@@ -40,6 +40,7 @@ class CheckContactDetailsController @Inject() (
     val ua = request.userAnswers
 
     val showChangeMessage: Boolean = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
+
     Ok(
       view(
         ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),

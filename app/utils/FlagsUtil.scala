@@ -20,9 +20,9 @@ import models.UserAnswers
 import models.requests.DataRequest
 import pages.QuestionPage
 import play.api.libs.json.Format.GenericFormat
-import repositories.SessionRepository
+import play.api.libs.json.Reads
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object FlagsUtil {
   def checkFlag(userAnswers: UserAnswers, changesPage: QuestionPage[Boolean], submittedOnlyPage: QuestionPage[Boolean]): Boolean = {
@@ -31,19 +31,12 @@ object FlagsUtil {
     changed || submittedOnly
   }
 
-  private def compareAnswers[A](userAnswers: UserAnswers,
-                                sessionRepository: SessionRepository,
-                                referencePage: QuestionPage[A],
-                                changesPage: QuestionPage[Boolean]
-                               ): Unit = {}
-
-  def flagIfChanged(value: Any, sessionRepository: SessionRepository, referencePage: QuestionPage[UserAnswers], changesPage: QuestionPage[Boolean])(
-    implicit
+  def checkIfChanged[A](value: Any, ua: UserAnswers, referencePage: QuestionPage[A])(implicit
+    rds: Reads[A],
     request: DataRequest[?],
-    ua: UserAnswers,
     ec: ExecutionContext
-  ): Future[Boolean] = {
-    sessionRepository.get(referencePage).map {
+  ): Boolean = {
+    ua.get(referencePage) match {
       case Some(savedValue) => savedValue != value
       case None             => true
     }

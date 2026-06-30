@@ -25,7 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.FlagsUtil.flagIfChanged
+import utils.FlagsUtil.checkIfChanged
 import views.html.BusinessContactNumberView
 
 import javax.inject.Inject
@@ -79,14 +79,13 @@ class BusinessContactNumberController @Inject() (
       validatedForm.fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, BusinessContactNumberPage, ContactDetailsChangesPage)
+          val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessContactNumberPage)
           for {
-            changed <- hasChanged
             updatedAnswers <- Future.fromTry(
                                 request.userAnswers.set(BusinessContactNumberPage, value)
                               )
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, changed))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(
             navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)

@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.OtherTradeClassFormProvider
 import models.Mode
 import navigation.Navigator
-import utils.FlagsUtil.flagIfChanged
+import utils.FlagsUtil.checkIfChanged
 import pages.{OtherTradeClassPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,11 +62,10 @@ class OtherTradeClassController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val hasChanged: Future[Boolean] = flagIfChanged(value, sessionRepository, OtherTradeClassPage, TradingDetailsChangesPage)
+          val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, OtherTradeClassPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
-            changed        <- hasChanged
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, changed))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
       )
