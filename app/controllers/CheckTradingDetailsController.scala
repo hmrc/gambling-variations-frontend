@@ -111,8 +111,33 @@ class CheckTradingDetailsController @Inject() (
       val seasonalOpt = request.userAnswers.get(SeasonalBusinessPage)
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
-      def stringMissing(opt: Option[String]): Boolean =
-        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not Provided"))
+      def stringMissing(opt: Option[String]): Boolean = {
+
+        println(s"[DEBUG] OtherTradeClassPage raw value from UserAnswers: $opt")
+
+        opt match {
+          case None =>
+            println("[DEBUG] -> Missing because value is None")
+            true
+
+          case Some(null) =>
+            println("[DEBUG] -> Missing because value is null")
+            true
+
+          case Some(value) =>
+            val trimmed = value.trim
+            println(s"[DEBUG] -> Trimmed value: '$trimmed'")
+
+            val missing =
+              trimmed.isEmpty ||
+                trimmed.equalsIgnoreCase("Not Provided")
+
+            println(s"[DEBUG] -> Missing evaluation result: $missing")
+
+            missing
+        }
+      }
+
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
         case None => true
