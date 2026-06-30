@@ -62,11 +62,11 @@ class FaxNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessFaxNumberPage)
+          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessFaxNumberPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessFaxNumberPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(BusinessFaxNumberPage, mode, updatedAnswers))
       )

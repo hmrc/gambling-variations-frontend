@@ -66,10 +66,10 @@ class SeasonalBusinessController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
-            val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, IsSeasonalBusinessPage)
+            val isChanged: Boolean = checkIfChanged(value, request.userAnswers, IsSeasonalBusinessPage)
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(IsSeasonalBusinessPage, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(IsSeasonalBusinessPage, mode, updatedAnswers))
         )

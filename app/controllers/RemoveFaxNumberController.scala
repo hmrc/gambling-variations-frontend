@@ -73,10 +73,10 @@ class RemoveFaxNumberController @Inject() (
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, faxNumber))),
             value =>
-              val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, RemoveFaxNumberPage)
+              val isChanged: Boolean = checkIfChanged(value, request.userAnswers, RemoveFaxNumberPage)
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, hasChanged))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(RemoveFaxNumberPage, mode, updatedAnswers)

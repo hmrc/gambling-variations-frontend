@@ -62,12 +62,12 @@ class CorrespondenceEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, CorrespondenceEmailPage)
+          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, CorrespondenceEmailPage)
 
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceEmailPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, hasChanged))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CorrespondenceEmailPage, mode, updatedAnswers))
       )

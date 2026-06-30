@@ -49,7 +49,7 @@ class AssociatedRegistrationNumbersController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val showChangeMessage = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsSubmittedPage)
+    val showChangeMessage = checkFlag(request.userAnswers, TradingDetailsChangesPage, AssociatedRegNumberSubmittedPage)
     val preparedForm = request.userAnswers.get(AddAssociatedRegistrationNumberPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -80,12 +80,12 @@ class AssociatedRegistrationNumbersController @Inject() (
             formWithErrors =>
               Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))),
             value =>
-              val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, AssociatedRegistrationNumbersPage)
+              val isChanged: Boolean = checkIfChanged(value, request.userAnswers, AssociatedRegistrationNumbersPage)
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(AssociatedRegNumberPage))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
           )

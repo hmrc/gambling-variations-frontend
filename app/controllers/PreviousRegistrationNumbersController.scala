@@ -113,7 +113,7 @@ class PreviousRegistrationNumbersController @Inject() (
               Future.successful(Redirect("#"))
             },
           value =>
-            val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, PreviousRegistrationNumbersPage)
+            val isChanged: Boolean = checkIfChanged(value, request.userAnswers, PreviousRegistrationNumbersPage)
             for {
               updatedAnswers <- Future.fromTry(
                                   request.userAnswers.set(
@@ -124,7 +124,7 @@ class PreviousRegistrationNumbersController @Inject() (
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.set(
                                     TradingDetailsChangesPage,
-                                    hasChanged
+                                    isChanged
                                   )
                                 )
               _ <- sessionRepository.set(updatedAnswers)

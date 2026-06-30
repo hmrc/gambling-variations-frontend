@@ -66,7 +66,7 @@ class PreviousRegistrationNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         previousRegistrationNumber => {
-          val hasChanged: Boolean =
+          val isChanged: Boolean =
             checkIfChanged(previousRegistrationNumber, request.userAnswers, PreviousRegistrationNumbersPage)
           val currentPreviousRegistrationNumbers = request.userAnswers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
 
@@ -77,7 +77,7 @@ class PreviousRegistrationNumberController @Inject() (
           } else {
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, previousRegistrationNumber))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(routes.PreviousRegistrationNumberController.onPageLoad(mode))
           }

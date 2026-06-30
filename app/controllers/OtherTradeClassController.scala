@@ -62,10 +62,10 @@ class OtherTradeClassController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val hasChanged: Boolean = checkIfChanged(value, request.userAnswers, OtherTradeClassPage)
+          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, OtherTradeClassPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, hasChanged))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
       )

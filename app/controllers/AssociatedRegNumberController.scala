@@ -79,7 +79,7 @@ class AssociatedRegNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           associatedRegNumber => {
-            val hasChanged = checkIfChanged(associatedRegNumber, request.userAnswers, AssociatedRegNumberPage)
+            val isChanged = checkIfChanged(associatedRegNumber, request.userAnswers, AssociatedRegNumberPage)
             val isDuplicate =
               maybeEditing match {
                 case Some(oldValue) =>
@@ -140,7 +140,7 @@ class AssociatedRegNumberController @Inject() (
                 updatedAnswers <- Future.fromTry(
                                     updatedAnswers.set(
                                       TradingDetailsChangesPage,
-                                      hasChanged
+                                      isChanged
                                     )
                                   )
                 _ <- sessionRepository.set(updatedAnswers)
