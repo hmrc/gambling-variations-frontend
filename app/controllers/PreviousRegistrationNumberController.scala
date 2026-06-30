@@ -18,8 +18,6 @@ package controllers
 
 import controllers.actions.*
 import forms.PreviousRegistrationNumberFormProvider
-import utils.FlagsUtil.checkIfChanged
-
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
