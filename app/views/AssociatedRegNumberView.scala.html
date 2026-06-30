@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("associatedRegNumber.title"), Some(messages("changeRegistrationDetails.title")))) {
 
-    @formHelper(action = routes.AssociatedRegNumberController.onSubmit()) {
+    @formHelper(action = routes.AssociatedRegNumberController.onSubmit(mode)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

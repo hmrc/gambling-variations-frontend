@@ -20,7 +20,7 @@ import controllers.routes
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import base.SpecBase
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import org.scalatest.matchers.must.Matchers
 import pages.AssociatedRegistrationNumbersPage
 import play.api.test.FakeRequest
@@ -55,12 +55,14 @@ class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val result = AssociatedRegNumberViewModel(associatedRegNumbers).summaryList
+      val result = AssociatedRegNumberViewModel(associatedRegNumbers, NormalMode).summaryList
 
       result.head.key.content mustEqual Text("XHM00000199")
       result(1).key.content mustEqual Text("ZIU00001218")
       result(2).key.content mustEqual Text("GTT28881666")
-      result.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersController.onRedirect(assocRegNumber = "XHM00000199").url
+      result.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersListController
+        .onRedirect(assocRegNumber = "XHM00000199")
+        .url
     }
   }
 }

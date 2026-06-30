@@ -33,7 +33,7 @@
 
 @layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
 
-    @formHelper(action = routes.AssociatedRegistrationNumbersController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.AssociatedRegistrationNumbersListController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -47,7 +47,7 @@
 
         @if(associatedRegNumberCount > 0) {
             @govukSummaryList(SummaryList(
-                rows = AssociatedRegNumberViewModel(associatedRegNumbers).summaryList
+                rows = AssociatedRegNumberViewModel(associatedRegNumbers, mode).summaryList
             ))}
 
         @if(associatedRegNumberCount < 3) {

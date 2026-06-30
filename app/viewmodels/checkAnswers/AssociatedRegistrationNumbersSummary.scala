@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import pages.AddAssociatedRegistrationNumberPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -35,7 +35,7 @@ object AssociatedRegistrationNumbersSummary {
         key   = "associatedRegistrationNumbers.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.AssociatedRegistrationNumbersController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url)
             .withVisuallyHiddenText(messages("associatedRegistrationNumbers.change.hidden"))
         )
       )

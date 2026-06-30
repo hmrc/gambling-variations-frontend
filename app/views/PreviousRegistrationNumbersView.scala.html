@@ -38,7 +38,7 @@
 
 @layout(pageTitle = title(form, messages("previousRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
 
-    @formHelper(action = routes.PreviousRegistrationNumbersController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.PreviousRegistrationNumbersListController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

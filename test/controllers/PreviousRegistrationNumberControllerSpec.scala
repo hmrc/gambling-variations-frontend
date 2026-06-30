@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{MgdTradeDetailsSectionPage, PreviousRegNumberPage, PreviousRegistrationNumbersPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{MgdTradeDetailsSectionPage, PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -41,7 +41,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
   val requiredUserAnswers = emptyUserAnswers.set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
 
   lazy val previousRegistrationNumberRoute = routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
-  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode).url
+  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
 
   "PreviousRegistrationNumber Controller" - {
 
@@ -120,7 +120,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers =
         requiredUserAnswers
-          .set(PreviousRegistrationNumbersPage, Seq("XDM00000001309"))
+          .set(PreviousRegistrationNumbersListPage, Seq("XDM00000001309"))
           .success
           .value
 
@@ -140,7 +140,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(PreviousRegistrationNumbersPage).value mustEqual Seq("XDM00000001309")
+        savedAnswersCaptor.getValue.get(PreviousRegistrationNumbersListPage).value mustEqual Seq("XDM00000001309")
         savedAnswersCaptor.getValue.get(UnsubmittedPreviousRegNumbersPage).value mustEqual Seq("XRM00000000574")
       }
     }
@@ -154,7 +154,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers =
         requiredUserAnswers
-          .set(PreviousRegistrationNumbersPage, Seq("XDM00000001309"))
+          .set(PreviousRegistrationNumbersListPage, Seq("XDM00000001309"))
           .success
           .value
           .set(UnsubmittedPreviousRegNumbersPage, Seq("XRM00000000574"))
@@ -177,7 +177,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(PreviousRegistrationNumbersPage).value mustEqual Seq("XDM00000001309")
+        savedAnswersCaptor.getValue.get(PreviousRegistrationNumbersListPage).value mustEqual Seq("XDM00000001309")
         savedAnswersCaptor.getValue.get(UnsubmittedPreviousRegNumbersPage).value mustEqual Seq(
           "XRM00000000574",
           "XQM00000001196"
@@ -189,7 +189,7 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers =
         requiredUserAnswers
-          .set(PreviousRegistrationNumbersPage, Seq("XRM00000000574"))
+          .set(PreviousRegistrationNumbersListPage, Seq("XRM00000000574"))
           .success
           .value
 
