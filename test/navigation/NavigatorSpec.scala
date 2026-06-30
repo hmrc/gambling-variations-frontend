@@ -94,7 +94,7 @@ class NavigatorSpec extends SpecBase {
         "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegNumberController.onPageLoad(NormalMode)
+            routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
         }
 
         "a page that doesn't exist in the route map to Index" in {
@@ -127,7 +127,7 @@ class NavigatorSpec extends SpecBase {
         "must go from AssociatedRegNumberPage to the check mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, CheckMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegNumberController.onPageLoad(CheckMode)
+            routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
         }
 
         "must go from SoleProprietorPage to the check mode sole proprietor page" in {
@@ -145,10 +145,64 @@ class NavigatorSpec extends SpecBase {
         routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
     }
 
+    "must go from AddPreviousRegistrationNumberPage to previous registration number page when yes is selected in Normal mode" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AddPreviousRegistrationNumberPage, true)
+          .success
+          .value
+
+      navigator.nextPage(AddPreviousRegistrationNumberPage, NormalMode, answers) mustBe
+        routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+    }
+
+    "must go from AddPreviousRegistrationNumberPage to check trading details when no is selected in Normal mode" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AddPreviousRegistrationNumberPage, false)
+          .success
+          .value
+
+      navigator.nextPage(AddPreviousRegistrationNumberPage, NormalMode, answers) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
+    }
+
+    "must go from AddPreviousRegistrationNumberPage to system error when no answer exists in Normal mode" in {
+
+      navigator.nextPage(AddPreviousRegistrationNumberPage, NormalMode, UserAnswers("id")) mustBe
+        routes.SystemErrorController.onPageLoad()
+    }
+
     "must go from PreviousRegNumberPage to the check mode previous registration number page" in {
 
       navigator.nextPage(PreviousRegNumberPage, CheckMode, UserAnswers("id")) mustBe
         routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    }
+
+    "must go from AddPreviousRegistrationNumberPage to previous registration number page when yes is selected in Check mode" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AddPreviousRegistrationNumberPage, true)
+          .success
+          .value
+
+      navigator.nextPage(AddPreviousRegistrationNumberPage, CheckMode, answers) mustBe
+        routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    }
+
+    "must go from AddPreviousRegistrationNumberPage to check trading details when no is selected in Check mode" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AddPreviousRegistrationNumberPage, false)
+          .success
+          .value
+
+      navigator.nextPage(AddPreviousRegistrationNumberPage, CheckMode, answers) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
     }
   }
 }

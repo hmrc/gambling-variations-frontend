@@ -326,7 +326,8 @@ associatedRegistrationNumbers.title = Associated registration numbers
 associatedRegistrationNumbers.heading = Associated registration numbers
 associatedRegistrationNumbers.radios = Do you want to add another registration number?
 associatedRegistrationNumbers.caption = Change registration details
-associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers.
+associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
+associatedRegistrationNumbers.max = You can only add up to 3 registration numbers.
 associatedRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
 associatedRegistrationNumbers.yesLabel = Yes, add another number
 associatedRegistrationNumbers.noLabel = No, return to check your trading details
@@ -468,6 +469,7 @@ otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apos
 otherTradeClass.checkYourAnswersLabel = What is your business trade class?
 otherTradeClass.error.required = Enter your business trade class
 otherTradeClass.error.invalid = Your business trade class must be in the correct format
+otherTradeClass.error.length = Your business trade class must be 300 characters or less
 otherTradeClass.textarea.label = You can enter up to 300 characters
 
 previousRegistrationNumber.title = What is your previous registration number?

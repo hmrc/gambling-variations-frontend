@@ -46,9 +46,13 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
     UserAnswers(
       userAnswersId,
       Json.obj(
-        "associatedRegistrationNumbers" -> assocRegSeq,
-        "chosenAssociatedRegNumber"     -> "XYM00000000",
-        "mgdTradeDetailsSection"        -> Json.obj("mgdRegNum" -> userAnswersId)
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> userAnswersId,
+          "associatedRegNumbersSection" -> Json.obj(
+            "associatedRegistrationNumbers " -> assocRegSeq,
+            "chosenAssociatedRegNumber"      -> "XYM00000000"
+          )
+        )
       )
     )
 

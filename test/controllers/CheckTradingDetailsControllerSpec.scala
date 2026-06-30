@@ -59,7 +59,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
       .set(IsSeasonalBusinessPage, true)
       .success
       .value
-      .set(PreviousRegistrationNumbersPage, Seq("MGD123", "MGD456"))
+      .set(PreviousRegistrationNumbersListPage, Seq("MGD123", "MGD456"))
       .success
       .value
       .set(AssociatedRegistrationNumbersPage, Seq("ASS789"))

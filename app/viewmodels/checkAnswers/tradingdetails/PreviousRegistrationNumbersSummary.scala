@@ -17,8 +17,8 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages.PreviousRegistrationNumbersPage
+import models.{NormalMode, UserAnswers}
+import pages.PreviousRegistrationNumbersListPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -32,7 +32,10 @@ object PreviousRegistrationNumbersSummary {
     Some {
 
       val numbers =
-        answers.get(PreviousRegistrationNumbersPage).getOrElse(Seq.empty)
+        answers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty)
+
+      val amount = numbers.length
+      val maxAmount = 3
 
       val value =
         numbers match {
@@ -52,19 +55,26 @@ object PreviousRegistrationNumbersSummary {
             )
         }
 
-      val actions =
-        if (numbers.size >= 3) {
-          Seq.empty
+      val hasNumbers = numbers.nonEmpty
+
+      val route =
+        if (hasNumbers) {
+          routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
         } else {
-          Seq(
-            ActionItemViewModel(
-              "site.change",
-              routes.PreviousRegistrationNumberController.onPageLoad(CheckMode).url
-            ).withVisuallyHiddenText(
-              messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
-            )
-          )
+          routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
         }
+
+      val actions = if (amount >= maxAmount) { Seq.empty }
+      else {
+        Seq(
+          ActionItemViewModel(
+            "site.change",
+            route
+          ).withVisuallyHiddenText(
+            messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
+          )
+        )
+      }
 
       SummaryListRowViewModel(
         key     = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",

@@ -60,7 +60,9 @@ class UnsubmittedPrevRegNumberViewModelSpec extends SpecBase with Matchers {
       val unsubmitted = UnsubmittedPrevRegNumberViewModel(unsubmittedPreviousRegNumbers).summaryList
 
       unsubmitted.head.key.content mustEqual Text("GTT28881666")
-      unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersController.onRedirect(prevRegNumber = "GTT28881666").url
+      unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersListController
+        .onRedirect(prevRegNumber = "GTT28881666")
+        .url
     }
   }
 }
