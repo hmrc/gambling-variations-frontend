@@ -77,7 +77,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
     }
 
-    "must display registration numbers separated by <br> and include action when 3 or more numbers" in {
+    "must display registration numbers separated by <br> and exclude change action when 3 or more numbers" in {
 
       val numbers = Seq("REG001", "REG002", "REG003")
 
@@ -95,8 +95,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       html must include("REG003")
       html must include("<br/>")
 
-      result.actions.get.items.size mustBe 1
-      result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+      result.actions.get.items.size mustBe 0
     }
   }
 }

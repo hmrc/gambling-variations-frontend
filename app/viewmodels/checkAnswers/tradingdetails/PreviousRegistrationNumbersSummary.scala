@@ -34,6 +34,9 @@ object PreviousRegistrationNumbersSummary {
       val numbers =
         answers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty)
 
+      val amount = numbers.length
+      val maxAmount = 3
+
       val value =
         numbers match {
           case Seq() =>
@@ -61,14 +64,17 @@ object PreviousRegistrationNumbersSummary {
           routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
         }
 
-      val actions = Seq(
-        ActionItemViewModel(
-          "site.change",
-          route
-        ).withVisuallyHiddenText(
-          messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
+      val actions = if (amount >= maxAmount) { Seq.empty }
+      else {
+        Seq(
+          ActionItemViewModel(
+            "site.change",
+            route
+          ).withVisuallyHiddenText(
+            messages("checkTradingDetails.previousRegistrationNumbers.change.hidden")
+          )
         )
-      )
+      }
 
       SummaryListRowViewModel(
         key     = "checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel",

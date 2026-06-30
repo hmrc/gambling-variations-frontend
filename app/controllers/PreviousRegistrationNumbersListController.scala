@@ -143,7 +143,7 @@ class PreviousRegistrationNumbersListController @Inject() (
                             )
                           )
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
-        _ <- sessionRepository.set(updatedAnswers)
+        _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
         routes.PreviousRegistrationNumberController.onPageLoad(mode)
       )
@@ -159,7 +159,7 @@ class PreviousRegistrationNumbersListController @Inject() (
                             )
                           )
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
-        _ <- sessionRepository.set(updatedAnswers)
+        _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
         routes.RemovePreviousRegNumberController.onPageLoad(mode)
       )
