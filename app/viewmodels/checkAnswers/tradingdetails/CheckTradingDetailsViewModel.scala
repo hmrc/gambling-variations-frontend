@@ -63,22 +63,17 @@ object CheckTradingDetailsViewModel {
 
         row.copy(value = ValueViewModel(Text(fixedValue)))
       }
+    
 
     val otherTradeClassRow =
       OtherTradeClassSummary.row(userAnswers).map { row =>
-        val tc   = userAnswers.get(BusinessTradeClassPage)
-        val desc = userAnswers.get(OtherTradeClassPage)
-
-        val fixedValue =
-          (tc, desc) match {
-            case (Some(BusinessTradeClass.Other), None) =>
-              "Not Provided"
-            case _ =>
-              row.value.content.toString
-          }
+        val descOpt = userAnswers.get(OtherTradeClassPage)
+        
+        val fixedValue: String = descOpt.filter(_.nonEmpty).getOrElse("Not Provided")
 
         row.copy(value = ValueViewModel(Text(fixedValue)))
       }
+
 
     val seasonalRow =
       IsSeasonalBusinessSummary.row(userAnswers)
