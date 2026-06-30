@@ -57,6 +57,10 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
         isGroupMember       = false,
         isPartnership       = false,
         businessNameChanged = true,
+        businessAddressChanged       = false,
+        contactDetailsChanged        = false,
+        correspondenceDetailsChanged = false,
+        tradingDetailsChanged        = false,
         licencesChanged     = true,
         premisesExists      = true,
         premisesTriggered   = false,
@@ -92,6 +96,10 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
         isGroupMember       = false,
         isPartnership       = true,
         businessNameChanged = false,
+        businessAddressChanged       = false,
+        contactDetailsChanged        = false,
+        correspondenceDetailsChanged = false,
+        tradingDetailsChanged        = false,
         licencesChanged     = false,
         premisesExists      = true,
         premisesTriggered   = false,
@@ -104,15 +112,19 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
     "include group member tasks when isGroupMember is true" in {
 
       val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber        = "XM123",
-        managementHomeUrl   = "/home",
-        isGroupMember       = true,
-        isPartnership       = false,
-        businessNameChanged = false,
-        licencesChanged     = false,
-        premisesExists      = true,
-        premisesTriggered   = false,
-        submitUrl           = "/submit"
+        mgdRegNumber                 = "XM123",
+        managementHomeUrl            = "/home",
+        isGroupMember                = true,
+        isPartnership                = false,
+        businessNameChanged          = false,
+        businessAddressChanged       = true,
+        contactDetailsChanged        = false,
+        correspondenceDetailsChanged = true,
+        tradingDetailsChanged        = false,
+        licencesChanged              = false,
+        premisesExists               = true,
+        premisesTriggered            = false,
+        submitUrl                    = "/submit"
       )
 
       val taskMessages = viewModel.tasks.map(_.name)
@@ -129,15 +141,19 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
     "include triggered premises task with NotStarted when premises do not exist" in {
 
       val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber        = "XM123",
-        managementHomeUrl   = "/home",
-        isGroupMember       = false,
-        isPartnership       = false,
-        businessNameChanged = false,
-        licencesChanged     = false,
-        premisesExists      = false,
-        premisesTriggered   = true,
-        submitUrl           = "/submit"
+        mgdRegNumber                 = "XM123",
+        managementHomeUrl            = "/home",
+        isGroupMember                = false,
+        isPartnership                = false,
+        businessNameChanged          = false,
+        businessAddressChanged       = true,
+        contactDetailsChanged        = false,
+        correspondenceDetailsChanged = true,
+        tradingDetailsChanged        = false,
+        licencesChanged              = false,
+        premisesExists               = false,
+        premisesTriggered            = true,
+        submitUrl                    = "/submit"
       )
 
       val premisesTasks =
@@ -148,18 +164,122 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
       premisesTasks.exists(_.status == NotStarted) mustBe true
     }
 
+    "show flag ReadyToSubmit when Business Name has changed" in {
+
+      val viewModel = ChangeRegistrationDetailsViewModel(
+        mgdRegNumber = "XM123",
+        managementHomeUrl = "/home",
+        isGroupMember = false,
+        isPartnership = false,
+        businessNameChanged = true,
+        businessAddressChanged = false,
+        contactDetailsChanged = false,
+        correspondenceDetailsChanged = false,
+        tradingDetailsChanged = false,
+        licencesChanged = false,
+        premisesExists = false,
+        premisesTriggered = false,
+        submitUrl = "/submit"
+      )
+
+      val businessNameTasks =
+        viewModel.tasks.filter(_.name == "Business name")
+
+
+      businessNameTasks.exists(_.status == ReadyToSubmit) mustBe true
+    }
+
+    "show flag ReadyToSubmit when Business Address has changed" in {
+
+      val viewModel = ChangeRegistrationDetailsViewModel(
+        mgdRegNumber = "XM123",
+        managementHomeUrl = "/home",
+        isGroupMember = false,
+        isPartnership = false,
+        businessNameChanged = false,
+        businessAddressChanged = true,
+        contactDetailsChanged = false,
+        correspondenceDetailsChanged = false,
+        tradingDetailsChanged = false,
+        licencesChanged = false,
+        premisesExists = false,
+        premisesTriggered = true,
+        submitUrl = "/submit"
+      )
+
+      val businessAddressTasks =
+        viewModel.tasks.filter(_.name == "Business address")
+
+
+      businessAddressTasks.exists(_.status == ReadyToSubmit) mustBe true
+    }
+
+    "show flag ReadyToSubmit when Business Contact Details has changed" in {
+
+      val viewModel = ChangeRegistrationDetailsViewModel(
+        mgdRegNumber = "XM123",
+        managementHomeUrl = "/home",
+        isGroupMember = false,
+        isPartnership = false,
+        businessNameChanged = false,
+        businessAddressChanged = false,
+        contactDetailsChanged = true,
+        correspondenceDetailsChanged = false,
+        tradingDetailsChanged = false,
+        licencesChanged = false,
+        premisesExists = false,
+        premisesTriggered = true,
+        submitUrl = "/submit"
+      )
+
+      val contactDetailsTasks =
+        viewModel.tasks.filter(_.name == "Business contact details")
+
+
+      contactDetailsTasks.exists(_.status == ReadyToSubmit) mustBe true
+    }
+
+    "show flag ReadyToSubmit when Correspondence Details has changed" in {
+
+      val viewModel = ChangeRegistrationDetailsViewModel(
+        mgdRegNumber = "XM123",
+        managementHomeUrl = "/home",
+        isGroupMember = false,
+        isPartnership = false,
+        businessNameChanged = true,
+        businessAddressChanged = true,
+        contactDetailsChanged = false,
+        correspondenceDetailsChanged = true,
+        tradingDetailsChanged = false,
+        licencesChanged = false,
+        premisesExists = false,
+        premisesTriggered = true,
+        submitUrl = "/submit"
+      )
+
+      val correspondenceDetailsTasks =
+        viewModel.tasks.filter(_.name == "Correspondence details")
+
+
+      correspondenceDetailsTasks.exists(_.status == ReadyToSubmit) mustBe true
+    }
+
     "include triggered premises task with NoChange when premises exist" in {
 
       val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber        = "XM123",
-        managementHomeUrl   = "/home",
-        isGroupMember       = false,
-        isPartnership       = false,
-        businessNameChanged = false,
-        licencesChanged     = false,
-        premisesExists      = true,
-        premisesTriggered   = true,
-        submitUrl           = "/submit"
+        mgdRegNumber                 = "XM123",
+        managementHomeUrl            = "/home",
+        isGroupMember                = false,
+        isPartnership                = false,
+        businessNameChanged          = false,
+        businessAddressChanged       = true,
+        contactDetailsChanged        = false,
+        correspondenceDetailsChanged = true,
+        tradingDetailsChanged        = false,
+        licencesChanged              = false,
+        premisesExists               = true,
+        premisesTriggered            = true,
+        submitUrl                    = "/submit"
       )
 
       val premisesTasks =
@@ -174,15 +294,19 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
     "return true when at least one task is ReadyToSubmit" in {
 
       val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber        = "XM123",
-        managementHomeUrl   = "/home",
-        isGroupMember       = false,
-        isPartnership       = false,
-        businessNameChanged = true,
-        licencesChanged     = false,
-        premisesExists      = true,
-        premisesTriggered   = false,
-        submitUrl           = "/submit"
+        mgdRegNumber                 = "XM123",
+        managementHomeUrl            = "/home",
+        isGroupMember                = false,
+        isPartnership                = false,
+        businessNameChanged          = true,
+        businessAddressChanged       = false,
+        contactDetailsChanged        = false,
+        correspondenceDetailsChanged = false,
+        tradingDetailsChanged        = false,
+        licencesChanged              = false,
+        premisesExists               = true,
+        premisesTriggered            = false,
+        submitUrl                    = "/submit"
       )
 
       viewModel.canStart mustBe true
@@ -191,15 +315,19 @@ class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
     "return false when no tasks are ReadyToSubmit" in {
 
       val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber        = "XM123",
-        managementHomeUrl   = "/home",
-        isGroupMember       = false,
-        isPartnership       = false,
-        businessNameChanged = false,
-        licencesChanged     = false,
-        premisesExists      = true,
-        premisesTriggered   = false,
-        submitUrl           = "/submit"
+        mgdRegNumber                 = "XM123",
+        managementHomeUrl            = "/home",
+        isGroupMember                = false,
+        isPartnership                = false,
+        businessNameChanged          = false,
+        businessAddressChanged       = false,
+        contactDetailsChanged        = false,
+        correspondenceDetailsChanged = false,
+        tradingDetailsChanged        = false,
+        licencesChanged              = false,
+        premisesExists               = false,
+        premisesTriggered            = false,
+        submitUrl                    = "/submit"
       )
 
       viewModel.canStart mustBe false
