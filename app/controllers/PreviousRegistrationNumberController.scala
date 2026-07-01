@@ -22,7 +22,7 @@ import forms.PreviousRegistrationNumberFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{ChosenPreviousRegNumberPage, PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -52,7 +52,7 @@ class PreviousRegistrationNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PreviousRegNumberPage) match {
+    val preparedForm = request.userAnswers.get(ChosenPreviousRegNumberPage).orElse(request.userAnswers.get(PreviousRegNumberPage)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -67,11 +67,16 @@ class PreviousRegistrationNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         registrationNumber => {
+          val chosenPreviousRegistrationNumber = request.userAnswers.get(ChosenPreviousRegNumberPage)
+
           val previousRegistrationNumbersList =
             request.userAnswers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty) ++
               request.userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
 
-          if (previousRegistrationNumbersList.contains(registrationNumber)) {
+          val isDuplicate =
+            previousRegistrationNumbersList.exists(value => value == registrationNumber && !chosenPreviousRegistrationNumber.contains(value))
+
+          if (isDuplicate) {
             Future.successful(
               BadRequest(view(form.fill(registrationNumber).withError(fieldName, "previousRegistrationNumber.error.duplicate"), mode))
             )
@@ -88,10 +93,16 @@ class PreviousRegistrationNumberController @Inject() (
   private def updateUserAnswers(userAnswers: UserAnswers, previousRegistrationNumber: String): Try[UserAnswers] = {
     val unsubmittedPreviousRegistrationNumbers = userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
     val updatedUnsubmittedPreviousRegistrationNumbers =
-      if (unsubmittedPreviousRegistrationNumbers.contains(previousRegistrationNumber)) {
-        unsubmittedPreviousRegistrationNumbers
-      } else {
-        unsubmittedPreviousRegistrationNumbers :+ previousRegistrationNumber
+      userAnswers.get(ChosenPreviousRegNumberPage) match {
+        case Some(chosenPreviousRegistrationNumber) if unsubmittedPreviousRegistrationNumbers.contains(chosenPreviousRegistrationNumber) =>
+          unsubmittedPreviousRegistrationNumbers.map {
+            case value if value == chosenPreviousRegistrationNumber => previousRegistrationNumber
+            case value                                              => value
+          }
+        case _ if unsubmittedPreviousRegistrationNumbers.contains(previousRegistrationNumber) =>
+          unsubmittedPreviousRegistrationNumbers
+        case _ =>
+          unsubmittedPreviousRegistrationNumbers :+ previousRegistrationNumber
       }
 
     for {
