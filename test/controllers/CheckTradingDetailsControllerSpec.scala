@@ -226,48 +226,6 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
-      "must redirect to SeasonalBusiness when seasonal business is missing" in {
-        val mockConnector = mock[GamblingConnector]
-
-        when(mockConnector.getBusinessDetails(any())(any()))
-          .thenReturn(Future.successful(businessDetails))
-
-        val mgdDetails = MgdTradeDetails(
-          mgdRegNumber = "MGD999999",
-          isBusinessSeasonal = Some(false),
-          businessTradeClass = Some(BusinessTradeClass.Casino),
-          businessActivityDesc = Some("Arcade"),
-          previousMgdRegistrationNumbers = Some(Seq("MGD123")),
-          associatedMgdRegistrationNumbers = Some(Seq("ASS456")),
-          systemDate = Some(LocalDate.of(2026, 1, 1))
-        )
-
-
-        when(mockConnector.getMgdTradeDetails(any[String])(any()))
-          .thenReturn(Future.successful(mgdDetails))
-
-        val ua =
-          emptyUserAnswers
-            .set(MgdTradeDetailsSectionPage, "MGD999999")
-            .success
-            .value
-            .set(BusinessTradeClassPage, BusinessTradeClass.Casino)
-            .success
-            .value
-
-        val application =
-          applicationBuilder(userAnswers = Some(ua))
-            .overrides(bind[GamblingConnector].toInstance(mockConnector))
-            .build()
-
-        running(application) {
-          val request = FakeRequest(POST, routes.CheckTradingDetailsController.onContinue().url)
-          val result = route(application, request).value
-
-          redirectLocation(result).value mustBe
-            routes.SeasonalBusinessController.onPageLoad(NormalMode).url
-        }
-      }
 
       "must redirect to OtherTradeClass when trade class is Other and description is missing" in {
         val mockConnector = mock[GamblingConnector]

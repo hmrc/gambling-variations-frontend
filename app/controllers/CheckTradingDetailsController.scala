@@ -112,7 +112,7 @@ class CheckTradingDetailsController @Inject() (
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
       def stringMissing(opt: Option[String]): Boolean =
-        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not Provided"))
+        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
         case None => true
@@ -129,8 +129,6 @@ class CheckTradingDetailsController @Inject() (
 
       if (tradeClassIsMissing) {
         Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
-      } else if (seasonalOpt.isEmpty) {
-        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
       } else if (tradeClassIsOther && otherDescIsMissing) {
         Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
       } else {

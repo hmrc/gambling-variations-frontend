@@ -32,9 +32,9 @@ class BusinessTradeClassSummarySpec extends SpecBase {
 
   "BusinessTradeClassSummary.row" - {
 
-    "return 'Not Provided' when the question has not been answered" in {
+    "return 'Not provided' when the question has not been answered" in {
       val row = BusinessTradeClassSummary.row(emptyUserAnswers)
-      row.value.value.content.asHtml.toString must include("Not Provided")
+      row.value.value.content.asHtml.toString must include("Not provided")
     }
 
 
