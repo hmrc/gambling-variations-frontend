@@ -77,6 +77,7 @@ class RemoveCorrespondenceFaxNumberController @Inject() (
                 checkIfChanged(value, request.userAnswers, RemoveCorrespondenceFaxNumberPage, CorrespondenceDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveCorrespondenceFaxNumberPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(

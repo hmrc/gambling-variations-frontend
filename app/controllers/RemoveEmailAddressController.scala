@@ -77,6 +77,7 @@ class RemoveEmailAddressController @Inject() (
                 checkIfChanged(value, request.userAnswers, RemoveEmailAddressPage, ContactDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveEmailAddressPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
