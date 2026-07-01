@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.OtherTradeClassFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.OtherTradeClassPage
+import pages.{OtherTradeClassPage, TradingDetailsChangeFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -63,6 +63,7 @@ class OtherTradeClassController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
       )
