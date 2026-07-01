@@ -84,7 +84,7 @@ class CheckTradingDetailsController @Inject() (
         CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).previousMgd.rows.nonEmpty
 
       if (previousRegsExist) {
-        Redirect(routes.PreviousRegistrationNumberController.onPageLoad(NormalMode))
+        Redirect(routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode))
       } else {
         Redirect(routes.PreviousRegistrationNumberController.onPageLoad(NormalMode))
       }
@@ -98,9 +98,9 @@ class CheckTradingDetailsController @Inject() (
         CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).associatedMgd.rows.nonEmpty
 
       if (associatedRegsExist) {
-        Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode))
+        Redirect(routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode))
       } else {
-        Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad(NormalMode))
+        Redirect(routes.AssociatedRegNumberController.onPageLoad(NormalMode))
       }
     }
 

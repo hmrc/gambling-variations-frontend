@@ -29,29 +29,34 @@ object OtherTradeClassSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
 
     val tradeClassOpt = answers.get(BusinessTradeClassPage)
-
-    if (!tradeClassOpt.contains(BusinessTradeClass.Other)) {
-      return None
-    }
-
-    val descOpt = answers.get(OtherTradeClassPage)
-
-    val displayValue =
-      descOpt.getOrElse("Not Provided")
-
-    Some(
-      SummaryListRowViewModel(
-        key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
-        value = ValueViewModel(displayValue),
-        actions = Seq(
-          ActionItemViewModel(
-            "site.change",
-            routes.OtherTradeClassController.onPageLoad(CheckMode).url
-          ).withVisuallyHiddenText(
-            messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
+    
+    tradeClassOpt match {
+      case Some(BusinessTradeClass.Other) =>
+        val descOpt = answers.get(OtherTradeClassPage)
+        
+        val descMissing = descOpt.forall(_.trim.isEmpty)
+        if (descMissing) {
+          None
+        } else {
+          Some(
+            SummaryListRowViewModel(
+              key = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
+              value = ValueViewModel(descOpt.get),
+              actions = Seq(
+                ActionItemViewModel(
+                  "site.change",
+                  routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+                ).withVisuallyHiddenText(
+                  messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
+                )
+              )
+            )
           )
-        )
-      )
-    )
+        }
+        
+      case _ =>
+        None
+    }
   }
+
 }

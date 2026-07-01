@@ -49,8 +49,9 @@
   @p("checkTradingDetails.submit.p1")
  }
 
- @govukButton(
-  ButtonViewModel(messages("site.continue"))
-  .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
- )
+@govukButton(
+ButtonViewModel(messages("site.continue"))
+.asLink(routes.CheckTradingDetailsController.onContinue().url)
+)
+
 }
