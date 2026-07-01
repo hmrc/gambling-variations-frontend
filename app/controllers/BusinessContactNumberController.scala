@@ -79,7 +79,8 @@ class BusinessContactNumberController @Inject() (
       validatedForm.fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessContactNumberPage)
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, BusinessContactNumberPage, ContactDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(
                                 request.userAnswers.set(BusinessContactNumberPage, value)

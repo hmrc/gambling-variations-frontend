@@ -85,7 +85,8 @@ class ChangeBusinessNameController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(soleProprietorView(formWithErrors, mode))),
               value =>
-                val isChanged: Boolean = checkIfChanged(value, request.userAnswers, SoleProprietorPage)
+                val isChanged: Boolean =
+                  checkIfChanged(value, request.userAnswers, SoleProprietorPage, BusinessNameChangesPage)
 
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
@@ -103,7 +104,7 @@ class ChangeBusinessNameController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType, headingKey, titleKey))),
               value =>
-                val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessNamePage)
+                val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessNamePage, BusinessNameChangesPage)
 
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNamePage, value))

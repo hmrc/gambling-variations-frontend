@@ -68,7 +68,8 @@ class RemoveAssociatedRegNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, chosenRegNumber))),
           value =>
-            val isChanged: Boolean = checkIfChanged(value, request.userAnswers, RemoveAssociatedRegNumberPage)
+            val isChanged: Boolean =
+              checkIfChanged(value, request.userAnswers, RemoveAssociatedRegNumberPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))

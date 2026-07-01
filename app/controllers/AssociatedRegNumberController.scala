@@ -79,7 +79,8 @@ class AssociatedRegNumberController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           associatedRegNumber => {
-            val isChanged = checkIfChanged(associatedRegNumber, request.userAnswers, AssociatedRegNumberPage)
+            val isChanged =
+              checkIfChanged(associatedRegNumber, request.userAnswers, AssociatedRegNumberPage, TradingDetailsChangesPage)
             val isDuplicate =
               maybeEditing match {
                 case Some(oldValue) =>

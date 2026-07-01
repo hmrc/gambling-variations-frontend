@@ -62,7 +62,8 @@ class BusinessEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage)
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage, ContactDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))

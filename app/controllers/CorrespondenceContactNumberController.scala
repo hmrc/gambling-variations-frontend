@@ -79,7 +79,8 @@ class CorrespondenceContactNumberController @Inject() (
       validatedForm.fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, CorrespondenceContactNumberPage)
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(
                                 request.userAnswers.set(CorrespondenceContactNumberPage, value)

@@ -67,7 +67,8 @@ class PreviousRegistrationNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         registrationNumber => {
-          val isChanged: Boolean = checkIfChanged(registrationNumber, request.userAnswers, PreviousRegistrationNumbersListPage)
+          val isChanged: Boolean =
+            checkIfChanged(registrationNumber, request.userAnswers, PreviousRegistrationNumbersListPage, TradingDetailsChangesPage)
           val previousRegistrationNumbersList =
             request.userAnswers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty) ++
               request.userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)

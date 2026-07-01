@@ -62,7 +62,8 @@ class OtherTradeClassController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, OtherTradeClassPage)
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, OtherTradeClassPage, TradingDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))

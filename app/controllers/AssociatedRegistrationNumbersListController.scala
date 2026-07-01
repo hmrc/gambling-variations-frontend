@@ -80,7 +80,8 @@ class AssociatedRegistrationNumbersListController @Inject() (
             formWithErrors =>
               Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))),
             value =>
-              val isChanged: Boolean = checkIfChanged(value, request.userAnswers, AssociatedRegistrationNumbersPage)
+              val isChanged: Boolean =
+                checkIfChanged(value, request.userAnswers, AssociatedRegistrationNumbersPage, TradingDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))

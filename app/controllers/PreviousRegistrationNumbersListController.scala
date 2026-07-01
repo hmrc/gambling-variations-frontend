@@ -113,7 +113,8 @@ class PreviousRegistrationNumbersListController @Inject() (
               Future.successful(Redirect(routes.CheckTradingDetailsController.onPageLoad()))
             },
           value =>
-            val isChanged: Boolean = checkIfChanged(value, request.userAnswers, PreviousRegistrationNumbersListPage)
+            val isChanged: Boolean =
+              checkIfChanged(value, request.userAnswers, PreviousRegistrationNumbersListPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(
                                   request.userAnswers.set(

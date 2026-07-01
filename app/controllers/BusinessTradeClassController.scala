@@ -22,7 +22,7 @@ import forms.BusinessTradeClassFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessEmailAddressPage, BusinessTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -67,7 +67,8 @@ class BusinessTradeClassController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
-            val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage)
+            val isChanged: Boolean =
+              checkIfChanged(value, request.userAnswers, BusinessTradeClassPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))

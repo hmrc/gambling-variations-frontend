@@ -62,7 +62,8 @@ class FaxNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessFaxNumberPage)
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, BusinessFaxNumberPage, ContactDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessFaxNumberPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))

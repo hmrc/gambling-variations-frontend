@@ -31,14 +31,17 @@ object FlagsUtil {
     changed || submittedOnly
   }
 
-  def checkIfChanged[A](value: Any, ua: UserAnswers, referencePage: QuestionPage[A])(implicit
+  def checkIfChanged[A](value: Any, ua: UserAnswers, referencePage: QuestionPage[A], changesPage: QuestionPage[Boolean])(implicit
     rds: Reads[A],
     request: DataRequest[?],
     ec: ExecutionContext
   ): Boolean = {
-    ua.get(referencePage) match {
+    val isChanged = ua.get(referencePage) match {
       case Some(savedValue) => savedValue != value
       case None             => true
     }
+
+    val isAlreadyFlagged = ua.get(changesPage).getOrElse(false)
+    isChanged || isAlreadyFlagged
   }
 }

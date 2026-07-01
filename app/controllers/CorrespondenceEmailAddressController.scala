@@ -62,7 +62,8 @@ class CorrespondenceEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean = checkIfChanged(value, request.userAnswers, CorrespondenceEmailPage)
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, CorrespondenceEmailPage, CorrespondenceDetailsChangesPage)
 
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceEmailPage, value))

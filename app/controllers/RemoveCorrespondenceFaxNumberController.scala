@@ -74,7 +74,7 @@ class RemoveCorrespondenceFaxNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, correspondenceFaxNumber))),
             value =>
               val isChanged: Boolean =
-                checkIfChanged(value, request.userAnswers, RemoveCorrespondenceFaxNumberPage)
+                checkIfChanged(value, request.userAnswers, RemoveCorrespondenceFaxNumberPage, CorrespondenceDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
