@@ -49,9 +49,13 @@
   @p("checkTradingDetails.submit.p1")
  }
 
-@govukButton(
-ButtonViewModel(messages("site.continue"))
-.asLink(routes.CheckTradingDetailsController.onContinue().url)
-)
+@formHelper(
+action = routes.CheckTradingDetailsController.onContinue()) {
+
+ @govukButton(
+  ButtonViewModel(messages("site.continue"))
+  )
+}
+
 
 }
