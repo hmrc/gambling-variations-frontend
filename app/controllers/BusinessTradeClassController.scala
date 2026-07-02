@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessTradeClassFormProvider
 
 import javax.inject.Inject
-import models.Mode
+import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
 import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -70,11 +70,37 @@ class BusinessTradeClassController @Inject() (
             val isChanged: Boolean =
               checkIfChanged(value, request.userAnswers, BusinessTradeClassPage, TradingDetailsChangesPage)
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessTradeClassPage, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers
+                  .set(BusinessTradeClassPage, value)
+                  .flatMap(_.set(TradingDetailsChangeFlagPage, true))
+              )
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers))
+
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield {
+
+              val next =
+                mode match {
+
+
+                  case NormalMode =>
+                    navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
+
+                  case CheckMode =>
+                    value match {
+
+                      case BusinessTradeClass.Other =>
+                        routes.OtherTradeClassController.onPageLoad(CheckMode)
+
+                      case _ =>
+                        routes.CheckTradingDetailsController.onPageLoad()
+                    }
+                }
+
+              Redirect(next)
+            }
         )
     }
+
 }

@@ -26,7 +26,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages.{GroupMemberPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages._
+import models._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,10 +50,7 @@ class CheckTradingDetailsController @Inject() (
 
       val isGroupMemberF: Future[Boolean] =
         request.userAnswers.get(GroupMemberPage) match {
-
-          case Some(value) =>
-            Future.successful(value)
-
+          case Some(value) => Future.successful(value)
           case None =>
             gamblingConnector
               .getBusinessDetails(request.mgdRegNum)
@@ -77,4 +75,65 @@ class CheckTradingDetailsController @Inject() (
         )
       }
     }
+
+  def onPreviousRegNumbers: Action[AnyContent] =
+    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+
+      val previousRegsExist =
+        CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).previousMgd.rows.nonEmpty
+
+      if (previousRegsExist) {
+        Redirect(routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode))
+      } else {
+        Redirect(routes.PreviousRegistrationNumberController.onPageLoad(NormalMode))
+      }
+    }
+
+
+  def onAssociatedRegNumbers: Action[AnyContent] =
+    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+
+      val associatedRegsExist =
+        CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).associatedMgd.rows.nonEmpty
+
+      if (associatedRegsExist) {
+        Redirect(routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode))
+      } else {
+        Redirect(routes.AssociatedRegNumberController.onPageLoad(NormalMode))
+      }
+    }
+
+  def onContinue: Action[AnyContent] =
+    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+
+      val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
+      val seasonalOpt = request.userAnswers.get(SeasonalBusinessPage)
+      val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
+
+      def stringMissing(opt: Option[String]): Boolean =
+        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
+
+      def tradeClassIsMissing: Boolean = tradeClassOpt match {
+        case None => true
+        case Some(tc: BusinessTradeClass) => false
+        case _ => true
+      }
+
+      def tradeClassIsOther: Boolean = tradeClassOpt match {
+        case Some(BusinessTradeClass.Other) => true
+        case _ => false
+      }
+
+      def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
+
+      if (tradeClassIsMissing) {
+        Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+      } else if (tradeClassIsOther && otherDescIsMissing) {
+        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+      } else {
+        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+      }
+    }
+
+
 }

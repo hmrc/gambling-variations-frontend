@@ -85,11 +85,11 @@ class NavigatorSpec extends SpecBase {
             routes.CheckContactDetailsController.onPageLoad()
         }
 
-        "must go from IsSeasonalBusinessPage to the normal mode seasonal business page" in {
-
+        "must go from IsSeasonalBusinessPage to the normal mode check trading details page" in {
           navigator.nextPage(IsSeasonalBusinessPage, NormalMode, UserAnswers("id")) mustBe
-            routes.SeasonalBusinessController.onPageLoad(NormalMode)
+            routes.CheckTradingDetailsController.onPageLoad()
         }
+
 
         "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
 
@@ -118,10 +118,9 @@ class NavigatorSpec extends SpecBase {
           navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad()
         }
 
-        "must go from IsSeasonalBusinessPage to CheckYourAnswers" in {
-
+        "must go from IsSeasonalBusinessPage to the check mode check trading details page" in {
           navigator.nextPage(IsSeasonalBusinessPage, CheckMode, UserAnswers("id")) mustBe
-            routes.SeasonalBusinessController.onPageLoad(CheckMode)
+            routes.CheckTradingDetailsController.onPageLoad()
         }
 
         "must go from AssociatedRegNumberPage to the check mode associated registration number page" in {

@@ -23,7 +23,7 @@ import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
-import pages.{IsSeasonalBusinessPage, TradingDetailsChangesPage}
+import pages.{IsSeasonalBusinessPage, TradingDetailsChangesPage, TradingDetailsChangeFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -70,6 +70,7 @@ class SeasonalBusinessController @Inject() (
               checkIfChanged(value, request.userAnswers, IsSeasonalBusinessPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(IsSeasonalBusinessPage, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(IsSeasonalBusinessPage, mode, updatedAnswers))

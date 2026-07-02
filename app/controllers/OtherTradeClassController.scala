@@ -21,7 +21,7 @@ import forms.OtherTradeClassFormProvider
 import models.Mode
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
-import pages.{OtherTradeClassPage, TradingDetailsChangesPage}
+import pages.{OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -66,6 +66,7 @@ class OtherTradeClassController @Inject() (
             checkIfChanged(value, request.userAnswers, OtherTradeClassPage, TradingDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))

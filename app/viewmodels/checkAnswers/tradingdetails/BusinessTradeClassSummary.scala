@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{BusinessTradeClass, CheckMode, UserAnswers}
 import pages.BusinessTradeClassPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -26,19 +26,35 @@ import viewmodels.implicits.*
 
 object BusinessTradeClassSummary {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(BusinessTradeClassPage).map { answer =>
+  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
+
+    val tradeClassOpt = answers.get(BusinessTradeClassPage)
+
+    val displayValue =
+      tradeClassOpt match {
+        case None =>
+          "Not provided"
+
+        case Some(BusinessTradeClass.Other) =>
+          messages("businessTradeClass.other")
+
+        case Some(value) =>
+          messages(s"businessTradeClass.$value")
+      }
+
+    Some(
       SummaryListRowViewModel(
         key = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
-        value = ValueViewModel(
-          messages(s"businessTradeClass.${answer.toString}")
-        ),
+        value = ValueViewModel(displayValue),
         actions = Seq(
           ActionItemViewModel(
             "site.change",
             routes.BusinessTradeClassController.onPageLoad(CheckMode).url
-          ).withVisuallyHiddenText(messages("checkTradingDetails.businessTradeClass.change.hidden"))
+          ).withVisuallyHiddenText(
+            messages("checkTradingDetails.businessTradeClass.change.hidden")
+          )
         )
       )
-    }
+    )
+  }
 }
