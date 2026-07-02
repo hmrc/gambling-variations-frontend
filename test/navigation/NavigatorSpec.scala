@@ -90,7 +90,6 @@ class NavigatorSpec extends SpecBase {
             routes.CheckTradingDetailsController.onPageLoad()
         }
 
-
         "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
