@@ -26,8 +26,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages._
-import models._
+import pages.*
+import models.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -89,7 +89,6 @@ class CheckTradingDetailsController @Inject() (
       }
     }
 
-
   def onAssociatedRegNumbers: Action[AnyContent] =
     (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
@@ -114,14 +113,13 @@ class CheckTradingDetailsController @Inject() (
         opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
-        case None => true
+        case None                         => true
         case Some(tc: BusinessTradeClass) => false
-        case _ => true
       }
 
       def tradeClassIsOther: Boolean = tradeClassOpt match {
         case Some(BusinessTradeClass.Other) => true
-        case _ => false
+        case _                              => false
       }
 
       def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
@@ -134,6 +132,5 @@ class CheckTradingDetailsController @Inject() (
         Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
       }
     }
-
 
 }

@@ -21,7 +21,7 @@ import forms.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
-import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, BusinessTypePage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, BusinessTypePage, TradingDetailsChangesPage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
