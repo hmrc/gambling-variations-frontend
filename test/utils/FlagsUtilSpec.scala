@@ -20,7 +20,7 @@ import base.SpecBase
 import models.UserAnswers
 import models.requests.DataRequest
 import pages.QuestionPage
-import play.api.libs.json.{JsPath, Json, OFormat}
+import play.api.libs.json.{JsPath, Json, OFormat, Reads}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -46,12 +46,12 @@ class FlagsUtilSpec extends SpecBase {
     override def path: JsPath = JsPath \ "testChangesPage"
   }
 
-  private def dataConstructor(ref: Option[String], subm: Option[Boolean], change: Option[Boolean]): UserAnswers = {
+  private def dataConstructor(ref: TestAnswer, subm: Boolean, change: Boolean): UserAnswers = {
     UserAnswers(userAnswersId,
                 Json.obj(
                   "testRefPage"           -> ref,
-                  "testChangesPage"       -> subm,
-                  "testSubmittedOnlyPage" -> change
+                  "testSubmittedOnlyPage" -> subm,
+                  "testChangesPage"       -> change
                 )
                )
   }
@@ -59,28 +59,20 @@ class FlagsUtilSpec extends SpecBase {
   "FlagsUtil" - {
     "checkFlag" - {
       "must return true for submittedOnly but not changed data" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = Some(true), change = Some(false))
-
+        val userAnswers = dataConstructor(TestAnswer("foobar"), subm = true, change = false)
         FlagsUtil.checkFlag(userAnswers, TestChangesPage, TestSubmittedOnlyPage) mustEqual true
 
       }
 
       "must return true for changed data without a submittedOnly flag" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = Some(false), change = Some(true))
+        val userAnswers = dataConstructor(TestAnswer("foobar"), subm = false, change = true)
 
         FlagsUtil.checkFlag(userAnswers, TestChangesPage, TestSubmittedOnlyPage) mustEqual true
 
       }
 
       "must return false for two false flags" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = Some(false), change = Some(false))
-
-        FlagsUtil.checkFlag(userAnswers, TestChangesPage, TestSubmittedOnlyPage) mustEqual false
-
-      }
-
-      "must return false for no flags" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = None, change = None)
+        val userAnswers = dataConstructor(TestAnswer("foobar"), subm = false, change = false)
 
         FlagsUtil.checkFlag(userAnswers, TestChangesPage, TestSubmittedOnlyPage) mustEqual false
 
@@ -90,22 +82,21 @@ class FlagsUtilSpec extends SpecBase {
     "checkIfChanged" - {
 
       "must return false when data hasn't changed" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = Some(false), change = Some(false))
-        val value = Some("foobar")
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val ua = dataConstructor(TestAnswer("foobar"), subm = false, change = false)
+        val value = TestAnswer("foobar")
+        value mustEqual ua.get(TestRefPage).getOrElse(None)
+        val application = applicationBuilder(userAnswers = Some(ua)).build()
 
         running(application) {
-          implicit val request: DataRequest[AnyContentAsEmpty.type] = DataRequest(FakeRequest(), userAnswersId, userAnswers)
+          implicit val request: DataRequest[AnyContentAsEmpty.type] = DataRequest(FakeRequest(), userAnswersId, ua)
           implicit val ec: ExecutionContext = application.injector.instanceOf[ExecutionContext]
-
-          FlagsUtil.checkIfChanged(value, userAnswers, TestRefPage, TestChangesPage) mustEqual false
+          FlagsUtil.checkIfChanged(value, ua, TestRefPage, TestChangesPage) mustEqual false
         }
       }
 
       "must return true when change was made earlier in user journey" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = Some(false), change = Some(true))
-        val value = Some("foobar")
+        val userAnswers = dataConstructor(TestAnswer("foobar"), subm = false, change = true)
+        val value = TestAnswer("foobar")
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
@@ -117,8 +108,8 @@ class FlagsUtilSpec extends SpecBase {
       }
 
       "must return true when new data submitted and both flags false" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = Some(false), change = Some(false))
-        val value = Some("newbar")
+        val userAnswers = dataConstructor(TestAnswer("foobar"), subm = false, change = false)
+        val value = Some(TestAnswer("newbar"))
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
@@ -130,8 +121,8 @@ class FlagsUtilSpec extends SpecBase {
       }
 
       "must return true when new data submitted and both flags true" in {
-        val userAnswers = dataConstructor(Some("foobar"), subm = Some(true), change = Some(true))
-        val value = Some("newbar")
+        val userAnswers = dataConstructor(TestAnswer("foobar"), subm = true, change = true)
+        val value = TestAnswer("newbar")
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {

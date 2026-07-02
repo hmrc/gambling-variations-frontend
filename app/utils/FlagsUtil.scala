@@ -36,12 +36,14 @@ object FlagsUtil {
     request: DataRequest[?],
     ec: ExecutionContext
   ): Boolean = {
+
     val isChanged = ua.get(referencePage) match {
       case Some(savedValue) => savedValue != value
       case None             => true
     }
 
-    val isAlreadyFlagged = ua.get(changesPage).getOrElse(false)
+    val isAlreadyFlagged = ua.get(changesPage).contains(true)
+
     isChanged || isAlreadyFlagged
   }
 }
