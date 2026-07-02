@@ -25,6 +25,6 @@ class CorrespondenceAddrAdditionalInfoScreenerFormProvider @Inject() extends Map
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("correspondenceAddrAdditionalInfoScreener.error.required")
+      "correspondenceAddrAdditionalInfoScreener" -> boolean("correspondenceAddrAdditionalInfoScreener.error.required")
     )
 }

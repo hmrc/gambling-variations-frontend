@@ -10,9 +10,9 @@ class CorrespondenceAddrAdditionalInfoScreenerFormProviderSpec extends BooleanFi
 
   val form = new CorrespondenceAddrAdditionalInfoScreenerFormProvider()()
 
-  ".value" - {
+  ".correspondenceAddrAdditionalInfoScreener" - {
 
-    val fieldName = "value"
+    val fieldName = "correspondenceAddrAdditionalInfoScreener"
 
     behave like booleanField(
       form,

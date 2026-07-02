@@ -20,7 +20,7 @@ import play.api.libs.json.JsPath
 
 case object CorrespondenceAddrAdditionalInfoScreenerPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
 
   override def toString: String = "correspondenceAddrAdditionalInfoScreener"
 }
