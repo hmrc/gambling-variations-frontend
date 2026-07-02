@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceNameFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage, CorrespondenceNamePage}
+import pages.{CorrespondenceDetailsSubmittedPage,CorrespondenceNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,7 +48,7 @@ class CorrespondenceNameController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(CorrespondenceEmailPage)
+      .get(CorrespondenceNamePage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
