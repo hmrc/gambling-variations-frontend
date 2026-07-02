@@ -21,24 +21,23 @@ import models.{CheckMode, UserAnswers}
 import pages.CorrespondenceAddrAdditionalInfoScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object CorrespondenceAddrAdditionalInfoScreenerSummary  {
+object CorrespondenceAddrAdditionalInfoScreenerSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CorrespondenceAddrAdditionalInfoScreenerPage).map {
-      answer =>
+    answers.get(CorrespondenceAddrAdditionalInfoScreenerPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "correspondenceAddrAdditionalInfoScreener.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CorrespondenceAddrAdditionalInfoScreenerController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("correspondenceAddrAdditionalInfoScreener.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "correspondenceAddrAdditionalInfoScreener.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.CorrespondenceAddrAdditionalInfoScreenerController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("correspondenceAddrAdditionalInfoScreener.change.hidden"))
         )
+      )
     }
 }
