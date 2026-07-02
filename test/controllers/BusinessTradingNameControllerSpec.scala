@@ -23,7 +23,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessTypePage, TradingDetailsChangesPage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessTypePage, TradingDetailsChangesPage, TradingNamePage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -151,7 +151,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must flag TradingDetailsChangesPage when data changed in" in {
+    "must flag BusinessNameChangesPage when data changed in" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
@@ -177,7 +177,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(TradingNamePage).value mustEqual "ABC Ltd"
-        savedAnswersCaptor.getValue.get(TradingDetailsChangesPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(BusinessNameChangesPage).value mustEqual true
       }
     }
 

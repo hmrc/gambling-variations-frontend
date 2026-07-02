@@ -21,7 +21,7 @@ import forms.RemoveTradeNameFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
-import pages.{BusinessNameSubmittedPage, RemoveTradeNamePage, TradingDetailsChangesPage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, RemoveTradeNamePage, TradingDetailsChangesPage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -67,7 +67,7 @@ class RemoveTradeNameController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
         )
