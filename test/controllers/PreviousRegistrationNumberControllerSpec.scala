@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{MgdTradeDetailsSectionPage, PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.{ChosenPreviousRegNumberPage, MgdTradeDetailsSectionPage, PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -83,6 +83,31 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view with the chosen previous registration number on a GET" in {
+
+      val userAnswers =
+        requiredUserAnswers
+          .set(PreviousRegNumberPage, "XQM00000001196")
+          .success
+          .value
+          .set(ChosenPreviousRegNumberPage, "XRM00000000574")
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, previousRegistrationNumberRoute)
+
+        val view = application.injector.instanceOf[PreviousRegistrationNumberView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill("XRM00000000574"), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -182,6 +207,82 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
           "XRM00000000574",
           "XQM00000001196"
         )
+      }
+    }
+
+    "must replace the chosen unsubmitted previous registration number when valid data is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers =
+        requiredUserAnswers
+          .set(PreviousRegistrationNumbersListPage, Seq("XDM00000001309"))
+          .success
+          .value
+          .set(UnsubmittedPreviousRegNumbersPage, Seq("XQM00000001196"))
+          .success
+          .value
+          .set(ChosenPreviousRegNumberPage, "XQM00000001196")
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, previousRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(PreviousRegistrationNumbersListPage).value mustEqual Seq("XDM00000001309")
+        savedAnswersCaptor.getValue.get(UnsubmittedPreviousRegNumbersPage).value mustEqual Seq("XRM00000000574")
+      }
+    }
+
+    "must allow the chosen unsubmitted previous registration number to be submitted unchanged" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers =
+        requiredUserAnswers
+          .set(UnsubmittedPreviousRegNumbersPage, Seq("XRM00000000574"))
+          .success
+          .value
+          .set(ChosenPreviousRegNumberPage, "XRM00000000574")
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, previousRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(UnsubmittedPreviousRegNumbersPage).value mustEqual Seq("XRM00000000574")
       }
     }
 
