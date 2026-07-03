@@ -18,11 +18,12 @@ package controllers
 
 import controllers.actions.*
 import forms.BusinessTradeClassFormProvider
+import models.requests.DataRequest
 
 import javax.inject.Inject
-import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
+import models.{BusinessTradeClass, CheckMode, Mode, NormalMode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage}
+import pages.{BusinessTradeClassPage, IsSeasonalBusinessPage, TradingDetailsChangeFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessTradeClassView
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class BusinessTradeClassController @Inject() (
   override val messagesApi: MessagesApi,
@@ -72,8 +74,11 @@ class BusinessTradeClassController @Inject() (
                                     .set(BusinessTradeClassPage, value)
                                     .flatMap(_.set(TradingDetailsChangeFlagPage, true))
                                 )
-              _ <- sessionRepository.set(updatedAnswers)
+              updatedAnswers <- removeSeasonalIfOther(value, updatedAnswers)
+              _              <- sessionRepository.set(updatedAnswers)
             } yield {
+              val seasonalBusIsEmpty: Boolean =
+                request.userAnswers.get(IsSeasonalBusinessPage).fold(true)(_ => false)
 
               val next =
                 mode match {
@@ -87,6 +92,9 @@ class BusinessTradeClassController @Inject() (
                       case BusinessTradeClass.Other =>
                         routes.OtherTradeClassController.onPageLoad(CheckMode)
 
+                      case seasonalBusIsEmpty =>
+                        routes.SeasonalBusinessController.onPageLoad(NormalMode)
+
                       case _ =>
                         routes.CheckTradingDetailsController.onPageLoad()
                     }
@@ -97,4 +105,11 @@ class BusinessTradeClassController @Inject() (
         )
     }
 
+  def removeSeasonalIfOther(value: Any, ua: UserAnswers): Future[UserAnswers] = {
+    if (value == BusinessTradeClass.Other) {
+      Future.fromTry(ua.remove(IsSeasonalBusinessPage))
+    } else {
+      Future(ua)
+    }
+  }
 }

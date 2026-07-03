@@ -26,25 +26,25 @@ import viewmodels.implicits.*
 
 object IsSeasonalBusinessSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers
-      .get(IsSeasonalBusinessPage)
-      .map { answer =>
+    if (answers.get(OtherTradeClassPage).isEmpty) {
+      answers
+        .get(IsSeasonalBusinessPage)
+        .map { answer =>
 
-        Some(
-          SummaryListRowViewModel(
-            key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
-            value = ValueViewModel(if (answer) messages("site.yes") else messages("site.no")),
-            actions = Seq(
-              ActionItemViewModel(
-                "site.change",
-                routes.SeasonalBusinessController.onPageLoad(CheckMode).url
-              ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
+          Some(
+            SummaryListRowViewModel(
+              key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
+              value = ValueViewModel(if (answer) messages("site.yes") else messages("site.no")),
+              actions = Seq(
+                ActionItemViewModel(
+                  "site.change",
+                  routes.SeasonalBusinessController.onPageLoad(CheckMode).url
+                ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
+              )
             )
           )
-        )
-      }
-      .getOrElse(
-        if (answers.get(OtherTradeClassPage).isEmpty) {
+        }
+        .getOrElse(
           Some(
             SummaryListRowViewModel(
               key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
@@ -57,8 +57,8 @@ object IsSeasonalBusinessSummary {
               )
             )
           )
-        } else {
-          None
-        }
-      )
+        )
+    } else {
+      None
+    }
 }
