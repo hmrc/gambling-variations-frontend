@@ -68,16 +68,15 @@ class BusinessTradeClassController @Inject() (
           value =>
             for {
               updatedAnswers <- Future.fromTry(
-                request.userAnswers
-                  .set(BusinessTradeClassPage, value)
-                  .flatMap(_.set(TradingDetailsChangeFlagPage, true))
-              )
+                                  request.userAnswers
+                                    .set(BusinessTradeClassPage, value)
+                                    .flatMap(_.set(TradingDetailsChangeFlagPage, true))
+                                )
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
 
               val next =
                 mode match {
-
 
                   case NormalMode =>
                     navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
