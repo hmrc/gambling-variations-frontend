@@ -25,6 +25,7 @@ import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 import org.scalatest.matchers.must.Matchers.*
+import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 class IsSeasonalBusinessSummarySpec extends SpecBase {
 
@@ -34,7 +35,10 @@ class IsSeasonalBusinessSummarySpec extends SpecBase {
   "IsSeasonalBusinessSummary.row" - {
 
     "return row with 'Not Provided' when no answer is provided" in {
-      IsSeasonalBusinessSummary.row(emptyUserAnswers) mustBe None
+      val row = IsSeasonalBusinessSummary.row(emptyUserAnswers)
+
+      row.head.value.content mustEqual Text("Not provided")
+      row.head.actions.head.toString must include("Change")
     }
 
     "return YES when true" in {
