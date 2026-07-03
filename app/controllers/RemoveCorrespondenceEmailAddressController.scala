@@ -73,8 +73,6 @@ class RemoveCorrespondenceEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, correspondenceEmail.getOrElse("")))),
         value =>
-          val isChanged =
-            checkIfChanged(value, request.userAnswers, RemoveCorrespondenceEmailAddressPage, CorrespondenceDetailsChangesPage)
           val updatedAnswers = for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrespondenceEmailAddressPage, value))
             cleanedAnswers <- if (value) {
@@ -82,7 +80,7 @@ class RemoveCorrespondenceEmailAddressController @Inject() (
                               } else {
                                 Future.successful(updatedAnswers)
                               }
-            cleanedAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
+            cleanedAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, value))
             _              <- sessionRepository.set(cleanedAnswers)
           } yield cleanedAnswers
 

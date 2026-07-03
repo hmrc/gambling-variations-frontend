@@ -62,12 +62,10 @@ class RemoveTradeNameController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
           value =>
-            val isChanged: Boolean =
-              checkIfChanged(value, request.userAnswers, RemoveTradeNamePage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, value))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
         )
