@@ -36,7 +36,7 @@ class AddCorrespondingDetailsYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
   formProvider: AddCorrespondingDetailsYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AddCorrespondingDetailsYesNoView

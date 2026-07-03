@@ -29,7 +29,7 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("addCorrespondingDetailsYesNo.title"))) {
+@layout(pageTitle = title(form, messages("addCorrespondingDetailsYesNo.title"),  Some(messages("addCorrespondingDetailsYesNo.subTitle")))) {
 
     @formHelper(action = routes.AddCorrespondingDetailsYesNoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 

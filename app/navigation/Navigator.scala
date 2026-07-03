@@ -109,7 +109,7 @@ class Navigator @Inject() () {
       .get(AddCorrespondingDetailsYesNoPage)
       .map {
         case true  => routes.IndexController.onPageLoad() // update it
-        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
+        case false => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
