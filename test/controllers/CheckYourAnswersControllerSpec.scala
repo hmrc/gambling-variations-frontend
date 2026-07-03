@@ -20,7 +20,8 @@ import base.SpecBase
 import pages.{BusinessFaxNumberPage, IsSeasonalBusinessPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import viewmodels.checkAnswers.{FaxNumberSummary, SeasonalBusinessSummary}
+import viewmodels.checkAnswers.FaxNumberSummary
+import viewmodels.checkAnswers.tradingdetails.SeasonalBusinessSummary
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
 
