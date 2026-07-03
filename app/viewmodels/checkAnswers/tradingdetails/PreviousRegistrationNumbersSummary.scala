@@ -18,9 +18,10 @@ package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.PreviousRegistrationNumbersListPage
+import pages.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
@@ -33,6 +34,7 @@ object PreviousRegistrationNumbersSummary {
 
       val numbers =
         answers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty)
+          ++ answers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
 
       val amount = numbers.length
       val maxAmount = 3

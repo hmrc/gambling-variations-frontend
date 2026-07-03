@@ -44,7 +44,7 @@ object BusinessTradeClassSummary {
 
     Some(
       SummaryListRowViewModel(
-        key = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
+        key   = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
         value = ValueViewModel(displayValue),
         actions = Seq(
           ActionItemViewModel(

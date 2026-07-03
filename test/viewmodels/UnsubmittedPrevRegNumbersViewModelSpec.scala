@@ -25,8 +25,9 @@ import org.scalatest.matchers.must.Matchers
 import pages.UnsubmittedPreviousRegNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import viewmodels.checkAnswers.tradingdetails.UnsubmittedPrevRegNumbersViewModel
 
-class UnsubmittedPrevRegNumberViewModelSpec extends SpecBase with Matchers {
+class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
 
   "UnsubmittedRegNumberViewModel" - {
 
@@ -57,7 +58,7 @@ class UnsubmittedPrevRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val unsubmitted = UnsubmittedPrevRegNumberViewModel(unsubmittedPreviousRegNumbers).summaryList
+      val unsubmitted = UnsubmittedPrevRegNumbersViewModel(unsubmittedPreviousRegNumbers).summaryList
 
       unsubmitted.head.key.content mustEqual Text("GTT28881666")
       unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersListController

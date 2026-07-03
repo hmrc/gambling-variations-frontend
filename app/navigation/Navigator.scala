@@ -63,7 +63,7 @@ class Navigator @Inject() () {
     case BusinessEmailAddressPage            => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
     case IsSeasonalBusinessPage              => _ => routes.CheckTradingDetailsController.onPageLoad()
     case OtherTradeClassPage                 => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case BusinessTradeClassPage               => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case BusinessTradeClassPage              => _ => routes.CheckTradingDetailsController.onPageLoad()
     case AddPreviousRegistrationNumberPage   => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
     case PreviousRegNumberPage               => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
     case PreviousRegistrationNumbersListPage => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
