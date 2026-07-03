@@ -23,7 +23,7 @@ import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AddCorrespondingDetailsYesNoPage
+import pages.{AddCorrespondingDetailsYesNoPage, CorrespondenceDetailsSectionPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -43,12 +43,18 @@ class AddCorrespondingDetailsYesNoControllerSpec extends SpecBase with MockitoSu
   private lazy val addCorrespondingDetailsYesNoRoute =
     routes.AddCorrespondingDetailsYesNoController.onPageLoad(NormalMode).url
 
+  private val userAnswersWithCorrespondenceDetails =
+    emptyUserAnswers
+      .set(CorrespondenceDetailsSectionPage, userAnswersId)
+      .success
+      .value
+
   "AddCorrespondingDetailsYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithCorrespondenceDetails))
           .build()
 
       running(application) {
@@ -67,7 +73,7 @@ class AddCorrespondingDetailsYesNoControllerSpec extends SpecBase with MockitoSu
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers =
-        UserAnswers(userAnswersId)
+        userAnswersWithCorrespondenceDetails
           .set(AddCorrespondingDetailsYesNoPage, true)
           .success
           .value
@@ -101,7 +107,7 @@ class AddCorrespondingDetailsYesNoControllerSpec extends SpecBase with MockitoSu
         .thenReturn(onwardRoute)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithCorrespondenceDetails))
           .overrides(
             bind[Navigator].toInstance(mockNavigator),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -123,7 +129,7 @@ class AddCorrespondingDetailsYesNoControllerSpec extends SpecBase with MockitoSu
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithCorrespondenceDetails))
           .build()
 
       running(application) {
