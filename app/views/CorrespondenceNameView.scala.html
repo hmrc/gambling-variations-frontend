@@ -45,6 +45,7 @@
                 label = LabelViewModel(messages("correspondenceName.heading")).asPageHeading(LabelSize.Large)
             )
             .withWidth(Fixed20)
+            .withAttribute("autocomplete" -> "name")
             )
 
         @govukButton(
