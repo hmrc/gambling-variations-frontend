@@ -22,7 +22,6 @@ import forms.RemoveCorrespondenceEmailAddressFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import utils.FlagsUtil.checkIfChanged
 import pages.{CorrespondenceDetailsChangesPage, CorrespondenceEmailPage, RemoveCorrespondenceEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

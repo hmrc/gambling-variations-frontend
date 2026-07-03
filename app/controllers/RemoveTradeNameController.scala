@@ -20,8 +20,7 @@ import controllers.actions.*
 import forms.RemoveTradeNameFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import utils.FlagsUtil.checkIfChanged
-import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, RemoveTradeNamePage, TradingDetailsChangesPage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, RemoveTradeNamePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

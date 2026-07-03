@@ -20,7 +20,6 @@ import controllers.actions.*
 import forms.RemovePreviousRegNumberFormProvider
 
 import javax.inject.Inject
-import utils.FlagsUtil.checkIfChanged
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.{ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, RemovePreviousRegNumberPage, TradingDetailsChangesPage, UnsubmittedPreviousRegNumbersPage}
