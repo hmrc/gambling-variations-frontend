@@ -58,7 +58,6 @@ class CorrespondenceAddrAdditionalInfoScreenerController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
