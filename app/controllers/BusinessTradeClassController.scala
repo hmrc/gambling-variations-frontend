@@ -72,8 +72,7 @@ class BusinessTradeClassController @Inject() (
                                     .set(BusinessTradeClassPage, value)
                                     .flatMap(_.set(TradingDetailsChangeFlagPage, true))
                                 )
-              updatedAnswers <- removeSeasonalIfOther(value, updatedAnswers)
-              _              <- sessionRepository.set(updatedAnswers)
+              _ <- sessionRepository.set(updatedAnswers)
             } yield {
               val seasonalBusIsEmpty: Boolean =
                 request.userAnswers.get(IsSeasonalBusinessPage).fold(true)(_ => false)
