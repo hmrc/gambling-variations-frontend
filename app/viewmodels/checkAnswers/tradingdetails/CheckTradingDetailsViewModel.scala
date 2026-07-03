@@ -39,7 +39,7 @@ object CheckTradingDetailsViewModel {
 
     if (isGroupMember) {
       val seasonalOnly =
-        Seq(IsSeasonalBusinessSummary.row(userAnswers))
+        Seq(IsSeasonalBusinessSummary.row(userAnswers)).flatten
 
       return CheckTradingDetailsViewModel(
         list          = SummaryListViewModel(seasonalOnly),
@@ -77,7 +77,7 @@ object CheckTradingDetailsViewModel {
       IsSeasonalBusinessSummary.row(userAnswers)
 
     val tradeClassRows =
-      Seq(tradeClassRow, otherTradeClassRow, Some(seasonalRow)).flatten
+      Seq(tradeClassRow, otherTradeClassRow, seasonalRow).flatten
 
     val previousMgdRows =
       Seq(PreviousRegistrationNumbersSummary.row(userAnswers)).flatten

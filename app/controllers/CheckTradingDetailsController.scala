@@ -119,6 +119,12 @@ class CheckTradingDetailsController @Inject() (
         case _                            => true
       }
 
+      def seasonalBusIsMissing: Boolean = seasonalOpt match {
+        case None                   => true
+        case Some(seasonalBusiness) => false
+        case _                      => true
+      }
+
       def tradeClassIsOther: Boolean = tradeClassOpt match {
         case Some(BusinessTradeClass.Other) => true
         case _                              => false
@@ -130,6 +136,8 @@ class CheckTradingDetailsController @Inject() (
         Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
       } else if (tradeClassIsOther && otherDescIsMissing) {
         Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+      } else if (seasonalBusIsMissing && !tradeClassIsOther) {
+        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
       } else {
         Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
       }
