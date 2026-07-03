@@ -25,19 +25,32 @@ import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 object IsSeasonalBusinessSummary {
+  def row(answers: UserAnswers)(implicit messages: Messages): SummaryListRow =
+    answers
+      .get(IsSeasonalBusinessPage)
+      .map { answer =>
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(IsSeasonalBusinessPage).map { answer =>
-
-      SummaryListRowViewModel(
-        key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
-        value = ValueViewModel(if (answer) messages("site.yes") else messages("site.no")),
-        actions = Seq(
-          ActionItemViewModel(
-            "site.change",
-            routes.SeasonalBusinessController.onPageLoad(CheckMode).url
-          ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
+        SummaryListRowViewModel(
+          key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
+          value = ValueViewModel(if (answer) messages("site.yes") else messages("site.no")),
+          actions = Seq(
+            ActionItemViewModel(
+              "site.change",
+              routes.SeasonalBusinessController.onPageLoad(CheckMode).url
+            ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
+          )
+        )
+      }
+      .getOrElse(
+        SummaryListRowViewModel(
+          key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
+          value = ValueViewModel("Not provided"),
+          actions = Seq(
+            ActionItemViewModel(
+              "site.change",
+              routes.SeasonalBusinessController.onPageLoad(CheckMode).url
+            ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
+          )
         )
       )
-    }
 }

@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import models.{BusinessTradeClass, UserAnswers}
-import pages.{BusinessTradeClassPage, OtherTradeClassPage}
+import pages.{BusinessTradeClassPage, IsSeasonalBusinessPage, OtherTradeClassPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
@@ -39,7 +39,7 @@ object CheckTradingDetailsViewModel {
 
     if (isGroupMember) {
       val seasonalOnly =
-        Seq(IsSeasonalBusinessSummary.row(userAnswers)).flatten
+        Seq(IsSeasonalBusinessSummary.row(userAnswers))
 
       return CheckTradingDetailsViewModel(
         list          = SummaryListViewModel(seasonalOnly),
@@ -77,7 +77,7 @@ object CheckTradingDetailsViewModel {
       IsSeasonalBusinessSummary.row(userAnswers)
 
     val tradeClassRows =
-      Seq(tradeClassRow, otherTradeClassRow, seasonalRow).flatten
+      Seq(tradeClassRow, otherTradeClassRow, Some(seasonalRow)).flatten
 
     val previousMgdRows =
       Seq(PreviousRegistrationNumbersSummary.row(userAnswers)).flatten
