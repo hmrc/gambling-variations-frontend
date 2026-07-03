@@ -21,6 +21,7 @@ import models.BusinessTradeClass
 import pages.*
 import play.api.Application
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 class CheckTradingDetailsViewModelSpec extends SpecBase {
 
@@ -46,7 +47,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       result.associatedMgd.rows mustBe Nil
     }
 
-    "must populate trade class rows for non-group members" in {
+    "must populate trade class & seasonal business rows for non-group members" in {
 
       val answers =
         emptyUserAnswers
@@ -61,6 +62,8 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
         CheckTradingDetailsViewModel.from(answers, isGroupMember = false)
 
       result.list.rows.nonEmpty mustBe true
+      result.list.rows.head.key.content mustEqual Text("Trade class")
+      result.list.rows(1).key.content mustEqual Text("Seasonal business")
     }
 
     "must include the other trade class row when trade class is Other" in {
@@ -98,6 +101,8 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
         CheckTradingDetailsViewModel.from(answers, isGroupMember = false)
 
       result.list.rows.size mustBe 2
+      result.list.rows.head.key.content mustEqual Text("Trade class")
+      result.list.rows(1).key.content mustEqual Text("Seasonal business")
     }
   }
 }

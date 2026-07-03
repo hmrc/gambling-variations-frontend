@@ -270,6 +270,35 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
+      "must redirect to SeasonalBusinessPage when seasonal business is not provided" in {
+        val mockConnector = mock[GamblingConnector]
+
+        when(mockConnector.getBusinessDetails(any())(any()))
+          .thenReturn(Future.successful(businessDetails))
+
+        val ua =
+          emptyUserAnswers
+            .set(MgdTradeDetailsSectionPage, "MGD999999")
+            .success
+            .value
+            .set(BusinessTradeClassPage, BusinessTradeClass.Adultgamingcentre)
+            .success
+            .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(ua))
+            .overrides(bind[GamblingConnector].toInstance(mockConnector))
+            .build()
+
+        running(application) {
+          val request = FakeRequest(POST, routes.CheckTradingDetailsController.onContinue().url)
+          val result = route(application, request).value
+
+          redirectLocation(result).value mustBe
+            routes.SeasonalBusinessController.onPageLoad(NormalMode).url
+        }
+      }
+
       "must redirect to ChangeRegistrationDetails when all fields are present" in {
         val mockConnector = mock[GamblingConnector]
 
