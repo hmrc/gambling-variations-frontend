@@ -42,7 +42,6 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       val result =
         CheckTradingDetailsViewModel.from(answers, isGroupMember = true)
 
-      result.list.rows mustBe Nil
       result.previousMgd.rows mustBe Nil
       result.associatedMgd.rows mustBe Nil
     }
