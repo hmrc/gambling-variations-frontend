@@ -14,30 +14,32 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.checkAnswers.tradingdetails
 
-import controllers.routes
+import base.SpecBase
+import models.UserAnswers
+import org.scalatest.matchers.must.Matchers
+import pages.PreviousRegistrationNumbersListPage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
-import base.SpecBase
-import models.{NormalMode, UserAnswers}
-import org.scalatest.matchers.must.Matchers
-import pages.AssociatedRegistrationNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import viewmodels.checkAnswers.tradingdetails.PreviousRegNumbersViewModel
 
-class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
+class PreviousRegNumbersViewModelSpec extends SpecBase with Matchers {
 
-  "AssociatedRegNumberViewModel" - {
+  "PreviousRegNumberViewModel" - {
 
     "must populate correct view" in {
       val data = Json.obj(
         "mgdTradeDetailsSection" -> Json.obj(
           "mgdRegNum" -> mgdRegNum,
-          "associatedRegNumbersSection" -> Json.obj(
-            "associatedRegistrationNumbers" -> Json.arr(
+          "previousRegNumbersSection" -> Json.obj(
+            "previousRegistrationNumbers" -> Json.arr(
               "XHM00000199",
-              "ZIU00001218",
+              "ZIU00001218"
+            ),
+            "unsubmittedPreviousRegNumbers" -> Json.arr(
               "GTT28881666"
             ),
             "updated" -> true
@@ -47,7 +49,7 @@ class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 
-      val associatedRegNumbers = baseUserAnswers.get(AssociatedRegistrationNumbersPage)
+      val previousRegNumbers = baseUserAnswers.get(PreviousRegistrationNumbersListPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
@@ -55,14 +57,10 @@ class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val result = AssociatedRegNumberViewModel(associatedRegNumbers, NormalMode).summaryList
+      val submitted = PreviousRegNumbersViewModel(previousRegNumbers).summaryList
 
-      result.head.key.content mustEqual Text("XHM00000199")
-      result(1).key.content mustEqual Text("ZIU00001218")
-      result(2).key.content mustEqual Text("GTT28881666")
-      result.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersListController
-        .onRedirect(assocRegNumber = "XHM00000199")
-        .url
+      submitted.head.key.content mustEqual Text("XHM00000199")
+      submitted(1).key.content mustEqual Text("ZIU00001218")
     }
   }
 }

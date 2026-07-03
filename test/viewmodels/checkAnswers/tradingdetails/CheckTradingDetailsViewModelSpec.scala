@@ -97,7 +97,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       val result =
         CheckTradingDetailsViewModel.from(answers, isGroupMember = false)
 
-      result.list.rows.size mustBe 1
+      result.list.rows.size mustBe 2
     }
   }
 }

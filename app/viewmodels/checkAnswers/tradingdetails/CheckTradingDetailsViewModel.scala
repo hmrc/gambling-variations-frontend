@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import models.{BusinessTradeClass, UserAnswers}
-import pages.{BusinessTradeClassPage, IsSeasonalBusinessPage, OtherTradeClassPage}
+import pages.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text

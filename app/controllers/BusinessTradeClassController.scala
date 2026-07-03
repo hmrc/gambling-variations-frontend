@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions.*
 import forms.BusinessTradeClassFormProvider
-import models.requests.DataRequest
 
 import javax.inject.Inject
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode, UserAnswers}
@@ -31,7 +30,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessTradeClassView
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class BusinessTradeClassController @Inject() (
   override val messagesApi: MessagesApi,

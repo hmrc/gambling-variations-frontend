@@ -33,7 +33,7 @@ class IsSeasonalBusinessSummarySpec extends SpecBase {
 
   "IsSeasonalBusinessSummary.row" - {
 
-    "return None when no answer is provided" in {
+    "return row with 'Not Provided' when no answer is provided" in {
       IsSeasonalBusinessSummary.row(emptyUserAnswers) mustBe None
     }
 

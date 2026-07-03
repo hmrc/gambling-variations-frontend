@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.checkAnswers.tradingdetails
 
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.libs.json.Json
 import base.SpecBase
+import controllers.routes
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.PreviousRegistrationNumbersListPage
+import pages.UnsubmittedPreviousRegNumbersPage
+import play.api.i18n.{Messages, MessagesApi}
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import viewmodels.checkAnswers.tradingdetails.PreviousRegNumbersViewModel
+import viewmodels.checkAnswers.tradingdetails.UnsubmittedPrevRegNumbersViewModel
 
-class PreviousRegNumbersViewModelSpec extends SpecBase with Matchers {
+class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
 
-  "PreviousRegNumberViewModel" - {
+  "UnsubmittedRegNumberViewModel" - {
 
     "must populate correct view" in {
       val data = Json.obj(
@@ -49,7 +50,7 @@ class PreviousRegNumbersViewModelSpec extends SpecBase with Matchers {
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 
-      val previousRegNumbers = baseUserAnswers.get(PreviousRegistrationNumbersListPage)
+      val unsubmittedPreviousRegNumbers = baseUserAnswers.get(UnsubmittedPreviousRegNumbersPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
@@ -57,10 +58,12 @@ class PreviousRegNumbersViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val submitted = PreviousRegNumbersViewModel(previousRegNumbers).summaryList
+      val unsubmitted = UnsubmittedPrevRegNumbersViewModel(unsubmittedPreviousRegNumbers).summaryList
 
-      submitted.head.key.content mustEqual Text("XHM00000199")
-      submitted(1).key.content mustEqual Text("ZIU00001218")
+      unsubmitted.head.key.content mustEqual Text("GTT28881666")
+      unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersListController
+        .onRedirect(prevRegNumber = "GTT28881666")
+        .url
     }
   }
 }

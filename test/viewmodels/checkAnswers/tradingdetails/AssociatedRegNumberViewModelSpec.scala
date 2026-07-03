@@ -14,33 +14,31 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.checkAnswers.tradingdetails
 
+import base.SpecBase
 import controllers.routes
+import models.{NormalMode, UserAnswers}
+import org.scalatest.matchers.must.Matchers
+import pages.AssociatedRegistrationNumbersPage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
-import base.SpecBase
-import models.UserAnswers
-import org.scalatest.matchers.must.Matchers
-import pages.UnsubmittedPreviousRegNumbersPage
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import viewmodels.checkAnswers.tradingdetails.UnsubmittedPrevRegNumbersViewModel
+import viewmodels.AssociatedRegNumberViewModel
 
-class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
+class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 
-  "UnsubmittedRegNumberViewModel" - {
+  "AssociatedRegNumberViewModel" - {
 
     "must populate correct view" in {
       val data = Json.obj(
         "mgdTradeDetailsSection" -> Json.obj(
           "mgdRegNum" -> mgdRegNum,
-          "previousRegNumbersSection" -> Json.obj(
-            "previousRegistrationNumbers" -> Json.arr(
+          "associatedRegNumbersSection" -> Json.obj(
+            "associatedRegistrationNumbers" -> Json.arr(
               "XHM00000199",
-              "ZIU00001218"
-            ),
-            "unsubmittedPreviousRegNumbers" -> Json.arr(
+              "ZIU00001218",
               "GTT28881666"
             ),
             "updated" -> true
@@ -50,7 +48,7 @@ class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
       val baseUserAnswers =
         UserAnswers(userAnswersId, data)
 
-      val unsubmittedPreviousRegNumbers = baseUserAnswers.get(UnsubmittedPreviousRegNumbersPage)
+      val associatedRegNumbers = baseUserAnswers.get(AssociatedRegistrationNumbersPage)
 
       val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
@@ -58,11 +56,13 @@ class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
 
       implicit val messages: Messages = messagesApi.preferred(FakeRequest())
 
-      val unsubmitted = UnsubmittedPrevRegNumbersViewModel(unsubmittedPreviousRegNumbers).summaryList
+      val result = AssociatedRegNumberViewModel(associatedRegNumbers, NormalMode).summaryList
 
-      unsubmitted.head.key.content mustEqual Text("GTT28881666")
-      unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersListController
-        .onRedirect(prevRegNumber = "GTT28881666")
+      result.head.key.content mustEqual Text("XHM00000199")
+      result(1).key.content mustEqual Text("ZIU00001218")
+      result(2).key.content mustEqual Text("GTT28881666")
+      result.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersListController
+        .onRedirect(assocRegNumber = "XHM00000199")
         .url
     }
   }
