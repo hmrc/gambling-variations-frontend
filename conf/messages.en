@@ -511,3 +511,10 @@ correspondenceAddrAdditionalInfoScreener.heading.caption = Change registration d
 correspondenceAddrAdditionalInfoScreener.hint = For example, building name or floor number
 correspondenceAddrAdditionalInfoScreener.error.required = Select yes to include additional information for the correspondence address
 correspondenceAddrAdditionalInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
+
+correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
+correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
+correspondenceAdditionalNameYesNo.caption = Change registration details
+correspondenceAdditionalNameYesNo.checkYourAnswersLabel = Additional correspondence name
+correspondenceAdditionalNameYesNo.error.required = Select yes to add an additional name for correspondence
+correspondenceAdditionalNameYesNo.change.hidden = do you want to add an additional name for correspondence?

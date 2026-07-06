@@ -55,6 +55,34 @@ class NavigatorSpec extends SpecBase {
             routes.CheckCorrespondenceDetailsController.onPageLoad()
         }
 
+        "must go from CorrespondenceAdditionalNameYesNoPage to CorrespondenceAdditionalName page when answer is true" in {
+
+          val answers = UserAnswers("id")
+            .set(CorrespondenceAdditionalNameYesNoPage, true)
+            .success
+            .value
+
+          navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
+            routes.IndexController.onPageLoad() // update it when available
+        }
+
+        "must go from CorrespondenceAdditionalNameYesNoPage to CheckCorrespondenceDetails page when answer is false" in {
+
+          val answers = UserAnswers("id")
+            .set(CorrespondenceAdditionalNameYesNoPage, false)
+            .success
+            .value
+
+          navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
+            routes.IndexController.onPageLoad()
+        }
+
+        "must go from CorrespondenceAdditionalNameYesNoPage to SystemError page when answer is missing" in {
+
+          navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, UserAnswers("id")) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
         "must go from SoleProprietorPage to the normal mode sole proprietor page" in {
 
           navigator.nextPage(SoleProprietorPage, NormalMode, UserAnswers("id")) mustBe
