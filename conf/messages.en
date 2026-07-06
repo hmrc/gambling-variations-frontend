@@ -505,9 +505,9 @@ removeCorrespondenceEmailAddress.checkYourAnswersLabel = removeCorrespondenceEma
 removeCorrespondenceEmailAddress.error.required = Select yes if you want to remove the correspondence email address
 
 
-correspondenceAddrAdditionalInfoScreener.title = Do you want to include additional information for the correspondence address?
-correspondenceAddrAdditionalInfoScreener.heading = Do you want to include additional information for the correspondence address?
-correspondenceAddrAdditionalInfoScreener.heading.caption = Change registration details
-correspondenceAddrAdditionalInfoScreener.hint = For example, building name or floor number
-correspondenceAddrAdditionalInfoScreener.error.required = Select yes to include additional information for the correspondence address
-correspondenceAddrAdditionalInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
+CorrespondenceAddrInfoScreener.title = Do you want to include additional information for the correspondence address?
+CorrespondenceAddrInfoScreener.heading = Do you want to include additional information for the correspondence address?
+CorrespondenceAddrInfoScreener.heading.caption = Change registration details
+CorrespondenceAddrInfoScreener.hint = For example, building name or floor number
+CorrespondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
+CorrespondenceAddrInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
