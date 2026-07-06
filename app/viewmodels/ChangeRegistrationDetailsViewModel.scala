@@ -79,7 +79,7 @@ final case class ChangeRegistrationDetailsViewModel(
       Some(
         TaskListItem(
           messages("changeRegistrationDetails.correspondenceDetails"),
-          routes.IndexController.onPageLoad().url,
+          routes.CheckCorrespondenceDetailsController.onPageLoad().url,
           status(correspondenceDetailsChanged)
         )
       ),
