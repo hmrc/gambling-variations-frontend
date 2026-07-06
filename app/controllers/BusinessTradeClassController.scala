@@ -76,8 +76,7 @@ class BusinessTradeClassController @Inject() (
                                     .flatMap(_.set(TradingDetailsChangeFlagPage, true))
                                 )
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
-
-              _ <- sessionRepository.set(updatedAnswers)
+              _              <- sessionRepository.set(updatedAnswers)
             } yield {
 
               val next =
