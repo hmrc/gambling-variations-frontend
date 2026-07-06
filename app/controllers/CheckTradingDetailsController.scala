@@ -116,7 +116,6 @@ class CheckTradingDetailsController @Inject() (
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
         case None                         => true
         case Some(tc: BusinessTradeClass) => false
-        case _                            => true
       }
 
       def tradeClassIsOther: Boolean = tradeClassOpt match {
