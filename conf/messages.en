@@ -519,6 +519,12 @@ correspondenceAdditionalNameYesNo.checkYourAnswersLabel = Additional corresponde
 correspondenceAdditionalNameYesNo.error.required = Select yes to add an additional name for correspondence
 correspondenceAdditionalNameYesNo.change.hidden = do you want to add an additional name for correspondence?
 
+addEmailAddressForCorrespondenceYesNo.title = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
+addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
+
 addCorrespondingDetailsYesNo.title = Correspondence details
 addCorrespondingDetailsYesNo.subTitle = Change registration details
 addCorrespondingDetailsYesNo.heading = Correspondence details
