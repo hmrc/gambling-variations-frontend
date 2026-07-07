@@ -19,16 +19,16 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class CorrespondenceAddrAdditionalInfoScreenerFormProviderSpec extends BooleanFieldBehaviours {
+class AddEmailAddressForCorrespondenceYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "correspondenceAddrAdditionalInfoScreener.error.required"
+  val requiredKey = "addEmailAddressForCorrespondenceYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new CorrespondenceAddrAdditionalInfoScreenerFormProvider()()
+  val form = new AddEmailAddressForCorrespondenceYesNoFormProvider()()
 
-  ".correspondenceAddrAdditionalInfoScreener" - {
+  ".value" - {
 
-    val fieldName = "correspondenceAddrAdditionalInfoScreener"
+    val fieldName = "value"
 
     behave like booleanField(
       form,

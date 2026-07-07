@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import views.html.components.*
+@import views.html.components._
 
 @this(
     layout: templates.Layout,
@@ -27,19 +27,20 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle =title(form, messages("correspondenceAddrAdditionalInfoScreener.title"),Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("addEmailAddressForCorrespondenceYesNo.title"), Some(messages("changeRegistrationDetails.title")))) {
 
-    @formHelper(action = routes.CorrespondenceAddrAdditionalInfoScreenerController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.AddEmailAddressForCorrespondenceYesNoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @caption(messages("correspondenceAddrAdditionalInfoScreener.heading.caption"))
+
+        @caption(messages("associatedRegistrationNumbers.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("correspondenceAddrAdditionalInfoScreener"),
-                legend = LegendViewModel(messages("correspondenceAddrAdditionalInfoScreener.heading")).asPageHeading(viewmodels.LegendSize.Large)
-            ).withHint(Hint(content = messages("correspondenceAddrAdditionalInfoScreener.hint")))
+                field = form("value"),
+                legend = LegendViewModel(messages("addEmailAddressForCorrespondenceYesNo.heading")).asPageHeading(viewmodels.LegendSize.Large)
+            )
         )
 
         @govukButton(

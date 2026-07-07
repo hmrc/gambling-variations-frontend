@@ -18,26 +18,27 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.CorrespondenceAddrAdditionalInfoScreenerPage
+import pages.AddEmailAddressForCorrespondenceYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
+import viewmodels.govuk.summarylist._
+import viewmodels.implicits._
 
-object CorrespondenceAddrAdditionalInfoScreenerSummary {
+object AddEmailAddressForCorrespondenceYesNoSummary  {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CorrespondenceAddrAdditionalInfoScreenerPage).map { answer =>
+    answers.get(AddEmailAddressForCorrespondenceYesNoPage).map {
+      answer =>
 
-      val value = if (answer) "site.yes" else "site.no"
+        val value = if (answer) "site.yes" else "site.no"
 
-      SummaryListRowViewModel(
-        key   = "correspondenceAddrAdditionalInfoScreener.checkYourAnswersLabel",
-        value = ValueViewModel(value),
-        actions = Seq(
-          ActionItemViewModel("site.change", routes.CorrespondenceAddrAdditionalInfoScreenerController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("correspondenceAddrAdditionalInfoScreener.change.hidden"))
+        SummaryListRowViewModel(
+          key     = "addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel",
+          value   = ValueViewModel(value),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText(messages("addEmailAddressForCorrespondenceYesNo.change.hidden"))
+          )
         )
-      )
     }
 }

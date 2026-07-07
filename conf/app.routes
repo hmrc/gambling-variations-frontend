@@ -171,12 +171,17 @@ POST       /change-registration-details/trading-details/previous-registration-nu
 GET        /change-registration-details/trading-details/change-previous-registration-number          controllers.PreviousRegistrationNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/trading-details/change-previous-registration-number          controllers.PreviousRegistrationNumberController.onSubmit(mode: Mode = CheckMode)
 
-GET        /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrAdditionalInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrAdditionalInfoScreenerController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/correspondence-details/change-include-additional-address-information                  controllers.CorrespondenceAddrAdditionalInfoScreenerController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/correspondence-details/change-include-additional-address-information                  controllers.CorrespondenceAddrAdditionalInfoScreenerController.onSubmit(mode: Mode = CheckMode)
+GET        /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/correspondence-details/change-include-additional-address-information                  controllers.CorrespondenceAddrInfoScreenerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/correspondence-details/change-include-additional-address-information                  controllers.CorrespondenceAddrInfoScreenerController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/correspondence-details/add-additional-name                  controllers.CorrespondenceAdditionalNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/add-additional-name                  controllers.CorrespondenceAdditionalNameYesNoController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/correspondence-details/add-additional-name                  controllers.CorrespondenceAdditionalNameYesNoController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/correspondence-details/add-additional-name                  controllers.CorrespondenceAdditionalNameYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/correspondence-details/add-email-address                         controllers.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/correspondence-details/add-email-address                         controllers.AddEmailAddressForCorrespondenceYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/correspondence-details/change-add-email-address                  controllers.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/correspondence-details/change-add-email-address                  controllers.AddEmailAddressForCorrespondenceYesNoController.onSubmit(mode: Mode = CheckMode)
