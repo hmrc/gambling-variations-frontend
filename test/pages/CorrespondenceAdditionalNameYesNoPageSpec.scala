@@ -15,20 +15,20 @@
  */
 
 package pages
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+
+import base.SpecBase
 import play.api.libs.json.JsPath
 
-class PreviousRegistrationNumbersPageSpec extends AnyFreeSpec with Matchers {
-  "PreviousRegistrationNumbersPage" - {
+class CorrespondenceAdditionalNameYesNoPageSpec extends SpecBase {
 
-    "must have the correct toString" in {
-      PreviousRegistrationNumbersPage.toString mustBe "previousRegistrationNumbers"
+  "CorrespondenceAdditionalNameYesNoPage" - {
+
+    "must have the correct path" in {
+      CorrespondenceAdditionalNameYesNoPage.path mustEqual (JsPath \ "correspondenceAdditionalNameYesNo")
     }
 
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ "previousRegistrationNumbers"
-      PreviousRegistrationNumbersPage.path mustBe expectedPath
+    "must have the correct string representation" in {
+      CorrespondenceAdditionalNameYesNoPage.toString mustEqual "correspondenceAdditionalNameYesNo"
     }
   }
 }

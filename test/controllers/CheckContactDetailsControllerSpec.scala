@@ -21,7 +21,7 @@ import models.UserAnswers
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.BusinessContactDetailsView
+import views.html.CheckContactDetailsView
 
 class CheckContactDetailsControllerSpec extends SpecBase {
 
@@ -43,7 +43,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         val request = FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
-        val view = application.injector.instanceOf[BusinessContactDetailsView]
+        val view = application.injector.instanceOf[CheckContactDetailsView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(Some("07000000000"), Some("07000000000"), Some("07000000000"), Some("a@b.com"), false)(

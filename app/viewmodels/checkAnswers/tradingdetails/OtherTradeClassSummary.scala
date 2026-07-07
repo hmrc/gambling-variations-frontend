@@ -17,35 +17,46 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages.OtherTradeClassPage
+import models.{BusinessTradeClass, CheckMode, UserAnswers}
+import pages.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
-import pages.BusinessTradeClassPage
-import models.BusinessTradeClass
 
 object OtherTradeClassSummary {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers
-      .get(BusinessTradeClassPage)
-      .collect { case BusinessTradeClass.Other =>
-        answers.get(OtherTradeClassPage).map { answer =>
-          SummaryListRowViewModel(
-            key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
-            value = ValueViewModel(answer),
-            actions = Seq(
-              ActionItemViewModel(
-                "site.change",
-                routes.BusinessTradeClassController.onPageLoad(CheckMode).url
-              ).withVisuallyHiddenText(
-                messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
+  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
+
+    val tradeClassOpt = answers.get(BusinessTradeClassPage)
+
+    tradeClassOpt match {
+      case Some(BusinessTradeClass.Other) =>
+        val descOpt = answers.get(OtherTradeClassPage)
+
+        val descMissing = descOpt.forall(_.trim.isEmpty)
+        if (descMissing) {
+          None
+        } else {
+          Some(
+            SummaryListRowViewModel(
+              key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
+              value = ValueViewModel(descOpt.get),
+              actions = Seq(
+                ActionItemViewModel(
+                  "site.change",
+                  routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+                ).withVisuallyHiddenText(
+                  messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
+                )
               )
             )
           )
         }
-      }
-      .flatten
+
+      case _ =>
+        None
+    }
+  }
+
 }

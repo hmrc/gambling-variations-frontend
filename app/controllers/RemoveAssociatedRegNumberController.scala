@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
+import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -71,10 +71,11 @@ class RemoveAssociatedRegNumberController @Inject() (
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
               updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, value))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
         )
-    } getOrElse Future.successful(Redirect(routes.AssociatedRegistrationNumbersController.onPageLoad()))
+    } getOrElse Future.successful(Redirect(routes.AssociatedRegistrationNumbersListController.onPageLoad(mode)))
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {

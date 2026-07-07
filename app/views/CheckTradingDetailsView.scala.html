@@ -20,6 +20,7 @@
 @this(
         layout: templates.Layout,
         govukSummaryList: GovukSummaryList,
+        formHelper: FormWithCSRF,
         h1: H1,
         p: Paragraph,
         govukButton: GovukButton,
@@ -49,8 +50,13 @@
   @p("checkTradingDetails.submit.p1")
  }
 
+@formHelper(
+action = routes.CheckTradingDetailsController.onContinue()) {
+
  @govukButton(
   ButtonViewModel(messages("site.continue"))
-  .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
- )
+  )
+}
+
+
 }

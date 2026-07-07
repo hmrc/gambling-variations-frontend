@@ -17,8 +17,9 @@
 package controllers
 
 import base.SpecBase
+import controllers.routes.*
 import forms.PreviousRegistrationNumbersFormProvider
-import models.{NormalMode, RegistrationNumbers, UserAnswers}
+import models.{CheckMode, NormalMode, RegistrationNumbers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -33,7 +34,7 @@ import views.html.PreviousRegistrationNumbersView
 
 import scala.concurrent.Future
 
-class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSugar {
+class PreviousRegistrationNumbersListControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "#")
 
@@ -73,12 +74,30 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
   private val baseUserAnswers =
     UserAnswers(userAnswersId, data)
 
+  private val lessThanMaxUserAnswers =
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        "mgdTradeDetailsSection" -> Json.obj(
+          "mgdRegNum" -> mgdRegNum,
+          "previousRegNumbersSection" -> Json.obj(
+            "previousRegistrationNumbers" -> Json.arr(
+              "XHM00000199"
+            ),
+            "updated" -> true
+          )
+        )
+      )
+    )
+
   private val alreadySubmittedInUa =
     UserAnswers(userAnswersId, dataAlreadySubmitted)
 
-  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersController.onPageLoad(NormalMode).url
-  lazy val previousRegNumbersRedirectRoute = routes.PreviousRegistrationNumbersController.onRedirect("ABC").url
-  lazy val removePrevRegNumberRoute = routes.RemovePreviousRegNumberController.onPageLoad(NormalMode).url
+  lazy val previousRegistrationNumbersRoute = PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+  lazy val previousRegNumbersRedirectRoute = PreviousRegistrationNumbersListController.onRedirect("XYM00001000033").url
+  lazy val previousRegNumbersChangeRedirectRoute = PreviousRegistrationNumbersListController.onChangeRedirect("XQM00005724366s").url
+  lazy val changePreviousRegistrationNumberRoute = PreviousRegistrationNumberController.onPageLoad(CheckMode).url
+  lazy val removePrevRegNumberRoute = RemovePreviousRegNumberController.onPageLoad(NormalMode).url
 
   "PreviousRegistrationNumbers Controller" - {
 
@@ -121,7 +140,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(baseUserAnswers))
+        applicationBuilder(userAnswers = Some(lessThanMaxUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -131,7 +150,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
       running(application) {
         val request =
           FakeRequest(POST, previousRegistrationNumbersRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("addPreviousRegistrationNumber", "true"))
 
         val result = route(application, request).value
 
@@ -170,21 +189,29 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
       }
     }
 
-    "must redirect to SystemError for a GET if no existing data is found" in {
+    "must redirect to change previous registration number on change redirect" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
 
       running(application) {
-        val request = FakeRequest(GET, previousRegistrationNumbersRoute)
+        val request = FakeRequest(GET, previousRegNumbersChangeRedirectRoute)
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual changePreviousRegistrationNumberRoute
       }
     }
 
-    "must redirect to remove prev reg number on submission" in {
+    "must redirect to remove previous registration number on submission" in {
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -208,6 +235,20 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
       }
     }
 
+    "must redirect to SystemError for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, previousRegistrationNumbersRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual SystemErrorController.onPageLoad().url
+      }
+    }
+
     "must redirect to SystemError for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -220,7 +261,7 @@ class PreviousRegistrationNumbersControllerSpec extends SpecBase with MockitoSug
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual SystemErrorController.onPageLoad().url
       }
     }
   }

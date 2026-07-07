@@ -19,6 +19,7 @@ package controllers
 import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
 import pages.*
+import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -33,24 +34,23 @@ class CheckBusinessNameController @Inject() (
   getData: DataRetrievalAction,
   requireData: BusinessNameDataRequiredAction,
   view: BusinessNameView
-)() extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(BusinessNameSubmittedPage).getOrElse(false)
+    val showChangeMessage: Boolean = checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
     val businessNameView: Option[Result] = for {
       businessName <- request.userAnswers.get(BusinessNamePage)
       businessType <- request.userAnswers.get(BusinessTypePage)
     } yield {
-      Ok(view(businessType, businessName, request.userAnswers.get(TradingNamePage), flag))
+      Ok(view(businessType, businessName, request.userAnswers.get(TradingNamePage), showChangeMessage))
     }
 
     val soleProprietorView: Option[Result] = request.userAnswers.get(SoleProprietorPage).map { soleProprietor =>
-      Ok(view(BusinessType.Soleproprietor, soleProprietor.fullName, request.userAnswers.get(TradingNamePage), flag))
+      Ok(view(BusinessType.Soleproprietor, soleProprietor.fullName, request.userAnswers.get(TradingNamePage), showChangeMessage))
     }
 
     businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
 
   }
-
 }

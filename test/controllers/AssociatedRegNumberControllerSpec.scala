@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{AssociatedRegNumberPage, AssociatedRegistrationNumbersPage, MgdTradeDetailsSectionPage}
+import pages.{AssociatedRegNumberPage, AssociatedRegistrationNumbersPage, MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -40,7 +40,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
   val fieldName = "associatedRegNumber"
   val requiredUserAnswers = emptyUserAnswers.set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
 
-  lazy val associatedRegNumberRoute = routes.AssociatedRegNumberController.onPageLoad().url
+  lazy val associatedRegNumberRoute = routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
 
   "AssociatedRegNumber Controller" - {
 
@@ -106,7 +106,44 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.AssociatedRegistrationNumbersController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url
+      }
+    }
+
+    "must flag TradingDetailsChangesPage when data added in" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers =
+        requiredUserAnswers
+          .set(AssociatedRegistrationNumbersPage, Seq("XDM00000001309"))
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, associatedRegNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "XRM00000000574"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(AssociatedRegistrationNumbersPage).value mustEqual Seq(
+          "XDM00000001309",
+          "XRM00000000574"
+        )
+        savedAnswersCaptor.getValue.get(TradingDetailsChangesPage).value mustEqual true
       }
     }
 

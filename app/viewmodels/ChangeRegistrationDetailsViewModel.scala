@@ -25,6 +25,10 @@ final case class ChangeRegistrationDetailsViewModel(
   isGroupMember: Boolean,
   isPartnership: Boolean,
   businessNameChanged: Boolean,
+  businessAddressChanged: Boolean,
+  contactDetailsChanged: Boolean,
+  correspondenceDetailsChanged: Boolean,
+  tradingDetailsChanged: Boolean,
   licencesChanged: Boolean,
   premisesExists: Boolean,
   premisesTriggered: Boolean,
@@ -48,14 +52,14 @@ final case class ChangeRegistrationDetailsViewModel(
         TaskListItem(
           messages("changeRegistrationDetails.businessAddress"),
           routes.IndexController.onPageLoad().url,
-          NoChange
+          status(businessAddressChanged)
         )
       ),
       optional(!isGroupMember)(
         TaskListItem(
           messages("changeRegistrationDetails.businessContactDetails"),
           routes.CheckContactDetailsController.onPageLoad().url,
-          NoChange
+          status(contactDetailsChanged)
         )
       ),
       optional(isGroupMember)(
@@ -76,14 +80,14 @@ final case class ChangeRegistrationDetailsViewModel(
         TaskListItem(
           messages("changeRegistrationDetails.correspondenceDetails"),
           routes.CheckCorrespondenceDetailsController.onPageLoad().url,
-          NoChange
+          status(correspondenceDetailsChanged)
         )
       ),
       Some(
         TaskListItem(
           messages("changeRegistrationDetails.tradingDetails"),
           routes.CheckTradingDetailsController.onPageLoad().url,
-          NoChange
+          status(tradingDetailsChanged)
         )
       ),
       Some(
