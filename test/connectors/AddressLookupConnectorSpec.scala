@@ -63,7 +63,6 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
     "For the .initJourney() method" should {
 
       "for a successful response" must {
-
         "return a Location for callback" in {
 
           stubFor(
@@ -87,6 +86,51 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
           actualResult mustBe expectedResult
 
         }
+      }
+
+      "for an error response" must {
+
+        "return a Left(Invalid) when no location returns" in {
+
+          stubFor(
+            post(urlEqualTo("/api/init"))
+              .withRequestBody(
+                equalToJson(
+                  Json.obj().toString()
+                )
+              )
+              .willReturn(
+                aResponse()
+                  .withStatus(ACCEPTED)
+              )
+          )
+
+          recoverToSucceededIf[RuntimeException] {
+            connector.initJourney()
+          }
+        }
+
+        "return a Left(DefaultedUnexpectedFailure) when unexpected response" in {
+
+          stubFor(
+            post(urlEqualTo("/api/init"))
+              .withRequestBody(
+                equalToJson(
+                  Json.obj().toString()
+                )
+              )
+              .willReturn(
+                aResponse()
+                  .withHeader(HeaderNames.LOCATION, "/foo")
+                  .withStatus(BAD_REQUEST)
+              )
+          )
+
+          recoverToSucceededIf[RuntimeException] {
+            connector.initJourney()
+          }
+        }
+
       }
 
     }
