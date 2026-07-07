@@ -19,6 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.*
+import models.Address
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -58,9 +59,18 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
   private lazy val connector =
     app.injector.instanceOf[AddressLookupConnector]
 
+  val address = Address(
+    "add1",
+    Some("add2"),
+    None,
+    None,
+    None,
+    Some("UK")
+  )
+
   "AddressLookupConnector" should {
 
-    "For the .initJourney() method" should {
+    ".initJourney() method" should {
 
       "for a successful response" must {
         "return a Location for callback" in {
@@ -136,4 +146,5 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
     }
 
   }
+
 }
