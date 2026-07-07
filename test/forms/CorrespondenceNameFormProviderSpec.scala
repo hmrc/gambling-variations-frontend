@@ -32,9 +32,9 @@ class CorrespondenceNameFormProviderSpec extends StringFieldBehaviours {
 
   private val correspondenceNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
 
-  ".value" - {
+  ".correspondenceName" - {
 
-    val fieldName = "value"
+    val fieldName = "correspondenceName"
 
     behave like fieldThatBindsValidData(
       form,

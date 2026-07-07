@@ -112,7 +112,7 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
 
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody("value" -> "valid name")
+            .withFormUrlEncodedBody("correspondenceName" -> "valid name")
 
         val result = route(application, request).value
 
