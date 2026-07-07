@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.{IsSeasonalBusinessPage, OtherTradeClassPage}
+import pages.IsSeasonalBusinessPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*

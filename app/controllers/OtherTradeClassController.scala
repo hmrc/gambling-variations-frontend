@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import forms.OtherTradeClassFormProvider
-import models.{CheckMode, Mode, NormalMode}
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
 import pages.{IsSeasonalBusinessPage, OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
@@ -70,10 +70,10 @@ class OtherTradeClassController @Inject() (
             updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield {
-            if (updatedAnswers.get(IsSeasonalBusinessPage).isEmpty) {
-              Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
-            } else {
+            if (updatedAnswers.get(IsSeasonalBusinessPage).nonEmpty) {
               Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
+            } else {
+              Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
             }
           }
       )

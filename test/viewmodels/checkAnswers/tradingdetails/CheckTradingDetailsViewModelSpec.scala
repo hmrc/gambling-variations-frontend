@@ -82,7 +82,7 @@ class CheckTradingDetailsViewModelSpec extends SpecBase {
       val result =
         CheckTradingDetailsViewModel.from(answers, isGroupMember = false)
 
-      result.list.rows.size mustBe 2
+      result.list.rows.size mustBe 3
     }
 
     "must not include the other trade class row when trade class is not Other" in {

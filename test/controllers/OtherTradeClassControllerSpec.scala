@@ -73,10 +73,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val data = Json.obj(
-        "otherTradeClassSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
-        OtherTradeClassPage.toString -> "valid trade class"
-      )
+      val data = Json.obj("otherTradeClassSection" -> Json.obj("mgdRegNum" -> userAnswersId), OtherTradeClassPage.toString -> "valid trade class")
 
       val userAnswers = UserAnswers(userAnswersId, data)
 
@@ -95,13 +92,20 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect to the next page when valid data is submitted and isSeasonal" in {
 
+      val data = Json.obj(
+        "otherTradeClassSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
+        OtherTradeClassPage.toString -> "valid trade class",
+        "isBusinessSeasonal"         -> true
+      )
+
+      val ua = UserAnswers(userAnswersId, data)
       val mockSessionRepository = mock[SessionRepository]
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
+        applicationBuilder(userAnswers = Some(ua))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -117,6 +121,37 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to the Seasonal Business page when seasonal data not provided" in {
+      val seasonalBusinessRoute = routes.SeasonalBusinessController.onPageLoad(NormalMode).url
+      val data = Json.obj(
+        "otherTradeClassSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
+        OtherTradeClassPage.toString -> "valid trade class"
+      )
+
+      val ua = UserAnswers(userAnswersId, data)
+      val mockSessionRepository = mock[SessionRepository]
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(ua))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, otherTradeClassRoute)
+            .withFormUrlEncodedBody(("otherTradeClass", "valid trade class"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual seasonalBusinessRoute
       }
     }
 
