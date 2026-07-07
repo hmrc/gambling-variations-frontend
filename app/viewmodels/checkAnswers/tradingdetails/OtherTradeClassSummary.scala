@@ -29,18 +29,18 @@ object OtherTradeClassSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
 
     val tradeClassOpt = answers.get(BusinessTradeClassPage)
-    
+
     tradeClassOpt match {
       case Some(BusinessTradeClass.Other) =>
         val descOpt = answers.get(OtherTradeClassPage)
-        
+
         val descMissing = descOpt.forall(_.trim.isEmpty)
         if (descMissing) {
           None
         } else {
           Some(
             SummaryListRowViewModel(
-              key = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
+              key   = "checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel",
               value = ValueViewModel(descOpt.get),
               actions = Seq(
                 ActionItemViewModel(
@@ -53,7 +53,7 @@ object OtherTradeClassSummary {
             )
           )
         }
-        
+
       case _ =>
         None
     }
