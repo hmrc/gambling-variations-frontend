@@ -22,6 +22,7 @@ import forms.AssociatedRegistrationNumbersFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
+import utils.FlagsUtil.{checkFlag, checkIfChanged}
 import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,7 +49,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(AssociatedRegNumberSubmittedPage).getOrElse(false)
+    val showChangeMessage = checkFlag(request.userAnswers, TradingDetailsChangesPage, AssociatedRegNumberSubmittedPage)
     val preparedForm = request.userAnswers.get(AddAssociatedRegistrationNumberPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -59,7 +60,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
       case None           => 0
     }
 
-    Ok(view(preparedForm, mode, associatedRegNumberSeq, associatedRegNumberCount, flag))
+    Ok(view(preparedForm, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
@@ -67,7 +68,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
 
       val associatedRegNumberSeq = request.userAnswers.get(AssociatedRegistrationNumbersPage)
       val associatedRegNumberCount = associatedRegNumberSeq.map(_.length).getOrElse(0)
-      val flag = request.userAnswers.get(AssociatedRegNumberSubmittedPage).getOrElse(false)
+      val showChangeMessage = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsSubmittedPage)
 
       if (associatedRegNumberCount >= 3) {
         Future.successful(Redirect(routes.CheckTradingDetailsController.onPageLoad()))
@@ -76,13 +77,17 @@ class AssociatedRegistrationNumbersListController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, flag))),
+            formWithErrors =>
+              Future.successful(BadRequest(view(formWithErrors, mode, associatedRegNumberSeq, associatedRegNumberCount, showChangeMessage))),
             value =>
+              val isChanged: Boolean =
+                checkIfChanged(value, request.userAnswers, AssociatedRegistrationNumbersPage, TradingDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddAssociatedRegistrationNumberPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(AssociatedRegNumberPage))
                 updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(AddAssociatedRegistrationNumberPage, mode, updatedAnswers))
           )

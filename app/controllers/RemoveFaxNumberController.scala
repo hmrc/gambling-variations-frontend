@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveFaxNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, RemoveFaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -74,6 +74,8 @@ class RemoveFaxNumberController @Inject() (
             value =>
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveFaxNumberPage, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(RemoveFaxNumberPage, mode, updatedAnswers)

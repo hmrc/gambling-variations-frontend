@@ -22,11 +22,12 @@ import forms.BusinessTradeClassFormProvider
 import javax.inject.Inject
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessTradeClassPage, IsSeasonalBusinessPage, TradingDetailsChangeFlagPage}
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.BusinessTradeClassView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -66,13 +67,16 @@ class BusinessTradeClassController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
+            val isChanged: Boolean =
+              checkIfChanged(value, request.userAnswers, BusinessTradeClassPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(
                                   request.userAnswers
                                     .set(BusinessTradeClassPage, value)
                                     .flatMap(_.set(TradingDetailsChangeFlagPage, true))
                                 )
-              _ <- sessionRepository.set(updatedAnswers)
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
+              _              <- sessionRepository.set(updatedAnswers)
             } yield {
               val seasonalBusIsEmpty: Boolean =
                 request.userAnswers.get(IsSeasonalBusinessPage).fold(true)(_ => false)
@@ -102,11 +106,4 @@ class BusinessTradeClassController @Inject() (
         )
     }
 
-  def removeSeasonalIfOther(value: Any, ua: UserAnswers): Future[UserAnswers] = {
-    if (value == BusinessTradeClass.Other) {
-      Future.fromTry(ua.remove(IsSeasonalBusinessPage))
-    } else {
-      Future(ua)
-    }
-  }
 }

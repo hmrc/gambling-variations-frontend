@@ -19,12 +19,15 @@ package controllers
 import base.SpecBase
 import forms.RemoveFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessFaxNumberPage, RemoveFaxNumberPage}
+import pages.{BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -33,6 +36,8 @@ import views.html.RemoveFaxNumberView
 import scala.concurrent.Future
 
 class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
+
+  def onwardRoute = Call("GET", "/foo")
 
   private val faxNumber = "123456789"
 
@@ -108,6 +113,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -121,6 +127,66 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must update data correctly when submitted in" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(RemoveFaxNumberPage).value mustEqual true
+      }
+    }
+
+    "must flag ContactDetailsChangesPage when data changed in" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(RemoveFaxNumberPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(ContactDetailsChangesPage).value mustEqual true
       }
     }
 

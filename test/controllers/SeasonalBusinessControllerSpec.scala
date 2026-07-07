@@ -20,10 +20,11 @@ import base.SpecBase
 import forms.SeasonalBusinessFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{IsSeasonalBusinessPage, MgdTradeDetailsSectionPage}
+import pages.{IsSeasonalBusinessPage, MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -104,6 +105,63 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must update data correctly when submitted in" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, seasonalBusinessRoute)
+            .withFormUrlEncodedBody(("isBusinessSeasonal", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(IsSeasonalBusinessPage).value mustEqual true
+      }
+    }
+
+    "must flag TradingDetailsChangesPage when data changed in" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, seasonalBusinessRoute)
+            .withFormUrlEncodedBody(("isBusinessSeasonal", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(IsSeasonalBusinessPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(TradingDetailsChangesPage).value mustEqual true
       }
     }
 

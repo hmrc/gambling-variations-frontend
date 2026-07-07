@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveEmailAddressFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, RemoveEmailAddressPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage, RemoveEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -74,6 +74,8 @@ class RemoveEmailAddressController @Inject() (
             value =>
               for {
                 updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveEmailAddressPage, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(RemoveEmailAddressPage, mode, updatedAnswers)

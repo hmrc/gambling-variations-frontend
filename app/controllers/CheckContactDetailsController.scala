@@ -17,13 +17,14 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
 
 import javax.inject.Inject
+import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.BusinessContactDetailsView
+import views.html.CheckContactDetailsView
 
 class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -31,19 +32,22 @@ class CheckContactDetailsController @Inject() (
   getData: DataRetrievalAction,
   requireData: BusinessContactDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: BusinessContactDetailsView
+  view: CheckContactDetailsView
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val flag = request.userAnswers.get(BusinessContactDetailsSubmittedPage).getOrElse(false)
+    val ua = request.userAnswers
+
+    val showChangeMessage: Boolean = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
+
     Ok(
       view(
-        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
-        request.userAnswers.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
-        request.userAnswers.get(BusinessFaxNumberPage),
-        request.userAnswers.get(BusinessEmailAddressPage),
-        flag
+        ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
+        ua.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
+        ua.get(BusinessFaxNumberPage),
+        ua.get(BusinessEmailAddressPage),
+        showChangeMessage
       )
     )
   }
