@@ -20,10 +20,11 @@ import controllers.actions.*
 import forms.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceContactNumberPage, CorrespondenceDetailsSubmittedPage}
+import repositories.SessionRepository
+import utils.FlagsUtil.checkIfChanged
+import pages.{CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CorrespondenceContactNumberView
 
@@ -78,11 +79,14 @@ class CorrespondenceContactNumberController @Inject() (
       validatedForm.fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage)
           for {
             updatedAnswers <- Future.fromTry(
                                 request.userAnswers.set(CorrespondenceContactNumberPage, value)
                               )
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(
             navigator.nextPage(CorrespondenceContactNumberPage, mode, updatedAnswers)

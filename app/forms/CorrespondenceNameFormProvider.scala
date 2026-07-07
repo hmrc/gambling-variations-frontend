@@ -14,11 +14,28 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object BusinessNameChangesPage extends QuestionPage[Boolean] {
-  override def path: JsPath = JsPath \ toString
-  override def toString: String = "businessNameChanged"
+import javax.inject.Inject
+
+class CorrespondenceNameFormProvider @Inject() extends Mappings {
+
+  private val correspondenceNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+
+  def apply(): Form[String] =
+    Form(
+      "correspondenceName" -> text("correspondenceName.error.required")
+        .verifying(
+          maxLength(100, "correspondenceName.error.length")
+        )
+        .verifying(
+          regexp(
+            correspondenceNameRegex,
+            "correspondenceName.error.invalid"
+          )
+        )
+    )
 }

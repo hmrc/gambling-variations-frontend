@@ -21,11 +21,12 @@ import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.{BusinessNamePage, BusinessNameSubmittedPage, BusinessTypePage, SoleProprietorPage}
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.{ChangeBusinessNameView, SoleProprietorNameView}
 
 import javax.inject.Inject
@@ -84,9 +85,13 @@ class ChangeBusinessNameController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(soleProprietorView(formWithErrors, mode))),
               value =>
+                val isChanged: Boolean =
+                  checkIfChanged(value, request.userAnswers, SoleProprietorPage, BusinessNameChangesPage)
+
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
                   updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
             )
@@ -99,14 +104,16 @@ class ChangeBusinessNameController @Inject() (
             .fold(
               formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType, headingKey, titleKey))),
               value =>
+                val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessNamePage, BusinessNameChangesPage)
+
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNamePage, value))
                   updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
             )
         }
       } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
     }
-
 }

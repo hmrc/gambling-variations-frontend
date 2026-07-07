@@ -19,8 +19,11 @@ package controllers
 import controllers.actions.*
 import models.{NormalMode, UserAnswers}
 import pages.{AddCorrespondenceAdditionalInformationPage, AddCorrespondenceAdditionalNamePage, AddCorrespondenceEmailAddressPage, AddCorrespondenceFaxNumberPage, CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage, IomOrCiFlagPage}
+import pages.*
+import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.hmrcfrontend.controllers.routes
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
@@ -40,7 +43,7 @@ class CheckCorrespondenceDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
 
     if (!hasAnyCorrespondenceDetails(request.userAnswers)) {
-      Redirect(routes.AddCorrespondingDetailsYesNoController.onPageLoad(NormalMode))
+      Redirect(controllers.routes.AddCorrespondingDetailsYesNoController.onPageLoad(NormalMode))
     } else {
       Ok(
         view(
@@ -57,11 +60,12 @@ class CheckCorrespondenceDetailsController @Inject() (
             request.userAnswers.get(CorrespondenceFaxNumberPage),
             request.userAnswers.get(AddCorrespondenceEmailAddressPage),
             request.userAnswers.get(CorrespondenceEmailPage),
-            request.userAnswers.get(CorrespondenceDetailsSubmittedPage).getOrElse(false)
+            checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage)
           )
         )
       )
     }
+
   }
 
   private def hasAnyCorrespondenceDetails(userAnswers: UserAnswers): Boolean =

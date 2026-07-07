@@ -17,30 +17,29 @@
 package controllers
 
 import controllers.actions.*
-import forms.OtherTradeClassFormProvider
+import forms.CorrespondenceNameFormProvider
 import models.Mode
 import navigation.Navigator
-import utils.FlagsUtil.checkIfChanged
-import pages.{OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.OtherTradeClassView
+import views.html.CorrespondenceNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OtherTradeClassController @Inject() (
+class CorrespondenceNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: OtherTradeClassDataRequiredAction,
-  formProvider: OtherTradeClassFormProvider,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: CorrespondenceNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: OtherTradeClassView
+  view: CorrespondenceNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,7 +48,7 @@ class OtherTradeClassController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(OtherTradeClassPage)
+      .get(CorrespondenceNamePage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
@@ -62,14 +61,11 @@ class OtherTradeClassController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, OtherTradeClassPage, TradingDetailsChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceNamePage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CorrespondenceNamePage, mode, updatedAnswers))
       )
   }
 }
