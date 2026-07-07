@@ -16,9 +16,12 @@
 
 package viewmodels.checkAnswers.tradingdetails
 
-import models.UserAnswers
+import models.{BusinessTradeClass, UserAnswers}
+import pages.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import viewmodels.govuk.all.ValueViewModel
 import viewmodels.govuk.summarylist.SummaryListViewModel
 
 case class CheckTradingDetailsViewModel(
@@ -34,31 +37,53 @@ object CheckTradingDetailsViewModel {
     isGroupMember: Boolean
   )(implicit messages: Messages): CheckTradingDetailsViewModel = {
 
+    if (isGroupMember) {
+      val seasonalOnly =
+        Seq(IsSeasonalBusinessSummary.row(userAnswers)).flatten
+
+      return CheckTradingDetailsViewModel(
+        list          = SummaryListViewModel(seasonalOnly),
+        previousMgd   = SummaryListViewModel(Nil),
+        associatedMgd = SummaryListViewModel(Nil)
+      )
+    }
+
+    val tradeClassRow =
+      BusinessTradeClassSummary.row(userAnswers).map { row =>
+        val tc = userAnswers.get(BusinessTradeClassPage)
+
+        val fixedValue =
+          tc match {
+            case None => "Not provided"
+            case Some(BusinessTradeClass.Other) =>
+              messages("businessTradeClass.other")
+            case Some(value) =>
+              messages(s"businessTradeClass.$value")
+          }
+
+        row.copy(value = ValueViewModel(Text(fixedValue)))
+      }
+
+    val otherTradeClassRow =
+      OtherTradeClassSummary.row(userAnswers).map { row =>
+        val descOpt = userAnswers.get(OtherTradeClassPage)
+
+        val fixedValue: String = descOpt.filter(_.nonEmpty).getOrElse("Not provided")
+
+        row.copy(value = ValueViewModel(Text(fixedValue)))
+      }
+
+    val seasonalRow =
+      IsSeasonalBusinessSummary.row(userAnswers)
+
     val tradeClassRows =
-      (
-        if (isGroupMember) Nil
-        else
-          Seq(
-            BusinessTradeClassSummary.row(userAnswers),
-            OtherTradeClassSummary.row(userAnswers)
-          ).flatten
-      ) ++ Seq(
-        IsSeasonalBusinessSummary.row(userAnswers)
-      ).flatten
+      Seq(tradeClassRow, otherTradeClassRow, seasonalRow).flatten
 
     val previousMgdRows =
-      if (isGroupMember) Nil
-      else
-        Seq(
-          PreviousRegistrationNumbersSummary.row(userAnswers)
-        ).flatten
+      Seq(PreviousRegistrationNumbersSummary.row(userAnswers)).flatten
 
     val associatedMgdRows =
-      if (isGroupMember) Nil
-      else
-        Seq(
-          AssociatedRegistrationNumbersSummary.row(userAnswers)
-        ).flatten
+      Seq(AssociatedRegistrationNumbersSummary.row(userAnswers)).flatten
 
     CheckTradingDetailsViewModel(
       list          = SummaryListViewModel(tradeClassRows),

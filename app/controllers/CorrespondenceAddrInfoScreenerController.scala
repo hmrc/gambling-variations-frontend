@@ -17,29 +17,30 @@
 package controllers
 
 import controllers.actions.*
-import forms.OtherTradeClassFormProvider
+import forms.CorrespondenceAddrInfoScreenerFormProvider
+
+import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{OtherTradeClassPage, TradingDetailsChangeFlagPage}
+import pages.{CorrespondenceAddrInfoScreenerPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.OtherTradeClassView
+import views.html.CorrespondenceAddrInfoScreenerView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OtherTradeClassController @Inject() (
+class CorrespondenceAddrInfoScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: OtherTradeClassDataRequiredAction,
-  formProvider: OtherTradeClassFormProvider,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: CorrespondenceAddrInfoScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: OtherTradeClassView
+  view: CorrespondenceAddrInfoScreenerView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,25 +48,26 @@ class OtherTradeClassController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(OtherTradeClassPage)
-      .fold(form)(form.fill)
+
+    val preparedForm = request.userAnswers.get(CorrespondenceAddrInfoScreenerPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
     Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddrInfoScreenerPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CorrespondenceAddrInfoScreenerPage, mode, updatedAnswers))
       )
   }
 }
