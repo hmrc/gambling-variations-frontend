@@ -20,7 +20,8 @@ import controllers.actions.*
 import forms.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage}
+import utils.FlagsUtil.checkIfChanged
+import pages.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -61,9 +62,13 @@ class CorrespondenceEmailAddressController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, CorrespondenceEmailPage, CorrespondenceDetailsChangesPage)
+
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceEmailPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CorrespondenceEmailPage, mode, updatedAnswers))
       )

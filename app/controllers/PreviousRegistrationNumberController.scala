@@ -18,16 +18,16 @@ package controllers
 
 import controllers.actions.*
 import forms.PreviousRegistrationNumberFormProvider
-
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ChosenPreviousRegNumberPage, PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.*
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.PreviousRegistrationNumberView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -69,6 +69,8 @@ class PreviousRegistrationNumberController @Inject() (
         registrationNumber => {
           val chosenPreviousRegistrationNumber = request.userAnswers.get(ChosenPreviousRegNumberPage)
 
+          val isChanged: Boolean =
+            checkIfChanged(registrationNumber, request.userAnswers, PreviousRegistrationNumbersListPage, TradingDetailsChangesPage)
           val previousRegistrationNumbersList =
             request.userAnswers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty) ++
               request.userAnswers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty)
@@ -83,6 +85,7 @@ class PreviousRegistrationNumberController @Inject() (
           } else {
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, registrationNumber))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(PreviousRegistrationNumbersListPage, mode, updatedAnswers))
           }
