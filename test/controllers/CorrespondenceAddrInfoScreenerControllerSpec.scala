@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import forms.CorrespondenceAddrAdditionalInfoScreenerFormProvider
+import forms.CorrespondenceAddrInfoScreenerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -29,23 +29,23 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.CorrespondenceAddrAdditionalInfoScreenerView
+import views.html.CorrespondenceAddrInfoScreenerView
 
 import scala.concurrent.Future
 
-class CorrespondenceAddrAdditionalInfoScreenerControllerSpec extends SpecBase with MockitoSugar {
+class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CorrespondenceAddrAdditionalInfoScreenerFormProvider()
+  val formProvider = new CorrespondenceAddrInfoScreenerFormProvider()
   val form = formProvider()
 
   val requiredAnswer = Json.obj(
     "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
 
-  lazy val correspondenceAddrAdditionalInfoScreenerRoute =
-    routes.CorrespondenceAddrAdditionalInfoScreenerController.onPageLoad(NormalMode).url
+  lazy val correspondenceAddrInfoScreenerRoute =
+    routes.CorrespondenceAddrInfoScreenerController.onPageLoad(NormalMode).url
 
   "CorrespondenceAddrAdditionalInfoScreener Controller" - {
 
@@ -54,11 +54,11 @@ class CorrespondenceAddrAdditionalInfoScreenerControllerSpec extends SpecBase wi
       val application = applicationBuilder(userAnswers = Some(UserAnswers("id", requiredAnswer))).build()
 
       running(application) {
-        val request = FakeRequest(GET, correspondenceAddrAdditionalInfoScreenerRoute)
+        val request = FakeRequest(GET, correspondenceAddrInfoScreenerRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[CorrespondenceAddrAdditionalInfoScreenerView]
+        val view = application.injector.instanceOf[CorrespondenceAddrInfoScreenerView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
@@ -78,9 +78,9 @@ class CorrespondenceAddrAdditionalInfoScreenerControllerSpec extends SpecBase wi
       val application = applicationBuilder(userAnswers = userAnswers).build()
 
       running(application) {
-        val request = FakeRequest(GET, correspondenceAddrAdditionalInfoScreenerRoute)
+        val request = FakeRequest(GET, correspondenceAddrInfoScreenerRoute)
 
-        val view = application.injector.instanceOf[CorrespondenceAddrAdditionalInfoScreenerView]
+        val view = application.injector.instanceOf[CorrespondenceAddrInfoScreenerView]
 
         val result = route(application, request).value
 
@@ -105,7 +105,7 @@ class CorrespondenceAddrAdditionalInfoScreenerControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, correspondenceAddrAdditionalInfoScreenerRoute)
+          FakeRequest(POST, correspondenceAddrInfoScreenerRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -123,12 +123,12 @@ class CorrespondenceAddrAdditionalInfoScreenerControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, correspondenceAddrAdditionalInfoScreenerRoute)
+          FakeRequest(POST, correspondenceAddrInfoScreenerRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[CorrespondenceAddrAdditionalInfoScreenerView]
+        val view = application.injector.instanceOf[CorrespondenceAddrInfoScreenerView]
 
         val result = route(application, request).value
 

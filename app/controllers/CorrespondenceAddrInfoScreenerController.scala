@@ -17,30 +17,30 @@
 package controllers
 
 import controllers.actions.*
-import forms.CorrespondenceAddrAdditionalInfoScreenerFormProvider
+import forms.CorrespondenceAddrInfoScreenerFormProvider
 
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddrAdditionalInfoScreenerPage, CorrespondenceDetailsSubmittedPage}
+import pages.{CorrespondenceAddrInfoScreenerPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceAddrAdditionalInfoScreenerView
+import views.html.CorrespondenceAddrInfoScreenerView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceAddrAdditionalInfoScreenerController @Inject() (
+class CorrespondenceAddrInfoScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceAddrAdditionalInfoScreenerFormProvider,
+  formProvider: CorrespondenceAddrInfoScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceAddrAdditionalInfoScreenerView
+  view: CorrespondenceAddrInfoScreenerView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,7 +49,7 @@ class CorrespondenceAddrAdditionalInfoScreenerController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(CorrespondenceAddrAdditionalInfoScreenerPage) match {
+    val preparedForm = request.userAnswers.get(CorrespondenceAddrInfoScreenerPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -64,10 +64,10 @@ class CorrespondenceAddrAdditionalInfoScreenerController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddrAdditionalInfoScreenerPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddrInfoScreenerPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAddrAdditionalInfoScreenerPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CorrespondenceAddrInfoScreenerPage, mode, updatedAnswers))
       )
   }
 }
