@@ -21,7 +21,7 @@ import play.api.data.FormError
 
 class CorrespondenceAddrInfoScreenerFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "correspondenceAddrAdditionalInfoScreener.error.required"
+  val requiredKey = "correspondenceAddrInfoScreener.error.required"
   val invalidKey = "error.boolean"
 
   val form = new CorrespondenceAddrInfoScreenerFormProvider()()
