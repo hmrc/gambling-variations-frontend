@@ -44,21 +44,17 @@ object IsSeasonalBusinessSummary {
         )
       }
       .getOrElse(
-        if (answers.get(OtherTradeClassPage).isEmpty) {
-          Some(
-            SummaryListRowViewModel(
-              key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
-              value = ValueViewModel("Not provided"),
-              actions = Seq(
-                ActionItemViewModel(
-                  "site.change",
-                  routes.SeasonalBusinessController.onPageLoad(CheckMode).url
-                ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
-              )
+        Some(
+          SummaryListRowViewModel(
+            key   = "checkTradingDetails.seasonalBusiness.checkYourAnswersLabel",
+            value = ValueViewModel(messages("site.notProvided")),
+            actions = Seq(
+              ActionItemViewModel(
+                "site.change",
+                routes.SeasonalBusinessController.onPageLoad(CheckMode).url
+              ).withVisuallyHiddenText(messages("checkTradingDetails.seasonalBusiness.change.hidden"))
             )
           )
-        } else {
-          None
-        }
+        )
       )
 }

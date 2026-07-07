@@ -135,7 +135,7 @@ class CheckTradingDetailsController @Inject() (
         Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
       } else if (tradeClassIsOther && otherDescIsMissing) {
         Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
-      } else if (seasonalBusIsMissing && !tradeClassIsOther) {
+      } else if (seasonalBusIsMissing) {
         Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
       } else {
         Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
