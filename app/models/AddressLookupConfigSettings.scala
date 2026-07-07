@@ -18,10 +18,10 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class AddressLookupConfiguration(options: AddressLookupConfigOptions)
+case class AddressLookupConfigSettings(options: AddressLookupConfigOptions, labels: AddressLookupLabels)
 
-object AddressLookupConfiguration {
-  implicit val fmt: Format[AddressLookupConfiguration] = Json.format[AddressLookupConfiguration]
+object AddressLookupConfigSettings {
+  implicit val fmt: Format[AddressLookupConfigSettings] = Json.format[AddressLookupConfigSettings]
 }
 
 case class AddressLookupConfigOptions(
@@ -72,7 +72,7 @@ object ManualAddressEntryLineContent {
   implicit val fmt: Format[ManualAddressEntryLineContent] = Json.format[ManualAddressEntryLineContent]
 }
 
-case class AddressLookupLabels(en: Map[String, String], cy: Map[String, String])
+case class AddressLookupLabels(en: AddressLookupLabelContent, cy: AddressLookupLabelContent)
 
 object AddressLookupLabels {
   implicit val fmt: Format[AddressLookupLabels] = Json.format[AddressLookupLabels]
@@ -84,7 +84,7 @@ case class AddressLookupLabelContent(
   lookupPageLabels: LookupPageLabels,
   confirmPageLabels: ConfirmPageLabels,
   editPageLabels: EditPageLabels,
-  international: Map[String, String]
+  international: International
 )
 
 object AddressLookupLabelContent {
