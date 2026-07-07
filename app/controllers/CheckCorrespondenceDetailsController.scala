@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import models.{NormalMode, UserAnswers}
-import pages.{AddCorrespondenceAdditionalInformationPage, AddCorrespondenceAdditionalNamePage, AddCorrespondenceEmailAddressPage, AddCorrespondenceFaxNumberPage, CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage, IomOrCiFlagPage}
+import pages.{AddCorrespondenceAdditionalInformationPage, AddCorrespondenceAdditionalNamePage, AddCorrespondenceEmailAddressPage, AddCorrespondenceFaxNumberPage, CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage, isleMOrChannelFlagPage}
 import pages.*
 import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -74,7 +74,7 @@ class CheckCorrespondenceDetailsController @Inject() (
       userAnswers.get(CorrespondenceAdditionalInformationPage).isDefined ||
       userAnswers.get(CorrespondenceFaxNumberPage).isDefined ||
       userAnswers.get(CorrespondenceEmailPage).isDefined ||
-      userAnswers.get(IomOrCiFlagPage).isDefined ||
+      userAnswers.get(isleMOrChannelFlagPage).isDefined ||
       userAnswers.get(CorrespondenceAddressUkPage).isDefined ||
       userAnswers.get(CorrespondenceAddressNonUkPage).isDefined ||
       userAnswers.get(CorrespondenceContactNumberPage).exists { contact =>
