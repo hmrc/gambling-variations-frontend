@@ -17,7 +17,8 @@
 package controllers
 
 import controllers.actions.*
-import pages.*
+import models.{NormalMode, UserAnswers}
+import pages.{AddCorrespondenceAdditionalInformationPage, AddCorrespondenceAdditionalNamePage, AddCorrespondenceEmailAddressPage, AddCorrespondenceFaxNumberPage, CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage, IomOrCiFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -38,24 +39,42 @@ class CheckCorrespondenceDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
 
-    Ok(
-      view(
-        CheckCorrespondenceDetailsViewModel(
-          request.userAnswers.get(CorrespondenceNamePage),
-          request.userAnswers.get(AddCorrespondenceAdditionalNamePage),
-          request.userAnswers.get(CorrespondenceAdditionalNamePage),
-          request.userAnswers.get(CorrespondenceAddressUkPage) orElse request.userAnswers.get(CorrespondenceAddressNonUkPage),
-          request.userAnswers.get(AddCorrespondenceAdditionalInformationPage),
-          request.userAnswers.get(CorrespondenceAdditionalInformationPage),
-          request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),
-          request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
-          request.userAnswers.get(AddCorrespondenceFaxNumberPage),
-          request.userAnswers.get(CorrespondenceFaxNumberPage),
-          request.userAnswers.get(AddCorrespondenceEmailAddressPage),
-          request.userAnswers.get(CorrespondenceEmailPage),
-          request.userAnswers.get(CorrespondenceDetailsSubmittedPage).getOrElse(false)
+    if (!hasAnyCorrespondenceDetails(request.userAnswers)) {
+      Redirect(routes.AddCorrespondingDetailsYesNoController.onPageLoad(NormalMode))
+    } else {
+      Ok(
+        view(
+          CheckCorrespondenceDetailsViewModel(
+            request.userAnswers.get(CorrespondenceNamePage),
+            request.userAnswers.get(AddCorrespondenceAdditionalNamePage),
+            request.userAnswers.get(CorrespondenceAdditionalNamePage),
+            request.userAnswers.get(CorrespondenceAddressUkPage) orElse request.userAnswers.get(CorrespondenceAddressNonUkPage),
+            request.userAnswers.get(AddCorrespondenceAdditionalInformationPage),
+            request.userAnswers.get(CorrespondenceAdditionalInformationPage),
+            request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),
+            request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
+            request.userAnswers.get(AddCorrespondenceFaxNumberPage),
+            request.userAnswers.get(CorrespondenceFaxNumberPage),
+            request.userAnswers.get(AddCorrespondenceEmailAddressPage),
+            request.userAnswers.get(CorrespondenceEmailPage),
+            request.userAnswers.get(CorrespondenceDetailsSubmittedPage).getOrElse(false)
+          )
         )
       )
-    )
+    }
   }
+
+  private def hasAnyCorrespondenceDetails(userAnswers: UserAnswers): Boolean =
+    userAnswers.get(CorrespondenceNamePage).isDefined ||
+      userAnswers.get(CorrespondenceAdditionalNamePage).isDefined ||
+      userAnswers.get(CorrespondenceAdditionalInformationPage).isDefined ||
+      userAnswers.get(CorrespondenceFaxNumberPage).isDefined ||
+      userAnswers.get(CorrespondenceEmailPage).isDefined ||
+      userAnswers.get(IomOrCiFlagPage).isDefined ||
+      userAnswers.get(CorrespondenceAddressUkPage).isDefined ||
+      userAnswers.get(CorrespondenceAddressNonUkPage).isDefined ||
+      userAnswers.get(CorrespondenceContactNumberPage).exists { contact =>
+        contact.phoneNumber.isDefined ||
+        contact.mobilePhoneNumber.isDefined
+      }
 }
