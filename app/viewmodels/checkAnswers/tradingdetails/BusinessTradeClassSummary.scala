@@ -33,7 +33,7 @@ object BusinessTradeClassSummary {
     val displayValue =
       tradeClassOpt match {
         case None =>
-          "Not provided"
+          messages("site.notProvided")
 
         case Some(BusinessTradeClass.Other) =>
           messages("businessTradeClass.other")
