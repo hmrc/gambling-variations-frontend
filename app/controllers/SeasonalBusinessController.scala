@@ -22,7 +22,8 @@ import forms.SeasonalBusinessFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{IsSeasonalBusinessPage, TradingDetailsChangeFlagPage}
+import utils.FlagsUtil.checkIfChanged
+import pages.{IsSeasonalBusinessPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,7 +50,6 @@ class SeasonalBusinessController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen mgdTradeDetailsDataRequired) { implicit request =>
-
       val preparedForm = request.userAnswers.get(IsSeasonalBusinessPage) match {
         case None        => form
         case Some(value) => form.fill(value)
@@ -66,9 +66,12 @@ class SeasonalBusinessController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
+            val isChanged: Boolean =
+              checkIfChanged(value, request.userAnswers, IsSeasonalBusinessPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(IsSeasonalBusinessPage, value))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(IsSeasonalBusinessPage, mode, updatedAnswers))
         )

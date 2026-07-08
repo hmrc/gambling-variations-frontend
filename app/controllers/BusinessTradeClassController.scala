@@ -22,11 +22,12 @@ import forms.BusinessTradeClassFormProvider
 import javax.inject.Inject
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
-import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage}
+import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.BusinessTradeClassView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -66,18 +67,20 @@ class BusinessTradeClassController @Inject() (
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
+            val isChanged: Boolean =
+              checkIfChanged(value, request.userAnswers, BusinessTradeClassPage, TradingDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(
-                request.userAnswers
-                  .set(BusinessTradeClassPage, value)
-                  .flatMap(_.set(TradingDetailsChangeFlagPage, true))
-              )
-              _ <- sessionRepository.set(updatedAnswers)
+                                  request.userAnswers
+                                    .set(BusinessTradeClassPage, value)
+                                    .flatMap(_.set(TradingDetailsChangeFlagPage, true))
+                                )
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
+              _              <- sessionRepository.set(updatedAnswers)
             } yield {
 
               val next =
                 mode match {
-
 
                   case NormalMode =>
                     navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)

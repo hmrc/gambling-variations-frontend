@@ -463,6 +463,13 @@ correspondenceEmailAddress.error.required = Enter a correspondence email address
 correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
 
+correspondenceName.title = What full name should we use for correspondence?
+correspondenceName.heading = What full name should we use for correspondence?
+correspondenceName.checkYourAnswersLabel = Full Name
+correspondenceName.error.required = Enter the full name for correspondence
+correspondenceName.error.invalid = The full name for correspondence must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+correspondenceName.error.length = The full name for correspondence must be 100 characters or less
+
 correspondenceAdditionalName.title = What additional full name should we use for correspondence?
 correspondenceAdditionalName.heading = What additional full name should we use for correspondence?
 correspondenceAdditionalName.checkYourAnswersLabel = Additional Full Name
@@ -511,3 +518,23 @@ removeCorrespondenceEmailAddress.heading = Are you sure you want to remove the c
 removeCorrespondenceEmailAddress.checkYourAnswersLabel = removeCorrespondenceEmailAddress
 removeCorrespondenceEmailAddress.error.required = Select yes if you want to remove the correspondence email address
 
+
+CorrespondenceAddrInfoScreener.title = Do you want to include additional information for the correspondence address?
+CorrespondenceAddrInfoScreener.heading = Do you want to include additional information for the correspondence address?
+CorrespondenceAddrInfoScreener.heading.caption = Change registration details
+CorrespondenceAddrInfoScreener.hint = For example, building name or floor number
+CorrespondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
+CorrespondenceAddrInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
+
+correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
+correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
+correspondenceAdditionalNameYesNo.caption = Change registration details
+correspondenceAdditionalNameYesNo.checkYourAnswersLabel = Additional correspondence name
+correspondenceAdditionalNameYesNo.error.required = Select yes to add an additional name for correspondence
+correspondenceAdditionalNameYesNo.change.hidden = do you want to add an additional name for correspondence?
+
+addEmailAddressForCorrespondenceYesNo.title = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
+addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?

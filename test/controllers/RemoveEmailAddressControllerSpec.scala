@@ -20,10 +20,11 @@ import base.SpecBase
 import forms.RemoveEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.RemoveEmailAddressPage
+import pages.{ContactDetailsChangesPage, RemoveEmailAddressPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -129,6 +130,73 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         verify(mockSessionRepository).set(any())
+      }
+    }
+
+    "must update data correctly when submitted in" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val mockNavigator = mock[Navigator]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockNavigator.nextPage(any(), any(), any()))
+        .thenReturn(routes.IndexController.onPageLoad())
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[Navigator].toInstance(mockNavigator)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeEmailRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(RemoveEmailAddressPage).value mustEqual true
+      }
+    }
+
+    "must flag ContactDetailsChangesPage when data changed in" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val mockNavigator = mock[Navigator]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      when(mockNavigator.nextPage(any(), any(), any()))
+        .thenReturn(routes.IndexController.onPageLoad())
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[Navigator].toInstance(mockNavigator)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeEmailRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(RemoveEmailAddressPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(ContactDetailsChangesPage).value mustEqual true
       }
     }
 

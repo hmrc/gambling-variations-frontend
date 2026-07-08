@@ -37,7 +37,6 @@ class BusinessTradeClassSummarySpec extends SpecBase {
       row.value.value.content.asHtml.toString must include("Not provided")
     }
 
-
     "return the correct row when the question has been answered" in {
 
       val answers =
