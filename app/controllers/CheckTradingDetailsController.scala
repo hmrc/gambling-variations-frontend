@@ -141,9 +141,6 @@ class CheckTradingDetailsController @Inject() (
       } else {
           Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
         }
-
-      //NOT GROUP MEMBER
-
       }
 
       }
