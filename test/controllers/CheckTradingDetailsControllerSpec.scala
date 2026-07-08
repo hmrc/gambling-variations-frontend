@@ -326,7 +326,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
             .set(BusinessTradeClassPage, BusinessTradeClass.Casino)
             .success
             .value
-            .set(SeasonalBusinessPage, true)
+            .set(IsSeasonalBusinessPage, true)
             .success
             .value
 

@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessTradeClassFormProvider
 
 import javax.inject.Inject
-import models.{BusinessTradeClass, CheckMode, Mode, NormalMode, UserAnswers}
+import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
 import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
