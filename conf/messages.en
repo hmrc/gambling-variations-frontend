@@ -531,3 +531,13 @@ addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email addr
 addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
 addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
 addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
+
+addCorrespondingDetailsYesNo.title = Correspondence details
+addCorrespondingDetailsYesNo.subTitle = Change registration details
+addCorrespondingDetailsYesNo.heading = Correspondence details
+addCorrespondingDetailsYesNo.caption = Change registration details
+addCorrespondingDetailsYesNo.p1 = We will contact you using the business details you provided. Alternatively, you can add correspondence details.
+addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
+addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?

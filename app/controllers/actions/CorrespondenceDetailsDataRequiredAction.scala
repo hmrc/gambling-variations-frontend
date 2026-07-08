@@ -105,6 +105,7 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
         }
       }
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.additionalInformation, CorrespondenceAdditionalInformationPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.iomOrCiFlag, isleMOrChannelFlagPage)
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.contactNumber, CorrespondenceContactNumberPage)
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.faxNumber, CorrespondenceFaxNumberPage)
       updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.emailAddr, CorrespondenceEmailPage)

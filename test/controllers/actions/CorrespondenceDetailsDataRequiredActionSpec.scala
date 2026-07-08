@@ -60,6 +60,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> "XWM00000001770"),
           "correspondenceName"           -> "ABC ltd",
           "correspondenceAdditionalName" -> "XX",
+          "iomOrCiFlag"                  -> "true",
           "correspondenceAddressUk" -> Json.obj(
             "address1" -> "add1",
             "address2" -> "add2",
@@ -183,6 +184,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
               "country"  -> "Spain"
             ),
             "correspondenceAdditionalInformation" -> "Upstairs",
+            "iomOrCiFlag"                         -> "true",
             "correspondenceContactNumber" -> Json.obj(
               "phoneNumber"       -> "0123456789",
               "mobilePhoneNumber" -> "0123456780"
@@ -236,6 +238,7 @@ object CorrespondenceDetailsDataRequiredActionSpec {
       )
     ),
     additionalInformation = Some("Upstairs"),
+    iomOrCiFlag           = Some("true"),
     contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
     faxNumber             = Some("0123456799"),
     emailAddr             = Some("abc@email.com")
@@ -256,6 +259,7 @@ object CorrespondenceDetailsDataRequiredActionSpec {
       )
     ),
     additionalInformation = Some("Upstairs"),
+    iomOrCiFlag           = Some("true"),
     contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
     faxNumber             = Some("0123456799"),
     emailAddr             = Some("abc@email.com")
