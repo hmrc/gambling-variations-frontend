@@ -532,8 +532,18 @@ addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add
 addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
 addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
 
-removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name? 
+addCorrespondingDetailsYesNo.title = Correspondence details
+addCorrespondingDetailsYesNo.subTitle = Change registration details
+addCorrespondingDetailsYesNo.heading = Correspondence details
+addCorrespondingDetailsYesNo.caption = Change registration details
+addCorrespondingDetailsYesNo.p1 = We will contact you using the business details you provided. Alternatively, you can add correspondence details.
+addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
+addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+
+removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name?
 removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
-removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name? 
-removeAdditionalCorrespondenceNameYesNo.error.required = Select yes if removeAdditionalCorrespondenceNameYesNo
+removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
 removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?

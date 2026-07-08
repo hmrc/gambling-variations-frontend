@@ -19,12 +19,12 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class RemoveAdditionalCorrespondenceNameYesNoFormProviderSpec extends BooleanFieldBehaviours {
+class AddCorrespondingDetailsYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removeAdditionalCorrespondenceNameYesNo.error.required"
+  val requiredKey = "addCorrespondingDetailsYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemoveAdditionalCorrespondenceNameYesNoFormProvider()()
+  val form = new AddCorrespondingDetailsYesNoFormProvider()()
 
   ".value" - {
 

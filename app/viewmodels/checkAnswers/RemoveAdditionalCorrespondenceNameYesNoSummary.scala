@@ -21,24 +21,23 @@ import models.{CheckMode, UserAnswers}
 import pages.RemoveAdditionalCorrespondenceNameYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object RemoveAdditionalCorrespondenceNameYesNoSummary  {
+object RemoveAdditionalCorrespondenceNameYesNoSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(RemoveAdditionalCorrespondenceNameYesNoPage).map {
-      answer =>
+    answers.get(RemoveAdditionalCorrespondenceNameYesNoPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("removeAdditionalCorrespondenceNameYesNo.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("removeAdditionalCorrespondenceNameYesNo.change.hidden"))
         )
+      )
     }
 }

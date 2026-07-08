@@ -16,7 +16,7 @@
 
 package viewmodels
 
-import models.{Address, NormalMode}
+import models.{Address, CheckMode, NormalMode}
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
@@ -65,7 +65,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceNameController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceName.hidden"))
               )
@@ -77,7 +77,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceNameController.onPageLoad(CheckMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceName.hidden"))
               )

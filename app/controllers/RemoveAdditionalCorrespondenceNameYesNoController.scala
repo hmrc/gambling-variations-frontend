@@ -16,12 +16,13 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.RemoveAdditionalCorrespondenceNameYesNoPage
+import pages.{AddCorrespondenceAdditionalNamePage, CorrespondenceAdditionalNamePage, RemoveAdditionalCorrespondenceNameYesNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,43 +31,85 @@ import views.html.RemoveAdditionalCorrespondenceNameYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveAdditionalCorrespondenceNameYesNoController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         navigator: Navigator,
-                                         authorise: AuthorisedAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: CorrespondenceDetailsDataRequiredAction,
-                                         formProvider: RemoveAdditionalCorrespondenceNameYesNoFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: RemoveAdditionalCorrespondenceNameYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: RemoveAdditionalCorrespondenceNameYesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RemoveAdditionalCorrespondenceNameYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
-  val form = formProvider()
+  private val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request =>
-      val name2: String= "Name 2"
-      val preparedForm = request.userAnswers.get(RemoveAdditionalCorrespondenceNameYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+
+      request.userAnswers.get(CorrespondenceAdditionalNamePage) match {
+        case Some(name2) =>
+          val preparedForm =
+            request.userAnswers.get(RemoveAdditionalCorrespondenceNameYesNoPage) match {
+              case Some(value) => form.fill(value)
+              case None        => form
+            }
+
+          Ok(view(preparedForm, mode, name2))
+
+        case None =>
+          Redirect(routes.JourneyRecoveryController.onPageLoad())
       }
+    }
 
-      Ok(view(preparedForm, mode, name2))
-  }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async {
-    implicit request =>
-      val name2: String= "Name 2"
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, name2))),
+      request.userAnswers.get(CorrespondenceAdditionalNamePage) match {
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveAdditionalCorrespondenceNameYesNoPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemoveAdditionalCorrespondenceNameYesNoPage, mode, updatedAnswers))
-      )
-  }
+        case Some(name2) =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(view(formWithErrors, mode, name2))
+                ),
+              value => {
+                val updatedAnswers =
+                  if (value) {
+                    for {
+                      answers1 <- request.userAnswers.remove(CorrespondenceAdditionalNamePage)
+                      answers2 <- answers1.set(AddCorrespondenceAdditionalNamePage, false)
+                      answers3 <- answers2.set(RemoveAdditionalCorrespondenceNameYesNoPage, value)
+                    } yield answers3
+                  } else {
+                    request.userAnswers.set(RemoveAdditionalCorrespondenceNameYesNoPage, value)
+                  }
+
+                Future
+                  .fromTry(updatedAnswers)
+                  .flatMap { answers =>
+                    sessionRepository.set(answers).map { _ =>
+                      Redirect(
+                        navigator.nextPage(
+                          RemoveAdditionalCorrespondenceNameYesNoPage,
+                          mode,
+                          answers
+                        )
+                      )
+                    }
+                  }
+              }
+            )
+
+        case None =>
+          Future.successful(
+            Redirect(routes.JourneyRecoveryController.onPageLoad())
+          )
+      }
+    }
 }

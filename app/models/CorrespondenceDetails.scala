@@ -25,6 +25,7 @@ case class CorrespondenceDetails(
   nameLine2: Option[String],
   correspondenceAddress: Option[Address],
   additionalInformation: Option[String],
+  iomOrCiFlag: Option[String],
   contactNumber: Option[ContactNumber],
   faxNumber: Option[String],
   emailAddr: Option[String]
@@ -40,6 +41,7 @@ object CorrespondenceDetails {
       (__ \ "nameLine2").readNullable[String].map(_.filter(_.nonEmpty)) and
       Address.reads.map(Some(_): Option[Address]).orElse(Reads.pure(None)) and
       (__ \ "adi").readNullable[String].map(_.filter(_.nonEmpty)) and
+      (__ \ "iomOrCiFlag").readNullable[String] and
       ContactNumber.reads
         .map(contactNumber => if (contactNumber.phoneNumber.isEmpty && contactNumber.mobilePhoneNumber.isEmpty) None else Some(contactNumber))
         .orElse(Reads.pure(None)) and
