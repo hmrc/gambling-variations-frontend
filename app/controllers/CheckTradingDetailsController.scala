@@ -106,7 +106,7 @@ class CheckTradingDetailsController @Inject() (
     (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
-      val seasonalOpt = request.userAnswers.get(SeasonalBusinessPage)
+      val seasonalOpt = request.userAnswers.get(IsSeasonalBusinessPage)
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
       def stringMissing(opt: Option[String]): Boolean =
@@ -119,9 +119,8 @@ class CheckTradingDetailsController @Inject() (
       }
 
       def seasonalBusIsMissing: Boolean = seasonalOpt match {
-        case None                   => true
-        case Some(seasonalBusiness) => false
-        case _                      => true
+        case None => true
+        case _    => false
       }
 
       def tradeClassIsOther: Boolean = tradeClassOpt match {

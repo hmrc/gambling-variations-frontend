@@ -72,7 +72,7 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "correspondenceDetailsSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
+        "correspondenceDetailsSection"  -> Json.obj("mgdRegNum" -> userAnswersId),
         CorrespondenceNamePage.toString -> "validName"
       )
 

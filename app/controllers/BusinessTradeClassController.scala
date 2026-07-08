@@ -24,7 +24,7 @@ import models.{BusinessTradeClass, CheckMode, Mode, NormalMode, UserAnswers}
 import navigation.Navigator
 import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
@@ -78,8 +78,17 @@ class BusinessTradeClassController @Inject() (
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
               _              <- sessionRepository.set(updatedAnswers)
             } yield {
-              val seasonalBusIsEmpty: Boolean =
-                request.userAnswers.get(IsSeasonalBusinessPage).fold(true)(_ => false)
+
+              val seasonalBusIsEmpty: Boolean = {
+                request.userAnswers.get(IsSeasonalBusinessPage) match {
+                  case None => true
+                  case _    => false
+                }
+              }
+
+              def routeIfSeasonalNonEmpty(route: Call): Call = {
+                if (seasonalBusIsEmpty) routes.SeasonalBusinessController.onPageLoad(NormalMode) else route
+              }
 
               val next =
                 mode match {
@@ -91,13 +100,11 @@ class BusinessTradeClassController @Inject() (
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routes.OtherTradeClassController.onPageLoad(CheckMode)
-
-                      case seasonalBusIsEmpty =>
-                        routes.SeasonalBusinessController.onPageLoad(NormalMode)
+                        routeIfSeasonalNonEmpty(routes.OtherTradeClassController.onPageLoad(CheckMode))
 
                       case _ =>
-                        routes.CheckTradingDetailsController.onPageLoad()
+                        routeIfSeasonalNonEmpty(routes.CheckTradingDetailsController.onPageLoad())
+
                     }
                 }
 
