@@ -531,3 +531,9 @@ addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email addr
 addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
 addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
 addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
+
+removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name? 
+removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name? 
+removeAdditionalCorrespondenceNameYesNo.error.required = Select yes if removeAdditionalCorrespondenceNameYesNo
+removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?
