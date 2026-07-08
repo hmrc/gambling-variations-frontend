@@ -129,18 +129,18 @@ class CheckTradingDetailsController @Inject() (
       val isGroupMember =
         request.userAnswers.get(GroupMemberPage) match {
           case Some(value) => value
-          case _ => false
+          case _           => false
         }
 
       if (tradeClassIsMissing && !isGroupMember) {
-          Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+        Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
       } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
-          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
       } else if (seasonalBusIsMissing) {
-          Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
       } else {
-          Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
       }
     }
 
-  }
+}
