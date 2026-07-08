@@ -79,35 +79,29 @@ class BusinessTradeClassController @Inject() (
               _              <- sessionRepository.set(updatedAnswers)
             } yield {
 
-              val seasonalBusIsEmpty: Boolean = {
-                request.userAnswers.get(IsSeasonalBusinessPage) match {
-                  case None => true
-                  case _    => false
-                }
-              }
-
-              def routeIfSeasonalNonEmpty(route: Call): Call = {
-                if (seasonalBusIsEmpty) routes.SeasonalBusinessController.onPageLoad(NormalMode) else route
-              }
-
-              val next =
+              val next = {
                 mode match {
-
                   case NormalMode =>
-                    navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
+                    value match {
+
+                      case BusinessTradeClass.Other =>
+                        routes.OtherTradeClassController.onPageLoad(CheckMode)
+
+                      case _ =>
+                        navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
+                    }
 
                   case CheckMode =>
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routeIfSeasonalNonEmpty(routes.OtherTradeClassController.onPageLoad(CheckMode))
+                        routes.OtherTradeClassController.onPageLoad(CheckMode)
 
                       case _ =>
-                        routeIfSeasonalNonEmpty(routes.CheckTradingDetailsController.onPageLoad())
-
+                        routes.CheckTradingDetailsController.onPageLoad()
                     }
                 }
-
+              }
               Redirect(next)
             }
         )
