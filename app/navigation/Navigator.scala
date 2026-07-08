@@ -54,7 +54,7 @@ class Navigator @Inject() () {
     case CorrespondenceEmailPage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage     => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceNamePage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceNamePage                => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                     => _ => routes.IndexController.onPageLoad()
   }
 
