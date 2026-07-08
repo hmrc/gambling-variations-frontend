@@ -140,10 +140,7 @@ class CheckTradingDetailsController @Inject() (
           Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
       } else {
           Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
-        }
       }
+    }
 
-      }
-
-
-}
+  }
