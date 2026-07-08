@@ -64,7 +64,6 @@ class CheckTradingDetailsController @Inject() (
             request.userAnswers,
             isGroupMember
           )
-
         Ok(
           view(
             vm.list,
@@ -103,7 +102,7 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onContinue: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
       val seasonalOpt = request.userAnswers.get(IsSeasonalBusinessPage)
@@ -126,21 +125,27 @@ class CheckTradingDetailsController @Inject() (
 
       def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
 
-      val isGroupMember =
+      val isGroupMemberF: Future[Boolean] =
         request.userAnswers.get(GroupMemberPage) match {
-          case Some(value) => value
-          case _           => false
+          case Some(value) => Future.successful(value)
+          case None =>
+            gamblingConnector
+              .getBusinessDetails(request.mgdRegNum)
+              .map(_.groupReg)
         }
 
-      if (tradeClassIsMissing && !isGroupMember) {
-        Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
-      } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
-        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
-      } else if (seasonalBusIsMissing) {
-        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
-      } else {
-        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+      isGroupMemberF.map { isGroupMember =>
+        if (tradeClassIsMissing && !isGroupMember) {
+          Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+        } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
+          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+        } else if (seasonalBusIsMissing) {
+          Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+        } else {
+          Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+        }
       }
+
     }
 
 }
