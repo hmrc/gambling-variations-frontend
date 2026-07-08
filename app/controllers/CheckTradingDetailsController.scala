@@ -113,15 +113,11 @@ class CheckTradingDetailsController @Inject() (
         opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
-        case None                         => true
         case Some(tc: BusinessTradeClass) => false
         case _                            => true
       }
 
-      def seasonalBusIsMissing: Boolean = seasonalOpt match {
-        case None => true
-        case _    => false
-      }
+      def seasonalBusIsMissing: Boolean = seasonalOpt.isEmpty
 
       def tradeClassIsOther: Boolean = tradeClassOpt match {
         case Some(BusinessTradeClass.Other) => true
@@ -130,15 +126,27 @@ class CheckTradingDetailsController @Inject() (
 
       def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
 
-      if (tradeClassIsMissing) {
-        Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
-      } else if (tradeClassIsOther && otherDescIsMissing) {
-        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+      val isGroupMember =
+        request.userAnswers.get(GroupMemberPage) match {
+          case Some(value) => value
+          case _ => false
+        }
+
+      if (tradeClassIsMissing && !isGroupMember) {
+          Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+      } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
+          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
       } else if (seasonalBusIsMissing) {
-        Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+          Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
       } else {
-        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+          Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+        }
+
+      //NOT GROUP MEMBER
+
       }
-    }
+
+      }
+
 
 }
