@@ -17,29 +17,29 @@
 package controllers
 
 import controllers.actions.*
-import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
+import forms.AddCorrespondingDetailsYesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.AddEmailAddressForCorrespondenceYesNoPage
+import pages.AddCorrespondingDetailsYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.AddEmailAddressForCorrespondenceYesNoView
+import views.html.AddCorrespondingDetailsYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddEmailAddressForCorrespondenceYesNoController @Inject() (
+class AddCorrespondingDetailsYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: AddEmailAddressForCorrespondenceYesNoFormProvider,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: AddCorrespondingDetailsYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AddEmailAddressForCorrespondenceYesNoView
+  view: AddCorrespondingDetailsYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -48,7 +48,7 @@ class AddEmailAddressForCorrespondenceYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match {
+    val preparedForm = request.userAnswers.get(AddCorrespondingDetailsYesNoPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -64,9 +64,9 @@ class AddEmailAddressForCorrespondenceYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddEmailAddressForCorrespondenceYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddCorrespondingDetailsYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddEmailAddressForCorrespondenceYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddCorrespondingDetailsYesNoPage, mode, updatedAnswers))
       )
   }
 }

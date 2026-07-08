@@ -16,26 +16,30 @@
 
 package forms
 
-import forms.mappings.Mappings
-import play.api.data.Form
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-import javax.inject.Inject
+class AddCorrespondingDetailsYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-class CorrespondenceNameFormProvider @Inject() extends Mappings {
+  val requiredKey = "addCorrespondingDetailsYesNo.error.required"
+  val invalidKey = "error.boolean"
 
-  private val correspondenceNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+  val form = new AddCorrespondingDetailsYesNoFormProvider()()
 
-  def apply(): Form[String] =
-    Form(
-      "correspondenceName" -> text("correspondenceName.error.required")
-        .verifying(
-          maxLength(100, "correspondenceName.error.length")
-        )
-        .verifying(
-          regexp(
-            correspondenceNameRegex,
-            "correspondenceName.error.invalid"
-          )
-        )
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

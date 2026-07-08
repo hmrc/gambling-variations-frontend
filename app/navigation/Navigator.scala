@@ -48,13 +48,14 @@ class Navigator @Inject() () {
     case AssociatedRegNumberPage               => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
     case AssociatedRegistrationNumbersPage     => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
     case RemoveAssociatedRegNumberPage         => userAnswers => navigateRemoveAssociatedRegNumberPage(NormalMode)(userAnswers)
+    case AddCorrespondingDetailsYesNoPage      => userAnswers => navigateAddCorrespondingDetailsYesNoPage(NormalMode)(userAnswers)
     case CorrespondenceAdditionalNameYesNoPage => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
     case CorrespondenceContactNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceFaxNumberPage           => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage     => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceNamePage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceNamePage                => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalNamePage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                     => _ => routes.IndexController.onPageLoad()
   }
@@ -115,6 +116,15 @@ class Navigator @Inject() () {
       .map {
         case false => routes.IndexController.onPageLoad() // change it
         case true  => routes.IndexController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateAddCorrespondingDetailsYesNoPage(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(AddCorrespondingDetailsYesNoPage)
+      .map {
+        case true  => routes.CorrespondenceNameController.onPageLoad(mode)
+        case false => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
