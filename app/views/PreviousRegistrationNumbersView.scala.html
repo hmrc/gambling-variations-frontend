@@ -15,7 +15,7 @@
  *@
 
 @import views.html.components.{Caption, Paragraph, H1, H2}
-@import viewmodels.{PreviousRegNumberViewModel, UnsubmittedPrevRegNumberViewModel}
+@import viewmodels.checkAnswers.tradingdetails.{PreviousRegNumbersViewModel, UnsubmittedPrevRegNumbersViewModel}
 
 @this(
     layout: templates.Layout,
@@ -57,7 +57,7 @@
             }
         @if(regNumbers.submittedCount > 0) {
             @govukSummaryList(SummaryList(
-                rows = PreviousRegNumberViewModel(regNumbers.submitted).summaryList
+                rows = PreviousRegNumbersViewModel(regNumbers.submitted).summaryList
                 ))
             }
 
@@ -69,7 +69,7 @@
 
         @if(regNumbers.unsubmittedCount > 0) {
             @govukSummaryList(SummaryList(
-                rows = UnsubmittedPrevRegNumberViewModel(regNumbers.unsubmitted).summaryList
+                rows = UnsubmittedPrevRegNumbersViewModel(regNumbers.unsubmitted).summaryList
                 ))
             }
 

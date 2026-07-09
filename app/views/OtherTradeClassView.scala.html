@@ -37,18 +37,18 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        <span class="govuk-caption-l">
-                @messages("changeRegistrationDetails.title")
-        </span>
+<h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+    <span class="govuk-caption-l">
+        @messages("changeRegistrationDetails.title")
+    </span>
+    @messages("otherTradeClass.heading")
+</h1>
+
+<div id="with-hint-hint" class="govuk-hint">
+    @messages("otherTradeClass.caption")
+</div>
 
 
-        <h1 class="govuk-heading-l">
-                @messages("otherTradeClass.heading")
-        </h1>
-
-        <span class="govuk-hint govuk-!-margin-bottom-4">
-            @messages("otherTradeClass.caption")
-        </span>
 
 
 

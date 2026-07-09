@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.checkAnswers.tradingdetails
 
-import controllers.routes
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.libs.json.Json
 import base.SpecBase
+import controllers.routes
 import models.{NormalMode, UserAnswers}
 import org.scalatest.matchers.must.Matchers
 import pages.AssociatedRegistrationNumbersPage
+import play.api.i18n.{Messages, MessagesApi}
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import viewmodels.AssociatedRegNumberViewModel
 
 class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
 

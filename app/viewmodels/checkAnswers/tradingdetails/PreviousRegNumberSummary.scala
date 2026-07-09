@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.AddAssociatedRegistrationNumberPage
+import pages.PreviousRegNumberPage
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object AssociatedRegistrationNumbersSummary {
+object PreviousRegNumberSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AddAssociatedRegistrationNumberPage).map { answer =>
-
-      val value = if (answer) "site.yes" else "site.no"
+    answers.get(PreviousRegNumberPage).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "associatedRegistrationNumbers.checkYourAnswersLabel",
-        value = ValueViewModel(value),
+        key   = "previousRegNumberSummary.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url)
-            .withVisuallyHiddenText(messages("associatedRegistrationNumbers.change.hidden"))
+          ActionItemViewModel("site.change", routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url)
+            .withVisuallyHiddenText(messages("previous.change.hidden"))
         )
       )
     }

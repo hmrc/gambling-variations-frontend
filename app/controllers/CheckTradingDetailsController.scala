@@ -18,36 +18,35 @@ package controllers
 
 import connectors.GamblingConnector
 import controllers.actions.*
+import utils.FlagsUtil.checkFlag
+
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages._
-import models._
+import pages.*
+import models.*
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckTradingDetailsController @Inject() (
-                                                override val messagesApi: MessagesApi,
-                                                authorised: AuthorisedAction,
-                                                getData: DataRetrievalAction,
-                                                checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
-                                                gamblingConnector: GamblingConnector,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: CheckTradingDetailsView
-                                              )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  authorised: AuthorisedAction,
+  getData: DataRetrievalAction,
+  checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
+  gamblingConnector: GamblingConnector,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckTradingDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
     (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
-      val showChangeMessage: Boolean =
-        request.userAnswers
-          .get(TradingDetailsChangeFlagPage)
-          .contains(true)
+      val showChangeMessage: Boolean = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsChangeFlagPage)
 
       val isGroupMemberF: Future[Boolean] =
         request.userAnswers.get(GroupMemberPage) match {
@@ -65,7 +64,6 @@ class CheckTradingDetailsController @Inject() (
             request.userAnswers,
             isGroupMember
           )
-
         Ok(
           view(
             vm.list,
@@ -90,7 +88,6 @@ class CheckTradingDetailsController @Inject() (
       }
     }
 
-
   def onAssociatedRegNumbers: Action[AnyContent] =
     (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
@@ -105,36 +102,50 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onContinue: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
-      val seasonalOpt = request.userAnswers.get(SeasonalBusinessPage)
+      val seasonalOpt = request.userAnswers.get(IsSeasonalBusinessPage)
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
       def stringMissing(opt: Option[String]): Boolean =
         opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
-        case None => true
         case Some(tc: BusinessTradeClass) => false
-        case _ => true
+        case _                            => true
       }
+
+      def seasonalBusIsMissing: Boolean = seasonalOpt.isEmpty
 
       def tradeClassIsOther: Boolean = tradeClassOpt match {
         case Some(BusinessTradeClass.Other) => true
-        case _ => false
+        case _                              => false
       }
 
       def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
 
-      if (tradeClassIsMissing) {
-        Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
-      } else if (tradeClassIsOther && otherDescIsMissing) {
-        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
-      } else {
-        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
-      }
-    }
+      val isGroupMemberF: Future[Boolean] =
+        request.userAnswers.get(GroupMemberPage) match {
+          case Some(value) => Future.successful(value)
+          case None =>
+            gamblingConnector
+              .getBusinessDetails(request.mgdRegNum)
+              .map(_.groupReg)
+        }
 
+      isGroupMemberF.map { isGroupMember =>
+        if (tradeClassIsMissing && !isGroupMember) {
+          Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+        } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
+          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+        } else if (seasonalBusIsMissing) {
+          Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+        } else {
+          Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+        }
+      }
+
+    }
 
 }

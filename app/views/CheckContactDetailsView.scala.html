@@ -51,7 +51,7 @@
             .withCssClass("button.govuk-button")
             .asLink{
                 if(phoneNumber.isEmpty && mobilePhoneNumber.isEmpty){
-                    routes.BusinessContactNumberController.onPageLoad(NormalMode).url
+                    routes.CheckContactDetailsController.onPageLoad().url
                 } else {
                     routes.ChangeRegistrationDetailsController.onPageLoad().url
                 }

@@ -33,7 +33,7 @@ object BusinessTradeClassSummary {
     val displayValue =
       tradeClassOpt match {
         case None =>
-          "Not provided"
+          messages("site.notProvided")
 
         case Some(BusinessTradeClass.Other) =>
           messages("businessTradeClass.other")
@@ -44,7 +44,7 @@ object BusinessTradeClassSummary {
 
     Some(
       SummaryListRowViewModel(
-        key = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
+        key   = "checkTradingDetails.businessTradeClass.checkYourAnswersLabel",
         value = ValueViewModel(displayValue),
         actions = Seq(
           ActionItemViewModel(

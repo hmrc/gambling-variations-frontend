@@ -29,6 +29,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "gambling-variations-frontend"
 
+  lazy val addressLookupFrontendBaseUrl: String =
+    configuration.get[Service]("microservice.services.address-lookup-frontend").baseUrl
+
+  lazy val addressLookupContinueUrl: String = ""
+  lazy val retrieveAddressUrl: String = addressLookupFrontendBaseUrl + "/api/v2/confirmed"
+
   def feedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 

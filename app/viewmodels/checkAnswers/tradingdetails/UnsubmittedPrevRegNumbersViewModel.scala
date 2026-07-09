@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Key, SummaryListRow}
 
-case class UnsubmittedPrevRegNumberViewModel(unsubmittedPreviousRegNumbers: Option[Seq[String]]) {
+case class UnsubmittedPrevRegNumbersViewModel(unsubmittedPreviousRegNumbers: Option[Seq[String]]) {
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = {
     unsubmittedPreviousRegNumbers match {

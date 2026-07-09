@@ -93,6 +93,12 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
         |        protocol = http
         |        host     = localhost
         |        port     = 9514
+        |      }        
+        |
+        |      address-lookup-frontend {
+        |        protocol = http
+        |        host     = localhost
+        |        port     = 9028
         |      }
         |    }
         |}

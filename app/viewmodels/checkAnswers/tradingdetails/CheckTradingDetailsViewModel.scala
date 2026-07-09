@@ -25,17 +25,17 @@ import viewmodels.govuk.all.ValueViewModel
 import viewmodels.govuk.summarylist.SummaryListViewModel
 
 case class CheckTradingDetailsViewModel(
-                                         list: SummaryList,
-                                         previousMgd: SummaryList,
-                                         associatedMgd: SummaryList
-                                       )
+  list: SummaryList,
+  previousMgd: SummaryList,
+  associatedMgd: SummaryList
+)
 
 object CheckTradingDetailsViewModel {
 
   def from(
-            userAnswers: UserAnswers,
-            isGroupMember: Boolean
-          )(implicit messages: Messages): CheckTradingDetailsViewModel = {
+    userAnswers: UserAnswers,
+    isGroupMember: Boolean
+  )(implicit messages: Messages): CheckTradingDetailsViewModel = {
 
     if (isGroupMember) {
       val seasonalOnly =
@@ -54,7 +54,7 @@ object CheckTradingDetailsViewModel {
 
         val fixedValue =
           tc match {
-            case None => "Not provided"
+            case None => messages("site.notProvided")
             case Some(BusinessTradeClass.Other) =>
               messages("businessTradeClass.other")
             case Some(value) =>
@@ -63,17 +63,15 @@ object CheckTradingDetailsViewModel {
 
         row.copy(value = ValueViewModel(Text(fixedValue)))
       }
-    
 
     val otherTradeClassRow =
       OtherTradeClassSummary.row(userAnswers).map { row =>
         val descOpt = userAnswers.get(OtherTradeClassPage)
-        
+
         val fixedValue: String = descOpt.filter(_.nonEmpty).getOrElse("Not provided")
 
         row.copy(value = ValueViewModel(Text(fixedValue)))
       }
-
 
     val seasonalRow =
       IsSeasonalBusinessSummary.row(userAnswers)

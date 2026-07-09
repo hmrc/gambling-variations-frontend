@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.checkAnswers.tradingdetails
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
-import viewmodels.govuk.all.stringToText
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Actions, Key, SummaryListRow}
 
-case class PreviousRegNumberViewModel(previousRegNumbers: Option[Seq[String]]) {
+case class PreviousRegNumbersViewModel(previousRegNumbers: Option[Seq[String]]) {
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = {
     previousRegNumbers match {
       case Some(previousRegNums) =>
         val rows: Seq[SummaryListRow] = for (prevReg <- previousRegNums) yield {
           SummaryListRow(
-            key     = Key(content = prevReg, classes = s"previous-reg-number previous-reg-number-$prevReg govuk-!-font-weight-regular"),
+            key     = Key(content = Text(prevReg), classes = s"previous-reg-number previous-reg-number-$prevReg govuk-!-font-weight-regular"),
             actions = Some(Actions(classes = "govuk-summary-list__actions govuk-!-width-one-half"))
           )
         }

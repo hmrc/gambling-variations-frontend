@@ -21,14 +21,14 @@ import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.BusinessContactDetailsView
+import views.html.CheckContactDetailsView
 
 class BusinessContactDetailsViewSpec extends SpecBase {
 
   trait Setup {
     val app = applicationBuilder().build()
 
-    val view = app.injector.instanceOf[BusinessContactDetailsView]
+    val view = app.injector.instanceOf[CheckContactDetailsView]
 
     implicit val request: play.api.mvc.Request[?] = FakeRequest()
 
