@@ -206,7 +206,7 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual
-          routes.JourneyRecoveryController.onPageLoad().url
+          routes.SystemErrorController.onPageLoad().url
       }
     }
 
@@ -225,7 +225,7 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual
-          routes.JourneyRecoveryController.onPageLoad().url
+          routes.SystemErrorController.onPageLoad().url
       }
     }
   }

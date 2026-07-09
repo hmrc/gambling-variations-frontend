@@ -22,7 +22,7 @@ import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddCorrespondenceAdditionalNamePage, CorrespondenceAdditionalNamePage, RemoveAdditionalCorrespondenceNameYesNoPage}
+import pages.{AddCorrespondenceAdditionalNamePage, CorrespondenceAdditionalNamePage, CorrespondenceDetailsChangesPage, RemoveAdditionalCorrespondenceNameYesNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -61,7 +61,7 @@ class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
           Ok(view(preparedForm, mode, name2))
 
         case None =>
-          Redirect(routes.JourneyRecoveryController.onPageLoad())
+          Redirect(routes.SystemErrorController.onPageLoad())
       }
     }
 
@@ -82,10 +82,11 @@ class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
                 val updatedAnswers =
                   if (value) {
                     for {
-                      answers1 <- request.userAnswers.remove(CorrespondenceAdditionalNamePage)
-                      answers2 <- answers1.set(AddCorrespondenceAdditionalNamePage, false)
-                      answers3 <- answers2.set(RemoveAdditionalCorrespondenceNameYesNoPage, value)
-                    } yield answers3
+                      updatedAnswers <- request.userAnswers.remove(CorrespondenceAdditionalNamePage)
+                      updatedAnswers <- updatedAnswers.set(AddCorrespondenceAdditionalNamePage, false)
+                      updatedAnswers <- updatedAnswers.set(RemoveAdditionalCorrespondenceNameYesNoPage, value)
+                      updatedAnswers <- updatedAnswers.set(CorrespondenceDetailsChangesPage, value)
+                    } yield updatedAnswers
                   } else {
                     request.userAnswers.set(RemoveAdditionalCorrespondenceNameYesNoPage, value)
                   }
@@ -108,7 +109,7 @@ class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
 
         case None =>
           Future.successful(
-            Redirect(routes.JourneyRecoveryController.onPageLoad())
+            Redirect(routes.SystemErrorController.onPageLoad())
           )
       }
     }
