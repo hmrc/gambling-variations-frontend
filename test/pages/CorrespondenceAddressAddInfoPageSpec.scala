@@ -29,7 +29,7 @@ class CorrespondenceAddressAddInfoPageSpec extends AnyFreeSpec with Matchers {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "correspondenceAddressAddInfo"
+      val expectedPath: JsPath = JsPath \ "correspondenceDetailsSection" \ "correspondenceAddressAddInfo"
       CorrespondenceAddressAddInfoPage.path mustBe expectedPath
     }
   }

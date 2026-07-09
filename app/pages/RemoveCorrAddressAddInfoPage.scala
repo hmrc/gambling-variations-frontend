@@ -20,7 +20,7 @@ import play.api.libs.json.JsPath
 
 case object RemoveCorrAddressAddInfoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
 
-  override def toString: String = "RemoveCorrAddressAddInfo"
+  override def toString: String = "removeCorrAddressAddInfo"
 }

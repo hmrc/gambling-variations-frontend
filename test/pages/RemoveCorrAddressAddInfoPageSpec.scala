@@ -29,7 +29,7 @@ class RemoveCorrAddressAddInfoPageSpec extends AnyFreeSpec with Matchers {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "removeCorrAddressAddInfo"
+      val expectedPath: JsPath = JsPath \ "correspondenceDetailsSection" \ "removeCorrAddressAddInfo"
       RemoveCorrAddressAddInfoPage.path mustBe expectedPath
     }
   }
