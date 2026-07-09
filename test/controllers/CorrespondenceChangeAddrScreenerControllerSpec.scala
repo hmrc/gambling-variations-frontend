@@ -95,7 +95,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "true"))
 
         val result = route(application, request).value
 
@@ -111,9 +111,9 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("correspondenceChangeAddrScreener" -> ""))
 
         val view = application.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
 
@@ -157,7 +157,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "true"))
 
         val result = route(application, request).value
 

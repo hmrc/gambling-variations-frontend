@@ -26,9 +26,9 @@ class CorrespondenceChangeAddrScreenerFormProviderSpec extends BooleanFieldBehav
 
   val form = new CorrespondenceChangeAddrScreenerFormProvider()()
 
-  ".value" - {
+  ".correspondenceChangeAddrScreener" - {
 
-    val fieldName = "value"
+    val fieldName = "correspondenceChangeAddrScreener"
 
     behave like booleanField(
       form,
