@@ -541,3 +541,9 @@ addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+
+correspondenceChangeAddrScreener.title = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.heading = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
+correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
