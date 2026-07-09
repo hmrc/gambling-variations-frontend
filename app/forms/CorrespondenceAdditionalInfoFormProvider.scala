@@ -28,7 +28,7 @@ class CorrespondenceAdditionalInfoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("correspondenceAdditionalInfo.error.required")
+      "correspondenceAdditionalInfo" -> text("correspondenceAdditionalInfo.error.required")
         .verifying(
           maxLength(100, "correspondenceAdditionalInfo.error.length")
         )
