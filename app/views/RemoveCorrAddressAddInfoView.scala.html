@@ -19,6 +19,7 @@
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
+    caption: Caption,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     govukButton: GovukButton
@@ -33,7 +34,7 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-
+        @caption(messages("removeCorrAddressAddInfo.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),

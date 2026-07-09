@@ -22,7 +22,7 @@ import forms.RemoveAdditionalAddrInfoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddressAddInfoPage, RemoveAdditionalAddrInfoPage}
+import pages.{CorrespondenceAddressAddInfoPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, RemoveCorrAddressAddInfoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,7 +49,7 @@ class RemoveCorrAddressAddInfoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val addressAddInfo = request.userAnswers.get(CorrespondenceAddressAddInfoPage).getOrElse("")
-    val preparedForm = request.userAnswers.get(RemoveAdditionalAddrInfoPage) match {
+    val preparedForm = request.userAnswers.get(RemoveCorrAddressAddInfoPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -66,9 +66,11 @@ class RemoveCorrAddressAddInfoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, addressAddInfo))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveAdditionalAddrInfoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrAddressAddInfoPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemoveAdditionalAddrInfoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(RemoveCorrAddressAddInfoPage, mode, updatedAnswers))
       )
   }
 }

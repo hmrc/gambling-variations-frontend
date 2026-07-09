@@ -541,6 +541,7 @@ addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspo
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
 
+removeCorrAddressAddInfo.caption = Change registration details
 removeCorrAddressAddInfo.title = Are you sure you want to remove the additional information for this correspondence address?
 removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
 removeCorrAddressAddInfo.hint = The additional information is: {0}
