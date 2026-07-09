@@ -22,5 +22,5 @@ case object CorrespondenceAddressAddInfoPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
 
-  override def toString: String = "CorrespondenceAddressAddInfo"
+  override def toString: String = "correspondenceAddressAddInfo"
 }
