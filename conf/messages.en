@@ -541,3 +541,9 @@ addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+
+correspondenceUKAddrScreener.title = Is the correspondence address in the UK?
+correspondenceUKAddrScreener.heading = Is the correspondence address in the UK?
+correspondenceUKAddrScreener.checkYourAnswersLabel = Is the correspondence address in the UK?
+correspondenceUKAddrScreener.error.required = Select yes if the correspondence address is in the UK
+correspondenceUKAddrScreener.change.hidden = Is the correspondence address in the UK?
