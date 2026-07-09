@@ -196,3 +196,8 @@ GET        /change-registration-details/correspondence-details                  
 POST       /change-registration-details/correspondence-details                        controllers.AddCorrespondingDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/change-correspondence-details                  controllers.AddCorrespondingDetailsYesNoController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/change-correspondence-details                  controllers.AddCorrespondingDetailsYesNoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /removeAdditionalAddrInfo                        controllers.RemoveAdditionalAddrInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /removeAdditionalAddrInfo                        controllers.RemoveAdditionalAddrInfoController.onSubmit(mode: Mode = NormalMode)
+GET        /changeRemoveAdditionalAddrInfo                  controllers.RemoveAdditionalAddrInfoController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeRemoveAdditionalAddrInfo                  controllers.RemoveAdditionalAddrInfoController.onSubmit(mode: Mode = CheckMode)

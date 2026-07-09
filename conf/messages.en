@@ -541,3 +541,9 @@ addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+
+removeAdditionalAddrInfo.title = removeAdditionalAddrInfo
+removeAdditionalAddrInfo.heading = removeAdditionalAddrInfo
+removeAdditionalAddrInfo.checkYourAnswersLabel = removeAdditionalAddrInfo
+removeAdditionalAddrInfo.error.required = Select yes if removeAdditionalAddrInfo
+removeAdditionalAddrInfo.change.hidden = RemoveAdditionalAddrInfo
