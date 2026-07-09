@@ -21,24 +21,23 @@ import models.{CheckMode, UserAnswers}
 import pages.RemoveAdditionalAddrInfoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object RemoveAdditionalAddrInfoSummary  {
+object RemoveAdditionalAddrInfoSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(RemoveAdditionalAddrInfoPage).map {
-      answer =>
+    answers.get(RemoveAdditionalAddrInfoPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "removeAdditionalAddrInfo.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.RemoveAdditionalAddrInfoController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("removeAdditionalAddrInfo.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "removeAdditionalAddrInfo.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.RemoveAdditionalAddrInfoController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("removeAdditionalAddrInfo.change.hidden"))
         )
+      )
     }
 }

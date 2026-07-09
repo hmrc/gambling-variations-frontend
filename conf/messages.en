@@ -517,7 +517,6 @@ correspondenceAddrInfoScreener.heading = Do you want to include additional infor
 correspondenceAddrInfoScreener.heading.caption = Change registration details
 correspondenceAddrInfoScreener.hint = For example, building name or floor number
 correspondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
-correspondenceAddrInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
 
 correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
 correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
@@ -542,8 +541,7 @@ addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspo
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
 
-removeAdditionalAddrInfo.title = removeAdditionalAddrInfo
-removeAdditionalAddrInfo.heading = removeAdditionalAddrInfo
-removeAdditionalAddrInfo.checkYourAnswersLabel = removeAdditionalAddrInfo
-removeAdditionalAddrInfo.error.required = Select yes if removeAdditionalAddrInfo
-removeAdditionalAddrInfo.change.hidden = RemoveAdditionalAddrInfo
+removeAdditionalAddrInfo.title = Do you want to add an email address for correspondence?
+removeAdditionalAddrInfo.heading = Do you want to add an email address for correspondence?
+removeAdditionalAddrInfo.hint = The additional information is: [4th floor, CMC Building]
+removeAdditionalAddrInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
