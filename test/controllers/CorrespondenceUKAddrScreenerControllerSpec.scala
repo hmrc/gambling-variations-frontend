@@ -95,7 +95,7 @@ class CorrespondenceUKAddrScreenerControllerSpec extends SpecBase with MockitoSu
       running(application) {
         val request =
           FakeRequest(POST, correspondenceUKAddrScreenerRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("correspondenceUKAddrScreener", "true"))
 
         val result = route(application, request).value
 
@@ -157,7 +157,7 @@ class CorrespondenceUKAddrScreenerControllerSpec extends SpecBase with MockitoSu
       running(application) {
         val request =
           FakeRequest(POST, correspondenceUKAddrScreenerRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("correspondenceUKAddrScreener", "true"))
 
         val result = route(application, request).value
 

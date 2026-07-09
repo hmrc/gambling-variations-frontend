@@ -38,7 +38,7 @@
         @caption(messages("associatedRegistrationNumbers.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("value"),
+                field = form("correspondenceUKAddrScreener"),
                 legend = LegendViewModel(messages("correspondenceUKAddrScreener.heading")).asPageHeading(viewmodels.LegendSize.Large)
             )
         )

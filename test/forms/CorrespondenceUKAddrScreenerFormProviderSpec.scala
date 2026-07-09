@@ -26,9 +26,9 @@ class CorrespondenceUKAddrScreenerFormProviderSpec extends BooleanFieldBehaviour
 
   val form = new CorrespondenceUKAddrScreenerFormProvider()()
 
-  ".value" - {
+  ".correspondenceUKAddrScreener" - {
 
-    val fieldName = "value"
+    val fieldName = "correspondenceUKAddrScreener"
 
     behave like booleanField(
       form,
