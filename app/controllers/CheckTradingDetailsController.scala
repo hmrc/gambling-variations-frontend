@@ -64,7 +64,6 @@ class CheckTradingDetailsController @Inject() (
             request.userAnswers,
             isGroupMember
           )
-
         Ok(
           view(
             vm.list,
@@ -103,19 +102,21 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onContinue: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
-      val seasonalOpt = request.userAnswers.get(SeasonalBusinessPage)
+      val seasonalOpt = request.userAnswers.get(IsSeasonalBusinessPage)
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
       def stringMissing(opt: Option[String]): Boolean =
         opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
-        case None                         => true
         case Some(tc: BusinessTradeClass) => false
+        case _                            => true
       }
+
+      def seasonalBusIsMissing: Boolean = seasonalOpt.isEmpty
 
       def tradeClassIsOther: Boolean = tradeClassOpt match {
         case Some(BusinessTradeClass.Other) => true
@@ -124,13 +125,27 @@ class CheckTradingDetailsController @Inject() (
 
       def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
 
-      if (tradeClassIsMissing) {
-        Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
-      } else if (tradeClassIsOther && otherDescIsMissing) {
-        Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
-      } else {
-        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+      val isGroupMemberF: Future[Boolean] =
+        request.userAnswers.get(GroupMemberPage) match {
+          case Some(value) => Future.successful(value)
+          case None =>
+            gamblingConnector
+              .getBusinessDetails(request.mgdRegNum)
+              .map(_.groupReg)
+        }
+
+      isGroupMemberF.map { isGroupMember =>
+        if (tradeClassIsMissing && !isGroupMember) {
+          Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+        } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
+          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+        } else if (seasonalBusIsMissing) {
+          Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+        } else {
+          Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+        }
       }
+
     }
 
 }

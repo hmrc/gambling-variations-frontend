@@ -45,7 +45,7 @@ object OtherTradeClassSummary {
               actions = Seq(
                 ActionItemViewModel(
                   "site.change",
-                  routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+                  routes.OtherTradeClassController.onPageLoad(CheckMode).url
                 ).withVisuallyHiddenText(
                   messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
                 )

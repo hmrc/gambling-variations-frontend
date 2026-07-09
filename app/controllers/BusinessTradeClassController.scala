@@ -22,9 +22,9 @@ import forms.BusinessTradeClassFormProvider
 import javax.inject.Inject
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
-import pages.{BusinessTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
@@ -79,11 +79,17 @@ class BusinessTradeClassController @Inject() (
               _              <- sessionRepository.set(updatedAnswers)
             } yield {
 
-              val next =
+              val next = {
                 mode match {
-
                   case NormalMode =>
-                    navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
+                    value match {
+
+                      case BusinessTradeClass.Other =>
+                        routes.OtherTradeClassController.onPageLoad(CheckMode)
+
+                      case _ =>
+                        navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
+                    }
 
                   case CheckMode =>
                     value match {
@@ -95,7 +101,7 @@ class BusinessTradeClassController @Inject() (
                         routes.CheckTradingDetailsController.onPageLoad()
                     }
                 }
-
+              }
               Redirect(next)
             }
         )
