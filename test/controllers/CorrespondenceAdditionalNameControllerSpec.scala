@@ -112,7 +112,7 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
 
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody("value" -> "valid name")
+            .withFormUrlEncodedBody("correspondenceAdditionalName" -> "valid name")
 
         val result = route(application, request).value
 
