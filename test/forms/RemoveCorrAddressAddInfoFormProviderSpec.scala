@@ -3,12 +3,12 @@ package forms
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class RemoveAdditionalAddrInfoFormProviderSpec extends BooleanFieldBehaviours {
+class RemoveCorrAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "removeAdditionalAddrInfo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemoveAdditionalAddrInfoFormProvider()()
+  val form = new RemoveCorrAddressAddInfoFormProvider()()
 
   ".value" - {
 

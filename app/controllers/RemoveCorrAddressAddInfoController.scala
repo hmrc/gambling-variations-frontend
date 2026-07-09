@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import forms.RemoveAdditionalAddrInfoFormProvider
+import forms.RemoveCorrAddressAddInfoFormProvider
 
 import javax.inject.Inject
 import models.Mode
@@ -32,15 +32,15 @@ import views.html.RemoveCorrAddressAddInfoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveCorrAddressAddInfoController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: RemoveAdditionalAddrInfoFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: RemoveCorrAddressAddInfoView
+                                                     override val messagesApi: MessagesApi,
+                                                     sessionRepository: SessionRepository,
+                                                     navigator: Navigator,
+                                                     authorise: AuthorisedAction,
+                                                     getData: DataRetrievalAction,
+                                                     requireData: CorrespondenceDetailsDataRequiredAction,
+                                                     formProvider: RemoveCorrAddressAddInfoFormProvider,
+                                                     val controllerComponents: MessagesControllerComponents,
+                                                     view: RemoveCorrAddressAddInfoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

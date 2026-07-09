@@ -1,8 +1,8 @@
 package controllers
 
 import base.SpecBase
-import forms.RemoveAdditionalAddrInfoFormProvider
-import models.{CheckMode, NormalMode, UserAnswers}
+import forms.RemoveCorrAddressAddInfoFormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -23,7 +23,7 @@ class RemoveCorrAddressAddInfoControllerSpec extends SpecBase with MockitoSugar 
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RemoveAdditionalAddrInfoFormProvider()
+  val formProvider = new RemoveCorrAddressAddInfoFormProvider()
   val form = formProvider()
 
   lazy val removeAddrAddInfoRoute: String = routes.RemoveCorrAddressAddInfoController.onPageLoad(NormalMode).url

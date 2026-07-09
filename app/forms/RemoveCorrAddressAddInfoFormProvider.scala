@@ -21,7 +21,7 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class RemoveAdditionalAddrInfoFormProvider @Inject() extends Mappings {
+class RemoveCorrAddressAddInfoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
