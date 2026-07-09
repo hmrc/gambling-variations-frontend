@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import views.html.components._
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
@@ -22,11 +24,11 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, addressAddInfo: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removeAdditionalAddrInfo.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("removeCorrAddressAddInfo.title"), Some(messages("changeRegistrationDetails.title")))) {
 
-    @formHelper(action = routes.RemoveAdditionalAddrInfoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.RemoveCorrAddressAddInfoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -35,8 +37,8 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("removeAdditionalAddrInfo.heading")).asPageHeading()
-            ).withHint(Hint(content = messages("removeAdditionalAddrInfo.hint")))
+                legend = LegendViewModel(messages("removeCorrAddressAddInfo.heading")).asPageHeading(viewmodels.LegendSize.Large)
+            ).withHint(Hint(content = messages("removeCorrAddressAddInfo.hint", addressAddInfo)))
         )
 
         @govukButton(

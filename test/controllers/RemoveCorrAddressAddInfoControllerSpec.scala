@@ -17,7 +17,7 @@ import views.html.RemoveAdditionalAddrInfoView
 
 import scala.concurrent.Future
 
-class RemoveAdditionalAddrInfoControllerSpec extends SpecBase with MockitoSugar {
+class RemoveCorrAddressAddInfoControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 

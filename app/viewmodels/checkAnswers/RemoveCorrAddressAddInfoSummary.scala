@@ -24,7 +24,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object RemoveAdditionalAddrInfoSummary {
+object RemoveCorrAddressAddInfoSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(RemoveAdditionalAddrInfoPage).map { answer =>
@@ -32,10 +32,10 @@ object RemoveAdditionalAddrInfoSummary {
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "removeAdditionalAddrInfo.checkYourAnswersLabel",
+        key   = "removeCorrAddressAddInfo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemoveAdditionalAddrInfoController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.RemoveCorrAddressAddInfoController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("removeAdditionalAddrInfo.change.hidden"))
         )
       )
