@@ -549,6 +549,20 @@ addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspo
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
 
+correspondenceUKAddress.title = Enter the correspondence address
+correspondenceUKAddress.heading = Enter the correspondence address
+correspondenceUKAddress.checkYourAnswersLabel = Correspondence Address
+correspondenceUKAddress.error.required = Enter address line 1 for the correspondence address
+correspondenceUKAddress.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.error.length = Address line 1 must be 27 characters or less
+
+correspondenceNonUKAddress.title = Enter the correspondence address
+correspondenceNonUKAddress.heading = Enter the correspondence address
+correspondenceNonUKAddress.checkYourAnswersLabel = Correspondence Address
+correspondenceNonUKAddress.error.required = Enter address line 1 for the correspondence address
+correspondenceNonUKAddress.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.error.length = Address line 1 must be 27 characters or less
+
 removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name?
 removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
 removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
