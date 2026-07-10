@@ -42,7 +42,7 @@ class CorrespondenceAdditionalNameFormProviderSpec extends StringFieldBehaviours
       Gen.oneOf(
         "foobar",
         "validname",
-        "jonjones",
+        "jonjones"
       )
     )
 
