@@ -72,19 +72,19 @@ class RemoveCorrespondenceDetailsYesNoController @Inject() (
             val updatedAnswers =
               if (value) {
                 for {
-                  updatedAnswer  <- request.userAnswers.remove(CorrespondenceNamePage)
-                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAdditionalNamePage)
-                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAddressUkPage)
-                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAddressNonUkPage)
-                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAdditionalInformationPage)
-                  updatedAnswer  <- updatedAnswer.remove(isleMOrChannelFlagPage)
-                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceContactNumberPage)
-                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceFaxNumberPage)
-                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceEmailPage)
-                  updatedAnswer  <- updatedAnswer.remove(AddCorrespondenceAdditionalNamePage)
-                  updatedAnswer  <- updatedAnswer.set(RemoveCorrespondenceDetailsYesNoPage, value)
-                  updatedAnswers <- updatedAnswer.set(CorrespondenceDetailsChangesPage, value)
-                } yield updatedAnswer
+                  updatedAnswers <- request.userAnswers.remove(CorrespondenceNamePage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceAdditionalNamePage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceAddressUkPage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceAddressNonUkPage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceAdditionalInformationPage)
+                  updatedAnswers <- updatedAnswers.remove(isleMOrChannelFlagPage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceContactNumberPage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceFaxNumberPage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceEmailPage)
+                  updatedAnswers <- updatedAnswers.remove(AddCorrespondenceAdditionalNamePage)
+                  updatedAnswers <- updatedAnswers.set(RemoveCorrespondenceDetailsYesNoPage, value)
+                  updatedAnswers <- updatedAnswers.set(CorrespondenceDetailsChangesPage, value)
+                } yield updatedAnswers
               } else {
                 request.userAnswers.set(RemoveCorrespondenceDetailsYesNoPage, value)
               }
