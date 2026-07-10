@@ -55,7 +55,7 @@ class AssociatedRegistrationNumbersViewSpec extends SpecBase {
       doc.select(".associated-reg-number-ZIU00001218").text must include("ZIU00001218")
       doc.select(".associated-reg-number-GTT28881666").text must include("GTT28881666")
       doc.select("p").text must include(
-        messages("Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.")
+        messages("associatedRegistrationNumbers.paragraph")
       )
       doc.select(".associated-reg-number-XHM00000199").text must include("XHM00000199")
     }
