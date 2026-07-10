@@ -478,6 +478,14 @@ correspondenceAdditionalName.error.required = Enter the additional full name for
 correspondenceAdditionalName.error.invalid = The additional full name for correspondence name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
 correspondenceAdditionalName.error.length = The additional full name for correspondence must be 100 characters or less
 
+correspondenceAdditionalInfo.title = What is the additional information for the correspondence address?
+correspondenceAdditionalInfo.heading = What is the additional information for the correspondence address?
+correspondenceAdditionalInfo.checkYourAnswersLabel = Additional Information
+correspondenceAdditionalInfo.hint = For example, building name or floor number
+correspondenceAdditionalInfo.error.required = Enter additional information for the correspondence address
+correspondenceAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+correspondenceAdditionalInfo.error.length = The additional information must be 100 characters or less
+
 otherTradeClass.title = What is your business trade class? - Change registration details
 otherTradeClass.heading = What is your business trade class?
 otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
