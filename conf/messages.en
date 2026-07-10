@@ -470,6 +470,13 @@ correspondenceName.error.required = Enter the full name for correspondence
 correspondenceName.error.invalid = The full name for correspondence must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
 correspondenceName.error.length = The full name for correspondence must be 100 characters or less
 
+correspondenceAdditionalName.title = What additional full name should we use for correspondence?
+correspondenceAdditionalName.heading = What additional full name should we use for correspondence?
+correspondenceAdditionalName.checkYourAnswersLabel = Additional Full Name
+correspondenceAdditionalName.error.required = Enter the additional full name for correspondence
+correspondenceAdditionalName.error.invalid = The additional full name for correspondence name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+correspondenceAdditionalName.error.length = The additional full name for correspondence must be 100 characters or less
+
 correspondenceAdditionalInfo.title = What is the additional information for the correspondence address?
 correspondenceAdditionalInfo.heading = What is the additional information for the correspondence address?
 correspondenceAdditionalInfo.checkYourAnswersLabel = Additional Information
@@ -549,3 +556,9 @@ addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+
+removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
+removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?

@@ -56,6 +56,7 @@ class Navigator @Inject() () {
     case RemoveCorrespondenceFaxNumberPage     => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceNamePage                => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAdditionalNamePage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalInformationPage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                     => _ => routes.IndexController.onPageLoad()
   }
@@ -71,7 +72,7 @@ class Navigator @Inject() () {
     case AddPreviousRegistrationNumberPage   => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
     case PreviousRegNumberPage               => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
     case PreviousRegistrationNumbersListPage => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
-    case RemovePreviousRegNumberPage         => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
+    case RemovePreviousRegNumberPage         => userAnswers => navigateRemovePreviousRegNumberPage(CheckMode)(userAnswers)
     case AddAssociatedRegistrationNumberPage => userAnswers => navigateAddAssociatedRegistrationNumberPage(CheckMode)(userAnswers)
     case AssociatedRegNumberPage             => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
     case AssociatedRegistrationNumbersPage   => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
@@ -79,6 +80,7 @@ class Navigator @Inject() () {
     case CorrespondenceFaxNumberPage         => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case RemoveCorrespondenceFaxNumberPage   => _ => routes.RemoveCorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case CorrespondenceNamePage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAdditionalNamePage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalInformationPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                   => _ => routes.CheckYourAnswersController.onPageLoad()
   }
@@ -133,6 +135,13 @@ class Navigator @Inject() () {
       .get(AssociatedRegistrationNumbersPage)
       .filter(_.nonEmpty)
       .map(_ => routes.AssociatedRegistrationNumbersListController.onPageLoad(mode))
+      .getOrElse(routes.CheckTradingDetailsController.onPageLoad())
+
+  private def navigateRemovePreviousRegNumberPage(mode: Mode)(answers: UserAnswers): Call =
+    answers
+      .get(PreviousRegistrationNumbersListPage)
+      .filter(_.nonEmpty)
+      .map(_ => routes.RemovePreviousRegNumberController.onPageLoad(mode))
       .getOrElse(routes.CheckTradingDetailsController.onPageLoad())
 
 }
