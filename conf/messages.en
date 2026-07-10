@@ -68,6 +68,9 @@ pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
 pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
 
+#Captions
+changeRegistrationDetails.caption = Change registration details
+
 businessType.soleproprietor = Sole proprietor
 businessType.unincorporatedbody = Unincorporated body
 businessType.corporatebody = Corporate body
@@ -91,8 +94,6 @@ businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
 businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
-
-
 
 
 changeRegistrationDetails.title = Change registration details
@@ -554,3 +555,9 @@ removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remov
 removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
 removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
 removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?
+
+faxNumberForCorrespondenceYesNo.title = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.heading = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.change.hidden = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.error.required = Select yes to add a fax number for correspondence

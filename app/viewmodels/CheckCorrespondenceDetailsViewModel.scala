@@ -292,7 +292,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(CheckMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addFaxNumber.hidden"))
               )
