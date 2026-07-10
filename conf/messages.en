@@ -542,6 +542,12 @@ addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspo
 addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
 addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
 
+removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
+removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?
+
 removeCorrespondenceDetailsYesNo.title = Are you sure you want to remove all your correspondence details?
 removeCorrespondenceDetailsYesNo.heading = Are you sure you want to remove all your correspondence details?
 removeCorrespondenceDetailsYesNo.checkYourAnswersLabel = Are you sure you want to remove all your correspondence details?
