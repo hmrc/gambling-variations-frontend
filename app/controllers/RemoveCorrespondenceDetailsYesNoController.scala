@@ -16,12 +16,13 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.RemoveCorrespondenceDetailsYesNoFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.RemoveCorrespondenceDetailsYesNoPage
+import pages.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,43 +31,78 @@ import views.html.RemoveCorrespondenceDetailsYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveCorrespondenceDetailsYesNoController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         navigator: Navigator,
-                                         authorise: AuthorisedAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: CorrespondenceDetailsDataRequiredAction,
-                                         formProvider: RemoveCorrespondenceDetailsYesNoFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: RemoveCorrespondenceDetailsYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class RemoveCorrespondenceDetailsYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: RemoveCorrespondenceDetailsYesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RemoveCorrespondenceDetailsYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(RemoveCorrespondenceDetailsYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    val preparedForm = request.userAnswers.get(RemoveCorrespondenceDetailsYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(view(formWithErrors, mode))
+            ),
+          value => {
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrespondenceDetailsYesNoPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, mode, updatedAnswers))
-      )
-  }
+            val updatedAnswers =
+              if (value) {
+                for {
+                  updatedAnswer  <- request.userAnswers.remove(CorrespondenceNamePage)
+                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAdditionalNamePage)
+                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAddressUkPage)
+                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAddressNonUkPage)
+                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceAdditionalInformationPage)
+                  updatedAnswer  <- updatedAnswer.remove(isleMOrChannelFlagPage)
+                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceContactNumberPage)
+                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceFaxNumberPage)
+                  updatedAnswer  <- updatedAnswer.remove(CorrespondenceEmailPage)
+                  updatedAnswer  <- updatedAnswer.remove(AddCorrespondenceAdditionalNamePage)
+                  updatedAnswer  <- updatedAnswer.set(RemoveCorrespondenceDetailsYesNoPage, value)
+                  updatedAnswers <- updatedAnswer.set(CorrespondenceDetailsChangesPage, value)
+                } yield updatedAnswer
+              } else {
+                request.userAnswers.set(RemoveCorrespondenceDetailsYesNoPage, value)
+              }
+
+            Future
+              .fromTry(updatedAnswers)
+              .flatMap { answers =>
+                sessionRepository.set(answers).map { _ =>
+                  Redirect(
+                    navigator.nextPage(
+                      RemoveCorrespondenceDetailsYesNoPage,
+                      mode,
+                      answers
+                    )
+                  )
+                }
+              }
+          }
+        )
+    }
 }
