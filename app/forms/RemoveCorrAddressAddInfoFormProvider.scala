@@ -25,6 +25,6 @@ class RemoveCorrAddressAddInfoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("removeAdditionalAddrInfo.error.required")
+      "value" -> boolean("removeCorrAddressAddInfo.error.required")
     )
 }
