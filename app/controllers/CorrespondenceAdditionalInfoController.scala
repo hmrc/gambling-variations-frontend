@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceAdditionalInfoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceDetailsSubmittedPage,CorrespondenceAdditionalInformationPage}
+import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,7 +30,7 @@ import views.html.CorrespondenceAdditionalInfoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceAdditionalInfoController @Inject()(
+class CorrespondenceAdditionalInfoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
