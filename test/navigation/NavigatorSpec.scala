@@ -55,6 +55,40 @@ class NavigatorSpec extends SpecBase {
             routes.CheckCorrespondenceDetailsController.onPageLoad()
         }
 
+        "must go from CorrespondenceContactNumberPage to FaxNumberForCorrespondenceYesNo page" in {
+
+          navigator.nextPage(CorrespondenceContactNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode)
+        }
+
+        "must go from AddCorrespondenceFaxNumberPage to CorrespondenceFaxNumber page when answer is true" in {
+
+          val answers = UserAnswers("id")
+            .set(AddCorrespondenceFaxNumberPage, true)
+            .success
+            .value
+
+          navigator.nextPage(AddCorrespondenceFaxNumberPage, NormalMode, answers) mustBe
+            routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode)
+        }
+
+        "must go from AddCorrespondenceFaxNumberPage to CheckCorrespondenceDetails page when answer is false" in {
+
+          val answers = UserAnswers("id")
+            .set(AddCorrespondenceFaxNumberPage, false)
+            .success
+            .value
+
+          navigator.nextPage(AddCorrespondenceFaxNumberPage, NormalMode, answers) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
+        "must go from AddCorrespondenceFaxNumberPage to SystemError page when answer is missing" in {
+
+          navigator.nextPage(AddCorrespondenceFaxNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
         "must go from CorrespondenceAdditionalNameYesNoPage to CorrespondenceAdditionalName page when answer is true" in {
 
           val answers = UserAnswers("id")
@@ -160,6 +194,17 @@ class NavigatorSpec extends SpecBase {
 
           navigator.nextPage(SoleProprietorPage, CheckMode, UserAnswers("id")) mustBe
             routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor, CheckMode)
+        }
+
+        "must go from AddCorrespondenceFaxNumberPage to CorrespondenceFaxNumber page when answer is true" in {
+
+          val answers = UserAnswers("id")
+            .set(AddCorrespondenceFaxNumberPage, true)
+            .success
+            .value
+
+          navigator.nextPage(AddCorrespondenceFaxNumberPage, CheckMode, answers) mustBe
+            routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
         }
       }
 
