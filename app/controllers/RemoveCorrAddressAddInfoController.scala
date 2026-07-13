@@ -22,7 +22,7 @@ import forms.RemoveCorrAddressAddInfoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddressAddInfoPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, RemoveCorrAddressAddInfoPage}
+import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, RemoveCorrAddressAddInfoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,7 +48,7 @@ class RemoveCorrAddressAddInfoController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val addressAddInfo = request.userAnswers.get(CorrespondenceAddressAddInfoPage).getOrElse("")
+    val addressAddInfo = request.userAnswers.get(CorrespondenceAdditionalInformationPage).getOrElse("")
     val preparedForm = request.userAnswers.get(RemoveCorrAddressAddInfoPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -58,7 +58,7 @@ class RemoveCorrAddressAddInfoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val addressAddInfo = request.userAnswers.get(CorrespondenceAddressAddInfoPage).getOrElse("")
+    val addressAddInfo = request.userAnswers.get(CorrespondenceAdditionalInformationPage).getOrElse("")
 
     form
       .bindFromRequest()

@@ -48,9 +48,9 @@ class RemoveCorrAddressAddInfoControllerSpec extends SpecBase with MockitoSugar 
     UserAnswers(userAnswersId,
                 Json.obj(
                   "correspondenceDetailsSection" -> Json.obj(
-                    "mgdRegNum"                    -> userAnswersId,
-                    "correspondenceAddressAddInfo" -> "abc"
-                  )
+                    "mgdRegNum" -> userAnswersId
+                  ),
+                  "correspondenceAdditionalInformation" -> "abc"
                 )
                )
 
