@@ -25,7 +25,6 @@ class CorrespondenceAdditionalNameFormProvider @Inject() extends Mappings {
 
   private val correspondenceAdditionalNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
 
-
   def apply(): Form[String] =
     Form(
       "correspondenceAdditionalName" -> text("correspondenceAdditionalName.error.required")

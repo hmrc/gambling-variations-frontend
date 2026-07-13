@@ -20,7 +20,10 @@
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     caption: Caption,
+    p: Paragraph,
+    h1: H1,
     govukErrorSummary: GovukErrorSummary,
+    fieldSet: GovukFieldset,
     govukRadios: GovukRadios,
     govukButton: GovukButton
 )
@@ -35,11 +38,17 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
         @caption(messages("removeCorrAddressAddInfo.caption"))
+        @fieldSet(Fieldset(legend = Some(Legend(
+            content = messages("removeCorrAddressAddInfo.heading"),
+            isPageHeading = true,
+            classes = "govuk-fieldset__legend--l"))))
+
+        @p(messages("removeCorrAddressAddInfo.paragraph", addressAddInfo))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("removeCorrAddressAddInfo.heading")).asPageHeading(viewmodels.LegendSize.Large)
-            ).withHint(Hint(content = messages("removeCorrAddressAddInfo.hint", addressAddInfo)))
+                legend = LegendViewModel(messages("removeCorrAddressAddInfo.heading")).withCssClass("govuk-visually-hidden")
+            )
         )
 
         @govukButton(

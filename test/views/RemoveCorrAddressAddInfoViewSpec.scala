@@ -39,8 +39,8 @@ class RemoveCorrAddressAddInfoViewSpec extends SpecBase {
         messages("removeCorrAddressAddInfo.heading")
       )
 
-      doc.select(".govuk-hint").text must include(
-        messages("removeCorrAddressAddInfo.hint", addressAddInfo)
+      doc.select("p").text must include(
+        messages("removeCorrAddressAddInfo.paragraph", addressAddInfo)
       )
 
       doc.select("button").text must include(

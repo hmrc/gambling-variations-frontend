@@ -557,5 +557,5 @@ removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to
 removeCorrAddressAddInfo.caption = Change registration details
 removeCorrAddressAddInfo.title = Are you sure you want to remove the additional information for this correspondence address?
 removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
-removeCorrAddressAddInfo.hint = The additional information is: {0}
+removeCorrAddressAddInfo.paragraph = The additional information is: {0}
 removeCorrAddressAddInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
