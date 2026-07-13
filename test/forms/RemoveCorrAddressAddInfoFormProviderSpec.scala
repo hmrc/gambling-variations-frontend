@@ -21,7 +21,7 @@ import play.api.data.FormError
 
 class RemoveCorrAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removeAdditionalAddrInfo.error.required"
+  val requiredKey = "removeCorrAddressAddInfo.error.required"
   val invalidKey = "error.boolean"
 
   val form = new RemoveCorrAddressAddInfoFormProvider()()
