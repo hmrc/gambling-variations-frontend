@@ -50,13 +50,15 @@ class Navigator @Inject() () {
     case RemoveAssociatedRegNumberPage         => userAnswers => navigateRemoveAssociatedRegNumberPage(NormalMode)(userAnswers)
     case AddCorrespondingDetailsYesNoPage      => userAnswers => navigateAddCorrespondingDetailsYesNoPage(NormalMode)(userAnswers)
     case CorrespondenceAdditionalNameYesNoPage => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
-    case CorrespondenceContactNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceContactNumberPage       => _ => routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode)
+    case AddCorrespondenceFaxNumberPage        => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
     case CorrespondenceFaxNumberPage           => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage     => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceNamePage                => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAdditionalNamePage      => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAdditionalNamePage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAdditionalInformationPage               => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrAddressAddInfoPage          => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                     => _ => routes.IndexController.onPageLoad()
   }
@@ -77,10 +79,12 @@ class Navigator @Inject() () {
     case AssociatedRegNumberPage             => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
     case AssociatedRegistrationNumbersPage   => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
     case RemoveAssociatedRegNumberPage       => userAnswers => navigateRemoveAssociatedRegNumberPage(CheckMode)(userAnswers)
+    case AddCorrespondenceFaxNumberPage      => userAnswers => navigateAddCorrespondenceFaxNumberPage(CheckMode)(userAnswers)
     case CorrespondenceFaxNumberPage         => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case RemoveCorrespondenceFaxNumberPage   => _ => routes.RemoveCorrespondenceFaxNumberController.onPageLoad(CheckMode)
     case CorrespondenceNamePage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAdditionalNamePage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAdditionalNamePage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAdditionalInformationPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrAddressAddInfoPage        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                   => _ => routes.CheckYourAnswersController.onPageLoad()
   }
@@ -127,6 +131,15 @@ class Navigator @Inject() () {
       .map {
         case true  => routes.CorrespondenceNameController.onPageLoad(mode)
         case false => routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateAddCorrespondenceFaxNumberPage(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(AddCorrespondenceFaxNumberPage)
+      .map {
+        case true  => routes.CorrespondenceFaxNumberController.onPageLoad(mode)
+        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
