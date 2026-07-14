@@ -533,7 +533,6 @@ correspondenceAddrInfoScreener.heading = Do you want to include additional infor
 correspondenceAddrInfoScreener.heading.caption = Change registration details
 correspondenceAddrInfoScreener.hint = For example, building name or floor number
 correspondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
-correspondenceAddrInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
 
 correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
 correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
@@ -569,3 +568,8 @@ faxNumberForCorrespondenceYesNo.heading = Do you want to add a fax number for co
 faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.change.hidden = Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.error.required = Select yes to add a fax number for correspondence
+
+removeCorrAddressAddInfo.title = Are you sure you want to remove the additional information for this correspondence address?
+removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
+removeCorrAddressAddInfo.paragraph = The additional information is: {0}
+removeCorrAddressAddInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
