@@ -36,6 +36,7 @@ class RemoveCorrAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {
       invalidError = FormError(fieldName, invalidKey)
     )
 
+
     behave like mandatoryField(
       form,
       fieldName,
