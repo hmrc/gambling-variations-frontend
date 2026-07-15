@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package models.addresslookup
 
+import models.{AddressLookupConfigOptions, AddressLookupConfigSettings, AddressLookupLabelContent, AddressLookupLabels, AppLevelLabels, ConfirmPageConfig, ConfirmPageLabels, EditPageLabels, International, LookupPageLabels, ManualAddressEntryConfig, ManualAddressEntryLineContent, MaxLengthErrorMessages, SelectPageConfig, SelectPageLabels, TimeoutConfig}
+import play.api.i18n.Messages
 import play.api.libs.json.{Format, Json}
 
 case class AddressLookupConfigSettings(options: AddressLookupConfigOptions, labels: AddressLookupLabels)
@@ -31,10 +33,14 @@ case class AddressLookupConfigOptions(
   useNewGovUkServiceNavigation: Boolean = true,
   accessibilityFooterUrl: String,
   deskProServiceName: String,
-  allowedCountryCodes: Seq[String],
+  showBackButtons: Boolean,
+  includeHMRCBranding: Boolean,
+  ukMode: Boolean,
+  pageHeadingStyle: String,
   selectPageConfig: SelectPageConfig,
   confirmPageConfig: ConfirmPageConfig,
-  manualAddressEntryConfig: ManualAddressEntryConfig
+  manualAddressEntryConfig: ManualAddressEntryConfig,
+  timeoutConfig: TimeoutConfig
 )
 
 object AddressLookupConfigOptions {
@@ -55,6 +61,12 @@ object ManualAddressEntryConfig {
   implicit val fmt: Format[ManualAddressEntryConfig] = Json.format[ManualAddressEntryConfig]
 }
 
+case class TimeoutConfig(timeoutAmount: Int, timeoutUrl: String, timeoutKeepAliveUrl: String)
+
+object TimeoutConfig {
+  implicit val fmt: Format[TimeoutConfig] = Json.format[TimeoutConfig]
+}
+
 case class MaxLengthErrorMessages(en: ManualAddressEntryLineContent, cy: ManualAddressEntryLineContent)
 
 object MaxLengthErrorMessages {
@@ -62,11 +74,20 @@ object MaxLengthErrorMessages {
 }
 
 case class ManualAddressEntryLineContent(
-  addressLine1: String,
-  addressLine2: String,
-  addressLine3: String,
-  town: String
-)
+  addressLine1: String = "addressLookup.manualAddressLine1",
+  addressLine2: String = "addressLookup.manualAddressLine2",
+  addressLine3: String = "addressLookup.manualAddressLine3",
+  town: String = "addressLookup.manualAddressLin4",
+  postcode: String = "addressLookup.manualAddressPostcode"
+) {
+  def messages(implicit messages: Messages) = ManualAddressEntryLineContent(
+    addressLine1 = messages(addressLine1),
+    addressLine2 = messages(addressLine2),
+    addressLine3 = messages(addressLine3),
+    town         = messages(town),
+    postcode     = messages(postcode)
+  )
+}
 
 object ManualAddressEntryLineContent {
   implicit val fmt: Format[ManualAddressEntryLineContent] = Json.format[ManualAddressEntryLineContent]
@@ -97,46 +118,52 @@ object AppLevelLabels {
   implicit val fmt: Format[AppLevelLabels] = Json.format[AppLevelLabels]
 }
 
-case class SelectPageLabels(title: String,
-                            heading: String,
-                            headingWithPostcode: String,
-                            proposalListLabel: String,
-                            submitLabel: String,
-                            searchAgainLinkText: String
-                           )
+case class SelectPageLabels(title: String = "correspondenceAddressSelectAddress.title",
+                            heading: String = "correspondenceAddressSelectAddress.heading"
+                           ) {
+  def messages(implicit messages: Messages) = SelectPageLabels(title = messages(title), heading = messages(heading))
+}
 
 object SelectPageLabels {
   implicit val fmt: Format[SelectPageLabels] = Json.format[SelectPageLabels]
 }
 
 case class LookupPageLabels(
-  title: String,
-  heading: String,
-  afterHeadingText: String,
-  filterLabel: String,
-  postcodeLabel: String,
-  submitLabel: String,
-  noResultsFoundMessage: String,
-  resultLimitExceededMessage: String
-)
+  title: String = "correspondenceAddressLookupAddress.title",
+  heading: String = "correspondenceAddressLookupAddress.heading",
+  postcodeLabel: String = "correspondenceAddressLookupAddress.postcode",
+  submitLabel: String = "correspondenceAddressLookupAddress.submit"
+) {
+  def messages(implicit messages: Messages) = LookupPageLabels(
+    title         = messages(title),
+    heading       = messages(heading),
+    postcodeLabel = messages(postcodeLabel),
+    submitLabel   = messages(submitLabel)
+  )
+}
 
 object LookupPageLabels {
   implicit val fmt: Format[LookupPageLabels] = Json.format[LookupPageLabels]
 }
 
 case class ConfirmPageLabels(
-  title: String,
-  heading: String,
-  searchAgainLinkText: String,
-  confirmChangeText: String
-)
+  title: String = "correspondenceAddressConfirmAddress.title",
+  heading: String = "correspondenceAddressConfirmAddress.heading",
+  changeLinkText: String = "correspondenceAddressConfirmAddress.change"
+) {
+  def messages(implicit messages: Messages) = ConfirmPageLabels(
+    title = messages(title),
+    heading = messages(heading),
+    changeLinkText = messages(changeLinkText)
+  )
+}
 
 object ConfirmPageLabels {
   implicit val fmt: Format[ConfirmPageLabels] = Json.format[ConfirmPageLabels]
 }
 
 case class EditPageLabels(
-  title: String,
+  title: String = ???,
   heading: String,
   line1Label: String,
   line2Label: String,
@@ -163,7 +190,7 @@ object SelectPageConfig {
   implicit val fmt: Format[SelectPageConfig] = Json.format[SelectPageConfig]
 }
 
-case class ConfirmPageConfig(showChangeLink: Boolean, showSubHeadingAndInfo: Boolean, showSearchAgainLink: Boolean, showConfirmChangeText: Boolean)
+case class ConfirmPageConfig(showConfirmChangeText: Boolean)
 
 object ConfirmPageConfig {
   implicit val fmt: Format[ConfirmPageConfig] = Json.format[ConfirmPageConfig]

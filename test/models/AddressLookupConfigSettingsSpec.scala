@@ -16,6 +16,7 @@
 
 package models
 
+import models.addresslookup.{AddressLookupConfigOptions, AddressLookupConfigSettings, AddressLookupLabelContent, AddressLookupLabels, AppLevelLabels, ConfirmPageConfig, ConfirmPageLabels, EditPageLabels, International, LookupPageLabels, ManualAddressEntryConfig, ManualAddressEntryLineContent, MaxLengthErrorMessages, SelectPageConfig, SelectPageLabels}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsSuccess, Json}

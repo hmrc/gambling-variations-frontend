@@ -37,10 +37,8 @@ checkYourAnswers.heading = Check your answers
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
-journeyRecovery.continue.guidance = [Add content to explain how to proceed.]
 journeyRecovery.startAgain.title = Sorry, there is a problem with the service
 journeyRecovery.startAgain.heading = Sorry, there is a problem with the service
-journeyRecovery.startAgain.guidance = [Add content to explain why the user needs to start again.]
 
 signedOut.title = For your security, we signed you out
 signedOut.heading = For your security, we signed you out
@@ -54,11 +52,11 @@ systemError.heading = Sorry, there is a problem with the service
 systemError.p1 = Try again later or contact the
 systemError.p1.link = HMRC Online Services Helpdesk (opens in new tab)
 
-
 accessDenied.title = Sorry, there is a problem with the service
 accessDenied.heading = Sorry, there is a problem with the service
 accessDenied.p1 = You do not have access to this service.
 accessDenied.p1.link = Continue to your account
+
 pageNotFound.title = Page not found
 pageNotFound.heading = Page not found
 pageNotFound.p1 = If you typed the web address, check it is correct.
@@ -67,6 +65,13 @@ pageNotFound.p3 = If the web address is correct or you selected a link or button
 pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
 pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
+
+addressLookup.manualAddressLine1 = Address line 1
+addressLookup.manualAddressLine2 = Address line 2
+addressLookup.manualAddressLine3 = Town or city
+addressLookup.manualAddressLine4 = County
+addressLookup.manualAddressPostcode = Postcode
+
 
 businessType.soleproprietor = Sole proprietor
 businessType.unincorporatedbody = Unincorporated body
@@ -531,3 +536,18 @@ addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email addr
 addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
 addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
 addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
+
+correspondenceAddressSelectAddress.title = Select the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+correspondenceAddressSelectAddress.heading = Select the correspondence address
+
+correspondenceAddressLookupAddress.title = Find the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+correspondenceAddressLookupAddress.heading = Find the correspondence address
+correspondenceAddressLookupAddress.postcode = Postcode
+correspondenceAddressLookupAddress.submit = Continue
+
+correspondenceAddressConfirmAddress.title = Review and confirm the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+correspondenceAddressConfirmAddress.heading = Review and confirm the correspondence address
+correspondenceAddressConfirmAddress.change = Edit address
+correspondenceAddressConfirmAddress.submit = Continue
+
+correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
