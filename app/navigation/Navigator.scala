@@ -50,9 +50,9 @@ class Navigator @Inject() () {
     case RemoveAssociatedRegNumberPage           => userAnswers => navigateRemoveAssociatedRegNumberPage(NormalMode)(userAnswers)
     case AddCorrespondingDetailsYesNoPage        => userAnswers => navigateAddCorrespondingDetailsYesNoPage(NormalMode)(userAnswers)
     case CorrespondenceAdditionalNameYesNoPage   => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
-    case RemoveCorrespondenceDetailsYesNoPage    => userAnswers => navigateRemoveCorrespondenceDetailsYesNoPage(userAnswers)
     case CorrespondenceContactNumberPage         => _ => routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode)
     case AddCorrespondenceFaxNumberPage          => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
+    case RemoveCorrespondenceDetailsYesNoPage    => userAnswers => navigateRemoveCorrespondenceDetailsYesNoPage(userAnswers)
     case CorrespondenceFaxNumberPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
@@ -60,6 +60,7 @@ class Navigator @Inject() () {
     case CorrespondenceNamePage                  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalNamePage        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalInformationPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
@@ -85,6 +86,7 @@ class Navigator @Inject() () {
     case CorrespondenceNamePage                  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalNamePage        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalInformationPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                       => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
