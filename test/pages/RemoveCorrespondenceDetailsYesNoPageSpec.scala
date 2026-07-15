@@ -14,32 +14,24 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.JsPath
 
-class RemoveCorrAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {
+class RemoveCorrespondenceDetailsYesNoPageSpec extends AnyFreeSpec with Matchers {
 
-  val requiredKey = "removeCorrAddressAddInfo.error.required"
-  val invalidKey = "error.boolean"
+  "RemoveCorrespondenceDetailsYesNoPage" - {
 
-  val form = new RemoveCorrAddressAddInfoFormProvider()()
+    "must have the correct toString" in {
+      RemoveCorrespondenceDetailsYesNoPage.toString mustBe "removeCorrespondenceDetailsYesNo"
+    }
 
-  ".value" - {
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "removeCorrespondenceDetailsYesNo"
 
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+      RemoveCorrespondenceDetailsYesNoPage.path mustBe expectedPath
+    }
   }
 }

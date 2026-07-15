@@ -19,10 +19,10 @@ package controllers
 import controllers.actions.*
 import models.{NormalMode, UserAnswers}
 import pages.*
-import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkFlag
 import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
 

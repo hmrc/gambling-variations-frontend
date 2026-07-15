@@ -573,3 +573,11 @@ removeCorrAddressAddInfo.title = Are you sure you want to remove the additional 
 removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
 removeCorrAddressAddInfo.paragraph = The additional information is: {0}
 removeCorrAddressAddInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
+
+removeCorrespondenceDetailsYesNo.title = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.heading = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.checkYourAnswersLabel = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.hint = If you remove your correspondence details, we will contact you through the business details you provided
+removeCorrespondenceDetailsYesNo.p1 = You must continue to the change registration details page to submit any changes.
+removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
+removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?

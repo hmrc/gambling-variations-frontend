@@ -52,6 +52,7 @@ class Navigator @Inject() () {
     case CorrespondenceAdditionalNameYesNoPage   => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
     case CorrespondenceContactNumberPage         => _ => routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode)
     case AddCorrespondenceFaxNumberPage          => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
+    case RemoveCorrespondenceDetailsYesNoPage    => userAnswers => navigateRemoveCorrespondenceDetailsYesNoPage(userAnswers)
     case CorrespondenceFaxNumberPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
@@ -156,5 +157,14 @@ class Navigator @Inject() () {
       .filter(_.nonEmpty)
       .map(_ => routes.RemovePreviousRegNumberController.onPageLoad(mode))
       .getOrElse(routes.CheckTradingDetailsController.onPageLoad())
+
+  private def navigateRemoveCorrespondenceDetailsYesNoPage(answers: UserAnswers): Call =
+    answers
+      .get(RemoveCorrespondenceDetailsYesNoPage)
+      .map {
+        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
+        case true  => routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
 
 }

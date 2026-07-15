@@ -100,6 +100,28 @@ class NavigatorSpec extends SpecBase {
             routes.IndexController.onPageLoad() // update it when available
         }
 
+        "must go from RemoveCorrespondenceDetailsYesNoPage to ChangeRegistrationDetails page when answer is true" in {
+
+          val answers = UserAnswers("id")
+            .set(RemoveCorrespondenceDetailsYesNoPage, true)
+            .success
+            .value
+
+          navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, answers) mustBe
+            routes.ChangeRegistrationDetailsController.onPageLoad()
+        }
+
+        "must go from RemoveCorrespondenceDetailsYesNoPage to CheckCorrespondenceDetails page when answer is true" in {
+
+          val answers = UserAnswers("id")
+            .set(RemoveCorrespondenceDetailsYesNoPage, false)
+            .success
+            .value
+
+          navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, answers) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
         "must go from CorrespondenceAdditionalNameYesNoPage to CheckCorrespondenceDetails page when answer is false" in {
 
           val answers = UserAnswers("id")
