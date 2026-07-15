@@ -41,7 +41,7 @@
         @caption(messages("removeAssociatedRegNumber.heading.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("value"),
+                field = form("removeCorrespondenceDetailsYesNo"),
                 legend = LegendViewModel(messages("removeCorrespondenceDetailsYesNo.heading"))
                 .asPageHeading(viewmodels.LegendSize.Large)
             )

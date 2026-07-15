@@ -25,6 +25,6 @@ class RemoveCorrespondenceDetailsYesNoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("removeCorrespondenceDetailsYesNo.error.required")
+      "removeCorrespondenceDetailsYesNo" -> boolean("removeCorrespondenceDetailsYesNo.error.required")
     )
 }

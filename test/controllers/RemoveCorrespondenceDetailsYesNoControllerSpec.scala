@@ -115,7 +115,7 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, removeCorrespondenceDetailsYesNoRoute)
-            .withFormUrlEncodedBody("value" -> "true")
+            .withFormUrlEncodedBody("removeCorrespondenceDetailsYesNo" -> "true")
 
         val result = route(application, request).value
 
@@ -142,7 +142,7 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, removeCorrespondenceDetailsYesNoRoute)
-            .withFormUrlEncodedBody("value" -> "false")
+            .withFormUrlEncodedBody("removeCorrespondenceDetailsYesNo" -> "false")
 
         val result = route(application, request).value
 
@@ -160,9 +160,9 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, removeCorrespondenceDetailsYesNoRoute)
-            .withFormUrlEncodedBody("value" -> "")
+            .withFormUrlEncodedBody("removeCorrespondenceDetailsYesNo" -> "")
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("removeCorrespondenceDetailsYesNo" -> ""))
 
         val result = route(application, request).value
 
@@ -201,7 +201,7 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, removeCorrespondenceDetailsYesNoRoute)
-            .withFormUrlEncodedBody("value" -> "true")
+            .withFormUrlEncodedBody("removeCorrespondenceDetailsYesNo" -> "true")
 
         val result = route(application, request).value
 

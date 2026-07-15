@@ -26,9 +26,9 @@ class RemoveCorrespondenceDetailsYesNoFormProviderSpec extends BooleanFieldBehav
 
   val form = new RemoveCorrespondenceDetailsYesNoFormProvider()()
 
-  ".value" - {
+  ".removeCorrespondenceDetailsYesNo" - {
 
-    val fieldName = "value"
+    val fieldName = "removeCorrespondenceDetailsYesNo"
 
     behave like booleanField(
       form,
