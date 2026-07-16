@@ -587,3 +587,6 @@ correspondenceChangeAddrScreener.heading = How do you want to change this corres
 correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
 correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
 correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
+correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
+correspondenceChangeAddrScreener.no = Edit current correspondence address

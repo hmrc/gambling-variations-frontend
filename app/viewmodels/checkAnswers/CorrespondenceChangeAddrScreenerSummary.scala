@@ -29,7 +29,7 @@ object CorrespondenceChangeAddrScreenerSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(CorrespondenceChangeAddrScreenerPage).map { answer =>
 
-      val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "correspondenceChangeAddrScreener.uk.yes" else "correspondenceChangeAddrScreener.no"
 
       SummaryListRowViewModel(
         key   = "correspondenceChangeAddrScreenerController.checkYourAnswersLabel",
