@@ -582,8 +582,9 @@ removeCorrespondenceDetailsYesNo.p1 = You must continue to the change registrati
 removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
 removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?
 
-correspondenceUKAddrScreener.title = Is the correspondence address in the UK?
-correspondenceUKAddrScreener.heading = Is the correspondence address in the UK?
-correspondenceUKAddrScreener.checkYourAnswersLabel = Is the correspondence address in the UK?
-correspondenceUKAddrScreener.error.required = Select yes if the correspondence address is in the UK
-correspondenceUKAddrScreener.change.hidden = Is the correspondence address in the UK?
+correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+correspondenceUKAddrScreener.checkYourAnswersLabel = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.error.required = Select yes if the correspondence address has a UK postcode
+correspondenceUKAddrScreener.change.hidden = Does the correspondence address have a UK postcode?
