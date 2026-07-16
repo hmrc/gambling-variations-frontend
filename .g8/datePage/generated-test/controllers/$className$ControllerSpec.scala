@@ -120,7 +120,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to SystemError for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -128,11 +128,11 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, getRequest()).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "must redirect to SystemError for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -140,7 +140,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, postRequest()).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
   }
