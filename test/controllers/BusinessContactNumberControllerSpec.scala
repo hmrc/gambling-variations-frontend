@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessContactNumberPage, ContactDetailsChangesPage}
+import pages.{BusinessContactNumberPage, ContactDetailsChangesPage, GroupMemberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -47,10 +47,14 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       "phoneNumber"       -> "01632 960 001",
       "mobilePhoneNumber" -> "07700900000"
     ),
+    GroupMemberPage.toString        -> false,
     "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
   )
 
-  val noAnswers = Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+  val noAnswers = Json.obj(
+    GroupMemberPage.toString        -> false,
+    "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+  )
 
   lazy val businessContactNumberRoute =
     routes.BusinessContactNumberController.onPageLoad(NormalMode).url
@@ -83,6 +87,50 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to access denied when group member is true on GET" in {
+
+      val data = Json.obj(
+        GroupMemberPage.toString        -> true,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, businessContactNumberRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect to system error when GroupMemberPage is missing on GET" in {
+
+      val data = Json.obj(
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, businessContactNumberRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
     "must populate the view correctly on a GET when previously answered" in {
 
       val application =
@@ -172,6 +220,61 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
           Some("01632 960 001"),
           Some("07111 111 111")
         )
+      }
+    }
+
+    "must redirect to access denied when group member is true on POST" in {
+
+      val data = Json.obj(
+        GroupMemberPage.toString        -> true,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, businessContactNumberRoute)
+            .withFormUrlEncodedBody(
+              ("phoneNumber", "01632 960 001"),
+              ("mobileNumber", "07700900000")
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect to system error when GroupMemberPage is missing on POST" in {
+
+      val data = Json.obj(
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, businessContactNumberRoute)
+            .withFormUrlEncodedBody(
+              ("phoneNumber", "01632 960 001"),
+              ("mobileNumber", "07700900000")
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
       }
     }
 

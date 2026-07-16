@@ -22,10 +22,42 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.CheckContactDetailsView
+import pages.GroupMemberPage
 
 class CheckContactDetailsControllerSpec extends SpecBase {
 
   "CheckContactDetails Controller" - {
+
+    "must redirect to access denied when group member is true" in {
+
+      val data = Json.obj(
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+        "businessContactNumber" -> Json.obj(
+          "phoneNumber"       -> "07000000000",
+          "mobilePhoneNumber" -> "07000000000"
+        ),
+        "businessFaxNumber"      -> "07000000000",
+        "businessEmailAddress"   -> "a@b.com",
+        GroupMemberPage.toString -> true
+      )
+
+      val userAnswers = UserAnswers("id-number", data)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
     "must return OK and the correct view for a GET" in {
 
       val data = Json.obj(
@@ -33,6 +65,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         "businessContactNumber"         -> Json.obj("phoneNumber" -> "07000000000", "mobilePhoneNumber" -> "07000000000"),
         "businessFaxNumber"             -> "07000000000",
         "businessEmailAddress"          -> "a@b.com",
+        GroupMemberPage.toString        -> false,
         "flag"                          -> false
       )
 
