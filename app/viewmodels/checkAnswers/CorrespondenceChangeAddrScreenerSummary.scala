@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.CorrespondenceChangeAddrScreenerPage
+import pages.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
@@ -29,14 +29,30 @@ object CorrespondenceChangeAddrScreenerSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(CorrespondenceChangeAddrScreenerPage).map { answer =>
 
-      val value = if (answer) "correspondenceChangeAddrScreener.uk.yes" else "correspondenceChangeAddrScreener.no"
+      val isUkAddress =
+        answers.get(CorrespondenceAddressUkPage).isDefined
+
+      val value =
+        if (answer) {
+          if (isUkAddress) {
+            "correspondenceChangeAddrScreener.uk.yes"
+          } else {
+            "correspondenceChangeAddrScreener.nonuk.yes"
+          }
+        } else {
+          "correspondenceChangeAddrScreener.no"
+        }
 
       SummaryListRowViewModel(
         key   = "correspondenceChangeAddrScreenerController.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.CorrespondenceChangeAddrScreenerController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("correspondenceChangeAddrScreenerController.change.hidden"))
+          ActionItemViewModel(
+            "site.change",
+            routes.CorrespondenceChangeAddrScreenerController.onPageLoad(CheckMode).url
+          ).withVisuallyHiddenText(
+            messages("correspondenceChangeAddrScreenerController.change.hidden")
+          )
         )
       )
     }
