@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceChangeAddrScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.CorrespondenceChangeAddrScreenerPage
+import pages.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -53,15 +53,20 @@ class CorrespondenceChangeAddrScreenerController @Inject()(
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    val isUkAddress =  request.userAnswers.get(CorrespondenceAddressUkPage).isDefined
+
+    Ok(view(preparedForm, mode, isUkAddress))
+
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
+    val isUkAddress =  request.userAnswers.get(CorrespondenceAddressUkPage).isDefined
+
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, isUkAddress))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceChangeAddrScreenerPage, value))
