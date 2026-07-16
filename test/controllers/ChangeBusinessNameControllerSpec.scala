@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessNameChangesPage, BusinessNamePage, BusinessTypePage}
+import pages.{BusinessNameChangesPage, BusinessNamePage, BusinessTypePage, GroupMemberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -50,10 +50,17 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
   val data = Json.obj(
     BusinessTypePage.toString -> businessType.code,
     BusinessNamePage.toString -> businessName,
+    GroupMemberPage.toString  -> false,
     "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
 
-  val noAnswers = UserAnswers(userAnswersId, Json.obj("businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)))
+  val noAnswers = UserAnswers(
+    userAnswersId,
+    Json.obj(
+      GroupMemberPage.toString -> false,
+      "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
+    )
+  )
 
   lazy val changeBusinessNameRoute =
     routes.ChangeBusinessNameController.onPageLoad(Partnership, NormalMode).url
@@ -79,6 +86,28 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(form.fill(businessName), NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to access denied when group member is true on GET" in {
+
+      val groupMemberData = Json.obj(
+        BusinessTypePage.toString -> businessType.code,
+        BusinessNamePage.toString -> businessName,
+        GroupMemberPage.toString  -> true,
+        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+
+      running(application) {
+        val request = FakeRequest(GET, changeBusinessNameRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
       }
     }
 
@@ -140,6 +169,30 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
         }
+      }
+    }
+
+    "must redirect to access denied when group member is true on POST" in {
+
+      val groupMemberData = Json.obj(
+        BusinessTypePage.toString -> businessType.code,
+        BusinessNamePage.toString -> businessName,
+        GroupMemberPage.toString  -> true,
+        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, changeBusinessNameRoute)
+            .withFormUrlEncodedBody(("value", "Updated Business Name"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
       }
     }
 

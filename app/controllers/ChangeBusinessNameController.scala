@@ -56,64 +56,98 @@ class ChangeBusinessNameController @Inject() (
 
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      (
-        request.userAnswers.get(BusinessTypePage) flatMap {
-          case Soleproprietor =>
-            request.userAnswers.get(SoleProprietorPage) map { soleProprietorName =>
-              val form = soleProprietorFormProvider()
-              val preparedForm = request.userAnswers.get(SoleProprietorPage).fold(form)(form.fill)
-              Ok(soleProprietorView(preparedForm, mode))
+
+      request.userAnswers.get(GroupMemberPage) match {
+        case Some(true) =>
+          Redirect(routes.AccessDeniedController.onPageLoad())
+
+        case Some(false) =>
+          (
+            request.userAnswers.get(BusinessTypePage) flatMap {
+              case Soleproprietor =>
+                request.userAnswers.get(SoleProprietorPage).map { _ =>
+                  val form = soleProprietorFormProvider()
+                  val preparedForm =
+                    request.userAnswers.get(SoleProprietorPage).fold(form)(form.fill)
+
+                  Ok(soleProprietorView(preparedForm, mode))
+                }
+
+              case businessType =>
+                request.userAnswers.get(BusinessNamePage).map { businessName =>
+                  val form = formProvider(businessType)
+                  val preparedForm = form.fill(businessName)
+
+                  val headingKey = headingKeyFor(businessType)
+                  val titleKey = titleKeyFor(businessType)
+
+                  Ok(view(preparedForm, mode, businessType, headingKey, titleKey))
+                }
             }
-          case businessType =>
-            request.userAnswers.get(BusinessNamePage) map { businessName =>
-              val form = formProvider(businessType)
-              val preparedForm = form.fill(businessName)
-              val headingKey = headingKeyFor(businessType)
-              val titleKey = titleKeyFor(businessType)
-              Ok(view(preparedForm, mode, businessType, headingKey, titleKey))
-            }
-        }
-      ) getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
+          ).getOrElse(
+            Redirect(routes.CheckBusinessNameController.onPageLoad())
+          )
+
+        case None =>
+          Redirect(routes.SystemErrorController.onPageLoad())
+      }
     }
 
   def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      request.userAnswers.get(BusinessTypePage) map {
-        case Soleproprietor =>
-          soleProprietorFormProvider()
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(soleProprietorView(formWithErrors, mode))),
-              value =>
-                val isChanged: Boolean =
-                  checkIfChanged(value, request.userAnswers, SoleProprietorPage, BusinessNameChangesPage)
 
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
-            )
-        case businessType => {
-          val headingKey = headingKeyFor(businessType)
-          val titleKey = titleKeyFor(businessType)
+      request.userAnswers.get(GroupMemberPage) match {
 
-          formProvider(businessType)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType, headingKey, titleKey))),
-              value =>
-                val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessNamePage, BusinessNameChangesPage)
+        case Some(true) =>
+          Future.successful(
+            Redirect(routes.AccessDeniedController.onPageLoad())
+          )
 
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNamePage, value))
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
-            )
-        }
-      } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+        case Some(false) =>
+          request.userAnswers.get(BusinessTypePage) map {
+            case Soleproprietor =>
+              soleProprietorFormProvider()
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(soleProprietorView(formWithErrors, mode))),
+                  value =>
+                    val isChanged: Boolean =
+                      checkIfChanged(value, request.userAnswers, SoleProprietorPage, BusinessNameChangesPage)
+
+                    for {
+                      updatedAnswers <- Future.fromTry(request.userAnswers.set(SoleProprietorPage, value))
+                      updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+                      updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
+                      _              <- sessionRepository.set(updatedAnswers)
+                    } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
+                )
+            case businessType => {
+              val headingKey = headingKeyFor(businessType)
+              val titleKey = titleKeyFor(businessType)
+
+              formProvider(businessType)
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType, headingKey, titleKey))),
+                  value =>
+                    val isChanged: Boolean = checkIfChanged(value, request.userAnswers, BusinessNamePage, BusinessNameChangesPage)
+
+                    for {
+                      updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessNamePage, value))
+                      updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+                      updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
+                      _              <- sessionRepository.set(updatedAnswers)
+                    } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
+                )
+            }
+          } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+
+        case None =>
+          Future.successful(
+            Redirect(routes.SystemErrorController.onPageLoad())
+          )
+
+      }
+
     }
 }

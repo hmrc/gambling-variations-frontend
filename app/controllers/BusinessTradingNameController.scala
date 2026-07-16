@@ -21,7 +21,7 @@ import forms.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
-import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, BusinessTypePage, TradingDetailsChangesPage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, BusinessTypePage, GroupMemberPage, TradingDetailsChangesPage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,36 +48,64 @@ class BusinessTradingNameController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val businessType =
-      request.userAnswers
-        .get(BusinessTypePage)
-        .getOrElse(throw new Exception())
-    val preparedForm = request.userAnswers.get(TradingNamePage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+
+    request.userAnswers.get(GroupMemberPage) match {
+
+      case Some(true) =>
+        Redirect(routes.AccessDeniedController.onPageLoad())
+
+      case Some(false) =>
+        val businessType =
+          request.userAnswers
+            .get(BusinessTypePage)
+            .getOrElse(throw new Exception())
+        val preparedForm = request.userAnswers.get(TradingNamePage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+
+        Ok(view(preparedForm, mode, businessType))
+
+      case None =>
+        Redirect(routes.SystemErrorController.onPageLoad())
     }
 
-    Ok(view(preparedForm, mode, businessType))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val businessType =
-      request.userAnswers
-        .get(BusinessTypePage)
-        .getOrElse(throw new Exception())
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType))),
-        value =>
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, TradingNamePage, TradingDetailsChangesPage)
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
-      )
+
+    request.userAnswers.get(GroupMemberPage) match {
+
+      case Some(true) =>
+        Future.successful(
+          Redirect(routes.AccessDeniedController.onPageLoad())
+        )
+
+      case Some(false) =>
+        val businessType =
+          request.userAnswers
+            .get(BusinessTypePage)
+            .getOrElse(throw new Exception())
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType))),
+            value =>
+              val isChanged: Boolean =
+                checkIfChanged(value, request.userAnswers, TradingNamePage, TradingDetailsChangesPage)
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
+          )
+
+      case None =>
+        Future.successful(
+          Redirect(routes.SystemErrorController.onPageLoad())
+        )
+
+    }
   }
 }
