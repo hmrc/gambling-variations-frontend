@@ -17,29 +17,30 @@
 package controllers
 
 import controllers.actions.*
-import forms.CorrespondenceAdditionalNameFormProvider
+import forms.RemoveCorrAddressAddInfoFormProvider
+
+import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSubmittedPage}
+import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, RemoveCorrAddressAddInfoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceAdditionalNameView
+import views.html.RemoveCorrAddressAddInfoView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceAdditionalNameController @Inject() (
+class RemoveCorrAddressAddInfoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceAdditionalNameFormProvider,
+  formProvider: RemoveCorrAddressAddInfoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceAdditionalNameView
+  view: RemoveCorrAddressAddInfoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,25 +48,30 @@ class CorrespondenceAdditionalNameController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(CorrespondenceAdditionalNamePage)
-      .fold(form)(form.fill)
+    val addressAddInfo = request.userAnswers.get(CorrespondenceAdditionalInformationPage).getOrElse("")
+    val preparedForm = request.userAnswers.get(RemoveCorrAddressAddInfoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-    Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode, addressAddInfo))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val addressAddInfo = request.userAnswers.get(CorrespondenceAdditionalInformationPage).getOrElse("")
 
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, addressAddInfo))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAdditionalNamePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrAddressAddInfoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.remove(CorrespondenceAdditionalInformationPage))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAdditionalNamePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(RemoveCorrAddressAddInfoPage, mode, updatedAnswers))
       )
   }
 }

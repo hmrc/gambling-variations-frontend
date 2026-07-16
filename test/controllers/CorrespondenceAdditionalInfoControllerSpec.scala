@@ -17,28 +17,28 @@
 package controllers
 
 import base.SpecBase
-import forms.CorrespondenceAdditionalNameFormProvider
+import forms.CorrespondenceAdditionalInfoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CorrespondenceAdditionalNamePage
+import pages.CorrespondenceAdditionalInformationPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.CorrespondenceAdditionalNameView
+import views.html.CorrespondenceAdditionalInfoView
 
 import scala.concurrent.Future
 
-class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSugar {
+class CorrespondenceAdditionalInfoControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CorrespondenceAdditionalNameFormProvider()
+  val formProvider = new CorrespondenceAdditionalInfoFormProvider()
   val form = formProvider()
 
   val noAnswers =
@@ -48,9 +48,9 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
     )
 
   lazy val nameRoute =
-    routes.CorrespondenceAdditionalNameController.onPageLoad(NormalMode).url
+    routes.CorrespondenceAdditionalInfoController.onPageLoad(NormalMode).url
 
-  "CorrespondenceAdditionalName Controller" - {
+  "CorrespondenceAdditionalInfo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -61,7 +61,7 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[CorrespondenceAdditionalNameView]
+        val view = application.injector.instanceOf[CorrespondenceAdditionalInfoView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
@@ -72,8 +72,8 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "correspondenceDetailsSection"            -> Json.obj("mgdRegNum" -> userAnswersId),
-        CorrespondenceAdditionalNamePage.toString -> "validName"
+        "correspondenceDetailsSection"                   -> Json.obj("mgdRegNum" -> userAnswersId),
+        CorrespondenceAdditionalInformationPage.toString -> "validName"
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
@@ -83,7 +83,7 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
       running(application) {
         val request = FakeRequest(GET, nameRoute)
 
-        val view = application.injector.instanceOf[CorrespondenceAdditionalNameView]
+        val view = application.injector.instanceOf[CorrespondenceAdditionalInfoView]
 
         val result = route(application, request).value
 
@@ -112,7 +112,7 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
 
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody("correspondenceAdditionalName" -> "valid name")
+            .withFormUrlEncodedBody("correspondenceAdditionalInfo" -> "valid name")
 
         val result = route(application, request).value
 
@@ -132,7 +132,7 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
 
         val boundForm = form.bind(Map("name" -> ""))
 
-        val view = application.injector.instanceOf[CorrespondenceAdditionalNameView]
+        val view = application.injector.instanceOf[CorrespondenceAdditionalInfoView]
 
         val result = route(application, request).value
 

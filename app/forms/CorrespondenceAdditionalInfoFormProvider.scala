@@ -21,20 +21,20 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class CorrespondenceAdditionalNameFormProvider @Inject() extends Mappings {
+class CorrespondenceAdditionalInfoFormProvider @Inject() extends Mappings {
 
-  private val correspondenceAdditionalNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+  private val correspondenceAdditionalInfoRegex = "^[a-zA-Z0-9\\-'\\s]+$"
 
   def apply(): Form[String] =
     Form(
-      "correspondenceAdditionalName" -> text("correspondenceAdditionalName.error.required")
+      "correspondenceAdditionalInfo" -> text("correspondenceAdditionalInfo.error.required")
         .verifying(
-          maxLength(100, "correspondenceAdditionalName.error.length")
+          maxLength(100, "correspondenceAdditionalInfo.error.length")
         )
         .verifying(
           regexp(
-            correspondenceAdditionalNameRegex,
-            "correspondenceAdditionalName.error.invalid"
+            correspondenceAdditionalInfoRegex,
+            "correspondenceAdditionalInfo.error.invalid"
           )
         )
     )

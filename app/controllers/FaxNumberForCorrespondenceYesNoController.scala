@@ -17,29 +17,29 @@
 package controllers
 
 import controllers.actions.*
-import forms.CorrespondenceAdditionalNameFormProvider
+import forms.FaxNumberForCorrespondenceYesNoFormProvider
+import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSubmittedPage}
+import pages.AddCorrespondenceFaxNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceAdditionalNameView
+import views.html.FaxNumberForCorrespondenceYesNoView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceAdditionalNameController @Inject() (
+class FaxNumberForCorrespondenceYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceAdditionalNameFormProvider,
+  requireData: DataRequiredAction,
+  formProvider: FaxNumberForCorrespondenceYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceAdditionalNameView
+  view: FaxNumberForCorrespondenceYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -47,9 +47,11 @@ class CorrespondenceAdditionalNameController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(CorrespondenceAdditionalNamePage)
-      .fold(form)(form.fill)
+
+    val preparedForm = request.userAnswers.get(AddCorrespondenceFaxNumberPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
     Ok(view(preparedForm, mode))
   }
@@ -62,10 +64,9 @@ class CorrespondenceAdditionalNameController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAdditionalNamePage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddCorrespondenceFaxNumberPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAdditionalNamePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddCorrespondenceFaxNumberPage, mode, updatedAnswers))
       )
   }
 }

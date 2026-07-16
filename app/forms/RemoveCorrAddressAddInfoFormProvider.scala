@@ -16,26 +16,15 @@
 
 package forms
 
+import javax.inject.Inject
+
 import forms.mappings.Mappings
 import play.api.data.Form
 
-import javax.inject.Inject
+class RemoveCorrAddressAddInfoFormProvider @Inject() extends Mappings {
 
-class CorrespondenceAdditionalNameFormProvider @Inject() extends Mappings {
-
-  private val correspondenceAdditionalNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
-
-  def apply(): Form[String] =
+  def apply(): Form[Boolean] =
     Form(
-      "correspondenceAdditionalName" -> text("correspondenceAdditionalName.error.required")
-        .verifying(
-          maxLength(100, "correspondenceAdditionalName.error.length")
-        )
-        .verifying(
-          regexp(
-            correspondenceAdditionalNameRegex,
-            "correspondenceAdditionalName.error.invalid"
-          )
-        )
+      "value" -> boolean("removeCorrAddressAddInfo.error.required")
     )
 }

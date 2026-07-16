@@ -17,29 +17,29 @@
 package controllers
 
 import controllers.actions.*
-import forms.CorrespondenceAdditionalNameFormProvider
+import forms.CorrespondenceAdditionalInfoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSubmittedPage}
+import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceAdditionalNameView
+import views.html.CorrespondenceAdditionalInfoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceAdditionalNameController @Inject() (
+class CorrespondenceAdditionalInfoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceAdditionalNameFormProvider,
+  formProvider: CorrespondenceAdditionalInfoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceAdditionalNameView
+  view: CorrespondenceAdditionalInfoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -48,7 +48,7 @@ class CorrespondenceAdditionalNameController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(CorrespondenceAdditionalNamePage)
+      .get(CorrespondenceAdditionalInformationPage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
@@ -62,10 +62,10 @@ class CorrespondenceAdditionalNameController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAdditionalNamePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAdditionalInformationPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAdditionalNamePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CorrespondenceAdditionalInformationPage, mode, updatedAnswers))
       )
   }
 }

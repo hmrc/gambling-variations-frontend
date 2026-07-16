@@ -68,6 +68,9 @@ pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
 pageNotFound.home.link = Continue to your account
 pageNotFound.p3.after = if you need to speak to someone.
 
+#Captions
+changeRegistrationDetails.caption = Change registration details
+
 businessType.soleproprietor = Sole proprietor
 businessType.unincorporatedbody = Unincorporated body
 businessType.corporatebody = Corporate body
@@ -91,8 +94,6 @@ businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
 businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
-
-
 
 
 changeRegistrationDetails.title = Change registration details
@@ -311,7 +312,7 @@ previousRegistrationNumbers.radios = Do you want to add another registration num
 previousRegistrationNumbers.caption = Change registration details
 previousRegistrationNumbers.hint = You can only add up to 3 registration numbers
 previousRegistrationNumbers.max = You can only add up to 3 registration numbers.
-previousRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+previousRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
 previousRegistrationNumbers.yesLabel = Yes, add another number
 previousRegistrationNumbers.noLabel = No, return to check your trading details
 previousRegistrationNumbers.checkYourAnswersLabel = previousRegistrationNumbers
@@ -328,7 +329,7 @@ associatedRegistrationNumbers.radios = Do you want to add another registration n
 associatedRegistrationNumbers.caption = Change registration details
 associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
 associatedRegistrationNumbers.max = You can only add up to 3 registration numbers.
-associatedRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+associatedRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
 associatedRegistrationNumbers.yesLabel = Yes, add another number
 associatedRegistrationNumbers.noLabel = No, return to check your trading details
 associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
@@ -477,6 +478,14 @@ correspondenceAdditionalName.error.required = Enter the additional full name for
 correspondenceAdditionalName.error.invalid = The additional full name for correspondence name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
 correspondenceAdditionalName.error.length = The additional full name for correspondence must be 100 characters or less
 
+correspondenceAdditionalInfo.title = What is the additional information for the correspondence address?
+correspondenceAdditionalInfo.heading = What is the additional information for the correspondence address?
+correspondenceAdditionalInfo.checkYourAnswersLabel = Additional Information
+correspondenceAdditionalInfo.hint = For example, building name or floor number
+correspondenceAdditionalInfo.error.required = Enter additional information for the correspondence address
+correspondenceAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+correspondenceAdditionalInfo.error.length = The additional information must be 100 characters or less
+
 otherTradeClass.title = What is your business trade class? - Change registration details
 otherTradeClass.heading = What is your business trade class?
 otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
@@ -524,7 +533,6 @@ correspondenceAddrInfoScreener.heading = Do you want to include additional infor
 correspondenceAddrInfoScreener.heading.caption = Change registration details
 correspondenceAddrInfoScreener.hint = For example, building name or floor number
 correspondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
-correspondenceAddrInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
 
 correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
 correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
@@ -568,3 +576,29 @@ removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remov
 removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
 removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
 removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?
+
+faxNumberForCorrespondenceYesNo.title = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.heading = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.change.hidden = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.error.required = Select yes to add a fax number for correspondence
+
+removeCorrAddressAddInfo.title = Are you sure you want to remove the additional information for this correspondence address?
+removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
+removeCorrAddressAddInfo.paragraph = The additional information is: {0}
+removeCorrAddressAddInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
+
+removeCorrespondenceDetailsYesNo.title = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.heading = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.checkYourAnswersLabel = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.hint = If you remove your correspondence details, we will contact you through the business details you provided
+removeCorrespondenceDetailsYesNo.p1 = You must continue to the change registration details page to submit any changes.
+removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
+removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?
+
+correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+correspondenceUKAddrScreener.checkYourAnswersLabel = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.error.required = Select yes if the correspondence address has a UK postcode
+correspondenceUKAddrScreener.change.hidden = Does the correspondence address have a UK postcode?
