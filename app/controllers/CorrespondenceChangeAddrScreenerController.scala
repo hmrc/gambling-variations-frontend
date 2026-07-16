@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.*
 import forms.CorrespondenceChangeAddrScreenerFormProvider
-import models.Mode
+import models.{Address, Mode}
 import navigation.Navigator
 import pages.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -53,7 +53,9 @@ class CorrespondenceChangeAddrScreenerController @Inject()(
       case Some(value) => form.fill(value)
     }
 
-    val isUkAddress =  request.userAnswers.get(CorrespondenceAddressUkPage).isDefined
+    val isUkAddress =
+      request.userAnswers.get(CorrespondenceAddressUkPage)
+        .exists(_.country.isEmpty)
 
     Ok(view(preparedForm, mode, isUkAddress))
 
@@ -61,7 +63,9 @@ class CorrespondenceChangeAddrScreenerController @Inject()(
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-    val isUkAddress =  request.userAnswers.get(CorrespondenceAddressUkPage).isDefined
+    val isUkAddress =
+      request.userAnswers.get(CorrespondenceAddressUkPage)
+        .exists(_.country.isEmpty)
 
     form
       .bindFromRequest()
