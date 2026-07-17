@@ -17,22 +17,22 @@
 package controllers
 
 import base.SpecBase
-import forms.ChangeBusinessNameFormProvider
+import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, SoleProprietorName, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessNameChangesPage, BusinessNamePage, BusinessTypePage, GroupMemberPage}
+import pages.*
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.ChangeBusinessNameView
+import views.html.{ChangeBusinessNameView, SoleProprietorNameView}
 
 import scala.concurrent.Future
 
@@ -86,6 +86,71 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(form.fill(businessName), NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to system error when GroupMemberPage is missing on GET" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            BusinessTypePage.toString -> businessType.code,
+            BusinessNamePage.toString -> businessName,
+            "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, changeBusinessNameRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must return OK and sole proprietor view for a GET" in {
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(BusinessNameSectionPage, mgdRegNum)
+          .success
+          .value
+          .set(GroupMemberPage, false)
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Soleproprietor)
+          .success
+          .value
+          .set(
+            SoleProprietorPage,
+            SoleProprietorName(
+              "Mr",
+              "John",
+              None,
+              "Smith"
+            )
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor, NormalMode).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
       }
     }
 
@@ -146,6 +211,36 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
+      "must redirect to system error when GroupMemberPage is missing on POST" in {
+
+        val userAnswers =
+          UserAnswers(
+            userAnswersId,
+            Json.obj(
+              BusinessTypePage.toString -> businessType.code,
+              BusinessNamePage.toString -> businessName,
+              "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+            )
+          )
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, changeBusinessNameRoute)
+              .withFormUrlEncodedBody(
+                ("value", "Updated Business Name")
+              )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
       "to the next page when valid data is submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]
@@ -169,6 +264,134 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
         }
+      }
+    }
+
+    "must redirect to next page when valid sole proprietor data is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(BusinessNameSectionPage, mgdRegNum)
+          .success
+          .value
+          .set(GroupMemberPage, false)
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Soleproprietor)
+          .success
+          .value
+          .set(
+            SoleProprietorPage,
+            SoleProprietorName(
+              "Mr",
+              "John",
+              None,
+              "Smith"
+            )
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            POST,
+            routes.ChangeBusinessNameController
+              .onSubmit(BusinessType.Soleproprietor, NormalMode)
+              .url
+          )
+            .withFormUrlEncodedBody(
+              "title"      -> "Mr",
+              "firstName"  -> "John",
+              "middleName" -> "",
+              "lastName"   -> "Updated"
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must return bad request when invalid sole proprietor data is submitted" in {
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(BusinessNameSectionPage, mgdRegNum)
+          .success
+          .value
+          .set(GroupMemberPage, false)
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Soleproprietor)
+          .success
+          .value
+          .set(
+            SoleProprietorPage,
+            SoleProprietorName(
+              "Mr",
+              "John",
+              None,
+              "Smith"
+            )
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(
+            POST,
+            routes.ChangeBusinessNameController
+              .onSubmit(BusinessType.Soleproprietor, NormalMode)
+              .url
+          )
+            .withFormUrlEncodedBody(
+              "title"      -> "",
+              "firstName"  -> "",
+              "middleName" -> "",
+              "lastName"   -> ""
+            )
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[SoleProprietorNameView]
+
+        val boundForm =
+          new SoleProprietorNameFormProvider()()
+            .bind(
+              Map(
+                "title"      -> "",
+                "firstName"  -> "",
+                "middleName" -> "",
+                "lastName"   -> ""
+              )
+            )
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, NormalMode)(
+            request,
+            messages(application)
+          ).toString
       }
     }
 
