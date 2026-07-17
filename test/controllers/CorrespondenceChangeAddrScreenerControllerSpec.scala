@@ -25,6 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.CorrespondenceChangeAddrScreenerPage
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -42,11 +43,17 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
 
   lazy val CorrespondenceChangeAddrScreenerRoute = routes.CorrespondenceChangeAddrScreenerController.onPageLoad(NormalMode).url
 
+  val noAnswers =
+    UserAnswers(
+      userAnswersId,
+      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+    )
+
   "CorrespondenceChangeAddrScreener Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, CorrespondenceChangeAddrScreenerRoute)
@@ -56,13 +63,20 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
         val view = application.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, false)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(CorrespondenceChangeAddrScreenerPage, true).success.value
+      val data = Json.obj(
+        "correspondenceDetailsSection" -> Json.obj(
+          "mgdRegNum" -> userAnswersId,
+          CorrespondenceChangeAddrScreenerPage.toString -> true
+        )
+      )
+
+      val userAnswers = UserAnswers(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,7 +88,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, false)(request, messages(application)).toString
       }
     }
 
@@ -85,7 +99,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -106,7 +120,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request =
@@ -120,13 +134,13 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, false)(request, messages(application)).toString
       }
     }
 
     "must return OK and the correct view for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, CorrespondenceChangeAddrScreenerRoute)
@@ -136,7 +150,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
         val view = application.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, false)(request, messages(application)).toString
       }
     }
 
@@ -147,7 +161,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = None)
+        applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)

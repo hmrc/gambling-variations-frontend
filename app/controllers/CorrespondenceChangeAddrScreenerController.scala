@@ -36,7 +36,7 @@ class CorrespondenceChangeAddrScreenerController @Inject()(
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
   formProvider: CorrespondenceChangeAddrScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: CorrespondenceChangeAddrScreenerView
