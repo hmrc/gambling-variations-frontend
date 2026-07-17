@@ -31,41 +31,63 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CorrespondenceNonUKAddressController @Inject()(
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceNonUKAddressFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceNonUKAddressView
-)(implicit ec: ExecutionContext)
+                                                      override val messagesApi: MessagesApi,
+                                                      sessionRepository: SessionRepository,
+                                                      navigator: Navigator,
+                                                      authorise: AuthorisedAction,
+                                                      getData: DataRetrievalAction,
+                                                      requireData: CorrespondenceDetailsDataRequiredAction,
+                                                      formProvider: CorrespondenceNonUKAddressFormProvider,
+                                                      val controllerComponents: MessagesControllerComponents,
+                                                      view: CorrespondenceNonUKAddressView
+                                                    )(implicit ec: ExecutionContext)
   extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  private val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(CorrespondenceAddressNonUkPage)
-      .fold(form)(form.fill)
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-    Ok(view(preparedForm, mode))
-  }
+      val preparedForm = request.userAnswers
+        .get(CorrespondenceAddressNonUkPage)
+        .fold(form)(form.fill)
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+      Ok(view(preparedForm, mode))
+    }
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddressNonUkPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAddressNonUkPage, mode, updatedAnswers))
-      )
-  }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(view(formWithErrors, mode))
+            ),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers.set(
+                  CorrespondenceAddressNonUkPage,
+                  value
+                )
+              )
+              updatedAnswers <- Future.fromTry(
+                updatedAnswers.set(
+                  CorrespondenceDetailsSubmittedPage,
+                  true
+                )
+              )
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(
+              navigator.nextPage(
+                CorrespondenceAddressNonUkPage,
+                mode,
+                updatedAnswers
+              )
+            )
+        )
+    }
 }

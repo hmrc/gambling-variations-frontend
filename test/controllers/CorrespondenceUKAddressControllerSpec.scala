@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.CorrespondenceUKAddressFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Address, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CorrespondenceUKAddressPage
+import pages.CorrespondenceAddressUkPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -36,18 +36,41 @@ import scala.concurrent.Future
 
 class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new CorrespondenceUKAddressFormProvider()
   val form = formProvider()
 
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+  val validAddress: Address =
+    Address(
+      address1 = "10 Downing Street",
+      address2 = Some("Westminster"),
+      address3 = Some("London"),
+      address4 = Some("Greater London"),
+      postcode = Some("SW1A 2AA"),
+      country = Some("GB")
     )
 
-  lazy val nameRoute =
+  val validFormData: Map[String, String] =
+    Map(
+      "addressLine1" -> "10 Downing Street",
+      "addressLine2" -> "Westminster",
+      "townOrCity"   -> "London",
+      "county"       -> "Greater London",
+      "postcode"     -> "SW1A 2AA"
+    )
+
+  val noAnswers: UserAnswers =
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        "correspondenceDetailsSection" -> Json.obj(
+          "mgdRegNum" -> userAnswersId
+        )
+      )
+    )
+
+  lazy val nameRoute: String =
     routes.CorrespondenceUKAddressController.onPageLoad(NormalMode).url
 
   "CorrespondenceUKAddress Controller" - {
@@ -71,12 +94,8 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val data = Json.obj(
-        "correspondenceDetailsSection"  -> Json.obj("mgdRegNum" -> userAnswersId),
-        CorrespondenceUKAddressPage.toString -> "validName"
-      )
-
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers =
+        noAnswers.set(CorrespondenceAddressUkPage, validAddress).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,7 +108,7 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill("validName"), NormalMode)(request, messages(application)).toString
+          view(form.fill(validAddress), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -112,7 +131,7 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
 
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody("correspondenceUKAddress" -> "valid name")
+            .withFormUrlEncodedBody(validFormData.toSeq*)
 
         val result = route(application, request).value
 
@@ -126,11 +145,20 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
+        val invalidFormData =
+          Map(
+            "addressLine1" -> "",
+            "addressLine2" -> "Westminster",
+            "townOrCity"   -> "London",
+            "county"       -> "Greater London",
+            "postcode"     -> "SW1A 2AA"
+          )
+
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody(("name", ""))
+            .withFormUrlEncodedBody(invalidFormData.toSeq*)
 
-        val boundForm = form.bind(Map("name" -> ""))
+        val boundForm = form.bind(invalidFormData)
 
         val view = application.injector.instanceOf[CorrespondenceUKAddressView]
 
@@ -164,7 +192,7 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody(("name", "validName"))
+            .withFormUrlEncodedBody(validFormData.toSeq*)
 
         val result = route(application, request).value
 

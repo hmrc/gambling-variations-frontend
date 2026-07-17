@@ -16,40 +16,81 @@
 
 @import viewmodels.InputWidth._
 @import viewmodels.LabelSize
-@import views.html.components.Caption
+@import views.html.components._
+@import viewmodels._
 
 @this(
-        layout: templates.Layout,
-        formHelper: FormWithCSRF,
-        govukErrorSummary: GovukErrorSummary,
-        govukInput: GovukInput,
-        govukButton: GovukButton,
-        caption: Caption
+layout: templates.Layout,
+formHelper: FormWithCSRF,
+govukErrorSummary: GovukErrorSummary,
+govukInput: GovukInput,
+h1: H1,
+govukButton: GovukButton,
+caption: Caption
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("correspondenceUKAddress.title"), Some("changeRegistrationDetails.title"))) {
 
-    @formHelper(action = routes.CorrespondenceUKAddressController.onSubmit(mode), Symbol("autoComplete") -> "on") {
+@formHelper(action = routes.CorrespondenceUKAddressController.onSubmit(mode), Symbol("autoComplete") -> "on") {
 
-        @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form))
-        }
-
-        @caption(messages("changeRegistrationDetails.title"))
-
-        @govukInput(
-            InputViewModel(
-                field = form("correspondenceUKAddress"),
-                label = LabelViewModel(messages("correspondenceUKAddress.heading")).asPageHeading(LabelSize.Large)
-            )
-            .withWidth(Fixed20)
-            .withAttribute("autocomplete" -> "name")
-            )
-
-        @govukButton(
-            ButtonViewModel(messages("site.continue"))
-        )
-    }
+@if(form.errors.nonEmpty) {
+@govukErrorSummary(ErrorSummaryViewModel(form))
 }
+
+@caption(messages("changeRegistrationDetails.title"))
+
+@h1("correspondenceUKAddress.heading", classes = "govuk-heading-l")
+
+@govukInput(
+InputViewModel(
+field = form("addressLine1"),
+label = LabelViewModel(messages("correspondenceUKAddress.addressLine1"))
+)
+.withWidth(Fixed20)
+.withAttribute("autocomplete" -> "address-line1")
+)
+
+@govukInput(
+InputViewModel(
+field = form("addressLine2"),
+label = LabelViewModel(messages("correspondenceUKAddress.addressLine2"))
+)
+.withWidth(Fixed20)
+.withAttribute("autocomplete" -> "address-line2")
+)
+
+@govukInput(
+InputViewModel(
+field = form("townOrCity"),
+label = LabelViewModel(messages("correspondenceUKAddress.townOrCity"))
+)
+.withWidth(Fixed10)
+.withAttribute("autocomplete" -> "address-level2")
+)
+
+@govukInput(
+InputViewModel(
+field = form("county"),
+label = LabelViewModel(messages("correspondenceUKAddress.County"))
+)
+.withWidth(Fixed10)
+.withAttribute("autocomplete" -> "address-level1")
+)
+
+@govukInput(
+InputViewModel(
+field = form("postcode"),
+label = LabelViewModel(messages("correspondenceUKAddress.Postcode"))
+)
+.withWidth(Fixed10)
+.withAttribute("autocomplete" -> "postal-code")
+)
+
+@govukButton(
+ButtonViewModel(messages("site.continue"))
+)
+}
+}
+

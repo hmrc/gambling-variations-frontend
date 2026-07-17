@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceAddressUkPage}
+import pages.{CorrespondenceAddressUkPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -31,41 +31,46 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CorrespondenceUKAddressController @Inject()(
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceUKAddressFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceUKAddressView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+                                                   override val messagesApi: MessagesApi,
+                                                   sessionRepository: SessionRepository,
+                                                   navigator: Navigator,
+                                                   authorise: AuthorisedAction,
+                                                   getData: DataRetrievalAction,
+                                                   requireData: CorrespondenceDetailsDataRequiredAction,
+                                                   formProvider: CorrespondenceUKAddressFormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: CorrespondenceUKAddressView
+                                                 )(implicit ec: ExecutionContext)
+  extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  private val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(CorrespondenceAddressUkPage)
-      .fold(form)(form.fill)
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-    Ok(view(preparedForm, mode))
-  }
+      val preparedForm = request.userAnswers
+        .get(CorrespondenceAddressUkPage)
+        .fold(form)(form.fill)
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+      Ok(view(preparedForm, mode))
+    }
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddressUkPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAddressUkPage, mode, updatedAnswers))
-      )
-  }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(BadRequest(view(formWithErrors, mode))),
+
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddressUkPage, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(CorrespondenceAddressUkPage, mode, updatedAnswers))
+        )
+    }
 }

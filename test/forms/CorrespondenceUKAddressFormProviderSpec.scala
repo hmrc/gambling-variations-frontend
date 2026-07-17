@@ -17,71 +17,308 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.Gen
+import models.Address
 import play.api.data.FormError
 
 class CorrespondenceUKAddressFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "correspondenceUKAddress.error.required"
-  private val lengthKey = "correspondenceUKAddress.error.length"
-  private val invalidKey = "correspondenceUKAddress.error.invalid"
-
-  private val maxLength = 100
-
   private val form = new CorrespondenceUKAddressFormProvider()()
 
-  private val correspondenceUKAddressRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+  private val addressRegex =
+    """^[A-Za-z0-9&'.,/\-\s]+$"""
 
-  ".correspondenceUKAddress" - {
+  private val postcodeCharactersRegex =
+    """^[A-Za-z0-9\s]+$"""
 
-    val fieldName = "correspondenceUKAddress"
+  private val ukPostcodeRegex =
+    """(?i)^([A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2})$"""
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      Gen.oneOf(
-        "foobar",
-        "validname",
-        "jonjones"
-      )
+  private val validData: Map[String, String] =
+    Map(
+      "addressLine1" -> "10 Downing Street",
+      "addressLine2" -> "Westminster",
+      "townOrCity"   -> "London",
+      "county"       -> "Greater London",
+      "postcode"     -> "SW1A 2AA"
     )
 
-    "bind strings longer than maximum length with length error" in {
+  private def bindWith(fieldName: String, value: String) =
+    form.bind(validData + (fieldName -> value))
 
-      val validLongString = "A" * (maxLength + 1)
+  ".bind" - {
 
-      val result = form.bind(
-        Map(fieldName -> validLongString)
+    "must bind valid data" in {
+
+      val result = form.bind(validData)
+
+      result.errors mustBe empty
+      result.value.value mustEqual Address(
+        address1 = "10 Downing Street",
+        address2 = Some("Westminster"),
+        address3 = Some("London"),
+        address4 = Some("Greater London"),
+        postcode = Some("SW1A 2AA"),
+        country = Some("GB")
       )
-
-      result.errors must contain only
-        FormError(fieldName, lengthKey, Seq(maxLength))
     }
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    "must bind when county is empty because county is optional" in {
 
-    "not bind invalid characters" in {
+      val result = form.bind(validData + ("county" -> ""))
+
+      result.errors mustBe empty
+      result.value.value mustEqual Address(
+        address1 = "10 Downing Street",
+        address2 = Some("Westminster"),
+        address3 = Some("London"),
+        address4 = None,
+        postcode = Some("SW1A 2AA"),
+        country = Some("GB")
+      )
+    }
+  }
+
+  ".addressLine1" - {
+
+    val fieldName = "addressLine1"
+    val requiredKey = "correspondenceUKAddress.addressLine1.error.required"
+    val lengthKey = "correspondenceUKAddress.addressLine1.error.length"
+    val invalidKey = "correspondenceUKAddress.addressLine1.error.invalid"
+    val maxLength = 27
+
+    "must not bind when empty" in {
+
+      val result = bindWith(fieldName, "")
+
+      result.errors must contain only FormError(fieldName, requiredKey)
+    }
+
+    "must not bind when longer than maximum length" in {
+
+      val result = bindWith(fieldName, "A" * (maxLength + 1))
+
+      result.errors must contain only FormError(fieldName, lengthKey, Seq(maxLength))
+    }
+
+    "must not bind invalid characters" in {
 
       val invalidValues = Seq(
         "Test@",
         "Hello#World",
-        "invalid!",
-        "name$123"
+        "Invalid!",
+        "Address$123"
       )
 
       invalidValues.foreach { value =>
-
-        val result = form.bind(
-          Map(fieldName -> value)
-        )
+        val result = bindWith(fieldName, value)
 
         result.errors must contain(
-          FormError(fieldName, invalidKey, Seq(correspondenceUKAddressRegex))
+          FormError(fieldName, invalidKey, Seq(addressRegex))
         )
+      }
+    }
+  }
+
+  ".addressLine2" - {
+
+    val fieldName = "addressLine2"
+    val requiredKey = "correspondenceUKAddress.addressLine2.error.required"
+    val lengthKey = "correspondenceUKAddress.addressLine2.error.length"
+    val invalidKey = "correspondenceUKAddress.addressLine2.error.invalid"
+    val maxLength = 27
+
+    "must not bind when empty" in {
+
+      val result = bindWith(fieldName, "")
+
+      result.errors must contain only FormError(fieldName, requiredKey)
+    }
+
+    "must not bind when longer than maximum length" in {
+
+      val result = bindWith(fieldName, "A" * (maxLength + 1))
+
+      result.errors must contain only FormError(fieldName, lengthKey, Seq(maxLength))
+    }
+
+    "must not bind invalid characters" in {
+
+      val invalidValues = Seq(
+        "Test@",
+        "Hello#World",
+        "Invalid!",
+        "Address$123"
+      )
+
+      invalidValues.foreach { value =>
+        val result = bindWith(fieldName, value)
+
+        result.errors must contain(
+          FormError(fieldName, invalidKey, Seq(addressRegex))
+        )
+      }
+    }
+  }
+
+  ".townOrCity" - {
+
+    val fieldName = "townOrCity"
+    val requiredKey = "correspondenceUKAddress.townOrCity.error.required"
+    val lengthKey = "correspondenceUKAddress.townOrCity.error.length"
+    val invalidKey = "correspondenceUKAddress.townOrCity.error.invalid"
+    val maxLength = 27
+
+    "must not bind when empty" in {
+
+      val result = bindWith(fieldName, "")
+
+      result.errors must contain only FormError(fieldName, requiredKey)
+    }
+
+    "must not bind when longer than maximum length" in {
+
+      val result = bindWith(fieldName, "A" * (maxLength + 1))
+
+      result.errors must contain only FormError(fieldName, lengthKey, Seq(maxLength))
+    }
+
+    "must not bind invalid characters" in {
+
+      val invalidValues = Seq(
+        "Town@",
+        "City#",
+        "Invalid!",
+        "Town$123"
+      )
+
+      invalidValues.foreach { value =>
+        val result = bindWith(fieldName, value)
+
+        result.errors must contain(
+          FormError(fieldName, invalidKey, Seq(addressRegex))
+        )
+      }
+    }
+  }
+
+  ".county" - {
+
+    val fieldName = "county"
+    val lengthKey = "correspondenceUKAddress.County.error.length"
+    val invalidKey = "correspondenceUKAddress.County.error.invalid"
+    val maxLength = 18
+
+    "must bind when empty" in {
+
+      val result = bindWith(fieldName, "")
+
+      result.errors mustBe empty
+    }
+
+    "must not bind when longer than maximum length" in {
+
+      val result = bindWith(fieldName, "A" * (maxLength + 1))
+
+      result.errors must contain(
+        FormError(fieldName, lengthKey)
+      )
+    }
+
+    "must not bind invalid characters" in {
+
+      val invalidValues = Seq(
+        "County@",
+        "County#",
+        "Invalid!",
+        "County$123"
+      )
+
+      invalidValues.foreach { value =>
+        val result = bindWith(fieldName, value)
+
+        result.errors must contain(
+          FormError(fieldName, invalidKey)
+        )
+      }
+    }
+  }
+
+  ".postcode" - {
+
+    val fieldName = "postcode"
+    val requiredKey = "correspondenceUKAddress.Postcode.error.required"
+    val invalidKey = "correspondenceUKAddress.Postcode.error.invalid"
+    val formatKey = "correspondenceUKAddress.Postcode.error.format"
+    val lengthKey = "correspondenceUKAddress.Postcode.error.length"
+    val maxLength = 8
+
+    "must not bind when empty" in {
+
+      val result = bindWith(fieldName, "")
+
+      result.errors must contain only FormError(fieldName, requiredKey)
+    }
+
+    "must not bind when longer than maximum length" in {
+
+      val result = bindWith(fieldName, "SW1A 22AA")
+
+      result.errors must contain(
+        FormError(fieldName, lengthKey, Seq(maxLength))
+      )
+    }
+
+    "must not bind invalid characters" in {
+
+      val invalidValues = Seq(
+        "SW1A-2AA",
+        "SW1A@2AA",
+        "SW1A#2AA",
+        "SW1A/2AA"
+      )
+
+      invalidValues.foreach { value =>
+        val result = bindWith(fieldName, value)
+
+        result.errors must contain(
+          FormError(fieldName, invalidKey, Seq(postcodeCharactersRegex))
+        )
+      }
+    }
+
+    "must not bind when postcode has valid characters but invalid UK format" in {
+
+      val invalidValues = Seq(
+        "ABC 123",
+        "12345678",
+        "ABCDEFGH",
+        "A1 1AAA"
+      )
+
+      invalidValues.foreach { value =>
+        val result = bindWith(fieldName, value)
+
+        result.errors must contain(
+          FormError(fieldName, formatKey, Seq(ukPostcodeRegex))
+        )
+      }
+    }
+
+    "must bind valid UK postcodes" in {
+
+      val validPostcodes = Seq(
+        "E1 6AN",
+        "SW1A 2AA",
+        "M1 1AE",
+        "B33 8TH",
+        "CR2 6XH",
+        "DN55 1PT"
+      )
+
+      validPostcodes.foreach { value =>
+        val result = bindWith(fieldName, value)
+
+        result.errors mustBe empty
       }
     }
   }
