@@ -21,7 +21,7 @@ import controllers.actions.*
 import utils.FlagsUtil.checkFlag
 
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
@@ -109,7 +109,7 @@ class CheckTradingDetailsController @Inject() (
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
       def stringMissing(opt: Option[String]): Boolean =
-        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
+        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase(Messages("site.notProvided")))
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
         case Some(tc: BusinessTradeClass) => false
