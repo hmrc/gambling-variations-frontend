@@ -590,3 +590,10 @@ correspondenceChangeAddrScreener.change.hidden = How do you want to change this 
 correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
 correspondenceChangeAddrScreener.no = Edit current correspondence address
+
+correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+correspondenceUKAddrScreener.checkYourAnswersLabel = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.error.required = Select yes if the correspondence address has a UK postcode
+correspondenceUKAddrScreener.change.hidden = Does the correspondence address have a UK postcode?

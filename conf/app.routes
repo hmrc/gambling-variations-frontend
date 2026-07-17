@@ -233,3 +233,8 @@ GET        /change-registration-details/correspondence-details/change-address   
 POST       /change-registration-details/correspondence-details/change-address                     controllers.CorrespondenceChangeAddrScreenerController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/correspondence-details/change-change-address            controllers.CorrespondenceChangeAddrScreenerController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/correspondence-details/change-change-address               controllers.CorrespondenceChangeAddrScreenerController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/correspondence-details/uk-or-non-uk-address                      controllers.CorrespondenceUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/correspondence-details/uk-or-non-uk-address                       controllers.CorrespondenceUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/correspondence-details/change-uk-or-non-uk-address              controllers.CorrespondenceUKAddrScreenerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/correspondence-details/change-uk-or-non-uk-address                controllers.CorrespondenceUKAddrScreenerController.onSubmit(mode: Mode = CheckMode)
