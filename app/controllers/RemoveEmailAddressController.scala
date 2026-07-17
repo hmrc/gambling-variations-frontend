@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveEmailAddressFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage, RemoveEmailAddressPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage, GroupMemberPage, RemoveEmailAddressPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,42 +49,56 @@ class RemoveEmailAddressController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
+      request.userAnswers.get(GroupMemberPage) match {
+        case Some(true) =>
+          Redirect(routes.AccessDeniedController.onPageLoad())
+        case Some(false) =>
+          request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
 
-      request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
+            val preparedForm = request.userAnswers.get(RemoveEmailAddressPage) match {
+              case Some(value) => form.fill(value)
+              case None        => form
+            }
 
-        val preparedForm = request.userAnswers.get(RemoveEmailAddressPage) match {
-          case Some(value) => form.fill(value)
-          case None        => form
-        }
+            Ok(view(preparedForm, mode, emailAddress))
 
-        Ok(view(preparedForm, mode, emailAddress))
+          } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
 
-      } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
+        case None =>
+          Redirect(routes.SystemErrorController.onPageLoad())
+      }
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.get(GroupMemberPage) match {
+        case Some(true) =>
+          Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
+        case Some(false) =>
+          request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
 
-      request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
-
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, emailAddress))),
-            value =>
-              for {
-                updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveEmailAddressPage, value))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(
-                navigator.nextPage(RemoveEmailAddressPage, mode, updatedAnswers)
+            form
+              .bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, emailAddress))),
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                    updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveEmailAddressPage, value))
+                    updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(
+                    navigator.nextPage(RemoveEmailAddressPage, mode, updatedAnswers)
+                  )
               )
+
+          } getOrElse Future.successful(
+            Redirect(routes.SystemErrorController.onPageLoad())
           )
 
-      } getOrElse Future.successful(
-        Redirect(routes.SystemErrorController.onPageLoad())
-      )
+        case None =>
+          Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+      }
     }
 
   private def updateUserAnswers(

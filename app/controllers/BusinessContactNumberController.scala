@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, ContactDetailsChangesPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, ContactDetailsChangesPage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,48 +49,70 @@ class BusinessContactNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
+      request.userAnswers.get(GroupMemberPage) match {
+        case Some(true) =>
+          Redirect(routes.AccessDeniedController.onPageLoad())
 
-      val preparedForm = request.userAnswers
-        .get(BusinessContactNumberPage)
-        .map(form.fill)
-        .getOrElse(form)
+        case Some(false) =>
+          val preparedForm = request.userAnswers
+            .get(BusinessContactNumberPage)
+            .map(form.fill)
+            .getOrElse(form)
 
-      Ok(view(preparedForm, mode))
+          Ok(view(preparedForm, mode))
+
+        case None =>
+          Redirect(routes.SystemErrorController.onPageLoad())
+      }
+
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-
-      val boundForm = form.bindFromRequest()
-
-      val validatedForm =
-        if (
-          boundForm("phoneNumber").value.forall(_.trim.isEmpty) &&
-          boundForm("mobileNumber").value.forall(_.trim.isEmpty)
-        ) {
-          boundForm.withError(
-            "phoneNumber",
-            "businessContactNumber.error.phoneNumber.required"
+      request.userAnswers.get(GroupMemberPage) match {
+        case Some(true) =>
+          Future.successful(
+            Redirect(routes.AccessDeniedController.onPageLoad())
           )
-        } else {
-          boundForm
-        }
 
-      validatedForm.fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, BusinessContactNumberPage, ContactDetailsChangesPage)
-          for {
-            updatedAnswers <- Future.fromTry(
-                                request.userAnswers.set(BusinessContactNumberPage, value)
-                              )
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(
-            navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
+        case Some(false) =>
+          val boundForm = form.bindFromRequest()
+
+          val validatedForm =
+            if (
+              boundForm("phoneNumber").value.forall(_.trim.isEmpty) &&
+              boundForm("mobileNumber").value.forall(_.trim.isEmpty)
+            ) {
+              boundForm.withError(
+                "phoneNumber",
+                "businessContactNumber.error.phoneNumber.required"
+              )
+            } else {
+              boundForm
+            }
+
+          validatedForm.fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+            value =>
+              val isChanged: Boolean =
+                checkIfChanged(value, request.userAnswers, BusinessContactNumberPage, ContactDetailsChangesPage)
+              for {
+                updatedAnswers <- Future.fromTry(
+                                    request.userAnswers.set(BusinessContactNumberPage, value)
+                                  )
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(
+                navigator.nextPage(BusinessContactNumberPage, mode, updatedAnswers)
+              )
           )
-      )
+
+        case None =>
+          Future.successful(
+            Redirect(routes.SystemErrorController.onPageLoad())
+          )
+      }
+
     }
 }

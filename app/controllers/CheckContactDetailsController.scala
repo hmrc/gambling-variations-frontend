@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage}
 
 import javax.inject.Inject
 import utils.FlagsUtil.checkFlag
@@ -37,18 +37,25 @@ class CheckContactDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val ua = request.userAnswers
+    request.userAnswers.get(GroupMemberPage) match {
+      case Some(true) =>
+        Redirect(routes.AccessDeniedController.onPageLoad())
+      case Some(false) =>
+        val ua = request.userAnswers
 
-    val showChangeMessage: Boolean = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
+        val showChangeMessage: Boolean = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
 
-    Ok(
-      view(
-        ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
-        ua.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
-        ua.get(BusinessFaxNumberPage),
-        ua.get(BusinessEmailAddressPage),
-        showChangeMessage
-      )
-    )
+        Ok(
+          view(
+            ua.get(BusinessContactNumberPage).flatMap(_.phoneNumber),
+            ua.get(BusinessContactNumberPage).flatMap(_.mobilePhoneNumber),
+            ua.get(BusinessFaxNumberPage),
+            ua.get(BusinessEmailAddressPage),
+            showChangeMessage
+          )
+        )
+      case None =>
+        Redirect(routes.SystemErrorController.onPageLoad())
+    }
   }
 }

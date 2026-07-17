@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessFaxNumberPage, ContactDetailsChangesPage}
+import pages.{BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -41,8 +41,13 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new FaxNumberFormProvider()
   val form = formProvider("faxNumber")
-  val noAnswers = UserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)))
-
+  val noAnswers = UserAnswers(
+    userAnswersId,
+    Json.obj(
+      GroupMemberPage.toString        -> false,
+      "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+    )
+  )
   lazy val faxNumberRoute = routes.FaxNumberController.onPageLoad(NormalMode).url
 
   "FaxNumber Controller" - {
@@ -63,9 +68,31 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to access denied when group member is true on GET" in {
+
+      val data = Json.obj(
+        GroupMemberPage.toString        -> true,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+        val request = FakeRequest(GET, faxNumberRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
+        GroupMemberPage.toString        -> false,
         "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId),
         BusinessFaxNumberPage.toString  -> "07700900999"
       )
@@ -137,6 +164,29 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(BusinessFaxNumberPage).value mustEqual "01632 960 001"
+      }
+    }
+
+    "must redirect to access denied when group member is true on POST" in {
+
+      val data = Json.obj(
+        GroupMemberPage.toString        -> true,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, faxNumberRoute)
+            .withFormUrlEncodedBody(("faxNumber", "01632 960 001"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
       }
     }
 

@@ -21,7 +21,7 @@ import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
-import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,28 +48,51 @@ class FaxNumberController @Inject() (
   val form = formProvider("faxNumber")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(BusinessFaxNumberPage)
-      .fold(form)(form.fill)
 
-    Ok(view(preparedForm, mode))
+    request.userAnswers.get(GroupMemberPage) match {
+      case Some(true) =>
+        Redirect(routes.AccessDeniedController.onPageLoad())
+      case Some(false) =>
+        val preparedForm = request.userAnswers
+          .get(BusinessFaxNumberPage)
+          .fold(form)(form.fill)
+
+        Ok(view(preparedForm, mode))
+
+      case None =>
+        Redirect(routes.SystemErrorController.onPageLoad())
+    }
+
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, BusinessFaxNumberPage, ContactDetailsChangesPage)
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessFaxNumberPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessFaxNumberPage, mode, updatedAnswers))
-      )
+    request.userAnswers.get(GroupMemberPage) match {
+      case Some(true) =>
+        Future.successful(
+          Redirect(routes.AccessDeniedController.onPageLoad())
+        )
+      case Some(false) =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+            value =>
+              val isChanged: Boolean =
+                checkIfChanged(value, request.userAnswers, BusinessFaxNumberPage, ContactDetailsChangesPage)
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessFaxNumberPage, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(BusinessFaxNumberPage, mode, updatedAnswers))
+          )
+
+      case None =>
+        Future.successful(
+          Redirect(routes.SystemErrorController.onPageLoad())
+        )
+    }
+
   }
 }
