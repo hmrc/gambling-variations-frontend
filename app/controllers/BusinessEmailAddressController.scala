@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,28 +48,41 @@ class BusinessEmailAddressController @Inject() (
   val form = formProvider("emailAddress")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(BusinessEmailAddressPage)
-      .fold(form)(form.fill)
+    request.userAnswers.get(GroupMemberPage) match {
+      case Some(true) =>
+        Redirect(routes.AccessDeniedController.onPageLoad())
+      case Some(false) =>
+        val preparedForm = request.userAnswers
+          .get(BusinessEmailAddressPage)
+          .fold(form)(form.fill)
 
-    Ok(view(preparedForm, mode))
+        Ok(view(preparedForm, mode))
+      case None =>
+        Redirect(routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage, ContactDetailsChangesPage)
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
-      )
+    request.userAnswers.get(GroupMemberPage) match {
+      case Some(true) =>
+        Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
+      case Some(false) =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+            value =>
+              val isChanged: Boolean =
+                checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage, ContactDetailsChangesPage)
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
+          )
+      case None =>
+        Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+    }
   }
 }
