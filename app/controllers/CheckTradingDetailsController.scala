@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CheckTradingDetailsController @Inject() (
   override val messagesApi: MessagesApi,
-  authorised: AuthorisedAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
   gamblingConnector: GamblingConnector,
@@ -44,7 +44,7 @@ class CheckTradingDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
       val showChangeMessage: Boolean = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsChangeFlagPage)
 
@@ -76,7 +76,7 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onPreviousRegNumbers: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
       val previousRegsExist =
         CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).previousMgd.rows.nonEmpty
@@ -89,7 +89,7 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onAssociatedRegNumbers: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
       val associatedRegsExist =
         CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).associatedMgd.rows.nonEmpty
@@ -102,7 +102,7 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onContinue: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
       val seasonalOpt = request.userAnswers.get(IsSeasonalBusinessPage)

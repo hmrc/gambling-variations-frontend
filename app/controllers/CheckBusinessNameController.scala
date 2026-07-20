@@ -30,14 +30,14 @@ import javax.inject.Inject
 class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
   val controllerComponents: MessagesControllerComponents,
-  authorised: AuthorisedAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessNameDataRequiredAction,
   view: BusinessNameView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val result =
       request.userAnswers
