@@ -30,27 +30,44 @@ import javax.inject.Inject
 class CheckBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
   val controllerComponents: MessagesControllerComponents,
-  authorised: AuthorisedAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessNameDataRequiredAction,
   view: BusinessNameView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
-    val showChangeMessage: Boolean = checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
-    val businessNameView: Option[Result] = for {
-      businessName <- request.userAnswers.get(BusinessNamePage)
-      businessType <- request.userAnswers.get(BusinessTypePage)
-    } yield {
-      Ok(view(businessType, businessName, request.userAnswers.get(TradingNamePage), showChangeMessage))
-    }
+  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val soleProprietorView: Option[Result] = request.userAnswers.get(SoleProprietorPage).map { soleProprietor =>
-      Ok(view(BusinessType.Soleproprietor, soleProprietor.fullName, request.userAnswers.get(TradingNamePage), showChangeMessage))
-    }
+    val result =
+      request.userAnswers
+        .get(GroupMemberPage)
+        .map {
+          case true =>
+            Redirect(routes.AccessDeniedController.onPageLoad())
 
-    businessNameView orElse soleProprietorView getOrElse Redirect(routes.SystemErrorController.onPageLoad())
+          case false =>
+            val showChangeMessage: Boolean =
+              checkFlag(request.userAnswers, BusinessNameChangesPage, BusinessNameSubmittedPage)
 
+            val businessNameView: Option[Result] = for {
+              businessName <- request.userAnswers.get(BusinessNamePage)
+              businessType <- request.userAnswers.get(BusinessTypePage)
+            } yield {
+              Ok(view(businessType, businessName, request.userAnswers.get(TradingNamePage), showChangeMessage))
+            }
+
+            val soleProprietorView: Option[Result] =
+              request.userAnswers.get(SoleProprietorPage).map { soleProprietor =>
+                Ok(view(BusinessType.Soleproprietor, soleProprietor.fullName, request.userAnswers.get(TradingNamePage), showChangeMessage))
+              }
+
+            businessNameView
+              .orElse(soleProprietorView)
+              .getOrElse(Redirect(routes.SystemErrorController.onPageLoad()))
+        }
+        .getOrElse(Redirect(routes.SystemErrorController.onPageLoad()))
+
+    result
   }
 }

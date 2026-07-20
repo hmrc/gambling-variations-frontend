@@ -16,6 +16,7 @@
 
 @import views.html.components.*
 @import viewmodels.CheckCorrespondenceDetailsViewModel
+@import models.NormalMode
 
 @this(
         layout: templates.Layout,
@@ -49,6 +50,6 @@
         )
     </p>
 
-    @link(messages("checkCorrespondenceDetails.message.remove"), "#")
+    @link(messages("checkCorrespondenceDetails.message.remove"), routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad(NormalMode).url)
 
 }

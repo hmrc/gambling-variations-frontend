@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveTradeNameFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, RemoveTradeNamePage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, GroupMemberPage, RemoveTradeNamePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -48,27 +48,54 @@ class RemoveTradeNameController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.get(TradingNamePage) map { tradingName =>
-      Ok(view(form, mode, tradingName))
-    } getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
+
+    request.userAnswers.get(GroupMemberPage) match {
+
+      case Some(true) =>
+        Redirect(routes.AccessDeniedController.onPageLoad())
+
+      case Some(false) =>
+        request.userAnswers.get(TradingNamePage) map { tradingName =>
+          Ok(view(form, mode, tradingName))
+        } getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
+
+      case None =>
+        Redirect(routes.SystemErrorController.onPageLoad())
+    }
+
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) async { implicit request =>
 
-    request.userAnswers.get(TradingNamePage) map { tradingName =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
+    request.userAnswers.get(GroupMemberPage) match {
+
+      case Some(true) =>
+        Future.successful(
+          Redirect(routes.AccessDeniedController.onPageLoad())
         )
-    } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+
+      case Some(false) =>
+        request.userAnswers.get(TradingNamePage) map { tradingName =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
+            )
+        } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+
+      case None =>
+        Future.successful(
+          Redirect(routes.SystemErrorController.onPageLoad())
+        )
+    }
+
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
