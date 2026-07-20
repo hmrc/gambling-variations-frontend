@@ -75,32 +75,6 @@ class CheckTradingDetailsController @Inject() (
       }
     }
 
-  def onPreviousRegNumbers: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
-
-      val previousRegsExist =
-        CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).previousMgd.rows.nonEmpty
-
-      if (previousRegsExist) {
-        Redirect(routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode))
-      } else {
-        Redirect(routes.PreviousRegistrationNumberController.onPageLoad(NormalMode))
-      }
-    }
-
-  def onAssociatedRegNumbers: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
-
-      val associatedRegsExist =
-        CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).associatedMgd.rows.nonEmpty
-
-      if (associatedRegsExist) {
-        Redirect(routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode))
-      } else {
-        Redirect(routes.AssociatedRegNumberController.onPageLoad(NormalMode))
-      }
-    }
-
   def onContinue: Action[AnyContent] =
     (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
