@@ -72,6 +72,172 @@ class NavigatorSpec extends SpecBase {
             routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode)
         }
 
+        "must go from AddAssociatedRegistrationNumberPage to AssociatedRegNumber page when yes is selected" in {
+
+          val answers =
+            UserAnswers("id")
+              .set(AddAssociatedRegistrationNumberPage, true)
+              .success
+              .value
+
+          navigator.nextPage(AddAssociatedRegistrationNumberPage, NormalMode, answers) mustBe
+            routes.AssociatedRegNumberController.onPageLoad(NormalMode)
+        }
+
+        "must go from BusinessNamePage to CheckBusinessNameController" in {
+
+          navigator.nextPage(BusinessNamePage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckBusinessNameController.onPageLoad()
+        }
+
+        "must go from RemoveEmailAddressPage to CheckContactDetailsController" in {
+
+          navigator.nextPage(RemoveEmailAddressPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckContactDetailsController.onPageLoad()
+        }
+
+        "must go from BusinessTradeClassPage to CheckTradingDetailsController" in {
+
+          navigator.nextPage(BusinessTradeClassPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckTradingDetailsController.onPageLoad()
+        }
+
+        "must go from OtherTradeClassPage to CheckTradingDetailsController" in {
+
+          navigator.nextPage(OtherTradeClassPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckTradingDetailsController.onPageLoad()
+        }
+
+        "must go from RemovePreviousRegNumberPage to PreviousRegistrationNumbersListController" in {
+
+          navigator.nextPage(RemovePreviousRegNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode)
+        }
+
+        "must go from AssociatedRegistrationNumbersPage to AssociatedRegistrationNumbersListController" in {
+
+          navigator.nextPage(AssociatedRegistrationNumbersPage, NormalMode, UserAnswers("id")) mustBe
+            routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
+        }
+
+        "must go from RemoveCorrespondenceFaxNumberPage to CheckCorrespondenceDetailsController" in {
+
+          navigator.nextPage(RemoveCorrespondenceFaxNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
+        "must go from CorrespondenceNamePage to CheckCorrespondenceDetailsController" in {
+
+          navigator.nextPage(CorrespondenceNamePage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
+        "must go from CorrespondenceAdditionalNamePage to CheckCorrespondenceDetailsController" in {
+
+          navigator.nextPage(CorrespondenceAdditionalNamePage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
+        "must go from CorrespondenceAdditionalInformationPage to CheckCorrespondenceDetailsController" in {
+
+          navigator.nextPage(CorrespondenceAdditionalInformationPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
+        "must go from AddAssociatedRegistrationNumberPage to CheckTradingDetails when no is selected" in {
+
+          val answers =
+            UserAnswers("id")
+              .set(AddAssociatedRegistrationNumberPage, false)
+              .success
+              .value
+
+          navigator.nextPage(AddAssociatedRegistrationNumberPage, NormalMode, answers) mustBe
+            routes.CheckTradingDetailsController.onPageLoad()
+        }
+
+        "must go from AddAssociatedRegistrationNumberPage to SystemError when unanswered" in {
+
+          navigator.nextPage(AddAssociatedRegistrationNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "must go to AssociatedRegistrationNumbersList when associated registration numbers exist" in {
+
+          val answers =
+            UserAnswers("id")
+              .set(AssociatedRegistrationNumbersPage, Seq("ABC123"))
+              .success
+              .value
+
+          navigator.nextPage(RemoveAssociatedRegNumberPage, NormalMode, answers) mustBe
+            routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
+        }
+
+        "must go to CheckTradingDetails when associated registration numbers are empty" in {
+
+          val answers =
+            UserAnswers("id")
+              .set(AssociatedRegistrationNumbersPage, Seq.empty[String])
+              .success
+              .value
+
+          navigator.nextPage(RemoveAssociatedRegNumberPage, NormalMode, answers) mustBe
+            routes.CheckTradingDetailsController.onPageLoad()
+        }
+
+        "must go to CheckTradingDetails when associated registration numbers are missing" in {
+
+          navigator.nextPage(RemoveAssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
+            routes.CheckTradingDetailsController.onPageLoad()
+        }
+
+        "must go to CorrespondenceName when AddCorrespondingDetailsYesNoPage is true" in {
+
+          val answers =
+            UserAnswers("id")
+              .set(AddCorrespondingDetailsYesNoPage, true)
+              .success
+              .value
+
+          navigator.nextPage(AddCorrespondingDetailsYesNoPage, NormalMode, answers) mustBe
+            routes.CorrespondenceNameController.onPageLoad(NormalMode)
+        }
+
+        "must go to ChangeRegistrationDetails when AddCorrespondingDetailsYesNoPage is false" in {
+
+          val answers =
+            UserAnswers("id")
+              .set(AddCorrespondingDetailsYesNoPage, false)
+              .success
+              .value
+
+          navigator.nextPage(AddCorrespondingDetailsYesNoPage, NormalMode, answers) mustBe
+            routes.ChangeRegistrationDetailsController.onPageLoad()
+        }
+
+        "must go to SystemError when AddCorrespondingDetailsYesNoPage is unanswered" in {
+
+          navigator.nextPage(AddCorrespondingDetailsYesNoPage, NormalMode, UserAnswers("id")) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "must go to SystemError when RemoveCorrespondenceDetailsYesNoPage is unanswered" in {
+
+          navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, UserAnswers("id")) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "must go to CheckCorrespondenceDetails when CorrespondenceFaxNumberPage is navigated" in {
+
+          navigator.nextPage(
+            CorrespondenceFaxNumberPage,
+            NormalMode,
+            UserAnswers("id")
+          ) mustBe
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
+        }
+
         "must go from AddCorrespondenceFaxNumberPage to CheckCorrespondenceDetails page when answer is false" in {
 
           val answers = UserAnswers("id")
@@ -232,6 +398,108 @@ class NavigatorSpec extends SpecBase {
 
     }
 
+    "must go from AddAssociatedRegistrationNumberPage to AssociatedRegNumber page when yes is selected" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AddAssociatedRegistrationNumberPage, true)
+          .success
+          .value
+
+      navigator.nextPage(AddAssociatedRegistrationNumberPage, CheckMode, answers) mustBe
+        routes.AssociatedRegNumberController.onPageLoad(CheckMode)
+    }
+
+    "must go from AddAssociatedRegistrationNumberPage to CheckTradingDetails when no is selected" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AddAssociatedRegistrationNumberPage, false)
+          .success
+          .value
+
+      navigator.nextPage(AddAssociatedRegistrationNumberPage, CheckMode, answers) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
+    }
+
+    "must go from AddAssociatedRegistrationNumberPage to SystemError when unanswered" in {
+
+      navigator.nextPage(AddAssociatedRegistrationNumberPage, CheckMode, UserAnswers("id")) mustBe
+        routes.SystemErrorController.onPageLoad()
+    }
+
+    "must go to AssociatedRegistrationNumbersList when associated registration numbers exist" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AssociatedRegistrationNumbersPage, Seq("ABC123"))
+          .success
+          .value
+
+      navigator.nextPage(RemoveAssociatedRegNumberPage, CheckMode, answers) mustBe
+        routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
+    }
+
+    "must go to CheckTradingDetails when associated registration numbers are empty" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AssociatedRegistrationNumbersPage, Seq.empty[String])
+          .success
+          .value
+
+      navigator.nextPage(RemoveAssociatedRegNumberPage, CheckMode, answers) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
+    }
+
+    "must go to CheckTradingDetails when previous registration numbers exist but list is empty" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(PreviousRegistrationNumbersListPage, Seq.empty[String])
+          .success
+          .value
+
+      navigator.nextPage(RemovePreviousRegNumberPage, CheckMode, answers) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
+    }
+
+    "must go to RemovePreviousRegNumber when previous registration numbers exist" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(PreviousRegistrationNumbersListPage, Seq("OLD1"))
+          .success
+          .value
+
+      navigator.nextPage(RemovePreviousRegNumberPage, CheckMode, answers) mustBe
+        routes.RemovePreviousRegNumberController.onPageLoad(CheckMode)
+    }
+
+    "must go to CheckTradingDetails when previous registration numbers are missing" in {
+
+      navigator.nextPage(RemovePreviousRegNumberPage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
+    }
+
+    "must go from AddCorrespondenceFaxNumberPage to CheckCorrespondenceDetails when answer is false" in {
+
+      val answers =
+        UserAnswers("id")
+          .set(AddCorrespondenceFaxNumberPage, false)
+          .success
+          .value
+
+      navigator.nextPage(AddCorrespondenceFaxNumberPage, CheckMode, answers) mustBe
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+    "must go from AddCorrespondenceFaxNumberPage to SystemError when unanswered" in {
+
+      navigator.nextPage(AddCorrespondenceFaxNumberPage, CheckMode, UserAnswers("id")) mustBe
+        routes.SystemErrorController.onPageLoad()
+    }
+
     "must go from PreviousRegNumberPage to the normal mode previous registration number page" in {
 
       navigator.nextPage(PreviousRegNumberPage, NormalMode, UserAnswers("id")) mustBe
@@ -272,6 +540,78 @@ class NavigatorSpec extends SpecBase {
 
       navigator.nextPage(PreviousRegNumberPage, CheckMode, UserAnswers("id")) mustBe
         routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    }
+
+    "must go from BusinessNamePage to CheckBusinessNameController" in {
+
+      navigator.nextPage(BusinessNamePage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckBusinessNameController.onPageLoad()
+    }
+
+    "must go from BusinessEmailAddressPage to BusinessEmailAddressController in Check mode" in {
+
+      navigator.nextPage(BusinessEmailAddressPage, CheckMode, UserAnswers("id")) mustBe
+        routes.BusinessEmailAddressController.onPageLoad(CheckMode)
+    }
+
+    "must go from OtherTradeClassPage to CheckTradingDetailsController in Check mode" in {
+
+      navigator.nextPage(OtherTradeClassPage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
+    }
+
+    "must go from BusinessTradeClassPage to CheckTradingDetailsController in Check mode" in {
+
+      navigator.nextPage(BusinessTradeClassPage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckTradingDetailsController.onPageLoad()
+    }
+
+    "must go from PreviousRegistrationNumbersListPage to PreviousRegistrationNumbersListController in Check mode" in {
+
+      navigator.nextPage(PreviousRegistrationNumbersListPage, CheckMode, UserAnswers("id")) mustBe
+        routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
+    }
+
+    "must go from AssociatedRegistrationNumbersPage to AssociatedRegistrationNumbersListController in Check mode" in {
+
+      navigator.nextPage(AssociatedRegistrationNumbersPage, CheckMode, UserAnswers("id")) mustBe
+        routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
+    }
+
+    "must go from CorrespondenceFaxNumberPage to CorrespondenceFaxNumberController in Check mode" in {
+
+      navigator.nextPage(CorrespondenceFaxNumberPage, CheckMode, UserAnswers("id")) mustBe
+        routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
+    }
+
+    "must go from RemoveCorrespondenceFaxNumberPage to RemoveCorrespondenceFaxNumberController in Check mode" in {
+
+      navigator.nextPage(RemoveCorrespondenceFaxNumberPage, CheckMode, UserAnswers("id")) mustBe
+        routes.RemoveCorrespondenceFaxNumberController.onPageLoad(CheckMode)
+    }
+
+    "must go from CorrespondenceNamePage to CheckCorrespondenceDetailsController in Check mode" in {
+
+      navigator.nextPage(CorrespondenceNamePage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+    "must go from CorrespondenceAdditionalNamePage to CheckCorrespondenceDetailsController in Check mode" in {
+
+      navigator.nextPage(CorrespondenceAdditionalNamePage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+    "must go from CorrespondenceAdditionalInformationPage to CheckCorrespondenceDetailsController in Check mode" in {
+
+      navigator.nextPage(CorrespondenceAdditionalInformationPage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+    "must go from RemoveCorrAddressAddInfoPage to CheckCorrespondenceDetailsController in Check mode" in {
+
+      navigator.nextPage(RemoveCorrAddressAddInfoPage, CheckMode, UserAnswers("id")) mustBe
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
     "must go from AddPreviousRegistrationNumberPage to previous registration number page when yes is selected in Check mode" in {
