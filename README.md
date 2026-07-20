@@ -60,6 +60,7 @@ Message key (messages.en):
 systemError.title = Sorry, there is a problem with the service
 ```
 Before adding new translation keys, please check the top of the following files [messages.en](conf/messages.en) | [messages.cy](conf/messages.cy) and review existing entries to avoid duplicates.
+Refer to the `DASS Welsh Translation Repository` in confluence. 
 
 ### License
 
