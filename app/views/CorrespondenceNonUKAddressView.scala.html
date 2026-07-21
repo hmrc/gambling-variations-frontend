@@ -76,6 +76,7 @@ field = form("region"),
 label = LabelViewModel(messages("correspondenceNonUKAddress.Region"))
 )
 .withWidth(Fixed10)
+.withAttribute("autocomplete" -> "postal-code")
 )
 
 @govukInput(
