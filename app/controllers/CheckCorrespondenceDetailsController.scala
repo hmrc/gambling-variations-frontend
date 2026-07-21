@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 class CheckCorrespondenceDetailsController @Inject() (
   override val messagesApi: MessagesApi,
-  authorised: AuthorisedAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
@@ -38,7 +38,7 @@ class CheckCorrespondenceDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     if (!hasAnyCorrespondenceDetails(request.userAnswers)) {
       Redirect(controllers.routes.AddCorrespondingDetailsYesNoController.onPageLoad(NormalMode))

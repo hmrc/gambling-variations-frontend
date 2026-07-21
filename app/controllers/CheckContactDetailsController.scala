@@ -28,7 +28,7 @@ import views.html.CheckContactDetailsView
 
 class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
-  authorised: AuthorisedAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessContactDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
@@ -36,7 +36,7 @@ class CheckContactDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     request.userAnswers.get(GroupMemberPage) match {
       case Some(true) =>
         Redirect(routes.AccessDeniedController.onPageLoad())
