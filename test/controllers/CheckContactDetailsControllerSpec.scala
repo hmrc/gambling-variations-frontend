@@ -91,11 +91,11 @@ class CheckContactDetailsControllerSpec extends SpecBase {
       val data = Json.obj(
         "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
         "businessContactNumber" -> Json.obj(
-          "phoneNumber" -> "07000000000",
+          "phoneNumber"       -> "07000000000",
           "mobilePhoneNumber" -> "07000000000"
         ),
-        "businessFaxNumber" -> "07000000000",
-        "businessEmailAddress" -> "a@b.com",
+        "businessFaxNumber"    -> "07000000000",
+        "businessEmailAddress" -> "a@b.com"
       )
 
       val userAnswers = UserAnswers("id-number", data)
