@@ -20,7 +20,11 @@ import controllers.actions.*
 import forms.CorrespondenceUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddressUkPage, CorrespondenceDetailsSubmittedPage}
+import pages.{
+  CorrespondenceAddressUkPage,
+  CorrespondenceDetailsSubmittedPage,
+  isleMOrChannelFlagPage
+}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,6 +50,14 @@ class CorrespondenceUKAddressController @Inject()(
 
   private val form = formProvider()
 
+  private def isIomOrCiPostcode(postcode: String): Boolean = {
+    val normalised = postcode.trim.toUpperCase
+
+    normalised.startsWith("IM") ||
+      normalised.startsWith("JE") ||
+      normalised.startsWith("GY")
+  }
+
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -63,14 +75,51 @@ class CorrespondenceUKAddressController @Inject()(
         .bindFromRequest()
         .fold(
           formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, mode))),
+            Future.successful(
+              BadRequest(view(formWithErrors, mode))
+            ),
 
-          value =>
+          value => {
+
+            val iomOrCiFlag =
+              if (value.postcode.exists(isIomOrCiPostcode)) {
+                "true"
+              } else {
+                "false"
+              }
+
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddressUkPage, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CorrespondenceAddressUkPage, mode, updatedAnswers))
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers.set(
+                  CorrespondenceAddressUkPage,
+                  value
+                )
+              )
+
+              updatedAnswers <- Future.fromTry(
+                updatedAnswers.set(
+                  isleMOrChannelFlagPage,
+                  iomOrCiFlag
+                )
+              )
+
+              updatedAnswers <- Future.fromTry(
+                updatedAnswers.set(
+                  CorrespondenceDetailsSubmittedPage,
+                  true
+                )
+              )
+
+              _ <- sessionRepository.set(updatedAnswers)
+
+            } yield Redirect(
+              navigator.nextPage(
+                CorrespondenceAddressUkPage,
+                mode,
+                updatedAnswers
+              )
+            )
+          }
         )
     }
 }
