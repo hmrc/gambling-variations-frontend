@@ -86,5 +86,34 @@ class CheckContactDetailsControllerSpec extends SpecBase {
       }
     }
 
+    "must return SystemErrorController when GroupMemberPage is empty" in {
+
+      val data = Json.obj(
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
+        "businessContactNumber" -> Json.obj(
+          "phoneNumber" -> "07000000000",
+          "mobilePhoneNumber" -> "07000000000"
+        ),
+        "businessFaxNumber" -> "07000000000",
+        "businessEmailAddress" -> "a@b.com",
+      )
+
+      val userAnswers = UserAnswers("id-number", data)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
   }
 }
