@@ -35,7 +35,7 @@ class SoleProprietorNameViewSpec extends SpecBase {
       val doc = Jsoup.parse(html.body)
 
       doc.title must include(messages("soleProprietorName.title"))
-      doc.select(".govuk-caption-l").text mustEqual messages("soleProprietorName.changeRegistrationDetails")
+      doc.select(".govuk-caption-l").text mustEqual messages("changeRegistrationDetails.caption")
       doc.select("h1").text mustEqual messages("soleProprietorName.heading")
 
       doc.select("form").attr("action") mustEqual controllers.routes.ChangeBusinessNameController.onSubmit(Soleproprietor, NormalMode).url

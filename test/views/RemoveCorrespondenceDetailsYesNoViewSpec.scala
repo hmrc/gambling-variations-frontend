@@ -54,7 +54,7 @@ class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
           messages(application)("removeCorrespondenceDetailsYesNo.heading")
 
         document.body().text() must include(
-          messages(application)("removeAssociatedRegNumber.heading.caption")
+          messages(application)("changeRegistrationDetails.caption")
         )
 
         document.body().text() must include(

@@ -79,7 +79,6 @@ businessType.llp = Limited liability partnership
 
 businessName.title = Check your business name
 businessName.heading = Check your business name
-businessName.caption = Change registration details
 businessName.name = {0}’s name
 businessName.table.paragraph.soleproprietor = If the business trades under a different name to the sole proprietor, you need to add a trading name.
 businessName.table.paragraph.unincorporatedbody = If the unincorporated body operates under a different name, you need to add a trading name.
@@ -96,8 +95,6 @@ businessName.link = Cancel and return to change registration details
 businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 
-changeRegistrationDetails.title = Change registration details
-changeRegistrationDetails.heading = Change registration details
 changeRegistrationDetails.heading.caption = MGD registration number: {0}
 changeRegistrationDetails.h2 = Declaration
 changeRegistrationDetails.p1 = You must make at least one change before you read the declaration and submit changes.
@@ -123,7 +120,6 @@ changeRegistrationDetails.change-registration.link = Cancel and return to manage
 
 declaration.title = Declaration
 declaration.heading = Declaration
-declaration.heading.caption = Change registration details
 declaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
 declaration.submit = Declare and submit
 
@@ -131,7 +127,6 @@ submit.changes = Submit changes
 
 soleProprietorName.title = 	What is the sole proprietor’s name?
 
-soleProprietorName.changeRegistrationDetails = Change registration details
 soleProprietorName.heading = What is the sole proprietor’s name?
 soleProprietorName.checkYourAnswersLabel = SoleProprietorNameForm
 
@@ -160,13 +155,11 @@ soleProprietorName.error.lastName.invalid = The sole proprietor’s last name mu
 
 removeTradeName.title = Are you sure you want to remove the trading name?
 removeTradeName.heading = Are you sure you want to remove the trading name {0}?
-removeTradeName.caption = Change registration details
 removeTradeName.error.required = Select yes if you want to remove the trading name
 removeTradeName.change.hidden = RemoveTradeName
 
 businessTradingName.title = What is the business trading name?
 businessTradingName.heading = What is the business trading name?
-businessTradingName.heading.caption = Change registration details
 businessTradingName.checkYourAnswersLabel = What is the business trading name?
 businessTradingName.error.required = Enter the business trading name
 businessTradingName.error.invalid = The business trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
@@ -186,7 +179,6 @@ changeBusinessName.heading.partnership = What is the partnership’s name?
 changeBusinessName.heading.corporatebody = What is the corporate body’s name?
 changeBusinessName.heading.unincorporatedbody = What is the unincorporated body’s name?
 changeBusinessName.heading.llp = What is the limited liability partnership’s name?
-changeBusinessName.caption = Change registration details
 
 changeBusinessName.label = Business name
 
@@ -214,38 +206,32 @@ removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
 removeFaxNumber.checkYourAnswersLabel = Fax number
 removeFaxNumber.error.required = Select yes if you want to remove the fax number
 removeFaxNumber.change.hidden = remove fax number
-removeFaxNumber.heading.caption = Change registration details
 
 removeEmailAddress.title = Are you sure you want to remove the email address?
 removeEmailAddress.heading = Are you sure you want to remove the email address {0}?
 removeEmailAddress.checkYourAnswersLabel = Business email address
 removeEmailAddress.error.required = Select yes if you want to remove the email address
 removeEmailAddress.change.hidden = remove business email address
-removeEmailAddress.heading.caption = Change registration details
 
 removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
 removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
 removePreviousRegNumber.checkYourAnswersLabel = removePreviousRegNumber
 removePreviousRegNumber.error.required = Select yes if you want to remove the previous registration number
 removePreviousRegNumber.change.hidden = remove previous registration number
-removePreviousRegNumber.heading.caption = Change registration details
 
 removeAssociatedRegNumber.title = Are you sure you want to remove the associated registration number?
 removeAssociatedRegNumber.heading = Are you sure you want to remove the associated registration number {0}?
 removeAssociatedRegNumber.checkYourAnswersLabel = removeAssociatedRegNumber
 removeAssociatedRegNumber.error.required = Select yes if you want to remove the associated registration number
 removeAssociatedRegNumber.change.hidden = remove associated registration number
-removeAssociatedRegNumber.heading.caption = Change registration details
 
 removeCorrespondenceFaxNumber.title = Are you sure you want to remove the correspondence fax number?
 removeCorrespondenceFaxNumber.heading = Are you sure you want to remove the correspondence fax number {0}?
 removeCorrespondenceFaxNumber.checkYourAnswersLabel = removeCorrespondenceFaxNumber
 removeCorrespondenceFaxNumber.error.required = Select yes if you want to remove the correspondence fax number
 removeCorrespondenceFaxNumber.change.hidden = remove correspondence fax number
-removeCorrespondenceFaxNumber.heading.caption = Change registration details
 
 #Check Contact Details
-contactDetails.caption = Change registration details
 contactDetails.title = Check your business contact details
 contactDetails.heading = Check your business contact details
 contactDetails.error.contactNumber = You must provide at least one contact number.
@@ -280,7 +266,6 @@ emailAddress.error.length = The email address must be 70 characters or less
 businessContactNumber.title = What are your business contact numbers?
 businessContactNumber.heading = What are your business contact numbers?
 businessContactNumber.p1 = You must provide at least one contact number.
-businessContactNumber.caption = Change registration details
 
 businessContactNumber.phoneNumber = Phone number
 businessContactNumber.mobileNumber = Mobile number
@@ -309,7 +294,6 @@ businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must 
 previousRegistrationNumbers.title = Previous registration numbers
 previousRegistrationNumbers.heading = Previous registration numbers
 previousRegistrationNumbers.radios = Do you want to add another registration number?
-previousRegistrationNumbers.caption = Change registration details
 previousRegistrationNumbers.hint = You can only add up to 3 registration numbers
 previousRegistrationNumbers.max = You can only add up to 3 registration numbers.
 previousRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
@@ -326,7 +310,6 @@ previousRegistrationNumbers.unsubmitted.plural = Registration numbers ready to s
 associatedRegistrationNumbers.title = Associated registration numbers
 associatedRegistrationNumbers.heading = Associated registration numbers
 associatedRegistrationNumbers.radios = Do you want to add another registration number?
-associatedRegistrationNumbers.caption = Change registration details
 associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
 associatedRegistrationNumbers.max = You can only add up to 3 registration numbers.
 associatedRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
@@ -339,7 +322,6 @@ associatedRegistrationNumbers.change.hidden =  registration number {0}
 
 businessTradeClass.title = What is the business trade class?
 businessTradeClass.heading = What is the business trade class?
-businessTradeClass.heading.caption = Change registration details
 businessTradeClass.adultGamingCentre = Adult gaming centre
 businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
 businessTradeClass.bingopromoter = Bingo promoter
@@ -354,7 +336,6 @@ businessTradeClass.error.required = Select the trade class for this business
 businessTradeClass.change.hidden = What is the business trade class?
 
 seasonalBusiness.title = Is this a seasonal business?
-seasonalBusiness.heading.caption = Change registration details
 seasonalBusiness.heading = Is this a seasonal business?
 seasonalBusiness.paragraph = A seasonal business has periods where it does not trade. If you operate a seasonal business, you must submit nil returns for any periods that you are not trading.
 seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
@@ -369,10 +350,8 @@ correspondenceFaxNumber.error.required = Enter the fax number for correspondence
 correspondenceFaxNumber.error.length = The fax number for correspondence must be 20 characters or less
 correspondenceFaxNumber.change.hidden = What fax number should we use for correspondence?
 
-checkTradingDetails.caption = Change registration details
 checkTradingDetails.title = Check your trading details
 checkTradingDetails.heading = Check your trading details
-checkTradingDetails.heading.caption = Change registration details
 checkTradingDetails.businessTradeClass.checkYourAnswersLabel = Trade class
 checkTradingDetails.businessTradeClass.change.hidden = trade class
 checkTradingDetails.seasonalBusiness.checkYourAnswersLabel = Seasonal business
@@ -402,7 +381,6 @@ businessTradeClass.other = Other
 correspondenceContactNumber.title = What contact numbers should we use for correspondence?
 correspondenceContactNumber.heading = What contact numbers should we use for correspondence?
 correspondenceContactNumber.p1 = You must provide at least one contact number.
-correspondenceContactNumber.caption = Change registration details
 correspondenceContactNumber.phoneNumber = Phone number
 correspondenceContactNumber.mobileNumber = Mobile number
 
@@ -415,7 +393,6 @@ correspondenceContactNumber.error.phoneNumber.length = The correspondence phone 
 correspondenceContactNumber.error.mobileNumber.required = Enter the correspondence mobile number
 correspondenceContactNumber.error.mobileNumber.invalid = The correspondence mobile number must only include numbers 0 to 9 and spaces
 correspondenceContactNumber.error.mobileNumber.length = The correspondence mobile number must be 20 characters or less
-checkCorrespondenceDetails.caption = Change registration details
 checkCorrespondenceDetails.title = Check your correspondence details
 checkCorrespondenceDetails.heading = Check your correspondence details
 checkCorrespondenceDetails.heading.contactNumbers = Correspondence contact numbers
@@ -497,7 +474,6 @@ otherTradeClass.textarea.label = You can enter up to 300 characters
 
 previousRegistrationNumber.title = What is your previous registration number?
 previousRegistrationNumber.heading = What is your previous registration number?
-previousRegistrationNumber.heading.caption = Change registration details
 previousRegistrationNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
 previousRegistrationNumber.checkYourAnswersLabel = Previous registration number
 previousRegistrationNumber.error.required = Enter your previous registration number
@@ -511,7 +487,6 @@ previousRegistrationNumber.change.hidden = previous registration number
 
 associatedRegNumber.title = What is your associated registration number?
 associatedRegNumber.heading = What is your associated registration number?
-associatedRegNumber.heading.caption = Change registration details
 associatedRegNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
 associatedRegNumber.checkYourAnswersLabel = Associated registration number
 associatedRegNumber.error.required = Enter your associated registration number
@@ -530,13 +505,11 @@ removeCorrespondenceEmailAddress.error.required = Select yes if you want to remo
 
 correspondenceAddrInfoScreener.title = Do you want to include additional information for the correspondence address?
 correspondenceAddrInfoScreener.heading = Do you want to include additional information for the correspondence address?
-correspondenceAddrInfoScreener.heading.caption = Change registration details
 correspondenceAddrInfoScreener.hint = For example, building name or floor number
 correspondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
 
 correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
 correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
-correspondenceAdditionalNameYesNo.caption = Change registration details
 correspondenceAdditionalNameYesNo.checkYourAnswersLabel = Additional correspondence name
 correspondenceAdditionalNameYesNo.error.required = Select yes to add an additional name for correspondence
 correspondenceAdditionalNameYesNo.change.hidden = do you want to add an additional name for correspondence?
@@ -548,9 +521,7 @@ addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an emai
 addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
 
 addCorrespondingDetailsYesNo.title = Correspondence details
-addCorrespondingDetailsYesNo.subTitle = Change registration details
 addCorrespondingDetailsYesNo.heading = Correspondence details
-addCorrespondingDetailsYesNo.caption = Change registration details
 addCorrespondingDetailsYesNo.p1 = We will contact you using the business details you provided. Alternatively, you can add correspondence details.
 addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
 addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?

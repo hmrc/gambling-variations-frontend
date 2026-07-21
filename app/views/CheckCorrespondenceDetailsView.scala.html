@@ -30,9 +30,9 @@
 
 @(checkCorrespondenceDetailsViewModel: CheckCorrespondenceDetailsViewModel)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("checkCorrespondenceDetails.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = titleNoForm(messages("checkCorrespondenceDetails.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @caption(messages("checkCorrespondenceDetails.caption"))
+    @caption(messages("changeRegistrationDetails.caption"))
     @h1("checkCorrespondenceDetails.heading", classes="govuk-heading-l")
 
     @govukSummaryList(SummaryList(

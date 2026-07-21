@@ -27,7 +27,7 @@
 
 @(form: Form[_], mode: Mode, mgdRegNumber: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removeAssociatedRegNumber.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = title(form, messages("removeAssociatedRegNumber.title"), Some("changeRegistrationDetails.caption"))) {
 
     @formHelper(action = routes.RemoveAssociatedRegNumberController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
@@ -35,7 +35,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @caption(messages("removeAssociatedRegNumber.heading.caption"))
+        @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
