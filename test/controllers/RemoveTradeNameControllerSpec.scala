@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessNameChangesPage, RemoveTradeNamePage}
+import pages.{BusinessNameChangesPage, GroupMemberPage, RemoveTradeNamePage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -44,12 +44,14 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
   val tradingName = "Test Trader"
 
   val data = Json.obj(
-    "tradingName"         -> "Test Trader",
-    "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+    "tradingName"            -> "Test Trader",
+    GroupMemberPage.toString -> false,
+    "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
 
   val noAnswers = Json.obj(
-    "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+    GroupMemberPage.toString -> false,
+    "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
 
   lazy val removeTradeNameRoute = routes.RemoveTradeNameController.onPageLoad().url
@@ -69,6 +71,47 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode, tradingName)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to access denied when group member is true on GET" in {
+
+      val groupMemberData = Json.obj(
+        "tradingName"            -> "Test Trader",
+        GroupMemberPage.toString -> true,
+        "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+
+      running(application) {
+        val request = FakeRequest(GET, removeTradeNameRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect to system error when GroupMemberPage is missing on GET" in {
+
+      val noGroupMemberData = Json.obj(
+        "tradingName"         -> "Test Trader",
+        "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers("id", noGroupMemberData))).build()
+
+      running(application) {
+        val request = FakeRequest(GET, removeTradeNameRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
 
@@ -103,6 +146,51 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
             status(result) mustEqual SEE_OTHER
             redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
           }
+        }
+      }
+
+      "must redirect to system error when GroupMemberPage is missing on POST" in {
+
+        val noGroupMemberData = Json.obj(
+          "tradingName"         -> "Test Trader",
+          "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+        )
+
+        val application =
+          applicationBuilder(userAnswers = Some(UserAnswers("id", noGroupMemberData))).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, removeTradeNameRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+      "must redirect to access denied when group member is true on POST" in {
+
+        val groupMemberData = Json.obj(
+          "tradingName"            -> "Test Trader",
+          GroupMemberPage.toString -> true,
+          "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
+        )
+
+        val application =
+          applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, removeTradeNameRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
         }
       }
 

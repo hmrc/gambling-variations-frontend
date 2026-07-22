@@ -30,7 +30,7 @@ import views.html.CorrespondenceUKAddrScreenerView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceUKAddrScreenerController @Inject()(
+class CorrespondenceUKAddrScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,

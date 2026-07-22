@@ -21,7 +21,7 @@ import controllers.actions.*
 import utils.FlagsUtil.checkFlag
 
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CheckTradingDetailsController @Inject() (
   override val messagesApi: MessagesApi,
-  authorised: AuthorisedAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
   gamblingConnector: GamblingConnector,
@@ -44,7 +44,7 @@ class CheckTradingDetailsController @Inject() (
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
       val showChangeMessage: Boolean = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsChangeFlagPage)
 
@@ -76,7 +76,7 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onPreviousRegNumbers: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
       val previousRegsExist =
         CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).previousMgd.rows.nonEmpty
@@ -89,7 +89,7 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onAssociatedRegNumbers: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired) { implicit request =>
 
       val associatedRegsExist =
         CheckTradingDetailsViewModel.from(request.userAnswers, isGroupMember = false).associatedMgd.rows.nonEmpty
@@ -102,14 +102,14 @@ class CheckTradingDetailsController @Inject() (
     }
 
   def onContinue: Action[AnyContent] =
-    (authorised andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
+    (authorise andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
 
       val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
       val seasonalOpt = request.userAnswers.get(IsSeasonalBusinessPage)
       val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
 
       def stringMissing(opt: Option[String]): Boolean =
-        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase("Not provided"))
+        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase(Messages("site.notProvided")))
 
       def tradeClassIsMissing: Boolean = tradeClassOpt match {
         case Some(tc: BusinessTradeClass) => false

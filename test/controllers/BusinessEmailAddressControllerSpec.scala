@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessEmailAddressPage, ContactDetailsChangesPage}
+import pages.{BusinessEmailAddressPage, ContactDetailsChangesPage, GroupMemberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -45,7 +45,10 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj(
+        GroupMemberPage.toString        -> false,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
     )
 
   lazy val emailAddressRoute =
@@ -74,7 +77,8 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
       val data = Json.obj(
         "businessContactDetailsSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
-        BusinessEmailAddressPage.toString -> "validEmail@example.com"
+        BusinessEmailAddressPage.toString -> "validEmail@example.com",
+        GroupMemberPage.toString          -> false
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
@@ -91,6 +95,33 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(form.fill("validEmail@example.com"), NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to access denied when group member is true on GET" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            GroupMemberPage.toString        -> true,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, emailAddressRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
       }
     }
 
@@ -207,6 +238,37 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual
           routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to access denied when group member is true on POST" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            GroupMemberPage.toString        -> true,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, emailAddressRoute)
+            .withFormUrlEncodedBody(
+              ("emailAddress", "validEmail@example.com")
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
       }
     }
 

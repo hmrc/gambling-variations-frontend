@@ -16,7 +16,7 @@
 
 package generators
 
-import models.{BusinessTradeClass, ContactNumber}
+import models.*
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
