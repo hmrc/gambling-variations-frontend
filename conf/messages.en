@@ -629,6 +629,15 @@ removeCorrespondenceDetailsYesNo.p1 = You must continue to the change registrati
 removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
 removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?
 
+correspondenceChangeAddrScreener.title = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.heading = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
+correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
+correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
+correspondenceChangeAddrScreener.no = Edit current correspondence address
+
 correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
 correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
 correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
