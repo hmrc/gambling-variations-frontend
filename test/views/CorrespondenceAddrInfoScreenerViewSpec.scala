@@ -54,7 +54,7 @@ class CorrespondenceAddrInfoScreenerViewSpec extends SpecBase {
       doc.title must include(messages("correspondenceAddrInfoScreener.title"))
 
       doc.select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
-      
+
       doc
         .select(".govuk-form-group")
         .select(".govuk-fieldset__heading")
