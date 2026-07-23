@@ -23,7 +23,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessNameChangesPage, BusinessTypePage, TradingNamePage}
+import pages.{BusinessNameChangesPage, BusinessTypePage, GroupMemberPage, TradingNamePage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -46,6 +46,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
   val data = Json.obj(
     BusinessTypePage.toString -> BusinessType.Partnership.code,
+    GroupMemberPage.toString  -> false,
     "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
 
@@ -68,6 +69,30 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(form, NormalMode, BusinessType.Partnership)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to access denied when group member is true on GET" in {
+
+      val groupMemberData = Json.obj(
+        BusinessTypePage.toString -> BusinessType.Partnership.code,
+        GroupMemberPage.toString  -> true,
+        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(UserAnswers(userAnswersId, groupMemberData))
+        ).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, businessTradingNameRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
       }
     }
 
@@ -148,6 +173,32 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(TradingNamePage).value mustEqual "ABC Ltd"
+      }
+    }
+
+    "must redirect to access denied when group member is true on POST" in {
+
+      val groupMemberData = Json.obj(
+        BusinessTypePage.toString -> BusinessType.Partnership.code,
+        GroupMemberPage.toString  -> true,
+        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(UserAnswers(userAnswersId, groupMemberData))
+        ).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, businessTradingNameRoute)
+            .withFormUrlEncodedBody("value" -> "ABC Ltd")
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
       }
     }
 

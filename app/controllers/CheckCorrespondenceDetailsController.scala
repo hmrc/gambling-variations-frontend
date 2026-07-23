@@ -17,11 +17,12 @@
 package controllers
 
 import controllers.actions.*
+import models.{NormalMode, UserAnswers}
 import pages.*
-import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkFlag
 import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
 
@@ -29,7 +30,7 @@ import javax.inject.Inject
 
 class CheckCorrespondenceDetailsController @Inject() (
   override val messagesApi: MessagesApi,
-  authorised: AuthorisedAction,
+  authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
@@ -37,26 +38,45 @@ class CheckCorrespondenceDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorised andThen getData andThen requireData) { implicit request =>
+  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    Ok(
-      view(
-        CheckCorrespondenceDetailsViewModel(
-          request.userAnswers.get(CorrespondenceNamePage),
-          request.userAnswers.get(AddCorrespondenceAdditionalNamePage),
-          request.userAnswers.get(CorrespondenceAdditionalNamePage),
-          request.userAnswers.get(CorrespondenceAddressUkPage) orElse request.userAnswers.get(CorrespondenceAddressNonUkPage),
-          request.userAnswers.get(AddCorrespondenceAdditionalInformationPage),
-          request.userAnswers.get(CorrespondenceAdditionalInformationPage),
-          request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),
-          request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
-          request.userAnswers.get(AddCorrespondenceFaxNumberPage),
-          request.userAnswers.get(CorrespondenceFaxNumberPage),
-          request.userAnswers.get(AddCorrespondenceEmailAddressPage),
-          request.userAnswers.get(CorrespondenceEmailPage),
-          checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage)
+    if (!hasAnyCorrespondenceDetails(request.userAnswers)) {
+      Redirect(controllers.routes.AddCorrespondingDetailsYesNoController.onPageLoad(NormalMode))
+    } else {
+      Ok(
+        view(
+          CheckCorrespondenceDetailsViewModel(
+            request.userAnswers.get(CorrespondenceNamePage),
+            request.userAnswers.get(AddCorrespondenceAdditionalNamePage),
+            request.userAnswers.get(CorrespondenceAdditionalNamePage),
+            request.userAnswers.get(CorrespondenceAddressUkPage) orElse request.userAnswers.get(CorrespondenceAddressNonUkPage),
+            request.userAnswers.get(AddCorrespondenceAdditionalInformationPage),
+            request.userAnswers.get(CorrespondenceAdditionalInformationPage),
+            request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),
+            request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
+            request.userAnswers.get(AddCorrespondenceFaxNumberPage),
+            request.userAnswers.get(CorrespondenceFaxNumberPage),
+            request.userAnswers.get(AddCorrespondenceEmailAddressPage),
+            request.userAnswers.get(CorrespondenceEmailPage),
+            checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage)
+          )
         )
       )
-    )
+    }
+
   }
+
+  private def hasAnyCorrespondenceDetails(userAnswers: UserAnswers): Boolean =
+    userAnswers.get(CorrespondenceNamePage).isDefined ||
+      userAnswers.get(CorrespondenceAdditionalNamePage).isDefined ||
+      userAnswers.get(CorrespondenceAdditionalInformationPage).isDefined ||
+      userAnswers.get(CorrespondenceFaxNumberPage).isDefined ||
+      userAnswers.get(CorrespondenceEmailPage).isDefined ||
+      userAnswers.get(isleMOrChannelFlagPage).isDefined ||
+      userAnswers.get(CorrespondenceAddressUkPage).isDefined ||
+      userAnswers.get(CorrespondenceAddressNonUkPage).isDefined ||
+      userAnswers.get(CorrespondenceContactNumberPage).exists { contact =>
+        contact.phoneNumber.isDefined ||
+        contact.mobilePhoneNumber.isDefined
+      }
 }

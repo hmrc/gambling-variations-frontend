@@ -72,6 +72,7 @@ addressLookup.manualAddressLine3 = Town or city
 addressLookup.manualAddressLine4 = County
 addressLookup.manualAddressPostcode = Postcode
 
+changeRegistrationDetails.caption = Change registration details
 
 businessType.soleproprietor = Sole proprietor
 businessType.unincorporatedbody = Unincorporated body
@@ -96,8 +97,6 @@ businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
 businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
-
-
 
 
 changeRegistrationDetails.title = Change registration details
@@ -316,7 +315,7 @@ previousRegistrationNumbers.radios = Do you want to add another registration num
 previousRegistrationNumbers.caption = Change registration details
 previousRegistrationNumbers.hint = You can only add up to 3 registration numbers
 previousRegistrationNumbers.max = You can only add up to 3 registration numbers.
-previousRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+previousRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
 previousRegistrationNumbers.yesLabel = Yes, add another number
 previousRegistrationNumbers.noLabel = No, return to check your trading details
 previousRegistrationNumbers.checkYourAnswersLabel = previousRegistrationNumbers
@@ -333,7 +332,7 @@ associatedRegistrationNumbers.radios = Do you want to add another registration n
 associatedRegistrationNumbers.caption = Change registration details
 associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
 associatedRegistrationNumbers.max = You can only add up to 3 registration numbers.
-associatedRegistrationNumbers.paragraph = Any changes you make to your registration numbers must be submitted and approved before your registration certificate is updated.
+associatedRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
 associatedRegistrationNumbers.yesLabel = Yes, add another number
 associatedRegistrationNumbers.noLabel = No, return to check your trading details
 associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
@@ -475,6 +474,21 @@ correspondenceName.error.required = Enter the full name for correspondence
 correspondenceName.error.invalid = The full name for correspondence must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
 correspondenceName.error.length = The full name for correspondence must be 100 characters or less
 
+correspondenceAdditionalName.title = What additional full name should we use for correspondence?
+correspondenceAdditionalName.heading = What additional full name should we use for correspondence?
+correspondenceAdditionalName.checkYourAnswersLabel = Additional Full Name
+correspondenceAdditionalName.error.required = Enter the additional full name for correspondence
+correspondenceAdditionalName.error.invalid = The additional full name for correspondence name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+correspondenceAdditionalName.error.length = The additional full name for correspondence must be 100 characters or less
+
+correspondenceAdditionalInfo.title = What is the additional information for the correspondence address?
+correspondenceAdditionalInfo.heading = What is the additional information for the correspondence address?
+correspondenceAdditionalInfo.checkYourAnswersLabel = Additional Information
+correspondenceAdditionalInfo.hint = For example, building name or floor number
+correspondenceAdditionalInfo.error.required = Enter additional information for the correspondence address
+correspondenceAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+correspondenceAdditionalInfo.error.length = The additional information must be 100 characters or less
+
 otherTradeClass.title = What is your business trade class? - Change registration details
 otherTradeClass.heading = What is your business trade class?
 otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
@@ -517,12 +531,11 @@ removeCorrespondenceEmailAddress.checkYourAnswersLabel = removeCorrespondenceEma
 removeCorrespondenceEmailAddress.error.required = Select yes if you want to remove the correspondence email address
 
 
-CorrespondenceAddrInfoScreener.title = Do you want to include additional information for the correspondence address?
-CorrespondenceAddrInfoScreener.heading = Do you want to include additional information for the correspondence address?
-CorrespondenceAddrInfoScreener.heading.caption = Change registration details
-CorrespondenceAddrInfoScreener.hint = For example, building name or floor number
-CorrespondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
-CorrespondenceAddrInfoScreener.change.hidden = CorrespondenceAddrAdditionalInfoScreener
+correspondenceAddrInfoScreener.title = Do you want to include additional information for the correspondence address?
+correspondenceAddrInfoScreener.heading = Do you want to include additional information for the correspondence address?
+correspondenceAddrInfoScreener.heading.caption = Change registration details
+correspondenceAddrInfoScreener.hint = For example, building name or floor number
+correspondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
 
 correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
 correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
@@ -536,6 +549,104 @@ addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email addr
 addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
 addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
 addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
+
+addCorrespondingDetailsYesNo.title = Correspondence details
+addCorrespondingDetailsYesNo.subTitle = Change registration details
+addCorrespondingDetailsYesNo.heading = Correspondence details
+addCorrespondingDetailsYesNo.caption = Change registration details
+addCorrespondingDetailsYesNo.p1 = We will contact you using the business details you provided. Alternatively, you can add correspondence details.
+addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
+addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+
+correspondenceUKAddress.title = Enter the correspondence address
+correspondenceUKAddress.heading = Enter the correspondence address
+correspondenceUKAddress.addressLine1 = Address line 1
+correspondenceUKAddress.addressLine2 = Address line 2
+correspondenceUKAddress.townOrCity = Town or city
+correspondenceUKAddress.County = County (optional)
+correspondenceUKAddress.Postcode = Postcode
+correspondenceUKAddress.checkYourAnswersLabel = Correspondence Address
+correspondenceUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
+correspondenceUKAddress.addressLine1.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.addressLine1.error.length = Address line 1 must be 27 characters or less
+correspondenceUKAddress.addressLine2.error.required = Enter address line 2 for the correspondence address
+correspondenceUKAddress.addressLine2.error.invalid = Address line 2 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.addressLine2.error.length = Address line 2 must be 27 characters or less
+correspondenceUKAddress.townOrCity.error.required = Enter the town or city for the correspondence address
+correspondenceUKAddress.townOrCity.error.invalid = Town or city must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.townOrCity.error.length = Town or city must be 27 characters or less
+correspondenceUKAddress.County.error.invalid = County must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.County.error.length = County must be 18 characters or less
+correspondenceUKAddress.Postcode.error.required = Enter postcode for the correspondence address
+correspondenceUKAddress.Postcode.error.invalid = Postcode must only include letters a to z, numbers 0 to 9 and spaces
+correspondenceUKAddress.Postcode.error.format = Enter a UK postcode, like E1 6AN or SW1A 2AA
+correspondenceUKAddress.Postcode.error.length = Postcode must be 8 characters or less, including the space
+
+correspondenceNonUKAddress.title = Enter the correspondence address
+correspondenceNonUKAddress.heading = Enter the correspondence address
+correspondenceNonUKAddress.addressLine1 = Address line 1
+correspondenceNonUKAddress.addressLine2 = Address line 2
+correspondenceNonUKAddress.townOrCity = Town or city
+correspondenceNonUKAddress.Country = Country
+correspondenceNonUKAddress.Region = Region or postal code (optional)
+correspondenceNonUKAddress.checkYourAnswersLabel = Correspondence Address
+correspondenceNonUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
+correspondenceNonUKAddress.addressLine1.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.addressLine1.error.length = Address line 1 must be 27 characters or less
+correspondenceNonUKAddress.addressLine2.error.required = Enter address line 2 for the correspondence address
+correspondenceNonUKAddress.addressLine2.error.invalid = Address line 2 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.addressLine2.error.length = Address line 2 must be 27 characters or less
+correspondenceNonUKAddress.townOrCity.error.required = Enter the town or city for the correspondence address
+correspondenceNonUKAddress.townOrCity.error.invalid = Town or city must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.townOrCity.error.length = Town or city must be 27 characters or less
+correspondenceNonUKAddress.Region.error.invalid = Region or postal code must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.Region.error.length = Region or postal code must be 18 characters or less, including spaces
+correspondenceNonUKAddress.Country.error.required = Enter the country for the correspondence address
+correspondenceNonUKAddress.Country.error.invalid = 	Country must only include letters a to z, apostrophes, hyphens or spaces
+correspondenceNonUKAddress.Country.error.length = Country must be 27 characters or less
+
+removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
+removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?
+
+faxNumberForCorrespondenceYesNo.title = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.heading = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.change.hidden = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.error.required = Select yes to add a fax number for correspondence
+
+removeCorrAddressAddInfo.title = Are you sure you want to remove the additional information for this correspondence address?
+removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
+removeCorrAddressAddInfo.paragraph = The additional information is: {0}
+removeCorrAddressAddInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
+
+removeCorrespondenceDetailsYesNo.title = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.heading = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.checkYourAnswersLabel = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.hint = If you remove your correspondence details, we will contact you through the business details you provided
+removeCorrespondenceDetailsYesNo.p1 = You must continue to the change registration details page to submit any changes.
+removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
+removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?
+
+correspondenceChangeAddrScreener.title = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.heading = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
+correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
+correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
+correspondenceChangeAddrScreener.no = Edit current correspondence address
+
+correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+correspondenceUKAddrScreener.checkYourAnswersLabel = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.error.required = Select yes if the correspondence address has a UK postcode
+correspondenceUKAddrScreener.change.hidden = Does the correspondence address have a UK postcode?
 
 correspondenceAddressSelectAddress.title = Select the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
 correspondenceAddressSelectAddress.heading = Select the correspondence address

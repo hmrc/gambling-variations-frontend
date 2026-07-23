@@ -18,7 +18,8 @@ package controllers
 
 import base.SpecBase
 import models.BusinessType.Soleproprietor
-import models.{BusinessType, UserAnswers}
+import models.{BusinessType, SoleProprietorName, UserAnswers}
+import pages.*
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -28,25 +29,40 @@ class CheckBusinessNameControllerSpec extends SpecBase {
 
   "BusinessName Controller" - {
 
-    val noAnswers = UserAnswers(userAnswersId,
-                                Json.obj(
-                                  "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-                                )
-                               )
+    val noAnswers = UserAnswers(
+      userAnswersId,
+      Json.obj(
+        "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+    )
 
     "must return OK and the correct view for a GET" - {
+
+      "with the expected URL" in {
+        routes.CheckBusinessNameController.onPageLoad().url must endWith("/change-registration/business-name/check")
+      }
+
       "when sole proprietor" in {
 
-        val data = Json.obj(
-          "soleProprietor" -> Json.obj(
-            "title"     -> "Mr",
-            "firstName" -> "Test",
-            "lastName"  -> "Fella"
-          ),
-          "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-        )
-
-        val userAnswers = UserAnswers("id", data)
+        val userAnswers =
+          UserAnswers(userAnswersId)
+            .set(BusinessNameSectionPage, mgdRegNum)
+            .success
+            .value
+            .set(GroupMemberPage, false)
+            .success
+            .value
+            .set(
+              SoleProprietorPage,
+              SoleProprietorName(
+                "Mr",
+                "Test",
+                None,
+                "Fella"
+              )
+            )
+            .success
+            .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -58,18 +74,32 @@ class CheckBusinessNameControllerSpec extends SpecBase {
           val view = application.injector.instanceOf[BusinessNameView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(Soleproprietor, "Mr Test Fella", None, false)(request, messages(application)).toString
+          contentAsString(result) mustEqual
+            view(
+              Soleproprietor,
+              "Mr Test Fella",
+              None,
+              false
+            )(request, messages(application)).toString
         }
       }
+
       "when partnership" in {
 
-        val data = Json.obj(
-          "businessName"        -> "Test Business Ltd",
-          "businessType"        -> 4,
-          "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-        )
-
-        val userAnswers = UserAnswers("id", data)
+        val userAnswers =
+          UserAnswers(userAnswersId)
+            .set(BusinessNameSectionPage, mgdRegNum)
+            .success
+            .value
+            .set(GroupMemberPage, false)
+            .success
+            .value
+            .set(BusinessNamePage, "Test Business Ltd")
+            .success
+            .value
+            .set(BusinessTypePage, BusinessType.Partnership)
+            .success
+            .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -81,8 +111,43 @@ class CheckBusinessNameControllerSpec extends SpecBase {
           val view = application.injector.instanceOf[BusinessNameView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(BusinessType.Partnership, "Test Business Ltd", None, false)(request, messages(application)).toString
+          contentAsString(result) mustEqual
+            view(
+              BusinessType.Partnership,
+              "Test Business Ltd",
+              None,
+              false
+            )(request, messages(application)).toString
         }
+      }
+    }
+
+    "must redirect to access denied when group member is true" in {
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(BusinessNameSectionPage, mgdRegNum)
+          .success
+          .value
+          .set(GroupMemberPage, true)
+          .success
+          .value
+          .set(BusinessNamePage, "Test Business Ltd")
+          .success
+          .value
+          .set(BusinessTypePage, BusinessType.Partnership)
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
       }
     }
 
@@ -99,7 +164,5 @@ class CheckBusinessNameControllerSpec extends SpecBase {
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
-
   }
-
 }

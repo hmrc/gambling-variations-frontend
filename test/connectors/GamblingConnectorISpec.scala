@@ -464,6 +464,7 @@ object GamblingConnectorISpec {
       )
     ),
     additionalInformation = Some("Upstairs"),
+    iomOrCiFlag           = Some("true"),
     contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
     faxNumber             = Some("0123456799"),
     emailAddr             = Some("abc@email.com")

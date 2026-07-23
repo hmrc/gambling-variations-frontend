@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.tradingdetails
 import base.SpecBase
 import controllers.routes
 import models.NormalMode
-import pages.PreviousRegistrationNumbersListPage
+import pages.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.Application
 import play.api.i18n.Messages
 
@@ -77,7 +77,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
     }
 
-    "must display registration numbers separated by <br> and exclude change action when 3 or more numbers" in {
+    "must display registration numbers separated by <br> and exclude change action when 3 or more  prev numbers" in {
 
       val numbers = Seq("REG001", "REG002", "REG003")
 
@@ -96,6 +96,27 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       html must include("<br/>")
 
       result.actions.get.items.size mustBe 0
+    }
+
+    "must display registration numbers separated by <br> and include change action when 3 or more  unsub numbers" in {
+
+      val numbers = Seq("REG001", "REG002", "REG003")
+
+      val answers =
+        emptyUserAnswers
+          .set(UnsubmittedPreviousRegNumbersPage, numbers)
+          .success
+          .value
+
+      val result = PreviousRegistrationNumbersSummary.row(answers).value
+      val html = result.value.content.asHtml.toString
+
+      html must include("REG001")
+      html must include("REG002")
+      html must include("REG003")
+      html must include("<br/>")
+
+      result.actions.get.items.size mustBe 1
     }
   }
 }

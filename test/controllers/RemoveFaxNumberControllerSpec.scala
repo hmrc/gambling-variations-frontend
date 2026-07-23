@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
+import pages.{BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage, RemoveFaxNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -42,12 +42,14 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   private val faxNumber = "123456789"
 
   private val baseAnswers =
-    UserAnswers(userAnswersId,
-                Json.obj(
-                  BusinessFaxNumberPage.toString  -> faxNumber,
-                  "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-                )
-               )
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        GroupMemberPage.toString        -> false,
+        BusinessFaxNumberPage.toString  -> faxNumber,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+    )
 
   val formProvider = new RemoveFaxNumberFormProvider()
   val form = formProvider()
@@ -74,6 +76,34 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
         contentAsString(result) mustEqual
           view(form, NormalMode, faxNumber)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to access denied when group member is true on GET" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            GroupMemberPage.toString        -> true,
+            BusinessFaxNumberPage.toString  -> faxNumber,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, removeFaxNumberRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
       }
     }
 
@@ -187,6 +217,64 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(RemoveFaxNumberPage).value mustEqual true
         savedAnswersCaptor.getValue.get(ContactDetailsChangesPage).value mustEqual true
+      }
+    }
+    "must redirect to access denied when group member is true on POST" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            GroupMemberPage.toString        -> true,
+            BusinessFaxNumberPage.toString  -> faxNumber,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect to system error when GroupMemberPage is missing on POST" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            BusinessFaxNumberPage.toString  -> faxNumber,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
       }
     }
 

@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ContactDetailsChangesPage, RemoveEmailAddressPage}
+import pages.{ContactDetailsChangesPage, GroupMemberPage, RemoveEmailAddressPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -39,12 +39,14 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   private val email = "test@test.com"
 
   private val baseAnswers =
-    UserAnswers(userAnswersId,
-                Json.obj(
-                  "businessEmailAddress"          -> email,
-                  "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-                )
-               )
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        "businessEmailAddress"          -> email,
+        GroupMemberPage.toString        -> false,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+    )
 
   val formProvider = new RemoveEmailAddressFormProvider()
   val form = formProvider()
@@ -71,6 +73,61 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
         contentAsString(result) mustEqual
           view(form, NormalMode, email)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to access denied when group member is true on GET" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            GroupMemberPage.toString        -> true,
+            "businessEmailAddress"          -> email,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, removeEmailRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect to system error when GroupMemberPage is missing on GET" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            "businessEmailAddress"          -> email,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, removeEmailRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
       }
     }
 
@@ -270,6 +327,65 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request = FakeRequest(GET, removeEmailRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to access denied when group member is true on POST" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            GroupMemberPage.toString        -> true,
+            "businessEmailAddress"          -> email,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeEmailRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect to system error when GroupMemberPage is missing on POST" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            "businessEmailAddress"          -> email,
+            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeEmailRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 

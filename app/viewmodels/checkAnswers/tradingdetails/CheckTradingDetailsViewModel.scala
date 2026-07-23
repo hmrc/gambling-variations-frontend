@@ -54,7 +54,7 @@ object CheckTradingDetailsViewModel {
 
         val fixedValue =
           tc match {
-            case None => "Not provided"
+            case None => messages("site.notProvided")
             case Some(BusinessTradeClass.Other) =>
               messages("businessTradeClass.other")
             case Some(value) =>
@@ -68,7 +68,7 @@ object CheckTradingDetailsViewModel {
       OtherTradeClassSummary.row(userAnswers).map { row =>
         val descOpt = userAnswers.get(OtherTradeClassPage)
 
-        val fixedValue: String = descOpt.filter(_.nonEmpty).getOrElse("Not provided")
+        val fixedValue: String = descOpt.filter(_.nonEmpty).getOrElse(messages("site.notProvided"))
 
         row.copy(value = ValueViewModel(Text(fixedValue)))
       }

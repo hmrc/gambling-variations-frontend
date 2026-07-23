@@ -62,3 +62,9 @@ accessDenied.title = cy:Sorry, there is a problem with the service
 accessDenied.heading = cy:Sorry, there is a problem with the service
 accessDenied.p1 = cy:You do not have access to this service.
 accessDenied.p1.link = cy:Continue to your account
+
+faxNumberForCorrespondenceYesNo.title = cy: Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.heading = cy: Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = cy: Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.change.hidden = cy: Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.error.required = cy: Select yes to add a fax number for correspondence

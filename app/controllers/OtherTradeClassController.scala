@@ -18,10 +18,10 @@ package controllers
 
 import controllers.actions.*
 import forms.OtherTradeClassFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import utils.FlagsUtil.checkIfChanged
-import pages.{OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.{IsSeasonalBusinessPage, OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -69,7 +69,13 @@ class OtherTradeClassController @Inject() (
             updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
+          } yield {
+            if (updatedAnswers.get(IsSeasonalBusinessPage).nonEmpty) {
+              Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
+            } else {
+              Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+            }
+          }
       )
   }
 }

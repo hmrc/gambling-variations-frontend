@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{NormalMode, UserAnswers}
-import pages.PreviousRegistrationNumbersListPage
+import pages.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -31,14 +31,15 @@ object PreviousRegistrationNumbersSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     Some {
 
-      val numbers =
-        answers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty)
+      val prevNumbers = answers.get(PreviousRegistrationNumbersListPage).getOrElse(Seq.empty)
+      val allNumbers =
+        answers.get(UnsubmittedPreviousRegNumbersPage).getOrElse(Seq.empty) ++ prevNumbers
 
-      val amount = numbers.length
+      val prevRegAmount = prevNumbers.length
       val maxAmount = 3
 
       val value =
-        numbers match {
+        allNumbers match {
           case Seq() =>
             ValueViewModel(messages("site.notProvided"))
 
@@ -55,7 +56,7 @@ object PreviousRegistrationNumbersSummary {
             )
         }
 
-      val hasNumbers = numbers.nonEmpty
+      val hasNumbers = allNumbers.nonEmpty
 
       val route =
         if (hasNumbers) {
@@ -64,7 +65,7 @@ object PreviousRegistrationNumbersSummary {
           routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
         }
 
-      val actions = if (amount >= maxAmount) { Seq.empty }
+      val actions = if (prevRegAmount >= maxAmount) { Seq.empty }
       else {
         Seq(
           ActionItemViewModel(
