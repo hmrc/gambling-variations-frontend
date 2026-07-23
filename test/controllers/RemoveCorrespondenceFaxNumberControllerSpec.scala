@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CorrespondenceDetailsChangesPage, CorrespondenceFaxNumberPage, RemoveCorrespondenceFaxNumberPage}
+import pages.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage, RemoveCorrespondenceFaxNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -101,6 +101,159 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
         contentAsString(result) mustEqual
           view(form.fill(true), NormalMode, correspondenceFaxNumber)(request, messages(application)).toString
+      }
+    }
+
+    "must remove CorrespondenceFaxNumberPage when user selects yes" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(RemoveCorrespondenceFaxNumberPage) mustBe Some(true)
+
+        savedAnswers.get(CorrespondenceFaxNumberPage) mustBe None
+
+        savedAnswers.get(CorrespondenceDetailsSubmittedPage) mustBe Some(true)
+
+        savedAnswers.get(CorrespondenceDetailsChangesPage) mustBe Some(true)
+      }
+    }
+
+    "must keep CorrespondenceFaxNumberPage when user selects no" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
+            .withFormUrlEncodedBody("value" -> "false")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(RemoveCorrespondenceFaxNumberPage) mustBe Some(false)
+
+        savedAnswers.get(CorrespondenceFaxNumberPage) mustBe Some(correspondenceFaxNumber)
+
+        savedAnswers.get(CorrespondenceDetailsSubmittedPage) mustBe Some(true)
+
+        savedAnswers.get(CorrespondenceDetailsChangesPage) mustBe Some(false)
+      }
+    }
+
+    "must redirect to SystemError on GET when CorrespondenceFaxNumberPage is missing" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            "correspondenceDetailsSection" ->
+              Json.obj(
+                "mgdRegNum" -> mgdRegNum
+              )
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, removeCorrespondenceFaxNumberRoute)
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError on POST when CorrespondenceFaxNumberPage is missing" in {
+
+      val userAnswers =
+        UserAnswers(
+          userAnswersId,
+          Json.obj(
+            "correspondenceDetailsSection" ->
+              Json.obj(
+                "mgdRegNum" -> mgdRegNum
+              )
+          )
+        )
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeCorrespondenceFaxNumberRoute)
+            .withFormUrlEncodedBody(
+              "value" -> "true"
+            )
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
       }
     }
 

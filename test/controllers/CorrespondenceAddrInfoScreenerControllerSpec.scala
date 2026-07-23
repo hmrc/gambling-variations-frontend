@@ -21,7 +21,7 @@ import forms.CorrespondenceAddrInfoScreenerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -32,7 +32,6 @@ import repositories.SessionRepository
 import views.html.CorrespondenceAddrInfoScreenerView
 
 import scala.concurrent.Future
-import org.mockito.Mockito.{verify, when}
 
 class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with MockitoSugar {
 
