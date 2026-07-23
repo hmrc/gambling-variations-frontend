@@ -16,11 +16,25 @@
 
 package pages
 
-import play.api.libs.json.JsPath
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-case object OtherBusinessTradeClassDescriptionPage extends QuestionPage[String] {
+class PageSpec extends AnyWordSpec with Matchers {
 
-  override def path: JsPath = JsPath \ toString
+  case object TestPage extends Page {
+    override def toString: String = "test-page"
+  }
 
-  override def toString: String = "otherBusinessTradeClassDescription"
+  "Page.toString implicit conversion" should {
+
+    "convert a Page instance to its string representation" in {
+      import Page.toString
+
+      val page: Page = TestPage
+
+      val result: String = page
+
+      result shouldBe "test-page"
+    }
+  }
 }

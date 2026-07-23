@@ -20,11 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{
-  CorrespondenceAddressUkPage,
-  CorrespondenceDetailsSubmittedPage,
-  isleMOrChannelFlagPage
-}
+import pages.{CorrespondenceAddressUkPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -34,18 +30,18 @@ import views.html.CorrespondenceUKAddressView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceUKAddressController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   sessionRepository: SessionRepository,
-                                                   navigator: Navigator,
-                                                   authorise: AuthorisedAction,
-                                                   getData: DataRetrievalAction,
-                                                   requireData: CorrespondenceDetailsDataRequiredAction,
-                                                   formProvider: CorrespondenceUKAddressFormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: CorrespondenceUKAddressView
-                                                 )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class CorrespondenceUKAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: CorrespondenceUKAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: CorrespondenceUKAddressView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
@@ -54,8 +50,8 @@ class CorrespondenceUKAddressController @Inject()(
     val normalised = postcode.trim.toUpperCase
 
     normalised.startsWith("IM") ||
-      normalised.startsWith("JE") ||
-      normalised.startsWith("GY")
+    normalised.startsWith("JE") ||
+    normalised.startsWith("GY")
   }
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
@@ -78,7 +74,6 @@ class CorrespondenceUKAddressController @Inject()(
             Future.successful(
               BadRequest(view(formWithErrors, mode))
             ),
-
           value => {
 
             val iomOrCiFlag =
@@ -90,25 +85,25 @@ class CorrespondenceUKAddressController @Inject()(
 
             for {
               updatedAnswers <- Future.fromTry(
-                request.userAnswers.set(
-                  CorrespondenceAddressUkPage,
-                  value
-                )
-              )
+                                  request.userAnswers.set(
+                                    CorrespondenceAddressUkPage,
+                                    value
+                                  )
+                                )
 
               updatedAnswers <- Future.fromTry(
-                updatedAnswers.set(
-                  isleMOrChannelFlagPage,
-                  iomOrCiFlag
-                )
-              )
+                                  updatedAnswers.set(
+                                    isleMOrChannelFlagPage,
+                                    iomOrCiFlag
+                                  )
+                                )
 
               updatedAnswers <- Future.fromTry(
-                updatedAnswers.set(
-                  CorrespondenceDetailsSubmittedPage,
-                  true
-                )
-              )
+                                  updatedAnswers.set(
+                                    CorrespondenceDetailsSubmittedPage,
+                                    true
+                                  )
+                                )
 
               _ <- sessionRepository.set(updatedAnswers)
 

@@ -21,7 +21,7 @@ import forms.CorrespondenceAddrInfoScreenerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -93,10 +93,13 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(
+          userAnswers = Some(UserAnswers("id", requiredAnswer))
+        )
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -104,13 +107,18 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
           .build()
 
       running(application) {
+
         val request =
           FakeRequest(POST, correspondenceAddrInfoScreenerRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(
+              "correspondenceAddrInfoScreener" -> "true"
+            )
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(any())
       }
     }
 
@@ -124,9 +132,9 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
       running(application) {
         val request =
           FakeRequest(POST, correspondenceAddrInfoScreenerRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody(("correspondenceAddrInfoScreener", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("correspondenceAddrInfoScreener" -> ""))
 
         val view = application.injector.instanceOf[CorrespondenceAddrInfoScreenerView]
 

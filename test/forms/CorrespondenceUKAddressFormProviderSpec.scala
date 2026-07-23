@@ -58,7 +58,7 @@ class CorrespondenceUKAddressFormProviderSpec extends StringFieldBehaviours {
         address3 = Some("London"),
         address4 = Some("Greater London"),
         postcode = Some("SW1A 2AA"),
-        country = Some("GB")
+        country  = Some("GB")
       )
     }
 
@@ -73,7 +73,7 @@ class CorrespondenceUKAddressFormProviderSpec extends StringFieldBehaviours {
         address3 = Some("London"),
         address4 = None,
         postcode = Some("SW1A 2AA"),
-        country = Some("GB")
+        country  = Some("GB")
       )
     }
   }

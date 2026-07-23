@@ -50,7 +50,6 @@ class CorrespondenceUKAddressFormProvider @Inject() extends Mappings {
               "correspondenceUKAddress.addressLine1.error.invalid"
             )
           ),
-
         "addressLine2" -> text("correspondenceUKAddress.addressLine2.error.required")
           .verifying(
             maxLength(
@@ -64,7 +63,6 @@ class CorrespondenceUKAddressFormProvider @Inject() extends Mappings {
               "correspondenceUKAddress.addressLine2.error.invalid"
             )
           ),
-
         "townOrCity" -> text("correspondenceUKAddress.townOrCity.error.required")
           .verifying(
             maxLength(
@@ -78,7 +76,6 @@ class CorrespondenceUKAddressFormProvider @Inject() extends Mappings {
               "correspondenceUKAddress.townOrCity.error.invalid"
             )
           ),
-
         "county" -> optional(text())
           .verifying(
             "correspondenceUKAddress.County.error.length",
@@ -88,7 +85,6 @@ class CorrespondenceUKAddressFormProvider @Inject() extends Mappings {
             "correspondenceUKAddress.County.error.invalid",
             _.forall(_.matches(addressRegex))
           ),
-
         "postcode" -> text("correspondenceUKAddress.Postcode.error.required")
           .verifying(
             maxLength(
@@ -108,27 +104,25 @@ class CorrespondenceUKAddressFormProvider @Inject() extends Mappings {
               "correspondenceUKAddress.Postcode.error.format"
             )
           )
-      )(
-        (addressLine1, addressLine2, townOrCity, county, postcode) =>
-          Address(
-            address1 = addressLine1,
-            address2 = Some(addressLine2),
-            address3 = Some(townOrCity),
-            address4 = county,
-            postcode = Some(postcode),
-            country = Some("GB")
+      )((addressLine1, addressLine2, townOrCity, county, postcode) =>
+        Address(
+          address1 = addressLine1,
+          address2 = Some(addressLine2),
+          address3 = Some(townOrCity),
+          address4 = county,
+          postcode = Some(postcode),
+          country  = Some("GB")
+        )
+      )(address =>
+        Some(
+          (
+            address.address1,
+            address.address2.getOrElse(""),
+            address.address3.getOrElse(""),
+            address.address4,
+            address.postcode.getOrElse("")
           )
-      )(
-        address =>
-          Some(
-            (
-              address.address1,
-              address.address2.getOrElse(""),
-              address.address3.getOrElse(""),
-              address.address4,
-              address.postcode.getOrElse("")
-            )
-          )
+        )
       )
     )
 }
