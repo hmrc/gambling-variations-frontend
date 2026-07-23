@@ -20,6 +20,7 @@ import base.SpecBase
 import forms.CorrespondenceAdditionalNameFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -28,21 +29,21 @@ import views.html.CorrespondenceAdditionalNameView
 class CorrespondenceAdditionalNameViewSpec extends SpecBase {
 
   trait Setup {
-    val app = applicationBuilder().build()
+    private val app = applicationBuilder().build()
 
-    val view = app.injector.instanceOf[CorrespondenceAdditionalNameView]
+    private val view = app.injector.instanceOf[CorrespondenceAdditionalNameView]
 
-    implicit val request: play.api.mvc.Request[?] = FakeRequest()
+    implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    val formProvider = new CorrespondenceAdditionalNameFormProvider()
-    val form = formProvider()
+    private val formProvider = new CorrespondenceAdditionalNameFormProvider()
+    private val form = formProvider()
 
-    val html = view(form, NormalMode)(request, messages)
+    private val html = view(form, NormalMode)(request, messages)
 
-    val doc = Jsoup.parse(html.body)
+    val doc: Document = Jsoup.parse(html.body)
 
   }
 
@@ -52,7 +53,9 @@ class CorrespondenceAdditionalNameViewSpec extends SpecBase {
 
       doc.title must include(messages("correspondenceAdditionalName.title"))
 
-      doc.body().select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
+      doc
+        .select(".govuk-caption-l")
+        .text() must include(messages("changeRegistrationDetails.caption"))
 
       doc
         .select(".govuk-label-wrapper")
