@@ -48,7 +48,7 @@ class CorrespondenceNonUKAddressControllerSpec extends SpecBase with MockitoSuga
       address3 = Some("Paris"),
       address4 = Some("75001"),
       postcode = None,
-      country = Some("France")
+      country  = Some("France")
     )
 
   val validFormData: Map[String, String] =

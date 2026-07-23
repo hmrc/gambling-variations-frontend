@@ -152,8 +152,8 @@ case class ConfirmPageLabels(
   changeLinkText: String = "correspondenceAddressConfirmAddress.change"
 ) {
   def messages(implicit messages: Messages) = ConfirmPageLabels(
-    title = messages(title),
-    heading = messages(heading),
+    title          = messages(title),
+    heading        = messages(heading),
     changeLinkText = messages(changeLinkText)
   )
 }

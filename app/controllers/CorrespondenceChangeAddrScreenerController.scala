@@ -30,7 +30,7 @@ import views.html.CorrespondenceChangeAddrScreenerView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceChangeAddrScreenerController @Inject()(
+class CorrespondenceChangeAddrScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -54,7 +54,8 @@ class CorrespondenceChangeAddrScreenerController @Inject()(
     }
 
     val isUkAddress =
-      request.userAnswers.get(CorrespondenceAddressUkPage)
+      request.userAnswers
+        .get(CorrespondenceAddressUkPage)
         .exists(_.country.isEmpty)
 
     Ok(view(preparedForm, mode, isUkAddress))
@@ -64,7 +65,8 @@ class CorrespondenceChangeAddrScreenerController @Inject()(
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
     val isUkAddress =
-      request.userAnswers.get(CorrespondenceAddressUkPage)
+      request.userAnswers
+        .get(CorrespondenceAddressUkPage)
         .exists(_.country.isEmpty)
 
     form

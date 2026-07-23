@@ -71,7 +71,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
 
       val data = Json.obj(
         "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum" -> userAnswersId,
+          "mgdRegNum"                                   -> userAnswersId,
           CorrespondenceChangeAddrScreenerPage.toString -> true
         )
       )
