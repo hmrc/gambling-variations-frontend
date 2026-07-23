@@ -17,28 +17,28 @@
 package views
 
 import base.SpecBase
-import forms.ContactNumberFormProvider
+import forms.{CorrespondenceAdditionalNameFormProvider, EmailAddressFormProvider}
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.CorrespondenceContactNumberView
+import views.html.CorrespondenceEmailAddressView
 
-class CorrespondenceContactNumberViewSpec extends SpecBase {
+class CorrespondenceEmailAddressViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    private val view = app.injector.instanceOf[CorrespondenceContactNumberView]
+    private val view = app.injector.instanceOf[CorrespondenceEmailAddressView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new ContactNumberFormProvider()
+    private val formProvider = new EmailAddressFormProvider()
     private val form = formProvider("TEST")
 
     private val html = view(form, NormalMode)(request, messages)
@@ -47,15 +47,14 @@ class CorrespondenceContactNumberViewSpec extends SpecBase {
 
   }
 
-  "CorrespondenceContactNumberView" - {
+  "CorrespondenceEmailAddressView" - {
 
     "must render page correctly" in new Setup {
 
-      doc.title must include(messages("correspondenceContactNumber.title"))
+      doc.title must include(messages("correspondenceEmailAddress.title"))
 
-      doc.select("h1").select(".govuk-heading-l").text()   must include(messages("correspondenceContactNumber.heading"))
-      doc.select("p").select(".govuk-body").text()         must include(messages("correspondenceContactNumber.p1"))
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
+      doc.select("h1").select(".govuk-label--l").text()    must include(messages("correspondenceEmailAddress.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
