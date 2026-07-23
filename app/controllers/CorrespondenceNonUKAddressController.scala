@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceNonUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddressNonUkPage, CorrespondenceDetailsSubmittedPage}
+import pages.{CorrespondenceAddressNonUkPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -74,13 +74,23 @@ class CorrespondenceNonUKAddressController @Inject() (
                                     value
                                   )
                                 )
+
+              updatedAnswers <- Future.fromTry(
+                                  updatedAnswers.set(
+                                    isleMOrChannelFlagPage,
+                                    "false"
+                                  )
+                                )
+
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.set(
                                     CorrespondenceDetailsSubmittedPage,
                                     true
                                   )
                                 )
+
               _ <- sessionRepository.set(updatedAnswers)
+
             } yield Redirect(
               navigator.nextPage(
                 CorrespondenceAddressNonUkPage,
