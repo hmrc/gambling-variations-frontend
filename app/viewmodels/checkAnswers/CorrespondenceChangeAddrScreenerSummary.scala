@@ -30,7 +30,8 @@ object CorrespondenceChangeAddrScreenerSummary {
     answers.get(CorrespondenceChangeAddrScreenerPage).map { answer =>
 
       val isUkAddress =
-        answers.get(CorrespondenceAddressUkPage)
+        answers
+          .get(CorrespondenceAddressUkPage)
           .exists(_.country.isEmpty)
 
       val value =

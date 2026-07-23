@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceNonUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceAddressNonUkPage}
+import pages.{CorrespondenceAddressNonUkPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,18 +30,18 @@ import views.html.CorrespondenceNonUKAddressView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceNonUKAddressController @Inject()(
-                                                      override val messagesApi: MessagesApi,
-                                                      sessionRepository: SessionRepository,
-                                                      navigator: Navigator,
-                                                      authorise: AuthorisedAction,
-                                                      getData: DataRetrievalAction,
-                                                      requireData: CorrespondenceDetailsDataRequiredAction,
-                                                      formProvider: CorrespondenceNonUKAddressFormProvider,
-                                                      val controllerComponents: MessagesControllerComponents,
-                                                      view: CorrespondenceNonUKAddressView
-                                                    )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class CorrespondenceNonUKAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: CorrespondenceNonUKAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: CorrespondenceNonUKAddressView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
@@ -69,17 +69,17 @@ class CorrespondenceNonUKAddressController @Inject()(
           value =>
             for {
               updatedAnswers <- Future.fromTry(
-                request.userAnswers.set(
-                  CorrespondenceAddressNonUkPage,
-                  value
-                )
-              )
+                                  request.userAnswers.set(
+                                    CorrespondenceAddressNonUkPage,
+                                    value
+                                  )
+                                )
               updatedAnswers <- Future.fromTry(
-                updatedAnswers.set(
-                  CorrespondenceDetailsSubmittedPage,
-                  true
-                )
-              )
+                                  updatedAnswers.set(
+                                    CorrespondenceDetailsSubmittedPage,
+                                    true
+                                  )
+                                )
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(

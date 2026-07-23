@@ -48,7 +48,7 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
       address3 = Some("London"),
       address4 = Some("Greater London"),
       postcode = Some("SW1A 2AA"),
-      country = Some("GB")
+      country  = Some("GB")
     )
 
   val validFormData: Map[String, String] =
