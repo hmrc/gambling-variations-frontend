@@ -64,7 +64,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       )
     )
 
-  "RemoveCorrespondenceEmailAddressController" ignore {
+  "RemoveCorrespondenceEmailAddressController" - {
 
     "must return OK and the correct view for a GET" in {
 
