@@ -22,7 +22,7 @@ import forms.RemoveCorrAddressAddInfoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, RemoveCorrAddressAddInfoPage}
+import pages.{AddCorrespondenceAddressAdditionalInformationPage, CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, RemoveCorrAddressAddInfoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -68,6 +68,7 @@ class RemoveCorrAddressAddInfoController @Inject() (
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrAddressAddInfoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(AddCorrespondenceAddressAdditionalInformationPage, false))
             updatedAnswers <- Future.fromTry(updatedAnswers.remove(CorrespondenceAdditionalInformationPage))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, value))
             _              <- sessionRepository.set(updatedAnswers)

@@ -22,7 +22,7 @@ import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddCorrespondenceAdditionalNamePage, CorrespondenceAdditionalNamePage, CorrespondenceDetailsChangesPage, RemoveAdditionalCorrespondenceNameYesNoPage}
+import pages.{AddCorrespondenceAdditionalNamePage, CorrespondenceAdditionalNamePage, CorrespondenceAdditionalNameYesNoPage, CorrespondenceDetailsChangesPage, RemoveAdditionalCorrespondenceNameYesNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -83,7 +83,7 @@ class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
                   if (value) {
                     for {
                       updatedAnswers <- request.userAnswers.remove(CorrespondenceAdditionalNamePage)
-                      updatedAnswers <- updatedAnswers.set(AddCorrespondenceAdditionalNamePage, false)
+                      updatedAnswers <- updatedAnswers.set(CorrespondenceAdditionalNameYesNoPage, false)
                       updatedAnswers <- updatedAnswers.set(RemoveAdditionalCorrespondenceNameYesNoPage, value)
                       updatedAnswers <- updatedAnswers.set(CorrespondenceDetailsChangesPage, value)
                     } yield updatedAnswers
@@ -95,13 +95,7 @@ class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
                   .fromTry(updatedAnswers)
                   .flatMap { answers =>
                     sessionRepository.set(answers).map { _ =>
-                      Redirect(
-                        navigator.nextPage(
-                          RemoveAdditionalCorrespondenceNameYesNoPage,
-                          mode,
-                          answers
-                        )
-                      )
+                      Redirect(controllers.routes.CheckCorrespondenceDetailsController.onPageLoad())
                     }
                   }
               }

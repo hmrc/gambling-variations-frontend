@@ -65,16 +65,19 @@ class Navigator @Inject() () {
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage                     => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage                        => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage                      => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
-    case BusinessEmailAddressPage                => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
-    case IsSeasonalBusinessPage                  => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case OtherTradeClassPage                     => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case BusinessTradeClassPage                  => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case AddPreviousRegistrationNumberPage       => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
-    case PreviousRegNumberPage                   => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
-    case PreviousRegistrationNumbersListPage     => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
+    case RemoveTradeNamePage                   => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessNamePage                      => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage                    => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
+    case BusinessEmailAddressPage              => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
+    case IsSeasonalBusinessPage                => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case OtherTradeClassPage                   => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case BusinessTradeClassPage                => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case AddPreviousRegistrationNumberPage     => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
+    case PreviousRegNumberPage                 => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    case PreviousRegistrationNumbersListPage   => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
+    case CorrespondenceAdditionalNameYesNoPage => userAnswers => navigateCorrespondenceAdditionalNameYesNoPageCheck(CheckMode)(userAnswers)
+    case AddCorrespondenceAddressAdditionalInformationPage =>
+      userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPageCheck(CheckMode)(userAnswers)
     case RemovePreviousRegNumberPage             => userAnswers => navigateRemovePreviousRegNumberPage(CheckMode)(userAnswers)
     case AddAssociatedRegistrationNumberPage     => userAnswers => navigateAddAssociatedRegistrationNumberPage(CheckMode)(userAnswers)
     case AssociatedRegNumberPage                 => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
@@ -123,6 +126,24 @@ class Navigator @Inject() () {
       .map {
         case false => routes.IndexController.onPageLoad() // change it
         case true  => routes.IndexController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateCorrespondenceAdditionalNameYesNoPageCheck(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(CorrespondenceAdditionalNameYesNoPage)
+      .map {
+        case false => routes.CheckCorrespondenceDetailsController.onPageLoad() // change it
+        case true  => routes.CorrespondenceAdditionalNameController.onPageLoad(mode)
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateAddCorrespondenceAddressAdditionalInformationPageCheck(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(AddCorrespondenceAddressAdditionalInformationPage)
+      .map {
+        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
+        case true  => routes.CorrespondenceAdditionalInfoController.onPageLoad(mode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
