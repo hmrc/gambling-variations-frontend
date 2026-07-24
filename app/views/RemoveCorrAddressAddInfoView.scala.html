@@ -30,7 +30,7 @@
 
 @(form: Form[_], mode: Mode, addressAddInfo: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removeCorrAddressAddInfo.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("removeCorrAddressAddInfo.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = routes.RemoveCorrAddressAddInfoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 

@@ -27,7 +27,7 @@
 
 @(form: Form[_], mode: Mode, correspondenceEmail: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removeCorrespondenceEmailAddress.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("removeCorrespondenceEmailAddress.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = routes.RemoveCorrespondenceEmailAddressController.onSubmit(), Symbol("autoComplete") -> "off") {
 
@@ -35,7 +35,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @caption(messages("checkTradingDetails.heading.caption"))
+        @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("removeCorrespondenceEmailAddress"),

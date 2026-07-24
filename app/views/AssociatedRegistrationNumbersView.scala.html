@@ -31,14 +31,14 @@
 
 @(form: Form[_], mode: Mode, associatedRegNumbers: Option[Seq[String]], associatedRegNumberCount: Int, isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = routes.AssociatedRegistrationNumbersListController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @caption(messages("associatedRegistrationNumbers.caption"))
+        @caption(messages("changeRegistrationDetails.caption"))
         @h1(messages("associatedRegistrationNumbers.heading"), classes = "govuk-heading-l")
 
         @if(isFlagged) {

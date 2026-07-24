@@ -43,6 +43,10 @@ class RemoveCorrAddressAddInfoViewSpec extends SpecBase {
         messages("removeCorrAddressAddInfo.paragraph", addressAddInfo)
       )
 
+      doc.select("span").select(".govuk-caption-l").text() must include(
+        messages("changeRegistrationDetails.caption")
+      )
+
       doc.select("button").text must include(
         messages("site.continue")
       )

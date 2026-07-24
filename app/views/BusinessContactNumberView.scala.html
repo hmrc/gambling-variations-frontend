@@ -32,14 +32,14 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("businessContactNumber.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = title(form, messages("businessContactNumber.title"), Some("changeRegistrationDetails.caption"))) {
 
     @formHelper(action = routes.BusinessContactNumberController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @caption(messages("businessContactNumber.caption"))
+        @caption(messages("changeRegistrationDetails.caption"))
         @h1("businessContactNumber.heading", classes = "govuk-heading-l")
         @p("businessContactNumber.p1")
         @govukInput(

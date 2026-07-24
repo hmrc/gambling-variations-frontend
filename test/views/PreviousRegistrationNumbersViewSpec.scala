@@ -48,8 +48,9 @@ class PreviousRegistrationNumbersViewSpec extends SpecBase {
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title             must include(messages("previousRegistrationNumbers.title"))
-      doc.select("h1").text must include(messages("previousRegistrationNumbers.heading"))
+      doc.title                                            must include(messages("previousRegistrationNumbers.title"))
+      doc.select("h1").text                                must include(messages("previousRegistrationNumbers.heading"))
+      doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
       doc.select(".must-be-submitted-message").text       must include(messages("previousRegistrationNumbers.paragraph"))
       doc.select(".previous-reg-number-XHM00000199").text must include("XHM00000199")
