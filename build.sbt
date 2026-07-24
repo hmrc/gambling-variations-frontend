@@ -54,10 +54,12 @@ lazy val microservice = (project in file("."))
 
 lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   fork := true,
-  unmanagedSourceDirectories += baseDirectory.value / "test-utils"
+  Test / unmanagedSourceDirectories += baseDirectory.value / "test-utils",
+  Test / javaOptions += "-Xmx1g"
 )
 
 lazy val it =
   (project in file("it"))
     .enablePlugins(PlayScala)
     .dependsOn(microservice % "test->test")
+    .settings(testSettings)
