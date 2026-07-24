@@ -267,7 +267,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         Actions(
           items = Seq(
             ActionItem(
-              href               = controllers.routes.CorrespondenceContactNumberController.onPageLoad(NormalMode).url,
+              href               = controllers.routes.CorrespondenceContactNumberController.onPageLoad(CheckMode).url,
               content            = "site.change",
               visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.contactNumbers.hidden"))
             )
