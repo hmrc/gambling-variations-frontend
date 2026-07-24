@@ -53,8 +53,8 @@ class CorrespondenceNameViewSpec extends SpecBase {
 
       doc.title must include(messages("correspondenceName.title"))
 
-      doc.select("h1").select(".govuk-label-wrapper").text()   must include(messages("correspondenceName.heading"))
-      doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
+      doc.select("h1").select(".govuk-label-wrapper").text() must include(messages("correspondenceName.heading"))
+      doc.select("span").select(".govuk-caption-l").text()   must include(messages("changeRegistrationDetails.caption"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 

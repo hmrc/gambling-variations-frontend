@@ -17,7 +17,7 @@
 package views
 
 import base.SpecBase
-import forms.{CorrespondenceAdditionalNameFormProvider, EmailAddressFormProvider}
+import forms.EmailAddressFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
