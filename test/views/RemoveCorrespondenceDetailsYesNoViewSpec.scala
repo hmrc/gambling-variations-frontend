@@ -53,7 +53,7 @@ class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
         document.select("h1").text() mustEqual
           messages(application)("removeCorrespondenceDetailsYesNo.heading")
 
-        document.body().text() must include(
+        document.select("span").select(".govuk-caption-l").text() must include(
           messages(application)("changeRegistrationDetails.caption")
         )
 
