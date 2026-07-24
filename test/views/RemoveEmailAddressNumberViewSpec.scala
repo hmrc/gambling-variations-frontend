@@ -41,7 +41,6 @@ class RemoveEmailAddressNumberViewSpec extends SpecBase {
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
-
       doc.select("legend").text must include(
         messages("removeEmailAddress.heading", faxNumber)
       )
