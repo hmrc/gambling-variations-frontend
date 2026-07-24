@@ -29,7 +29,7 @@ class RemoveAssociatedRegNumberViewSpec extends SpecBase {
 
   private val form = new RemoveAssociatedRegNumberFormProvider()()
   private val application = applicationBuilder().build()
-  val view = application.injector.instanceOf[RemoveAssociatedRegNumberView]
+  val view: RemoveAssociatedRegNumberView = application.injector.instanceOf[RemoveAssociatedRegNumberView]
 
   "RemoveAssociatedRegNumberView" - {
 
@@ -41,6 +41,10 @@ class RemoveAssociatedRegNumberViewSpec extends SpecBase {
 
         document.title() must include(
           messages(application)("removeAssociatedRegNumber.title")
+        )
+
+        document.select("span").select(".govuk-caption-l").text() must include(
+          messages(application)("changeRegistrationDetails.caption")
         )
 
         document.select(".govuk-fieldset__heading").text() mustEqual
