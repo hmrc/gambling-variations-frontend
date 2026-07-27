@@ -91,7 +91,6 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
 
   private def addAdditionalCorrespondenceNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     addCorrespondenceAdditionalName map { add =>
-      println(add)
       SummaryListRow(
         key = Key(
           content = messages("checkCorrespondenceDetails.heading.addAdditionalCorrespondenceName")
@@ -427,10 +426,9 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href = "controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url",
-                content = "site.change",
-                visuallyHiddenText =
-                  Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
+                href               = "controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url",
+                content            = "site.change",
+                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
               )
             )
           )
