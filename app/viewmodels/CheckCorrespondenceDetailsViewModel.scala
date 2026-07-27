@@ -426,10 +426,9 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href = "controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url",
-                content = "site.change",
-                visuallyHiddenText =
-                  Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
+                href               = "controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url",
+                content            = "site.change",
+                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
               )
             )
           )
