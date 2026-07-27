@@ -68,11 +68,15 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = Some(
-        UserAnswers("id",
-                    Json.obj(
-                      "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum, "correspondenceAddrAdditionalInfoScreener" -> true)
-                    )
-                   )
+        UserAnswers(
+          "id",
+          Json.obj(
+            "correspondenceDetailsSection" -> Json.obj(
+              "mgdRegNum" -> mgdRegNum
+            ),
+            "addCorrespondenceAddressAdditionalInformation" -> true
+          )
+        )
       )
 
       val application = applicationBuilder(userAnswers = userAnswers).build()

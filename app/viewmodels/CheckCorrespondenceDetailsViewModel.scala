@@ -168,7 +168,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad(CheckMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
               )
@@ -180,7 +180,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceUKAddressController.onPageLoad(CheckMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
               )

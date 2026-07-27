@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -34,8 +33,6 @@ import views.html.RemoveAdditionalCorrespondenceNameYesNoView
 import scala.concurrent.Future
 
 class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase with MockitoSugar {
-
-  private val onwardRoute = Call("GET", "/foo")
 
   private val formProvider = new RemoveAdditionalCorrespondenceNameYesNoFormProvider()
   private val form = formProvider()
@@ -116,7 +113,6 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
       val application =
         applicationBuilder(userAnswers = Some(userAnswersWithAdditionalName))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -129,7 +125,7 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual routes.CheckCorrespondenceDetailsController.onPageLoad().url
       }
     }
 
