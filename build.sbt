@@ -53,13 +53,8 @@ lazy val microservice = (project in file("."))
   )
 
 lazy val testSettings: Seq[Def.Setting[?]] = Seq(
-  Test / fork := true,
-  Test / javaOptions ++= Seq("-Xms512m", "-Xmx2048m"),
-  Test / parallelExecution := false,
-  Test / unmanagedSourceDirectories ++= Seq(
-    baseDirectory.value / "test",
-    baseDirectory.value / "test-utils"
-  )
+  fork := true,
+  unmanagedSourceDirectories += baseDirectory.value / "test-utils"
 )
 
 lazy val it =
