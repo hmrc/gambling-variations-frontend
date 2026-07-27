@@ -35,6 +35,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                                                faxNumber: Option[String],
                                                addCorrespondenceEmailAddress: Option[Boolean],
                                                emailAddress: Option[String],
+                                               hasUkPostcode: Option[Boolean],
                                                isSubmitted: Boolean
                                               ) {
 
@@ -43,6 +44,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     addAdditionalCorrespondenceNameSummaryListRow,
     Some(additionalCorrespondenceNameSummaryListRow),
     Some(correspondenceAddressUkSummaryListRow),
+    hasUkPostcodeSummaryListRow,
     addAdditionalInformationSummaryListRow,
     Some(additionalInformationSummaryListRow),
     Some(contactNumbersSummaryListRow),
@@ -409,6 +411,32 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         )
       }
     )
+
+  private def hasUkPostcodeSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    hasUkPostcode map { answer =>
+      SummaryListRow(
+        key = Key(
+          content = messages("checkCorrespondenceDetails.heading.addAdditionalInformation")
+        ),
+        value = Value(
+          content =
+            if (answer) messages("site.yes")
+            else messages("site.no")
+        ),
+        actions = Some(
+          Actions(
+            items = Seq(
+              ActionItem(
+                href = "controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url",
+                content = "site.change",
+                visuallyHiddenText =
+                  Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
+              )
+            )
+          )
+        )
+      )
+    }
 
   private def contactNumbersContent(implicit messages: Messages): Content =
     if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
