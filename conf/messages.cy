@@ -63,6 +63,14 @@ accessDenied.heading = cy:Sorry, there is a problem with the service
 accessDenied.p1 = cy:You do not have access to this service.
 accessDenied.p1.link = cy:Continue to your account
 
+pageNotFound.title = Heb ddod o hyd i’r dudalen
+pageNotFound.heading = Heb ddod o hyd i’r dudalen
+pageNotFound.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
+pageNotFound.p2 = Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
+pageNotFound.p3 = Os  yw’r cyfeiriad gwe yn gywir, neu os dewisoch gysylltiad neu fotwm, cysylltwch â
+pageNotFound.p3.link = Desg Gymorth Gwasanaethau Ar-lein CThEF (yn agor tab newydd)
+pageNotFound.p3.after = os oes angen i chi siarad â rhywun.
+
 faxNumberForCorrespondenceYesNo.title = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.heading = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = cy: Do you want to add a fax number for correspondence?
