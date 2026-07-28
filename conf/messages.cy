@@ -1,4 +1,4 @@
-service.name = cy: Gambling variations frontend
+service.name = Rheoli eich treth gamblo
 
 site.back = Yn ôl
 site.remove = Tynnu
@@ -53,10 +53,10 @@ signedOut.guidance = Ni wnaethom gadw’ch atebion.
 unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 
-systemError.title = cy: Sorry, there is a problem with the service
-systemError.heading = cy: Sorry, there is a problem with the service
-systemError.p1 = cy: Try again later or contact the
-systemError.p1.link = cy: HMRC Online Services Helpdesk (opens in a new tab)
+systemError.title = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+systemError.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+systemError.p1 = Rhowch gynnig arall arni yn nes ymlaen, neu cysylltwch â 
+systemError.p1.link = Desg Gymorth Gwasanaethau Ar-lein CThEF (yn agor tab newydd)
 
 accessDenied.title = cy:Sorry, there is a problem with the service
 accessDenied.heading = cy:Sorry, there is a problem with the service
