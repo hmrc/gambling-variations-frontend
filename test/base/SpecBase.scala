@@ -103,7 +103,7 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
         |    }
         |}
         |features {
-        |  welsh-translation: false
+        |  welsh-translation: true
         |}
         |""".stripMargin))
   )
