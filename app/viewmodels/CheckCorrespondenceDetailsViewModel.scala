@@ -176,7 +176,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
             )
           )
         )
-      } else if (hasUkPostcode.isEmpty) {
+      } else if (hasUkPostcode.contains(true)) {
         Some(
           Actions(
             items = Seq(
