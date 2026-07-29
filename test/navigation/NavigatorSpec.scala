@@ -58,7 +58,7 @@ class NavigatorSpec extends SpecBase {
         "must go from CorrespondenceContactNumberPage to FaxNumberForCorrespondenceYesNo page" in {
 
           navigator.nextPage(CorrespondenceContactNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode)
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
         }
 
         "must go from AddCorrespondenceFaxNumberPage to CorrespondenceFaxNumber page when answer is true" in {
@@ -263,7 +263,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
           navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-            routes.IndexController.onPageLoad() // update it when available
+            routes.CorrespondenceAdditionalNameController.onPageLoad(NormalMode)
         }
 
         "must go from RemoveCorrespondenceDetailsYesNoPage to ChangeRegistrationDetails page when answer is true" in {
@@ -296,7 +296,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
           navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-            routes.IndexController.onPageLoad()
+            routes.CheckCorrespondenceDetailsController.onPageLoad()
         }
 
         "must go from CorrespondenceAdditionalNameYesNoPage to SystemError page when answer is missing" in {
