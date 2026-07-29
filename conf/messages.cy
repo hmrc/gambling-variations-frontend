@@ -68,3 +68,8 @@ faxNumberForCorrespondenceYesNo.heading = cy: Do you want to add a fax number fo
 faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.change.hidden = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.error.required = cy: Select yes to add a fax number for correspondence
+
+accessDenied.title = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+accessDenied.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+accessDenied.p1 = Nid oes gennych fynediad at y gwasanaeth hwn.
+accessDenied.p1.link = Parhau i’ch cyfrif
