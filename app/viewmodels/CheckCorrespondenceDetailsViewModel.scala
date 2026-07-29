@@ -43,8 +43,8 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     Some(correspondenceNameSummaryListRow),
     addAdditionalCorrespondenceNameSummaryListRow,
     Some(additionalCorrespondenceNameSummaryListRow),
-    Some(correspondenceAddressUkSummaryListRow),
     hasUkPostcodeSummaryListRow,
+    Some(correspondenceAddressUkSummaryListRow),
     addAdditionalInformationSummaryListRow,
     Some(additionalInformationSummaryListRow),
     Some(contactNumbersSummaryListRow),
@@ -164,12 +164,24 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
       value = Value(
         content = addressContent
       ),
-      actions = if (correspondenceName.isEmpty) {
+      actions = if (correspondenceAddress.isEmpty) {
         Some(
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad(NormalMode).url,
+                href               = controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url,
+                content            = "site.change",
+                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
+              )
+            )
+          )
+        )
+      } else if (hasUkPostcode.isEmpty) {
+        Some(
+          Actions(
+            items = Seq(
+              ActionItem(
+                href               = controllers.routes.CorrespondenceUKAddressController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
               )
@@ -181,7 +193,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.CorrespondenceUKAddressController.onPageLoad(NormalMode).url,
+                href               = controllers.routes.CorrespondenceNonUKAddressController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
               )
@@ -415,7 +427,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     hasUkPostcode map { answer =>
       SummaryListRow(
         key = Key(
-          content = messages("checkCorrespondenceDetails.heading.addAdditionalInformation")
+          content = messages("correspondenceUKAddrScreener.heading.addAdditionalInformation")
         ),
         value = Value(
           content =
@@ -426,9 +438,9 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url",
+                href               = controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url,
                 content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
+                visuallyHiddenText = Some(messages("correspondenceUKAddrScreener.label.addAdditionalInformation.hidden"))
               )
             )
           )

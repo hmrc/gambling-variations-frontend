@@ -54,7 +54,9 @@ class Navigator @Inject() () {
     case AddCorrespondenceFaxNumberPage        => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
     case RemoveCorrespondenceDetailsYesNoPage  => userAnswers => navigateRemoveCorrespondenceDetailsYesNoPage(userAnswers)
     case AddCorrespondenceAddressAdditionalInformationPage =>
-      userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPage(CheckMode)(userAnswers)
+      userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPage(NormalMode)(userAnswers)
+    case CorrespondenceUKAddrScreenerPage =>
+      userAnswers => navigateCorrespondenceUKAddrScreenerPage(NormalMode)(userAnswers)
     case CorrespondenceFaxNumberPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
@@ -64,6 +66,7 @@ class Navigator @Inject() () {
     case CorrespondenceAdditionalInformationPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAddressUkPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAddressNonUkPage          => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
@@ -136,6 +139,15 @@ class Navigator @Inject() () {
       .map {
         case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
         case true  => routes.CorrespondenceAdditionalInfoController.onPageLoad(mode)
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateCorrespondenceUKAddrScreenerPage(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(CorrespondenceUKAddrScreenerPage)
+      .map {
+        case false => routes.CorrespondenceNonUKAddressController.onPageLoad(mode)
+        case true  => routes.CorrespondenceUKAddressController.onPageLoad(mode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
