@@ -16,7 +16,24 @@
 
 package models
 
-import models.addresslookup.{AddressLookupConfigOptions, AddressLookupConfigSettings, AddressLookupLabelContent, AddressLookupLabels, AppLevelLabels, ConfirmPageConfig, ConfirmPageLabels, EditPageLabels, International, LookupPageLabels, ManualAddressEntryConfig, ManualAddressEntryLineContent, MaxLengthErrorMessages, SelectPageConfig, SelectPageLabels}
+import models.addresslookup.{
+  AddressLookupConfigOptions,
+  AddressLookupConfigSettings,
+  AddressLookupLabelContent,
+  AddressLookupLabels,
+  AppLevelLabels,
+  ConfirmPageConfig,
+  ConfirmPageLabels,
+  EditPageLabels,
+  International,
+  LookupPageLabels,
+  ManualAddressEntryConfig,
+  ManualAddressEntryLineContent,
+  MaxLengthErrorMessages,
+  SelectPageConfig,
+  SelectPageLabels,
+  TimeoutConfig
+}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsSuccess, Json}
@@ -29,7 +46,8 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
       addressLine1 = "Enter address line 1",
       addressLine2 = "Enter address line 2",
       addressLine3 = "Enter address line 3",
-      town         = "Enter town or city"
+      town         = "Enter town or city",
+      postcode     = "Enter postcode"
     )
 
     val manualAddressEntryConfig = ManualAddressEntryConfig(
@@ -44,25 +62,32 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
       )
     )
 
+    val timeoutConfig = TimeoutConfig(
+      timeoutAmount       = 900,
+      timeoutUrl          = "http://localhost:9000/timeout",
+      timeoutKeepAliveUrl = "http://localhost:9000/keep-alive"
+    )
+
     val options = AddressLookupConfigOptions(
-      continueUrl            = "http://localhost:9000/continue",
-      homeNavHref            = "http://localhost:9000/home",
-      signOutHref            = "http://localhost:9000/sign-out",
-      accessibilityFooterUrl = "http://localhost:9000/accessibility",
-      deskProServiceName     = "gambling-variations-frontend",
-      allowedCountryCodes    = Seq("GB"),
+      continueUrl              = "http://localhost:9000/continue",
+      homeNavHref               = "http://localhost:9000/home",
+      signOutHref               = "http://localhost:9000/sign-out",
+      accessibilityFooterUrl    = "http://localhost:9000/accessibility",
+      deskProServiceName        = "gambling-variations-frontend",
+      showBackButtons           = true,
+      includeHMRCBranding       = false,
+      ukMode                    = true,
+      pageHeadingStyle          = "govuk-heading-l",
       selectPageConfig = SelectPageConfig(
         proposalListLimit     = 30,
         showSearchLinkAgain   = true,
         showNoneOfTheseOption = false
       ),
       confirmPageConfig = ConfirmPageConfig(
-        showChangeLink        = true,
-        showSubHeadingAndInfo = false,
-        showSearchAgainLink   = true,
         showConfirmChangeText = false
       ),
-      manualAddressEntryConfig = manualAddressEntryConfig
+      manualAddressEntryConfig = manualAddressEntryConfig,
+      timeoutConfig            = timeoutConfig
     )
 
     val editPageLabels = EditPageLabels(
@@ -80,28 +105,19 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
     val labelContent = AddressLookupLabelContent(
       appLevelLabels = AppLevelLabels(navTitle = "Manage your gambling variation"),
       selectPageLabels = SelectPageLabels(
-        title               = "Select address",
-        heading             = "Select address",
-        headingWithPostcode = "Select address for AA1 1AA",
-        proposalListLabel   = "Select an address",
-        submitLabel         = "Continue",
-        searchAgainLinkText = "Search again"
+        title   = "Select address",
+        heading = "Select address"
       ),
       lookupPageLabels = LookupPageLabels(
-        title                      = "Find address",
-        heading                    = "Find address",
-        afterHeadingText           = "We will use this address to send you letters",
-        filterLabel                = "Property name or number",
-        postcodeLabel              = "Postcode",
-        submitLabel                = "Find address",
-        noResultsFoundMessage      = "No results found",
-        resultLimitExceededMessage = "Too many results"
+        title         = "Find address",
+        heading       = "Find address",
+        postcodeLabel = "Postcode",
+        submitLabel   = "Find address"
       ),
       confirmPageLabels = ConfirmPageLabels(
-        title               = "Confirm address",
-        heading             = "Confirm address",
-        searchAgainLinkText = "Search again",
-        confirmChangeText   = "By confirming this change"
+        title          = "Confirm address",
+        heading        = "Confirm address",
+        changeLinkText = "Change"
       ),
       editPageLabels = editPageLabels,
       international  = International(editPageLabels = editPageLabels)
@@ -120,7 +136,8 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
       val json = Json.toJson(settings)
 
       (json \ "options" \ "continueUrl").as[String]                       shouldBe "http://localhost:9000/continue"
-      (json \ "options" \ "allowedCountryCodes").as[Seq[String]]          shouldBe Seq("GB")
+      (json \ "options" \ "ukMode").as[Boolean]                           shouldBe true
+      (json \ "options" \ "pageHeadingStyle").as[String]                  shouldBe "govuk-heading-l"
       (json \ "labels" \ "en" \ "appLevelLabels" \ "navTitle").as[String] shouldBe "Manage your gambling variation"
     }
   }

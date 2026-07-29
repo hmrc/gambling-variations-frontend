@@ -16,6 +16,7 @@
 
 package services
 
+import config.FrontendAppConfig
 import connectors.GamblingConnector
 import models.BusinessDetails
 import models.addresslookup.*
@@ -27,17 +28,22 @@ import javax.inject.Inject
 import scala.concurrent.Future
 
 class AddressLookupService @Inject()(
-  connector: AddressLookupService
-)() {
+                                      appConfig: FrontendAppConfig
+                                    ){
 
   def configureAddressLookup(ukMode: Boolean)(implicit hc: HeaderCarrier, messages: Messages): AddressLookupConfigSettings =
     AddressLookupConfigSettings(
       options = AddressLookupConfigOptions(
-        continueUrl = ???,
-        homeNavHref = ???,
-        signOutHref = ???,
-        accessibilityFooterUrl = ???,
-        deskProServiceName = ???,
+        continueUrl = appConfig.addressLookupContinueUrl,
+        homeNavHref = appConfig.addressLookupHomeNavHref,
+        signOutHref = appConfig.signOutUrl,
+        accessibilityFooterUrl = appConfig.addressLookupAccessibilityFooterUrl,
+        deskProServiceName = appConfig.addressLookupDeskProServiceName,
+        timeoutConfig = TimeoutConfig(
+          timeoutAmount = 900,
+          timeoutUrl = appConfig.addressLookupTimeoutUrl,
+          timeoutKeepAliveUrl = appConfig.addressLookupTimeoutKeepAliveUrl
+        ),
         showBackButtons = true,
         includeHMRCBranding = false,
         ukMode = ukMode,
@@ -67,12 +73,7 @@ class AddressLookupService @Inject()(
             cy = ManualAddressEntryLineContent().messages
           ),
           showOrganisationName = false
-      ),
-        timeoutConfig = TimeoutConfig(
-          timeoutAmount = 900,
-          timeoutUrl = ???,
-          timeoutKeepAliveUrl = ???
-        )
+      )
     ),
       labels = AddressLookupLabels(
         en = AddressLookupLabelContent(
@@ -82,8 +83,8 @@ class AddressLookupService @Inject()(
           selectPageLabels = SelectPageLabels().messages,
           lookupPageLabels = LookupPageLabels().messages,
           confirmPageLabels = ConfirmPageLabels().messages,
-          editPageLabels = ???,
-          international = ???
+          editPageLabels = EditPageLabels().messages,
+          international = International.messages
         ),
         cy = AddressLookupLabelContent(
           appLevelLabels = AppLevelLabels(
@@ -92,64 +93,65 @@ class AddressLookupService @Inject()(
           selectPageLabels = SelectPageLabels().messages,
           lookupPageLabels = LookupPageLabels().messages,
           confirmPageLabels = ConfirmPageLabels().messages,
-          editPageLabels = EditPageLabels(),
-          international = ???
+          editPageLabels = EditPageLabels().messages,
+          international = International.messages
         )
       )
+    )
 }
 
-"""
-  |  "labels": {
-  |    "en": {
-  |      "editPageLabels": {
-  |        "title": "META title from Confluence",
-  |        "heading": "Enter your XXX address",
-  |        "organisationLabel": "",
-  |        "line1Label": "Address line 1",
-  |        "line2Label": "Address line 2",
-  |        "line3Label": "Town or city",
-  |        "townLabel": "County (optional)",
-  |        "postcodeLabel": "Postcode",
-  |        "countryLabel": "",
-  |        "submitLabel": "Continue"
-  |      },
-  |      "international": {
-  |        "editPageLabels": {
-  |          "organisationLabel": "",
-  |          "line1Label": "Address line 1",
-  |          "line2Label": "Address line 2",
-  |          "line3Label": "Town or city",
-  |          "townLabel": "Region or postal code",
-  |          "postcodeLabel": "",
-  |          "countryLabel": "Country"
-  |        }
-  |      }
-  |    },
-  |
-  |    "cy": {
-  |      "editPageLabels": {
-  |        "title": "META title from Confluence",
-  |        "heading": "Enter address",
-  |        "organisationLabel": "",
-  |        "line1Label": "Address line 1",
-  |        "line2Label": "Address line 2",
-  |        "line3Label": "Town or city",
-  |        "townLabel": "County (optional)",
-  |        "postcodeLabel": "Postcode",
-  |        "countryLabel": "",
-  |        "submitLabel": "Continue"
-  |      },
-  |      "international": {
-  |        "editPageLabels": {
-  |          "organisationLabel": "",
-  |          "line1Label": "Address line 1",
-  |          "line2Label": "Address line 2",
-  |          "line3Label": "Town or city",
-  |          "townLabel": "Region or postal code (optional)",
-  |          "postcodeLabel": "",
-  |          "countryLabel": "Country"
-  |        }
-  |      }
-  |    }
-  |  }
-  |""".stripMargin
+//"""
+//  |  "labels": {
+//  |    "en": {
+//  |      "editPageLabels": {
+//  |        "title": "META title from Confluence",
+//  |        "heading": "Enter your XXX address",
+//  |        "organisationLabel": "",
+//  |        "line1Label": "Address line 1",
+//  |        "line2Label": "Address line 2",
+//  |        "line3Label": "Town or city",
+//  |        "townLabel": "County (optional)",
+//  |        "postcodeLabel": "Postcode",
+//  |        "countryLabel": "",
+//  |        "submitLabel": "Continue"
+//  |      },
+//  |      "international": {
+//  |        "editPageLabels": {
+//  |          "organisationLabel": "",
+//  |          "line1Label": "Address line 1",
+//  |          "line2Label": "Address line 2",
+//  |          "line3Label": "Town or city",
+//  |          "townLabel": "Region or postal code",
+//  |          "postcodeLabel": "",
+//  |          "countryLabel": "Country"
+//  |        }
+//  |      }
+//  |    },
+//  |
+//  |    "cy": {
+//  |      "editPageLabels": {
+//  |        "title": "META title from Confluence",
+//  |        "heading": "Enter address",
+//  |        "organisationLabel": "",
+//  |        "line1Label": "Address line 1",
+//  |        "line2Label": "Address line 2",
+//  |        "line3Label": "Town or city",
+//  |        "townLabel": "County (optional)",
+//  |        "postcodeLabel": "Postcode",
+//  |        "countryLabel": "",
+//  |        "submitLabel": "Continue"
+//  |      },
+//  |      "international": {
+//  |        "editPageLabels": {
+//  |          "organisationLabel": "",
+//  |          "line1Label": "Address line 1",
+//  |          "line2Label": "Address line 2",
+//  |          "line3Label": "Town or city",
+//  |          "townLabel": "Region or postal code (optional)",
+//  |          "postcodeLabel": "",
+//  |          "countryLabel": "Country"
+//  |        }
+//  |      }
+//  |    }
+//  |  }
+//  |""".stripMargin

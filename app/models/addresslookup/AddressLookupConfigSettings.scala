@@ -16,7 +16,6 @@
 
 package models.addresslookup
 
-import models.{AddressLookupConfigOptions, AddressLookupConfigSettings, AddressLookupLabelContent, AddressLookupLabels, AppLevelLabels, ConfirmPageConfig, ConfirmPageLabels, EditPageLabels, International, LookupPageLabels, ManualAddressEntryConfig, ManualAddressEntryLineContent, MaxLengthErrorMessages, SelectPageConfig, SelectPageLabels, TimeoutConfig}
 import play.api.i18n.Messages
 import play.api.libs.json.{Format, Json}
 
@@ -163,16 +162,30 @@ object ConfirmPageLabels {
 }
 
 case class EditPageLabels(
-  title: String = ???,
-  heading: String,
-  line1Label: String,
-  line2Label: String,
-  line3Label: String,
-  townLabel: String,
-  postcodeLabel: Option[String],
-  countryLabel: Option[String],
-  submitLabel: Option[String]
-)
+                           title: String = "correspondenceUKAddress.title",
+                           heading: String = "correspondenceUKAddress.heading",
+                           line1Label: String = "correspondenceUKAddress.addressLine1",
+                           line2Label: String = "correspondenceUKAddress.addressLine2",
+                           line3Label: String = "correspondenceUKAddress.townOrCity",
+                           townLabel: String = "correspondenceUKAddress.County",
+                           postcodeLabel: Option[String] = Some("correspondenceUKAddress.Postcode"),
+                           countryLabel: Option[String] = None,
+                           submitLabel: Option[String] = Some("site.continue")
+                         ) {
+
+  def messages(implicit messages: Messages): EditPageLabels =
+    copy(
+      title = messages(title),
+      heading = messages(heading),
+      line1Label = messages(line1Label),
+      line2Label = messages(line2Label),
+      line3Label = messages(line3Label),
+      townLabel = messages(townLabel),
+      postcodeLabel = postcodeLabel.map(messages(_)),
+      countryLabel = countryLabel.map(messages(_)),
+      submitLabel = submitLabel.map(messages(_))
+    )
+}
 
 object EditPageLabels {
   implicit val fmt: Format[EditPageLabels] = Json.format[EditPageLabels]
@@ -181,9 +194,26 @@ object EditPageLabels {
 case class International(editPageLabels: EditPageLabels)
 
 object International {
-  implicit val fmt: Format[International] = Json.format[International]
-}
 
+  implicit val fmt: Format[International] =
+    Json.format[International]
+
+  def messages(implicit messages: Messages): International =
+    International(
+      editPageLabels =
+        EditPageLabels(
+          title = "correspondenceNonUKAddress.title",
+          heading = "correspondenceNonUKAddress.heading",
+          line1Label = "correspondenceNonUKAddress.addressLine1",
+          line2Label = "correspondenceNonUKAddress.addressLine2",
+          line3Label = "correspondenceNonUKAddress.townOrCity",
+          townLabel = "correspondenceNonUKAddress.Region",
+          postcodeLabel = None,
+          countryLabel = Some("correspondenceNonUKAddress.Country"),
+          submitLabel = Some("site.continue")
+        ).messages
+    )
+}
 case class SelectPageConfig(proposalListLimit: Int, showSearchLinkAgain: Boolean, showNoneOfTheseOption: Boolean)
 
 object SelectPageConfig {
