@@ -83,7 +83,6 @@ class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
                   if (value) {
                     for {
                       updatedAnswers <- request.userAnswers.remove(CorrespondenceAdditionalNamePage)
-                      updatedAnswers <- updatedAnswers.set(CorrespondenceAdditionalNameYesNoPage, false)
                       updatedAnswers <- updatedAnswers.set(RemoveAdditionalCorrespondenceNameYesNoPage, value)
                       updatedAnswers <- updatedAnswers.set(CorrespondenceDetailsChangesPage, value)
                     } yield updatedAnswers

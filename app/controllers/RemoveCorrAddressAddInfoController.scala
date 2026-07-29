@@ -68,7 +68,6 @@ class RemoveCorrAddressAddInfoController @Inject() (
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveCorrAddressAddInfoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(AddCorrespondenceAddressAdditionalInformationPage, false))
             updatedAnswers <- Future.fromTry(updatedAnswers.remove(CorrespondenceAdditionalInformationPage))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, value))
             _              <- sessionRepository.set(updatedAnswers)

@@ -63,6 +63,7 @@ class Navigator @Inject() () {
     case CorrespondenceAdditionalNamePage        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAdditionalInformationPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAddressUkPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
@@ -90,7 +91,6 @@ class Navigator @Inject() () {
     case CorrespondenceAdditionalInformationPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceContactNumberPage         => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAddressUkPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _                                       => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
