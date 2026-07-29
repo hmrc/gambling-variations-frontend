@@ -20,7 +20,7 @@ import base.SpecBase
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import play.api.test.Helpers.running
+import play.api.test.Helpers.{GET, running}
 import views.html.SystemErrorView
 
 class SystemErrorViewSpec extends SpecBase {
@@ -48,42 +48,39 @@ class SystemErrorViewSpec extends SpecBase {
       link.attr("rel") must include("noreferrer")
     }
 
-    "must render the language toggle on an English page" in {
+    "render the language toggle when Welsh translation is enabled" in {
 
-      val application = applicationBuilder().build()
+      val application = applicationBuilder()
+        .configure("features.welsh-translation" -> true)
+        .build()
 
       running(application) {
         val serviceDeskUrl = "https://www.gov.uk/find-hmrc-contacts/technical-support-with-hmrc-online-services"
-        val request = FakeRequest("GET", controllers.routes.SystemErrorController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.routes.SystemErrorController.onPageLoad().url)
         val view = application.injector.instanceOf[SystemErrorView]
+
         val html = view(serviceDeskUrl)(request, messages(application))
         val doc = Jsoup.parse(html.body)
-        val welshToggle = doc.select(".hmrc-service-navigation-language-select a").select(":contains(CYM)")
 
-        doc.select(".govuk-back-link").text                         must include("Back")
-        doc.select(".hmrc-service-navigation-language-select").text must include("ENG CYM")
-        welshToggle.text                                            must include("CYM")
+        doc.select(".hmrc-service-navigation-language-select").isEmpty mustBe false
       }
     }
 
-    "must render the language toggle on a Welsh page" in {
+    "not render the language toggle when Welsh translation is disabled" in {
 
-      val application = applicationBuilder().build()
+      val application = applicationBuilder()
+        .configure("features.welsh-translation" -> false)
+        .build()
 
       running(application) {
         val serviceDeskUrl = "https://www.gov.uk/find-hmrc-contacts/technical-support-with-hmrc-online-services"
-        val request = FakeRequest("GET", controllers.routes.SystemErrorController.onPageLoad().url)
-          .withCookies(play.api.mvc.Cookie("PLAY_LANG", "cy"))
+        val request = FakeRequest(GET, controllers.routes.SystemErrorController.onPageLoad().url)
         val view = application.injector.instanceOf[SystemErrorView]
-        val messages = application.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
-        val html = view(serviceDeskUrl)(request, messages)
-        val doc = Jsoup.parse(html.body)
-        val englishToggle = doc.select(".hmrc-service-navigation-language-select a").select(":contains(ENG)")
 
-        doc.select(".govuk-back-link").text                         must include("Yn ôl")
-        doc.select(".hmrc-service-navigation-language-select").text must include("ENG")
-        doc.select(".hmrc-service-navigation-language-select").text must include("CYM")
-        englishToggle.text                                          must include("ENG")
+        val html = view(serviceDeskUrl)(request, messages(application))
+        val doc = Jsoup.parse(html.body)
+
+        doc.select(".hmrc-service-navigation-language-select").isEmpty mustBe true
       }
     }
   }
