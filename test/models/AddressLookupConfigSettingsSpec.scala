@@ -55,7 +55,13 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
       line2MaxLength  = 35,
       line3MaxLength  = 35,
       townMaxLength   = 35,
-      mandatoryFields = Map("line1" -> true, "line2" -> false),
+      mandatoryFields = Map(
+        "addressLine1" -> true,
+        "addressLine2" -> true,
+        "addressLine3" -> true,
+        "town"         -> false,
+        "postcode"     -> true
+      ),
       maxLengthErrorMessages = MaxLengthErrorMessages(
         en = manualAddressEntryLineContent,
         cy = manualAddressEntryLineContent
@@ -64,59 +70,59 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
 
     val timeoutConfig = TimeoutConfig(
       timeoutAmount       = 900,
-      timeoutUrl          = "http://localhost:9000/timeout",
-      timeoutKeepAliveUrl = "http://localhost:9000/keep-alive"
+      timeoutUrl          = "/timeout",
+      timeoutKeepAliveUrl = "/keep-alive"
     )
 
     val options = AddressLookupConfigOptions(
-      continueUrl              = "http://localhost:9000/continue",
-      homeNavHref               = "http://localhost:9000/home",
-      signOutHref               = "http://localhost:9000/sign-out",
-      accessibilityFooterUrl    = "http://localhost:9000/accessibility",
+      continueUrl              = "/continue",
+      homeNavHref               = "/",
+      signOutHref               = "/sign-out",
+      accessibilityFooterUrl    = "/accessibility-statement/gambling-variations",
       deskProServiceName        = "gambling-variations-frontend",
       showBackButtons           = true,
       includeHMRCBranding       = false,
       ukMode                    = true,
       pageHeadingStyle          = "govuk-heading-l",
       selectPageConfig = SelectPageConfig(
-        proposalListLimit     = 30,
+        proposalListLimit     = 10,
         showSearchLinkAgain   = true,
-        showNoneOfTheseOption = false
+        showNoneOfTheseOption = true
       ),
       confirmPageConfig = ConfirmPageConfig(
-        showConfirmChangeText = false
+        showConfirmChangeText = true
       ),
       manualAddressEntryConfig = manualAddressEntryConfig,
       timeoutConfig            = timeoutConfig
     )
 
     val editPageLabels = EditPageLabels(
-      title         = "Enter address",
-      heading       = "Enter address",
+      title         = "Enter the correspondence address",
+      heading       = "Enter the correspondence address",
       line1Label    = "Address line 1",
       line2Label    = "Address line 2",
-      line3Label    = "Address line 3",
-      townLabel     = "Town or city",
+      line3Label    = "Town or city",
+      townLabel     = "County (optional)",
       postcodeLabel = Some("Postcode"),
-      countryLabel  = Some("Country"),
+      countryLabel  = None,
       submitLabel   = Some("Continue")
     )
 
     val labelContent = AddressLookupLabelContent(
       appLevelLabels = AppLevelLabels(navTitle = "Manage your gambling variation"),
       selectPageLabels = SelectPageLabels(
-        title   = "Select address",
-        heading = "Select address"
+        title   = "Select the correspondence address",
+        heading = "Select the correspondence address"
       ),
       lookupPageLabels = LookupPageLabels(
-        title         = "Find address",
-        heading       = "Find address",
+        title         = "Enter the correspondence address",
+        heading       = "Enter the correspondence address",
         postcodeLabel = "Postcode",
         submitLabel   = "Find address"
       ),
       confirmPageLabels = ConfirmPageLabels(
-        title          = "Confirm address",
-        heading        = "Confirm address",
+        title          = "Confirm the correspondence address",
+        heading        = "Review and confirm",
         changeLinkText = "Change"
       ),
       editPageLabels = editPageLabels,
@@ -135,10 +141,16 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
     "serialise nested options and labels under their own keys" in {
       val json = Json.toJson(settings)
 
-      (json \ "options" \ "continueUrl").as[String]                       shouldBe "http://localhost:9000/continue"
+      (json \ "options" \ "continueUrl").as[String]                       shouldBe "/continue"
       (json \ "options" \ "ukMode").as[Boolean]                           shouldBe true
       (json \ "options" \ "pageHeadingStyle").as[String]                  shouldBe "govuk-heading-l"
       (json \ "labels" \ "en" \ "appLevelLabels" \ "navTitle").as[String] shouldBe "Manage your gambling variation"
+    }
+
+    "print the generated JSON for use in the address-lookup-frontend stub" in {
+      val json = Json.toJson(settings)
+      println(Json.prettyPrint(json))
+      succeed
     }
   }
 
