@@ -49,6 +49,7 @@ class Navigator @Inject() () {
     case AssociatedRegistrationNumbersPage     => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
     case RemoveAssociatedRegNumberPage         => userAnswers => navigateRemoveAssociatedRegNumberPage(NormalMode)(userAnswers)
     case AddCorrespondingDetailsYesNoPage      => userAnswers => navigateAddCorrespondingDetailsYesNoPage(NormalMode)(userAnswers)
+    case CorrespondenceChangeAddrScreenerPage  => userAnswers => navigatCorrespondenceChangeAddrScreenerPage(NormalMode)(userAnswers)
     case CorrespondenceAdditionalNameYesNoPage => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
     case CorrespondenceContactNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case AddCorrespondenceFaxNumberPage        => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
@@ -157,6 +158,15 @@ class Navigator @Inject() () {
       .map {
         case true  => routes.CorrespondenceNameController.onPageLoad(mode)
         case false => routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatCorrespondenceChangeAddrScreenerPage(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(CorrespondenceChangeAddrScreenerPage)
+      .map {
+        case true  => routes.CorrespondenceNonUKAddressController.onPageLoad(mode)
+        case false => routes.CorrespondenceUKAddressController.onPageLoad(mode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
