@@ -29,7 +29,7 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("correspondenceName.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = title(form, messages("correspondenceName.title"), Some("changeRegistrationDetails.caption"))) {
 
     @formHelper(action = routes.CorrespondenceNameController.onSubmit(mode), Symbol("autoComplete") -> "on") {
 
@@ -37,7 +37,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @caption(messages("changeRegistrationDetails.title"))
+        @caption(messages("changeRegistrationDetails.caption"))
 
         @govukInput(
             InputViewModel(

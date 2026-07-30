@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage}
+import pages.*
 
 import javax.inject.Inject
 import utils.FlagsUtil.checkFlag

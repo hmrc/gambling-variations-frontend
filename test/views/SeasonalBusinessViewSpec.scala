@@ -36,6 +36,7 @@ class SeasonalBusinessViewSpec extends SpecBase {
       doc.title must include(messages("seasonalBusiness.title"))
       doc.select("h1").text mustEqual messages("seasonalBusiness.heading")
       doc.select(".govuk-hint").text mustEqual messages("seasonalBusiness.paragraph")
+      doc.select(".govuk-caption-l").text mustEqual messages("changeRegistrationDetails.caption")
 
       doc.select("form").attr("action") mustEqual controllers.routes.SeasonalBusinessController.onSubmit(NormalMode).url
 

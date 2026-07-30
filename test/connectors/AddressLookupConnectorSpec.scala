@@ -20,6 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.Address
+import org.scalactic.Prettifier.default
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -30,7 +31,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
 
@@ -143,6 +144,21 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
 
       }
 
+    }
+
+    "retrieveAddress" should {
+      "retrieveAddress" in {
+        val address = Address("address_one", None, None, None, None, None)
+        val json = Json.toJson(address).toString
+        val id = "test-id"
+
+        wireMockServer.stubFor(
+          get(urlEqualTo(s"/api/v2/confirmed?id=$id"))
+            .willReturn(okJson(json))
+        )
+
+        connector.retrieveAddress(id).map(_ mustBe address)
+      }
     }
 
   }

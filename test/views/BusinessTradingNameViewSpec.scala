@@ -52,6 +52,8 @@ class BusinessTradingNameViewSpec extends SpecBase {
 
       doc.select("h1").text must include(messages("businessTradingName.heading"))
 
+      doc.body().text() must include(messages("changeRegistrationDetails.caption"))
+
       doc.select(".govuk-hint").isEmpty mustBe true
     }
 

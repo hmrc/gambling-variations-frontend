@@ -29,7 +29,7 @@ caption: Caption
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("previousRegistrationNumber.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("previousRegistrationNumber.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
 @formHelper(action = routes.PreviousRegistrationNumberController.onSubmit(mode)) {
 
@@ -37,7 +37,7 @@ caption: Caption
 @govukErrorSummary(ErrorSummaryViewModel(form))
 }
 
-@caption(messages("previousRegistrationNumber.heading.caption"))
+@caption(messages("changeRegistrationDetails.caption"))
 
 @govukInput(
 InputViewModel(
