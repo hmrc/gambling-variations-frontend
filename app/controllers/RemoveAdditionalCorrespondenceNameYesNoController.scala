@@ -18,23 +18,20 @@ package controllers
 
 import controllers.actions.*
 import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
-
-import javax.inject.Inject
 import models.Mode
-import navigation.Navigator
-import pages.{AddCorrespondenceAdditionalNamePage, CorrespondenceAdditionalNamePage, CorrespondenceAdditionalNameYesNoPage, CorrespondenceDetailsChangesPage, RemoveAdditionalCorrespondenceNameYesNoPage}
+import pages.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsChangesPage, RemoveAdditionalCorrespondenceNameYesNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveAdditionalCorrespondenceNameYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
