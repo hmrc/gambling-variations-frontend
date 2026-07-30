@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.Address
+import models.*
 import org.scalactic.Prettifier.default
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -69,6 +69,80 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
     Some("UK")
   )
 
+  private val addressLookupConfig = AddressLookupConfigSettings(
+    options = AddressLookupConfigOptions(
+      continueUrl            = "http://localhost:9000/continue",
+      homeNavHref            = "http://localhost:9000/home",
+      signOutHref            = "http://localhost:9000/sign-out",
+      accessibilityFooterUrl = "http://localhost:9000/accessibility",
+      deskProServiceName     = "gambling-variations-frontend",
+      allowedCountryCodes    = Seq("GB"),
+      selectPageConfig       = SelectPageConfig(30, showSearchLinkAgain = true, showNoneOfTheseOption = false),
+      confirmPageConfig = ConfirmPageConfig(
+        showChangeLink        = true,
+        showSubHeadingAndInfo = false,
+        showSearchAgainLink   = true,
+        showConfirmChangeText = false
+      ),
+      manualAddressEntryConfig = ManualAddressEntryConfig(
+        line1MaxLength  = 35,
+        line2MaxLength  = 35,
+        line3MaxLength  = 35,
+        townMaxLength   = 35,
+        mandatoryFields = Map("addressLine1" -> true),
+        maxLengthErrorMessages = MaxLengthErrorMessages(
+          en = ManualAddressEntryLineContent("line1", "line2", "line3", "town"),
+          cy = ManualAddressEntryLineContent("line1", "line2", "line3", "town")
+        )
+      )
+    ),
+    labels = {
+      val editPageLabels = EditPageLabels(
+        title         = "Enter address",
+        heading       = "Enter address",
+        line1Label    = "Address line 1",
+        line2Label    = "Address line 2",
+        line3Label    = "Address line 3",
+        townLabel     = "Town or city",
+        postcodeLabel = Some("Postcode"),
+        countryLabel  = Some("Country"),
+        submitLabel   = Some("Continue")
+      )
+
+      val labels = AddressLookupLabelContent(
+        appLevelLabels = AppLevelLabels("Manage your gambling variation"),
+        selectPageLabels = SelectPageLabels(
+          title               = "Select address",
+          heading             = "Select address",
+          headingWithPostcode = "Select address for {0}",
+          proposalListLabel   = "Select an address",
+          submitLabel         = "Continue",
+          searchAgainLinkText = "Search again"
+        ),
+        lookupPageLabels = LookupPageLabels(
+          title                      = "Find address",
+          heading                    = "Find address",
+          afterHeadingText           = "We will use this address to contact you.",
+          filterLabel                = "Property name or number",
+          postcodeLabel              = "Postcode",
+          submitLabel                = "Find address",
+          noResultsFoundMessage      = "No addresses found",
+          resultLimitExceededMessage = "Too many addresses found"
+        ),
+        confirmPageLabels = ConfirmPageLabels(
+          title               = "Confirm address",
+          heading             = "Confirm address",
+          searchAgainLinkText = "Search again",
+          confirmChangeText   = "By confirming this change, you agree that the information is correct."
+        ),
+        editPageLabels = editPageLabels,
+        international  = International(editPageLabels)
+      )
+
+      AddressLookupLabels(en = labels, cy = labels)
+    }
+  )
+
   "AddressLookupConnector" should {
 
     ".initJourney() method" should {
@@ -80,7 +154,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
             post(urlEqualTo("/api/init"))
               .withRequestBody(
                 equalToJson(
-                  Json.obj().toString()
+                  Json.toJson(addressLookupConfig).toString()
                 )
               )
               .willReturn(
@@ -92,7 +166,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
 
           val expectedResult = "/foo"
           val actualResult =
-            connector.initJourney().futureValue
+            connector.initJourney(addressLookupConfig).futureValue
 
           actualResult mustBe expectedResult
 
@@ -107,7 +181,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
             post(urlEqualTo("/api/init"))
               .withRequestBody(
                 equalToJson(
-                  Json.obj().toString()
+                  Json.toJson(addressLookupConfig).toString()
                 )
               )
               .willReturn(
@@ -117,7 +191,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
           )
 
           recoverToSucceededIf[RuntimeException] {
-            connector.initJourney()
+            connector.initJourney(addressLookupConfig)
           }
         }
 
@@ -127,7 +201,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
             post(urlEqualTo("/api/init"))
               .withRequestBody(
                 equalToJson(
-                  Json.obj().toString()
+                  Json.toJson(addressLookupConfig).toString()
                 )
               )
               .willReturn(
@@ -138,7 +212,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
           )
 
           recoverToSucceededIf[RuntimeException] {
-            connector.initJourney()
+            connector.initJourney(addressLookupConfig)
           }
         }
 
