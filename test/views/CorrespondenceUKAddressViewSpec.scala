@@ -17,28 +17,28 @@
 package views
 
 import base.SpecBase
-import forms.CorrespondenceUKAddrScreenerFormProvider
+import forms.CorrespondenceUKAddressFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.CorrespondenceUKAddrScreenerView
+import views.html.CorrespondenceUKAddressView
 
-class CorrespondenceUKAddrScreenerViewSpec extends SpecBase {
+class CorrespondenceUKAddressViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    private val view = app.injector.instanceOf[CorrespondenceUKAddrScreenerView]
+    private val view = app.injector.instanceOf[CorrespondenceUKAddressView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new CorrespondenceUKAddrScreenerFormProvider()
+    private val formProvider = new CorrespondenceUKAddressFormProvider()
     private val form = formProvider()
 
     private val html = view(form, NormalMode)(request, messages)
@@ -47,17 +47,17 @@ class CorrespondenceUKAddrScreenerViewSpec extends SpecBase {
 
   }
 
-  "CorrespondenceUKAddrScreenerView" - {
+  "CorrespondenceUKAddressView" - {
 
     "must render page correctly" in new Setup {
 
-      doc.title must include(messages("correspondenceUKAddrScreener.title"))
+      doc.title must include(messages("correspondenceUKAddress.title"))
+
+      doc.title must include(messages("changeRegistrationDetails.caption"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
-      doc.select("h1").select(".govuk-fieldset__heading").text() must include(messages("correspondenceUKAddrScreener.heading"))
-
-      doc.select("#correspondenceUKAddrScreener-hint").select(".govuk-hint").text() must include(messages("correspondenceUKAddrScreener.hint"))
+      doc.select("h1").text() must include(messages("correspondenceUKAddress.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
