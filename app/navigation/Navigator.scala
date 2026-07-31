@@ -49,7 +49,7 @@ class Navigator @Inject() () {
     case AssociatedRegistrationNumbersPage     => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
     case RemoveAssociatedRegNumberPage         => userAnswers => navigateRemoveAssociatedRegNumberPage(NormalMode)(userAnswers)
     case AddCorrespondingDetailsYesNoPage      => userAnswers => navigateAddCorrespondingDetailsYesNoPage(NormalMode)(userAnswers)
-    case CorrespondenceChangeAddrScreenerPage  => userAnswers => navigatCorrespondenceChangeAddrScreenerPage(NormalMode)(userAnswers)
+    case CorrespondenceChangeAddrScreenerPage  => userAnswers => navigateCorrespondenceChangeAddrScreenerPage(NormalMode)(userAnswers)
     case CorrespondenceAdditionalNameYesNoPage => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
     case CorrespondenceContactNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case AddCorrespondenceFaxNumberPage        => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
@@ -161,14 +161,28 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigatCorrespondenceChangeAddrScreenerPage(mode: Mode)(userAnswers: UserAnswers): Call =
+  private def navigateCorrespondenceChangeAddrScreenerPage(mode: Mode)(userAnswers: UserAnswers): Call = {
+
+    val isUkAddress =
+      userAnswers.get(CorrespondenceAddressUkPage).isDefined
+
     userAnswers
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
-        case true  => routes.CorrespondenceNonUKAddressController.onPageLoad(mode)
-        case false => routes.CorrespondenceUKAddressController.onPageLoad(mode)
+        case true if isUkAddress =>
+          routes.CorrespondenceNonUKAddressController.onPageLoad(mode)
+
+        case false if isUkAddress =>
+          routes.CorrespondenceUKAddressController.onPageLoad(mode)
+
+        case true =>
+          routes.CorrespondenceUKAddressController.onPageLoad(mode)
+
+        case false =>
+          routes.CorrespondenceNonUKAddressController.onPageLoad(mode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
 
   private def navigateAddCorrespondenceFaxNumberPage(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers

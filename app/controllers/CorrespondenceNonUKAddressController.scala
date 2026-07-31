@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceNonUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddressNonUkPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
+import pages.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -72,6 +72,12 @@ class CorrespondenceNonUKAddressController @Inject() (
                                   request.userAnswers.set(
                                     CorrespondenceAddressNonUkPage,
                                     value
+                                  )
+                                )
+
+              updatedAnswers <- Future.fromTry(
+                                  updatedAnswers.remove(
+                                    CorrespondenceAddressUkPage
                                   )
                                 )
 
