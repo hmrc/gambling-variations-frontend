@@ -156,7 +156,11 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
       }
     )
 
-  private def correspondenceAddressUkSummaryListRow(implicit messages: Messages): SummaryListRow =
+  private def correspondenceAddressUkSummaryListRow(implicit messages: Messages): SummaryListRow = {
+    val changeUrl =
+      if (correspondenceAddress.isEmpty) { controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url }
+      else { controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad(NormalMode).url }
+
     SummaryListRow(
       key = Key(
         content = messages("checkCorrespondenceDetails.heading.correspondenceAddress")
@@ -164,44 +168,21 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
       value = Value(
         content = addressContent
       ),
-      actions = if (correspondenceAddress.isEmpty) {
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
+      actions = Some(
+        Actions(
+          items = Seq(
+            ActionItem(
+              href    = changeUrl,
+              content = "site.change",
+              visuallyHiddenText = Some(
+                messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden")
               )
             )
           )
         )
-      } else if (hasUkPostcode.contains(true)) {
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad(NormalMode).url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
-              )
-            )
-          )
-        )
-      } else {
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad(NormalMode).url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
-              )
-            )
-          )
-        )
-      }
+      )
     )
+  }
 
   private def addAdditionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     addCorrespondenceAdditionalInformation map { add =>
