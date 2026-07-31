@@ -54,7 +54,7 @@ class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
           messages(application)("addCorrespondingDetailsYesNo.heading")
 
         document.body().text() must include(
-          messages(application)("addCorrespondingDetailsYesNo.caption")
+          messages(application)("changeRegistrationDetails.caption")
         )
 
         document.body().text() must include(

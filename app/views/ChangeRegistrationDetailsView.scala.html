@@ -34,11 +34,11 @@
     submitUrl: String
 )(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("changeRegistrationDetails.title"))) {
+@layout(pageTitle = titleNoForm(messages("changeRegistrationDetails.caption"))) {
 
 @caption(messages("changeRegistrationDetails.heading.caption", mgdRegNumber))
 
-@h1("changeRegistrationDetails.heading", classes = "govuk-heading-l")
+@h1("changeRegistrationDetails.caption", classes = "govuk-heading-l")
 
 <ul class="govuk-task-list">
 

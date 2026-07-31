@@ -67,7 +67,7 @@ class CorrespondenceAdditionalNameYesNoViewSpec extends SpecBase {
       val doc = Jsoup.parse(html.body)
 
       doc.select(".govuk-caption-l").text must include(
-        messages("correspondenceAdditionalNameYesNo.caption")
+        messages("changeRegistrationDetails.caption")
       )
     }
 

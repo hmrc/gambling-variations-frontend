@@ -23,7 +23,7 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import views.html.CheckContactDetailsView
 
-class BusinessContactDetailsViewSpec extends SpecBase {
+class CheckContactDetailsViewSpec extends SpecBase {
 
   trait Setup {
     val app = applicationBuilder().build()
@@ -44,6 +44,7 @@ class BusinessContactDetailsViewSpec extends SpecBase {
       val doc = Jsoup.parse(html.body)
 
       doc.title             must include(messages("contactDetails.title"))
+      doc.title             must include(messages("changeRegistrationDetails.caption"))
       doc.select("h1").text must include(messages("contactDetails.heading"))
 
       doc.select(".contact-numbers").text must include(messages("contactDetails.label.phoneNumber"))
