@@ -22,7 +22,6 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import models.{CorrespondenceDetails, UserAnswers}
 import pages.*
 import play.api.Logging
-import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -87,28 +86,23 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
-    optional.fold(Try(userAnswers)) { value =>
-      userAnswers.set(page, value)
-    }
-
   private def setCorrespondenceDetails(correspondenceDetails: CorrespondenceDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Correspondence Details")
     for {
       updatedAnswers <- answers.set(CorrespondenceDetailsSectionPage, correspondenceDetails.mgdRegNumber)
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.nameLine1, CorrespondenceNamePage)
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.nameLine2, CorrespondenceAdditionalNamePage)
+      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceNamePage, correspondenceDetails.nameLine1)
+      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceAdditionalNamePage, correspondenceDetails.nameLine2)
       updatedAnswers <- {
         correspondenceDetails.correspondenceAddress.flatMap(_.postcode) match {
-          case Some(_) => setIfDefined(updatedAnswers, correspondenceDetails.correspondenceAddress, CorrespondenceAddressUkPage)
-          case None    => setIfDefined(updatedAnswers, correspondenceDetails.correspondenceAddress, CorrespondenceAddressNonUkPage)
+          case Some(_) => updatedAnswers.setIfDefined(CorrespondenceAddressUkPage, correspondenceDetails.correspondenceAddress)
+          case None    => updatedAnswers.setIfDefined(CorrespondenceAddressNonUkPage, correspondenceDetails.correspondenceAddress)
         }
       }
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.additionalInformation, CorrespondenceAdditionalInformationPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.iomOrCiFlag, isleMOrChannelFlagPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.contactNumber, CorrespondenceContactNumberPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.faxNumber, CorrespondenceFaxNumberPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails.emailAddr, CorrespondenceEmailPage)
+      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceAdditionalInformationPage, correspondenceDetails.additionalInformation)
+      updatedAnswers <- updatedAnswers.setIfDefined(isleMOrChannelFlagPage, correspondenceDetails.iomOrCiFlag)
+      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceContactNumberPage, correspondenceDetails.contactNumber)
+      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceFaxNumberPage, correspondenceDetails.faxNumber)
+      updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceEmailPage, correspondenceDetails.emailAddr)
     } yield updatedAnswers
   }
 
