@@ -16,26 +16,11 @@
 
 package pages
 
-import models.UserAnswers
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object AddCorrespondenceFaxNumberPage extends QuestionPage[Boolean] {
+case object IsAddingNewCorrespondenceDetailsPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "addCorrespondenceFaxNumber"
-
-  override def cleanup(
-    value: Option[Boolean],
-    userAnswers: UserAnswers
-  ): Try[UserAnswers] =
-    value match {
-      case Some(false) =>
-        userAnswers.remove(CorrespondenceFaxNumberPage)
-
-      case _ =>
-        Try(userAnswers)
-    }
+  override def toString: String = "isAddingNewCorrespondenceDetails"
 }

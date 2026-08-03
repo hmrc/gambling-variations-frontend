@@ -59,7 +59,8 @@ class CheckCorrespondenceDetailsController @Inject() (
             request.userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage),
             request.userAnswers.get(CorrespondenceEmailPage),
             request.userAnswers.get(CorrespondenceUKAddrScreenerPage),
-            checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage)
+            checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage),
+            request.userAnswers.get(IsAddingNewCorrespondenceDetailsPage)
           )
         )
       )
