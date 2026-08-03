@@ -66,7 +66,7 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
     gamblingConnector.getMgdTradeDetails(answers.id) flatMap { mgdContactDetails =>
 
       setMgdTradeDetails(mgdContactDetails, answers) map { updatedAnswers =>
-        logger.info("User Answers not found. Saving User Answers")
+        logger.info("User Answers updated with Mgd Trade Details. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
             logger.info("User Answers saved.")

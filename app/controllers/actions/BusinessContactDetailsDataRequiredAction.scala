@@ -66,7 +66,7 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
     gamblingConnector.getBusinessContactDetails(answers.id) flatMap { contact =>
 
       setBusinessContactDetails(contact, answers) map { updatedAnswers =>
-        logger.info("User Answers not found. Saving User Answers")
+        logger.info("User Answers updated with Business Contact Details. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
             logger.info("User Answers saved.")

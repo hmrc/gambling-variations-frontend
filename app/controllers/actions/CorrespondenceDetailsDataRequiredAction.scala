@@ -70,7 +70,7 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
     gamblingConnector.getCorrespondenceDetails(answers.id) flatMap { correspondenceDetails =>
 
       setCorrespondenceDetails(correspondenceDetails, answers) map { updatedAnswers =>
-        logger.info("User Answers not found. Saving User Answers")
+        logger.info("User Answers updated with Correspondence Details. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
             logger.info("User Answers saved.")
