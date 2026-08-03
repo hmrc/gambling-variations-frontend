@@ -56,7 +56,7 @@ class CheckCorrespondenceDetailsController @Inject() (
             request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
             request.userAnswers.get(AddCorrespondenceFaxNumberPage),
             request.userAnswers.get(CorrespondenceFaxNumberPage),
-            request.userAnswers.get(AddCorrespondenceEmailAddressPage),
+            request.userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage),
             request.userAnswers.get(CorrespondenceEmailPage),
             request.userAnswers.get(CorrespondenceUKAddrScreenerPage),
             checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage)

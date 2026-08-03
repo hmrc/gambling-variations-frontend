@@ -28,74 +28,67 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage                   => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage                      => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage                    => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
-    case TradingNamePage                       => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessFaxNumberPage                 => _ => routes.CheckContactDetailsController.onPageLoad()
-    case RemoveFaxNumberPage                   => _ => routes.CheckContactDetailsController.onPageLoad()
-    case RemoveEmailAddressPage                => _ => routes.CheckContactDetailsController.onPageLoad()
-    case BusinessContactNumberPage             => _ => routes.CheckContactDetailsController.onPageLoad()
-    case BusinessEmailAddressPage              => _ => routes.CheckContactDetailsController.onPageLoad()
-    case BusinessTradeClassPage                => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case IsSeasonalBusinessPage                => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case OtherTradeClassPage                   => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case AddPreviousRegistrationNumberPage     => userAnswers => addPreviousRegistrationNumberRoute(NormalMode)(userAnswers)
-    case PreviousRegNumberPage                 => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
-    case PreviousRegistrationNumbersListPage   => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode)
-    case RemovePreviousRegNumberPage           => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode)
-    case AddAssociatedRegistrationNumberPage   => userAnswers => navigateAddAssociatedRegistrationNumberPage(NormalMode)(userAnswers)
-    case AssociatedRegNumberPage               => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
-    case AssociatedRegistrationNumbersPage     => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
-    case RemoveAssociatedRegNumberPage         => userAnswers => navigateRemoveAssociatedRegNumberPage(NormalMode)(userAnswers)
-    case AddCorrespondingDetailsYesNoPage      => userAnswers => navigateAddCorrespondingDetailsYesNoPage(NormalMode)(userAnswers)
-    case CorrespondenceChangeAddrScreenerPage  => userAnswers => navigateCorrespondenceChangeAddrScreenerPage(NormalMode)(userAnswers)
-    case CorrespondenceAdditionalNameYesNoPage => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
-    case CorrespondenceContactNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case AddCorrespondenceFaxNumberPage        => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
-    case RemoveCorrespondenceDetailsYesNoPage  => userAnswers => navigateRemoveCorrespondenceDetailsYesNoPage(userAnswers)
+    case RemoveTradeNamePage                       => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessNamePage                          => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage                        => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
+    case TradingNamePage                           => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessFaxNumberPage                     => _ => routes.CheckContactDetailsController.onPageLoad()
+    case RemoveFaxNumberPage                       => _ => routes.CheckContactDetailsController.onPageLoad()
+    case RemoveEmailAddressPage                    => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessContactNumberPage                 => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessEmailAddressPage                  => _ => routes.CheckContactDetailsController.onPageLoad()
+    case BusinessTradeClassPage                    => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case IsSeasonalBusinessPage                    => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case OtherTradeClassPage                       => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case AddPreviousRegistrationNumberPage         => userAnswers => addPreviousRegistrationNumberRoute(NormalMode)(userAnswers)
+    case PreviousRegNumberPage                     => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+    case PreviousRegistrationNumbersListPage       => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode)
+    case RemovePreviousRegNumberPage               => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode)
+    case AddAssociatedRegistrationNumberPage       => userAnswers => navigateAddAssociatedRegistrationNumberPage(NormalMode)(userAnswers)
+    case AssociatedRegNumberPage                   => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
+    case AssociatedRegistrationNumbersPage         => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
+    case RemoveAssociatedRegNumberPage             => userAnswers => navigateRemoveAssociatedRegNumberPage(NormalMode)(userAnswers)
+    case AddCorrespondingDetailsYesNoPage          => userAnswers => navigateAddCorrespondingDetailsYesNoPage(NormalMode)(userAnswers)
+    case CorrespondenceChangeAddrScreenerPage      => userAnswers => navigateCorrespondenceChangeAddrScreenerPage(NormalMode)(userAnswers)
+    case CorrespondenceAdditionalNameYesNoPage     => userAnswers => navigateCorrespondenceAdditionalNameYesNoPage(NormalMode)(userAnswers)
+    case CorrespondenceContactNumberPage           => userAnswers => navigateCorrespondenceContactNumberPage(NormalMode)(userAnswers)
+    case AddCorrespondenceFaxNumberPage            => userAnswers => navigateAddCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
+    case CorrespondenceFaxNumberPage               => userAnswers => navigateCorrespondenceFaxNumberPage(NormalMode)(userAnswers)
+    case AddEmailAddressForCorrespondenceYesNoPage => userAnswers => navigateAddEmailAddressForCorrespondenceYesNoPage(NormalMode)(userAnswers)
+    case RemoveCorrespondenceDetailsYesNoPage      => userAnswers => navigateRemoveCorrespondenceDetailsYesNoPage(userAnswers)
     case AddCorrespondenceAddressAdditionalInformationPage =>
       userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPage(NormalMode)(userAnswers)
     case CorrespondenceUKAddrScreenerPage =>
       userAnswers => navigateCorrespondenceUKAddrScreenerPage(NormalMode)(userAnswers)
-    case CorrespondenceFaxNumberPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceEmailPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceNamePage                  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAdditionalNamePage        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAdditionalInformationPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceNamePage                  => userAnswers => navigateCorrespondenceNamePage(NormalMode)(userAnswers)
+    case CorrespondenceAdditionalNamePage        => userAnswers => navigateCorrespondenceAdditionalNamePage(NormalMode)(userAnswers)
+    case CorrespondenceAdditionalInformationPage => userAnswers => navigateCorrespondenceAdditionalInformationPage(NormalMode)(userAnswers)
     case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAddressUkPage             => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAddressNonUkPage          => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAddressUkPage             => userAnswers => navigateCorrespondenceAddressUkPage(NormalMode)(userAnswers)
+    case CorrespondenceAddressNonUkPage          => userAnswers => navigateCorrespondenceAddressNonUkPage(NormalMode)(userAnswers)
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage                     => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage                        => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage                      => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
-    case BusinessEmailAddressPage                => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
-    case IsSeasonalBusinessPage                  => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case OtherTradeClassPage                     => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case BusinessTradeClassPage                  => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case AddPreviousRegistrationNumberPage       => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
-    case PreviousRegNumberPage                   => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
-    case PreviousRegistrationNumbersListPage     => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
-    case RemovePreviousRegNumberPage             => userAnswers => navigateRemovePreviousRegNumberPage(CheckMode)(userAnswers)
-    case AddAssociatedRegistrationNumberPage     => userAnswers => navigateAddAssociatedRegistrationNumberPage(CheckMode)(userAnswers)
-    case AssociatedRegNumberPage                 => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
-    case AssociatedRegistrationNumbersPage       => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
-    case RemoveAssociatedRegNumberPage           => userAnswers => navigateRemoveAssociatedRegNumberPage(CheckMode)(userAnswers)
-    case AddCorrespondenceFaxNumberPage          => userAnswers => navigateAddCorrespondenceFaxNumberPage(CheckMode)(userAnswers)
-    case CorrespondenceFaxNumberPage             => _ => routes.CorrespondenceFaxNumberController.onPageLoad(CheckMode)
-    case RemoveCorrespondenceFaxNumberPage       => _ => routes.RemoveCorrespondenceFaxNumberController.onPageLoad(CheckMode)
-    case CorrespondenceNamePage                  => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAdditionalNamePage        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAdditionalInformationPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceContactNumberPage         => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case _                                       => _ => routes.CheckYourAnswersController.onPageLoad()
+    case RemoveTradeNamePage                 => _ => routes.CheckBusinessNameController.onPageLoad()
+    case BusinessNamePage                    => _ => routes.CheckBusinessNameController.onPageLoad()
+    case SoleProprietorPage                  => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
+    case BusinessEmailAddressPage            => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
+    case IsSeasonalBusinessPage              => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case OtherTradeClassPage                 => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case BusinessTradeClassPage              => _ => routes.CheckTradingDetailsController.onPageLoad()
+    case AddPreviousRegistrationNumberPage   => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
+    case PreviousRegNumberPage               => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    case PreviousRegistrationNumbersListPage => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
+    case RemovePreviousRegNumberPage         => userAnswers => navigateRemovePreviousRegNumberPage(CheckMode)(userAnswers)
+    case AddAssociatedRegistrationNumberPage => userAnswers => navigateAddAssociatedRegistrationNumberPage(CheckMode)(userAnswers)
+    case AssociatedRegNumberPage             => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
+    case AssociatedRegistrationNumbersPage   => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
+    case RemoveAssociatedRegNumberPage       => userAnswers => navigateRemoveAssociatedRegNumberPage(CheckMode)(userAnswers)
+    case _                                   => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {
@@ -106,6 +99,48 @@ class Navigator @Inject() () {
         checkRouteMap(page)(userAnswers)
     }
   }
+
+  private def navigateCorrespondenceNamePage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondingDetailsYesNoPage) match {
+      case Some(true) => routes.CorrespondenceAdditionalNameYesNoController.onPageLoad(mode)
+      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+  private def navigateCorrespondenceAdditionalNamePage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondingDetailsYesNoPage) match {
+      case Some(true) => routes.CorrespondenceUKAddrScreenerController.onPageLoad(mode)
+      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+  private def navigateCorrespondenceAddressUkPage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondingDetailsYesNoPage) match {
+      case Some(true) => routes.CorrespondenceAddrInfoScreenerController.onPageLoad(mode)
+      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+  private def navigateCorrespondenceAddressNonUkPage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondingDetailsYesNoPage) match {
+      case Some(true) => routes.CorrespondenceAddrInfoScreenerController.onPageLoad(mode)
+      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+  private def navigateCorrespondenceAdditionalInformationPage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondingDetailsYesNoPage) match {
+      case Some(true) => routes.CorrespondenceContactNumberController.onPageLoad(mode)
+      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+  private def navigateCorrespondenceContactNumberPage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondingDetailsYesNoPage) match {
+      case Some(true) => routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(mode)
+      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
+
+  private def navigateCorrespondenceFaxNumberPage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondingDetailsYesNoPage) match {
+      case Some(true) => routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(mode)
+      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    }
 
   private def navigateAddAssociatedRegistrationNumberPage(mode: Mode)(answers: UserAnswers): Call =
     answers
@@ -126,22 +161,33 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigateCorrespondenceAdditionalNameYesNoPage(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers
-      .get(CorrespondenceAdditionalNameYesNoPage)
-      .map {
-        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
-        case true  => routes.CorrespondenceAdditionalNameController.onPageLoad(mode)
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+    userAnswers.get(CorrespondenceAdditionalNameYesNoPage) match {
+      case Some(true) =>
+        routes.CorrespondenceAdditionalNameController.onPageLoad(mode)
+      case Some(false) =>
+        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+          routes.CorrespondenceUKAddrScreenerController.onPageLoad(mode)
+        else
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
 
-  private def navigateAddCorrespondenceAddressAdditionalInformationPage(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers
-      .get(AddCorrespondenceAddressAdditionalInformationPage)
-      .map {
-        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
-        case true  => routes.CorrespondenceAdditionalInfoController.onPageLoad(mode)
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
+
+  private def navigateAddCorrespondenceAddressAdditionalInformationPage(mode: Mode)(answers: UserAnswers): Call =
+    answers.get(AddCorrespondenceAddressAdditionalInformationPage) match {
+      case Some(true) =>
+        routes.CorrespondenceAdditionalInfoController.onPageLoad(mode)
+
+      case Some(false) =>
+        if (answers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+          routes.CorrespondenceContactNumberController.onPageLoad(mode)
+        else
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
 
   private def navigateCorrespondenceUKAddrScreenerPage(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers
@@ -185,13 +231,34 @@ class Navigator @Inject() () {
   }
 
   private def navigateAddCorrespondenceFaxNumberPage(mode: Mode)(userAnswers: UserAnswers): Call =
-    userAnswers
-      .get(AddCorrespondenceFaxNumberPage)
-      .map {
-        case true  => routes.CorrespondenceFaxNumberController.onPageLoad(mode)
-        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+    userAnswers.get(AddCorrespondenceFaxNumberPage) match {
+      case Some(true) =>
+        routes.CorrespondenceFaxNumberController.onPageLoad(mode)
+
+      case Some(false) =>
+        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+          routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(mode)
+        else
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
+
+  private def navigateAddEmailAddressForCorrespondenceYesNoPage(mode: Mode)(userAnswers: UserAnswers): Call =
+    userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match {
+      case Some(true) =>
+        routes.CorrespondenceEmailAddressController.onPageLoad(mode)
+
+      case Some(false) =>
+        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+        else
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
 
   private def navigateRemoveAssociatedRegNumberPage(mode: Mode)(answers: UserAnswers): Call =
     answers

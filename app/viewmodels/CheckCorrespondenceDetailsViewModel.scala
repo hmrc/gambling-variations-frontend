@@ -354,7 +354,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addEmailAddress.hidden"))
               )

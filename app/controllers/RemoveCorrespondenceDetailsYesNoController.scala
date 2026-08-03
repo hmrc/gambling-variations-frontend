@@ -81,7 +81,12 @@ class RemoveCorrespondenceDetailsYesNoController @Inject() (
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceContactNumberPage)
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceFaxNumberPage)
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceEmailPage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceAdditionalNameYesNoPage)
+                  updatedAnswers <- updatedAnswers.remove(CorrespondenceUKAddrScreenerPage)
+                  updatedAnswers <- updatedAnswers.remove(AddCorrespondenceAddressAdditionalInformationPage)
                   updatedAnswers <- updatedAnswers.remove(AddCorrespondenceAdditionalNamePage)
+                  updatedAnswers <- updatedAnswers.remove(AddEmailAddressForCorrespondenceYesNoPage)
+                  updatedAnswers <- updatedAnswers.remove(AddCorrespondenceFaxNumberPage)
                   updatedAnswers <- updatedAnswers.set(RemoveCorrespondenceDetailsYesNoPage, value)
                   updatedAnswers <- updatedAnswers.set(CorrespondenceDetailsChangesPage, value)
                 } yield updatedAnswers
