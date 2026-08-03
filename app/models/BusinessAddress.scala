@@ -30,10 +30,14 @@ object BusinessAddress {
 
   implicit val writes: OWrites[BusinessAddress] = Json.writes[BusinessAddress]
 
+  // Address.reads requires address1, so the entire address block would need to be omitted if no address exists
+  private val optionalAddressReads: Reads[Option[Address]] =
+    Address.reads.map(Option(_)).orElse(Reads.pure(None))
+
   implicit val reads: Reads[BusinessAddress] = (
     (__ \ "mgdRegNumber").read[String] and
       (__ \ "adi").readNullable[String].map(_.filter(_.nonEmpty)) and
-      Address.reads.map(Some(_): Option[Address]).orElse(Reads.pure(None)) and
+      optionalAddressReads and
       (__ \ "iomOrCiFlag").readNullable[String]
   )(BusinessAddress.apply _)
 
