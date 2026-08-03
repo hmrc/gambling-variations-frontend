@@ -47,19 +47,20 @@ class CheckCorrespondenceDetailsController @Inject() (
         view(
           CheckCorrespondenceDetailsViewModel(
             request.userAnswers.get(CorrespondenceNamePage),
-            request.userAnswers.get(AddCorrespondenceAdditionalNamePage),
+            request.userAnswers.get(CorrespondenceAdditionalNameYesNoPage),
             request.userAnswers.get(CorrespondenceAdditionalNamePage),
             request.userAnswers.get(CorrespondenceAddressUkPage) orElse request.userAnswers.get(CorrespondenceAddressNonUkPage),
-            request.userAnswers.get(AddCorrespondenceAdditionalInformationPage),
+            request.userAnswers.get(AddCorrespondenceAddressAdditionalInformationPage),
             request.userAnswers.get(CorrespondenceAdditionalInformationPage),
             request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),
             request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
             request.userAnswers.get(AddCorrespondenceFaxNumberPage),
             request.userAnswers.get(CorrespondenceFaxNumberPage),
-            request.userAnswers.get(AddCorrespondenceEmailAddressPage),
+            request.userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage),
             request.userAnswers.get(CorrespondenceEmailPage),
             request.userAnswers.get(CorrespondenceUKAddrScreenerPage),
-            checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage)
+            checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage),
+            request.userAnswers.get(IsAddingNewCorrespondenceDetailsPage)
           )
         )
       )
