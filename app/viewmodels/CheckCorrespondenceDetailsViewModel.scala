@@ -22,6 +22,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.{FluentValue, stringToText}
+import play.api.mvc.Call
 
 case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String],
                                                addCorrespondenceAdditionalName: Option[Boolean],
@@ -39,6 +40,15 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                                                isSubmitted: Boolean,
                                                isAddingNewCorrespondenceDetails: Option[Boolean]
                                               ) {
+
+  def continueCall: Call =
+    if (correspondenceName.isEmpty) {
+      controllers.routes.CorrespondenceNameController.onPageLoad(NormalMode)
+    } else if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
+      controllers.routes.CorrespondenceContactNumberController.onPageLoad(NormalMode)
+    } else {
+      controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
+    }
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     Some(correspondenceNameSummaryListRow),
