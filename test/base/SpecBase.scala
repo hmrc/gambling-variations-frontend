@@ -32,6 +32,9 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
+import com.typesafe.config.ConfigFactory
+import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValues with ScalaFutures with IntegrationPatience with MockFactory {
 
@@ -57,14 +60,18 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
         bind[AuthorisedAction].to[FakeAuthorisedAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
+  
 
-  protected val testFrontendAppConfig = new FrontendAppConfig(
-    Configuration(ConfigFactory.parseString("""
+  private val testConfiguration = Configuration(
+    ConfigFactory.parseString(
+      """
         |host = "http://localhost:9000"
-        | mongodb {
+        |
+        |mongodb {
         |  timeToLiveInSeconds = 900
-        | }
-        | urls {
+        |}
+        |
+        |urls {
         |  login = "http://foo.com/login"
         |  loginContinue = "http://foo.com/bar"
         |  signOut = "http://foo.com/sign-out"
@@ -72,40 +79,67 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
         |  accessibilityStatementUrl = "http://foo.com/accessibility-statement"
         |  betaFeedbackUrl = "http://foo.com/beta-feedback"
         |  researchUrl = "http://foo.com/research"
-        | }
-        |  timeout-dialog {
-        |   timeout   = 10
-        |   countdown = 5
-        | }
-        | contact-frontend {
+        |}
+        |
+        |timeout-dialog {
+        |  timeout   = 10
+        |  countdown = 5
+        |}
+        |
+        |contact-frontend {
         |  host      = "http://localhost:9250"
         |  serviceId = "gambling-variations-frontend"
         |}
+        |
         |microservice {
-        |    services {
-        |      auth {
-        |        protocol = http
-        |        host     = localhost
-        |        port     = 8500
-        |      }
-        |
-        |      feedback-frontend {
-        |        protocol = http
-        |        host     = localhost
-        |        port     = 9514
-        |      }        
-        |
-        |      address-lookup-frontend {
-        |        protocol = http
-        |        host     = localhost
-        |        port     = 9028
-        |      }
+        |  services {
+        |    auth {
+        |      protocol = http
+        |      host     = localhost
+        |      port     = 8500
         |    }
+        |
+        |    feedback-frontend {
+        |      protocol = http
+        |      host     = localhost
+        |      port     = 9514
+        |    }
+        |
+        |    address-lookup-frontend {
+        |      protocol = http
+        |      host     = localhost
+        |      port     = 9028
+        |    }
+        |
+        |    accessibility-statement {
+        |      protocol = http
+        |      host     = localhost
+        |      port     = 12346
+        |    }
+        |  }
         |}
+        |
+        |address-lookup {
+        |  home-nav-href = "http://www.hmrc.gov.uk/"
+        |  deskpro-service-name = "gambling-variations-frontend"
+        |  timeout-url = "/there-is-a-problem"
+        |  timeout-keep-alive-url = "/refresh-session"
+        |}
+        |
         |features {
-        |  welsh-translation: false
+        |  welsh-translation = false
         |}
-        |""".stripMargin))
+        |""".stripMargin
+    )
   )
+
+  private val testServicesConfig =
+    new ServicesConfig(testConfiguration)
+
+  protected val testFrontendAppConfig =
+    new FrontendAppConfig(
+      testConfiguration,
+      testServicesConfig
+    )
 
 }
