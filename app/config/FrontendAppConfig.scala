@@ -20,9 +20,10 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
+class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig: ServicesConfig) {
 
   val host: String = configuration.get[String]("host")
 
@@ -32,17 +33,15 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val addressLookupFrontendBaseUrl: String =
     configuration.get[Service]("microservice.services.address-lookup-frontend").baseUrl
 
-  lazy val addressLookupContinueUrl: String =
-    configuration.
-      get[String]("address-lookup.continue-url")
-
   lazy val addressLookupHomeNavHref: String =
     configuration.
       get[String]("address-lookup.home-nav-href")
 
-  lazy val addressLookupAccessibilityFooterUrl: String =
-    configuration.
-      get[String]("address-lookup.accessibility-footer-url")
+  private val accessibilityHost: String = servicesConfig.getConfString(
+    confKey = "accessibility-statement.host", throw new Exception("missing config accessibility-statement.host")
+  )  
+
+  def accessibilityFooterUrl = s"$accessibilityHost/accessibility-statement/gambling-variations-frontend"
 
   lazy val addressLookupDeskProServiceName: String =
     configuration.

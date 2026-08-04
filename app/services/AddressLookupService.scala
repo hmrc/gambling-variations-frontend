@@ -34,10 +34,10 @@ class AddressLookupService @Inject()(
   def configureAddressLookup(ukMode: Boolean)(implicit hc: HeaderCarrier, messages: Messages): AddressLookupConfigSettings =
     AddressLookupConfigSettings(
       options = AddressLookupConfigOptions(
-        continueUrl = appConfig.addressLookupContinueUrl,
+        continueUrl = appConfig.loginContinueUrl,
         homeNavHref = appConfig.addressLookupHomeNavHref,
         signOutHref = appConfig.signOutUrl,
-        accessibilityFooterUrl = appConfig.addressLookupAccessibilityFooterUrl,
+        accessibilityFooterUrl = appConfig.accessibilityFooterUrl,
         deskProServiceName = appConfig.addressLookupDeskProServiceName,
         timeoutConfig = TimeoutConfig(
           timeoutAmount = 900,
