@@ -19,9 +19,10 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{MgdTradeDetails, UserAnswers}
+import models.{BusinessAddress, UserAnswers}
 import pages.*
 import play.api.Logging
+import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -33,11 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
 
-class MgdTradeDetailsDataRequiredActionImpl @Inject() (
+class BusinessAddressDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
   val gamblingConnector: GamblingConnector
 )(implicit val executionContext: ExecutionContext)
-    extends MgdTradeDetailsDataRequiredAction
+    extends BusinessAddressDataRequiredAction
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
@@ -52,9 +53,13 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(MgdTradeDetailsSectionPage) map { _ =>
+        userAnswers.get(BusinessAddressSectionPage) map { _ =>
+          logger.info(s"MgdRegNum found for Business Address with id ${userAnswers.id}")
+
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
         } getOrElse {
+          logger.info(s"User Answers found with id ${userAnswers.id}")
+
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           saveUserAnswersToSessionAndRedirect(userAnswers, request)
         }
@@ -62,10 +67,10 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
   }
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getMgdTradeDetails(answers.id) flatMap { mgdContactDetails =>
+    gamblingConnector.getBusinessAddress(answers.id) flatMap { businessAddress =>
 
-      setMgdTradeDetails(mgdContactDetails, answers) map { updatedAnswers =>
-        logger.info("User Answers updated with Mgd Trade Details. Saving User Answers")
+      copyBusinessAddressToUserAnswers(businessAddress, answers) map { updatedAnswers =>
+        logger.info("User Answers updated with Business Address. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
             logger.info("User Answers saved.")
@@ -82,27 +87,20 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
-    logger.info("Setting User Answers for Mgd Trade Details")
-    val previousRegs =
-      mgdTradeDetails.previousMgdRegistrationNumbers
-        .map(_.map(_.trim).filter(_.nonEmpty))
-        .filter(_.nonEmpty)
-
-    val associatedRegs =
-      mgdTradeDetails.associatedMgdRegistrationNumbers
-        .map(_.map(_.trim).filter(_.nonEmpty))
-        .filter(_.nonEmpty)
-
+  private def copyBusinessAddressToUserAnswers(businessAddress: BusinessAddress, answers: UserAnswers): Try[UserAnswers] = {
+    logger.info("Updating User Answers with Business Address")
     for {
-      updatedAnswers <- answers.set(MgdTradeDetailsSectionPage, mgdTradeDetails.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(IsSeasonalBusinessPage, mgdTradeDetails.isBusinessSeasonal)
-      updatedAnswers <- updatedAnswers.setIfDefined(BusinessTradeClassPage, mgdTradeDetails.businessTradeClass)
-      updatedAnswers <- updatedAnswers.setIfDefined(OtherTradeClassPage, mgdTradeDetails.businessActivityDesc)
-      updatedAnswers <- updatedAnswers.setIfDefined(PreviousRegistrationNumbersListPage, previousRegs)
-      updatedAnswers <- updatedAnswers.setIfDefined(AssociatedRegistrationNumbersPage, associatedRegs)
+      updatedAnswers <- answers.set(BusinessAddressSectionPage, businessAddress.mgdRegNumber)
+      updatedAnswers <- {
+        businessAddress.address.flatMap(_.postcode) match {
+          case Some(_) => updatedAnswers.setIfDefined(BusinessAddressUkPage, businessAddress.address)
+          case None    => updatedAnswers.setIfDefined(BusinessAddressNonUkPage, businessAddress.address)
+        }
+      }
+      updatedAnswers <- updatedAnswers.setIfDefined(BusinessAddressAdditionalInformationPage, businessAddress.adi)
+      updatedAnswers <- updatedAnswers.setIfDefined(BusinessAddressIsleMOrChannelFlagPage, businessAddress.iomOrCiFlag)
     } yield updatedAnswers
   }
 }
 
-trait MgdTradeDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+trait BusinessAddressDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

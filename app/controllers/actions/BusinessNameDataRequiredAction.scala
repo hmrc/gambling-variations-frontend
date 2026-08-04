@@ -22,7 +22,6 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
 import play.api.Logging
-import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -70,7 +69,7 @@ class BusinessNameDataRequiredActionImpl @Inject() (
     gamblingConnector.getBusinessName(answers.id) flatMap { entityName =>
 
       setBusinessName(entityName, answers) map { updatedAnswers =>
-        logger.info("User Answers not found. Saving User Answers")
+        logger.info("User Answers updated with Business Name. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
             logger.info("User Answers saved.")
@@ -87,11 +86,6 @@ class BusinessNameDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
-    optional.fold(Try(userAnswers)) { value =>
-      userAnswers.set(page, value)
-    }
-
   private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Business Name")
     entity match {
@@ -100,14 +94,14 @@ class BusinessNameDataRequiredActionImpl @Inject() (
           updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
           updatedAnswers <- updatedAnswers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
           updatedAnswers <- updatedAnswers.set(BusinessTypePage, BusinessType.Soleproprietor)
-          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
+          updatedAnswers <- updatedAnswers.setIfDefined(TradingNamePage, tradingName)
         } yield updatedAnswers
       case BusinessNameDetails(mgdRegNum, businessName, businessType, tradingName, _) =>
         for {
           updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
           updatedAnswers <- updatedAnswers.set(BusinessNamePage, businessName)
           updatedAnswers <- updatedAnswers.set(BusinessTypePage, businessType)
-          updatedAnswers <- setIfDefined(updatedAnswers, tradingName, TradingNamePage)
+          updatedAnswers <- updatedAnswers.setIfDefined(TradingNamePage, tradingName)
         } yield updatedAnswers
     }
   }
