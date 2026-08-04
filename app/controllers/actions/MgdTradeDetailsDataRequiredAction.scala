@@ -22,7 +22,6 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import models.{MgdTradeDetails, UserAnswers}
 import pages.*
 import play.api.Logging
-import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -66,7 +65,7 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
     gamblingConnector.getMgdTradeDetails(answers.id) flatMap { mgdContactDetails =>
 
       setMgdTradeDetails(mgdContactDetails, answers) map { updatedAnswers =>
-        logger.info("User Answers not found. Saving User Answers")
+        logger.info("User Answers updated with Mgd Trade Details. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
             logger.info("User Answers saved.")
@@ -83,11 +82,6 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
-    optional.fold(Try(userAnswers)) { value =>
-      userAnswers.set(page, value)
-    }
-
   private def setMgdTradeDetails(mgdTradeDetails: MgdTradeDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Mgd Trade Details")
     val previousRegs =
@@ -102,11 +96,11 @@ class MgdTradeDetailsDataRequiredActionImpl @Inject() (
 
     for {
       updatedAnswers <- answers.set(MgdTradeDetailsSectionPage, mgdTradeDetails.mgdRegNumber)
-      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.isBusinessSeasonal, IsSeasonalBusinessPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessTradeClass, BusinessTradeClassPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, mgdTradeDetails.businessActivityDesc, OtherTradeClassPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, previousRegs, PreviousRegistrationNumbersListPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, associatedRegs, AssociatedRegistrationNumbersPage)
+      updatedAnswers <- updatedAnswers.setIfDefined(IsSeasonalBusinessPage, mgdTradeDetails.isBusinessSeasonal)
+      updatedAnswers <- updatedAnswers.setIfDefined(BusinessTradeClassPage, mgdTradeDetails.businessTradeClass)
+      updatedAnswers <- updatedAnswers.setIfDefined(OtherTradeClassPage, mgdTradeDetails.businessActivityDesc)
+      updatedAnswers <- updatedAnswers.setIfDefined(PreviousRegistrationNumbersListPage, previousRegs)
+      updatedAnswers <- updatedAnswers.setIfDefined(AssociatedRegistrationNumbersPage, associatedRegs)
     } yield updatedAnswers
   }
 }

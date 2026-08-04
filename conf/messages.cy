@@ -1,4 +1,4 @@
-service.name = cy: Gambling variations frontend
+service.name = Rheoli eich treth gamblo
 
 site.back = Yn ôl
 site.remove = Tynnu
@@ -53,18 +53,31 @@ signedOut.guidance = Ni wnaethom gadw’ch atebion.
 unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 
-systemError.title = cy: Sorry, there is a problem with the service
-systemError.heading = cy: Sorry, there is a problem with the service
-systemError.p1 = cy: Try again later or contact the
-systemError.p1.link = cy: HMRC Online Services Helpdesk (opens in a new tab)
+systemError.title = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+systemError.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+systemError.p1 = Rhowch gynnig arall arni yn nes ymlaen, neu cysylltwch â 
+systemError.p1.link = Desg Gymorth Gwasanaethau Ar-lein CThEF (yn agor tab newydd)
 
 accessDenied.title = cy:Sorry, there is a problem with the service
 accessDenied.heading = cy:Sorry, there is a problem with the service
 accessDenied.p1 = cy:You do not have access to this service.
 accessDenied.p1.link = cy:Continue to your account
 
+pageNotFound.title = Heb ddod o hyd i’r dudalen
+pageNotFound.heading = Heb ddod o hyd i’r dudalen
+pageNotFound.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
+pageNotFound.p2 = Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
+pageNotFound.p3 = Os  yw’r cyfeiriad gwe yn gywir, neu os dewisoch gysylltiad neu fotwm, cysylltwch â
+pageNotFound.p3.link = Desg Gymorth Gwasanaethau Ar-lein CThEF (yn agor tab newydd)
+pageNotFound.p3.after = os oes angen i chi siarad â rhywun.
+
 faxNumberForCorrespondenceYesNo.title = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.heading = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.change.hidden = cy: Do you want to add a fax number for correspondence?
 faxNumberForCorrespondenceYesNo.error.required = cy: Select yes to add a fax number for correspondence
+
+accessDenied.title = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+accessDenied.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+accessDenied.p1 = Nid oes gennych fynediad at y gwasanaeth hwn.
+accessDenied.p1.link = Parhau i’ch cyfrif

@@ -16,12 +16,13 @@
 
 package viewmodels
 
-import models.{Address, CheckMode, NormalMode}
+import models.{Address, NormalMode}
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.{FluentValue, stringToText}
+import play.api.mvc.Call
 
 case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String],
                                                addCorrespondenceAdditionalName: Option[Boolean],
@@ -35,13 +36,25 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                                                faxNumber: Option[String],
                                                addCorrespondenceEmailAddress: Option[Boolean],
                                                emailAddress: Option[String],
-                                               isSubmitted: Boolean
+                                               hasUkPostcode: Option[Boolean],
+                                               isSubmitted: Boolean,
+                                               isAddingNewCorrespondenceDetails: Option[Boolean]
                                               ) {
+
+  def continueCall: Call =
+    if (correspondenceName.isEmpty) {
+      controllers.routes.CorrespondenceNameController.onPageLoad(NormalMode)
+    } else if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
+      controllers.routes.CorrespondenceContactNumberController.onPageLoad(NormalMode)
+    } else {
+      controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
+    }
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     Some(correspondenceNameSummaryListRow),
     addAdditionalCorrespondenceNameSummaryListRow,
     Some(additionalCorrespondenceNameSummaryListRow),
+    hasUkPostcodeSummaryListRow,
     Some(correspondenceAddressUkSummaryListRow),
     addAdditionalInformationSummaryListRow,
     Some(additionalInformationSummaryListRow),
@@ -77,7 +90,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.CorrespondenceNameController.onPageLoad(CheckMode).url,
+                href               = controllers.routes.CorrespondenceNameController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceName.hidden"))
               )
@@ -104,7 +117,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceAdditionalNameYesNoController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden"))
               )
@@ -127,7 +140,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceAdditionalNameController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden"))
               )
@@ -135,26 +148,34 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           )
         )
       } else {
-        Some(
-          Actions(
-            items = Seq(
+        val items = Seq(
+          Some(
+            ActionItem(
+              href               = controllers.routes.CorrespondenceAdditionalNameController.onPageLoad(NormalMode).url,
+              content            = "site.change",
+              visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden"))
+            )
+          ),
+          if (!isAddingNewCorrespondenceDetails.contains(true))
+            Some(
               ActionItem(
-                href               = "#",
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden"))
-              ),
-              ActionItem(
-                href               = "#",
+                href               = controllers.routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad(NormalMode).url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden"))
               )
             )
-          )
-        )
+          else None
+        ).flatten
+
+        Some(Actions(items = items))
       }
     )
 
-  private def correspondenceAddressUkSummaryListRow(implicit messages: Messages): SummaryListRow =
+  private def correspondenceAddressUkSummaryListRow(implicit messages: Messages): SummaryListRow = {
+    val changeUrl =
+      if (correspondenceAddress.isEmpty) { controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url }
+      else { controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad(NormalMode).url }
+
     SummaryListRow(
       key = Key(
         content = messages("checkCorrespondenceDetails.heading.correspondenceAddress")
@@ -162,32 +183,21 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
       value = Value(
         content = addressContent
       ),
-      actions = if (correspondenceName.isEmpty) {
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = "#",
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
+      actions = Some(
+        Actions(
+          items = Seq(
+            ActionItem(
+              href    = changeUrl,
+              content = "site.change",
+              visuallyHiddenText = Some(
+                messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden")
               )
             )
           )
         )
-      } else {
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = "#",
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.correspondenceAddress.hidden"))
-              )
-            )
-          )
-        )
-      }
+      )
     )
+  }
 
   private def addAdditionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     addCorrespondenceAdditionalInformation map { add =>
@@ -206,7 +216,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceAddrInfoScreenerController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
               )
@@ -229,7 +239,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.CorrespondenceAdditionalInfoController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden"))
               )
@@ -237,22 +247,26 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           )
         )
       } else {
-        Some(
-          Actions(
-            items = Seq(
+        val items = Seq(
+          Some(
+            ActionItem(
+              href               = controllers.routes.CorrespondenceAdditionalInfoController.onPageLoad(NormalMode).url,
+              content            = "site.change",
+              visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden"))
+            )
+          ),
+          if (!isAddingNewCorrespondenceDetails.contains(true))
+            Some(
               ActionItem(
-                href               = "#",
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden"))
-              ),
-              ActionItem(
-                href               = "#",
+                href               = controllers.routes.RemoveCorrAddressAddInfoController.onPageLoad(NormalMode).url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden"))
               )
             )
-          )
-        )
+          else None
+        ).flatten
+
+        Some(Actions(items = items))
       }
     )
 
@@ -292,7 +306,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(CheckMode).url,
+                href               = controllers.routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addFaxNumber.hidden"))
               )
@@ -323,22 +337,26 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           )
         )
       } else {
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode).url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
-              ),
+        val items = Seq(
+          Some(
+            ActionItem(
+              href               = controllers.routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode).url,
+              content            = "site.change",
+              visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
+            )
+          ),
+          if (!isAddingNewCorrespondenceDetails.contains(true))
+            Some(
               ActionItem(
                 href               = controllers.routes.RemoveCorrespondenceFaxNumberController.onPageLoad(NormalMode).url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.faxNumber.hidden"))
               )
             )
-          )
-        )
+          else None
+        ).flatten
+
+        Some(Actions(items = items))
       }
     )
 
@@ -359,7 +377,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           Actions(
             items = Seq(
               ActionItem(
-                href               = "#",
+                href               = controllers.routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(NormalMode).url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addEmailAddress.hidden"))
               )
@@ -390,24 +408,53 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
           )
         )
       } else {
-        Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode).url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr.hidden"))
-              ),
+        val items = Seq(
+          Some(
+            ActionItem(
+              href               = controllers.routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode).url,
+              content            = "site.change",
+              visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr.hidden"))
+            )
+          ),
+          if (!isAddingNewCorrespondenceDetails.contains(true))
+            Some(
               ActionItem(
                 href               = controllers.routes.RemoveCorrespondenceEmailAddressController.onPageLoad().url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.emailAddr.hidden"))
               )
             )
-          )
-        )
+          else None
+        ).flatten
+
+        Some(Actions(items = items))
       }
     )
+
+  private def hasUkPostcodeSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    hasUkPostcode map { answer =>
+      SummaryListRow(
+        key = Key(
+          content = messages("correspondenceUKAddrScreener.heading.addAdditionalInformation")
+        ),
+        value = Value(
+          content =
+            if (answer) messages("site.yes")
+            else messages("site.no")
+        ),
+        actions = Some(
+          Actions(
+            items = Seq(
+              ActionItem(
+                href               = controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url,
+                content            = "site.change",
+                visuallyHiddenText = Some(messages("correspondenceUKAddrScreener.label.addAdditionalInformation.hidden"))
+              )
+            )
+          )
+        )
+      )
+    }
 
   private def contactNumbersContent(implicit messages: Messages): Content =
     if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {

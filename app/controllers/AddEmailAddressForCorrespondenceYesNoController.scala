@@ -18,10 +18,11 @@ package controllers
 
 import controllers.actions.*
 import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.AddEmailAddressForCorrespondenceYesNoPage
+import pages.{AddCorrespondingDetailsYesNoPage, AddEmailAddressForCorrespondenceYesNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -65,7 +66,10 @@ class AddEmailAddressForCorrespondenceYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddEmailAddressForCorrespondenceYesNoPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(
+                                updatedAnswers.remove(AddCorrespondingDetailsYesNoPage)
+                              )
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddEmailAddressForCorrespondenceYesNoPage, mode, updatedAnswers))
       )
   }

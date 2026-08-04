@@ -54,9 +54,7 @@ class CorrespondenceChangeAddrScreenerController @Inject() (
     }
 
     val isUkAddress =
-      request.userAnswers
-        .get(CorrespondenceAddressUkPage)
-        .exists(_.country.isEmpty)
+      request.userAnswers.get(CorrespondenceAddressUkPage).isDefined
 
     Ok(view(preparedForm, mode, isUkAddress))
 

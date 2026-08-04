@@ -47,6 +47,11 @@ final case class UserAnswers(
     }
   }
 
+  def setIfDefined[A](page: Settable[A], optional: Option[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
+    optional.fold(Try(this)) { value =>
+      set(page, value)
+    }
+
   def remove[A](page: Settable[A]): Try[UserAnswers] = {
 
     val updatedData = data.removeObject(page.path) match {

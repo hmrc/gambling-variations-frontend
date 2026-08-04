@@ -27,7 +27,7 @@
 
 @(form: Form[_], mode: Mode, additionalName: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removeAdditionalCorrespondenceNameYesNo.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = title(form, messages("removeAdditionalCorrespondenceNameYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
     @formHelper(action = routes.RemoveAdditionalCorrespondenceNameYesNoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
@@ -35,7 +35,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @caption(messages("removeAssociatedRegNumber.heading.caption"))
+        @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),

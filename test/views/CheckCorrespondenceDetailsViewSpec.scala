@@ -65,7 +65,9 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
         faxNumber                              = Some("02000000000"),
         addCorrespondenceEmailAddress          = Some(true),
         emailAddress                           = Some("test@test.com"),
-        isSubmitted                            = false
+        hasUkPostcode                          = Some(false),
+        isSubmitted                            = false,
+        isAddingNewCorrespondenceDetails       = Some(false)
       )
   }
 

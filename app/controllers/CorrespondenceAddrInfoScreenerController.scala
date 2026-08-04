@@ -18,17 +18,16 @@ package controllers
 
 import controllers.actions.*
 import forms.CorrespondenceAddrInfoScreenerFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddrInfoScreenerPage, CorrespondenceDetailsSubmittedPage}
+import pages.{AddCorrespondenceAddressAdditionalInformationPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CorrespondenceAddrInfoScreenerView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CorrespondenceAddrInfoScreenerController @Inject() (
@@ -49,7 +48,7 @@ class CorrespondenceAddrInfoScreenerController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(CorrespondenceAddrInfoScreenerPage) match {
+    val preparedForm = request.userAnswers.get(AddCorrespondenceAddressAdditionalInformationPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -64,10 +63,10 @@ class CorrespondenceAddrInfoScreenerController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAddrInfoScreenerPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddCorrespondenceAddressAdditionalInformationPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAddrInfoScreenerPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddCorrespondenceAddressAdditionalInformationPage, mode, updatedAnswers))
       )
   }
 }

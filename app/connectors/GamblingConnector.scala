@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails}
+import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -148,6 +148,30 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
           case status =>
             throw UpstreamErrorResponse(
               s"Unexpected status while fetching Mgd Trade Details: $status",
+              status
+            )
+        }
+      }
+  }
+
+  def getBusinessAddress(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[BusinessAddress] = {
+    http
+      .get(url"$baseUrl/business-address/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[BusinessAddress]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON Business Address: $errors"),
+                details => details
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Business Address: $status",
               status
             )
         }

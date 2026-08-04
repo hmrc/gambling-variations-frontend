@@ -16,11 +16,29 @@
 
 package pages
 
+import models.UserAnswers
 import play.api.libs.json.JsPath
+
+import scala.util.{Success, Try}
 
 case object CorrespondenceUKAddrScreenerPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
+  override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "CorrespondenceUKAddrScreener"
+  override def toString: String = "correspondenceUKAddrScreener"
+
+  override def cleanup(
+    value: Option[Boolean],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    value match {
+      case Some(true) =>
+        userAnswers.remove(CorrespondenceAddressNonUkPage)
+
+      case Some(false) =>
+        userAnswers.remove(CorrespondenceAddressUkPage)
+
+      case None =>
+        Success(userAnswers)
+    }
 }

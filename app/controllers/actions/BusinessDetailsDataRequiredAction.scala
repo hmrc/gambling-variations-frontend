@@ -22,7 +22,6 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessDetails, UserAnswers}
 import pages.*
 import play.api.Logging
-import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -123,15 +122,6 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
       }
   }
 
-  private def setIfDefined[A](
-    userAnswers: UserAnswers,
-    optional: Option[A],
-    page: QuestionPage[A]
-  )(implicit wrt: Writes[A]): Try[UserAnswers] =
-    optional.fold(Try(userAnswers)) { value =>
-      userAnswers.set(page, value)
-    }
-
   private def setBusinessDetails(
     details: BusinessDetails,
     answers: UserAnswers
@@ -140,10 +130,9 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
     logger.info("Mapping BusinessDetails into UserAnswers")
 
     for {
-      updatedAnswers <- setIfDefined(
-                          answers,
-                          details.businessType,
-                          BusinessTypePage
+      updatedAnswers <- answers.setIfDefined(
+                          BusinessTypePage,
+                          details.businessType
                         )
 
       updatedAnswers <- updatedAnswers.set(

@@ -149,6 +149,38 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must use connector when GroupMemberPage is missing" in {
+
+      val mockConnector = mock[GamblingConnector]
+
+      when(mockConnector.getBusinessDetails(any[String]())(any()))
+        .thenReturn(Future.successful(businessDetails.copy(groupReg = true)))
+
+      val userAnswers =
+        filledUserAnswers
+          .remove(GroupMemberPage)
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[GamblingConnector].toInstance(mockConnector))
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual OK
+
+        verify(mockConnector).getBusinessDetails(any[String]())(any())
+      }
+    }
+
     "must hide trade class and MGD registration sections when user IS a group member" in {
 
       val groupMemberAnswers =

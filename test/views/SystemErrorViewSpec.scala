@@ -20,6 +20,7 @@ import base.SpecBase
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
+import play.api.test.Helpers.{GET, running}
 import views.html.SystemErrorView
 
 class SystemErrorViewSpec extends SpecBase {
@@ -45,6 +46,42 @@ class SystemErrorViewSpec extends SpecBase {
 
       link.attr("target") mustEqual "_blank"
       link.attr("rel") must include("noreferrer")
+    }
+
+    "render the language toggle when Welsh translation is enabled" in {
+
+      val application = applicationBuilder()
+        .configure("features.welsh-translation" -> true)
+        .build()
+
+      running(application) {
+        val serviceDeskUrl = "https://www.gov.uk/find-hmrc-contacts/technical-support-with-hmrc-online-services"
+        val request = FakeRequest(GET, controllers.routes.SystemErrorController.onPageLoad().url)
+        val view = application.injector.instanceOf[SystemErrorView]
+
+        val html = view(serviceDeskUrl)(request, messages(application))
+        val doc = Jsoup.parse(html.body)
+
+        doc.select(".hmrc-service-navigation-language-select").isEmpty mustBe false
+      }
+    }
+
+    "not render the language toggle when Welsh translation is disabled" in {
+
+      val application = applicationBuilder()
+        .configure("features.welsh-translation" -> false)
+        .build()
+
+      running(application) {
+        val serviceDeskUrl = "https://www.gov.uk/find-hmrc-contacts/technical-support-with-hmrc-online-services"
+        val request = FakeRequest(GET, controllers.routes.SystemErrorController.onPageLoad().url)
+        val view = application.injector.instanceOf[SystemErrorView]
+
+        val html = view(serviceDeskUrl)(request, messages(application))
+        val doc = Jsoup.parse(html.body)
+
+        doc.select(".hmrc-service-navigation-language-select").isEmpty mustBe true
+      }
     }
   }
 

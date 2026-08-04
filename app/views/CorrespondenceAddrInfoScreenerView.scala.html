@@ -27,14 +27,14 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle =title(form, messages("correspondenceAddrInfoScreener.title"),Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle =title(form, messages("correspondenceAddrInfoScreener.title"),Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = routes.CorrespondenceAddrInfoScreenerController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @caption(messages("correspondenceAddrInfoScreener.heading.caption"))
+        @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("correspondenceAddrInfoScreener"),

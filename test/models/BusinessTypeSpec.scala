@@ -15,10 +15,12 @@
  */
 
 package models
-
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.*
+import play.api.i18n.Messages
+import play.api.test.Helpers.stubMessages
+import play.api.mvc.JavascriptLiteral
 
 class BusinessTypeSpec extends AnyWordSpec with Matchers {
 
@@ -36,6 +38,72 @@ class BusinessTypeSpec extends AnyWordSpec with Matchers {
       BusinessType.fromCode(0)  shouldBe None
       BusinessType.fromCode(6)  shouldBe None
       BusinessType.fromCode(-1) shouldBe None
+    }
+  }
+
+  "BusinessType.values" should {
+
+    "contain all business types in the expected order" in {
+      BusinessType.values shouldBe Seq(
+        BusinessType.Soleproprietor,
+        BusinessType.Corporatebody,
+        BusinessType.Unincorporatedbody,
+        BusinessType.Partnership,
+        BusinessType.LimitedLiabilityPartnership
+      )
+    }
+  }
+
+  "BusinessType.enumerable" should {
+
+    "find values by their string representation" in {
+      BusinessType.enumerable.withName("soleproprietor")     shouldBe Some(BusinessType.Soleproprietor)
+      BusinessType.enumerable.withName("corporatebody")      shouldBe Some(BusinessType.Corporatebody)
+      BusinessType.enumerable.withName("unincorporatedbody") shouldBe Some(BusinessType.Unincorporatedbody)
+      BusinessType.enumerable.withName("partnership")        shouldBe Some(BusinessType.Partnership)
+      BusinessType.enumerable.withName("llp")                shouldBe Some(BusinessType.LimitedLiabilityPartnership)
+    }
+
+    "return None for an unknown value" in {
+      BusinessType.enumerable.withName("unknown") shouldBe None
+    }
+  }
+
+  "BusinessType.options" should {
+
+    "create a radio item for every business type" in {
+      implicit val messages: Messages = stubMessages()
+
+      val options = BusinessType.options
+
+      options.map(_.value) shouldBe Seq(
+        Some("soleproprietor"),
+        Some("corporatebody"),
+        Some("unincorporatedbody"),
+        Some("partnership"),
+        Some("llp")
+      )
+
+      options.map(_.id) shouldBe Seq(
+        Some("value_0"),
+        Some("value_1"),
+        Some("value_2"),
+        Some("value_3"),
+        Some("value_4")
+      )
+    }
+  }
+
+  "BusinessType.jsLiteral" should {
+
+    "convert a business type to its string representation" in {
+      val jsLiteral = implicitly[JavascriptLiteral[BusinessType]]
+
+      jsLiteral.to(BusinessType.Soleproprietor)              shouldBe "soleproprietor"
+      jsLiteral.to(BusinessType.Corporatebody)               shouldBe "corporatebody"
+      jsLiteral.to(BusinessType.Unincorporatedbody)          shouldBe "unincorporatedbody"
+      jsLiteral.to(BusinessType.Partnership)                 shouldBe "partnership"
+      jsLiteral.to(BusinessType.LimitedLiabilityPartnership) shouldBe "llp"
     }
   }
 

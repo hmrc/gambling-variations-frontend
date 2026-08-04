@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage, RemoveFaxNumberPage}
+import pages.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage, RemoveFaxNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -46,6 +46,24 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       userAnswersId,
       Json.obj(
         GroupMemberPage.toString        -> false,
+        BusinessFaxNumberPage.toString  -> faxNumber,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+    )
+
+  private val answersWithoutFaxNumber =
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        GroupMemberPage.toString        -> false,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
+    )
+
+  private val answersWithoutGroupMember =
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
         BusinessFaxNumberPage.toString  -> faxNumber,
         "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
       )
@@ -79,6 +97,26 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to SystemError on GET when BusinessFaxNumberPage is missing" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithoutFaxNumber)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, removeFaxNumberRoute)
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
     "must redirect to access denied when group member is true on GET" in {
 
       val userAnswers =
@@ -104,6 +142,90 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
         redirectLocation(result).value mustEqual
           routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError on POST when BusinessFaxNumberPage is missing" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithoutFaxNumber)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeFaxNumberRoute)
+            .withFormUrlEncodedBody(
+              "value" -> "true"
+            )
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError when GroupMemberPage is missing on GET" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithoutGroupMember)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, removeFaxNumberRoute)
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must keep BusinessFaxNumberPage and set submitted flag when user selects no" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeFaxNumberRoute)
+            .withFormUrlEncodedBody(
+              "value" -> "false"
+            )
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(RemoveFaxNumberPage) mustBe Some(false)
+        savedAnswers.get(BusinessFaxNumberPage) mustBe Some(faxNumber)
+        savedAnswers.get(BusinessContactDetailsSubmittedPage) mustBe Some(true)
+        savedAnswers.get(ContactDetailsChangesPage) mustBe Some(false)
       }
     }
 

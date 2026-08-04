@@ -31,7 +31,7 @@ caption: Caption
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("correspondenceNonUKAddress.title"), Some("changeRegistrationDetails.title"))) {
+@layout(pageTitle = title(form, messages("correspondenceNonUKAddress.title"), Some("changeRegistrationDetails.caption"))) {
 
 @formHelper(action = routes.CorrespondenceNonUKAddressController.onSubmit(mode), Symbol("autoComplete") -> "on") {
 
@@ -39,7 +39,7 @@ caption: Caption
 @govukErrorSummary(ErrorSummaryViewModel(form))
 }
 
-@caption(messages("changeRegistrationDetails.title"))
+@caption(messages("changeRegistrationDetails.caption"))
 
 @h1("correspondenceNonUKAddress.heading", classes = "govuk-heading-l")
 

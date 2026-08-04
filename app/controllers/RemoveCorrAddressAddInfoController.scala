@@ -18,8 +18,6 @@ package controllers
 
 import controllers.actions.*
 import forms.RemoveCorrAddressAddInfoFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, RemoveCorrAddressAddInfoPage}
@@ -29,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveCorrAddressAddInfoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveCorrAddressAddInfoController @Inject() (

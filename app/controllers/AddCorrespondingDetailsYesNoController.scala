@@ -18,10 +18,11 @@ package controllers
 
 import controllers.actions.*
 import forms.AddCorrespondingDetailsYesNoFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.AddCorrespondingDetailsYesNoPage
+import pages.{AddCorrespondingDetailsYesNoPage, IsAddingNewCorrespondenceDetailsPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -65,6 +66,7 @@ class AddCorrespondingDetailsYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddCorrespondingDetailsYesNoPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(IsAddingNewCorrespondenceDetailsPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddCorrespondingDetailsYesNoPage, mode, updatedAnswers))
       )

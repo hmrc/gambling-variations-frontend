@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{RemoveAssociatedRegNumberPage, TradingDetailsChangesPage}
+import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, MgdTradeDetailsSectionPage, RemoveAssociatedRegNumberPage, TradingDetailsChangesPage}
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -58,6 +58,26 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
       )
     )
 
+  private val answersWithChosenAssociatedRegNumber =
+    emptyUserAnswers
+      .set(MgdTradeDetailsSectionPage, "MGD999999")
+      .success
+      .value
+      .set(ChosenAssociatedRegNumberPage, "XYM00000000")
+      .success
+      .value
+      .set(AssociatedRegistrationNumbersPage, Seq("XYM00000000", "b", "c"))
+      .success
+      .value
+  private val answersWithChosenButNoAssociatedList =
+    emptyUserAnswers
+      .set(MgdTradeDetailsSectionPage, "MGD999999")
+      .success
+      .value
+      .set(ChosenAssociatedRegNumberPage, "XYM00000000")
+      .success
+      .value
+
   "RemoveAssociatedRegNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
@@ -74,6 +94,35 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode, "XYM00000000")(request, messages(application)).toString
 
+      }
+    }
+
+    "must populate the view when RemoveAssociatedRegNumberPage has previously been answered" in {
+
+      val userAnswers =
+        answersWithChosenAssociatedRegNumber
+          .set(RemoveAssociatedRegNumberPage, true)
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, removeAssociatedRegNumberRoute)
+
+        val view =
+          application.injector.instanceOf[RemoveAssociatedRegNumberView]
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(form.fill(true), NormalMode, "XYM00000000")(request, messages(application)).toString
       }
     }
 
@@ -100,6 +149,186 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to System Error on GET when ChosenAssociatedRegNumberPage is missing" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(MgdTradeDetailsSectionPage, "MGD999999")
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(GET, removeAssociatedRegNumberRoute)
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to AssociatedRegistrationNumbersList when chosen associated registration number is missing on submit" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(MgdTradeDetailsSectionPage, "MGD999999")
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeAssociatedRegNumberRoute)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url
+      }
+    }
+    "must remove chosen associated registration number when user selects yes" in {
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithChosenAssociatedRegNumber))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeAssociatedRegNumberRoute)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(RemoveAssociatedRegNumberPage).value mustEqual true
+        savedAnswers.get(AssociatedRegistrationNumbersPage).value mustEqual Seq("b", "c")
+        savedAnswers.get(AssociatedRegNumberSubmittedPage).value mustEqual true
+        savedAnswers.get(ChosenAssociatedRegNumberPage) mustEqual None
+        savedAnswers.get(TradingDetailsChangesPage).value mustEqual true
+      }
+    }
+    "must not fail when user selects yes but AssociatedRegistrationNumbersPage is missing" in {
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithChosenButNoAssociatedList))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeAssociatedRegNumberRoute)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(RemoveAssociatedRegNumberPage).value mustEqual true
+        savedAnswers.get(AssociatedRegistrationNumbersPage) mustEqual None
+        savedAnswers.get(AssociatedRegNumberSubmittedPage).value mustEqual true
+        savedAnswers.get(ChosenAssociatedRegNumberPage) mustEqual None
+        savedAnswers.get(TradingDetailsChangesPage).value mustEqual true
+      }
+    }
+
+    "must not remove associated registration number when user selects no" in {
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithChosenAssociatedRegNumber))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeAssociatedRegNumberRoute)
+            .withFormUrlEncodedBody("value" -> "false")
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers =
+          savedAnswersCaptor.getValue
+
+        savedAnswers.get(RemoveAssociatedRegNumberPage).value mustEqual false
+        savedAnswers.get(AssociatedRegistrationNumbersPage).value mustEqual Seq("XYM00000000", "b", "c")
+        savedAnswers.get(AssociatedRegNumberSubmittedPage).value mustEqual true
+        savedAnswers.get(ChosenAssociatedRegNumberPage) mustEqual None
+        savedAnswers.get(TradingDetailsChangesPage).value mustEqual false
       }
     }
 

@@ -16,11 +16,12 @@
 
 package pages
 
+import models.Address
 import play.api.libs.json.JsPath
 
-case object AddCorrespondenceAdditionalInformationPage extends QuestionPage[Boolean] {
+case object BusinessAddressUkPage extends QuestionPage[Address] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "addCorrespondenceAdditionalInformation"
+  override def toString: String = "businessAddressUk"
 }

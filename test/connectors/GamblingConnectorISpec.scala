@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.{Address, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails}
+import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -361,6 +361,58 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
   }
+
+  "GamblingConnector.getBusinessAddress" should {
+
+    "return businessAddress when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "XRM00000000574",
+           |  "adi": "1st floor",
+           |  "address1": "address1",
+           |  "address2": "address2",
+           |  "address3": "address3",
+           |  "address4": "address4",
+           |  "postcode": "L1 8YL",
+           |  "country": "England",
+           |  "iomOrCiFlag": "FALSE",
+           |  "systemDate": "2026-05-31"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-address/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getBusinessAddress(mgdRegNumber).futureValue mustBe businessAddress
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-address/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessAddress(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/business-address/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getBusinessAddress(mgdRegNumber)
+      }
+    }
+
+  }
 }
 
 object GamblingConnectorISpec {
@@ -468,6 +520,22 @@ object GamblingConnectorISpec {
     contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
     faxNumber             = Some("0123456799"),
     emailAddr             = Some("abc@email.com")
+  )
+
+  val businessAddress: BusinessAddress = BusinessAddress(
+    mgdRegNumber = "XRM00000000574",
+    adi          = Some("1st floor"),
+    address = Some(
+      Address(
+        "address1",
+        Some("address2"),
+        Some("address3"),
+        Some("address4"),
+        Some("L1 8YL"),
+        Some("England")
+      )
+    ),
+    iomOrCiFlag = Some("FALSE")
   )
 
 }

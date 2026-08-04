@@ -29,7 +29,7 @@
 
 @(form: Form[_], mode: Mode, businessType: BusinessType)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("businessTradingName.title"), Some(messages("changeRegistrationDetails.title")))) {
+@layout(pageTitle = title(form, messages("businessTradingName.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = routes.BusinessTradingNameController.onSubmit(mode)) {
 
@@ -37,7 +37,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @caption(messages("businessTradingName.heading.caption"))
+        @caption(messages("changeRegistrationDetails.caption"))
 
             @govukInput(
                 if (businessType == BusinessType.Soleproprietor) {
