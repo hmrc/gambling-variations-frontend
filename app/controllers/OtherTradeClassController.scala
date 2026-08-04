@@ -18,14 +18,14 @@ package controllers
 
 import controllers.actions.*
 import forms.OtherTradeClassFormProvider
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
-import utils.FlagsUtil.checkIfChanged
 import pages.{IsSeasonalBusinessPage, OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.OtherTradeClassView
 
 import javax.inject.Inject
@@ -73,7 +73,7 @@ class OtherTradeClassController @Inject() (
             if (updatedAnswers.get(IsSeasonalBusinessPage).nonEmpty) {
               Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
             } else {
-              Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+              Redirect(routes.SeasonalBusinessController.onPageLoad())
             }
           }
       )

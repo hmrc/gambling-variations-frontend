@@ -103,13 +103,9 @@ POST       /change-registration-details/trading-details/associated-registration-
 
 GET        /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/trading-details/change-business-trade-class                  controllers.BusinessTradeClassController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/trading-details/change-business-trade-class                  controllers.BusinessTradeClassController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/trading-details/seasonal-business                        controllers.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/seasonal-business                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/trading-details/change-seasonal-business                  controllers.SeasonalBusinessController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/trading-details/change-seasonal-business                  controllers.SeasonalBusinessController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
@@ -160,9 +156,6 @@ POST       /change-registration-details/trading-details/check                   
 
 GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/trading-details/change-other-business-trade-class                  controllers.OtherTradeClassController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/trading-details/change-other-business-trade-class                  controllers.OtherTradeClassController.onSubmit(mode: Mode = CheckMode)
-
 
 GET        /change-registration-details/trading-details/associated-registration-number                  controllers.AssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/associated-registration-number                  controllers.AssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)

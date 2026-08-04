@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import pages.IsSeasonalBusinessPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -35,7 +35,7 @@ object SeasonalBusinessSummary {
         key   = "seasonalBusiness.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SeasonalBusinessController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.SeasonalBusinessController.onPageLoad().url)
             .withVisuallyHiddenText(messages("seasonalBusiness.change.hidden"))
         )
       )

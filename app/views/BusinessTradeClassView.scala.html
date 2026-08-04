@@ -30,7 +30,7 @@
 
 @layout(pageTitle = title(form, messages("businessTradeClass.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = routes.BusinessTradeClassController.onSubmit(mode)) {
+    @formHelper(action = routes.BusinessTradeClassController.onSubmit()) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))

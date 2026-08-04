@@ -54,7 +54,7 @@ class BusinessTradeClassSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+              routes.BusinessTradeClassController.onPageLoad().url
             ).withVisuallyHiddenText(
               msgs("checkTradingDetails.businessTradeClass.change.hidden")
             )

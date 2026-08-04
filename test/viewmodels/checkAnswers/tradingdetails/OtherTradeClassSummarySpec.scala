@@ -58,7 +58,7 @@ class OtherTradeClassSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.OtherTradeClassController.onPageLoad(CheckMode).url // change it
+              routes.OtherTradeClassController.onPageLoad().url // change it
             ).withVisuallyHiddenText(
               msgs("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
             )
