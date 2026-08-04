@@ -46,9 +46,11 @@
         @govukButton(
         ButtonViewModel(messages("site.continue"))
             .withCssClass("button.govuk-button")
-            .asLink(routes.ChangeRegistrationDetailsController.onPageLoad().url)
+            .asLink(checkCorrespondenceDetailsViewModel.continueCall.url)
         )
     </p>
+
+
 
     @link(messages("checkCorrespondenceDetails.message.remove"), routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad(NormalMode).url)
 
