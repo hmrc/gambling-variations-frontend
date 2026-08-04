@@ -111,7 +111,7 @@ class NavigatorSpec extends SpecBase {
         "must go from RemovePreviousRegNumberPage to PreviousRegistrationNumbersListController" in {
 
           navigator.nextPage(RemovePreviousRegNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode)
+            routes.PreviousRegistrationNumbersListController.onPageLoad()
         }
 
         "must go from AssociatedRegistrationNumbersPage to AssociatedRegistrationNumbersListController" in {
@@ -859,12 +859,6 @@ class NavigatorSpec extends SpecBase {
 
       navigator.nextPage(BusinessTradeClassPage, CheckMode, UserAnswers("id")) mustBe
         routes.CheckTradingDetailsController.onPageLoad()
-    }
-
-    "must go from PreviousRegistrationNumbersListPage to PreviousRegistrationNumbersListController in Check mode" in {
-
-      navigator.nextPage(PreviousRegistrationNumbersListPage, CheckMode, UserAnswers("id")) mustBe
-        routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
     }
 
     "must go from AddPreviousRegistrationNumberPage to previous registration number page when yes is selected in Check mode" in {

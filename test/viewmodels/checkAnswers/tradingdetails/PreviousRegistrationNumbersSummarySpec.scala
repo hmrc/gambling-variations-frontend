@@ -74,7 +74,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       html must include("<br/>")
 
       result.actions.get.items.size mustBe 1
-      result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+      result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad().url
     }
 
     "must display registration numbers separated by <br> and exclude change action when 3 or more  prev numbers" in {

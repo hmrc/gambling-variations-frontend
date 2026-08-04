@@ -60,7 +60,7 @@ object PreviousRegistrationNumbersSummary {
 
       val route =
         if (hasNumbers) {
-          routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+          routes.PreviousRegistrationNumbersListController.onPageLoad().url
         } else {
           routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
         }

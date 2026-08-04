@@ -93,7 +93,7 @@ class PreviousRegistrationNumbersListControllerSpec extends SpecBase with Mockit
   private val alreadySubmittedInUa =
     UserAnswers(userAnswersId, dataAlreadySubmitted)
 
-  lazy val previousRegistrationNumbersRoute = PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+  lazy val previousRegistrationNumbersRoute = PreviousRegistrationNumbersListController.onPageLoad().url
   lazy val previousRegNumbersRedirectRoute = PreviousRegistrationNumbersListController.onRedirect("XYM00001000033").url
   lazy val previousRegNumbersChangeRedirectRoute = PreviousRegistrationNumbersListController.onChangeRedirect("XQM00005724366s").url
   lazy val changePreviousRegistrationNumberRoute = PreviousRegistrationNumberController.onPageLoad(CheckMode).url
