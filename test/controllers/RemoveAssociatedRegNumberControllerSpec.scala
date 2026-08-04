@@ -201,7 +201,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url
+          routes.AssociatedRegistrationNumbersListController.onPageLoad().url
       }
     }
     "must remove chosen associated registration number when user selects yes" in {

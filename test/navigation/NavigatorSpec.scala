@@ -117,7 +117,7 @@ class NavigatorSpec extends SpecBase {
         "must go from AssociatedRegistrationNumbersPage to AssociatedRegistrationNumbersListController" in {
 
           navigator.nextPage(AssociatedRegistrationNumbersPage, NormalMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
+            routes.AssociatedRegistrationNumbersListController.onPageLoad()
         }
 
         "must go from RemoveCorrespondenceFaxNumberPage to CheckCorrespondenceDetailsController" in {
@@ -171,7 +171,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(RemoveAssociatedRegNumberPage, NormalMode, answers) mustBe
-            routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
+            routes.AssociatedRegistrationNumbersListController.onPageLoad()
         }
 
         "must go to CheckTradingDetails when associated registration numbers are empty" in {
@@ -343,7 +343,7 @@ class NavigatorSpec extends SpecBase {
         "must go from AssociatedRegNumberPage to the normal mode associated registration number page" in {
 
           navigator.nextPage(AssociatedRegNumberPage, NormalMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode)
+            routes.AssociatedRegistrationNumbersListController.onPageLoad()
         }
 
         "a page that doesn't exist in the route map to Index" in {
@@ -370,12 +370,6 @@ class NavigatorSpec extends SpecBase {
         "must go from IsSeasonalBusinessPage to the check mode check trading details page" in {
           navigator.nextPage(IsSeasonalBusinessPage, CheckMode, UserAnswers("id")) mustBe
             routes.CheckTradingDetailsController.onPageLoad()
-        }
-
-        "must go from AssociatedRegNumberPage to the check mode associated registration number page" in {
-
-          navigator.nextPage(AssociatedRegNumberPage, CheckMode, UserAnswers("id")) mustBe
-            routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
         }
 
         "must go from SoleProprietorPage to the check mode sole proprietor page" in {
@@ -756,7 +750,7 @@ class NavigatorSpec extends SpecBase {
           .value
 
       navigator.nextPage(RemoveAssociatedRegNumberPage, CheckMode, answers) mustBe
-        routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
+        routes.AssociatedRegistrationNumbersListController.onPageLoad()
     }
 
     "must go to CheckTradingDetails when associated registration numbers are empty" in {
@@ -871,12 +865,6 @@ class NavigatorSpec extends SpecBase {
 
       navigator.nextPage(PreviousRegistrationNumbersListPage, CheckMode, UserAnswers("id")) mustBe
         routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
-    }
-
-    "must go from AssociatedRegistrationNumbersPage to AssociatedRegistrationNumbersListController in Check mode" in {
-
-      navigator.nextPage(AssociatedRegistrationNumbersPage, CheckMode, UserAnswers("id")) mustBe
-        routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
     }
 
     "must go from AddPreviousRegistrationNumberPage to previous registration number page when yes is selected in Check mode" in {

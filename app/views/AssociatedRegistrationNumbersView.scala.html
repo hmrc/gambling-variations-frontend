@@ -33,7 +33,7 @@
 
 @layout(pageTitle = title(form, messages("associatedRegistrationNumbers.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = routes.AssociatedRegistrationNumbersListController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.AssociatedRegistrationNumbersListController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
