@@ -17,15 +17,11 @@
 package services
 
 import config.FrontendAppConfig
-import connectors.GamblingConnector
-import models.BusinessDetails
 import models.addresslookup.*
 import play.api.i18n.Messages
-import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
-
 import javax.inject.Inject
-import scala.concurrent.Future
+
 
 class AddressLookupService @Inject()(
                                       appConfig: FrontendAppConfig
