@@ -32,7 +32,27 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val addressLookupFrontendBaseUrl: String =
     configuration.get[Service]("microservice.services.address-lookup-frontend").baseUrl
 
-  lazy val addressLookupContinueUrl: String = ""
+  lazy val addressLookupHomeNavHref: String =
+    configuration.
+      get[String]("address-lookup.home-nav-href")
+
+  private val accessibilityHost: String =
+    configuration.
+      get[Service]("microservice.services.accessibility-statement").baseUrl
+
+  def accessibilityFooterUrl = s"$accessibilityHost/accessibility-statement/gambling-variations-frontend"
+
+  lazy val addressLookupDeskProServiceName: String =
+    configuration.
+      get[String]("address-lookup.deskpro-service-name")
+
+  lazy val addressLookupTimeoutUrl: String =
+    configuration.
+    get[String]("address-lookup.timeout-url")
+
+  lazy val addressLookupTimeoutKeepAliveUrl: String =
+    configuration.
+      get[String]("address-lookup.timeout-keep-alive-url")
   lazy val retrieveAddressUrl: String = addressLookupFrontendBaseUrl + "/api/v2/confirmed"
 
   def feedbackUrl(implicit request: RequestHeader): String =
