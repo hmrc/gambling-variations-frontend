@@ -20,12 +20,13 @@ import controllers.actions.*
 import forms.CorrespondenceAdditionalInfoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsSubmittedPage}
+import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CorrespondenceAdditionalInfoView
+import utils.FlagsUtil.*
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -61,9 +62,12 @@ class CorrespondenceAdditionalInfoController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val ua = request.userAnswers
+          val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceAdditionalInformationPage, value))
+            updatedAnswers <- Future.fromTry(ua.set(CorrespondenceAdditionalInformationPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CorrespondenceAdditionalInformationPage, mode, updatedAnswers))
       )
