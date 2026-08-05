@@ -35,7 +35,7 @@ object CorrespondenceUKAddrScreenerSummary {
         key   = "correspondenceUKAddrScreenerController.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.CorrespondenceUKAddrScreenerController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.CorrespondenceUKAddrScreenerController.onPageLoad().url)
             .withVisuallyHiddenText(messages("correspondenceUKAddrScreenerController.change.hidden"))
         )
       )

@@ -18,14 +18,13 @@ package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
 import controllers.routes
-import models.CheckMode
+import org.scalatest.matchers.must.Matchers.*
 import pages.IsSeasonalBusinessPage
 import play.api.Application
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
-import org.scalatest.matchers.must.Matchers.*
-import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 class IsSeasonalBusinessSummarySpec extends SpecBase {
 

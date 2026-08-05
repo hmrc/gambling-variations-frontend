@@ -41,7 +41,7 @@ class CorrespondenceAdditionalNameYesNoControllerSpec extends SpecBase with Mock
   val form = formProvider()
 
   lazy val correspondenceAdditionalNameYesNoRoute =
-    routes.CorrespondenceAdditionalNameYesNoController.onPageLoad(NormalMode).url
+    routes.CorrespondenceAdditionalNameYesNoController.onPageLoad().url
 
   "CorrespondenceAdditionalNameYesNo Controller" - {
 

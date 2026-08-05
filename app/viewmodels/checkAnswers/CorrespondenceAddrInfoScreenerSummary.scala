@@ -35,7 +35,7 @@ object CorrespondenceAddrInfoScreenerSummary {
         key   = "correspondenceAddrInfoScreener.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.CorrespondenceAddrInfoScreenerController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.CorrespondenceAddrInfoScreenerController.onPageLoad().url)
             .withVisuallyHiddenText(messages("correspondenceAddrInfoScreener.change.hidden"))
         )
       )

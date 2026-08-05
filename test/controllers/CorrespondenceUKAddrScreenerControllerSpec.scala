@@ -40,7 +40,7 @@ class CorrespondenceUKAddrScreenerControllerSpec extends SpecBase with MockitoSu
   val formProvider = new CorrespondenceUKAddrScreenerFormProvider()
   val form = formProvider()
 
-  lazy val correspondenceUKAddrScreenerRoute = routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode).url
+  lazy val correspondenceUKAddrScreenerRoute = routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
 
   "CorrespondenceUKAddrScreener Controller" - {
 

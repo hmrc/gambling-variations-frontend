@@ -29,7 +29,7 @@
 
 @layout(pageTitle =title(form, messages("correspondenceAddrInfoScreener.title"),Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = routes.CorrespondenceAddrInfoScreenerController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.CorrespondenceAddrInfoScreenerController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

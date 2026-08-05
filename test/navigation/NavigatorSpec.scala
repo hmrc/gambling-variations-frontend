@@ -69,7 +69,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
           navigator.nextPage(AddCorrespondenceFaxNumberPage, NormalMode, answers) mustBe
-            routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode)
+            routes.CorrespondenceFaxNumberController.onPageLoad()
         }
 
         "must go from AddAssociatedRegistrationNumberPage to AssociatedRegNumber page when yes is selected" in {
@@ -201,7 +201,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(AddCorrespondingDetailsYesNoPage, NormalMode, answers) mustBe
-            routes.CorrespondenceNameController.onPageLoad(NormalMode)
+            routes.CorrespondenceNameController.onPageLoad()
         }
 
         "must go to ChangeRegistrationDetails when AddCorrespondingDetailsYesNoPage is false" in {
@@ -263,7 +263,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
           navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-            routes.CorrespondenceAdditionalNameController.onPageLoad(NormalMode)
+            routes.CorrespondenceAdditionalNameController.onPageLoad()
         }
 
         "must go from RemoveCorrespondenceDetailsYesNoPage to ChangeRegistrationDetails page when answer is true" in {
@@ -387,7 +387,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceNamePage, NormalMode, answers) mustBe
-            routes.CorrespondenceAdditionalNameYesNoController.onPageLoad(NormalMode)
+            routes.CorrespondenceAdditionalNameYesNoController.onPageLoad()
         }
 
         "must go from CorrespondenceAdditionalNamePage to CorrespondenceUKAddrScreener when AddCorrespondingDetailsYesNoPage is true" in {
@@ -399,7 +399,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceAdditionalNamePage, NormalMode, answers) mustBe
-            routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode)
+            routes.CorrespondenceUKAddrScreenerController.onPageLoad()
         }
 
         "must go from CorrespondenceAddressUkPage to CorrespondenceAddrInfoScreener when AddCorrespondingDetailsYesNoPage is true" in {
@@ -411,7 +411,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceAddressUkPage, NormalMode, answers) mustBe
-            routes.CorrespondenceAddrInfoScreenerController.onPageLoad(NormalMode)
+            routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
         }
 
         "must go from CorrespondenceAddressNonUkPage to CorrespondenceAddrInfoScreener when AddCorrespondingDetailsYesNoPage is true" in {
@@ -423,7 +423,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceAddressNonUkPage, NormalMode, answers) mustBe
-            routes.CorrespondenceAddrInfoScreenerController.onPageLoad(NormalMode)
+            routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
         }
 
         "must go from CorrespondenceAdditionalInformationPage to CorrespondenceContactNumber when AddCorrespondingDetailsYesNoPage is true" in {
@@ -435,7 +435,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceAdditionalInformationPage, NormalMode, answers) mustBe
-            routes.CorrespondenceContactNumberController.onPageLoad(NormalMode)
+            routes.CorrespondenceContactNumberController.onPageLoad()
         }
 
         "must go from CorrespondenceContactNumberPage to FaxNumberForCorrespondenceYesNo when AddCorrespondingDetailsYesNoPage is true" in {
@@ -447,7 +447,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceContactNumberPage, NormalMode, answers) mustBe
-            routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode)
+            routes.FaxNumberForCorrespondenceYesNoController.onPageLoad()
         }
 
         "must go from CorrespondenceFaxNumberPage to AddEmailAddressForCorrespondenceYesNo when AddCorrespondingDetailsYesNoPage is true" in {
@@ -484,7 +484,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-            routes.CorrespondenceNonUKAddressController.onPageLoad(NormalMode)
+            routes.CorrespondenceNonUKAddressController.onPageLoad()
         }
 
         "must go from CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when keeping a UK address" in {
@@ -509,7 +509,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-            routes.CorrespondenceUKAddressController.onPageLoad(NormalMode)
+            routes.CorrespondenceUKAddressController.onPageLoad()
         }
 
         "must go from CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when changing from a non-UK address" in {
@@ -521,7 +521,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-            routes.CorrespondenceUKAddressController.onPageLoad(NormalMode)
+            routes.CorrespondenceUKAddressController.onPageLoad()
         }
 
         "must go from CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when keeping a non-UK address" in {
@@ -533,7 +533,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-            routes.CorrespondenceNonUKAddressController.onPageLoad(NormalMode)
+            routes.CorrespondenceNonUKAddressController.onPageLoad()
         }
 
         "must go to SystemError when CorrespondenceChangeAddrScreenerPage is unanswered" in {
@@ -551,7 +551,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(AddCorrespondenceAddressAdditionalInformationPage, NormalMode, answers) mustBe
-            routes.CorrespondenceAdditionalInfoController.onPageLoad(NormalMode)
+            routes.CorrespondenceAdditionalInfoController.onPageLoad()
         }
 
         "must go to CorrespondenceContactNumber when no additional address information is required" in {
@@ -566,7 +566,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(AddCorrespondenceAddressAdditionalInformationPage, NormalMode, answers) mustBe
-            routes.CorrespondenceContactNumberController.onPageLoad(NormalMode)
+            routes.CorrespondenceContactNumberController.onPageLoad()
         }
 
         "must go to CheckCorrespondenceDetails when no additional address information is required outside correspondence journey" in {
@@ -599,7 +599,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
-            routes.CorrespondenceUKAddressController.onPageLoad(NormalMode)
+            routes.CorrespondenceUKAddressController.onPageLoad()
         }
 
         "must go to CorrespondenceNonUKAddress when non-UK address is selected" in {
@@ -611,7 +611,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
-            routes.CorrespondenceNonUKAddressController.onPageLoad(NormalMode)
+            routes.CorrespondenceNonUKAddressController.onPageLoad()
         }
 
         "must go to SystemError when CorrespondenceUKAddrScreenerPage is unanswered" in {
@@ -704,7 +704,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-            routes.CorrespondenceUKAddrScreenerController.onPageLoad(NormalMode)
+            routes.CorrespondenceUKAddrScreenerController.onPageLoad()
         }
 
       }

@@ -35,7 +35,7 @@ object FaxNumberForCorrespondenceYesNoSummary {
         key   = "faxNumberForCorrespondenceYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.FaxNumberForCorrespondenceYesNoController.onPageLoad().url)
             .withVisuallyHiddenText(messages("faxNumberForCorrespondenceYesNo.change.hidden"))
         )
       )
