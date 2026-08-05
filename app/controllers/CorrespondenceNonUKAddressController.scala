@@ -20,12 +20,13 @@ import controllers.actions.*
 import forms.CorrespondenceNonUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
+import pages.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CorrespondenceNonUKAddressView
+import utils.FlagsUtil.*
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,9 +68,11 @@ class CorrespondenceNonUKAddressController @Inject() (
               BadRequest(view(formWithErrors, mode))
             ),
           value =>
+            val ua = request.userAnswers
+            val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAddressNonUkPage, CorrespondenceDetailsChangesPage)
             for {
               updatedAnswers <- Future.fromTry(
-                                  request.userAnswers.set(
+                                  ua.set(
                                     CorrespondenceAddressNonUkPage,
                                     value
                                   )
@@ -92,6 +95,13 @@ class CorrespondenceNonUKAddressController @Inject() (
                                   updatedAnswers.set(
                                     CorrespondenceDetailsSubmittedPage,
                                     true
+                                  )
+                                )
+
+              updatedAnswers <- Future.fromTry(
+                                  updatedAnswers.set(
+                                    CorrespondenceDetailsChangesPage,
+                                    isChanged
                                   )
                                 )
 

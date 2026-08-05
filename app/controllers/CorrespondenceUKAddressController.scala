@@ -20,11 +20,12 @@ import controllers.actions.*
 import forms.CorrespondenceUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
+import pages.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.CorrespondenceUKAddressView
 
 import javax.inject.Inject
@@ -75,7 +76,8 @@ class CorrespondenceUKAddressController @Inject() (
               BadRequest(view(formWithErrors, mode))
             ),
           value => {
-
+            val ua = request.userAnswers
+            val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage)
             val iomOrCiFlag =
               if (value.postcode.exists(isIomOrCiPostcode)) {
                 "true"
@@ -85,7 +87,7 @@ class CorrespondenceUKAddressController @Inject() (
 
             for {
               updatedAnswers <- Future.fromTry(
-                                  request.userAnswers.set(
+                                    ua.set(
                                     CorrespondenceAddressUkPage,
                                     value
                                   )
@@ -107,6 +109,12 @@ class CorrespondenceUKAddressController @Inject() (
                                   updatedAnswers.set(
                                     CorrespondenceDetailsSubmittedPage,
                                     true
+                                  )
+                                )
+              updatedAnswers <- Future.fromTry(
+                                  updatedAnswers.set(
+                                    CorrespondenceDetailsChangesPage,
+                                    isChanged
                                   )
                                 )
 
