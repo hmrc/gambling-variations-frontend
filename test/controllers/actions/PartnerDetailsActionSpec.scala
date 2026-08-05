@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{PartnerDetails, UserAnswers}
+import models.{PartnersDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -187,7 +187,7 @@ object PartnerDetailsActionSpec {
   val mgdRegNum = "XRM00000000574"
 
   //TODO data types
-  val partnerDetails: PartnerDetails = PartnerDetails(
+  val partnerDetails: PartnersDetails = PartnersDetails(
     mgdRegNumber  = mgdRegNum,
     businessEmail = Some("email"),
     faxNumber     = Some("fax"),

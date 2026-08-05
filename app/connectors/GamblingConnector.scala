@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails, PartnerDetails}
+import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -59,7 +59,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
   }
 
   //TODO I dunno man
-  def getPartnerDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[PartnerDetails] = {
+  def getPartnerDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[PartnersDetails] = {
     http
       .get(url"$baseUrl/partner-details/mgd/$mgdRegNumber")
       .execute[HttpResponse]
@@ -68,7 +68,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
 
           case OK =>
             response.json
-              .validate[PartnerDetails]
+              .validate[PartnersDetails]
               .fold(
                 errors => throw new RuntimeException(s"Invalid JSON Business Name: $errors"),
                 entity => entity

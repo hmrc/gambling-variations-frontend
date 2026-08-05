@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnerDetails}
+import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -574,7 +574,7 @@ object GamblingConnectorISpec {
     iomOrCiFlag = Some("FALSE")
   )
 
-  val partnerDetails: PartnerDetails = PartnerDetails(
+  val partnerDetails: PartnersDetails = PartnersDetails(
     mgdRegNumber  = "XWM00000001770",
     businessEmail = Some("email"),
     faxNumber     = Some("fax"),
