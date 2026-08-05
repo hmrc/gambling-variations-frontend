@@ -49,7 +49,7 @@ class BusinessAddressAdditionalInfoControllerSpec extends SpecBase with MockitoS
 
   val data: JsObject = Json.obj(
     "businessAddressSection" -> Json.obj(
-      "mgdRegNum" -> userAnswersId,
+      "mgdRegNum"                                       -> userAnswersId,
       BusinessAddressAdditionalInformationPage.toString -> "jlkjfdlkjsls"
     )
   )

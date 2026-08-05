@@ -67,7 +67,7 @@ class BusinessAddressAdditionalInfoViewSpec extends SpecBase {
       val html = view(errorForm, NormalMode)
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".govuk-error-summary").text() must include ("Enter additional information for your business address")
+      doc.select(".govuk-error-summary").text() must include("Enter additional information for your business address")
     }
 
     "must render correct error summary when the submitted value is invalid" in new Setup {
@@ -81,14 +81,16 @@ class BusinessAddressAdditionalInfoViewSpec extends SpecBase {
       val html = view(errorForm, NormalMode)
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".govuk-error-summary").text() must include("The additional information must only include letters a to z, " +
-        "numbers 0 to 9, apostrophes, hyphens or spaces")
+      doc.select(".govuk-error-summary").text() must include(
+        "The additional information must only include letters a to z, " +
+          "numbers 0 to 9, apostrophes, hyphens or spaces"
+      )
     }
 
     "must render correct error summary when the submitted value is too long" in new Setup {
       val sb = new StringBuilder()
       val tooLong = 101
-      for(_ <- 1 to tooLong) {
+      for (_ <- 1 to tooLong) {
         sb.append(s"a")
       }
       val longString: String = sb.toString()
