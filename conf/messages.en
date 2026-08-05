@@ -635,5 +635,10 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-businessAddressAdditionalInfo.title = businessAddressAdditionalInfo
-businessAddressAdditionalInfo.heading = businessAddressAdditionalInfo
+
+
+businessAddressAdditionalInfo.title = What is the additional information for your business address?
+businessAddressAdditionalInfo.heading = What is the additional information for your business address?
+businessAddressAdditionalInfo.error.empty = Enter additional information for your business address
+businessAddressAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+businessAddressAdditionalInfo.error.length = The additional information must be 100 characters or less
