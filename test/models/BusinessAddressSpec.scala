@@ -45,7 +45,7 @@ class BusinessAddressSpec extends AnyWordSpec with Matchers {
       result.isSuccess shouldBe true
 
       result.get.mgdRegNumber shouldBe "MGD123456"
-      result.get.adi shouldBe Some("1st floor")
+      result.get.adi          shouldBe Some("1st floor")
       result.get.address shouldBe Some(
         Address(
           "address1",
@@ -69,9 +69,9 @@ class BusinessAddressSpec extends AnyWordSpec with Matchers {
       val result =
         json.validate[BusinessAddress]
 
-      result.isSuccess shouldBe true
-      result.get.adi shouldBe None
-      result.get.address shouldBe None
+      result.isSuccess       shouldBe true
+      result.get.adi         shouldBe None
+      result.get.address     shouldBe None
       result.get.iomOrCiFlag shouldBe None
     }
   }
