@@ -16,24 +16,7 @@
 
 package models
 
-import models.addresslookup.{
-  AddressLookupConfigOptions,
-  AddressLookupConfigSettings,
-  AddressLookupLabelContent,
-  AddressLookupLabels,
-  AppLevelLabels,
-  ConfirmPageConfig,
-  ConfirmPageLabels,
-  EditPageLabels,
-  International,
-  LookupPageLabels,
-  ManualAddressEntryConfig,
-  ManualAddressEntryLineContent,
-  MaxLengthErrorMessages,
-  SelectPageConfig,
-  SelectPageLabels,
-  TimeoutConfig
-}
+import models.addresslookup.{AddressLookupConfigOptions, AddressLookupConfigSettings, AddressLookupLabelContent, AddressLookupLabels, AppLevelLabels, ConfirmPageConfig, ConfirmPageLabels, EditPageLabels, International, LookupPageLabels, ManualAddressEntryConfig, ManualAddressEntryLineContent, MaxLengthErrorMessages, SelectPageConfig, SelectPageLabels, TimeoutConfig}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsSuccess, Json}
@@ -51,10 +34,10 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
     )
 
     val manualAddressEntryConfig = ManualAddressEntryConfig(
-      line1MaxLength  = 35,
-      line2MaxLength  = 35,
-      line3MaxLength  = 35,
-      townMaxLength   = 35,
+      line1MaxLength = 35,
+      line2MaxLength = 35,
+      line3MaxLength = 35,
+      townMaxLength  = 35,
       mandatoryFields = Map(
         "addressLine1" -> true,
         "addressLine2" -> true,
@@ -75,15 +58,15 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
     )
 
     val options = AddressLookupConfigOptions(
-      continueUrl              = "/continue",
-      homeNavHref               = "/",
-      signOutHref               = "/sign-out",
-      accessibilityFooterUrl    = "/accessibility-statement/gambling-variations",
-      deskProServiceName        = "gambling-variations-frontend",
-      showBackButtons           = true,
-      includeHMRCBranding       = false,
-      ukMode                    = true,
-      pageHeadingStyle          = "govuk-heading-l",
+      continueUrl            = "/continue",
+      homeNavHref            = "/",
+      signOutHref            = "/sign-out",
+      accessibilityFooterUrl = "/accessibility-statement/gambling-variations",
+      deskProServiceName     = "gambling-variations-frontend",
+      showBackButtons        = true,
+      includeHMRCBranding    = false,
+      ukMode                 = true,
+      pageHeadingStyle       = "govuk-heading-l",
       selectPageConfig = SelectPageConfig(
         proposalListLimit     = 10,
         showSearchLinkAgain   = true,

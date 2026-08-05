@@ -20,12 +20,13 @@ import controllers.actions.*
 import forms.CorrespondenceNameFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceDetailsSubmittedPage, CorrespondenceNamePage}
+import pages.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CorrespondenceNameView
+import utils.FlagsUtil.*
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -61,9 +62,12 @@ class CorrespondenceNameController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val ua = request.userAnswers
+          val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceNamePage, CorrespondenceDetailsChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceNamePage, value))
+            updatedAnswers <- Future.fromTry(ua.set(CorrespondenceNamePage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(CorrespondenceNamePage, mode, updatedAnswers))
       )

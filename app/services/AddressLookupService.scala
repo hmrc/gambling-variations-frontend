@@ -22,31 +22,30 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 
-
-class AddressLookupService @Inject()(
-                                      appConfig: FrontendAppConfig
-                                    ){
+class AddressLookupService @Inject() (
+  appConfig: FrontendAppConfig
+) {
 
   def configureAddressLookup(ukMode: Boolean)(implicit hc: HeaderCarrier, messages: Messages): AddressLookupConfigSettings =
     AddressLookupConfigSettings(
       options = AddressLookupConfigOptions(
-        continueUrl = appConfig.loginContinueUrl,
-        homeNavHref = appConfig.addressLookupHomeNavHref,
-        signOutHref = appConfig.signOutUrl,
+        continueUrl            = appConfig.loginContinueUrl,
+        homeNavHref            = appConfig.addressLookupHomeNavHref,
+        signOutHref            = appConfig.signOutUrl,
         accessibilityFooterUrl = appConfig.accessibilityFooterUrl,
-        deskProServiceName = appConfig.addressLookupDeskProServiceName,
+        deskProServiceName     = appConfig.addressLookupDeskProServiceName,
         timeoutConfig = TimeoutConfig(
-          timeoutAmount = 900,
-          timeoutUrl = appConfig.addressLookupTimeoutUrl,
+          timeoutAmount       = 900,
+          timeoutUrl          = appConfig.addressLookupTimeoutUrl,
           timeoutKeepAliveUrl = appConfig.addressLookupTimeoutKeepAliveUrl
         ),
-        showBackButtons = true,
+        showBackButtons     = true,
         includeHMRCBranding = false,
-        ukMode = ukMode,
-        pageHeadingStyle = "govuk-heading-l",
+        ukMode              = ukMode,
+        pageHeadingStyle    = "govuk-heading-l",
         selectPageConfig = SelectPageConfig(
-          proposalListLimit = 10,
-          showSearchLinkAgain = true,
+          proposalListLimit     = 10,
+          showSearchLinkAgain   = true,
           showNoneOfTheseOption = true
         ),
         confirmPageConfig = ConfirmPageConfig(
@@ -56,41 +55,41 @@ class AddressLookupService @Inject()(
           line1MaxLength = 35,
           line2MaxLength = 35,
           line3MaxLength = 35,
-          townMaxLength = 35,
+          townMaxLength  = 35,
           mandatoryFields = Map(
             "addressLine1" -> true,
             "addressLine2" -> true,
             "addressLine3" -> true,
-            "town" -> false,
-            "postcode" -> true
+            "town"         -> false,
+            "postcode"     -> true
           ),
           maxLengthErrorMessages = MaxLengthErrorMessages(
             en = ManualAddressEntryLineContent().messages,
             cy = ManualAddressEntryLineContent().messages
           ),
           showOrganisationName = false
-      )
-    ),
+        )
+      ),
       labels = AddressLookupLabels(
         en = AddressLookupLabelContent(
           appLevelLabels = AppLevelLabels(
             navTitle = messages("service.name")
           ),
-          selectPageLabels = SelectPageLabels().messages,
-          lookupPageLabels = LookupPageLabels().messages,
+          selectPageLabels  = SelectPageLabels().messages,
+          lookupPageLabels  = LookupPageLabels().messages,
           confirmPageLabels = ConfirmPageLabels().messages,
-          editPageLabels = EditPageLabels().messages,
-          international = International.messages
+          editPageLabels    = EditPageLabels().messages,
+          international     = International.messages
         ),
         cy = AddressLookupLabelContent(
           appLevelLabels = AppLevelLabels(
             navTitle = messages("service.name")
           ),
-          selectPageLabels = SelectPageLabels().messages,
-          lookupPageLabels = LookupPageLabels().messages,
+          selectPageLabels  = SelectPageLabels().messages,
+          lookupPageLabels  = LookupPageLabels().messages,
           confirmPageLabels = ConfirmPageLabels().messages,
-          editPageLabels = EditPageLabels().messages,
-          international = International.messages
+          editPageLabels    = EditPageLabels().messages,
+          international     = International.messages
         )
       )
     )

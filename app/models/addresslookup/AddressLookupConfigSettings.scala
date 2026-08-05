@@ -162,28 +162,28 @@ object ConfirmPageLabels {
 }
 
 case class EditPageLabels(
-                           title: String = "correspondenceUKAddress.title",
-                           heading: String = "correspondenceUKAddress.heading",
-                           line1Label: String = "correspondenceUKAddress.addressLine1",
-                           line2Label: String = "correspondenceUKAddress.addressLine2",
-                           line3Label: String = "correspondenceUKAddress.townOrCity",
-                           townLabel: String = "correspondenceUKAddress.County",
-                           postcodeLabel: Option[String] = Some("correspondenceUKAddress.Postcode"),
-                           countryLabel: Option[String] = None,
-                           submitLabel: Option[String] = Some("site.continue")
-                         ) {
+  title: String = "correspondenceUKAddress.title",
+  heading: String = "correspondenceUKAddress.heading",
+  line1Label: String = "correspondenceUKAddress.addressLine1",
+  line2Label: String = "correspondenceUKAddress.addressLine2",
+  line3Label: String = "correspondenceUKAddress.townOrCity",
+  townLabel: String = "correspondenceUKAddress.County",
+  postcodeLabel: Option[String] = Some("correspondenceUKAddress.Postcode"),
+  countryLabel: Option[String] = None,
+  submitLabel: Option[String] = Some("site.continue")
+) {
 
   def messages(implicit messages: Messages): EditPageLabels =
     copy(
-      title = messages(title),
-      heading = messages(heading),
-      line1Label = messages(line1Label),
-      line2Label = messages(line2Label),
-      line3Label = messages(line3Label),
-      townLabel = messages(townLabel),
+      title         = messages(title),
+      heading       = messages(heading),
+      line1Label    = messages(line1Label),
+      line2Label    = messages(line2Label),
+      line3Label    = messages(line3Label),
+      townLabel     = messages(townLabel),
       postcodeLabel = postcodeLabel.map(messages(_)),
-      countryLabel = countryLabel.map(messages(_)),
-      submitLabel = submitLabel.map(messages(_))
+      countryLabel  = countryLabel.map(messages(_)),
+      submitLabel   = submitLabel.map(messages(_))
     )
 }
 
@@ -200,18 +200,17 @@ object International {
 
   def messages(implicit messages: Messages): International =
     International(
-      editPageLabels =
-        EditPageLabels(
-          title = "correspondenceNonUKAddress.title",
-          heading = "correspondenceNonUKAddress.heading",
-          line1Label = "correspondenceNonUKAddress.addressLine1",
-          line2Label = "correspondenceNonUKAddress.addressLine2",
-          line3Label = "correspondenceNonUKAddress.townOrCity",
-          townLabel = "correspondenceNonUKAddress.Region",
-          postcodeLabel = None,
-          countryLabel = Some("correspondenceNonUKAddress.Country"),
-          submitLabel = Some("site.continue")
-        ).messages
+      editPageLabels = EditPageLabels(
+        title         = "correspondenceNonUKAddress.title",
+        heading       = "correspondenceNonUKAddress.heading",
+        line1Label    = "correspondenceNonUKAddress.addressLine1",
+        line2Label    = "correspondenceNonUKAddress.addressLine2",
+        line3Label    = "correspondenceNonUKAddress.townOrCity",
+        townLabel     = "correspondenceNonUKAddress.Region",
+        postcodeLabel = None,
+        countryLabel  = Some("correspondenceNonUKAddress.Country"),
+        submitLabel   = Some("site.continue")
+      ).messages
     )
 }
 case class SelectPageConfig(proposalListLimit: Int, showSearchLinkAgain: Boolean, showNoneOfTheseOption: Boolean)
