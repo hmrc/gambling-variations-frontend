@@ -37,7 +37,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result mustBe defined
       result.get.value.toString must include(msgs("site.notProvided"))
       result.get.actions.get.items.size mustBe 1
-      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
+      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad().url
     }
 
     "must display 'not provided' when an empty list is supplied" in {
@@ -53,7 +53,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result mustBe defined
       result.get.value.toString must include(msgs("site.notProvided"))
       result.get.actions.get.items.size mustBe 1
-      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
+      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad().url
     }
 
     "must display registration numbers separated by <br> and include action when less than 3 numbers" in {

@@ -459,7 +459,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(CorrespondenceFaxNumberPage, NormalMode, answers) mustBe
-            routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(NormalMode)
+            routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
         }
 
         "must go from CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when changing from a UK address" in {
@@ -653,7 +653,7 @@ class NavigatorSpec extends SpecBase {
               .value
 
           navigator.nextPage(AddEmailAddressForCorrespondenceYesNoPage, NormalMode, answers) mustBe
-            routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode)
+            routes.CorrespondenceEmailAddressController.onPageLoad()
         }
 
         "must go to CheckCorrespondenceDetails when AddEmailAddressForCorrespondenceYesNoPage is false and AddCorrespondingDetailsYesNoPage is true" in {
@@ -786,7 +786,7 @@ class NavigatorSpec extends SpecBase {
           .value
 
       navigator.nextPage(RemovePreviousRegNumberPage, CheckMode, answers) mustBe
-        routes.RemovePreviousRegNumberController.onPageLoad(CheckMode)
+        routes.RemovePreviousRegNumberController.onPageLoad()
     }
 
     "must go to CheckTradingDetails when previous registration numbers are missing" in {
@@ -798,7 +798,7 @@ class NavigatorSpec extends SpecBase {
     "must go from PreviousRegNumberPage to the normal mode previous registration number page" in {
 
       navigator.nextPage(PreviousRegNumberPage, NormalMode, UserAnswers("id")) mustBe
-        routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+        routes.PreviousRegistrationNumberController.onPageLoad()
     }
 
     "must go from AddPreviousRegistrationNumberPage to previous registration number page when yes is selected in Normal mode" in {
@@ -810,7 +810,7 @@ class NavigatorSpec extends SpecBase {
           .value
 
       navigator.nextPage(AddPreviousRegistrationNumberPage, NormalMode, answers) mustBe
-        routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+        routes.PreviousRegistrationNumberController.onPageLoad()
     }
 
     "must go from AddPreviousRegistrationNumberPage to check trading details when no is selected in Normal mode" in {
@@ -829,12 +829,6 @@ class NavigatorSpec extends SpecBase {
 
       navigator.nextPage(AddPreviousRegistrationNumberPage, NormalMode, UserAnswers("id")) mustBe
         routes.SystemErrorController.onPageLoad()
-    }
-
-    "must go from PreviousRegNumberPage to the check mode previous registration number page" in {
-
-      navigator.nextPage(PreviousRegNumberPage, CheckMode, UserAnswers("id")) mustBe
-        routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
     }
 
     "must go from BusinessNamePage to CheckBusinessNameController" in {
@@ -861,28 +855,5 @@ class NavigatorSpec extends SpecBase {
         routes.CheckTradingDetailsController.onPageLoad()
     }
 
-    "must go from AddPreviousRegistrationNumberPage to previous registration number page when yes is selected in Check mode" in {
-
-      val answers =
-        UserAnswers("id")
-          .set(AddPreviousRegistrationNumberPage, true)
-          .success
-          .value
-
-      navigator.nextPage(AddPreviousRegistrationNumberPage, CheckMode, answers) mustBe
-        routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
-    }
-
-    "must go from AddPreviousRegistrationNumberPage to check trading details when no is selected in Check mode" in {
-
-      val answers =
-        UserAnswers("id")
-          .set(AddPreviousRegistrationNumberPage, false)
-          .success
-          .value
-
-      navigator.nextPage(AddPreviousRegistrationNumberPage, CheckMode, answers) mustBe
-        routes.CheckTradingDetailsController.onPageLoad()
-    }
   }
 }

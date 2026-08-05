@@ -41,7 +41,7 @@ class Navigator @Inject() () {
     case IsSeasonalBusinessPage                    => _ => routes.CheckTradingDetailsController.onPageLoad()
     case OtherTradeClassPage                       => _ => routes.CheckTradingDetailsController.onPageLoad()
     case AddPreviousRegistrationNumberPage         => userAnswers => addPreviousRegistrationNumberRoute(NormalMode)(userAnswers)
-    case PreviousRegNumberPage                     => _ => routes.PreviousRegistrationNumberController.onPageLoad(NormalMode)
+    case PreviousRegNumberPage                     => _ => routes.PreviousRegistrationNumberController.onPageLoad()
     case PreviousRegistrationNumbersListPage       => _ => routes.PreviousRegistrationNumbersListController.onPageLoad()
     case RemovePreviousRegNumberPage               => _ => routes.PreviousRegistrationNumbersListController.onPageLoad()
     case AddAssociatedRegistrationNumberPage       => userAnswers => navigateAddAssociatedRegistrationNumberPage(NormalMode)(userAnswers)
@@ -81,7 +81,7 @@ class Navigator @Inject() () {
     case OtherTradeClassPage               => _ => routes.CheckTradingDetailsController.onPageLoad()
     case BusinessTradeClassPage            => _ => routes.CheckTradingDetailsController.onPageLoad()
     case AddPreviousRegistrationNumberPage => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
-    case PreviousRegNumberPage             => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
+    // case PreviousRegNumberPage             => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
     // case PreviousRegistrationNumbersListPage => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
     case RemovePreviousRegNumberPage         => userAnswers => navigateRemovePreviousRegNumberPage(CheckMode)(userAnswers)
     case AddAssociatedRegistrationNumberPage => userAnswers => navigateAddAssociatedRegistrationNumberPage(CheckMode)(userAnswers)
@@ -138,7 +138,7 @@ class Navigator @Inject() () {
 
   private def navigateCorrespondenceFaxNumberPage(mode: Mode)(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(mode)
+      case Some(true) => routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
       case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
@@ -156,7 +156,7 @@ class Navigator @Inject() () {
       .get(AddPreviousRegistrationNumberPage)
       .map {
         case false => routes.CheckTradingDetailsController.onPageLoad()
-        case true  => routes.PreviousRegistrationNumberController.onPageLoad(mode)
+        case true  => routes.PreviousRegistrationNumberController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -237,7 +237,7 @@ class Navigator @Inject() () {
 
       case Some(false) =>
         if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
-          routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(mode)
+          routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
         else
           routes.CheckCorrespondenceDetailsController.onPageLoad()
 
@@ -248,7 +248,7 @@ class Navigator @Inject() () {
   private def navigateAddEmailAddressForCorrespondenceYesNoPage(mode: Mode)(userAnswers: UserAnswers): Call =
     userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match {
       case Some(true) =>
-        routes.CorrespondenceEmailAddressController.onPageLoad(mode)
+        routes.CorrespondenceEmailAddressController.onPageLoad()
 
       case Some(false) =>
         if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
@@ -271,7 +271,7 @@ class Navigator @Inject() () {
     answers
       .get(PreviousRegistrationNumbersListPage)
       .filter(_.nonEmpty)
-      .map(_ => routes.RemovePreviousRegNumberController.onPageLoad(mode))
+      .map(_ => routes.RemovePreviousRegNumberController.onPageLoad())
       .getOrElse(routes.CheckTradingDetailsController.onPageLoad())
 
   private def navigateRemoveCorrespondenceDetailsYesNoPage(answers: UserAnswers): Call =

@@ -41,7 +41,7 @@ class CheckCorrespondenceDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     if (!hasAnyCorrespondenceDetails(request.userAnswers)) {
-      Redirect(controllers.routes.AddCorrespondingDetailsYesNoController.onPageLoad(NormalMode))
+      Redirect(controllers.routes.AddCorrespondingDetailsYesNoController.onPageLoad())
     } else {
       Ok(
         view(

@@ -51,7 +51,7 @@ object CorrespondenceChangeAddrScreenerSummary {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.CorrespondenceChangeAddrScreenerController.onPageLoad(CheckMode).url
+            routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
           ).withVisuallyHiddenText(
             messages("correspondenceChangeAddrScreenerController.change.hidden")
           )

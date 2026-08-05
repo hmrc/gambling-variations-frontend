@@ -42,7 +42,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
   val formProvider = new RemoveAssociatedRegNumberFormProvider()
   val form = formProvider()
 
-  lazy val removeAssociatedRegNumberRoute = routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
+  lazy val removeAssociatedRegNumberRoute = routes.RemoveAssociatedRegNumberController.onPageLoad().url
   private val assocRegSeq = Some(Seq("XYM00000000", "b", "c"))
   private val baseAnswers =
     UserAnswers(

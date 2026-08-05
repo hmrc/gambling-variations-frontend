@@ -35,7 +35,7 @@ object RemoveCorrAddressAddInfoSummary {
         key   = "removeCorrAddressAddInfo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemoveCorrAddressAddInfoController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.RemoveCorrAddressAddInfoController.onPageLoad().url)
             .withVisuallyHiddenText(messages("removeAdditionalAddrInfo.change.hidden"))
         )
       )

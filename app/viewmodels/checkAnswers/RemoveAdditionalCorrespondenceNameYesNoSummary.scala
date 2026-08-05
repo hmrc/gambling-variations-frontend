@@ -35,7 +35,7 @@ object RemoveAdditionalCorrespondenceNameYesNoSummary {
         key   = "removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad().url)
             .withVisuallyHiddenText(messages("removeAdditionalCorrespondenceNameYesNo.change.hidden"))
         )
       )

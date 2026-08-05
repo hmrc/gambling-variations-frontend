@@ -54,7 +54,7 @@ class CheckCorrespondenceDetailsControllerSpec extends SpecBase {
 
         redirectLocation(result).value mustEqual
           routes.AddCorrespondingDetailsYesNoController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
       }
     }
@@ -339,7 +339,7 @@ class CheckCorrespondenceDetailsControllerSpec extends SpecBase {
 
         redirectLocation(result).value mustEqual
           routes.AddCorrespondingDetailsYesNoController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
       }
     }

@@ -100,7 +100,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad(mode))
+      } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad())
     }
 
   def onChangeRedirect(mode: Mode, assocRegNumber: String): Action[AnyContent] =

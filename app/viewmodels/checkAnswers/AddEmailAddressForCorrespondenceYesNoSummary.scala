@@ -35,7 +35,7 @@ object AddEmailAddressForCorrespondenceYesNoSummary {
         key   = "addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad().url)
             .withVisuallyHiddenText(messages("addEmailAddressForCorrespondenceYesNo.change.hidden"))
         )
       )

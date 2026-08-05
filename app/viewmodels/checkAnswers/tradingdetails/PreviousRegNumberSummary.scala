@@ -34,7 +34,7 @@ object PreviousRegNumberSummary {
         key   = "previousRegNumberSummary.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url)
+          ActionItemViewModel("site.change", routes.PreviousRegistrationNumberController.onPageLoad().url)
             .withVisuallyHiddenText(messages("previous.change.hidden"))
         )
       )

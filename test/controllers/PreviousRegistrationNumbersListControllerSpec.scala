@@ -96,8 +96,8 @@ class PreviousRegistrationNumbersListControllerSpec extends SpecBase with Mockit
   lazy val previousRegistrationNumbersRoute = PreviousRegistrationNumbersListController.onPageLoad().url
   lazy val previousRegNumbersRedirectRoute = PreviousRegistrationNumbersListController.onRedirect("XYM00001000033").url
   lazy val previousRegNumbersChangeRedirectRoute = PreviousRegistrationNumbersListController.onChangeRedirect("XQM00005724366s").url
-  lazy val changePreviousRegistrationNumberRoute = PreviousRegistrationNumberController.onPageLoad(CheckMode).url
-  lazy val removePrevRegNumberRoute = RemovePreviousRegNumberController.onPageLoad(NormalMode).url
+  lazy val changePreviousRegistrationNumberRoute = PreviousRegistrationNumberController.onPageLoad().url
+  lazy val removePrevRegNumberRoute = RemovePreviousRegNumberController.onPageLoad().url
 
   "PreviousRegistrationNumbers Controller" - {
 

@@ -127,7 +127,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
         .eachAttr("href")
         .asScala must contain(
         routes.RemoveCorrespondenceDetailsYesNoController
-          .onPageLoad(NormalMode)
+          .onPageLoad()
           .url
       )
     }

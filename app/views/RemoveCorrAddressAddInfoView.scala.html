@@ -32,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages("removeCorrAddressAddInfo.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = routes.RemoveCorrAddressAddInfoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.RemoveCorrAddressAddInfoController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

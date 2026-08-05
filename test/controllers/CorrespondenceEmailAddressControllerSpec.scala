@@ -49,7 +49,7 @@ class CorrespondenceEmailAddressControllerSpec extends SpecBase with MockitoSuga
     )
 
   lazy val emailAddressRoute =
-    routes.CorrespondenceEmailAddressController.onPageLoad(NormalMode).url
+    routes.CorrespondenceEmailAddressController.onPageLoad().url
 
   "CorrespondenceEmailAddress Controller" - {
 

@@ -31,7 +31,7 @@ caption: Caption
 
 @layout(pageTitle = title(form, messages("previousRegistrationNumber.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-@formHelper(action = routes.PreviousRegistrationNumberController.onSubmit(mode)) {
+@formHelper(action = routes.PreviousRegistrationNumberController.onSubmit()) {
 
 @if(form.errors.nonEmpty) {
 @govukErrorSummary(ErrorSummaryViewModel(form))

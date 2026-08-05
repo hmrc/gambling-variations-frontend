@@ -301,7 +301,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
+        redirectLocation(result).value mustEqual routes.RemoveAssociatedRegNumberController.onPageLoad().url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())

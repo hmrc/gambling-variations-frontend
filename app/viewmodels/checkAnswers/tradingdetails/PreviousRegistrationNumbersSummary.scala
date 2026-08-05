@@ -62,7 +62,7 @@ object PreviousRegistrationNumbersSummary {
         if (hasNumbers) {
           routes.PreviousRegistrationNumbersListController.onPageLoad().url
         } else {
-          routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
+          routes.PreviousRegistrationNumberController.onPageLoad().url
         }
 
       val actions = if (prevRegAmount >= maxAmount) { Seq.empty }
