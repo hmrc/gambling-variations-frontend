@@ -87,7 +87,7 @@ class CorrespondenceUKAddressController @Inject() (
 
             for {
               updatedAnswers <- Future.fromTry(
-                                    ua.set(
+                                  ua.set(
                                     CorrespondenceAddressUkPage,
                                     value
                                   )
