@@ -189,12 +189,19 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     val changeUrl =
       if (correspondenceAddress.isEmpty) {
         controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
-      } else if (hasUkPostcode.contains(true)) {
-        controllers.routes.CorrespondenceUKAddressController.onPageLoad().url
-      } else if (hasUkPostcode.contains(false)) {
-        controllers.routes.CorrespondenceNonUKAddressController.onPageLoad().url
+      } else if (isAddingNewCorrespondenceDetails.contains(true)) {
+        hasUkPostcode match {
+          case Some(true) =>
+            controllers.routes.CorrespondenceUKAddressController.onPageLoad().url
+
+          case Some(false) =>
+            controllers.routes.CorrespondenceNonUKAddressController.onPageLoad().url
+
+          case None =>
+            controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
+        }
       } else {
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
+        controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
       }
 
     SummaryListRow(
