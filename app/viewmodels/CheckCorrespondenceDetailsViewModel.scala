@@ -185,9 +185,17 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
       )
     }
   private def correspondenceAddressUkSummaryListRow(implicit messages: Messages): SummaryListRow = {
+
     val changeUrl =
-      if (correspondenceAddress.isEmpty) { controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url }
-      else { controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url }
+      if (correspondenceAddress.isEmpty) {
+        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
+      } else if (hasUkPostcode.contains(true)) {
+        controllers.routes.CorrespondenceUKAddressController.onPageLoad().url
+      } else if (hasUkPostcode.contains(false)) {
+        controllers.routes.CorrespondenceNonUKAddressController.onPageLoad().url
+      } else {
+        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
+      }
 
     SummaryListRow(
       key = Key(
