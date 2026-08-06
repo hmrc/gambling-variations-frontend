@@ -18,8 +18,7 @@ package views
 
 import base.SpecBase
 import forms.BusinessAddressAdditionalInfoFormProvider
-import models.BusinessType.Soleproprietor
-import models.{NormalMode, SoleProprietorName}
+import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
