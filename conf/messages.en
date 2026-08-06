@@ -633,3 +633,9 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+businessUKAddrScreener.title = Does your business address have a UK postcode?
+businessUKAddrScreener.heading = Does your business address have a UK postcode?
+businessUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
+businessUKAddrScreener.error.required = Select yes if the business address has a UK postcode
+businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
