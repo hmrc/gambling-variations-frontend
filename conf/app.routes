@@ -74,13 +74,9 @@ POST       /change-registration-details/business-contact-details/change-fax-numb
 
 GET        /change-registration-details/business-contact-details/email-address                     controllers.BusinessEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-contact-details/email-address                     controllers.BusinessEmailAddressController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/business-contact-details/change-email-address              controllers.BusinessEmailAddressController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/business-contact-details/change-email-address              controllers.BusinessEmailAddressController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/business-contact-details/contact-numbers                   controllers.BusinessContactNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-contact-details/contact-numbers                   controllers.BusinessContactNumberController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/business-contact-details/change-contact-numbers            controllers.BusinessContactNumberController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/business-contact-details/change-contact-numbers            controllers.BusinessContactNumberController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/trading-details/change-associated-registration-numbers-redirect        controllers.AssociatedRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, assocRegNumber: String)
 GET        /change-registration-details/trading-details/associated-registration-numbers-redirect               controllers.AssociatedRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)

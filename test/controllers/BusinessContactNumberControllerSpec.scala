@@ -57,7 +57,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
   )
 
   lazy val businessContactNumberRoute =
-    routes.BusinessContactNumberController.onPageLoad(NormalMode).url
+    routes.BusinessContactNumberController.onPageLoad().url
 
   val userAnswers =
     UserAnswers(

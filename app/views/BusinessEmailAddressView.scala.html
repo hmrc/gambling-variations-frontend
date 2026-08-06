@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("emailAddress.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = routes.BusinessEmailAddressController.onSubmit(mode), Symbol("autoComplete") -> "on") {
+    @formHelper(action = routes.BusinessEmailAddressController.onSubmit(), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

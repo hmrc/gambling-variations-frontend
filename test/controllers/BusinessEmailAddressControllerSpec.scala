@@ -52,7 +52,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     )
 
   lazy val emailAddressRoute =
-    routes.BusinessEmailAddressController.onPageLoad(NormalMode).url
+    routes.BusinessEmailAddressController.onPageLoad().url
 
   "BusinessEmailAddress Controller" - {
 
