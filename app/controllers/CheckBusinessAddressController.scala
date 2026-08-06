@@ -27,21 +27,21 @@ import views.html.BusinessAddressView
 import javax.inject.Inject
 
 class CheckBusinessAddressController @Inject() (
-                                              override val messagesApi: MessagesApi,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              authorise: AuthorisedAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: BusinessAddressDataRequiredAction,
-                                              view: BusinessAddressView
-                                            ) extends FrontendBaseController
-  with I18nSupport {
+  override val messagesApi: MessagesApi,
+  val controllerComponents: MessagesControllerComponents,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: BusinessAddressDataRequiredAction,
+  view: BusinessAddressView
+) extends FrontendBaseController
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val ua = request.userAnswers
     val showChangeMessage: Boolean = checkFlag(ua, BusinessAddressChangesPage, BusinessAddressSubmittedPage)
     ua.get(BusinessAddressSectionPage) match {
       case Some(_) => Ok(view(showChangeMessage))
-      case None => Redirect(routes.SystemErrorController.onPageLoad())
+      case None    => Redirect(routes.SystemErrorController.onPageLoad())
     }
   }
 }
