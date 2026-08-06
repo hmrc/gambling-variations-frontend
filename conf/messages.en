@@ -633,3 +633,5 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+checkBusinessAddress.title = checkBusinessAddress
+checkBusinessAddress.heading = checkBusinessAddress
