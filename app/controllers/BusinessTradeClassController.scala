@@ -85,7 +85,7 @@ class BusinessTradeClassController @Inject() (
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routes.OtherTradeClassController.onPageLoad(CheckMode)
+                        routes.OtherTradeClassController.onPageLoad()
 
                       case _ =>
                         navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
@@ -95,7 +95,7 @@ class BusinessTradeClassController @Inject() (
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routes.OtherTradeClassController.onPageLoad(CheckMode)
+                        routes.OtherTradeClassController.onPageLoad()
 
                       case _ =>
                         routes.CheckTradingDetailsController.onPageLoad()

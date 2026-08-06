@@ -28,7 +28,7 @@
 
 @layout(pageTitle = title(form, messages("soleProprietorName.title"), Some("changeRegistrationDetails.caption"))) {
 
-  @formHelper(action = controllers.routes.ChangeBusinessNameController.onSubmit(BusinessType.Soleproprietor, mode)) {
+  @formHelper(action = controllers.routes.ChangeBusinessNameController.onSubmit(BusinessType.Soleproprietor)) {
 
     @if(form.hasErrors) {
       @govukErrorSummary(ErrorSummaryViewModel(form))

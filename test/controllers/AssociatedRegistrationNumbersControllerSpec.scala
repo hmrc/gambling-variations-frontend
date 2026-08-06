@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.AssociatedRegistrationNumbersFormProvider
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -56,7 +56,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
     UserAnswers(userAnswersId, data)
 
   lazy val associatedRegistrationNumbersRoute =
-    routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url
+    routes.AssociatedRegistrationNumbersListController.onPageLoad().url
 
   "AssociatedRegistrationNumbers Controller" - {
 
@@ -301,7 +301,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
+        redirectLocation(result).value mustEqual routes.RemoveAssociatedRegNumberController.onPageLoad().url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())
@@ -335,7 +335,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad(CheckMode).url
+        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad().url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())
@@ -383,7 +383,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual
-          routes.AssociatedRegNumberController.onPageLoad(NormalMode).url
+          routes.AssociatedRegNumberController.onPageLoad().url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())

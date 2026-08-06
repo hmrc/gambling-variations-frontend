@@ -53,7 +53,7 @@ class CorrespondenceContactNumberControllerSpec extends SpecBase with MockitoSug
   val noAnswers = Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
 
   lazy val correspondenceContactNumberRoute =
-    routes.CorrespondenceContactNumberController.onPageLoad(NormalMode).url
+    routes.CorrespondenceContactNumberController.onPageLoad().url
 
   val userAnswers =
     UserAnswers(

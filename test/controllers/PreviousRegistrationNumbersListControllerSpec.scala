@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import controllers.routes.*
 import forms.PreviousRegistrationNumbersFormProvider
-import models.{CheckMode, NormalMode, RegistrationNumbers, UserAnswers}
+import models.{NormalMode, RegistrationNumbers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -93,11 +93,11 @@ class PreviousRegistrationNumbersListControllerSpec extends SpecBase with Mockit
   private val alreadySubmittedInUa =
     UserAnswers(userAnswersId, dataAlreadySubmitted)
 
-  lazy val previousRegistrationNumbersRoute = PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+  lazy val previousRegistrationNumbersRoute = PreviousRegistrationNumbersListController.onPageLoad().url
   lazy val previousRegNumbersRedirectRoute = PreviousRegistrationNumbersListController.onRedirect("XYM00001000033").url
   lazy val previousRegNumbersChangeRedirectRoute = PreviousRegistrationNumbersListController.onChangeRedirect("XQM00005724366s").url
-  lazy val changePreviousRegistrationNumberRoute = PreviousRegistrationNumberController.onPageLoad(CheckMode).url
-  lazy val removePrevRegNumberRoute = RemovePreviousRegNumberController.onPageLoad(NormalMode).url
+  lazy val changePreviousRegistrationNumberRoute = PreviousRegistrationNumberController.onPageLoad().url
+  lazy val removePrevRegNumberRoute = RemovePreviousRegNumberController.onPageLoad().url
 
   "PreviousRegistrationNumbers Controller" - {
 

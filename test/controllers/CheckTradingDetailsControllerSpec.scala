@@ -253,7 +253,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           redirectLocation(result).value mustBe
-            routes.BusinessTradeClassController.onPageLoad(NormalMode).url
+            routes.BusinessTradeClassController.onPageLoad().url
         }
       }
 
@@ -298,7 +298,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           redirectLocation(result).value mustBe
-            routes.OtherTradeClassController.onPageLoad(NormalMode).url
+            routes.OtherTradeClassController.onPageLoad().url
         }
       }
 
@@ -327,7 +327,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           redirectLocation(result).value mustBe
-            routes.SeasonalBusinessController.onPageLoad(NormalMode).url
+            routes.SeasonalBusinessController.onPageLoad().url
         }
       }
 

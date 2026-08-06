@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import pages.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -51,7 +51,7 @@ object CorrespondenceChangeAddrScreenerSummary {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.CorrespondenceChangeAddrScreenerController.onPageLoad(CheckMode).url
+            routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
           ).withVisuallyHiddenText(
             messages("correspondenceChangeAddrScreenerController.change.hidden")
           )

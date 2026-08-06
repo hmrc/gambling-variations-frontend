@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("seasonalBusiness.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = routes.SeasonalBusinessController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.SeasonalBusinessController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

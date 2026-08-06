@@ -41,7 +41,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
   val formProvider = new CorrespondenceChangeAddrScreenerFormProvider()
   val form = formProvider()
 
-  lazy val CorrespondenceChangeAddrScreenerRoute = routes.CorrespondenceChangeAddrScreenerController.onPageLoad(NormalMode).url
+  lazy val CorrespondenceChangeAddrScreenerRoute = routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
 
   val noAnswers =
     UserAnswers(

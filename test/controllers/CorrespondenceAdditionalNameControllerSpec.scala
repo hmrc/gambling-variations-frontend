@@ -48,7 +48,7 @@ class CorrespondenceAdditionalNameControllerSpec extends SpecBase with MockitoSu
     )
 
   lazy val nameRoute =
-    routes.CorrespondenceAdditionalNameController.onPageLoad(NormalMode).url
+    routes.CorrespondenceAdditionalNameController.onPageLoad().url
 
   "CorrespondenceAdditionalName Controller" - {
 

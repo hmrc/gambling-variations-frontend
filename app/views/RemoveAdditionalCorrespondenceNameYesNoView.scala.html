@@ -29,7 +29,7 @@
 
 @layout(pageTitle = title(form, messages("removeAdditionalCorrespondenceNameYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = routes.RemoveAdditionalCorrespondenceNameYesNoController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.RemoveAdditionalCorrespondenceNameYesNoController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

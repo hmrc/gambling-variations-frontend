@@ -40,7 +40,7 @@ class FaxNumberForCorrespondenceYesNoControllerSpec extends SpecBase with Mockit
   val formProvider = new FaxNumberForCorrespondenceYesNoFormProvider()
   val form = formProvider()
 
-  lazy val faxNumberForCorrespondenceYesNoRoute = routes.FaxNumberForCorrespondenceYesNoController.onPageLoad(NormalMode).url
+  lazy val faxNumberForCorrespondenceYesNoRoute = routes.FaxNumberForCorrespondenceYesNoController.onPageLoad().url
 
   "FaxNumberForCorrespondenceYesNo Controller" - {
 

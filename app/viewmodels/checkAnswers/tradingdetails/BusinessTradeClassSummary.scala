@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{BusinessTradeClass, CheckMode, UserAnswers}
+import models.{BusinessTradeClass, UserAnswers}
 import pages.BusinessTradeClassPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -49,7 +49,7 @@ object BusinessTradeClassSummary {
         actions = Seq(
           ActionItemViewModel(
             "site.change",
-            routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+            routes.BusinessTradeClassController.onPageLoad().url
           ).withVisuallyHiddenText(
             messages("checkTradingDetails.businessTradeClass.change.hidden")
           )

@@ -71,7 +71,7 @@ class CorrespondenceNonUKAddressControllerSpec extends SpecBase with MockitoSuga
     )
 
   lazy val nameRoute: String =
-    routes.CorrespondenceNonUKAddressController.onPageLoad(NormalMode).url
+    routes.CorrespondenceNonUKAddressController.onPageLoad().url
 
   "CorrespondenceNonUKAddress Controller" - {
 

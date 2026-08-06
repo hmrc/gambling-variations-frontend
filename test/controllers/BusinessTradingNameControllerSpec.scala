@@ -42,7 +42,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   lazy val businessTradingNameRoute =
-    routes.BusinessTradingNameController.onPageLoad(NormalMode).url
+    routes.BusinessTradingNameController.onPageLoad().url
 
   val data = Json.obj(
     BusinessTypePage.toString -> BusinessType.Partnership.code,

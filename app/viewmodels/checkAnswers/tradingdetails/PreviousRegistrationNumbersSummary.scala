@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -60,9 +60,9 @@ object PreviousRegistrationNumbersSummary {
 
       val route =
         if (hasNumbers) {
-          routes.PreviousRegistrationNumbersListController.onPageLoad(NormalMode).url
+          routes.PreviousRegistrationNumbersListController.onPageLoad().url
         } else {
-          routes.PreviousRegistrationNumberController.onPageLoad(NormalMode).url
+          routes.PreviousRegistrationNumberController.onPageLoad().url
         }
 
       val actions = if (prevRegAmount >= maxAmount) { Seq.empty }

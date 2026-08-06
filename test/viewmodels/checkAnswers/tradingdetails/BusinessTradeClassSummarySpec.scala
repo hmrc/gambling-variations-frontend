@@ -18,10 +18,10 @@ package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
 import controllers.routes
-import models.{BusinessTradeClass, CheckMode}
+import models.BusinessTradeClass
 import pages.BusinessTradeClassPage
-import play.api.i18n.Messages
 import play.api.Application
+import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
@@ -54,7 +54,7 @@ class BusinessTradeClassSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.BusinessTradeClassController.onPageLoad(CheckMode).url
+              routes.BusinessTradeClassController.onPageLoad().url
             ).withVisuallyHiddenText(
               msgs("checkTradingDetails.businessTradeClass.change.hidden")
             )

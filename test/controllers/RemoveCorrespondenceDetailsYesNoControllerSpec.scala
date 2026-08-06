@@ -41,7 +41,7 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
   private val form = formProvider()
 
   private lazy val removeCorrespondenceDetailsYesNoRoute =
-    routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad(NormalMode).url
+    routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad().url
 
   private val validUserAnswers =
     emptyUserAnswers

@@ -40,7 +40,7 @@ class AddEmailAddressForCorrespondenceYesNoControllerSpec extends SpecBase with 
   val formProvider = new AddEmailAddressForCorrespondenceYesNoFormProvider()
   val form = formProvider()
 
-  lazy val addEmailAddressForCorrespondenceYesNoRoute = routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad(NormalMode).url
+  lazy val addEmailAddressForCorrespondenceYesNoRoute = routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad().url
 
   "AddEmailAddressForCorrespondenceYesNo Controller" - {
 
