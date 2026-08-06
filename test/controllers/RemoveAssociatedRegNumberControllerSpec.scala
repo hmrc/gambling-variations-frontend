@@ -42,7 +42,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
   val formProvider = new RemoveAssociatedRegNumberFormProvider()
   val form = formProvider()
 
-  lazy val removeAssociatedRegNumberRoute = routes.RemoveAssociatedRegNumberController.onPageLoad(NormalMode).url
+  lazy val removeAssociatedRegNumberRoute = routes.RemoveAssociatedRegNumberController.onPageLoad().url
   private val assocRegSeq = Some(Seq("XYM00000000", "b", "c"))
   private val baseAnswers =
     UserAnswers(
@@ -201,7 +201,7 @@ class RemoveAssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          routes.AssociatedRegistrationNumbersListController.onPageLoad(NormalMode).url
+          routes.AssociatedRegistrationNumbersListController.onPageLoad().url
       }
     }
     "must remove chosen associated registration number when user selects yes" in {

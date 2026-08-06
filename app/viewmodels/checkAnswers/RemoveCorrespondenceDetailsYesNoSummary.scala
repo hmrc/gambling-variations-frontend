@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.UserAnswers
 import pages.RemoveCorrespondenceDetailsYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -35,7 +35,7 @@ object RemoveCorrespondenceDetailsYesNoSummary {
         key   = "removeCorrespondenceDetailsYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad().url)
             .withVisuallyHiddenText(messages("removeCorrespondenceDetailsYesNo.change.hidden"))
         )
       )

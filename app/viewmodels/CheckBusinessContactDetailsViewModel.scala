@@ -45,7 +45,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
         Actions(
           items = Seq(
             ActionItem(
-              href               = controllers.routes.BusinessContactNumberController.onPageLoad(NormalMode).url,
+              href               = controllers.routes.BusinessContactNumberController.onPageLoad().url,
               content            = "site.change",
               visuallyHiddenText = Some(messages("contactDetails.label.contactNumbers"))
             )
@@ -111,7 +111,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.BusinessEmailAddressController.onPageLoad(NormalMode).url,
+                href               = controllers.routes.BusinessEmailAddressController.onPageLoad().url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               )
@@ -123,7 +123,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.BusinessEmailAddressController.onPageLoad(NormalMode).url,
+                href               = controllers.routes.BusinessEmailAddressController.onPageLoad().url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               ),

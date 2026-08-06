@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{Address, ContactNumber, NormalMode, UserAnswers}
+import models.{Address, ContactNumber, UserAnswers}
 import pages.*
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -54,7 +54,7 @@ class CheckCorrespondenceDetailsControllerSpec extends SpecBase {
 
         redirectLocation(result).value mustEqual
           routes.AddCorrespondingDetailsYesNoController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
       }
     }
@@ -339,7 +339,7 @@ class CheckCorrespondenceDetailsControllerSpec extends SpecBase {
 
         redirectLocation(result).value mustEqual
           routes.AddCorrespondingDetailsYesNoController
-            .onPageLoad(NormalMode)
+            .onPageLoad()
             .url
       }
     }

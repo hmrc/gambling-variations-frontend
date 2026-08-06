@@ -98,10 +98,10 @@ businessName.message.requiredToSubmit = You must continue to the change registra
 
 
 changeRegistrationDetails.heading.caption = MGD registration number: {0}
-changeRegistrationDetails.h2 = Declaration
-changeRegistrationDetails.p1 = You must make at least one change before you read the declaration and submit changes.
+changeRegistrationDetails.noChangesYet = You need to change at least one detail before you can submit your changes to HMRC.
+changeRegistrationDetails.table.section = Section
+changeRegistrationDetails.table.status = Status
 changeRegistrationDetails.businessName = Business name
-changeRegistrationDetails.noChange = No changes
 changeRegistrationDetails.businessAddress = Business address
 changeRegistrationDetails.businessContactDetails = Business contact details
 changeRegistrationDetails.correspondenceDetails = Correspondence details
@@ -110,13 +110,13 @@ changeRegistrationDetails.returnPeriod = Return periods
 changeRegistrationDetails.partnerDetails = Partner details
 changeRegistrationDetails.groupMemberDetails = Group member details
 changeRegistrationDetails.controllingBodyDetails = Controlling body details
-changeRegistrationDetails.licences = Licences
-changeRegistrationDetails.premises = Premises
-changeRegistrationDetails.readyToSubmit = Ready to submit
-changeRegistrationDetails.notYetStarted = Not yet started
-changeRegistrationDetails.submit = Declare and submit
-changeRegistrationDetails.can-not-start = Cannot start yet
-changeRegistrationDetails.change-registration.link = Cancel and return to manage your Machine Games Duty
+changeRegistrationDetails.licencesAndPremises = Licences and premises
+changeRegistrationDetails.noDetailsChanged = No details changed
+changeRegistrationDetails.changesReadyToSubmit = Changes ready to submit
+changeRegistrationDetails.needsCompleting = Needs completing
+changeRegistrationDetails.approvalTime = Once HMRC approve your changes, we will update your registration certificate. This can take up to 48 hours.
+changeRegistrationDetails.submit = Submit changes
+changeRegistrationDetails.change-registration.link = Return to manage your Machine Games Duty
 
 
 
@@ -124,8 +124,6 @@ declaration.title = Declaration
 declaration.heading = Declaration
 declaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
 declaration.submit = Declare and submit
-
-submit.changes = Submit changes
 
 soleProprietorName.title = 	What is the sole proprietor’s name?
 

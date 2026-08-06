@@ -16,7 +16,6 @@
 
 package viewmodels
 
-import models.NormalMode
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -51,7 +50,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       val vm = viewModel(correspondenceName = None)
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceNameController.onPageLoad(NormalMode)
+        controllers.routes.CorrespondenceNameController.onPageLoad()
     }
 
     "navigate to CorrespondenceContactNumberController when both phone numbers are missing" in {
@@ -61,7 +60,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceContactNumberController.onPageLoad(NormalMode)
+        controllers.routes.CorrespondenceContactNumberController.onPageLoad()
     }
 
     "navigate to ChangeRegistrationDetailsController when mandatory details are present" in {

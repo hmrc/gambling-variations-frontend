@@ -37,7 +37,7 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
   private val form = formProvider()
 
   private lazy val removeAdditionalCorrespondenceNameYesNoRoute =
-    routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad(NormalMode).url
+    routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad().url
 
   private val userAnswersWithAdditionalName =
     emptyUserAnswers

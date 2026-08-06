@@ -63,7 +63,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
   )
 
   lazy val changeBusinessNameRoute =
-    routes.ChangeBusinessNameController.onPageLoad(Partnership, NormalMode).url
+    routes.ChangeBusinessNameController.onPageLoad(Partnership).url
 
   "ChangeBusinessName Controller" - {
 
@@ -146,7 +146,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor, NormalMode).url)
+          FakeRequest(GET, routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor).url)
 
         val result = route(application, request).value
 
@@ -309,7 +309,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
           FakeRequest(
             POST,
             routes.ChangeBusinessNameController
-              .onSubmit(BusinessType.Soleproprietor, NormalMode)
+              .onSubmit(BusinessType.Soleproprietor)
               .url
           )
             .withFormUrlEncodedBody(
@@ -360,7 +360,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
           FakeRequest(
             POST,
             routes.ChangeBusinessNameController
-              .onSubmit(BusinessType.Soleproprietor, NormalMode)
+              .onSubmit(BusinessType.Soleproprietor)
               .url
           )
             .withFormUrlEncodedBody(

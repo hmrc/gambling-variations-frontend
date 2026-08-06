@@ -110,11 +110,11 @@ class CheckTradingDetailsController @Inject() (
 
       isGroupMemberF.map { isGroupMember =>
         if (tradeClassIsMissing && !isGroupMember) {
-          Redirect(routes.BusinessTradeClassController.onPageLoad(NormalMode))
+          Redirect(routes.BusinessTradeClassController.onPageLoad())
         } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
-          Redirect(routes.OtherTradeClassController.onPageLoad(NormalMode))
+          Redirect(routes.OtherTradeClassController.onPageLoad())
         } else if (seasonalBusIsMissing) {
-          Redirect(routes.SeasonalBusinessController.onPageLoad(NormalMode))
+          Redirect(routes.SeasonalBusinessController.onPageLoad())
         } else {
           Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
         }

@@ -41,7 +41,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new SeasonalBusinessFormProvider()
   val form = formProvider()
 
-  lazy val seasonalBusinessRoute = routes.SeasonalBusinessController.onPageLoad(NormalMode).url
+  lazy val seasonalBusinessRoute = routes.SeasonalBusinessController.onPageLoad().url
 
   private val baseUserAnswers =
     UserAnswers(userAnswersId).set(MgdTradeDetailsSectionPage, mgdRegNum).success.value

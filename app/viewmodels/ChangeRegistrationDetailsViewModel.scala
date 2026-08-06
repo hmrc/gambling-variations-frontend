@@ -17,120 +17,122 @@
 package viewmodels
 
 import controllers.routes
+import models.{BusinessType, UserAnswers}
+import pages.*
 import play.api.i18n.Messages
 
 final case class ChangeRegistrationDetailsViewModel(
   mgdRegNumber: String,
   managementHomeUrl: String,
-  isGroupMember: Boolean,
-  isPartnership: Boolean,
-  businessNameChanged: Boolean,
-  businessAddressChanged: Boolean,
-  contactDetailsChanged: Boolean,
-  correspondenceDetailsChanged: Boolean,
-  tradingDetailsChanged: Boolean,
-  licencesChanged: Boolean,
-  premisesExists: Boolean,
-  premisesTriggered: Boolean,
-  submitUrl: String
-)(implicit messages: Messages) {
+  submitUrl: String,
+  sections: Seq[RegistrationSectionRow]
+) {
 
-  def tasks: Seq[TaskListItem] = {
+  def hasChanges: Boolean =
+    sections.exists(_.status == ChangesReadyToSubmit)
 
-    def status(flag: Boolean): TaskStatus =
-      if (flag) ReadyToSubmit else NoChange
+  def showSubmit: Boolean = hasChanges
 
-    Seq(
-      optional(!isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.businessName"),
-          routes.CheckBusinessNameController.onPageLoad().url,
-          status(businessNameChanged)
+  def showNoChangesMessage: Boolean = !hasChanges
+}
+
+object ChangeRegistrationDetailsViewModel {
+
+  def from(
+    userAnswers: UserAnswers,
+    mgdRegNumber: String,
+    managementHomeUrl: String,
+    isGroupMember: Boolean
+  )(implicit messages: Messages): ChangeRegistrationDetailsViewModel = {
+
+    val isPartnership =
+      userAnswers.get(BusinessTypePage).contains(BusinessType.Partnership)
+
+    def status(page: QuestionPage[Boolean]): SectionStatus =
+      if (userAnswers.get(page).getOrElse(false)) ChangesReadyToSubmit else NoDetailsChanged
+
+    val sections: Seq[RegistrationSectionRow] =
+      Seq(
+        optional(isGroupMember)(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.controllingBodyDetails"),
+            routes.PageNotFoundController.onPageLoad().url,
+            NoDetailsChanged
+          )
+        ),
+        optional(isGroupMember)(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.groupMemberDetails"),
+            routes.PageNotFoundController.onPageLoad().url,
+            NoDetailsChanged
+          )
+        ),
+        optional(!isGroupMember)(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.businessName"),
+            routes.CheckBusinessNameController.onPageLoad().url,
+            status(BusinessNameChangesPage)
+          )
+        ),
+        optional(!isGroupMember)(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.businessAddress"),
+            routes.PageNotFoundController.onPageLoad().url,
+            status(BusinessAddressChangesPage)
+          )
+        ),
+        optional(!isGroupMember)(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.businessContactDetails"),
+            routes.CheckContactDetailsController.onPageLoad().url,
+            status(ContactDetailsChangesPage)
+          )
+        ),
+        Some(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.correspondenceDetails"),
+            routes.CheckCorrespondenceDetailsController.onPageLoad().url,
+            status(CorrespondenceDetailsChangesPage)
+          )
+        ),
+        optional(isPartnership)(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.partnerDetails"),
+            routes.PageNotFoundController.onPageLoad().url,
+            NoDetailsChanged
+          )
+        ),
+        Some(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.tradingDetails"),
+            routes.CheckTradingDetailsController.onPageLoad().url,
+            status(TradingDetailsChangesPage)
+          )
+        ),
+        optional(!isGroupMember)(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.licencesAndPremises"),
+            routes.PageNotFoundController.onPageLoad().url,
+            NoDetailsChanged
+          )
+        ),
+        Some(
+          RegistrationSectionRow(
+            messages("changeRegistrationDetails.returnPeriod"),
+            routes.PageNotFoundController.onPageLoad().url,
+            NoDetailsChanged
+          )
         )
-      ),
-      optional(!isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.businessAddress"),
-          routes.IndexController.onPageLoad().url,
-          status(businessAddressChanged)
-        )
-      ),
-      optional(!isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.businessContactDetails"),
-          routes.CheckContactDetailsController.onPageLoad().url,
-          status(contactDetailsChanged)
-        )
-      ),
-      optional(isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.controllingBodyDetails"),
-          "group-member-details",
-          NoChange
-        )
-      ),
-      optional(isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.groupMemberDetails"),
-          "group-member-details",
-          NoChange
-        )
-      ),
-      Some(
-        TaskListItem(
-          messages("changeRegistrationDetails.correspondenceDetails"),
-          routes.CheckCorrespondenceDetailsController.onPageLoad().url,
-          status(correspondenceDetailsChanged)
-        )
-      ),
-      Some(
-        TaskListItem(
-          messages("changeRegistrationDetails.tradingDetails"),
-          routes.CheckTradingDetailsController.onPageLoad().url,
-          status(tradingDetailsChanged)
-        )
-      ),
-      Some(
-        TaskListItem(
-          messages("changeRegistrationDetails.returnPeriod"),
-          routes.IndexController.onPageLoad().url,
-          NoChange
-        )
-      ),
-      optional(isPartnership)(
-        TaskListItem(
-          messages("changeRegistrationDetails.partnerDetails"),
-          routes.IndexController.onPageLoad().url,
-          NoChange
-        )
-      ),
-      optional(!isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.premises"),
-          routes.IndexController.onPageLoad().url,
-          status(licencesChanged)
-        )
-      ),
-      optional(!isGroupMember)(
-        TaskListItem(
-          messages("changeRegistrationDetails.licences"),
-          routes.IndexController.onPageLoad().url,
-          status(licencesChanged)
-        )
-      ),
-      optional(!isGroupMember && premisesTriggered)(
-        TaskListItem(
-          messages("changeRegistrationDetails.premises"),
-          "premises",
-          if (premisesExists) NoChange else NotStarted
-        )
-      )
-    ).flatten
+      ).flatten
+
+    ChangeRegistrationDetailsViewModel(
+      mgdRegNumber      = mgdRegNumber,
+      managementHomeUrl = managementHomeUrl,
+      submitUrl         = routes.DeclarationController.onPageLoad().url,
+      sections          = sections
+    )
   }
 
-  def canStart: Boolean =
-    tasks.exists(_.status == ReadyToSubmit)
-
-  private def optional(condition: Boolean)(item: => TaskListItem): Option[TaskListItem] =
-    if (condition) Some(item) else None
+  private def optional(condition: Boolean)(row: => RegistrationSectionRow): Option[RegistrationSectionRow] =
+    if (condition) Some(row) else None
 }

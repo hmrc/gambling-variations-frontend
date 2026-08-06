@@ -16,341 +16,241 @@
 
 package viewmodels
 
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+import base.SpecBase
 import controllers.routes
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.test.Helpers.stubMessagesApi
-import org.scalatest.OptionValues.*
+import models.{BusinessType, UserAnswers}
+import pages.*
+import play.api.Application
+import play.api.i18n.Messages
 
-class ChangeRegistrationDetailsViewModelSpec extends AnyWordSpec with Matchers {
+class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
 
-  implicit val messages: Messages = {
-    val messagesApi: MessagesApi = stubMessagesApi(
-      Map(
-        "en" -> Map(
-          "changeRegistrationDetails.businessName"           -> "Business name",
-          "changeRegistrationDetails.businessAddress"        -> "Business address",
-          "changeRegistrationDetails.businessContactDetails" -> "Business contact details",
-          "changeRegistrationDetails.controllingBodyDetails" -> "Controlling body details",
-          "changeRegistrationDetails.groupMemberDetails"     -> "Group member details",
-          "changeRegistrationDetails.correspondenceDetails"  -> "Correspondence details",
-          "changeRegistrationDetails.tradingDetails"         -> "Trading details",
-          "changeRegistrationDetails.returnPeriod"           -> "Return period",
-          "changeRegistrationDetails.partnerDetails"         -> "Partner details",
-          "changeRegistrationDetails.premises"               -> "Premises",
-          "changeRegistrationDetails.licences"               -> "Licences"
-        )
-      )
+  private val app: Application = applicationBuilder().build()
+
+  private implicit val msgs: Messages = messages(app)
+
+  private val managementHomeUrl = "http://foo.com/home"
+
+  private def viewModel(userAnswers: UserAnswers, isGroupMember: Boolean): ChangeRegistrationDetailsViewModel =
+    ChangeRegistrationDetailsViewModel.from(
+      userAnswers       = userAnswers,
+      mgdRegNumber      = mgdRegNum,
+      managementHomeUrl = managementHomeUrl,
+      isGroupMember     = isGroupMember
     )
 
-    messagesApi.preferred(Seq.empty)
-  }
+  private def answersFor(businessType: BusinessType): UserAnswers =
+    emptyUserAnswers.set(BusinessTypePage, businessType).success.value
 
-  "ChangeRegistrationDetailsViewModel#tasks" should {
+  private val nonPartnershipAnswers = answersFor(BusinessType.Corporatebody)
+  private val partnershipAnswers = answersFor(BusinessType.Partnership)
 
-    "include non-group-member tasks" in {
+  "ChangeRegistrationDetailsViewModel.from" - {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = true,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = false,
-        licencesChanged              = true,
-        premisesExists               = true,
-        premisesTriggered            = false,
-        submitUrl                    = "/submit"
-      )
+    "must build the sections for a non group member who is not a partnership" in {
 
-      val tasks = viewModel.tasks
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = false)
 
-      tasks.map(_.name) must contain allOf (
+      vm.sections.map(_.name) mustEqual Seq(
         "Business name",
         "Business address",
         "Business contact details",
         "Correspondence details",
         "Trading details",
-        "Return period",
-        "Premises",
-        "Licences"
+        "Licences and premises",
+        "Return periods"
       )
-
-      tasks.map(_.name) must not contain
-        "Controlling body details"
-
-      tasks.find(_.name == "Business name").value.status mustBe ReadyToSubmit
-      tasks.find(_.name == "Licences").value.status mustBe ReadyToSubmit
-      tasks.find(_.name == "Trading details").value.url mustBe routes.CheckTradingDetailsController.onPageLoad().url
     }
 
-    "include partnership task when isPartnership is true" in {
+    "must build the sections for a non group member who is a partnership" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = true,
-        businessNameChanged          = false,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = true,
-        premisesTriggered            = false,
-        submitUrl                    = "/submit"
+      val vm = viewModel(partnershipAnswers, isGroupMember = false)
+
+      vm.sections.map(_.name) mustEqual Seq(
+        "Business name",
+        "Business address",
+        "Business contact details",
+        "Correspondence details",
+        "Partner details",
+        "Trading details",
+        "Licences and premises",
+        "Return periods"
       )
-
-      viewModel.tasks.map(_.name) must contain("Partner details")
     }
 
-    "include group member tasks when isGroupMember is true" in {
+    "must build the sections for a group member who is not a partnership" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = true,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = true,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = true,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = true,
-        premisesTriggered            = false,
-        submitUrl                    = "/submit"
-      )
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = true)
 
-      val taskMessages = viewModel.tasks.map(_.name)
-
-      taskMessages must contain allOf (
+      vm.sections.map(_.name) mustEqual Seq(
         "Controlling body details",
-        "Group member details"
+        "Group member details",
+        "Correspondence details",
+        "Trading details",
+        "Return periods"
       )
-
-      taskMessages must not contain
-        "Business name"
     }
 
-    "include triggered premises task with NotStarted when premises do not exist" in {
+    "must show partner details for a group member who is a partnership" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = true,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = true,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = false,
-        premisesTriggered            = true,
-        submitUrl                    = "/submit"
+      val vm = viewModel(partnershipAnswers, isGroupMember = true)
+
+      vm.sections.map(_.name) mustEqual Seq(
+        "Controlling body details",
+        "Group member details",
+        "Correspondence details",
+        "Partner details",
+        "Trading details",
+        "Return periods"
       )
-
-      val premisesTasks =
-        viewModel.tasks.filter(_.name == "Premises")
-
-      premisesTasks.size mustBe 2
-
-      premisesTasks.exists(_.status == NotStarted) mustBe true
     }
 
-    "show flag ReadyToSubmit when Business Name has changed" in {
+    "must omit partner details when the business type is missing" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = true,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = false,
-        premisesTriggered            = false,
-        submitUrl                    = "/submit"
-      )
+      val vm = viewModel(emptyUserAnswers, isGroupMember = false)
 
-      val businessNameTasks =
-        viewModel.tasks.filter(_.name == "Business name")
-
-      businessNameTasks.exists(_.status == ReadyToSubmit) mustBe true
+      vm.sections.map(_.name) must not contain "Partner details"
     }
 
-    "show flag ReadyToSubmit when Business Address has changed" in {
+    "must link the sections that are already built" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = true,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = false,
-        premisesTriggered            = true,
-        submitUrl                    = "/submit"
-      )
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = false)
 
-      val businessAddressTasks =
-        viewModel.tasks.filter(_.name == "Business address")
+      def urlOf(name: String): String = vm.sections.find(_.name == name).value.url
 
-      businessAddressTasks.exists(_.status == ReadyToSubmit) mustBe true
+      urlOf("Business name") mustEqual routes.CheckBusinessNameController.onPageLoad().url
+      urlOf("Business contact details") mustEqual routes.CheckContactDetailsController.onPageLoad().url
+      urlOf("Correspondence details") mustEqual routes.CheckCorrespondenceDetailsController.onPageLoad().url
+      urlOf("Trading details") mustEqual routes.CheckTradingDetailsController.onPageLoad().url
     }
 
-    "show flag ReadyToSubmit when Business Contact Details has changed" in {
+    "must send the sections that are not built yet to the page not found screen" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = true,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = false,
-        premisesTriggered            = true,
-        submitUrl                    = "/submit"
+      // These rows are shown so the user sees the full picture, but the journeys behind them do
+      // not exist. Remove a name from this list as each journey is built.
+      val notBuiltYet = Set(
+        "Controlling body details",
+        "Group member details",
+        "Business address",
+        "Partner details",
+        "Licences and premises",
+        "Return periods"
       )
 
-      val contactDetailsTasks =
-        viewModel.tasks.filter(_.name == "Business contact details")
+      val allSections =
+        viewModel(partnershipAnswers, isGroupMember = false).sections ++
+          viewModel(partnershipAnswers, isGroupMember = true).sections
 
-      contactDetailsTasks.exists(_.status == ReadyToSubmit) mustBe true
+      val placeholderUrls =
+        allSections.filter(section => notBuiltYet.contains(section.name)).map(_.url).distinct
+
+      placeholderUrls mustEqual Seq(routes.PageNotFoundController.onPageLoad().url)
     }
 
-    "show flag ReadyToSubmit when Correspondence Details has changed" in {
+    "must point the submit link at the declaration page" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = true,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = false,
-        premisesTriggered            = true,
-        submitUrl                    = "/submit"
-      )
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = false)
 
-      val correspondenceDetailsTasks =
-        viewModel.tasks.filter(_.name == "Correspondence details")
-
-      correspondenceDetailsTasks.exists(_.status == ReadyToSubmit) mustBe true
+      vm.submitUrl mustEqual routes.DeclarationController.onPageLoad().url
     }
 
-    "show flag ReadyToSubmit when Trading Details has changed" in {
+    "must carry the registration number and the management home url" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = true,
-        licencesChanged              = false,
-        premisesExists               = false,
-        premisesTriggered            = true,
-        submitUrl                    = "/submit"
-      )
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = false)
 
-      val tradingDetailsTasks =
-        viewModel.tasks.filter(_.name == "Trading details")
-
-      tradingDetailsTasks.exists(_.status == ReadyToSubmit) mustBe true
+      vm.mgdRegNumber mustEqual mgdRegNum
+      vm.managementHomeUrl mustEqual managementHomeUrl
     }
 
-    "include triggered premises task with NoChange when premises exist" in {
+    "must default every section to no details changed" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = true,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = true,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = true,
-        premisesTriggered            = true,
-        submitUrl                    = "/submit"
-      )
+      val vm = viewModel(partnershipAnswers, isGroupMember = false)
 
-      val premisesTasks =
-        viewModel.tasks.filter(_.name == "Premises")
+      vm.sections.map(_.status).distinct mustEqual Seq(NoDetailsChanged)
+    }
 
-      premisesTasks.exists(_.status == NoChange) mustBe true
+    val changeFlags = Seq(
+      (BusinessNameChangesPage, "Business name"),
+      (BusinessAddressChangesPage, "Business address"),
+      (ContactDetailsChangesPage, "Business contact details"),
+      (CorrespondenceDetailsChangesPage, "Correspondence details"),
+      (TradingDetailsChangesPage, "Trading details")
+    )
+
+    changeFlags.foreach { case (page, sectionName) =>
+      s"must mark only $sectionName as ready to submit when its change flag is set" in {
+
+        val userAnswers = nonPartnershipAnswers.set(page, true).success.value
+
+        val vm = viewModel(userAnswers, isGroupMember = false)
+
+        vm.sections.filter(_.status == ChangesReadyToSubmit).map(_.name) mustEqual Seq(sectionName)
+      }
+    }
+
+    "must ignore the submitted flags when working out the status" in {
+
+      // The submitted flags only record that the user has walked through a section. On their own
+      // they are not a change, so the section must still read as no details changed.
+      val userAnswers =
+        nonPartnershipAnswers
+          .set(BusinessNameSubmittedPage, true)
+          .success
+          .value
+          .set(BusinessContactDetailsSubmittedPage, true)
+          .success
+          .value
+          .set(CorrespondenceDetailsSubmittedPage, true)
+          .success
+          .value
+          .set(TradingDetailsSubmittedPage, true)
+          .success
+          .value
+
+      val vm = viewModel(userAnswers, isGroupMember = false)
+
+      vm.sections.map(_.status).distinct mustEqual Seq(NoDetailsChanged)
+      vm.hasChanges mustEqual false
     }
   }
 
-  "ChangeRegistrationDetailsViewModel#canStart" should {
+  "ChangeRegistrationDetailsViewModel" - {
 
-    "return true when at least one task is ReadyToSubmit" in {
+    "must not offer the submit button when nothing has changed" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = true,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = true,
-        premisesTriggered            = false,
-        submitUrl                    = "/submit"
-      )
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = false)
 
-      viewModel.canStart mustBe true
+      vm.hasChanges mustEqual false
+      vm.showSubmit mustEqual false
+      vm.showNoChangesMessage mustEqual true
     }
 
-    "return false when no tasks are ReadyToSubmit" in {
+    "must offer the submit button when at least one section has changes" in {
 
-      val viewModel = ChangeRegistrationDetailsViewModel(
-        mgdRegNumber                 = "XM123",
-        managementHomeUrl            = "/home",
-        isGroupMember                = false,
-        isPartnership                = false,
-        businessNameChanged          = false,
-        businessAddressChanged       = false,
-        contactDetailsChanged        = false,
-        correspondenceDetailsChanged = false,
-        tradingDetailsChanged        = false,
-        licencesChanged              = false,
-        premisesExists               = false,
-        premisesTriggered            = false,
-        submitUrl                    = "/submit"
-      )
+      val userAnswers = nonPartnershipAnswers.set(TradingDetailsChangesPage, true).success.value
 
-      viewModel.canStart mustBe false
+      val vm = viewModel(userAnswers, isGroupMember = false)
+
+      vm.hasChanges mustEqual true
+      vm.showSubmit mustEqual true
+      vm.showNoChangesMessage mustEqual false
+    }
+
+    "must not offer the submit button when the only outstanding section needs completing" in {
+
+      val vm =
+        ChangeRegistrationDetailsViewModel(
+          mgdRegNumber      = mgdRegNum,
+          managementHomeUrl = managementHomeUrl,
+          submitUrl         = routes.DeclarationController.onPageLoad().url,
+          sections = Seq(
+            RegistrationSectionRow("Controlling body details", "/controlling-body", NeedsCompleting),
+            RegistrationSectionRow("Trading details", "/trading-details", NoDetailsChanged)
+          )
+        )
+
+      vm.hasChanges mustEqual false
+      vm.showSubmit mustEqual false
     }
   }
 }

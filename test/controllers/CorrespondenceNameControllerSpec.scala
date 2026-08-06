@@ -48,7 +48,7 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
     )
 
   lazy val nameRoute =
-    routes.CorrespondenceNameController.onPageLoad(NormalMode).url
+    routes.CorrespondenceNameController.onPageLoad().url
 
   "CorrespondenceName Controller" - {
 

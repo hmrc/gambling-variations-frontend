@@ -42,7 +42,7 @@ class RemoveCorrAddressAddInfoControllerSpec extends SpecBase with MockitoSugar 
   val formProvider = new RemoveCorrAddressAddInfoFormProvider()
   val form = formProvider()
 
-  lazy val removeAddrAddInfoRoute: String = routes.RemoveCorrAddressAddInfoController.onPageLoad(NormalMode).url
+  lazy val removeAddrAddInfoRoute: String = routes.RemoveCorrAddressAddInfoController.onPageLoad().url
 
   private val baseAnswers =
     UserAnswers(userAnswersId,

@@ -39,10 +39,10 @@ class CorrespondenceFaxNumberControllerSpec extends SpecBase {
       .value
 
   private lazy val onPageLoadRoute =
-    routes.CorrespondenceFaxNumberController.onPageLoad(NormalMode).url
+    routes.CorrespondenceFaxNumberController.onPageLoad().url
 
   private lazy val onSubmitRoute =
-    routes.CorrespondenceFaxNumberController.onSubmit(NormalMode).url
+    routes.CorrespondenceFaxNumberController.onSubmit().url
 
   "CorrespondenceFaxNumberController" - {
 

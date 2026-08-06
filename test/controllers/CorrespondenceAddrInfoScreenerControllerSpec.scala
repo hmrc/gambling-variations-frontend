@@ -45,7 +45,7 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
   )
 
   lazy val correspondenceAddrInfoScreenerRoute =
-    routes.CorrespondenceAddrInfoScreenerController.onPageLoad(NormalMode).url
+    routes.CorrespondenceAddrInfoScreenerController.onPageLoad().url
 
   "CorrespondenceAddrAdditionalInfoScreener Controller" - {
 

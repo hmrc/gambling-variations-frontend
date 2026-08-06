@@ -18,17 +18,15 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.*
-import models.BusinessType
-import pages.*
+import pages.GroupMemberPage
 import play.api.Logging
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.*
+import viewmodels.ChangeRegistrationDetailsViewModel
 import views.html.ChangeRegistrationDetailsView
 
 import javax.inject.Inject
-import scala.concurrent.Future
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -43,86 +41,28 @@ class ChangeRegistrationDetailsController @Inject() (
     with Logging {
 
   def onPageLoad: Action[AnyContent] =
-    (authorise andThen getData andThen businessDetailsRequired).async { implicit request =>
+    (authorise andThen getData andThen businessDetailsRequired) { implicit request =>
 
-      implicit val msgs: Messages = messagesApi.preferred(request)
+      request.userAnswers
+        .get(GroupMemberPage)
+        .map { isGroupMember =>
 
-      val result =
-        request.userAnswers
-          .get(GroupMemberPage)
-          .map { isGroupMember =>
-
-            val isPartnership =
-              request.userAnswers
-                .get(BusinessTypePage)
-                .contains(BusinessType.Partnership)
-
-            val businessNameChanged =
-              request.userAnswers
-                .get(BusinessNameChangesPage)
-                .getOrElse(false)
-
-            val businessAddressChanged =
-              request.userAnswers
-                .get(BusinessAddressChangesPage)
-                .getOrElse(false)
-
-            val contactDetailsChanged =
-              request.userAnswers
-                .get(ContactDetailsChangesPage)
-                .getOrElse(false)
-
-            val correspondenceDetailsChanged =
-              request.userAnswers
-                .get(CorrespondenceDetailsChangesPage)
-                .getOrElse(false)
-
-            val tradingDetailsChanged =
-              request.userAnswers
-                .get(TradingDetailsChangesPage)
-                .getOrElse(false)
-
-            val licencesChanged = false
-            val premisesExists = false
-            val premisesTriggered = licencesChanged
-
-            val submitUrl =
-              routes.DeclarationController.onPageLoad().url
-
-            val vm =
-              ChangeRegistrationDetailsViewModel(
-                mgdRegNumber                 = request.mgdRegNum,
-                managementHomeUrl            = appConfig.gamblingManagementHomeUrl,
-                isGroupMember                = isGroupMember,
-                isPartnership                = isPartnership,
-                businessNameChanged          = businessNameChanged,
-                businessAddressChanged       = businessAddressChanged,
-                contactDetailsChanged        = contactDetailsChanged,
-                correspondenceDetailsChanged = correspondenceDetailsChanged,
-                tradingDetailsChanged        = tradingDetailsChanged,
-                licencesChanged              = licencesChanged,
-                premisesExists               = premisesExists,
-                premisesTriggered            = premisesTriggered,
-                submitUrl                    = submitUrl
-              )
-
-            Ok(
-              view(
-                vm,
-                request.mgdRegNum,
-                appConfig.gamblingManagementHomeUrl,
-                submitUrl
-              )
-            )
-          }
-          .getOrElse {
-            logger.error(
-              s"Missing GroupMemberPage for MGD registration number ${request.mgdRegNum}"
+          val vm =
+            ChangeRegistrationDetailsViewModel.from(
+              userAnswers       = request.userAnswers,
+              mgdRegNumber      = request.mgdRegNum,
+              managementHomeUrl = appConfig.gamblingManagementHomeUrl,
+              isGroupMember     = isGroupMember
             )
 
-            Redirect(routes.SystemErrorController.onPageLoad())
-          }
+          Ok(view(vm))
+        }
+        .getOrElse {
+          logger.error(
+            s"Missing GroupMemberPage for MGD registration number ${request.mgdRegNum}"
+          )
 
-      Future.successful(result)
+          Redirect(routes.SystemErrorController.onPageLoad())
+        }
     }
 }
