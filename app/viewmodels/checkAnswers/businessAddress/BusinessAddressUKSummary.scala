@@ -12,17 +12,20 @@ import viewmodels.implicits.*
 class BusinessAddressUKSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(BusinessAddressUkPage).map { answer =>
-      SummaryListRowViewModel(
-        key = "checkBusinessAddress.label.address",
-        value = ValueViewModel(HtmlFormat.escape(answer).toString),
-        actions = Seq(
-          if (answer != null) {
-            ActionItemViewModel("site.change", routes.PageNotFoundController.onPageLoad().url)
-            ActionItemViewModel("site.remove", routes.PageNotFoundController.onPageLoad().url)
-          } else {
-            ActionItemViewModel("site.change", routes.PageNotFoundController.onPageLoad().url)
-          }
+      if (answer != null) {
+        SummaryListRowViewModel(
+          key = "checkBusinessAddress.label.address",
+          value = ValueViewModel(HtmlFormat.escape(answer).toString),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.PageNotFoundController.onPageLoad().url))
         )
-      )
-  }
+      } else {
+        SummaryListRowViewModel(
+          key = "checkBusinessAddress.label.address",
+          value = ValueViewModel(messages("site.notProvided")),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.PageNotFoundController.onPageLoad().url))
+        )
+      }
+    }
 }
