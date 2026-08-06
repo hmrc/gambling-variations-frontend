@@ -17,146 +17,148 @@
 package controllers
 
 import base.SpecBase
-import models.BusinessType
+import models.{BusinessType, UserAnswers}
+import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessNameChangesPage, BusinessTypePage, GroupMemberPage}
+import pages.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 
+import scala.jdk.CollectionConverters.*
+
 class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar {
+
+  private def request = FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
+
+  private def sectionNames(content: String): Seq[String] =
+    Jsoup
+      .parse(content)
+      .select("table.govuk-table tbody tr td:first-child a")
+      .asScala
+      .map(_.text)
+      .toSeq
+
+  private def statuses(content: String): Seq[String] =
+    Jsoup
+      .parse(content)
+      .select("table.govuk-table tbody tr td:last-child")
+      .asScala
+      .map(_.text)
+      .toSeq
+
+  private val partnershipAnswers: UserAnswers =
+    emptyUserAnswers
+      .set(BusinessTypePage, BusinessType.Partnership)
+      .success
+      .value
 
   "ChangeRegistrationDetailsController" - {
 
-    "must return OK and render the view for a partnership business" in {
+    "must return OK and render the sections for a partnership that is not a group member" in {
+
+      val userAnswers = partnershipAnswers.set(GroupMemberPage, false).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        sectionNames(contentAsString(result)) mustEqual Seq(
+          "Business name",
+          "Business address",
+          "Business contact details",
+          "Correspondence details",
+          "Partner details",
+          "Trading details",
+          "Licences and premises",
+          "Return periods"
+        )
+      }
+    }
+
+    "must return OK and render the sections for a group member" in {
+
+      val userAnswers = partnershipAnswers.set(GroupMemberPage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        sectionNames(contentAsString(result)) mustEqual Seq(
+          "Controlling body details",
+          "Group member details",
+          "Correspondence details",
+          "Partner details",
+          "Trading details",
+          "Return periods"
+        )
+      }
+    }
+
+    "must show every section as unchanged and hide the submit button when nothing has changed" in {
+
+      val userAnswers = partnershipAnswers.set(GroupMemberPage, false).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+
+        val result = route(application, request).value
+        val content = contentAsString(result)
+
+        status(result) mustEqual OK
+
+        statuses(content).distinct mustEqual Seq("No details changed")
+
+        content must include("You need to change at least one detail before you can submit your changes to HMRC.")
+        Jsoup.parse(content).select(".govuk-button").size mustEqual 0
+      }
+    }
+
+    "must show the submit button when a section has changes" in {
 
       val userAnswers =
-        emptyUserAnswers
+        partnershipAnswers
           .set(GroupMemberPage, false)
-          .success
-          .value
-          .set(BusinessTypePage, BusinessType.Partnership)
           .success
           .value
           .set(BusinessNameChangesPage, true)
           .success
           .value
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
 
-        val request =
-          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
-
         val result = route(application, request).value
+        val content = contentAsString(result)
 
         status(result) mustEqual OK
-      }
-    }
 
-    "must return OK and render view for a group member" in {
+        statuses(content).head mustEqual "Changes ready to submit"
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(GroupMemberPage, true)
-          .success
-          .value
-          .set(BusinessTypePage, BusinessType.Partnership)
-          .success
-          .value
-          .set(BusinessNameChangesPage, false)
-          .success
-          .value
+        val button = Jsoup.parse(content).select(".govuk-button")
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        button.size mustEqual 1
+        button.text mustEqual "Submit changes"
+        button.attr("href") mustEqual routes.DeclarationController.onPageLoad().url
 
-      running(application) {
-
-        val request =
-          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-      }
-    }
-
-    "must return OK for non-partnership business type" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(GroupMemberPage, false)
-          .success
-          .value
-          .set(BusinessTypePage, BusinessType.Partnership)
-          .success
-          .value
-          .set(BusinessNameChangesPage, true)
-          .success
-          .value
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-
-        val request =
-          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-      }
-    }
-
-    "must return OK when business name has not changed" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(GroupMemberPage, false)
-          .success
-          .value
-          .set(BusinessTypePage, BusinessType.Partnership)
-          .success
-          .value
-          .set(BusinessNameChangesPage, false)
-          .success
-          .value
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-
-        val request =
-          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
+        content must not include "You need to change at least one detail before you can submit your changes to HMRC."
       }
     }
 
     "must redirect to SystemErrorController when GroupMemberPage is missing" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(BusinessTypePage, BusinessType.Partnership)
-          .success
-          .value
-          .set(BusinessNameChangesPage, true)
-          .success
-          .value
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(partnershipAnswers)).build()
 
       running(application) {
-
-        val request =
-          FakeRequest(GET, routes.ChangeRegistrationDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 

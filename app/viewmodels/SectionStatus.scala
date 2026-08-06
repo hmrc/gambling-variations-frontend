@@ -15,13 +15,14 @@
  */
 
 package viewmodels
-sealed trait TaskStatus
-case object NoChange      extends TaskStatus
-case object ReadyToSubmit extends TaskStatus
-case object NotStarted    extends TaskStatus
 
-case class TaskListItem(
+sealed trait SectionStatus
+case object NoDetailsChanged     extends SectionStatus
+case object ChangesReadyToSubmit extends SectionStatus
+case object NeedsCompleting      extends SectionStatus
+
+case class RegistrationSectionRow(
   name: String,
   url: String,
-  status: TaskStatus
+  status: SectionStatus
 )
