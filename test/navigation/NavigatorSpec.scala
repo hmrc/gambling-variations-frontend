@@ -646,6 +646,54 @@ class NavigatorSpec extends SpecBase {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
+      "should route CorrespondenceUKAddrScreenerPage to CheckCorrespondenceDetails when the answer remains UK" in {
+        val answers =
+          emptyAnswers
+            .set(
+              CorrespondenceAddressUkPage,
+              Address(
+                address1 = "line1",
+                address2 = Some("line2"),
+                address3 = None,
+                address4 = None,
+                postcode = Some("AA1 1AA"),
+                country  = Some("GB")
+              )
+            )
+            .success
+            .value
+            .set(CorrespondenceUKAddrScreenerPage, true)
+            .success
+            .value
+
+        navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+      }
+
+      "should route CorrespondenceUKAddrScreenerPage to CheckCorrespondenceDetails when the answer remains non-UK" in {
+        val answers =
+          emptyAnswers
+            .set(
+              CorrespondenceAddressNonUkPage,
+              Address(
+                address1 = "line1",
+                address2 = Some("line2"),
+                address3 = None,
+                address4 = None,
+                postcode = None,
+                country  = Some("France")
+              )
+            )
+            .success
+            .value
+            .set(CorrespondenceUKAddrScreenerPage, false)
+            .success
+            .value
+
+        navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+      }
+
       "should route RemoveCorrespondenceDetailsYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
