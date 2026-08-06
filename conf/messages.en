@@ -633,3 +633,8 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+
+businessAddrInfoScreener.title = Do you want to include additional information for your business address?
+businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
+businessAddrInfoScreener.hint = For example, building name or floor number
+businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
