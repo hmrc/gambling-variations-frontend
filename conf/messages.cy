@@ -103,3 +103,9 @@ changeRegistrationDetails.needsCompleting = cy: Needs completing
 changeRegistrationDetails.approvalTime = cy: Once HMRC approve your changes, we will update your registration certificate. This can take up to 48 hours.
 changeRegistrationDetails.submit = cy: Submit changes
 changeRegistrationDetails.change-registration.link = cy: Return to manage your Machine Games Duty
+
+businessAddressAdditionalInfo.title = cy: What is the additional information for your business address?
+businessAddressAdditionalInfo.heading = cy: What is the additional information for your business address?
+businessAddressAdditionalInfo.error.required = cy: Enter additional information for your business address
+businessAddressAdditionalInfo.error.invalid = cy: The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+businessAddressAdditionalInfo.error.length = cy: The additional information must be 100 characters or less
