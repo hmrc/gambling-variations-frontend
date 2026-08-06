@@ -176,14 +176,31 @@ class Navigator @Inject() () {
         routes.SystemErrorController.onPageLoad()
     }
 
-  private def navigateCorrespondenceUKAddrScreenerPage()(userAnswers: UserAnswers): Call =
-    userAnswers
-      .get(CorrespondenceUKAddrScreenerPage)
-      .map {
-        case false => routes.CorrespondenceNonUKAddressController.onPageLoad()
-        case true  => routes.CorrespondenceUKAddressController.onPageLoad()
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+  private def navigateCorrespondenceUKAddrScreenerPage()(answers: UserAnswers): Call = {
+
+    val previouslyUk =
+      answers.get(CorrespondenceAddressUkPage).isDefined
+
+    val previouslyNonUk =
+      answers.get(CorrespondenceAddressNonUkPage).isDefined
+
+    answers.get(CorrespondenceUKAddrScreenerPage) match {
+      case Some(true) if previouslyUk =>
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case Some(false) if previouslyNonUk =>
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case Some(true) =>
+        routes.CorrespondenceUKAddressController.onPageLoad()
+
+      case Some(false) =>
+        routes.CorrespondenceNonUKAddressController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
+  }
 
   private def navigateAddCorrespondingDetailsYesNoPage()(userAnswers: UserAnswers): Call =
     userAnswers
