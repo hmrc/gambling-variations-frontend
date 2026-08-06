@@ -16,13 +16,12 @@
 
 package pages
 
+import models.CorrespondenceDetails
 import play.api.libs.json.JsPath
 
-import java.time.LocalDate
-
-case class PartnerDetailsDateOfJoiningPage(index: Int) extends QuestionPage[LocalDate] {
+case class PartnerDetailsCorrespondenceDetailsSectionPage(index: Int) extends QuestionPage[CorrespondenceDetails] {
 
   override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
 
-  override def toString: String = "dateOfJoining"
+  override def toString: String = "correspondenceDetailsSection"
 }

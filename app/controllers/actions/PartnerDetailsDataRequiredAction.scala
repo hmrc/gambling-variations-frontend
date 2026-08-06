@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{Address, ContactNumber, CorrespondenceDetails, MgdTradeDetails, PartnerDetails, PartnersDetails, SoleProprietorName, UserAnswers}
+import models.{Address, ContactNumber, CorrespondenceDetails, PartnerDetails, PartnersDetails, SoleProprietorName, UserAnswers}
 import pages.*
 import play.api.Logging
 import play.api.libs.json.Writes
@@ -53,8 +53,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        // TODO this checks minimum parameters needed to make it run
-        // in this case, an email
         userAnswers.get(PartnerDetailsBusinessEmailPage) map { _ =>
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
         } getOrElse {
@@ -66,8 +64,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
     gamblingConnector.getPartnerDetails(answers.id) flatMap { mgdContactDetails =>
-      // TODO just for testing, head of the partners details
-      setPartnerDetails(mgdContactDetails.partners.head, answers) map { updatedAnswers =>
+      setPartnerDetails(mgdContactDetails, answers) map { updatedAnswers =>
         logger.info("User Answers not found. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
@@ -90,22 +87,25 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       userAnswers.set(page, value)
     }
 
-  private def setPartnerDetails(partnerDetails: PartnerDetails, answers: UserAnswers): Try[UserAnswers] = {
-    logger.info("Setting User Answers for Partner Details")
+  private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
 
-    val address: Option[Address] = partnerDetails.address1.map(address1 =>
-      Address(
-        address1 = address1,
-        address2 = partnerDetails.address2,
-        address3 = partnerDetails.address3,
-        address4 = partnerDetails.address4,
-        postcode = partnerDetails.postcode,
-        country  = partnerDetails.country
-      )
-    )
+    // TODO included in correspondence, but not inserted there
+    val address = partnerDetails.address1 match {
+      case Some(address1) =>
+        Some(
+          Address(
+            address1 = address1,
+            address2 = partnerDetails.address2,
+            address3 = partnerDetails.address3,
+            address4 = partnerDetails.address4,
+            postcode = partnerDetails.postcode,
+            country  = partnerDetails.country
+          )
+        )
+      case _ => None
+    }
 
-    // TODO this makes no sense, it should be an option
-    val soleProprietor: Option[SoleProprietorName] =
+    val soleProprietor =
       (partnerDetails.solePropTitle, partnerDetails.solePropFirstName, partnerDetails.solePropMiddleName, partnerDetails.solePropLastName) match {
         case (Some(title), Some(firstName), middleName, Some(lastName)) =>
           Some(
@@ -119,81 +119,62 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
         case _ => None
       }
 
-
-    val contactNumber: Option[ContactNumber] = (partnerDetails.phoneNumber, partnerDetails.mobilePhoneNumber) match {
+    // TODO included in correspondence, but not inserted there
+    val contactNumber = (partnerDetails.phoneNumber, partnerDetails.mobilePhoneNumber) match {
       case (None, None) => None
-      case (a, b) => Some(ContactNumber(a, b))
+      case (a, b)       => Some(ContactNumber(a, b))
     }
-//    val contactNumber = ContactNumber(
-//      phoneNumber = partnerDetails.phoneNumber,
-//      mobilePhoneNumber = partnerDetails.mobilePhoneNumber
-//    )
 
     val correspondenceDetails = CorrespondenceDetails(
       mgdRegNumber          = partnerDetails.mgdRegNumber,
-      nameLine1             = None, //TODO - what would it be?
-      nameLine2             = None, //TODO - what would it be?
-      correspondenceAddress = address,
-      additionalInformation = partnerDetails.adi, //TODO is adi = additional information
+      nameLine1             = None, // TODO - what would it be?
+      nameLine2             = None, // TODO - what would it be?
+      correspondenceAddress = None, // address,
+      additionalInformation = partnerDetails.adi, // TODO is adi = additional information
       iomOrCiFlag           = partnerDetails.iomOrCiFlag,
-      contactNumber         = contactNumber,
+      contactNumber         = None, // contactNumber,
       faxNumber             = partnerDetails.faxNumber,
       emailAddr             = partnerDetails.emailAddress
     )
 
     for {
-      updatedAnswers <- answers.set(PartnerDetailsPage, partnerDetails.mgdRegNumber) // TODO ✅
+      updatedAnswers <- userAnswers
+      updatedAnswers <- updatedAnswers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfJoining, PartnerDetailsDateOfJoiningPage(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfLeaving, PartnerDetailsDateOfLeavingPage(index))
 
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfJoining, PartnerDetailsDateOfJoiningPage) // TODO ✅
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfLeaving, PartnerDetailsDateOfLeavingPage) // TODO ✅
+      updatedAnswers <- setIfDefined(updatedAnswers, soleProprietor, PartnerDetailsSoleProprietorPage(index))
 
-      updatedAnswers <- setIfDefined(updatedAnswers, soleProprietor, SoleProprietorPage) // TODO ✅ BUT Option?
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropTitle, SoleProprietorPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropFirstName, PartnerDetailsBusinessEmailPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropMiddleName, PartnerDetailsBusinessEmailPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropLastName, PartnerDetailsBusinessEmailPage)// TODO ✅
-
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.businessName, BusinessNamePage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.tradingName, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfBirth, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.nino, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.utr, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.vrn, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.crn, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfIncorporation, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.countryOfIncorporation, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.foreignCorporateRef, PartnerDetailsBusinessEmailPage)
-
-      // TODO this is re-using some structure already existing
       updatedAnswers <- {
         address.flatMap(_.postcode) match {
-          case Some(_) => setIfDefined(updatedAnswers, address, CorrespondenceAddressUkPage) // TODO ✅
-          case None    => setIfDefined(updatedAnswers, address, CorrespondenceAddressNonUkPage) // TODO ✅
+          case Some(_) => setIfDefined(updatedAnswers, address, PartnerDetailsCorrespondenceAddressUkPage(index))
+          case None    => setIfDefined(updatedAnswers, address, PartnerDetailsCorrespondenceAddressNonUkPage(index))
         }
       }
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address1, PartnerDetailsBusinessEmailPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address2, PartnerDetailsBusinessEmailPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address3, PartnerDetailsBusinessEmailPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address4, PartnerDetailsBusinessEmailPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.postcode, PartnerDetailsBusinessEmailPage)// TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.country, PartnerDetailsBusinessEmailPage)// TODO ✅
 
-      //TODO so this one makes less sense to me because there is an action already that takes Correspondence and it breaks it down to individual pieces.
-      updatedAnswers <- setIfDefined(updatedAnswers, correspondenceDetails, CorrespondenceDetailsSectionPage) 
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.adi, PartnerDetailsBusinessEmailPage)
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.iomOrCiFlag, PartnerDetailsBusinessEmailPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, contactNumber, PartnerDetailsContactNumberPage(index))
 
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.phoneNumber, PartnerDetailsPhoneNumberPage) // TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.mobilePhoneNumber, PartnerDetailsMobileNumberPage) // TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.faxNumber, PartnerDetailsFaxNumberPage) // TODO ✅
-//      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.emailAddress, PartnerDetailsBusinessEmailPage) // TODO ✅
+      updatedAnswers <- updatedAnswers.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), correspondenceDetails)
 
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.isFutureLeaveDate, PartnerDetailsBusinessEmailPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.isFutureJoinDate, PartnerDetailsBusinessEmailPage)
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfIncorporation, PartnerDetailsDateOfIncorporation(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.countryOfIncorporation, PartnerDetailsCountryOfIncorporation(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.foreignCorporateRef, PartnerDetailsForeignCorporateRefPage(index))
 
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.businessType, BusinessTypePage) // TODO ✅
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.businessName, PartnerDetailsBusinessNamePage(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.tradingName, PartnerDetailsTradingNamePage(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfBirth, PartnerDetailsDateOfBirthPage(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.nino, PartnerDetailsNinoPage(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.utr, PartnerDetailsUtrPage(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.vrn, PartnerDetailsVrnPage(index))
+      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.crn, PartnerDetailsCrnPage(index))
+
     } yield updatedAnswers
   }
+
+  private def setPartnerDetails(partnersDetails: PartnersDetails, answers: UserAnswers): Try[UserAnswers] = partnersDetails.partners.zipWithIndex
+    .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
+      buildPartnerDetails(partnerDetails, index, userAnswers)
+    }
 
 }
 

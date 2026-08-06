@@ -16,13 +16,12 @@
 
 package pages
 
+import models.SoleProprietorName
 import play.api.libs.json.JsPath
 
-import java.time.LocalDate
-
-case class PartnerDetailsDateOfJoiningPage(index: Int) extends QuestionPage[LocalDate] {
+case class PartnerDetailsSoleProprietorPage(index: Int) extends QuestionPage[SoleProprietorName] {
 
   override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
 
-  override def toString: String = "dateOfJoining"
+  override def toString: String = "soleProprietor"
 }

@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnersDetails}
+import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -413,42 +413,6 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
   }
-
-  // TODO should be fine once I know the schema exactly
-  "GamblingConnector.getPartnerDetails" should {
-    "return partnerDetails when backend returns 200" in {
-
-      val jsonAsString =
-        s"""{
-            |"mgdRegNumber":"XWM00000001770",
-            |"businessEmail": "email",
-            |"faxNumber": "fax",
-            |"mobileNumber": "mobile",
-            |"phoneNumber": "phone"
-            | }
-            |""".stripMargin
-
-      wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/partner-details/mgd/$mgdRegNumber"))
-          .willReturn(okJson(jsonAsString))
-      )
-
-      connector.getPartnerDetails(mgdRegNumber).futureValue mustBe partnerDetails
-    }
-
-    "return NotFound when backend returns UpstreamErrorResponse" in {
-
-      wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/partner-details/mgd/$mgdRegNumber"))
-          .willReturn(aResponse().withStatus(404))
-      )
-
-      recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getPartnerDetails(mgdRegNumber)
-      }
-    }
-  }
-
 }
 
 object GamblingConnectorISpec {
@@ -572,14 +536,6 @@ object GamblingConnectorISpec {
       )
     ),
     iomOrCiFlag = Some("FALSE")
-  )
-
-  val partnerDetails: PartnersDetails = PartnersDetails(
-    mgdRegNumber  = "XWM00000001770",
-    businessEmail = Some("email"),
-    faxNumber     = Some("fax"),
-    mobileNumber  = Some("mobile"),
-    phoneNumber   = Some("phone")
   )
 
 }
