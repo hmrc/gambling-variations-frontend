@@ -20,6 +20,7 @@ import controllers.routes
 import models.*
 import models.BusinessType.Soleproprietor
 import pages.*
+import pages.partner.PartnerAddFaxNumberYesNoPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -69,6 +70,7 @@ class Navigator @Inject() () {
     case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAddressUkPage             => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage          => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
+    case PartnerAddFaxNumberYesNoPage            => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
@@ -258,6 +260,15 @@ class Navigator @Inject() () {
       .map {
         case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
         case true  => routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerAddFaxNumberYesNoPage(answers: UserAnswers): Call =
+    answers
+      .get(PartnerAddFaxNumberYesNoPage)
+      .map {
+        case false => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
