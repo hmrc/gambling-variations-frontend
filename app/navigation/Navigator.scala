@@ -30,7 +30,7 @@ class Navigator @Inject() () {
   private val normalRoutes: Page => UserAnswers => Call = {
     case RemoveTradeNamePage                       => _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage                          => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage                        => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, NormalMode)
+    case SoleProprietorPage                        => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor)
     case TradingNamePage                           => _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessFaxNumberPage                     => _ => routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage                       => _ => routes.CheckContactDetailsController.onPageLoad()
@@ -72,23 +72,8 @@ class Navigator @Inject() () {
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = {
-    case RemoveTradeNamePage               => _ => routes.CheckBusinessNameController.onPageLoad()
-    case BusinessNamePage                  => _ => routes.CheckBusinessNameController.onPageLoad()
-    case SoleProprietorPage                => _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor, CheckMode)
-    case BusinessEmailAddressPage          => _ => routes.BusinessEmailAddressController.onPageLoad(CheckMode)
-    case IsSeasonalBusinessPage            => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case OtherTradeClassPage               => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case BusinessTradeClassPage            => _ => routes.CheckTradingDetailsController.onPageLoad()
-    case AddPreviousRegistrationNumberPage => userAnswers => addPreviousRegistrationNumberRoute(CheckMode)(userAnswers)
-    // case PreviousRegNumberPage             => _ => routes.PreviousRegistrationNumberController.onPageLoad(CheckMode)
-    // case PreviousRegistrationNumbersListPage => _ => routes.PreviousRegistrationNumbersListController.onPageLoad(CheckMode)
-    case RemovePreviousRegNumberPage         => userAnswers => navigateRemovePreviousRegNumberPage(CheckMode)(userAnswers)
-    case AddAssociatedRegistrationNumberPage => userAnswers => navigateAddAssociatedRegistrationNumberPage(CheckMode)(userAnswers)
-    // case AssociatedRegNumberPage             => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
-    // case AssociatedRegistrationNumbersPage   => _ => routes.AssociatedRegistrationNumbersListController.onPageLoad(CheckMode)
-    case RemoveAssociatedRegNumberPage => userAnswers => navigateRemoveAssociatedRegNumberPage(CheckMode)(userAnswers)
-    case _                             => _ => routes.CheckYourAnswersController.onPageLoad()
+  private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
+    routes.CheckYourAnswersController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {
