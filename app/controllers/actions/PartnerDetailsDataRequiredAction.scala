@@ -21,6 +21,7 @@ import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, ContactNumber, CorrespondenceDetails, PartnerDetails, PartnersDetails, SoleProprietorName, UserAnswers}
 import pages.*
+import pages.partnerdetails.{PartnerDetailsAddress1Page, PartnerDetailsAddress2Page, PartnerDetailsAddress3Page, PartnerDetailsAddress4Page, PartnerDetailsAdiPage, PartnerDetailsBusinessEmailPage, PartnerDetailsBusinessNamePage, PartnerDetailsContactNumberPage, PartnerDetailsCorrespondenceDetailsSectionPage, PartnerDetailsCountryOfIncorporation, PartnerDetailsCountryPage, PartnerDetailsCrnPage, PartnerDetailsDateOfBirthPage, PartnerDetailsDateOfIncorporation, PartnerDetailsDateOfJoiningPage, PartnerDetailsDateOfLeavingPage, PartnerDetailsFaxNumberPage, PartnerDetailsForeignCorporateRefPage, PartnerDetailsIomOrCiPage, PartnerDetailsMobilePhoneNumberPage, PartnerDetailsNinoPage, PartnerDetailsPage, PartnerDetailsPhoneNumberPage, PartnerDetailsPostcodePage, PartnerDetailsSolePropFirstNamePage, PartnerDetailsSolePropLastNamePage, PartnerDetailsSolePropMiddleNamePage, PartnerDetailsSolePropTitlePage, PartnerDetailsSoleProprietorPage, PartnerDetailsTradingNamePage, PartnerDetailsUtrPage, PartnerDetailsVrnPage}
 import play.api.Logging
 import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
@@ -53,12 +54,13 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(PartnerDetailsBusinessEmailPage) map { _ =>
-          Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
-          given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-          saveUserAnswersToSessionAndRedirect(userAnswers, request)
-        }
+        // TODO this is a check to see if a particular element is present
+//        userAnswers.get(PartnerDetailsBusinessEmailPage) map { _ =>
+        Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
+//        } getOrElse {
+//          given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+//          saveUserAnswersToSessionAndRedirect(userAnswers, request)
+//        }
     }
   }
 
@@ -87,89 +89,56 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       userAnswers.set(page, value)
     }
 
-  private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
+  private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = for {
+    updatedAnswers <- userAnswers
+    updatedAnswers <- updatedAnswers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfJoining, PartnerDetailsDateOfJoiningPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfLeaving, PartnerDetailsDateOfLeavingPage(index))
 
-    // TODO included in correspondence, but not inserted there
-    val address = partnerDetails.address1 match {
-      case Some(address1) =>
-        Some(
-          Address(
-            address1 = address1,
-            address2 = partnerDetails.address2,
-            address3 = partnerDetails.address3,
-            address4 = partnerDetails.address4,
-            postcode = partnerDetails.postcode,
-            country  = partnerDetails.country
-          )
-        )
-      case _ => None
-    }
+//      updatedAnswers <- setIfDefined(updatedAnswers, soleProprietor, PartnerDetailsSoleProprietorPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropTitle, PartnerDetailsSolePropTitlePage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropFirstName, PartnerDetailsSolePropFirstNamePage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropMiddleName, PartnerDetailsSolePropMiddleNamePage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.solePropLastName, PartnerDetailsSolePropLastNamePage(index))
 
-    val soleProprietor =
-      (partnerDetails.solePropTitle, partnerDetails.solePropFirstName, partnerDetails.solePropMiddleName, partnerDetails.solePropLastName) match {
-        case (Some(title), Some(firstName), middleName, Some(lastName)) =>
-          Some(
-            SoleProprietorName(
-              title      = title,
-              firstName  = firstName,
-              middleName = middleName,
-              lastName   = lastName
-            )
-          )
-        case _ => None
-      }
+//      updatedAnswers <- {
+//        address.flatMap(_.postcode) match {
+//          case Some(_) => setIfDefined(updatedAnswers, address, PartnerDetailsCorrespondenceAddressUkPage(index))
+//          case None    => setIfDefined(updatedAnswers, address, PartnerDetailsCorrespondenceAddressNonUkPage(index))
+//        }
+//      }
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address1, PartnerDetailsAddress1Page(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address2, PartnerDetailsAddress2Page(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address3, PartnerDetailsAddress3Page(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.address4, PartnerDetailsAddress4Page(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.postcode, PartnerDetailsPostcodePage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.country, PartnerDetailsCountryPage(index))
 
-    // TODO included in correspondence, but not inserted there
-    val contactNumber = (partnerDetails.phoneNumber, partnerDetails.mobilePhoneNumber) match {
-      case (None, None) => None
-      case (a, b)       => Some(ContactNumber(a, b))
-    }
+//      updatedAnswers <- setIfDefined(updatedAnswers, contactNumber, PartnerDetailsContactNumberPage(index))
 
-    val correspondenceDetails = CorrespondenceDetails(
-      mgdRegNumber          = partnerDetails.mgdRegNumber,
-      nameLine1             = None, // TODO - what would it be?
-      nameLine2             = None, // TODO - what would it be?
-      correspondenceAddress = None, // address,
-      additionalInformation = partnerDetails.adi, // TODO is adi = additional information
-      iomOrCiFlag           = partnerDetails.iomOrCiFlag,
-      contactNumber         = None, // contactNumber,
-      faxNumber             = partnerDetails.faxNumber,
-      emailAddr             = partnerDetails.emailAddress
-    )
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.phoneNumber, PartnerDetailsPhoneNumberPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.mobilePhoneNumber, PartnerDetailsMobilePhoneNumberPage(index))
 
-    for {
-      updatedAnswers <- userAnswers
-      updatedAnswers <- updatedAnswers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfJoining, PartnerDetailsDateOfJoiningPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfLeaving, PartnerDetailsDateOfLeavingPage(index))
+//      updatedAnswers <- updatedAnswers.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), correspondenceDetails)
 
-      updatedAnswers <- setIfDefined(updatedAnswers, soleProprietor, PartnerDetailsSoleProprietorPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.adi, PartnerDetailsAdiPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.iomOrCiFlag, PartnerDetailsIomOrCiPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.faxNumber, PartnerDetailsFaxNumberPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.emailAddress, PartnerDetailsBusinessEmailPage(index))
 
-      updatedAnswers <- {
-        address.flatMap(_.postcode) match {
-          case Some(_) => setIfDefined(updatedAnswers, address, PartnerDetailsCorrespondenceAddressUkPage(index))
-          case None    => setIfDefined(updatedAnswers, address, PartnerDetailsCorrespondenceAddressNonUkPage(index))
-        }
-      }
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfIncorporation, PartnerDetailsDateOfIncorporation(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.countryOfIncorporation, PartnerDetailsCountryOfIncorporation(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.foreignCorporateRef, PartnerDetailsForeignCorporateRefPage(index))
 
-      updatedAnswers <- setIfDefined(updatedAnswers, contactNumber, PartnerDetailsContactNumberPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.businessName, PartnerDetailsBusinessNamePage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.tradingName, PartnerDetailsTradingNamePage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfBirth, PartnerDetailsDateOfBirthPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.nino, PartnerDetailsNinoPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.utr, PartnerDetailsUtrPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.vrn, PartnerDetailsVrnPage(index))
+    updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.crn, PartnerDetailsCrnPage(index))
 
-      updatedAnswers <- updatedAnswers.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), correspondenceDetails)
-
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfIncorporation, PartnerDetailsDateOfIncorporation(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.countryOfIncorporation, PartnerDetailsCountryOfIncorporation(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.foreignCorporateRef, PartnerDetailsForeignCorporateRefPage(index))
-
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.businessName, PartnerDetailsBusinessNamePage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.tradingName, PartnerDetailsTradingNamePage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfBirth, PartnerDetailsDateOfBirthPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.nino, PartnerDetailsNinoPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.utr, PartnerDetailsUtrPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.vrn, PartnerDetailsVrnPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.crn, PartnerDetailsCrnPage(index))
-
-    } yield updatedAnswers
-  }
+  } yield updatedAnswers
 
   private def setPartnerDetails(partnersDetails: PartnersDetails, answers: UserAnswers): Try[UserAnswers] = partnersDetails.partners.zipWithIndex
     .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.partnerdetails
 
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsUtrPage(index: Int) extends QuestionPage[String] {
+case class PartnerDetailsPage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
 
-  override def toString: String = "utr"
+  override def toString: String = "mgdRegNum"
 }
-

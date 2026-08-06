@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package pages.partnerdetails
 
+import models.PartnersDetails
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsBusinessNamePage(index: Int) extends QuestionPage[String] {
+import java.time.LocalDate
+
+case class PartnerDetailsDateOfIncorporation(index: Int) extends QuestionPage[LocalDate] {
 
   override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
 
-  override def toString: String = "businessName"
+  override def toString: String = "dateOfIncorporation"
 }
 
