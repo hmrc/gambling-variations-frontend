@@ -60,16 +60,17 @@ class Navigator @Inject() () {
       userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPage()(userAnswers)
     case CorrespondenceUKAddrScreenerPage =>
       userAnswers => navigateCorrespondenceUKAddrScreenerPage()(userAnswers)
-    case CorrespondenceEmailPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemoveCorrespondenceFaxNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemoveCorrespondenceEmailAddressPage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceNamePage                  => userAnswers => navigateCorrespondenceNamePage()(userAnswers)
-    case CorrespondenceAdditionalNamePage        => userAnswers => navigateCorrespondenceAdditionalNamePage()(userAnswers)
-    case CorrespondenceAdditionalInformationPage => userAnswers => navigateCorrespondenceAdditionalInformationPage()(userAnswers)
-    case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAddressUkPage             => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
-    case CorrespondenceAddressNonUkPage          => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
-    case _                                       => _ => routes.IndexController.onPageLoad()
+    case CorrespondenceEmailPage                      => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceFaxNumberPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceEmailAddressPage         => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceNamePage                       => userAnswers => navigateCorrespondenceNamePage()(userAnswers)
+    case CorrespondenceAdditionalNamePage             => userAnswers => navigateCorrespondenceAdditionalNamePage()(userAnswers)
+    case CorrespondenceAdditionalInformationPage      => userAnswers => navigateCorrespondenceAdditionalInformationPage()(userAnswers)
+    case RemoveCorrAddressAddInfoPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAddressUkPage                  => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
+    case CorrespondenceAddressNonUkPage               => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
+    case PartnerDetailsAdditionalAddressInfoYesNoPage => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
+    case _                                            => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
@@ -260,5 +261,19 @@ class Navigator @Inject() () {
         case true  => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers: UserAnswers): Call =
+    userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match
+      case Some(true) =>
+        routes.CorrespondenceEmailAddressController.onPageLoad()
+
+      case Some(false) =>
+        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+        else
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
 
 }
