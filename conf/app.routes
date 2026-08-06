@@ -181,3 +181,6 @@ POST       /change-registration-details/correspondence-details/uk-postcode-yes-n
 
 GET        /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onSubmit(mode: Mode = NormalMode)

@@ -638,3 +638,8 @@ businessAddrInfoScreener.title = Do you want to include additional information f
 businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
 businessAddrInfoScreener.hint = For example, building name or floor number
 businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
+
+removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for this business address?
+removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for this business address?
+removeBusinessAddressAddInfo.paragraph = The additional information is: {0}
+removeBusinessAddressAddInfo.error.required = Select yes if you want to remove the additional information for this business address
