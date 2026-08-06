@@ -58,54 +58,77 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
 
-  protected val testFrontendAppConfig = new FrontendAppConfig(
-    Configuration(ConfigFactory.parseString("""
-        |host = "http://localhost:9000"
-        | mongodb {
-        |  timeToLiveInSeconds = 900
-        | }
-        | urls {
-        |  login = "http://foo.com/login"
-        |  loginContinue = "http://foo.com/bar"
-        |  signOut = "http://foo.com/sign-out"
-        |  homePageUrl = "http://foo.com/home"
-        |  accessibilityStatementUrl = "http://foo.com/accessibility-statement"
-        |  betaFeedbackUrl = "http://foo.com/beta-feedback"
-        |  researchUrl = "http://foo.com/research"
-        | }
-        |  timeout-dialog {
-        |   timeout   = 10
-        |   countdown = 5
-        | }
-        | contact-frontend {
-        |  host      = "http://localhost:9250"
-        |  serviceId = "gambling-variations-frontend"
-        |}
-        |microservice {
-        |    services {
-        |      auth {
-        |        protocol = http
-        |        host     = localhost
-        |        port     = 8500
-        |      }
-        |
-        |      feedback-frontend {
-        |        protocol = http
-        |        host     = localhost
-        |        port     = 9514
-        |      }        
-        |
-        |      address-lookup-frontend {
-        |        protocol = http
-        |        host     = localhost
-        |        port     = 9028
-        |      }
-        |    }
-        |}
-        |features {
-        |  welsh-translation: false
-        |}
-        |""".stripMargin))
-  )
+  private val testConfiguration: Configuration =
+    Configuration(
+      ConfigFactory.parseString(
+        """
+          |host = "http://localhost:9000"
+          |
+          |mongodb {
+          |  timeToLiveInSeconds = 900
+          |}
+          |
+          |urls {
+          |  login = "http://foo.com/login"
+          |  loginContinue = "http://foo.com/bar"
+          |  signOut = "http://foo.com/sign-out"
+          |  hmrcOnlineServiceDesk = "http://foo.com/help"
+          |  gamblingManagementHome = "http://foo.com/home"
+          |  account = "http://foo.com/account"
+          |}
+          |
+          |timeout-dialog {
+          |  timeout   = 10
+          |  countdown = 5
+          |}
+          |
+          |contact-frontend {
+          |  host = "http://localhost:9250"
+          |}
+          |
+          |address-lookup {
+          |  home-nav-href = "http://www.hmrc.gov.uk/"
+          |  deskpro-service-name = "gambling-variations-frontend"
+          |  timeout-url = "/there-is-a-problem"
+          |  timeout-keep-alive-url = "/refresh-session"
+          |}
+          |
+          |microservice {
+          |  services {
+          |    auth {
+          |      protocol = "http"
+          |      host     = "localhost"
+          |      port     = 8500
+          |    }
+          |
+          |    feedback-frontend {
+          |      protocol = "http"
+          |      host     = "localhost"
+          |      port     = 9514
+          |    }
+          |
+          |    address-lookup-frontend {
+          |      protocol = "http"
+          |      host     = "localhost"
+          |      port     = 9028
+          |    }
+          |
+          |    accessibility-statement {
+          |      protocol = "http"
+          |      host     = "localhost"
+          |      port     = 12346
+          |    }
+          |  }
+          |}
+          |
+          |features {
+          |  welsh-translation = false
+          |}
+          |""".stripMargin
+      )
+    )
+
+  protected val testFrontendAppConfig: FrontendAppConfig =
+    new FrontendAppConfig(testConfiguration)
 
 }

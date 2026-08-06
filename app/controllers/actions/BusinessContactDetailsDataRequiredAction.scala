@@ -22,7 +22,6 @@ import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessContactDetails, ContactNumber, UserAnswers}
 import pages.*
 import play.api.Logging
-import play.api.libs.json.Writes
 import play.api.mvc.{ActionRefiner, Result}
 import play.api.mvc.Results.Redirect
 import repositories.SessionRepository
@@ -66,7 +65,7 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
     gamblingConnector.getBusinessContactDetails(answers.id) flatMap { contact =>
 
       setBusinessContactDetails(contact, answers) map { updatedAnswers =>
-        logger.info("User Answers not found. Saving User Answers")
+        logger.info("User Answers updated with Business Contact Details. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
             logger.info("User Answers saved.")
@@ -83,24 +82,18 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
-    optional.fold(Try(userAnswers)) { value =>
-      userAnswers.set(page, value)
-    }
-
   private def setBusinessContactDetails(contact: BusinessContactDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Business Contact Details")
     for {
       updatedAnswers <- answers.set(BusinessContactDetailsSectionPage, contact.mgdRegNumber)
-      updatedAnswers <- setIfDefined(
-                          updatedAnswers,
+      updatedAnswers <- updatedAnswers.setIfDefined(
+                          BusinessContactNumberPage,
                           contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
                             ContactNumber(Some(phone), Some(mobile))
-                          },
-                          BusinessContactNumberPage
+                          }
                         )
-      updatedAnswers <- setIfDefined(updatedAnswers, contact.faxNumber, BusinessFaxNumberPage)
-      updatedAnswers <- setIfDefined(updatedAnswers, contact.emailAddr, BusinessEmailAddressPage)
+      updatedAnswers <- updatedAnswers.setIfDefined(BusinessFaxNumberPage, contact.faxNumber)
+      updatedAnswers <- updatedAnswers.setIfDefined(BusinessEmailAddressPage, contact.emailAddr)
     } yield updatedAnswers
   }
 

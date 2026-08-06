@@ -54,7 +54,8 @@ lazy val microservice = (project in file("."))
 
 lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   fork := true,
-  unmanagedSourceDirectories += baseDirectory.value / "test-utils"
+  unmanagedSourceDirectories += baseDirectory.value / "test-utils",
+  testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-S", "12345")
 )
 
 lazy val it =
