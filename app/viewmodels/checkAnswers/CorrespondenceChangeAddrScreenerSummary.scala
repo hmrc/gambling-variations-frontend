@@ -17,8 +17,9 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
+import models.CorrespondenceChangeAddrOption.*
 import models.UserAnswers
-import pages.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
+import pages.CorrespondenceChangeAddrScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
@@ -29,21 +30,12 @@ object CorrespondenceChangeAddrScreenerSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(CorrespondenceChangeAddrScreenerPage).map { answer =>
 
-      val isUkAddress =
-        answers
-          .get(CorrespondenceAddressUkPage)
-          .exists(_.country.isEmpty)
-
-      val value =
-        if (answer) {
-          if (isUkAddress) {
-            "correspondenceChangeAddrScreener.uk.yes"
-          } else {
-            "correspondenceChangeAddrScreener.nonuk.yes"
-          }
-        } else {
-          "correspondenceChangeAddrScreener.no"
-        }
+      val value = answer match {
+        case DifferentUkAddress   => "correspondenceChangeAddrScreener.uk.differentAddress"
+        case ChangeToNonUkAddress => "correspondenceChangeAddrScreener.uk.yes"
+        case ChangeToUkAddress    => "correspondenceChangeAddrScreener.nonuk.yes"
+        case EditCurrentAddress   => "correspondenceChangeAddrScreener.no"
+      }
 
       SummaryListRowViewModel(
         key   = "correspondenceChangeAddrScreenerController.checkYourAnswersLabel",

@@ -19,6 +19,7 @@ package navigation
 import controllers.routes
 import models.*
 import models.BusinessType.Soleproprietor
+import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import play.api.mvc.Call
 
@@ -200,16 +201,19 @@ class Navigator @Inject() () {
     userAnswers
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
-        case true if isUkAddress =>
+        case DifferentUkAddress =>
+          routes.PageNotFoundController.onPageLoad()
+
+        case ChangeToNonUkAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
 
-        case false if isUkAddress =>
+        case ChangeToUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()
 
-        case true =>
+        case EditCurrentAddress if isUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()
 
-        case false =>
+        case EditCurrentAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())

@@ -16,13 +16,13 @@
 
 package forms
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.OptionFieldBehaviours
+import models.CorrespondenceChangeAddrOption
 import play.api.data.FormError
 
-class CorrespondenceChangeAddrScreenerFormProviderSpec extends BooleanFieldBehaviours {
+class CorrespondenceChangeAddrScreenerFormProviderSpec extends OptionFieldBehaviours {
 
   val requiredKey = "correspondenceChangeAddrScreener.error.required"
-  val invalidKey = "error.boolean"
 
   val form = new CorrespondenceChangeAddrScreenerFormProvider()()
 
@@ -30,10 +30,11 @@ class CorrespondenceChangeAddrScreenerFormProviderSpec extends BooleanFieldBehav
 
     val fieldName = "correspondenceChangeAddrScreener"
 
-    behave like booleanField(
+    behave like optionsField[CorrespondenceChangeAddrOption](
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      validValues  = CorrespondenceChangeAddrOption.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(
