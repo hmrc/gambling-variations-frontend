@@ -103,3 +103,11 @@ changeRegistrationDetails.needsCompleting = cy: Needs completing
 changeRegistrationDetails.approvalTime = cy: Once HMRC approve your changes, we will update your registration certificate. This can take up to 48 hours.
 changeRegistrationDetails.submit = cy: Submit changes
 changeRegistrationDetails.change-registration.link = cy: Return to manage your Machine Games Duty
+
+checkBusinessAddress.title = cy: Check your business address
+checkBusinessAddress.heading = cy: Check your business address
+checkBusinessAddress.label.address = cy: Business address
+checkBusinessAddress.question.ukPostcode = cy: Does address have a UK postcode?
+checkBusinessAddress.question.howToChange = cy: How do you want to change your business address?
+checkBusinessAddress.question.addInfo = cy: Add additional information for address?
+checkBusinessAddress.messages.required = cy: You must continue to the change registration details page to submit any changes.

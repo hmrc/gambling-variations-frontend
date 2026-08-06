@@ -633,5 +633,11 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-checkBusinessAddress.title = checkBusinessAddress
-checkBusinessAddress.heading = checkBusinessAddress
+
+checkBusinessAddress.title = Check your business address
+checkBusinessAddress.heading = Check your business address
+checkBusinessAddress.label.address = Business address
+checkBusinessAddress.question.ukPostcode = Does address have a UK postcode?
+checkBusinessAddress.question.howToChange = How do you want to change your business address?
+checkBusinessAddress.question.addInfo = Add additional information for address?
+checkBusinessAddress.messages.required = You must continue to the change registration details page to submit any changes.
