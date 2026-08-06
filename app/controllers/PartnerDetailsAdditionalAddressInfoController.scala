@@ -30,18 +30,18 @@ import views.html.PartnerDetailsAdditionalAddressInfoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsAdditionalAddressInfoController @Inject()(
-                                                               override val messagesApi: MessagesApi,
-                                                               sessionRepository: SessionRepository,
-                                                               navigator: Navigator,
-                                                               authorise: AuthorisedAction,
-                                                               getData: DataRetrievalAction,
-                                                               requireData: CorrespondenceDetailsDataRequiredAction,
-                                                               formProvider: PartnerDetailsAdditionalAddressInfoFormProvider,
-                                                               val controllerComponents: MessagesControllerComponents,
-                                                               view: PartnerDetailsAdditionalAddressInfoView
-                                                             )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class PartnerDetailsAdditionalAddressInfoController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: CorrespondenceDetailsDataRequiredAction,
+  formProvider: PartnerDetailsAdditionalAddressInfoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PartnerDetailsAdditionalAddressInfoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
