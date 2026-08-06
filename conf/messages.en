@@ -634,8 +634,8 @@ correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
 
-addPartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
-addPartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
-addPartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
-addPartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
-addPartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
+PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?

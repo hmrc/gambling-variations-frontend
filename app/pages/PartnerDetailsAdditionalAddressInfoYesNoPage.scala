@@ -28,12 +28,12 @@ object PartnerDetailsAdditionalAddressInfoYesNoPage extends QuestionPage[Boolean
   override def toString: String = "partnerDetailsAdditionalAddressInfoYesNo"
 
   override def cleanup(
-                        value: Option[Boolean],
-                        userAnswers: UserAnswers
-                      ): Try[UserAnswers] =
+    value: Option[Boolean],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
     value match {
       case Some(false) =>
-        userAnswers.remove(PartnerDetailsAdditionalAddressInfoPage)
+        userAnswers.remove(PartnerDetailsAdditionalAddressInfoYesNoPage)
 
       case _ =>
         Try(userAnswers)

@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.PartnerDetailsAdditionalAddressInfoYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{AddEmailAddressForCorrespondenceYesNoPage, PartnerDetailsAdditionalAddressInfoYesNoPage}
+import pages.PartnerDetailsAdditionalAddressInfoYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -30,18 +30,18 @@ import views.html.PartnerDetailsAdditionalAddressInfoYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsAdditionalAddressInfoYesNoController @Inject()(
-                                                                    override val messagesApi: MessagesApi,
-                                                                    sessionRepository: SessionRepository,
-                                                                    navigator: Navigator,
-                                                                    authorise: AuthorisedAction,
-                                                                    getData: DataRetrievalAction,
-                                                                    requireData: DataRequiredAction,
-                                                                    formProvider: PartnerDetailsAdditionalAddressInfoYesNoFormProvider,
-                                                                    val controllerComponents: MessagesControllerComponents,
-                                                                    view: PartnerDetailsAdditionalAddressInfoYesNoView
-                                                                  )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: PartnerDetailsAdditionalAddressInfoYesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PartnerDetailsAdditionalAddressInfoYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
@@ -64,7 +64,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddEmailAddressForCorrespondenceYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAdditionalAddressInfoYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage, mode, updatedAnswers))
       )

@@ -262,18 +262,8 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers: UserAnswers): Call =
-    userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match
-      case Some(true) =>
-        routes.CorrespondenceEmailAddressController.onPageLoad()
-
-      case Some(false) =>
-        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
-        else
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
-
-      case None =>
-        routes.SystemErrorController.onPageLoad()
+  private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers: UserAnswers): Call = {
+    routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+  }
 
 }

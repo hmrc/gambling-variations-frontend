@@ -21,10 +21,10 @@ import play.api.data.FormError
 
 class PartnerDetailsAdditionalAddressInfoYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "addPartnerDetails.additionalAddressInfoYesNo.error.required"
+  val requiredKey = "PartnerDetails.additionalAddressInfoYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new PartnerDetailsAdditionalAddressInfoYesNoFormProviderSpec()()
+  val form = new PartnerDetailsAdditionalAddressInfoYesNoFormProvider()()
 
   ".value" - {
 
