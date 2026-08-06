@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import controllers.routes.*
 import forms.PreviousRegistrationNumbersFormProvider
-import models.{CheckMode, NormalMode, RegistrationNumbers, UserAnswers}
+import models.{NormalMode, RegistrationNumbers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when

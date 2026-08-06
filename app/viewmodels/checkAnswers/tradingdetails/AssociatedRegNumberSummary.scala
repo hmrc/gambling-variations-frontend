@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.AssociatedRegNumberPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -34,7 +34,7 @@ object AssociatedRegNumberSummary {
         key   = "associatedRegNumber.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.AssociatedRegNumberController.onPageLoad(NormalMode).url)
+          ActionItemViewModel("site.change", routes.AssociatedRegNumberController.onPageLoad().url)
             .withVisuallyHiddenText(messages("associatedRegNumber.change.hidden"))
         )
       )

@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{Address, ContactNumber, NormalMode, UserAnswers}
+import models.{Address, ContactNumber, UserAnswers}
 import pages.*
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

@@ -109,7 +109,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad(mode))
+      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad())
     }
 
 }

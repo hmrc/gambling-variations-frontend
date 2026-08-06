@@ -17,7 +17,8 @@
 package views
 
 import base.SpecBase
-import models.{Address, NormalMode}
+import controllers.routes
+import models.Address
 import org.jsoup.Jsoup
 import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers.*
@@ -25,7 +26,6 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
-import controllers.routes
 
 import scala.jdk.CollectionConverters.*
 

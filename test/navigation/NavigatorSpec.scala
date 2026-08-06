@@ -104,7 +104,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(AddAssociatedRegistrationNumberPage, NormalMode, answers) mustBe
-          routes.AssociatedRegNumberController.onPageLoad(NormalMode)
+          routes.AssociatedRegNumberController.onPageLoad()
       }
 
       "should route AddAssociatedRegistrationNumberPage to CheckTradingDetails when answer is false" in {

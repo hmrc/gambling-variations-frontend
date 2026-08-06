@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
 import controllers.routes
-import models.{BusinessTradeClass, CheckMode}
+import models.BusinessTradeClass
 import pages.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.Application
 import play.api.i18n.Messages

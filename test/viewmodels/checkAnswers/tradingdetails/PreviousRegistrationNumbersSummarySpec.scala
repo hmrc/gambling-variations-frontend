@@ -18,7 +18,6 @@ package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
 import controllers.routes
-import models.NormalMode
 import pages.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.Application
 import play.api.i18n.Messages
