@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class BusinessAddressAdditionalInfoFormProvider @Inject() extends Mappings {
 
-  private val businessAddressAdditionalInfoRegex = "^[A-Za-z 0-9-']{1,100}$"
+  private val businessAddressAdditionalInfoRegex = "^[A-Za-z0-9 -']+$"
   private val maxL = 100
   def apply(): Form[String] =
     Form(
