@@ -20,6 +20,7 @@ import controllers.routes
 import models.*
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import pages.partner.PartnerAddFaxNumberYesNoPage
 
 class NavigatorSpec extends SpecBase {
@@ -720,7 +721,6 @@ class NavigatorSpec extends SpecBase {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
-
       "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is true" in {
         val answers =
           emptyAnswers
@@ -740,7 +740,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, answers) mustBe
-          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() //update later
+          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
       }
 
       "should route PartnerAddFaxNumberYesNoPage to SystemError when unanswered" in {
@@ -751,6 +751,11 @@ class NavigatorSpec extends SpecBase {
       "should route RemoveCorrespondenceDetailsYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsAdditionalAddressInfoPage to itself" in {
+        navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage, NormalMode, emptyAnswers) mustBe
+          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad() // TODO: update later.
       }
     }
   }

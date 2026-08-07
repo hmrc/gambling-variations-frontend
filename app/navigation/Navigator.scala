@@ -22,6 +22,7 @@ import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.partner.PartnerAddFaxNumberYesNoPage
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -72,6 +73,7 @@ class Navigator @Inject() () {
     case CorrespondenceAddressUkPage             => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage          => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
     case PartnerAddFaxNumberYesNoPage            => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
+    case PartnerDetailsAdditionalAddressInfoPage => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
