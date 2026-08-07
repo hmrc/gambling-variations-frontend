@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("partnerDetailsAdditionalAddressInfo.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = routes.PartnerDetailsAdditionalAddressInfoController.onSubmit(mode), Symbol("autoComplete") -> "on") {
+    @formHelper(action = routes.PartnerDetailsAdditionalAddressInfoController.onSubmit(), Symbol("autoComplete") -> "on") {
 
     @if(form.errors.nonEmpty) {
         @govukErrorSummary(ErrorSummaryViewModel(form))
