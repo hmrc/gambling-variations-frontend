@@ -41,7 +41,8 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       emailAddress                           = None,
       hasUkPostcode                          = None,
       isSubmitted                            = false,
-      isAddingNewCorrespondenceDetails       = None
+      isAddingNewCorrespondenceDetails       = None,
+      changeCorrespondenceAddress            = None
     )
 
   "continueCall" should {

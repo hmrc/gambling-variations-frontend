@@ -19,6 +19,7 @@ package views
 import base.SpecBase
 import controllers.routes
 import models.Address
+import models.CorrespondenceChangeAddrOption.DifferentUkAddress
 import org.jsoup.Jsoup
 import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers.*
@@ -67,7 +68,8 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
         emailAddress                           = Some("test@test.com"),
         hasUkPostcode                          = Some(false),
         isSubmitted                            = false,
-        isAddingNewCorrespondenceDetails       = Some(false)
+        isAddingNewCorrespondenceDetails       = Some(false),
+        changeCorrespondenceAddress            = Some(DifferentUkAddress)
       )
   }
 
@@ -100,6 +102,10 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
       doc.text must include("07123456789")
       doc.text must include("02000000000")
       doc.text must include("test@test.com")
+      doc
+        .select(".govuk-summary-list__value")
+        .select(".changeCorrespondenceChangeAddr")
+        .text must include(messages("correspondenceChangeAddrScreener.uk.differentAddress"))
     }
 
     "must render continue button" in new Setup {
