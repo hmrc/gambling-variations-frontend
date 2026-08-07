@@ -19,6 +19,7 @@ import base.SpecBase
 import controllers.routes
 import models.*
 import pages.*
+import pages.partner.PartnerAddFaxNumberYesNoPage
 
 class NavigatorSpec extends SpecBase {
 
@@ -692,6 +693,34 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
           routes.CheckCorrespondenceDetailsController.onPageLoad()
+      }
+
+
+      "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerAddFaxNumberYesNoPage, true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
+      }
+
+      "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerAddFaxNumberYesNoPage, false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() //update later
+      }
+
+      "should route PartnerAddFaxNumberYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
       }
 
       "should route RemoveCorrespondenceDetailsYesNoPage to SystemError when unanswered" in {
