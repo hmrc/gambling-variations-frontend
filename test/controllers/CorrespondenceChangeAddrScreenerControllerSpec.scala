@@ -18,6 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.CorrespondenceChangeAddrScreenerFormProvider
+import models.CorrespondenceChangeAddrOption.EditCurrentAddress
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -72,7 +73,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       val data = Json.obj(
         "correspondenceDetailsSection" -> Json.obj(
           "mgdRegNum"                                   -> userAnswersId,
-          CorrespondenceChangeAddrScreenerPage.toString -> true
+          CorrespondenceChangeAddrScreenerPage.toString -> EditCurrentAddress.toString
         )
       )
 
@@ -88,7 +89,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(EditCurrentAddress), NormalMode, false)(request, messages(application)).toString
       }
     }
 
@@ -109,7 +110,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "true"))
+            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "editCurrentAddress"))
 
         val result = route(application, request).value
 
@@ -171,7 +172,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "true"))
+            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "editCurrentAddress"))
 
         val result = route(application, request).value
 

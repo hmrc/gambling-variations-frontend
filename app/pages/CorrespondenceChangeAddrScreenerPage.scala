@@ -16,9 +16,10 @@
 
 package pages
 
+import models.CorrespondenceChangeAddrOption
 import play.api.libs.json.JsPath
 
-case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[Boolean] {
+case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[CorrespondenceChangeAddrOption] {
 
   override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
 

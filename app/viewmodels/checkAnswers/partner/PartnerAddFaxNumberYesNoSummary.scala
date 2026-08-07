@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.partner
 
-import controllers.routes
 import models.UserAnswers
-import pages.AddEmailAddressForCorrespondenceYesNoPage
+import pages.partner.PartnerAddFaxNumberYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object AddEmailAddressForCorrespondenceYesNoSummary {
+object PartnerAddFaxNumberYesNoSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AddEmailAddressForCorrespondenceYesNoPage).map { answer =>
+    answers.get(PartnerAddFaxNumberYesNoPage).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel",
+        key   = "partnerAddFaxNumberYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("addEmailAddressForCorrespondenceYesNo.change.hidden"))
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerAddFaxNumberYesNo.change.hidden"))
         )
       )
     }

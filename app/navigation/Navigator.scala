@@ -19,7 +19,9 @@ package navigation
 import controllers.routes
 import models.*
 import models.BusinessType.Soleproprietor
+import models.CorrespondenceChangeAddrOption.*
 import pages.*
+import pages.partner.PartnerAddFaxNumberYesNoPage
 import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import play.api.mvc.Call
 
@@ -70,6 +72,7 @@ class Navigator @Inject() () {
     case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAddressUkPage             => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage          => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
+    case PartnerAddFaxNumberYesNoPage            => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
     case PartnerDetailsAdditionalAddressInfoPage => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
@@ -176,14 +179,31 @@ class Navigator @Inject() () {
         routes.SystemErrorController.onPageLoad()
     }
 
-  private def navigateCorrespondenceUKAddrScreenerPage()(userAnswers: UserAnswers): Call =
-    userAnswers
-      .get(CorrespondenceUKAddrScreenerPage)
-      .map {
-        case false => routes.CorrespondenceNonUKAddressController.onPageLoad()
-        case true  => routes.CorrespondenceUKAddressController.onPageLoad()
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+  private def navigateCorrespondenceUKAddrScreenerPage()(answers: UserAnswers): Call = {
+
+    val previouslyUk =
+      answers.get(CorrespondenceAddressUkPage).isDefined
+
+    val previouslyNonUk =
+      answers.get(CorrespondenceAddressNonUkPage).isDefined
+
+    answers.get(CorrespondenceUKAddrScreenerPage) match {
+      case Some(true) if previouslyUk =>
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case Some(false) if previouslyNonUk =>
+        routes.CheckCorrespondenceDetailsController.onPageLoad()
+
+      case Some(true) =>
+        routes.CorrespondenceUKAddressController.onPageLoad()
+
+      case Some(false) =>
+        routes.CorrespondenceNonUKAddressController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
+  }
 
   private def navigateAddCorrespondingDetailsYesNoPage()(userAnswers: UserAnswers): Call =
     userAnswers
@@ -202,16 +222,19 @@ class Navigator @Inject() () {
     userAnswers
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
-        case true if isUkAddress =>
+        case DifferentUkAddress =>
+          routes.PageNotFoundController.onPageLoad()
+
+        case ChangeToNonUkAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
 
-        case false if isUkAddress =>
+        case ChangeToUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()
 
-        case true =>
+        case EditCurrentAddress if isUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()
 
-        case false =>
+        case EditCurrentAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
@@ -260,6 +283,15 @@ class Navigator @Inject() () {
       .map {
         case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
         case true  => routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerAddFaxNumberYesNoPage(answers: UserAnswers): Call =
+    answers
+      .get(PartnerAddFaxNumberYesNoPage)
+      .map {
+        case false => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 

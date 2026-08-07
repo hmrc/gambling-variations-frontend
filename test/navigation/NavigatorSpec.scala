@@ -18,8 +18,10 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import models.*
+import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.partner.PartnerDetailsAdditionalAddressInfoPage
+import pages.partner.PartnerAddFaxNumberYesNoPage
 
 class NavigatorSpec extends SpecBase {
 
@@ -372,7 +374,7 @@ class NavigatorSpec extends SpecBase {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
-      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when changing from a UK address" in {
+      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when changing from a UK address to a non-UK address" in {
         val answers =
           emptyAnswers
             .set(
@@ -388,7 +390,7 @@ class NavigatorSpec extends SpecBase {
             )
             .success
             .value
-            .set(CorrespondenceChangeAddrScreenerPage, true)
+            .set(CorrespondenceChangeAddrScreenerPage, ChangeToNonUkAddress)
             .success
             .value
 
@@ -396,7 +398,7 @@ class NavigatorSpec extends SpecBase {
           routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
 
-      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when keeping a UK address" in {
+      "should route CorrespondenceChangeAddrScreenerPage to PageNotFound when changing to a different UK address" in {
         val answers =
           emptyAnswers
             .set(
@@ -412,7 +414,31 @@ class NavigatorSpec extends SpecBase {
             )
             .success
             .value
-            .set(CorrespondenceChangeAddrScreenerPage, false)
+            .set(CorrespondenceChangeAddrScreenerPage, DifferentUkAddress)
+            .success
+            .value
+
+        navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when editing a UK address" in {
+        val answers =
+          emptyAnswers
+            .set(
+              CorrespondenceAddressUkPage,
+              Address(
+                address1 = "line1",
+                address2 = Some("line2"),
+                address3 = None,
+                address4 = None,
+                postcode = Some("AA1 1AA"),
+                country  = Some("GB")
+              )
+            )
+            .success
+            .value
+            .set(CorrespondenceChangeAddrScreenerPage, EditCurrentAddress)
             .success
             .value
 
@@ -423,7 +449,7 @@ class NavigatorSpec extends SpecBase {
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when changing from a non-UK address" in {
         val answers =
           emptyAnswers
-            .set(CorrespondenceChangeAddrScreenerPage, true)
+            .set(CorrespondenceChangeAddrScreenerPage, ChangeToUkAddress)
             .success
             .value
 
@@ -431,10 +457,10 @@ class NavigatorSpec extends SpecBase {
           routes.CorrespondenceUKAddressController.onPageLoad()
       }
 
-      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when keeping a non-UK address" in {
+      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when editing a non-UK address" in {
         val answers =
           emptyAnswers
-            .set(CorrespondenceChangeAddrScreenerPage, false)
+            .set(CorrespondenceChangeAddrScreenerPage, EditCurrentAddress)
             .success
             .value
 
@@ -645,6 +671,81 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, answers) mustBe
           routes.CheckCorrespondenceDetailsController.onPageLoad()
+      }
+
+      "should route CorrespondenceUKAddrScreenerPage to CheckCorrespondenceDetails when the answer remains UK" in {
+        val answers =
+          emptyAnswers
+            .set(
+              CorrespondenceAddressUkPage,
+              Address(
+                address1 = "line1",
+                address2 = Some("line2"),
+                address3 = None,
+                address4 = None,
+                postcode = Some("AA1 1AA"),
+                country  = Some("GB")
+              )
+            )
+            .success
+            .value
+            .set(CorrespondenceUKAddrScreenerPage, true)
+            .success
+            .value
+
+        navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+      }
+
+      "should route CorrespondenceUKAddrScreenerPage to CheckCorrespondenceDetails when the answer remains non-UK" in {
+        val answers =
+          emptyAnswers
+            .set(
+              CorrespondenceAddressNonUkPage,
+              Address(
+                address1 = "line1",
+                address2 = Some("line2"),
+                address3 = None,
+                address4 = None,
+                postcode = None,
+                country  = Some("France")
+              )
+            )
+            .success
+            .value
+            .set(CorrespondenceUKAddrScreenerPage, false)
+            .success
+            .value
+
+        navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.CheckCorrespondenceDetailsController.onPageLoad()
+      }
+
+      "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerAddFaxNumberYesNoPage, true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
+      }
+
+      "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerAddFaxNumberYesNoPage, false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
+      }
+
+      "should route PartnerAddFaxNumberYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
       }
 
       "should route RemoveCorrespondenceDetailsYesNoPage to SystemError when unanswered" in {
