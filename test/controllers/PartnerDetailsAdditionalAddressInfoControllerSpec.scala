@@ -44,11 +44,11 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj("partnerDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
 
   lazy val nameRoute =
-    routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(NormalMode).url
+    routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad().url
 
   "PartnerDetailsAdditionalAddressInfo Controller" - {
 
@@ -72,7 +72,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "correspondenceDetailsSection"                   -> Json.obj("mgdRegNum" -> userAnswersId),
+        "partnerDetailsSection"                          -> Json.obj("mgdRegNum" -> userAnswersId),
         PartnerDetailsAdditionalAddressInfoPage.toString -> "validName"
       )
 
@@ -93,7 +93,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
       }
     }
 
-    "must redirect to the next page when valid data is submitted" ignore {
+    "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
 
@@ -112,7 +112,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
 
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody("correspondenceAdditionalInfo" -> "valid name")
+            .withFormUrlEncodedBody("partnerDetailsAdditionalAddressInfo" -> "valid name")
 
         val result = route(application, request).value
 
@@ -128,9 +128,9 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
       running(application) {
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody(("name", ""))
+            .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", ""))
 
-        val boundForm = form.bind(Map("name" -> ""))
+        val boundForm = form.bind(Map("partnerDetailsAdditionalAddressInfo" -> ""))
 
         val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
 
@@ -142,7 +142,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
       }
     }
 
-    "must redirect to SystemError for a GET if no session exists" in {
+    "must return OK and the correct view for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -150,27 +150,34 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
         val request = FakeRequest(GET, nameRoute)
 
         val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
-    "must redirect to SystemError for a POST if no session exists" in {
+    "must redirect to the next page for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val mockSessionRepository = mock[SessionRepository]
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
 
       running(application) {
         val request =
           FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody(("name", "validName"))
+            .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", "validName"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
   }
