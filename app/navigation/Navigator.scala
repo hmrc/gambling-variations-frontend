@@ -22,6 +22,7 @@ import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.partner.PartnerAddFaxNumberYesNoPage
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import pages.partner.PartnerDetailsAdditionalAddressInfoYesNoPage
 import play.api.mvc.Call
 
@@ -73,8 +74,10 @@ class Navigator @Inject() () {
     case CorrespondenceAddressUkPage                  => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage               => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
     case PartnerAddFaxNumberYesNoPage                 => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
+    case PartnerDetailsAdditionalAddressInfoPage      => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case PartnerDetailsAdditionalAddressInfoYesNoPage => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
-    case _                                            => _ => routes.IndexController.onPageLoad()
+
+    case _ => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>

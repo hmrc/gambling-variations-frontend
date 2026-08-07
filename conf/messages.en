@@ -609,6 +609,7 @@ correspondenceChangeAddrScreener.heading = How do you want to change this corres
 correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
 correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
 correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.uk.differentAddress = Change to a different UK address
 correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
 correspondenceChangeAddrScreener.no = Edit current correspondence address
@@ -639,6 +640,15 @@ partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partn
 partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the partner
 partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
+
+
+partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.checkYourAnswersLabel = Additional Information
+partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor number
+partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
+partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
 
 
 PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?

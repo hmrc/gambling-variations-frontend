@@ -20,6 +20,7 @@ import controllers.routes
 import models.*
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoYesNoPage}
 
 class NavigatorSpec extends SpecBase {
@@ -777,6 +778,11 @@ class NavigatorSpec extends SpecBase {
       "should route RemoveCorrespondenceDetailsYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsAdditionalAddressInfoPage to itself" in {
+        navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage, NormalMode, emptyAnswers) mustBe
+          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad() // TODO: update later.
       }
     }
   }
