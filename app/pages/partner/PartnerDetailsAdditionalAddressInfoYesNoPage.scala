@@ -14,13 +14,29 @@
  * limitations under the License.
  */
 
-package pages
+package pages.partner
 
+import models.UserAnswers
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-object PartnerDetailsAdditionalAddressInfoPage extends QuestionPage[String] {
+import scala.util.Try
+
+object PartnerDetailsAdditionalAddressInfoYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "partnerDetailsAdditionalInfo"
+  override def toString: String = "partnerDetailsAdditionalAddressInfoYesNo"
+
+  override def cleanup(
+    value: Option[Boolean],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    value match {
+      case Some(false) =>
+        userAnswers.remove(PartnerDetailsAdditionalAddressInfoPage)
+
+      case _ =>
+        Try(userAnswers)
+    }
 }

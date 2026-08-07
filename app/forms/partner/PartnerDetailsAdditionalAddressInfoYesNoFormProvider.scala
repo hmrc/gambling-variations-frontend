@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms.partner
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-import scala.util.Try
+import javax.inject.Inject
 
-object PartnerDetailsAdditionalAddressInfoYesNoPage extends QuestionPage[Boolean] {
+class PartnerDetailsAdditionalAddressInfoYesNoFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "partnerDetailsAdditionalAddressInfoYesNo"
-
-  override def cleanup(
-    value: Option[Boolean],
-    userAnswers: UserAnswers
-  ): Try[UserAnswers] =
-    value match {
-      case Some(false) =>
-        userAnswers.remove(PartnerDetailsAdditionalAddressInfoPage)
-
-      case _ =>
-        Try(userAnswers)
-    }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("PartnerDetails.additionalAddressInfoYesNo.error.required")
+    )
 }

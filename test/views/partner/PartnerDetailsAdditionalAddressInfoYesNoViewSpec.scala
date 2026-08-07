@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package views.partner
 
 import base.SpecBase
-import forms.PartnerDetailsAdditionalAddressInfoYesNoFormProvider
+import forms.partner.PartnerDetailsAdditionalAddressInfoYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.PartnerDetailsAdditionalAddressInfoYesNoView
+import views.html.partner.PartnerDetailsAdditionalAddressInfoYesNoView
 
 class PartnerDetailsAdditionalAddressInfoYesNoViewSpec extends SpecBase {
 

@@ -20,6 +20,7 @@ import controllers.routes
 import models.*
 import models.BusinessType.Soleproprietor
 import pages.*
+import pages.partner.PartnerDetailsAdditionalAddressInfoYesNoPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -263,7 +264,13 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers: UserAnswers): Call = {
-    routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+    userAnswers
+      .get(PartnerDetailsAdditionalAddressInfoYesNoPage)
+      .map {
+        case false => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 
 }
