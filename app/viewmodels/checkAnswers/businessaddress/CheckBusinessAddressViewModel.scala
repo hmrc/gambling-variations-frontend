@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.businessAddress
+package viewmodels.checkAnswers.businessaddress
 
 import models.{Address, UserAnswers}
 import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
@@ -23,12 +23,13 @@ import viewmodels.govuk.all.SummaryListViewModel
 
 class CheckBusinessAddressViewModel(ua: UserAnswers)(implicit messages: Messages) {
   val isUk: Boolean = ua.get(BusinessAddressUkPage).isDefined
-  val addressUa: Option[Address] = if (isUk) {
+  private val addressUa: Option[Address] = if (isUk) {
     ua.get(BusinessAddressUkPage)
   } else {
     ua.get(BusinessAddressNonUkPage)
   }
+
   SummaryListViewModel(
-    rows = Seq(BusinessAddressRow(ua:UserAnswers, isUk)
+    rows = Seq(BusinessAddressRow().from(address = addressUa, isUk = isUk))
   )
 }
