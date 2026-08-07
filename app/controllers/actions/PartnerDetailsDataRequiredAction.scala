@@ -53,12 +53,22 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
-        Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
+
+        userAnswers.get(PartnerDetailsPage(0)) map { _ =>
+          logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
+
+          Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
+        } getOrElse {
+          logger.info(s"User Answers found with id ${userAnswers.id}")
+
+          given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+          saveUserAnswersToSessionAndRedirect(userAnswers, request)
+        }
     }
   }
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getPartnerDetails(answers.id) flatMap { partnerDetails =>
+    gamblingConnector.getPartnersDetails(answers.id) flatMap { partnerDetails =>
       setPartnerDetails(partnerDetails, answers) map { updatedAnswers =>
         logger.info("User Answers not found. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
@@ -76,11 +86,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       Left(Redirect(routes.SystemErrorController.onPageLoad()))
     }
   }
-
-//  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
-//    optional.fold(Try(userAnswers)) { value =>
-//      userAnswers.set(page, value)
-//    }
 
   private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
 

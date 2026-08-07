@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 case class PartnerDetailsDateOfLeavingPage(index: Int) extends QuestionPage[LocalDate] {
 
-  override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
 
   override def toString: String = "dateOfLeaving"
 }

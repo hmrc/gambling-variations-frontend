@@ -21,8 +21,7 @@ import play.api.libs.json.JsPath
 
 case class PartnerDetailsIsFutureLeaveDatePage(index: Int) extends QuestionPage[Int] {
 
-  override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
 
   override def toString: String = "isFutureLeaveDate"
 }
-

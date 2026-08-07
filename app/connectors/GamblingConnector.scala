@@ -58,7 +58,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
       }
   }
 
-  def getPartnerDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[PartnersDetails] = {
+  def getPartnersDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[PartnersDetails] = {
     http
       .get(url"$baseUrl/partner-details/mgd/$mgdRegNumber")
       .execute[HttpResponse]
