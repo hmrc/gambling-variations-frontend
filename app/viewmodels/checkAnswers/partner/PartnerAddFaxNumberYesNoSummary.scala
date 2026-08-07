@@ -23,21 +23,20 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerAddFaxNumberYesNoSummary  {
+object PartnerAddFaxNumberYesNoSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerAddFaxNumberYesNoPage).map {
-      answer =>
+    answers.get(PartnerAddFaxNumberYesNoPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "partnerAddFaxNumberYesNo.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url)
-              .withVisuallyHiddenText(messages("partnerAddFaxNumberYesNo.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "partnerAddFaxNumberYesNo.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerAddFaxNumberYesNo.change.hidden"))
         )
+      )
     }
 }
