@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import models.CorrespondenceChangeAddrOption._
 @import views.html.components._
 
 @this(
@@ -41,25 +42,35 @@
             field = form("correspondenceChangeAddrScreener"),
             legend = LegendViewModel(messages("correspondenceChangeAddrScreener.heading"))
             .asPageHeading(viewmodels.LegendSize.Large),
-            items = Seq(
+            items =
+            if (isUkAddress) {
+            Seq(
             RadioItem(
-            value = Some("true"),
-            content = Text(
-            messages(
-            if (isUkAddress)
-            "correspondenceChangeAddrScreener.uk.yes"
-            else
-            "correspondenceChangeAddrScreener.nonuk.yes"
-            )
-            )
+            value = Some(DifferentUkAddress.toString),
+            content = Text(messages("correspondenceChangeAddrScreener.uk.differentAddress"))
             ),
             RadioItem(
-            value = Some("false"),
-            content = Text(
-            messages("correspondenceChangeAddrScreener.no")
+            value = Some(ChangeToNonUkAddress.toString),
+            content = Text(messages("correspondenceChangeAddrScreener.uk.yes"))
+            ),
+            RadioItem(divider = Some(messages("site.or"))),
+            RadioItem(
+            value = Some(EditCurrentAddress.toString),
+            content = Text(messages("correspondenceChangeAddrScreener.no"))
             )
             )
+            } else {
+            Seq(
+            RadioItem(
+            value = Some(ChangeToUkAddress.toString),
+            content = Text(messages("correspondenceChangeAddrScreener.nonuk.yes"))
+            ),
+            RadioItem(
+            value = Some(EditCurrentAddress.toString),
+            content = Text(messages("correspondenceChangeAddrScreener.no"))
             )
+            )
+            }
             )
         )
 

@@ -17,51 +17,85 @@
 package views
 
 import base.SpecBase
-import forms.CorrespondenceNonUKAddressFormProvider
+import forms.CorrespondenceChangeAddrScreenerFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.CorrespondenceNonUKAddressView
+import views.html.CorrespondenceChangeAddrScreenerView
+
+import scala.jdk.CollectionConverters.*
 
 class CorrespondenceChangeAddrScreenerViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    private val view = app.injector.instanceOf[CorrespondenceNonUKAddressView]
+    private val view = app.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new CorrespondenceNonUKAddressFormProvider()
+    private val formProvider = new CorrespondenceChangeAddrScreenerFormProvider()
     private val form = formProvider()
 
-    private val html = view(form, NormalMode)(request, messages)
-
-    val doc: Document = Jsoup.parse(html.body)
-
+    def docFor(isUkAddress: Boolean): Document = {
+      val html = view(form, NormalMode, isUkAddress)(request, messages)
+      Jsoup.parse(html.body)
+    }
   }
 
-  "CorrespondenceNonUKAddressView" - {
+  "CorrespondenceChangeAddrScreenerView" - {
 
     "must render page correctly" in new Setup {
+      val doc: Document = docFor(isUkAddress = true)
 
-      doc.title must include(messages("correspondenceNonUKAddress.title"))
+      doc.title must include(messages("correspondenceChangeAddrScreener.title"))
 
       doc.title must include(messages("changeRegistrationDetails.caption"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
-      doc.select("h1").text() must include(messages("correspondenceNonUKAddress.heading"))
+      doc.select("h1").text() must include(messages("correspondenceChangeAddrScreener.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
-
     }
 
+    "when the correspondence address is a UK address" - {
+
+      "must render three options with an 'or' divider before the last option" in new Setup {
+        val doc: Document = docFor(isUkAddress = true)
+
+        val labels: Seq[String] = doc.select(".govuk-radios__item .govuk-label").asScala.map(_.text()).toSeq
+
+        labels mustEqual Seq(
+          messages("correspondenceChangeAddrScreener.uk.differentAddress"),
+          messages("correspondenceChangeAddrScreener.uk.yes"),
+          messages("correspondenceChangeAddrScreener.no")
+        )
+
+        doc.select(".govuk-radios__divider").text() mustEqual messages("site.or")
+      }
+    }
+
+    "when the correspondence address is not a UK address" - {
+
+      "must render two options with no divider" in new Setup {
+        val doc: Document = docFor(isUkAddress = false)
+
+        val labels: Seq[String] = doc.select(".govuk-radios__item .govuk-label").asScala.map(_.text()).toSeq
+
+        labels mustEqual Seq(
+          messages("correspondenceChangeAddrScreener.nonuk.yes"),
+          messages("correspondenceChangeAddrScreener.no")
+        )
+
+        doc.select(".govuk-radios__divider") mustBe empty
+      }
+    }
   }
 }
