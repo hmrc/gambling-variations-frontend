@@ -51,7 +51,6 @@ final case class PartnerDetails(
   countryOfIncorporation: Option[String],//TODO ✅
   foreignCorporateRef: Option[String],//TODO ✅
 
-  //TODO address details are in its own object
   address1: Option[String],//TODO ✅
   address2: Option[String],//TODO ✅
   address3: Option[String],//TODO ✅

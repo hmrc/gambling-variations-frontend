@@ -25,11 +25,3 @@ case object CorrespondenceAddressUkPage extends QuestionPage[Address] {
 
   override def toString: String = "correspondenceAddressUk"
 }
-
-//TODO this makes me question things
-case class PartnerDetailsCorrespondenceAddressUkPage(index: Int) extends QuestionPage[Address] {
-
-  override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
-
-  override def toString: String = "correspondenceAddressUk"
-}

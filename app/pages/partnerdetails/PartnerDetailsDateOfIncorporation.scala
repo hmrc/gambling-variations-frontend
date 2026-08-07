@@ -16,7 +16,6 @@
 
 package pages.partnerdetails
 
-import models.PartnersDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 

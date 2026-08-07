@@ -20,7 +20,6 @@ import models.CorrespondenceDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-//TODO 2
 case class PartnerDetailsCorrespondenceDetailsSectionPage(index: Int) extends QuestionPage[CorrespondenceDetails] {
 
   override def path: JsPath = JsPath \ "partnerDetails" \ index \ toString
