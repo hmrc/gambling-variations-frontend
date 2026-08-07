@@ -649,3 +649,9 @@ partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor n
 partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
 partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
+
+partnerAddEmailAddressYesNoPage.title = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.heading = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
+partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
