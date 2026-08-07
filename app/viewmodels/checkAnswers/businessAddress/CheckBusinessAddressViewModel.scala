@@ -16,14 +16,19 @@
 
 package viewmodels.checkAnswers.businessAddress
 
-import models.UserAnswers
+import models.{Address, UserAnswers}
+import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
 import play.api.i18n.Messages
 import viewmodels.govuk.all.SummaryListViewModel
 
 class CheckBusinessAddressViewModel(ua: UserAnswers)(implicit messages: Messages) {
-  private val addressRowUK = BusinessAddressSummary().from(ua)
-
+  val isUk: Boolean = ua.get(BusinessAddressUkPage).isDefined
+  val addressUa: Option[Address] = if (isUk) {
+    ua.get(BusinessAddressUkPage)
+  } else {
+    ua.get(BusinessAddressNonUkPage)
+  }
   SummaryListViewModel(
-    rows = Seq(addressRowUK)
+    rows = Seq(BusinessAddressRow(ua:UserAnswers, isUk)
   )
 }
