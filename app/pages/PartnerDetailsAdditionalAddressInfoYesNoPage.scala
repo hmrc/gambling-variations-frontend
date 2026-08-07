@@ -33,7 +33,7 @@ object PartnerDetailsAdditionalAddressInfoYesNoPage extends QuestionPage[Boolean
   ): Try[UserAnswers] =
     value match {
       case Some(false) =>
-        userAnswers.remove(PartnerDetailsAdditionalAddressInfoYesNoPage)
+        userAnswers.remove(PartnerDetailsAdditionalAddressInfoPage)
 
       case _ =>
         Try(userAnswers)

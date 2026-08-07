@@ -93,7 +93,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoViewSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val html = view(boundForm, NormalMode)
+      val html = view(boundForm, NormalMode)(request, messages)
       val doc = Jsoup.parse(html.body)
 
       doc.select(".govuk-error-summary").size() mustEqual 1

@@ -21,14 +21,14 @@ import play.api.libs.json.JsPath
 
 class PartnerDetailsAdditionalAddressInfoYesNoPageSpec extends SpecBase {
 
-    "PartnerDetailsAdditionalAddressInfoYesNoPage" - {
+  "PartnerDetailsAdditionalAddressInfoYesNoPage" - {
 
-      "must have the correct path" in {
-        PartnerDetailsAdditionalAddressInfoYesNoPage.path mustEqual (JsPath \ "partnerDetailsAdditionalAddressInfoYesNo")
-      }
-
-      "must have the correct string representation" in {
-        PartnerDetailsAdditionalAddressInfoYesNoPage.toString mustEqual "partnerDetailsAdditionalAddressInfoYesNo"
-      }
+    "must have the correct path" in {
+      PartnerDetailsAdditionalAddressInfoYesNoPage.path mustEqual (JsPath \ "partnerDetailsAdditionalAddressInfoYesNo")
     }
+
+    "must have the correct string representation" in {
+      PartnerDetailsAdditionalAddressInfoYesNoPage.toString mustEqual "partnerDetailsAdditionalAddressInfoYesNo"
+    }
+  }
 }
