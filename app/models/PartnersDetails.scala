@@ -21,53 +21,44 @@ import play.api.libs.json.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-//TODO this is an actual structure backend will provide from rds
 final case class PartnersDetails(
   partners: Seq[PartnerDetails],
   systemDate: Option[LocalDate]
 )
 
 final case class PartnerDetails(
-  mgdRegNumber: String, //TODO ✅
-
-  dateOfJoining: Option[LocalDate],//TODO ✅
-  dateOfLeaving: Option[LocalDate],//TODO ✅
-
-  //TODO prop details are in its own object
-  solePropTitle: Option[String],//TODO ✅
-  solePropFirstName: Option[String],//TODO ✅
-  solePropMiddleName: Option[String],//TODO ✅
-  solePropLastName: Option[String],//TODO ✅
-
-  businessName: Option[String],//TODO ✅
-  tradingName: Option[String],//TODO ✅
-  dateOfBirth: Option[LocalDate],//TODO ✅
-  nino: Option[String],//TODO ✅
-  utr: Option[String],//TODO ✅
-  vrn: Option[String],//TODO ✅
-  crn: Option[String],//TODO ✅
-  
-  dateOfIncorporation: Option[LocalDate],//TODO ✅
-  countryOfIncorporation: Option[String],//TODO ✅
-  foreignCorporateRef: Option[String],//TODO ✅
-
-  address1: Option[String],//TODO ✅
-  address2: Option[String],//TODO ✅
-  address3: Option[String],//TODO ✅
-  address4: Option[String],//TODO ✅
-  postcode: Option[String],//TODO ✅
-  country: Option[String],//TODO ✅
-
-  adi: Option[String],//TODO ✅
-  iomOrCiFlag: Option[String],//TODO ✅
-  phoneNumber: Option[String],//TODO ✅
-  mobilePhoneNumber: Option[String],//TODO ✅
-  faxNumber: Option[String],//TODO ✅
-  emailAddress: Option[String],//TODO ✅
-
-  isFutureLeaveDate: Option[Int], //TODO not sure if it should be cached, seems like logic data
-  isFutureJoinDate: Option[Int],  //TODO not sure if it should be cached, seems like logic data
-  businessType: Option[Int]       //TODO not sure if it should be cached, seems like logic data
+  mgdRegNumber: String,
+  dateOfJoining: Option[LocalDate],
+  dateOfLeaving: Option[LocalDate],
+  solePropTitle: Option[String],
+  solePropFirstName: Option[String],
+  solePropMiddleName: Option[String],
+  solePropLastName: Option[String],
+  businessName: Option[String],
+  tradingName: Option[String],
+  dateOfBirth: Option[LocalDate],
+  nino: Option[String],
+  utr: Option[String],
+  vrn: Option[String],
+  crn: Option[String],
+  dateOfIncorporation: Option[LocalDate],
+  countryOfIncorporation: Option[String],
+  foreignCorporateRef: Option[String],
+  address1: Option[String],
+  address2: Option[String],
+  address3: Option[String],
+  address4: Option[String],
+  postcode: Option[String],
+  country: Option[String],
+  adi: Option[String],
+  iomOrCiFlag: Option[String],
+  phoneNumber: Option[String],
+  mobilePhoneNumber: Option[String],
+  faxNumber: Option[String],
+  emailAddress: Option[String],
+  isFutureLeaveDate: Option[Int],
+  isFutureJoinDate: Option[Int],
+  businessType: Option[Int]
 )
 object PartnerDetails {
 

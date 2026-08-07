@@ -53,20 +53,13 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
-
-        // TODO this is a check to see if a particular element is present
-//        userAnswers.get(PartnerDetailsBusinessEmailPage) map { _ =>
         Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-//        } getOrElse {
-//          given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-//          saveUserAnswersToSessionAndRedirect(userAnswers, request)
-//        }
     }
   }
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getPartnerDetails(answers.id) flatMap { mgdContactDetails =>
-      setPartnerDetails(mgdContactDetails, answers) map { updatedAnswers =>
+    gamblingConnector.getPartnerDetails(answers.id) flatMap { partnerDetails =>
+      setPartnerDetails(partnerDetails, answers) map { updatedAnswers =>
         logger.info("User Answers not found. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
@@ -84,10 +77,10 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
-    optional.fold(Try(userAnswers)) { value =>
-      userAnswers.set(page, value)
-    }
+//  private def setIfDefined[A](userAnswers: UserAnswers, optional: Option[A], page: QuestionPage[A])(implicit wrt: Writes[A]): Try[UserAnswers] =
+//    optional.fold(Try(userAnswers)) { value =>
+//      userAnswers.set(page, value)
+//    }
 
   private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
 
@@ -127,10 +120,10 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
     val correspondenceDetails = CorrespondenceDetails(
       mgdRegNumber          = partnerDetails.mgdRegNumber,
-      nameLine1             = None, // TODO - what would it be?
-      nameLine2             = None, // TODO - what would it be?
+      nameLine1             = None,
+      nameLine2             = None,
       correspondenceAddress = address,
-      additionalInformation = partnerDetails.adi, // TODO is adi = additional information
+      additionalInformation = partnerDetails.adi,
       iomOrCiFlag           = partnerDetails.iomOrCiFlag,
       contactNumber         = contactNumber,
       faxNumber             = partnerDetails.faxNumber,
@@ -140,24 +133,28 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     for {
       updatedAnswers <- userAnswers
       updatedAnswers <- updatedAnswers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfJoining, PartnerDetailsDateOfJoiningPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfLeaving, PartnerDetailsDateOfLeavingPage(index))
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfJoiningPage(index), partnerDetails.dateOfJoining)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfLeavingPage(index), partnerDetails.dateOfLeaving)
 
-      updatedAnswers <- setIfDefined(updatedAnswers, soleProprietor, PartnerDetailsSoleProprietorPage(index))
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsSoleProprietorPage(index), soleProprietor)
 
       updatedAnswers <- updatedAnswers.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), correspondenceDetails)
 
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfIncorporation, PartnerDetailsDateOfIncorporation(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.countryOfIncorporation, PartnerDetailsCountryOfIncorporation(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.foreignCorporateRef, PartnerDetailsForeignCorporateRefPage(index))
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfIncorporation(index), partnerDetails.dateOfIncorporation)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCountryOfIncorporation(index), partnerDetails.countryOfIncorporation)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsForeignCorporateRefPage(index), partnerDetails.foreignCorporateRef)
 
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.businessName, PartnerDetailsBusinessNamePage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.tradingName, PartnerDetailsTradingNamePage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.dateOfBirth, PartnerDetailsDateOfBirthPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.nino, PartnerDetailsNinoPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.utr, PartnerDetailsUtrPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.vrn, PartnerDetailsVrnPage(index))
-      updatedAnswers <- setIfDefined(updatedAnswers, partnerDetails.crn, PartnerDetailsCrnPage(index))
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessNamePage(index), partnerDetails.businessName)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(index), partnerDetails.tradingName)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfBirthPage(index), partnerDetails.dateOfBirth)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsNinoPage(index), partnerDetails.nino)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsUtrPage(index), partnerDetails.utr)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsVrnPage(index), partnerDetails.vrn)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCrnPage(index), partnerDetails.crn)
+
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureLeaveDatePage(index), partnerDetails.isFutureLeaveDate)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureJoinDatePage(index), partnerDetails.isFutureJoinDate)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), partnerDetails.businessType)
 
     } yield updatedAnswers
   }
