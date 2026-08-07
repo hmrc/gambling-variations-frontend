@@ -20,6 +20,7 @@ import controllers.routes
 import models.*
 import models.BusinessType.Soleproprietor
 import pages.*
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -264,8 +265,8 @@ class Navigator @Inject() () {
 
   private def navigatePartnerDetailsAdditionalInformationPage()(answers: UserAnswers): Call =
     answers.get(PartnerDetailsAdditionalAddressInfoPage) match {
-      case Some(_) => routes.PartnerDetailsAdditionalAddressInfoController.onSubmit()
-      case _       => routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
+      case Some(_) => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onSubmit()
+      case _       => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     }
 
 }

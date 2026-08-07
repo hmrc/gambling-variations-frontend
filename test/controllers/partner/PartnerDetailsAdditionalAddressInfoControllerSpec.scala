@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import base.SpecBase
-import forms.PartnerDetailsAdditionalAddressInfoFormProvider
+import forms.partner.PartnerDetailsAdditionalAddressInfoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.PartnerDetailsAdditionalAddressInfoPage
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.PartnerDetailsAdditionalAddressInfoView
+import views.html.partner.PartnerDetailsAdditionalAddressInfoView
 
 import scala.concurrent.Future
 
@@ -48,7 +48,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
     )
 
   lazy val nameRoute =
-    routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad().url
+    controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad().url
 
   "PartnerDetailsAdditionalAddressInfo Controller" - {
 
