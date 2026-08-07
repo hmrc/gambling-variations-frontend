@@ -89,6 +89,16 @@ class PartnerDetailsAdditionalAddressInfoYesNoViewSpec extends SpecBase {
       )
     }
 
+    "must render the hint" in new Setup {
+
+      val html = view(form, NormalMode)(request, messages)
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".govuk-hint").text must include(
+        messages("PartnerDetails.additionalAddressInfoYesNo.hint")
+      )
+    }
+
     "must render error summary when form has errors" in new Setup {
 
       val boundForm = form.bind(Map("value" -> ""))
@@ -98,5 +108,6 @@ class PartnerDetailsAdditionalAddressInfoYesNoViewSpec extends SpecBase {
 
       doc.select(".govuk-error-summary").size() mustEqual 1
     }
+
   }
 }

@@ -638,4 +638,5 @@ PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additio
 PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
 PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
 PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
+PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
 PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
