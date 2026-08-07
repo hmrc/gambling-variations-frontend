@@ -19,6 +19,7 @@ import base.SpecBase
 import controllers.routes
 import models.*
 import pages.*
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 
 class NavigatorSpec extends SpecBase {
 
@@ -649,6 +650,11 @@ class NavigatorSpec extends SpecBase {
       "should route RemoveCorrespondenceDetailsYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsAdditionalAddressInfoPage to itself" in {
+        navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage, NormalMode, emptyAnswers) mustBe
+          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad() // TODO: update later.
       }
     }
   }

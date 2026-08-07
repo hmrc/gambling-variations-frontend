@@ -70,7 +70,7 @@ class Navigator @Inject() () {
     case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAddressUkPage             => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage          => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
-    case PartnerDetailsAdditionalAddressInfoPage => userAnswers => navigatePartnerDetailsAdditionalInformationPage()(userAnswers)
+    case PartnerDetailsAdditionalAddressInfoPage => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case _                                       => _ => routes.IndexController.onPageLoad()
   }
 
@@ -262,11 +262,5 @@ class Navigator @Inject() () {
         case true  => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  private def navigatePartnerDetailsAdditionalInformationPage()(answers: UserAnswers): Call =
-    answers.get(PartnerDetailsAdditionalAddressInfoPage) match {
-      case Some(_) => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onSubmit()
-      case _       => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
-    }
 
 }
