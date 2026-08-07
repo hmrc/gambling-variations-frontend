@@ -21,7 +21,7 @@ import models.*
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.partner.PartnerDetailsAdditionalAddressInfoPage
-import pages.partner.PartnerAddFaxNumberYesNoPage
+import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoYesNoPage}
 
 class NavigatorSpec extends SpecBase {
 
@@ -745,6 +745,33 @@ class NavigatorSpec extends SpecBase {
 
       "should route PartnerAddFaxNumberYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoYesNoController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsAdditionalAddressInfoYesNoPage, true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad() // update later
+      }
+
+      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoYesNoController when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsAdditionalAddressInfoYesNoPage, false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad() // update later
+      }
+
+      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
 
