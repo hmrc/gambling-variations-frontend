@@ -5,6 +5,7 @@ site.remove = Remove
 site.change = Change
 site.no = No
 site.yes = Yes
+site.or = or
 site.continue = Continue
 site.start = Start now
 site.startAgain = Start again
@@ -633,6 +634,12 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the partner
+partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
+
 
 PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
 PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
