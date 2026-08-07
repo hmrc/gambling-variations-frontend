@@ -30,6 +30,7 @@ class CheckBusinessAddressViewModel(ua: UserAnswers)(implicit messages: Messages
   }
 
   SummaryListViewModel(
-    rows = Seq(BusinessAddressRow().from(address = addressUa, isUk = isUk))
+    rows = Seq(
+      BusinessAddressRow().from(address = addressUa, isUk = isUk))
   )
 }
