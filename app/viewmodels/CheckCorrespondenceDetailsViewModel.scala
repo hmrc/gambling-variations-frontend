@@ -16,13 +16,13 @@
 
 package viewmodels
 
-import models.{Address, NormalMode}
+import models.{Address, CorrespondenceChangeAddrOption, NormalMode}
 import play.api.i18n.Messages
+import play.api.mvc.Call
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import viewmodels.govuk.all.{FluentValue, stringToText}
-import play.api.mvc.Call
 
 case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String],
                                                addCorrespondenceAdditionalName: Option[Boolean],
@@ -38,7 +38,8 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
                                                emailAddress: Option[String],
                                                hasUkPostcode: Option[Boolean],
                                                isSubmitted: Boolean,
-                                               isAddingNewCorrespondenceDetails: Option[Boolean]
+                                               isAddingNewCorrespondenceDetails: Option[Boolean],
+                                               changeCorrespondenceAddress: Option[CorrespondenceChangeAddrOption]
                                               ) {
 
   def continueCall: Call =
@@ -55,6 +56,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     addAdditionalCorrespondenceNameSummaryListRow,
     additionalCorrespondenceNameSummaryListRow,
     hasUkPostcodeSummaryListRow,
+    howToChangeAddressContentSummaryListRow,
     Some(correspondenceAddressUkSummaryListRow),
     addAdditionalInformationSummaryListRow,
     additionalInformationSummaryListRow,
@@ -184,6 +186,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         )
       )
     }
+
   private def correspondenceAddressUkSummaryListRow(implicit messages: Messages): SummaryListRow = {
 
     val changeUrl =
@@ -311,6 +314,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         )
       )
     }
+
   private def contactNumbersSummaryListRow(implicit messages: Messages): SummaryListRow =
     SummaryListRow(
       key = Key(
@@ -499,6 +503,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         )
       )
     }
+
   private def hasUkPostcodeSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     hasUkPostcode map { answer =>
       SummaryListRow(
@@ -571,4 +576,31 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     }
   }
 
+  private def howToChangeAddressContentSummaryListRow(implicit messages: Messages) = changeCorrespondenceAddress
+    .map {
+      case CorrespondenceChangeAddrOption.DifferentUkAddress   => "correspondenceChangeAddrScreener.uk.differentAddress"
+      case CorrespondenceChangeAddrOption.ChangeToNonUkAddress => "correspondenceChangeAddrScreener.uk.yes"
+      case CorrespondenceChangeAddrOption.ChangeToUkAddress    => "correspondenceChangeAddrScreener.nonuk.yes"
+      case CorrespondenceChangeAddrOption.EditCurrentAddress   => "correspondenceChangeAddrScreener.no"
+    }
+    .map(addressModeChange)
+
+  private def addressModeChange(label: String)(implicit messages: Messages) = {
+    SummaryListRow(
+      key   = Key(content = messages("correspondenceChangeAddrScreener.heading")),
+      value = Value(content = HtmlContent(Html(messages(label)))).withCssClass("changeCorrespondenceChangeAddr"),
+      actions = Some(
+        Actions(
+          items = Seq(
+            ActionItem(
+              href               = "#",
+              content            = "site.change",
+              visuallyHiddenText = Some(messages("correspondenceChangeAddrScreener.change.hidden"))
+            )
+          )
+        )
+      )
+    )
+
+  }
 }
