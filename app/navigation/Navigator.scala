@@ -21,9 +21,7 @@ import models.*
 import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
-import pages.partner.PartnerAddFaxNumberYesNoPage
-import pages.partner.PartnerDetailsAdditionalAddressInfoPage
-import pages.partner.PartnerDetailsAdditionalAddressInfoYesNoPage
+import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsAdditionalAddressInfoYesNoPage, RemoveAdditionalInfoForPartnerAddressYesNoPage}
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -64,18 +62,19 @@ class Navigator @Inject() () {
       userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPage()(userAnswers)
     case CorrespondenceUKAddrScreenerPage =>
       userAnswers => navigateCorrespondenceUKAddrScreenerPage()(userAnswers)
-    case CorrespondenceEmailPage                      => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemoveCorrespondenceFaxNumberPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemoveCorrespondenceEmailAddressPage         => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceNamePage                       => userAnswers => navigateCorrespondenceNamePage()(userAnswers)
-    case CorrespondenceAdditionalNamePage             => userAnswers => navigateCorrespondenceAdditionalNamePage()(userAnswers)
-    case CorrespondenceAdditionalInformationPage      => userAnswers => navigateCorrespondenceAdditionalInformationPage()(userAnswers)
-    case RemoveCorrAddressAddInfoPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAddressUkPage                  => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
-    case CorrespondenceAddressNonUkPage               => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
-    case PartnerAddFaxNumberYesNoPage                 => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
-    case PartnerDetailsAdditionalAddressInfoPage      => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
-    case PartnerDetailsAdditionalAddressInfoYesNoPage => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
+    case CorrespondenceEmailPage                        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceFaxNumberPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceEmailAddressPage           => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceNamePage                         => userAnswers => navigateCorrespondenceNamePage()(userAnswers)
+    case CorrespondenceAdditionalNamePage               => userAnswers => navigateCorrespondenceAdditionalNamePage()(userAnswers)
+    case CorrespondenceAdditionalInformationPage        => userAnswers => navigateCorrespondenceAdditionalInformationPage()(userAnswers)
+    case RemoveCorrAddressAddInfoPage                   => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAddressUkPage                    => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
+    case CorrespondenceAddressNonUkPage                 => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
+    case PartnerAddFaxNumberYesNoPage                   => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
+    case RemoveAdditionalInfoForPartnerAddressYesNoPage => userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers)
+    case PartnerDetailsAdditionalAddressInfoPage        => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
+    case PartnerDetailsAdditionalAddressInfoYesNoPage   => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
 
     case _ => _ => routes.IndexController.onPageLoad()
   }
@@ -304,6 +303,16 @@ class Navigator @Inject() () {
       .map {
         case false => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
         case true  => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
+  private def navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(RemoveAdditionalInfoForPartnerAddressYesNoPage)
+      .map {
+        case false => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
