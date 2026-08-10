@@ -23,5 +23,5 @@ case class PartnerDetailsForeignCorporateRefPage(index: Int) extends QuestionPag
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "foreignCorporateRef"
+  override def toString: String = "partnerDetailsForeignCorporateRef"
 }

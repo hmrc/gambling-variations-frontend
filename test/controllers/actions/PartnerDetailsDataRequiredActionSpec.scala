@@ -61,16 +61,16 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val data = Json.obj(
             "partners" -> Json.arr(
               Json.obj(
-                "mgdRegNumber"  -> "XWM00000001762",
-                "dateOfJoining" -> "2022-01-15",
-                "dateOfLeaving" -> "2028-12-31",
-                "soleProprietor" -> Json.obj(
+                "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
+                "partnerDetailsDateOfJoining" -> "2022-01-15",
+                "partnerDetailsDateOfLeaving" -> "2028-12-31",
+                "partnerDetailsSoleProprietor" -> Json.obj(
                   "title"      -> "Mr",
                   "firstName"  -> "John",
                   "middleName" -> "Michael",
                   "lastName"   -> "Doe"
                 ),
-                "correspondenceDetailsSection" -> Json.obj(
+                "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                   "mgdRegNumber" -> "XWM00000001762",
                   "correspondenceAddress" -> Json.obj(
                     "address1" -> "123 High Street",
@@ -89,19 +89,19 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
                   "faxNumber" -> "02071234568",
                   "emailAddr" -> "john.doe@example.com"
                 ),
-                "dateOfIncorporation"    -> "2020-03-01",
-                "countryOfIncorporation" -> "GB",
-                "businessName"           -> "XYZ Consulting Ltd",
-                "tradingName"            -> "XYZ Consulting",
-                "dateOfBirth"            -> "1985-06-20",
-                "nino"                   -> "AB123456C",
-                "utr"                    -> "1234567890",
-                "vrn"                    -> "GB123456789",
-                "crn"                    -> "09876543",
-                "foreignCorporateRef"    -> "FCR-987654",
-                "isFutureLeaveDate"      -> 0,
-                "isFutureJoinDate"       -> 0,
-                "businessType"           -> 2
+                "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
+                "partnerDetailsCountryOfIncorporation" -> "GB",
+                "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
+                "partnerDetailsTradingName"            -> "XYZ Consulting",
+                "partnerDetailsDateOfBirth"            -> "1985-06-20",
+                "partnerDetailsNino"                   -> "AB123456C",
+                "partnerDetailsUtr"                    -> "1234567890",
+                "partnerDetailsVrn"                    -> "GB123456789",
+                "partnerDetailsCrn"                    -> "09876543",
+                "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
+                "partnerDetailsIsFutureLeaveDate"      -> 0,
+                "partnerDetailsIsFutureJoinDate"       -> 0,
+                "partnerDetailsBusinessType"           -> 2
               )
             )
           )
@@ -171,7 +171,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val minimalData = Json.obj(
             "partners" -> Json.arr(
               Json.obj(
-                "mgdRegNumber" -> "XWM00000001762"
+                "partnerDetailsMgdRegNumber" -> "XWM00000001762"
               )
             ),
             "systemDate" -> "2026-07-30"
@@ -209,16 +209,16 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val expectedResponse = Json.obj(
             "partners" -> Json.arr(
               Json.obj(
-                "mgdRegNumber"  -> "XWM00000001762",
-                "dateOfJoining" -> "2022-01-15",
-                "dateOfLeaving" -> "2028-12-31",
-                "soleProprietor" -> Json.obj(
+                "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
+                "partnerDetailsDateOfJoining" -> "2022-01-15",
+                "partnerDetailsDateOfLeaving" -> "2028-12-31",
+                "partnerDetailsSoleProprietor" -> Json.obj(
                   "title"      -> "Mr",
                   "firstName"  -> "John",
                   "middleName" -> "Michael",
                   "lastName"   -> "Doe"
                 ),
-                "correspondenceDetailsSection" -> Json.obj(
+                "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                   "mgdRegNumber" -> "XWM00000001762",
                   "correspondenceAddress" -> Json.obj(
                     "address1" -> "123 High Street",
@@ -237,19 +237,19 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
                   "faxNumber" -> "02071234568",
                   "emailAddr" -> "john.doe@example.com"
                 ),
-                "dateOfIncorporation"    -> "2020-03-01",
-                "countryOfIncorporation" -> "GB",
-                "businessName"           -> "XYZ Consulting Ltd",
-                "tradingName"            -> "XYZ Consulting",
-                "dateOfBirth"            -> "1985-06-20",
-                "nino"                   -> "AB123456C",
-                "utr"                    -> "1234567890",
-                "vrn"                    -> "GB123456789",
-                "crn"                    -> "09876543",
-                "foreignCorporateRef"    -> "FCR-987654",
-                "isFutureLeaveDate"      -> 0,
-                "isFutureJoinDate"       -> 0,
-                "businessType"           -> 2
+                "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
+                "partnerDetailsCountryOfIncorporation" -> "GB",
+                "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
+                "partnerDetailsTradingName"            -> "XYZ Consulting",
+                "partnerDetailsDateOfBirth"            -> "1985-06-20",
+                "partnerDetailsNino"                   -> "AB123456C",
+                "partnerDetailsUtr"                    -> "1234567890",
+                "partnerDetailsVrn"                    -> "GB123456789",
+                "partnerDetailsCrn"                    -> "09876543",
+                "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
+                "partnerDetailsIsFutureLeaveDate"      -> 0,
+                "partnerDetailsIsFutureJoinDate"       -> 0,
+                "partnerDetailsBusinessType"           -> 2
               )
             ),
             "systemDate" -> "2026-07-30"

@@ -23,5 +23,5 @@ case class PartnerDetailsIsFutureLeaveDatePage(index: Int) extends QuestionPage[
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "isFutureLeaveDate"
+  override def toString: String = "partnerDetailsIsFutureLeaveDate"
 }

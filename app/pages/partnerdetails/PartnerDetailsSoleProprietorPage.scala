@@ -24,5 +24,5 @@ case class PartnerDetailsSoleProprietorPage(index: Int) extends QuestionPage[Sol
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "soleProprietor"
+  override def toString: String = "partnerDetailsSoleProprietor"
 }

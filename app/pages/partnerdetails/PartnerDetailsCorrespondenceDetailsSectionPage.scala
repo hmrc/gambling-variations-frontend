@@ -24,5 +24,5 @@ case class PartnerDetailsCorrespondenceDetailsSectionPage(index: Int) extends Qu
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "correspondenceDetailsSection"
+  override def toString: String = "partnerDetailsCorrespondenceDetailsSection"
 }

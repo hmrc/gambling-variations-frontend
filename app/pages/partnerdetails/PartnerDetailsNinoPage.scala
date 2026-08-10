@@ -23,5 +23,5 @@ case class PartnerDetailsNinoPage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "nino"
+  override def toString: String = "partnerDetailsNino"
 }
