@@ -40,27 +40,30 @@ class CheckCorrespondenceDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    if (!hasAnyCorrespondenceDetails(request.userAnswers)) {
+    val answers = request.userAnswers
+
+    if (!hasAnyCorrespondenceDetails(answers)) {
       Redirect(controllers.routes.AddCorrespondingDetailsYesNoController.onPageLoad())
     } else {
       Ok(
         view(
           CheckCorrespondenceDetailsViewModel(
-            request.userAnswers.get(CorrespondenceNamePage),
-            request.userAnswers.get(CorrespondenceAdditionalNameYesNoPage),
-            request.userAnswers.get(CorrespondenceAdditionalNamePage),
-            request.userAnswers.get(CorrespondenceAddressUkPage) orElse request.userAnswers.get(CorrespondenceAddressNonUkPage),
-            request.userAnswers.get(AddCorrespondenceAddressAdditionalInformationPage),
-            request.userAnswers.get(CorrespondenceAdditionalInformationPage),
-            request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),
-            request.userAnswers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
-            request.userAnswers.get(AddCorrespondenceFaxNumberPage),
-            request.userAnswers.get(CorrespondenceFaxNumberPage),
-            request.userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage),
-            request.userAnswers.get(CorrespondenceEmailPage),
-            request.userAnswers.get(CorrespondenceUKAddrScreenerPage),
-            checkFlag(request.userAnswers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage),
-            request.userAnswers.get(IsAddingNewCorrespondenceDetailsPage)
+            correspondenceName                     = answers.get(CorrespondenceNamePage),
+            addCorrespondenceAdditionalName        = answers.get(CorrespondenceAdditionalNameYesNoPage),
+            additionalCorrespondenceName           = answers.get(CorrespondenceAdditionalNamePage),
+            correspondenceAddress                  = answers.get(CorrespondenceAddressUkPage) orElse answers.get(CorrespondenceAddressNonUkPage),
+            addCorrespondenceAdditionalInformation = answers.get(AddCorrespondenceAddressAdditionalInformationPage),
+            correspondenceAdditionalInformation    = answers.get(CorrespondenceAdditionalInformationPage),
+            phoneNumber                            = answers.get(CorrespondenceContactNumberPage).flatMap(_.phoneNumber),
+            mobilePhoneNumber                      = answers.get(CorrespondenceContactNumberPage).flatMap(_.mobilePhoneNumber),
+            addCorrespondenceFaxNumber             = answers.get(AddCorrespondenceFaxNumberPage),
+            faxNumber                              = answers.get(CorrespondenceFaxNumberPage),
+            addCorrespondenceEmailAddress          = answers.get(AddEmailAddressForCorrespondenceYesNoPage),
+            emailAddress                           = answers.get(CorrespondenceEmailPage),
+            hasUkPostcode                          = answers.get(CorrespondenceUKAddrScreenerPage),
+            isSubmitted                            = checkFlag(answers, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage),
+            isAddingNewCorrespondenceDetails       = answers.get(IsAddingNewCorrespondenceDetailsPage),
+            changeCorrespondenceAddress            = answers.get(CorrespondenceChangeAddrScreenerPage)
           )
         )
       )

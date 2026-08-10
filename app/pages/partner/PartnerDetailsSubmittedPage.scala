@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package pages.partner
 
-import models.CorrespondenceChangeAddrOption
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[CorrespondenceChangeAddrOption] {
-
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
-
-  override def toString: String = "CorrespondenceChangeAddrScreener"
+case object PartnerDetailsSubmittedPage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \ "partnerDetailsSection" \ toString
+  override def toString: String = "submitted"
 }

@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
-package pages
+package pages.partner
 
-import models.CorrespondenceChangeAddrOption
+import models.UserAnswers
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[CorrespondenceChangeAddrOption] {
+import scala.util.Try
 
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
+object PartnerDetailsAdditionalAddressInfoYesNoPage extends QuestionPage[Boolean] {
 
-  override def toString: String = "CorrespondenceChangeAddrScreener"
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "partnerDetailsAdditionalAddressInfoYesNo"
+
+  override def cleanup(
+    value: Option[Boolean],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    value match {
+      case Some(false) =>
+        userAnswers.remove(PartnerDetailsAdditionalAddressInfoPage)
+
+      case _ =>
+        Try(userAnswers)
+    }
 }

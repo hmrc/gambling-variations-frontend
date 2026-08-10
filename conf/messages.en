@@ -5,6 +5,7 @@ site.remove = Remove
 site.change = Change
 site.no = No
 site.yes = Yes
+site.or = or
 site.continue = Continue
 site.start = Start now
 site.startAgain = Start again
@@ -608,6 +609,7 @@ correspondenceChangeAddrScreener.heading = How do you want to change this corres
 correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
 correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
 correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.uk.differentAddress = Change to a different UK address
 correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
 correspondenceChangeAddrScreener.no = Edit current correspondence address
@@ -633,6 +635,29 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the partner
+partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
+
+
+partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.checkYourAnswersLabel = Additional Information
+partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor number
+partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
+partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
+
+
+PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
+PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
+PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
+
 
 checkBusinessAddress.title = Check your business address
 checkBusinessAddress.heading = Check your business address

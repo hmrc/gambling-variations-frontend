@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-package forms
+package forms.partner
 
 import forms.mappings.Mappings
-import models.CorrespondenceChangeAddrOption
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class CorrespondenceChangeAddrScreenerFormProvider @Inject() extends Mappings {
+class PartnerDetailsAdditionalAddressInfoFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[CorrespondenceChangeAddrOption] =
+  private val partnerDetailsAdditionalInfoRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+
+  def apply(): Form[String] =
     Form(
-      "correspondenceChangeAddrScreener" -> enumerable[CorrespondenceChangeAddrOption](
-        "correspondenceChangeAddrScreener.error.required"
-      )
+      "partnerDetailsAdditionalAddressInfo" -> text("partnerDetailsAdditionalAddressInfo.error.required")
+        .verifying(
+          maxLength(100, "partnerDetailsAdditionalAddressInfo.error.length")
+        )
+        .verifying(
+          regexp(
+            partnerDetailsAdditionalInfoRegex,
+            "partnerDetailsAdditionalAddressInfo.error.invalid"
+          )
+        )
     )
 }
