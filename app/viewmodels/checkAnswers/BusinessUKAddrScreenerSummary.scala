@@ -32,11 +32,11 @@ object BusinessUKAddrScreenerSummary {
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "businessUKAddrScreenerController.checkYourAnswersLabel",
+        key   = "businessUKAddrScreener.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
           ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("businessUKAddrScreenerController.change.hidden"))
+            .withVisuallyHiddenText(messages("businessUKAddrScreener.change.hidden"))
         )
       )
     }

@@ -673,3 +673,5 @@ businessUKAddrScreener.hint = You must select yes if the address is in the Chann
 businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
 businessUKAddrScreener.error.required = Select yes if your business address has a UK postcode
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
+businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?

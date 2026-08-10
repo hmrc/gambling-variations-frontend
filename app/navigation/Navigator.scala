@@ -105,6 +105,12 @@ class Navigator @Inject() () {
       case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
+  private def navigateBusinessAdditionalNamePage()(answers: UserAnswers): Call =
+    answers.get(BusinessUKAddrScreenerPage) match {
+      case Some(true) => routes.BusinessUKAddrScreenerController.onPageLoad()
+      case _ => routes.PageNotFoundController.onPageLoad()
+    }
+
   private def navigateCorrespondenceAddressUkPage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
       case Some(true) => routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
