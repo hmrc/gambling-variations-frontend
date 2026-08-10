@@ -31,14 +31,11 @@ case object BusinessAddressViewModel {
     } else {
       ua.get(BusinessAddressNonUkPage)
     }
-    
-    
+
+
 
     SummaryListViewModel(
       rows =
         Seq(
-        BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
-        AddressAdditionalInfoRow.from(ua))
-    )
-  }
-}
+        BusinessAddressRow(address = addressUa, isUk = isUk).toRow))
+}}
