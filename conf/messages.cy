@@ -115,6 +115,13 @@ correspondenceChangeAddrScreener.uk.yes = cy: Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = cy: Change to a UK address
 correspondenceChangeAddrScreener.no = cy: Edit current correspondence address
 
+businessAddressAdditionalInfo.title = cy: What is the additional information for your business address?
+businessAddressAdditionalInfo.heading = cy: What is the additional information for your business address?
+businessAddressAdditionalInfo.hint = cy: For example, building name or floor number
+businessAddressAdditionalInfo.error.required = cy: Enter additional information for your business address
+businessAddressAdditionalInfo.error.invalid = cy: The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+businessAddressAdditionalInfo.error.length = cy: The additional information must be 100 characters or less
+
 checkBusinessAddress.title = cy: Check your business address
 checkBusinessAddress.heading = cy: Check your business address
 checkBusinessAddress.label.address = cy: Business address
