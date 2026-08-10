@@ -64,6 +64,8 @@ class Navigator @Inject() () {
       userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPage()(userAnswers)
     case CorrespondenceUKAddrScreenerPage =>
       userAnswers => navigateCorrespondenceUKAddrScreenerPage()(userAnswers)
+    case BusinessUKAddrScreenerPage =>
+      userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
     case CorrespondenceEmailPage                      => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage         => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
@@ -103,12 +105,6 @@ class Navigator @Inject() () {
     answers.get(AddCorrespondingDetailsYesNoPage) match {
       case Some(true) => routes.CorrespondenceUKAddrScreenerController.onPageLoad()
       case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    }
-
-  private def navigateBusinessAdditionalNamePage()(answers: UserAnswers): Call =
-    answers.get(BusinessUKAddrScreenerPage) match {
-      case Some(true) => routes.BusinessUKAddrScreenerController.onPageLoad()
-      case _ => routes.PageNotFoundController.onPageLoad()
     }
 
   private def navigateCorrespondenceAddressUkPage()(answers: UserAnswers): Call =
@@ -208,6 +204,32 @@ class Navigator @Inject() () {
 
       case Some(false) =>
         routes.CorrespondenceNonUKAddressController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
+  }
+
+  private def navigateBusinessUKAddrScreenerPage()(answers: UserAnswers): Call = {
+
+    val previouslyUk =
+      answers.get(BusinessAddressUkPage).isDefined
+
+    val previouslyNonUk =
+      answers.get(BusinessAddressNonUkPage).isDefined
+
+    answers.get(BusinessUKAddrScreenerPage) match {
+      case Some(true) if previouslyUk =>
+        routes.PageNotFoundController.onPageLoad()
+
+      case Some(false) if previouslyNonUk =>
+        routes.PageNotFoundController.onPageLoad()
+
+      case Some(true) =>
+        routes.PageNotFoundController.onPageLoad()
+
+      case Some(false) =>
+        routes.PageNotFoundController.onPageLoad()
 
       case None =>
         routes.SystemErrorController.onPageLoad()
