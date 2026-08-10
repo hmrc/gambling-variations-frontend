@@ -29,6 +29,8 @@ GET        /change-registration/business-name/check              controllers.Che
 
 GET        /change-registration/declaration             controllers.DeclarationController.onPageLoad()
 
+GET        /mock-partner controllers.MockController.onPageLoad()
+
 GET        /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
 
