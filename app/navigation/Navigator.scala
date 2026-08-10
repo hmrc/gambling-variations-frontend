@@ -21,9 +21,7 @@ import models.*
 import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
-import pages.partner.PartnerAddFaxNumberYesNoPage
-import pages.partner.PartnerDetailsAdditionalAddressInfoPage
-import pages.partner.PartnerDetailsAdditionalAddressInfoYesNoPage
+import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsAdditionalAddressInfoYesNoPage, RemoveAdditionalInfoForPartnerYesNoPage}
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -74,6 +72,7 @@ class Navigator @Inject() () {
     case CorrespondenceAddressUkPage                  => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage               => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
     case PartnerAddFaxNumberYesNoPage                 => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
+    case RemoveAdditionalInfoForPartnerYesNoPage      => userAnswers => navigateRemoveAdditionalInfoForPartnerYesNoPage()(userAnswers)
     case PartnerDetailsAdditionalAddressInfoPage      => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case PartnerDetailsAdditionalAddressInfoYesNoPage => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
 
@@ -304,6 +303,16 @@ class Navigator @Inject() () {
       .map {
         case false => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
         case true  => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
+  private def navigateRemoveAdditionalInfoForPartnerYesNoPage()(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(PartnerDetailsAdditionalAddressInfoYesNoPage)
+      .map {
+        case false => controllers.partner.routes.RemoveAdditionalInfoForPartnerYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.RemoveAdditionalInfoForPartnerYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
