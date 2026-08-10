@@ -16,12 +16,21 @@
 
 package pages
 
-import models.Address
 import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
 
-case object BusinessAddressNonUkPage extends QuestionPage[Address] {
+class BusinessAddressSubmittedPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  "BusinessAddressSubmittedPage" must {
 
-  override def toString: String = "businessAddressNonUk"
+    "have the correct path" in {
+
+      BusinessAddressSubmittedPage.path mustEqual (JsPath \ "businessAddressSection" \ "businessAddressSubmitted")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessAddressSubmittedPage.toString mustEqual "businessAddressSubmitted"
+    }
+  }
 }
