@@ -72,6 +72,7 @@ class Navigator @Inject() () {
     case CorrespondenceAddressUkPage                  => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage               => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
     case PartnerAddFaxNumberYesNoPage                 => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
+    case RemoveAdditionalInfoForPartnerAddressYesNoPage => userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers)
     case PartnerDetailsAdditionalAddressInfoPage      => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case PartnerDetailsAdditionalAddressInfoYesNoPage => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
     case BusinessChangeAddrScreenerPage               => userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
