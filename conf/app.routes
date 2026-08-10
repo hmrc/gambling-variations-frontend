@@ -195,3 +195,6 @@ GET        /change-registration-details/business-address/additional-information 
 POST       /change-registration-details/business-address/additional-information                       controllers.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/business-address/change-additional-information                       controllers.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-address/change-additional-information                       controllers.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/remove-additional-address-information                        controllers.partner.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-additional-address-information                        controllers.partner.RemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(mode: Mode = NormalMode)

@@ -318,4 +318,14 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 
+  private def navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(RemoveAdditionalInfoForPartnerAddressYesNoPage)
+      .map {
+        case false => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
 }
