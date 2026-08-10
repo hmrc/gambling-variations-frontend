@@ -17,30 +17,30 @@
 package controllers
 
 import base.SpecBase
-import forms.RemoveAdditionalInfoForPartnerYesNoFormProvider
+import forms.partner.RemoveAdditionalInfoForPartnerAddressYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.RemoveAdditionalInfoForPartnerYesNoPage
+import pages.partner.RemoveAdditionalInfoForPartnerAddressYesNoPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.partner.RemoveAdditionalInfoForPartnerYesNoView
+import views.html.partner.RemoveAdditionalInfoForPartnerAddressYesNoView
 
 import scala.concurrent.Future
 
-class RemoveAdditionalInfoForPartnerYesNoControllerSpec extends SpecBase with MockitoSugar {
+class RemoveAdditionalInfoForPartnerAddressYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RemoveAdditionalInfoForPartnerYesNoFormProvider()
+  val formProvider = new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()
   val form = formProvider()
 
-  lazy val removeAdditionalInfoForPartnerYesNoRoute = controllers.partner.routes.RemoveAdditionalInfoForPartnerYesNoController.onPageLoad().url
+  lazy val removeAdditionalInfoForPartnerYesNoRoute = controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url
 
   "RemoveAdditionalInfoForPartnerYesNo Controller" - {
 
@@ -53,7 +53,7 @@ class RemoveAdditionalInfoForPartnerYesNoControllerSpec extends SpecBase with Mo
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[RemoveAdditionalInfoForPartnerYesNoView]
+        val view = application.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
@@ -62,14 +62,14 @@ class RemoveAdditionalInfoForPartnerYesNoControllerSpec extends SpecBase with Mo
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(RemoveAdditionalInfoForPartnerYesNoPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(RemoveAdditionalInfoForPartnerAddressYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
 
-        val view = application.injector.instanceOf[RemoveAdditionalInfoForPartnerYesNoView]
+        val view = application.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
 
         val result = route(application, request).value
 
@@ -115,7 +115,7 @@ class RemoveAdditionalInfoForPartnerYesNoControllerSpec extends SpecBase with Mo
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[RemoveAdditionalInfoForPartnerYesNoView]
+        val view = application.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
 
         val result = route(application, request).value
 

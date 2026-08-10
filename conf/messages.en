@@ -658,8 +658,8 @@ PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include
 PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
 PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
 
-removeAdditionalInfoForPartnerYesNo.title = Are you sure you want to remove the additional information for this partner’s address?
-removeAdditionalInfoForPartnerYesNo.heading = Are you sure you want to remove the additional information for this partner’s address?
-removeAdditionalInfoForPartnerYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
-removeAdditionalInfoForPartnerYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
-removeAdditionalInfoForPartnerYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.title = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.heading = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
+removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?

@@ -17,27 +17,26 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partner.RemoveAdditionalInfoForPartnerYesNoPage
+import pages.partner.RemoveAdditionalInfoForPartnerAddressYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object RemoveAdditionalInfoForPartnerYesNoSummary  {
+object RemoveAdditionalInfoForPartnerAddressYesNoSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(RemoveAdditionalInfoForPartnerYesNoPage).map {
-      answer =>
+    answers.get(RemoveAdditionalInfoForPartnerAddressYesNoPage).map { answer =>
 
-        val value = if (answer) "site.yes" else "site.no"
+      val value = if (answer) "site.yes" else "site.no"
 
-        SummaryListRowViewModel(
-          key     = "removeAdditionalInfoForPartnerYesNo.checkYourAnswersLabel",
-          value   = ValueViewModel(value),
-          actions = Seq(
-            ActionItemViewModel("site.change", controllers.partner.routes.RemoveAdditionalInfoForPartnerYesNoController.onPageLoad().url)
-              .withVisuallyHiddenText(messages("removeAdditionalInfoForPartnerYesNo.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel",
+        value = ValueViewModel(value),
+        actions = Seq(
+          ActionItemViewModel("site.change", controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("removeAdditionalInfoForPartnerAddressYesNo.change.hidden"))
         )
+      )
     }
 }
