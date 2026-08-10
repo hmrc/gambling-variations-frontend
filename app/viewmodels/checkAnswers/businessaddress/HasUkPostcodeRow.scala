@@ -25,7 +25,7 @@ import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, Value
 import viewmodels.implicits.*
 
 case object HasUkPostcodeRow {
-  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): Option[SummaryListRow] = {
+  def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
     ua.get(BusinessAddressHasUkPostcodePage) match {
       case Some(hasUkPc) =>
         Some(SummaryListRowViewModel(

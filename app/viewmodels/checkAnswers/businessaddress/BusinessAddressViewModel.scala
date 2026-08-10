@@ -16,8 +16,8 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import models.{Address, Mode, UserAnswers}
-import pages.{AddBusinessAddressAdditionalInformationPage, BusinessAddressNonUkPage, BusinessAddressUkPage}
+import models.{Address, CheckMode, Mode, NormalMode, UserAnswers}
+import pages.*
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
@@ -25,6 +25,16 @@ import viewmodels.govuk.all.SummaryListViewModel
 case object BusinessAddressViewModel {
   def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
     val isUk = ua.get(BusinessAddressUkPage).isDefined
+    val hasUkPostcodeOpt: Seq[SummaryListRow] = ua.get(BusinessAddressHasUkPostcodePage) match {
+      case Some(_) => HasUkPostcodeRow.from(ua).flatMap(_ => )
+      case None => Seq.empty
+    }
+
+    val addAddressAdditionalInfoOpt = ua.get(AddBusinessAddressAdditionalInformationPage) match {
+      case Some(_) => AddAddressAdditionalInfoRow.from(ua)
+      case None => Seq.empty
+    }
+
 
     val addressUa: Option[Address] = if (isUk) {
       ua.get(BusinessAddressUkPage)
@@ -32,10 +42,12 @@ case object BusinessAddressViewModel {
       ua.get(BusinessAddressNonUkPage)
     }
 
+    val businessAddressRowsBase =
+      Seq(
+        BusinessAddressAdditionalInfoRow.from(ua),
+        BusinessAddressRow(address = addressUa, isUk = isUk).toRow)
 
 
-    SummaryListViewModel(
-      rows =
-        Seq(
-        BusinessAddressRow(address = addressUa, isUk = isUk).toRow))
-}}
+    val rows = if(hasUkPostcodeOpt)
+}
+}

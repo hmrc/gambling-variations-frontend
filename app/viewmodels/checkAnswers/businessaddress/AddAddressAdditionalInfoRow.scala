@@ -24,8 +24,8 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, V
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-case object AddressAdditionalInfoRow {
-  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): Option[SummaryListRow] = {
+case object AddAddressAdditionalInfoRow {
+  def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
     ua.get(AddBusinessAddressAdditionalInformationPage) match {
       case Some(addinfo) => {
         Some(SummaryListRowViewModel(
