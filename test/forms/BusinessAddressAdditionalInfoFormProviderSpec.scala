@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.CorrespondenceChangeAddrOption
-import play.api.libs.json.JsPath
-
-case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[CorrespondenceChangeAddrOption] {
-
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
-
-  override def toString: String = "CorrespondenceChangeAddrScreener"
-}
+class BusinessAddressAdditionalInfoFormProviderSpec {}

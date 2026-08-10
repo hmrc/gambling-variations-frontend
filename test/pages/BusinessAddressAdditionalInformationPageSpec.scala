@@ -16,12 +16,21 @@
 
 package pages
 
-import models.CorrespondenceChangeAddrOption
 import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
 
-case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[CorrespondenceChangeAddrOption] {
+class BusinessAddressAdditionalInformationPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
+  "BusinessAddressAdditionalInformationPage" must {
 
-  override def toString: String = "CorrespondenceChangeAddrScreener"
+    "have the correct path" in {
+
+      BusinessAddressAdditionalInformationPage.path mustEqual (JsPath \ "businessAddressSection" \ "businessAddressAdditionalInformation")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessAddressAdditionalInformationPage.toString mustEqual "businessAddressAdditionalInformation"
+    }
+  }
 }

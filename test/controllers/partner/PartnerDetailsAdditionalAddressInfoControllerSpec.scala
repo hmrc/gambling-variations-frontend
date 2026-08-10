@@ -14,67 +14,66 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import base.SpecBase
-import forms.CorrespondenceChangeAddrScreenerFormProvider
-import models.CorrespondenceChangeAddrOption.EditCurrentAddress
+import forms.partner.PartnerDetailsAdditionalAddressInfoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CorrespondenceChangeAddrScreenerPage
+import pages.partner.PartnerDetailsAdditionalAddressInfoPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.CorrespondenceChangeAddrScreenerView
+import views.html.partner.PartnerDetailsAdditionalAddressInfoView
 
 import scala.concurrent.Future
 
-class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new CorrespondenceChangeAddrScreenerFormProvider()
+  val formProvider = new PartnerDetailsAdditionalAddressInfoFormProvider()
   val form = formProvider()
-
-  lazy val CorrespondenceChangeAddrScreenerRoute = routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
 
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj("partnerDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
 
-  "CorrespondenceChangeAddrScreener Controller" - {
+  lazy val nameRoute =
+    controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad().url
+
+  "PartnerDetailsAdditionalAddressInfo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, CorrespondenceChangeAddrScreenerRoute)
+        val request = FakeRequest(GET, nameRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
+        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, false)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum"                                   -> userAnswersId,
-          CorrespondenceChangeAddrScreenerPage.toString -> EditCurrentAddress.toString
-        )
+        "partnerDetailsSection"                          -> Json.obj("mgdRegNum" -> userAnswersId),
+        PartnerDetailsAdditionalAddressInfoPage.toString -> "validName"
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
@@ -82,14 +81,15 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, CorrespondenceChangeAddrScreenerRoute)
+        val request = FakeRequest(GET, nameRoute)
 
-        val view = application.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
+        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(EditCurrentAddress), NormalMode, false)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(form.fill("validName"), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -97,7 +97,8 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(noAnswers))
@@ -108,9 +109,10 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
           .build()
 
       running(application) {
+
         val request =
-          FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "editCurrentAddress"))
+          FakeRequest(POST, nameRoute)
+            .withFormUrlEncodedBody("partnerDetailsAdditionalAddressInfo" -> "valid name")
 
         val result = route(application, request).value
 
@@ -125,44 +127,42 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
 
       running(application) {
         val request =
-          FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", ""))
+          FakeRequest(POST, nameRoute)
+            .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", ""))
 
-        val boundForm = form.bind(Map("correspondenceChangeAddrScreener" -> ""))
+        val boundForm = form.bind(Map("partnerDetailsAdditionalAddressInfo" -> ""))
 
-        val view = application.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
+        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, false)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
 
     "must return OK and the correct view for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
+      val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, CorrespondenceChangeAddrScreenerRoute)
+        val request = FakeRequest(GET, nameRoute)
 
         val result = route(application, request).value
-
-        val view = application.injector.instanceOf[CorrespondenceChangeAddrScreenerView]
-
+        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
     "must redirect to the next page for a POST if no existing data is found" in {
 
       val mockSessionRepository = mock[SessionRepository]
-
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
+        applicationBuilder(userAnswers = None)
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -171,8 +171,8 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
 
       running(application) {
         val request =
-          FakeRequest(POST, CorrespondenceChangeAddrScreenerRoute)
-            .withFormUrlEncodedBody(("correspondenceChangeAddrScreener", "editCurrentAddress"))
+          FakeRequest(POST, nameRoute)
+            .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", "validName"))
 
         val result = route(application, request).value
 

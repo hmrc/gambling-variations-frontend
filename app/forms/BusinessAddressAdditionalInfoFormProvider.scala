@@ -17,17 +17,25 @@
 package forms
 
 import forms.mappings.Mappings
-import models.CorrespondenceChangeAddrOption
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class CorrespondenceChangeAddrScreenerFormProvider @Inject() extends Mappings {
+class BusinessAddressAdditionalInfoFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[CorrespondenceChangeAddrOption] =
+  private val businessAddressAdditionalInfoRegex = "^[A-Za-z0-9 -']+$"
+  private val maxL = 100
+  def apply(): Form[String] =
     Form(
-      "correspondenceChangeAddrScreener" -> enumerable[CorrespondenceChangeAddrOption](
-        "correspondenceChangeAddrScreener.error.required"
-      )
+      "businessAddressAdditionalInfo" -> text("businessAddressAdditionalInfo.error.required")
+        .verifying(
+          maxLength(maxL, "businessAddressAdditionalInfo.error.length")
+        )
+        .verifying(
+          regexp(
+            businessAddressAdditionalInfoRegex,
+            "correspondenceAdditionalInfo.error.invalid"
+          )
+        )
     )
 }

@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package forms
+package forms.partner
 
-import forms.behaviours.OptionFieldBehaviours
-import models.CorrespondenceChangeAddrOption
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class CorrespondenceChangeAddrScreenerFormProviderSpec extends OptionFieldBehaviours {
+class PartnerDetailsAdditionalAddressInfoYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "correspondenceChangeAddrScreener.error.required"
+  val requiredKey = "PartnerDetails.additionalAddressInfoYesNo.error.required"
+  val invalidKey = "error.boolean"
 
-  val form = new CorrespondenceChangeAddrScreenerFormProvider()()
+  val form = new PartnerDetailsAdditionalAddressInfoYesNoFormProvider()()
 
-  ".correspondenceChangeAddrScreener" - {
+  ".value" - {
 
-    val fieldName = "correspondenceChangeAddrScreener"
+    val fieldName = "value"
 
-    behave like optionsField[CorrespondenceChangeAddrOption](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = CorrespondenceChangeAddrOption.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

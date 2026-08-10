@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.CorrespondenceChangeAddrOption
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[CorrespondenceChangeAddrOption] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
+class PartnerAddFaxNumberYesNoFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "CorrespondenceChangeAddrScreener"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("partnerAddFaxNumberYesNo.error.required")
+    )
 }
