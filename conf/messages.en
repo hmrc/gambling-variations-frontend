@@ -635,6 +635,7 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+
 partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
@@ -666,3 +667,9 @@ businessAddressAdditionalInfo.hint = For example, building name or floor number
 businessAddressAdditionalInfo.error.required = Enter additional information for your business address
 businessAddressAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessAddressAdditionalInfo.error.length = The additional information must be 100 characters or less
+
+partnerRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner's fax number?
+partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove this partner's fax number?
+partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner's fax number?
+partnerRemoveFaxNumberYesNo.error.required = Select yes to remove a fax number for the partner
+partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove this partner's fax number?
