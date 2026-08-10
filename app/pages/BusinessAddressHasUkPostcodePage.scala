@@ -21,22 +21,9 @@ import play.api.libs.json.JsPath
 
 import scala.util.Try
 
-case object AddBusinessAddressAdditionalInformationPage extends QuestionPage[Boolean] {
+case object BusinessAddressHasUkPostcodePage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ "businessAddressSection" \ toString
 
-  override def toString: String = "addBusinessAddressAdditionalInformation"
-
-  override def cleanup(
-                        value: Option[Boolean],
-                        userAnswers: UserAnswers
-                      ): Try[UserAnswers] =
-    value match {
-      case Some(false) =>
-        userAnswers.remove(BusinessAddressAdditionalInformationPage)
-
-      case _ =>
-        Try(userAnswers)
-    }
-
+  override def toString: String = "hasUkPostcode"
 }
