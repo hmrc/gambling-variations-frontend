@@ -26,12 +26,14 @@ import views.html.partner.RemoveAdditionalInfoForPartnerAddressYesNoView
 
 class RemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends SpecBase {
 
-  trait Setup:
+  trait Setup {
     private val app = applicationBuilder().build()
 
-    val view = app.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
+    val view =
+      app.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
 
-    val formProvider = new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()
+    val formProvider =
+      new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()
 
     val form = formProvider()
 
@@ -42,11 +44,14 @@ class RemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends SpecBase {
         .instanceOf[play.api.i18n.MessagesApi]
         .preferred(request)
 
+    val additionalInformation = "Additional Information"
+  }
+
   "RemoveAdditionalInfoForPartnerAddressYesNoView" - {
 
     "must render page correctly" in new Setup {
 
-      val html = view(form, NormalMode)(request, messages)
+      val html = view(form, NormalMode, additionalInformation)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
       doc.title must include(
@@ -57,6 +62,10 @@ class RemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends SpecBase {
         .select(".govuk-fieldset__heading")
         .text mustBe
         messages("removeAdditionalInfoForPartnerAddressYesNo.heading")
+
+      doc
+        .select(".govuk-hint")
+        .text must include(additionalInformation)
 
       doc.select("input[name=value]").size() mustEqual 2
 
@@ -98,7 +107,9 @@ class RemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val html = view(boundForm, NormalMode)(request, messages)
+      val html =
+        view(boundForm, NormalMode, additionalInformation)(request, messages)
+
       val doc: Document = Jsoup.parse(html.body)
 
       doc.select(".govuk-error-summary").size() mustEqual 1
@@ -114,7 +125,9 @@ class RemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends SpecBase {
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val html = view(boundForm, NormalMode)(request, messages)
+      val html =
+        view(boundForm, NormalMode, additionalInformation)(request, messages)
+
       val doc: Document = Jsoup.parse(html.body)
 
       doc

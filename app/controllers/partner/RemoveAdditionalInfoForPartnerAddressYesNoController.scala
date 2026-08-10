@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.partner.RemoveAdditionalInfoForPartnerAddressYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.RemoveAdditionalInfoForPartnerAddressYesNoPage
+import pages.partner.{PartnerDetailsAdditionalAddressInfoPage, RemoveAdditionalInfoForPartnerAddressYesNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,27 +46,59 @@ class RemoveAdditionalInfoForPartnerAddressYesNoController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(RemoveAdditionalInfoForPartnerAddressYesNoPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+      request.userAnswers.get(PartnerDetailsAdditionalAddressInfoPage) match {
+        case Some(additionalInformation) =>
+          val preparedForm = request.userAnswers.get(RemoveAdditionalInfoForPartnerAddressYesNoPage) match {
+            case None        => form
+            case Some(value) => form.fill(value)
+          }
+
+          Ok(view(preparedForm, mode, additionalInformation))
+
+        case None =>
+          Redirect(controllers.routes.SystemErrorController.onPageLoad())
+      }
     }
 
-    Ok(view(preparedForm, mode))
-  }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+      request.userAnswers.get(PartnerDetailsAdditionalAddressInfoPage) match {
+        case Some(additionalInformation) =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(formWithErrors, mode, additionalInformation)
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.set(
+                                        RemoveAdditionalInfoForPartnerAddressYesNoPage,
+                                        value
+                                      )
+                                    )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(
+                  navigator.nextPage(
+                    RemoveAdditionalInfoForPartnerAddressYesNoPage,
+                    mode,
+                    updatedAnswers
+                  )
+                )
+            )
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveAdditionalInfoForPartnerAddressYesNoPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemoveAdditionalInfoForPartnerAddressYesNoPage, mode, updatedAnswers))
-      )
-  }
+        case None =>
+          Future.successful(
+            Redirect(controllers.routes.SystemErrorController.onPageLoad())
+          )
+      }
+    }
 }

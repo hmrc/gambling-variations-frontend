@@ -672,3 +672,4 @@ removeAdditionalInfoForPartnerAddressYesNo.heading = Are you sure you want to re
 removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
 removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
 removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.hint = The additional information is: {0}

@@ -24,7 +24,7 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, additionalInformation: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("removeAdditionalInfoForPartnerAddressYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
@@ -38,7 +38,7 @@
             RadiosViewModel.yesNo(
                 field = form("value"),
                 legend = LegendViewModel(messages("removeAdditionalInfoForPartnerAddressYesNo.heading")).asPageHeading(Large)
-            )
+            ).withHint(Hint(content = messages("removeAdditionalInfoForPartnerAddressYesNo.hint", additionalInformation)))
         )
 
         @govukButton(
