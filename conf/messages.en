@@ -614,6 +614,16 @@ correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
 correspondenceChangeAddrScreener.no = Edit current correspondence address
 
+businessChangeAddrScreener.title = How do you want to change your business address?
+businessChangeAddrScreener.heading = How do you want to change your business address?
+businessChangeAddrScreener.checkYourAnswersLabel = How do you want to change your business address?
+businessChangeAddrScreener.error.required = Select how you want to change your business address
+businessChangeAddrScreener.change.hidden = How do you want to change your business address?
+businessChangeAddrScreener.uk.differentUkAddress = Change to a different UK address
+businessChangeAddrScreener.uk.changeToNonUkAddress = Change to a non-UK address
+businessChangeAddrScreener.nonuk.changeToUkAddress = Change to a UK address
+businessChangeAddrScreener.editCurrentAddress = Edit current business address
+
 correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
 correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
 correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes

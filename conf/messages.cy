@@ -115,6 +115,16 @@ correspondenceChangeAddrScreener.uk.yes = cy: Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = cy: Change to a UK address
 correspondenceChangeAddrScreener.no = cy: Edit current correspondence address
 
+businessChangeAddrScreener.title = cy: How do you want to change your business address?
+businessChangeAddrScreener.heading = cy: How do you want to change your business address?
+businessChangeAddrScreener.checkYourAnswersLabel = cy: How do you want to change your business address?
+businessChangeAddrScreener.error.required = cy: Select how you want to change your business address
+businessChangeAddrScreener.change.hidden = cy: How do you want to change your business address?
+businessChangeAddrScreener.uk.differentUkAddress = cy: Change to a different UK address
+businessChangeAddrScreener.uk.changeToNonUkAddress = cy: Change to a non-UK address
+businessChangeAddrScreener.nonuk.changeToUkAddress = cy: Change to a UK address
+businessChangeAddrScreener.editCurrentAddress = cy: Edit current business address
+
 businessAddressAdditionalInfo.title = cy: What is the additional information for your business address?
 businessAddressAdditionalInfo.heading = cy: What is the additional information for your business address?
 businessAddressAdditionalInfo.hint = cy: For example, building name or floor number

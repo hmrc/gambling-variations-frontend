@@ -77,7 +77,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.businessAddress"),
-            routes.PageNotFoundController.onPageLoad().url,
+            routes.BusinessChangeAddrScreenerController.onPageLoad().url,
             status(BusinessAddressChangesPage)
           )
         ),

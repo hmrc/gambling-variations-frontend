@@ -21,7 +21,7 @@ import models.*
 import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
-import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsAdditionalAddressInfoYesNoPage, RemoveAdditionalInfoForPartnerAddressYesNoPage}
+import pages.partner.*
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -75,6 +75,7 @@ class Navigator @Inject() () {
     case RemoveAdditionalInfoForPartnerAddressYesNoPage => userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers)
     case PartnerDetailsAdditionalAddressInfoPage        => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case PartnerDetailsAdditionalAddressInfoYesNoPage   => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
+    case BusinessChangeAddrScreenerPage                 => userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
 
     case _ => _ => routes.IndexController.onPageLoad()
   }
@@ -241,6 +242,17 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
+
+  private def navigateBusinessChangeAddrScreenerPage()(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(BusinessChangeAddrScreenerPage)
+      .map {
+        case BusinessChangeAddrOption.DifferentUkAddress   => routes.PageNotFoundController.onPageLoad()
+        case BusinessChangeAddrOption.ChangeToNonUkAddress => routes.PageNotFoundController.onPageLoad()
+        case BusinessChangeAddrOption.ChangeToUkAddress    => routes.PageNotFoundController.onPageLoad()
+        case BusinessChangeAddrOption.EditCurrentAddress   => routes.PageNotFoundController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigateAddCorrespondenceFaxNumberPage()(userAnswers: UserAnswers): Call =
     userAnswers.get(AddCorrespondenceFaxNumberPage) match {

@@ -472,6 +472,55 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a different UK address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.DifferentUkAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a non-UK address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.ChangeToNonUkAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a UK address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.ChangeToUkAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when editing the current address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.EditCurrentAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to SystemError when unanswered" in {
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
       "should route AddCorrespondenceAddressAdditionalInformationPage to CorrespondenceAdditionalInfo when answer is true" in {
         val answers =
           emptyAnswers
