@@ -15,7 +15,7 @@
  *@
 
 @import views.html.components.*
-@import viewmodels.BusinessAddressViewModel
+@import viewmodels.checkAnswers.businessaddress.BusinessAddressViewModel
 
 @this(
         layout: templates.Layout,
@@ -24,34 +24,25 @@
         h1:H1,
         link: Link,
         paragraph: Paragraph,
-        govukSummaryList : GovukSummaryList
+        govukSummaryList : GovukSummaryList,
+        hint: GovukHint
 )
 
-@(isFlagged: Boolean)(implicit request: Request[_], messages: Messages)
+@(ua: UserAnswers, showChangeMessage: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkBusinessAddress.title"), Some("changeRegistrationDetails.caption"))) {
 
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("checkBusinessAddress.heading", classes="govuk-heading-l")
+    @hint(HintViewModel("checkBusinessAddress.hint"))
 
+    @govukSummaryList(BusinessAddressViewModel.from(ua))
 
-    @govukSummaryList(BusinessAddressViewModel)
-
-    @if(isFlagged) {
+    @if(showChangeMessage) {
         @paragraph(messages("checkBusinessAddress.message.requiredToSubmit"))
     }
-    <p class="govuk-body">
-        @govukButton(
-        ButtonViewModel(messages("site.continue"))
-            .withCssClass("button.govuk-button")
-            .asLink{
-                if(phoneNumber.isEmpty && mobilePhoneNumber.isEmpty){
-                    routes.CheckContactDetailsController.onPageLoad().url
-                } else {
-                    routes.ChangeRegistrationDetailsController.onPageLoad().url
-                }
-            }
-        )
-    </p>
 
+    @govukButton(
+        ButtonViewModel(messages("site.continue"))
+    )
 }

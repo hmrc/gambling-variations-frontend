@@ -17,23 +17,24 @@
 package viewmodels.checkAnswers.businessaddress
 
 import models.{Address, UserAnswers}
-import pages.{BusinessAddressAdditionalInformationPage, BusinessAddressNonUkPage, BusinessAddressUkPage}
+import pages.{AddBusinessAddressAdditionalInformationPage, BusinessAddressNonUkPage, BusinessAddressUkPage}
 import play.api.i18n.Messages
-import viewmodels.govuk.all.{SummaryListRowViewModel, SummaryListViewModel}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
+import viewmodels.govuk.all.SummaryListViewModel
 
-class BusinessAddressViewModel(ua: UserAnswers)(implicit messages: Messages) {
-  private val isAdditionalInfoAdded = ua.get(BusinessAddressAdditionalInformationPage).getOrElse(false)
-  private val isUk: Boolean = ua.get(BusinessAddressUkPage).isDefined
-  private val addressUa: Option[Address] = if (isUk) {
-    ua.get(BusinessAddressUkPage)
-  } else {
-    ua.get(BusinessAddressNonUkPage)
-  }
+case object BusinessAddressViewModel {
+  def from(ua: UserAnswers)(implicit messages: Messages): SummaryList = {
+    val addInfo = ua.get(AddBusinessAddressAdditionalInformationPage).getOrElse(false)
+    val isUk = ua.get(BusinessAddressUkPage).isDefined
 
-  SummaryListViewModel(
-    rows = Seq(BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
-            AddressAdditionalInfoRow(isAdditionalInfoAdded).toRow
+    val addressUa: Option[Address] = if (isUk) {
+      ua.get(BusinessAddressUkPage)
+    } else {
+      ua.get(BusinessAddressNonUkPage)
+    }
+
+    SummaryListViewModel(
+      rows = Seq(BusinessAddressRow(address = addressUa, isUk = isUk).toRow, AddressAdditionalInfoRow(addInfo).toRow)
     )
-
-  )
+  }
 }
