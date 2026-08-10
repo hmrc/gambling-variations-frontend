@@ -23,8 +23,8 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, V
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-class BusinessAddressRow {
-  def from(address: Option[Address], isUk: Boolean)(implicit messages: Messages): SummaryListRow = {
+case class BusinessAddressRow(address: Option[Address], isUk: Boolean)(implicit messages: Messages) {
+  def toRow: SummaryListRow = {
 
     val addressRowValue: Value = {
       address match {
