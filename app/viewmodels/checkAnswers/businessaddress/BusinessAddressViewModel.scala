@@ -16,15 +16,14 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import models.{Address, UserAnswers}
+import models.{Address, Mode, UserAnswers}
 import pages.{AddBusinessAddressAdditionalInformationPage, BusinessAddressNonUkPage, BusinessAddressUkPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
 
 case object BusinessAddressViewModel {
-  def from(ua: UserAnswers)(implicit messages: Messages): SummaryList = {
-    val addInfo = ua.get(AddBusinessAddressAdditionalInformationPage).getOrElse(false)
+  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
     val isUk = ua.get(BusinessAddressUkPage).isDefined
 
     val addressUa: Option[Address] = if (isUk) {
@@ -32,9 +31,14 @@ case object BusinessAddressViewModel {
     } else {
       ua.get(BusinessAddressNonUkPage)
     }
+    
+    
 
     SummaryListViewModel(
-      rows = Seq(BusinessAddressRow(address = addressUa, isUk = isUk).toRow, AddressAdditionalInfoRow(addInfo).toRow)
+      rows =
+        Seq(
+        BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
+        AddressAdditionalInfoRow.from(ua))
     )
   }
 }

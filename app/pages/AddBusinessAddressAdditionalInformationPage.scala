@@ -28,9 +28,9 @@ case object AddBusinessAddressAdditionalInformationPage extends QuestionPage[Boo
   override def toString: String = "addBusinessAddressAdditionalInformation"
 
   override def cleanup(
-                        value: Option[Boolean],
-                        userAnswers: UserAnswers
-                      ): Try[UserAnswers] =
+    value: Option[Boolean],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
     value match {
       case Some(false) =>
         userAnswers.remove(BusinessAddressAdditionalInformationPage)

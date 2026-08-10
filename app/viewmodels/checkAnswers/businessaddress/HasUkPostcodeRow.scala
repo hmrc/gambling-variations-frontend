@@ -18,22 +18,21 @@ package viewmodels.checkAnswers.businessaddress
 
 import controllers.routes
 import models.{CheckMode, Mode, UserAnswers}
-import pages.{AddBusinessAddressAdditionalInformationPage, BusinessAddressChangesPage, BusinessAddressHasUkPostcodePage}
+import pages.{BusinessAddressChangesPage, BusinessAddressHasUkPostcodePage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-case object AddressAdditionalInfoRow {
+case object HasUkPostcodeRow {
   def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): Option[SummaryListRow] = {
-    ua.get(AddBusinessAddressAdditionalInformationPage) match {
-      case Some(addinfo) => {
+    ua.get(BusinessAddressHasUkPostcodePage) match {
+      case Some(hasUkPc) =>
         Some(SummaryListRowViewModel(
           key = "checkBusinessAddress.question.addInfo",
-          value = ValueViewModel(if (addinfo) "site.yes" else "site.no"),
+          value = ValueViewModel(if (hasUkPc) "site.yes" else "site.no"),
           actions = Seq(ActionItemViewModel("site.change", "#"))
         ))
-      }
       case None => None
     }
   }
