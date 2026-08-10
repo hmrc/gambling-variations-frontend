@@ -17,12 +17,13 @@
 package viewmodels.checkAnswers.businessaddress
 
 import models.{Address, UserAnswers}
-import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
+import pages.{BusinessAddressAdditionalInformationPage, BusinessAddressNonUkPage, BusinessAddressUkPage}
 import play.api.i18n.Messages
 import viewmodels.govuk.all.{SummaryListRowViewModel, SummaryListViewModel}
 
 class BusinessAddressViewModel(ua: UserAnswers)(implicit messages: Messages) {
-  val isUk: Boolean = ua.get(BusinessAddressUkPage).isDefined
+  private val isAdditionalInfoAdded = ua.get(BusinessAddressAdditionalInformationPage).getOrElse(false)
+  private val isUk: Boolean = ua.get(BusinessAddressUkPage).isDefined
   private val addressUa: Option[Address] = if (isUk) {
     ua.get(BusinessAddressUkPage)
   } else {
@@ -31,7 +32,7 @@ class BusinessAddressViewModel(ua: UserAnswers)(implicit messages: Messages) {
 
   SummaryListViewModel(
     rows = Seq(BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
-               SummaryListRowViewModel()
+            AddressAdditionalInfoRow(isAdditionalInfoAdded).toRow
     )
 
   )
