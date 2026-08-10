@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package views
+package views.partner
 
 import base.SpecBase
-import forms.PartnerRemoveFaxNumberYesNoFormProvider
+import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -39,7 +39,7 @@ class PartnerRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
         val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
 
-        val html = view(form, NormalMode)(FakeRequest(), messages(application))
+        val html = view(form, NormalMode, "here-goes-nothing!")(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
@@ -48,7 +48,7 @@ class PartnerRemoveFaxNumberYesNoViewSpec extends SpecBase {
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)(s"partnerRemoveFaxNumberYesNo.heading")
+          messages(application)(s"partnerRemoveFaxNumberYesNo.heading", "here-goes-nothing!")
 
         document.getElementById("value").attr("value") mustEqual "true"
 
@@ -69,7 +69,7 @@ class PartnerRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(boundForm, NormalMode)(FakeRequest(), messages(application))
+        val html = view(boundForm, NormalMode, "here-goes-nothing!")(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 

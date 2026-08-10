@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerRemoveFaxNumberYesNoFormProvider
-
-import javax.inject.Inject
+import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.PartnerRemoveFaxNumberYesNoPage
+import pages.partner.PartnerRemoveFaxNumberYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,6 +28,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PartnerRemoveFaxNumberYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerRemoveFaxNumberYesNoController @Inject() (
@@ -55,7 +54,7 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode, "fax-number-goes-here"))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -63,7 +62,7 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, ""))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerRemoveFaxNumberYesNoPage, value))

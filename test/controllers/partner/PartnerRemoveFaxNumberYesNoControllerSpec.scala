@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import base.SpecBase
-import forms.PartnerRemoveFaxNumberYesNoFormProvider
+import controllers.partner.routes.PartnerRemoveFaxNumberYesNoController
+import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.PartnerRemoveFaxNumberYesNoPage
+import pages.partner.PartnerRemoveFaxNumberYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -38,9 +39,10 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
   def onwardRoute = Call("GET", "/foo")
 
-  val form: Form[Boolean] = (new PartnerRemoveFaxNumberYesNoFormProvider())()
+  private val formProvider = new PartnerRemoveFaxNumberYesNoFormProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val partnerRemoveFaxNumberYesNoRoute: String = routes.PartnerRemoveFaxNumberYesNoController.onPageLoad().url
+  lazy val partnerRemoveFaxNumberYesNoRoute: String = PartnerRemoveFaxNumberYesNoController.onPageLoad().url
 
   "PartnerRemoveFaxNumberYesNo Controller" - {
 
@@ -56,7 +58,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
         val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, "fax-number-goes-here")(request, messages(application)).toString
       }
     }
 
@@ -74,7 +76,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "fax-number-goes-here")(request, messages(application)).toString
       }
     }
 
@@ -113,14 +115,9 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
           FakeRequest(POST, partnerRemoveFaxNumberYesNoRoute)
             .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
-
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
 

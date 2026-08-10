@@ -16,7 +16,6 @@
 
 package forms.partner
 
-import forms.PartnerAddFaxNumberYesNoFormProvider
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 

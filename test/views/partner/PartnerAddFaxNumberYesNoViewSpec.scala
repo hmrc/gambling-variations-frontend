@@ -17,7 +17,7 @@
 package views.partner
 
 import base.SpecBase
-import forms.PartnerAddFaxNumberYesNoFormProvider
+import forms.partner.PartnerAddFaxNumberYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

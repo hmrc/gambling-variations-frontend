@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package viewmodels
+package viewmodels.checkAnswers.partner
 
 import base.SpecBase
-import controllers.routes.PartnerRemoveFaxNumberYesNoController
-import pages.PartnerRemoveFaxNumberYesNoPage
+import controllers.partner.routes.PartnerRemoveFaxNumberYesNoController
+import pages.partner.PartnerRemoveFaxNumberYesNoPage
 import play.api.Application
 import play.api.i18n.Messages
-import viewmodels.checkAnswers.PartnerRemoveFaxNumberYesNoSummary
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
