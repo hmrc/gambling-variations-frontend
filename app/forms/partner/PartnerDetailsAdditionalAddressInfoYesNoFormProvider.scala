@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms.partner
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object AddCorrespondenceEmailAddressPage extends QuestionPage[Boolean] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ toString
+class PartnerDetailsAdditionalAddressInfoYesNoFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "addCorrespondenceEmailAddress"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("PartnerDetails.additionalAddressInfoYesNo.error.required")
+    )
 }
