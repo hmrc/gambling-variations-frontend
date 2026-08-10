@@ -658,6 +658,15 @@ PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include
 PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
 PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
 
+
+
+businessAddressAdditionalInfo.title = What is the additional information for your business address?
+businessAddressAdditionalInfo.heading = What is the additional information for your business address?
+businessAddressAdditionalInfo.hint = For example, building name or floor number
+businessAddressAdditionalInfo.error.required = Enter additional information for your business address
+businessAddressAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+businessAddressAdditionalInfo.error.length = The additional information must be 100 characters or less
+
 removeAdditionalInfoForPartnerAddressYesNo.title = Are you sure you want to remove the additional information for this partner’s address?
 removeAdditionalInfoForPartnerAddressYesNo.heading = Are you sure you want to remove the additional information for this partner’s address?
 removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
