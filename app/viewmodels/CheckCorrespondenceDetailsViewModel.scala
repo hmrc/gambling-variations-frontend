@@ -45,6 +45,8 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
   def continueCall: Call =
     if (correspondenceName.isEmpty) {
       controllers.routes.CorrespondenceNameController.onPageLoad()
+    } else if (correspondenceAddress.forall(_.address1.trim.isEmpty)) {
+      controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
     } else if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
       controllers.routes.CorrespondenceContactNumberController.onPageLoad()
     } else {
