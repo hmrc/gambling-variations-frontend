@@ -9,32 +9,28 @@ import views.html.BusinessAddressView
 
 class CheckBusinessAddressControllerSpec extends SpecBase {
 
-  private val regOnly = Json.obj(
-    "businessAddressSection" -> Json.obj(
-      "mgdRegNum" -> "XMY1000001",
-    )
-  )
 
-  val addressOnlyUa: UserAnswers = UserAnswers("id", Json.obj(
-    "businessAddressSection" -> Json.obj("mgdRegNum" -> "XMY1000002",
-    "businessAddressUk" -> Address(
-      "abc",
-      Some("abc"),
-      Some("abc"),
-      Some("abc"),
-      Some("abc"),
-      Some("abc")
-      )
 
-    )
-    )
-  )
 
-  private val basicAnswers = UserAnswers("id", regOnly)
 
   "CheckBusinessAddress Controller" - {
 
     "must return OK and the correct view for a GET when address is present" in {
+
+      val addressOnlyUa: UserAnswers = UserAnswers("id", Json.obj(
+        "businessAddressSection" -> Json.obj("mgdRegNum" -> "XMY1000002",
+          "businessAddressUk" -> Address(
+            "abc",
+            Some("abc"),
+            Some("abc"),
+            Some("abc"),
+            Some("abc"),
+            Some("abc")
+          )
+
+        )
+      )
+      )
 
       val application = applicationBuilder(userAnswers = Some(addressOnlyUa)).build()
 
@@ -52,6 +48,15 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
 
     "must redirect when address is not present" in {
 
+      val regOnly = Json.obj(
+        "businessAddressSection" -> Json.obj(
+          "mgdRegNum" -> "XMY1000001",
+        )
+      )
+
+      val basicAnswers = UserAnswers("id", regOnly)
+
+
       val application = applicationBuilder(userAnswers = Some(basicAnswers)).build()
 
       running(application) {
@@ -62,6 +67,27 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessAddressView]
 
         status(result) mustEqual SEE_OTHER
+      }
+    }
+    "must return SystemErrorController when Business Address section is empty" in {
+
+      val data = Json.obj(
+        "businessContactDetailsSection" -> Json.obj())
+
+      val userAnswers = UserAnswers("id-number", data)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(GET, routes.CheckBusinessAddressController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
       }
     }
   }
