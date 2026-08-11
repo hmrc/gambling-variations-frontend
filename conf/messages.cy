@@ -132,6 +132,25 @@ businessAddressAdditionalInfo.error.required = cy: Enter additional information 
 businessAddressAdditionalInfo.error.invalid = cy: The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessAddressAdditionalInfo.error.length = cy: The additional information must be 100 characters or less
 
+soleProprietorName.title = Beth yw enw’r berchnogaeth unigol?
+soleProprietorName.heading = Beth yw enw’r berchnogaeth unigol?
+soleProprietorName.title.label = Teitl
+soleProprietorName.firstName.label = Enw cyntaf
+soleProprietorName.middleName.label = Enwau canol (dewisol)
+soleProprietorName.lastName.label = Enw olaf
+
+soleProprietorName.error.title.required = Nodwch deitl y berchnogaeth unigol
+soleProprietorName.error.title.length = Mae’n rhaid i deitl y berchnogaeth unigol fod yn 20 o gymeriadau neu lai
+soleProprietorName.error.title.invalid = Mae’n rhaid i deitl y berchnogaeth unigol gynnwys y llythrennau a i z, collnodau, cysylltnodau neu fylchau yn unig
+soleProprietorName.error.firstName.required = Nodwch enw cyntaf y berchnogaeth unigol
+soleProprietorName.error.firstName.length = Rhaid i enw cyntaf y berchnogaeth unigol fod yn 100 o gymeriadau neu lai
+soleProprietorName.error.firstName.invalid = Rhaid i enw cyntaf y berchnogaeth unigol gynnwys dim ond y llythrennau a i z, rhifau 0 i 9, bylchau, cysylltnodau a chollnodau
+soleProprietorName.error.middleName.length = Mae’n rhaid i enwau canol y berchnogaeth unigol fod yn 100 o gymeriadau neu lai
+soleProprietorName.error.middleName.invalid = Rhaid i enwau canol y berchnogaeth unigol gynnwys dim ond y llythrennau a i z, rhifau 0 i 9, bylchau, cysylltnodau a chollnodau
+soleProprietorName.error.lastName.required = Nodwch enw olaf y berchnogaeth unigol
+soleProprietorName.error.lastName.length = Rhaid i enw olaf y berchnogaeth unigol fod yn 100 o gymeriadau neu lai
+soleProprietorName.error.lastName.invalid = Rhaid i enw olaf y berchnogaeth unigol gynnwys dim ond y llythrennau a i z, rhifau 0 i 9, bylchau, cysylltnodau a chollnodau
+
 removeTradeName.title = A ydych yn siŵr eich bod am dynnu’r enw masnachu
 removeTradeName.heading = A ydych yn siŵr eich bod am dynnu’r enw masnachu {0}?
 removeTradeName.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r enw masnachu
