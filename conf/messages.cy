@@ -83,7 +83,7 @@ accessDenied.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 accessDenied.p1 = Nid oes gennych fynediad at y gwasanaeth hwn.
 accessDenied.p1.link = Parhau i’ch cyfrif
 
-changeRegistrationDetails.caption = cy: Change registration details
+changeRegistrationDetails.caption = Newid manylion cofrestru
 changeRegistrationDetails.heading.caption = cy: MGD registration number: {0}
 changeRegistrationDetails.noChangesYet = cy: You need to change at least one detail before you can submit your changes to HMRC.
 changeRegistrationDetails.table.section = cy: Section
@@ -131,3 +131,7 @@ businessAddressAdditionalInfo.hint = cy: For example, building name or floor num
 businessAddressAdditionalInfo.error.required = cy: Enter additional information for your business address
 businessAddressAdditionalInfo.error.invalid = cy: The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessAddressAdditionalInfo.error.length = cy: The additional information must be 100 characters or less
+
+removeTradeName.title = A ydych yn siŵr eich bod am dynnu’r enw masnachu
+removeTradeName.heading = A ydych yn siŵr eich bod am dynnu’r enw masnachu {0}?
+removeTradeName.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r enw masnachu
