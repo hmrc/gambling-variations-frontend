@@ -135,3 +135,7 @@ businessAddressAdditionalInfo.error.length = cy: The additional information must
 removeTradeName.title = A ydych yn siŵr eich bod am dynnu’r enw masnachu
 removeTradeName.heading = A ydych yn siŵr eich bod am dynnu’r enw masnachu {0}?
 removeTradeName.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r enw masnachu
+
+removeFaxNumber.title = A ydych yn siŵr eich bod am dynnu’r rhif ffacs?
+removeFaxNumber.heading = A ydych yn siŵr eich bod am dynnu’r rhif ffacs {0}?
+removeFaxNumber.error.required = cy: Select yes if you want to remove the fax number
