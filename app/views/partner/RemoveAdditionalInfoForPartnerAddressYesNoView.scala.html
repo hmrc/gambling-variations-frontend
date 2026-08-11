@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import views.html.components._
 @import viewmodels.LegendSize.Large
 
 @this(
@@ -21,7 +22,8 @@
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption
 )
 
 @(form: Form[_], mode: Mode, additionalInformation: String)(implicit request: Request[_], messages: Messages)
@@ -34,6 +36,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
