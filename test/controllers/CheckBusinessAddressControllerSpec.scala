@@ -26,10 +26,9 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
             Some("abc"),
             Some("abc"),
             Some("abc")
+            )
           )
-
         )
-      )
       )
 
       val application = applicationBuilder(userAnswers = Some(addressOnlyUa)).build()
