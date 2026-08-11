@@ -15,7 +15,9 @@ case object BusinessAddressAdditionalInfoRow {
         case Some(addInfo) => addInfo
         case _             => "site.notProvided"
       }),
-      actions = Seq(ActionItemViewModel("site.change", "#"))
-    )
+      actions = Seq(
+        ActionItemViewModel("site.change", "#"),
+        ActionItemViewModel("site.remove", "#"),
+    ))
   }
 }

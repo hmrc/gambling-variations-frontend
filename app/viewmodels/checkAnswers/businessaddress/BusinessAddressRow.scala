@@ -48,7 +48,10 @@ case class BusinessAddressRow(address: Option[Address], isUk: Boolean)(implicit 
     SummaryListRowViewModel(
       key     = "checkBusinessAddress.label.address",
       value   = addressRowValue,
-      actions = Seq(ActionItemViewModel("site.change", routes.PageNotFoundController.onPageLoad().url))
+      actions = Seq(
+        ActionItemViewModel("site.change", "#"),
+        ActionItemViewModel("site.remove", "#"),
+      )
     )
   }
 }

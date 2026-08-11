@@ -27,6 +27,7 @@ case object BusinessAddressViewModel {
     val isUk = ua.get(BusinessAddressUkPage).isDefined
     val hasUkPostcodeIsDefined = ua.get(BusinessAddressHasUkPostcodePage).isDefined
     val addressAdditionalInfoIsDefined = ua.get(AddBusinessAddressAdditionalInformationPage).isDefined
+    val howToChangeBusinessAddressIsDefined = ua.get(BusinessAddressChangeScreenerPage).isDefined
 
     val addressUa: Option[Address] = if (isUk) {
       ua.get(BusinessAddressUkPage)
@@ -34,7 +35,7 @@ case object BusinessAddressViewModel {
       ua.get(BusinessAddressNonUkPage)
     }
 
-    val screenerRows =
+    val yesNoRows =
       if(hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined) {
         Seq(HasUkPostcodeRow.from(ua), AddAddressAdditionalInfoRow.from(ua))
       } else if (hasUkPostcodeIsDefined) {
@@ -43,14 +44,18 @@ case object BusinessAddressViewModel {
         Seq(AddAddressAdditionalInfoRow.from(ua))
       }
 
+    val howToChangeBusinessAddressRow = Seq(HowToChangeBusinessAddressRow.from(ua))
+
     val addressBaseRows = Seq(
       BusinessAddressRow(addressUa, isUk).toRow,
       BusinessAddressAdditionalInfoRow.from(ua)
     )
 
     SummaryListViewModel(
-      if(mode == NormalMode) {
-        screenerRows ++ addressBaseRows
+      if(mode == NormalMode && (hasUkPostcodeIsDefined || addressAdditionalInfoIsDefined)) {
+        yesNoRows ++ addressBaseRows
+      } else if (mode == CheckMode && howToChangeBusinessAddressIsDefined) {
+        howToChangeBusinessAddressRow ++ addressBaseRows
       } else {
         addressBaseRows
       }
