@@ -17,8 +17,9 @@
 package viewmodels.checkAnswers.businessaddress
 
 import controllers.routes
+import models.BusinessAddressChangeAddrOption.*
 import models.{CheckMode, Mode, UserAnswers}
-import pages.CorrespondenceChangeAddrScreenerPage
+import pages.BusinessAddressChangeScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
@@ -29,9 +30,13 @@ case object HowToChangeBusinessAddressRow {
     SummaryListRowViewModel(
       key = "checkBusinessAddress.question.howToChange",
       value = ValueViewModel(
-        ua.get(CorrespondenceChangeAddrScreenerPage) match {
+        ua.get(BusinessAddressChangeScreenerPage) match {
           case Some(howToChange) => howToChange match {
-          
+            case DifferentUkAddress => "checkBusinessAddress.changeOption.difUk"
+            case ChangeToNonUkAddress => "checkBusinessAddress.changeOption.nonUk"
+            case ChangeToUkAddress => "checkBusinessAddress.changeOption.uk"
+            case EditCurrentAddress => "checkBusinessAddress.changeOption.edit"
+            case _ => "site.notProvided"
         }
           case None => "site.notProvided"
         }),
