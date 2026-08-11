@@ -614,6 +614,16 @@ correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
 correspondenceChangeAddrScreener.no = Edit current correspondence address
 
+businessChangeAddrScreener.title = How do you want to change your business address?
+businessChangeAddrScreener.heading = How do you want to change your business address?
+businessChangeAddrScreener.checkYourAnswersLabel = How do you want to change your business address?
+businessChangeAddrScreener.error.required = Select how you want to change your business address
+businessChangeAddrScreener.change.hidden = How do you want to change your business address?
+businessChangeAddrScreener.uk.differentUkAddress = Change to a different UK address
+businessChangeAddrScreener.uk.changeToNonUkAddress = Change to a non-UK address
+businessChangeAddrScreener.nonuk.changeToUkAddress = Change to a UK address
+businessChangeAddrScreener.editCurrentAddress = Edit current business address
+
 correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
 correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
 correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
@@ -667,6 +677,12 @@ businessAddressAdditionalInfo.error.required = Enter additional information for 
 businessAddressAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessAddressAdditionalInfo.error.length = The additional information must be 100 characters or less
 
+removeAdditionalInfoForPartnerAddressYesNo.title = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.heading = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
+removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.hint = The additional information is: {0}
 
 checkBusinessAddress.title = Check your business address
 checkBusinessAddress.heading = Check your business address
