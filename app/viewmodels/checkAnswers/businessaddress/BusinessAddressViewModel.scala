@@ -34,25 +34,26 @@ case object BusinessAddressViewModel {
       ua.get(BusinessAddressNonUkPage)
     }
 
-    if(hasUkPostcodeIsDefined && mode == NormalMode) {
-     SummaryListViewModel(
-       Seq(HasUkPostcodeRow.from(ua),
-        BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
-        BusinessAddressAdditionalInfoRow.from(ua))
-     )
-    } else if (addressAdditionalInfoIsDefined && mode == CheckMode) {
-      SummaryListViewModel(
-        Seq(
-          AddAddressAdditionalInfoRow.from(ua),
-          BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
-          BusinessAddressAdditionalInfoRow.from(ua)
-      ))
-    } else {
-      SummaryListViewModel(
-        Seq(
-          BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
-          BusinessAddressAdditionalInfoRow.from(ua)
-      ))
-    }
+    val screenerRows =
+      if(hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined) {
+        Seq(HasUkPostcodeRow.from(ua), AddAddressAdditionalInfoRow.from(ua))
+      } else if (hasUkPostcodeIsDefined) {
+        Seq(HasUkPostcodeRow.from(ua))
+      } else {
+        Seq(AddAddressAdditionalInfoRow.from(ua))
+      }
+
+    val addressBaseRows = Seq(
+      BusinessAddressRow(addressUa, isUk).toRow,
+      BusinessAddressAdditionalInfoRow.from(ua)
+    )
+
+    SummaryListViewModel(
+      if(mode == NormalMode) {
+        screenerRows ++ addressBaseRows
+      } else {
+        addressBaseRows
+      }
+    )
   }
 }
