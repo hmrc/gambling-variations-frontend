@@ -21,8 +21,7 @@ import models.*
 import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
-import pages.partner.PartnerAddFaxNumberYesNoPage
-import pages.partner.PartnerDetailsAdditionalAddressInfoPage
+import pages.partner.*
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -63,18 +62,22 @@ class Navigator @Inject() () {
       userAnswers => navigateAddCorrespondenceAddressAdditionalInformationPage()(userAnswers)
     case CorrespondenceUKAddrScreenerPage =>
       userAnswers => navigateCorrespondenceUKAddrScreenerPage()(userAnswers)
-    case CorrespondenceEmailPage                 => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemoveCorrespondenceFaxNumberPage       => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case RemoveCorrespondenceEmailAddressPage    => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceNamePage                  => userAnswers => navigateCorrespondenceNamePage()(userAnswers)
-    case CorrespondenceAdditionalNamePage        => userAnswers => navigateCorrespondenceAdditionalNamePage()(userAnswers)
-    case CorrespondenceAdditionalInformationPage => userAnswers => navigateCorrespondenceAdditionalInformationPage()(userAnswers)
-    case RemoveCorrAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    case CorrespondenceAddressUkPage             => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
-    case CorrespondenceAddressNonUkPage          => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
-    case PartnerAddFaxNumberYesNoPage            => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
-    case PartnerDetailsAdditionalAddressInfoPage => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
-    case _                                       => _ => routes.IndexController.onPageLoad()
+    case CorrespondenceEmailPage                        => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceFaxNumberPage              => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveCorrespondenceEmailAddressPage           => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceNamePage                         => userAnswers => navigateCorrespondenceNamePage()(userAnswers)
+    case CorrespondenceAdditionalNamePage               => userAnswers => navigateCorrespondenceAdditionalNamePage()(userAnswers)
+    case CorrespondenceAdditionalInformationPage        => userAnswers => navigateCorrespondenceAdditionalInformationPage()(userAnswers)
+    case RemoveCorrAddressAddInfoPage                   => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case CorrespondenceAddressUkPage                    => userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
+    case CorrespondenceAddressNonUkPage                 => userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
+    case PartnerAddFaxNumberYesNoPage                   => userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
+    case RemoveAdditionalInfoForPartnerAddressYesNoPage => userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers)
+    case PartnerDetailsAdditionalAddressInfoPage        => _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
+    case PartnerDetailsAdditionalAddressInfoYesNoPage   => userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
+    case BusinessChangeAddrScreenerPage                 => userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
+
+    case _ => _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
@@ -240,6 +243,17 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 
+  private def navigateBusinessChangeAddrScreenerPage()(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(BusinessChangeAddrScreenerPage)
+      .map {
+        case BusinessChangeAddrOption.DifferentUkAddress   => routes.PageNotFoundController.onPageLoad()
+        case BusinessChangeAddrOption.ChangeToNonUkAddress => routes.PageNotFoundController.onPageLoad()
+        case BusinessChangeAddrOption.ChangeToUkAddress    => routes.PageNotFoundController.onPageLoad()
+        case BusinessChangeAddrOption.EditCurrentAddress   => routes.PageNotFoundController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
   private def navigateAddCorrespondenceFaxNumberPage()(userAnswers: UserAnswers): Call =
     userAnswers.get(AddCorrespondenceFaxNumberPage) match {
       case Some(true) =>
@@ -294,5 +308,25 @@ class Navigator @Inject() () {
         case true  => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(PartnerDetailsAdditionalAddressInfoYesNoPage)
+      .map {
+        case false => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
+  private def navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(RemoveAdditionalInfoForPartnerAddressYesNoPage)
+      .map {
+        case false => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
 
 }

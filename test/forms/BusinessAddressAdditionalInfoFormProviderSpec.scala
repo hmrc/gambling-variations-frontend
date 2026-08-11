@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.Address
-import play.api.libs.json.JsPath
-
-case object BusinessAddressNonUkPage extends QuestionPage[Address] {
-
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
-
-  override def toString: String = "businessAddressNonUk"
-}
+class BusinessAddressAdditionalInfoFormProviderSpec {}

@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms.partner
 
-import models.Address
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object BusinessAddressNonUkPage extends QuestionPage[Address] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+class RemoveAdditionalInfoForPartnerAddressYesNoFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "businessAddressNonUk"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeAdditionalInfoForPartnerAddressYesNo.error.required")
+    )
 }

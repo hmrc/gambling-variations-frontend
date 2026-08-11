@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pages
+package pages.partner
 
-import models.Address
+import base.SpecBase
 import play.api.libs.json.JsPath
 
-case object BusinessAddressNonUkPage extends QuestionPage[Address] {
+class PartnerDetailsAdditionalAddressInfoYesNoPageSpec extends SpecBase {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  "PartnerDetailsAdditionalAddressInfoYesNoPage" - {
 
-  override def toString: String = "businessAddressNonUk"
+    "must have the correct path" in {
+      PartnerDetailsAdditionalAddressInfoYesNoPage.path mustEqual (JsPath \ "partnerDetailsAdditionalAddressInfoYesNo")
+    }
+
+    "must have the correct string representation" in {
+      PartnerDetailsAdditionalAddressInfoYesNoPage.toString mustEqual "partnerDetailsAdditionalAddressInfoYesNo"
+    }
+  }
 }

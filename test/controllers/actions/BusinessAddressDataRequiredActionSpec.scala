@@ -58,17 +58,19 @@ class BusinessAddressDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "businessAddressSection" -> Json.obj("mgdRegNum" -> "XRM00000000574"),
-            "businessAddressUk" -> Json.obj(
-              "address1" -> "address1",
-              "address2" -> "address2",
-              "address3" -> "address3",
-              "address4" -> "address4",
-              "postcode" -> "L1 8YL",
-              "country"  -> "England"
-            ),
-            "businessAddressAdditionalInformation" -> "1st floor",
-            "businessAddressIomOrCiFlag"           -> "false"
+            "businessAddressSection" -> Json.obj(
+              "mgdRegNum" -> "XRM00000000574",
+              "businessAddressUk" -> Json.obj(
+                "address1" -> "address1",
+                "address2" -> "address2",
+                "address3" -> "address3",
+                "address4" -> "address4",
+                "postcode" -> "L1 8YL",
+                "country"  -> "England"
+              ),
+              "businessAddressAdditionalInformation" -> "1st floor",
+              "businessAddressIomOrCiFlag"           -> "false"
+            )
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -95,16 +97,18 @@ class BusinessAddressDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "businessAddressSection" -> Json.obj("mgdRegNum" -> "XRM00000000574"),
-            "businessAddressNonUk" -> Json.obj(
-              "address1" -> "address1",
-              "address2" -> "address2",
-              "address3" -> "address3",
-              "address4" -> "address4",
-              "country"  -> "Spain"
-            ),
-            "businessAddressAdditionalInformation" -> "1st floor",
-            "businessAddressIomOrCiFlag"           -> "false"
+            "businessAddressSection" -> Json.obj(
+              "mgdRegNum" -> "XRM00000000574",
+              "businessAddressNonUk" -> Json.obj(
+                "address1" -> "address1",
+                "address2" -> "address2",
+                "address3" -> "address3",
+                "address4" -> "address4",
+                "country"  -> "Spain"
+              ),
+              "businessAddressAdditionalInformation" -> "1st floor",
+              "businessAddressIomOrCiFlag"           -> "false"
+            )
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -131,16 +135,18 @@ class BusinessAddressDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "businessAddressSection" -> Json.obj("mgdRegNum" -> "XRM00000000574"),
-            "businessAddressNonUk" -> Json.obj(
-              "address1" -> "address1",
-              "address2" -> "address2",
-              "address3" -> "address3",
-              "address4" -> "address4",
-              "country"  -> "Isle of Man"
-            ),
-            "businessAddressAdditionalInformation" -> "1st floor",
-            "businessAddressIomOrCiFlag"           -> "true"
+            "businessAddressSection" -> Json.obj(
+              "mgdRegNum" -> "XRM00000000574",
+              "businessAddressNonUk" -> Json.obj(
+                "address1" -> "address1",
+                "address2" -> "address2",
+                "address3" -> "address3",
+                "address4" -> "address4",
+                "country"  -> "Isle of Man"
+              ),
+              "businessAddressAdditionalInformation" -> "1st floor",
+              "businessAddressIomOrCiFlag"           -> "true"
+            )
           )
 
           val result: Either[Result, DataRequest[AnyContent]] =
@@ -237,17 +243,19 @@ class BusinessAddressDataRequiredActionSpec extends SpecBase with MockitoSugar {
             "businessNameSection" -> Json.obj(
               "mgdRegNum" -> "ABC12345678901"
             ),
-            "businessAddressSection" -> Json.obj("mgdRegNum" -> "XRM00000000574"),
-            "businessAddressUk" -> Json.obj(
-              "address1" -> "address1",
-              "address2" -> "address2",
-              "address3" -> "address3",
-              "address4" -> "address4",
-              "postcode" -> "L1 8YL",
-              "country"  -> "England"
-            ),
-            "businessAddressAdditionalInformation" -> "1st floor",
-            "businessAddressIomOrCiFlag"           -> "false"
+            "businessAddressSection" -> Json.obj(
+              "mgdRegNum" -> "XRM00000000574",
+              "businessAddressUk" -> Json.obj(
+                "address1" -> "address1",
+                "address2" -> "address2",
+                "address3" -> "address3",
+                "address4" -> "address4",
+                "postcode" -> "L1 8YL",
+                "country"  -> "England"
+              ),
+              "businessAddressAdditionalInformation" -> "1st floor",
+              "businessAddressIomOrCiFlag"           -> "false"
+            )
           )
 
           val existingUserAnswers = UserAnswers(mgdRegNum,

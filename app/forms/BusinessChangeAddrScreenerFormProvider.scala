@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.Address
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import models.BusinessChangeAddrOption
+import play.api.data.Form
 
-case object BusinessAddressNonUkPage extends QuestionPage[Address] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+class BusinessChangeAddrScreenerFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "businessAddressNonUk"
+  def apply(): Form[BusinessChangeAddrOption] =
+    Form(
+      "businessChangeAddrScreener" -> enumerable[BusinessChangeAddrOption](
+        "businessChangeAddrScreener.error.required"
+      )
+    )
 }
