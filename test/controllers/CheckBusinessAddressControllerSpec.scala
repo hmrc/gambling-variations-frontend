@@ -9,7 +9,7 @@ import views.html.BusinessAddressView
 
 class CheckBusinessAddressControllerSpec extends SpecBase {
 
-  private val baseAnswers = Json.obj(
+  private val regOnly = Json.obj(
     "businessAddressSection" -> Json.obj(
       "mgdRegNum" -> "XMY1000001",
     )
@@ -30,7 +30,7 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
     )
   )
 
-  private val ua = UserAnswers("id", baseAnswers)
+  private val basicAnswers = UserAnswers("id", regOnly)
 
   "CheckBusinessAddress Controller" - {
 
@@ -47,6 +47,21 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(ua = addressOnlyUa, mode = NormalMode, showChangeMessage = false)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect when address is not present" in {
+
+      val application = applicationBuilder(userAnswers = Some(basicAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.CheckBusinessAddressController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[BusinessAddressView]
+
+        status(result) mustEqual SEE_OTHER
       }
     }
   }
