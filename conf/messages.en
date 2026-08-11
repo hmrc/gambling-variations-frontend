@@ -669,7 +669,6 @@ PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or f
 PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
 
 
-
 businessAddressAdditionalInfo.title = What is the additional information for your business address?
 businessAddressAdditionalInfo.heading = What is the additional information for your business address?
 businessAddressAdditionalInfo.hint = For example, building name or floor number
@@ -683,3 +682,9 @@ removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure 
 removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
 removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
 removeAdditionalInfoForPartnerAddressYesNo.hint = The additional information is: {0}
+
+partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner''s email address?
+partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner''s email address?
+partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner''s email address?
+partnerDetailsRemoveEmailAddressYesNo.error.required = Select yes to remove a email address for the partner
+partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to remove {0} as this partner''s email address?
