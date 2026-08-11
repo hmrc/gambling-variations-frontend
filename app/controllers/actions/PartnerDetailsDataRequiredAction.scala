@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{Address, ContactNumber, CorrespondenceDetails, PartnerDetails, PartnersDetails, SoleProprietorName, UserAnswers}
+import models.{Address, BusinessType, ContactNumber, CorrespondenceDetails, PartnerDetails, PartnersDetails, SoleProprietorName, UserAnswers}
 import pages.*
 import pages.partnerdetails.*
 import play.api.Logging
@@ -87,6 +87,11 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
+  private def setPartnerDetails(partnersDetails: PartnersDetails, answers: UserAnswers): Try[UserAnswers] = partnersDetails.partners.zipWithIndex
+    .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
+      buildPartnerDetails(partnerDetails, index, userAnswers)
+    }
+
   private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
 
     val address = partnerDetails.address1 match {
@@ -104,20 +109,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       case _ => None
     }
 
-    val soleProprietor =
-      (partnerDetails.solePropTitle, partnerDetails.solePropFirstName, partnerDetails.solePropMiddleName, partnerDetails.solePropLastName) match {
-        case (Some(title), Some(firstName), middleName, Some(lastName)) =>
-          Some(
-            SoleProprietorName(
-              title      = title,
-              firstName  = firstName,
-              middleName = middleName,
-              lastName   = lastName
-            )
-          )
-        case _ => None
-      }
-
     val contactNumber = (partnerDetails.phoneNumber, partnerDetails.mobilePhoneNumber) match {
       case (None, None) => None
       case (a, b)       => Some(ContactNumber(a, b))
@@ -132,16 +123,15 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       iomOrCiFlag           = partnerDetails.iomOrCiFlag,
       contactNumber         = contactNumber,
       faxNumber             = partnerDetails.faxNumber,
-      emailAddr             = partnerDetails.emailAddress
+      emailAddr             = partnerDetails.emailAddr
     )
 
     for {
       updatedAnswers <- userAnswers
-      updatedAnswers <- updatedAnswers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
+      updatedAnswers <- setIfDefinedBusinessDetails(partnerDetails, updatedAnswers, index)
+
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfJoiningPage(index), partnerDetails.dateOfJoining)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfLeavingPage(index), partnerDetails.dateOfLeaving)
-
-      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsSoleProprietorPage(index), soleProprietor)
 
       updatedAnswers <- updatedAnswers.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), correspondenceDetails)
 
@@ -149,8 +139,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCountryOfIncorporation(index), partnerDetails.countryOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsForeignCorporateRefPage(index), partnerDetails.foreignCorporateRef)
 
-      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessNamePage(index), partnerDetails.businessName)
-      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(index), partnerDetails.tradingName)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfBirthPage(index), partnerDetails.dateOfBirth)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsNinoPage(index), partnerDetails.nino)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsUtrPage(index), partnerDetails.utr)
@@ -159,15 +147,44 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureLeaveDatePage(index), partnerDetails.isFutureLeaveDate)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureJoinDatePage(index), partnerDetails.isFutureJoinDate)
-      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), partnerDetails.businessType)
-
     } yield updatedAnswers
   }
 
-  private def setPartnerDetails(partnersDetails: PartnersDetails, answers: UserAnswers): Try[UserAnswers] = partnersDetails.partners.zipWithIndex
-    .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
-      buildPartnerDetails(partnerDetails, index, userAnswers)
-    }
+  private def setIfDefinedBusinessDetails(partnerDetails: PartnerDetails, answers: UserAnswers, index: Int): Try[UserAnswers] = for {
+    updatedAnswers <- answers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
+    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(index), partnerDetails.tradingName)
+    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), partnerDetails.businessType)
+
+    updatedAnswers <- partnerDetails.businessType
+                        .flatMap(BusinessType.fromCode)
+                        // If BusinessType is None, stop and return updatedAnswers
+                        .fold(Try(updatedAnswers)) {
+                          case BusinessType.Soleproprietor =>
+                            (partnerDetails.solePropTitle,
+                             partnerDetails.solePropFirstName,
+                             partnerDetails.solePropMiddleName,
+                             partnerDetails.solePropLastName
+                            ) match {
+                              // If SoleProp names are missing, stop and return updatedAnswers
+                              case (Some(title), Some(firstName), middleName, Some(lastName)) =>
+                                updatedAnswers.set(
+                                  PartnerDetailsSoleProprietorPage(index),
+                                  SoleProprietorName(
+                                    title      = title,
+                                    firstName  = firstName,
+                                    middleName = middleName,
+                                    lastName   = lastName
+                                  )
+                                )
+                              // SoleProp names are missing
+                              case _ => Try(updatedAnswers)
+                            }
+                          // BusinessType is missing
+                          case _ =>
+                            updatedAnswers.setIfDefined(PartnerDetailsBusinessNamePage(index), partnerDetails.businessName)
+                        }
+
+  } yield updatedAnswers
 
 }
 
