@@ -309,7 +309,7 @@ object PartnerDetailsDataRequiredActionSpec {
     phoneNumber            = Some("02071234567"),
     mobilePhoneNumber      = Some("07700123456"),
     faxNumber              = Some("02071234568"),
-    emailAddress           = Some("john.doe@example.com"),
+    emailAddr              = Some("john.doe@example.com"),
     isFutureLeaveDate      = Some(0),
     isFutureJoinDate       = Some(0),
     businessType           = Some(2)

@@ -132,7 +132,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       iomOrCiFlag           = partnerDetails.iomOrCiFlag,
       contactNumber         = contactNumber,
       faxNumber             = partnerDetails.faxNumber,
-      emailAddr             = partnerDetails.emailAddress
+      emailAddr             = partnerDetails.emailAddr
     )
 
     for {

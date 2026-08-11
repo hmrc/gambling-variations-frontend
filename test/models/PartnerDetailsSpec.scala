@@ -100,7 +100,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
       result.get.partners.head.phoneNumber            shouldBe Some("02071234567")
       result.get.partners.head.mobilePhoneNumber      shouldBe Some("07700123456")
       result.get.partners.head.faxNumber              shouldBe Some("02071234568")
-      result.get.partners.head.emailAddress           shouldBe Some("john.doe@example.com")
+      result.get.partners.head.emailAddr              shouldBe Some("john.doe@example.com")
       result.get.partners.head.isFutureJoinDate       shouldBe Some(0)
       result.get.partners.head.isFutureLeaveDate      shouldBe Some(0)
       result.get.partners.head.businessType           shouldBe Some(2)
