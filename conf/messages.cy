@@ -135,3 +135,7 @@ businessAddressAdditionalInfo.error.length = cy: The additional information must
 removeTradeName.title = A ydych yn siŵr eich bod am dynnu’r enw masnachu
 removeTradeName.heading = A ydych yn siŵr eich bod am dynnu’r enw masnachu {0}?
 removeTradeName.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r enw masnachu
+
+removeEmailAddress.title = A ydych yn siŵr eich bod am dynnu’r cyfeiriad e-bost?
+removeEmailAddress.heading = A ydych yn siŵr eich bod am dynnu’r cyfeiriad e-bost {0}?
+removeEmailAddress.error.required = cy: Select yes if you want to remove the email address
