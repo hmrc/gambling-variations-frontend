@@ -25,16 +25,8 @@ import viewmodels.govuk.all.SummaryListViewModel
 case object BusinessAddressViewModel {
   def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
     val isUk = ua.get(BusinessAddressUkPage).isDefined
-    val hasUkPostcodeOpt: Seq[SummaryListRow] = ua.get(BusinessAddressHasUkPostcodePage) match {
-      case Some(_) => HasUkPostcodeRow.from(ua).flatMap(_ => )
-      case None => Seq.empty
-    }
-
-    val addAddressAdditionalInfoOpt = ua.get(AddBusinessAddressAdditionalInformationPage) match {
-      case Some(_) => AddAddressAdditionalInfoRow.from(ua)
-      case None => Seq.empty
-    }
-
+    val hasUkPostcodeIsDefined = ua.get(BusinessAddressHasUkPostcodePage).isDefined
+    val addressAdditionalInfoIsDefined = ua.get(AddBusinessAddressAdditionalInformationPage).isDefined
 
     val addressUa: Option[Address] = if (isUk) {
       ua.get(BusinessAddressUkPage)
@@ -42,12 +34,25 @@ case object BusinessAddressViewModel {
       ua.get(BusinessAddressNonUkPage)
     }
 
-    val businessAddressRowsBase =
-      Seq(
-        BusinessAddressAdditionalInfoRow.from(ua),
-        BusinessAddressRow(address = addressUa, isUk = isUk).toRow)
-
-
-    val rows = if(hasUkPostcodeOpt)
-}
+    if(hasUkPostcodeIsDefined && mode == NormalMode) {
+     SummaryListViewModel(
+       Seq(HasUkPostcodeRow.from(ua),
+        BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
+        BusinessAddressAdditionalInfoRow.from(ua))
+     )
+    } else if (addressAdditionalInfoIsDefined && mode == CheckMode) {
+      SummaryListViewModel(
+        Seq(
+          AddAddressAdditionalInfoRow.from(ua),
+          BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
+          BusinessAddressAdditionalInfoRow.from(ua)
+      ))
+    } else {
+      SummaryListViewModel(
+        Seq(
+          BusinessAddressRow(address = addressUa, isUk = isUk).toRow,
+          BusinessAddressAdditionalInfoRow.from(ua)
+      ))
+    }
+  }
 }

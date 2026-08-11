@@ -25,16 +25,15 @@ import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, Value
 import viewmodels.implicits.*
 
 case object AddAddressAdditionalInfoRow {
-  def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
-    ua.get(AddBusinessAddressAdditionalInformationPage) match {
-      case Some(addinfo) => {
-        Some(SummaryListRowViewModel(
+  def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
+        SummaryListRowViewModel(
           key = "checkBusinessAddress.question.addInfo",
-          value = ValueViewModel(if (addinfo) "site.yes" else "site.no"),
+          value = ValueViewModel(
+            ua.get(AddBusinessAddressAdditionalInformationPage) match {
+              case Some(addinfo) => if (addinfo) "site.yes" else "site.no"
+              case None => "site.notProvided"
+            }),
           actions = Seq(ActionItemViewModel("site.change", "#"))
-        ))
-      }
-      case None => None
+        )
     }
-  }
 }
