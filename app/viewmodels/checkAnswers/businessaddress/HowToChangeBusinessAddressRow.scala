@@ -34,7 +34,7 @@ case object HowToChangeBusinessAddressRow {
           case Some(howToChange) => howToChange match {
             case DifferentUkAddress => "checkBusinessAddress.changeOption.difUk"
             case ChangeToNonUkAddress => "checkBusinessAddress.changeOption.nonUk"
-            case ChangeToUkAddress => "checkBusinessAddress.changeOption.uk"
+            case ChangeToUkAddress => "checkBusinessAddress.changeOption.toUk"
             case EditCurrentAddress => "checkBusinessAddress.changeOption.edit"
             case _ => "site.notProvided"
         }
