@@ -17,17 +17,31 @@
 package viewmodels.checkAnswers.businessaddress
 
 import controllers.routes
-import models.Address
+import models.{Address, Mode, UserAnswers}
 import play.api.i18n.Messages
+import play.api.mvc.Result
+import navigation.Navigator
+import pages.{BusinessAddressNonUkPage, BusinessAddressSectionPage, BusinessAddressUkPage}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-case class BusinessAddressRow(address: Option[Address], isUk: Boolean)(implicit messages: Messages) {
+import java.net.http.HttpClient.Redirect
+
+case class BusinessAddressRow(ua: UserAnswers, isUk: Boolean, isNonUk: Boolean, mode: Mode)
+                             (implicit messages: Messages, navigator: Navigator) {
   def toRow: SummaryListRow = {
 
+    val addressUa: Option[Address] = if (isUk) {
+      ua.get(BusinessAddressUkPage)
+    } else if(isNonUk){
+      ua.get(BusinessAddressNonUkPage)
+    } else {
+      None
+    }
+
     val addressRowValue: Value = {
-      address match {
+      addressUa match {
         case Some(addr) =>
           ValueViewModel(
             s"""
@@ -44,6 +58,17 @@ case class BusinessAddressRow(address: Option[Address], isUk: Boolean)(implicit 
       }
 
     }
+
+    val changeRoute: String =
+      if(isUk) {
+        "#"
+      } else if(isNonUk) {
+        "#"
+      } else {
+        "#"
+      }
+
+
 
     SummaryListRowViewModel(
       key     = "checkBusinessAddress.label.address",

@@ -41,8 +41,10 @@ class CheckBusinessAddressController @Inject() (
     val showChangeMessage: Boolean = checkFlag(ua, BusinessAddressChangesPage, BusinessAddressSubmittedPage)
 
     ua.get(BusinessAddressSectionPage) match {
-      case Some(_) => Ok(view(ua, showChangeMessage))
-      case None    => Redirect(routes.SystemErrorController.onPageLoad())
+      case Some(_) => {
+        Ok(view(ua, showChangeMessage))
+      }
+      case None    => Redirect("#")
     }
   }
 }
