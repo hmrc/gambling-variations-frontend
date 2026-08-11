@@ -58,7 +58,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
             "phoneNumber"            -> "02071234567",
             "mobilePhoneNumber"      -> "07700123456",
             "faxNumber"              -> "02071234568",
-            "emailAddress"           -> "john.doe@example.com",
+            "emailAddr"              -> "john.doe@example.com",
             "isFutureLeaveDate"      -> 0,
             "isFutureJoinDate"       -> 0,
             "businessType"           -> 2

@@ -69,10 +69,6 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           |  "mgdRegNumber": "XWM00000001762",
           |  "dateOfJoining": "2022-01-15",
           |  "dateOfLeaving": "2028-12-31",
-          |  "solePropTitle": "Mr",
-          |  "solePropFirstName": "John",
-          |  "solePropMiddleName": "Michael",
-          |  "solePropLastName": "Doe",
           |  "businessName": "XYZ Consulting Ltd",
           |  "tradingName": "XYZ Consulting",
           |  "dateOfBirth": "1985-06-20",
@@ -94,7 +90,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           |  "phoneNumber": "02071234567",
           |  "mobilePhoneNumber": "07700123456",
           |  "faxNumber": "02071234568",
-          |  "emailAddress": "john.doe@example.com",
+          |  "emailAddr": "john.doe@example.com",
           |  "isFutureLeaveDate": 0,
           |  "isFutureJoinDate": 0,
           |  "businessType": 2
@@ -108,7 +104,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           .willReturn(okJson(jsonAsString))
       )
 
-      connector.getPartnersDetails(mgdRegNumber).futureValue mustBe partnerDetails
+      connector.getPartnersDetails(mgdRegNumber).futureValue mustBe partnersDetailsBusinessName
     }
 
     "return UpstreamErrorResponse when backend returns 404" in {
@@ -616,16 +612,16 @@ object GamblingConnectorISpec {
     iomOrCiFlag = Some("FALSE")
   )
 
-  val partnerDetails = PartnersDetails(
+  val partnersDetailsBusinessName = PartnersDetails(
     partners = Seq(
       PartnerDetails(
         mgdRegNumber           = "XWM00000001762",
         dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
         dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
-        solePropTitle          = Some("Mr"),
-        solePropFirstName      = Some("John"),
-        solePropMiddleName     = Some("Michael"),
-        solePropLastName       = Some("Doe"),
+        solePropTitle          = None,
+        solePropFirstName      = None,
+        solePropMiddleName     = None,
+        solePropLastName       = None,
         businessName           = Some("XYZ Consulting Ltd"),
         tradingName            = Some("XYZ Consulting"),
         dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
