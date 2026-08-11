@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.{AuthorisedAction, BusinessAddressDataRequiredAction, DataRetrievalAction}
+import models.Mode
 import pages.*
 import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -36,15 +37,15 @@ class CheckBusinessAddressController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val ua = request.userAnswers
     val showChangeMessage: Boolean = checkFlag(ua, BusinessAddressChangesPage, BusinessAddressSubmittedPage)
 
     ua.get(BusinessAddressSectionPage) match {
       case Some(_) => {
-        Ok(view(ua, showChangeMessage))
+        Ok(view(ua, mode, showChangeMessage))
       }
-      case None    => Redirect("#")
+      case None => Redirect("#")
     }
   }
 }

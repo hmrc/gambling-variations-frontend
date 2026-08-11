@@ -26,14 +26,13 @@ import viewmodels.implicits.*
 
 case object AddAddressAdditionalInfoRow {
   def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
-        SummaryListRowViewModel(
-          key = "checkBusinessAddress.question.addInfo",
-          value = ValueViewModel(
-            ua.get(AddBusinessAddressAdditionalInformationPage) match {
-              case Some(addinfo) => if (addinfo) "site.yes" else "site.no"
-              case None => "site.notProvided"
-            }),
-          actions = Seq(ActionItemViewModel("site.change", "#"))
-        )
-    }
+    SummaryListRowViewModel(
+      key = "checkBusinessAddress.question.addInfo",
+      value = ValueViewModel(ua.get(AddBusinessAddressAdditionalInformationPage) match {
+        case Some(addinfo) => if (addinfo) "site.yes" else "site.no"
+        case None          => "site.notProvided"
+      }),
+      actions = Seq(ActionItemViewModel("site.change", "#"))
+    )
+  }
 }

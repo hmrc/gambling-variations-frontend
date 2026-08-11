@@ -15,6 +15,7 @@
  *@
 
 @import views.html.components.*
+@import models.Mode
 @import viewmodels.checkAnswers.businessaddress.BusinessAddressViewModel
 
 @this(
@@ -28,7 +29,7 @@
         hint: GovukHint
 )
 
-@(ua: UserAnswers, showChangeMessage: Boolean)(implicit request: Request[_], messages: Messages)
+@(ua: UserAnswers, mode: Mode, showChangeMessage: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkBusinessAddress.title"), Some("changeRegistrationDetails.caption"))) {
 
@@ -36,7 +37,7 @@
     @h1("checkBusinessAddress.heading", classes="govuk-heading-l")
     @hint(HintViewModel("checkBusinessAddress.hint"))
 
-    @govukSummaryList(BusinessAddressViewModel.from(ua))
+    @govukSummaryList(BusinessAddressViewModel.from(ua, mode))
 
     @if(showChangeMessage) {
         @paragraph(messages("checkBusinessAddress.message.requiredToSubmit"))

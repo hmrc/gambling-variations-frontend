@@ -16,25 +16,21 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import controllers.routes
 import models.{Address, Mode, UserAnswers}
 import play.api.i18n.Messages
-import play.api.mvc.Result
-import navigation.Navigator
-import pages.{BusinessAddressNonUkPage, BusinessAddressSectionPage, BusinessAddressUkPage}
+import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-import java.net.http.HttpClient.Redirect
-
-case class BusinessAddressRow(ua: UserAnswers, isUk: Boolean, isNonUk: Boolean, mode: Mode)
-                             (implicit messages: Messages, navigator: Navigator) {
+case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Messages) {
   def toRow: SummaryListRow = {
+    val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
+    val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
 
     val addressUa: Option[Address] = if (isUk) {
       ua.get(BusinessAddressUkPage)
-    } else if(isNonUk){
+    } else if (isNonUk) {
       ua.get(BusinessAddressNonUkPage)
     } else {
       None
@@ -56,26 +52,23 @@ case class BusinessAddressRow(ua: UserAnswers, isUk: Boolean, isNonUk: Boolean, 
           )
         case None => ValueViewModel("site.notProvided")
       }
-
     }
 
     val changeRoute: String =
-      if(isUk) {
+      if (isUk) {
         "#"
-      } else if(isNonUk) {
+      } else if (isNonUk) {
         "#"
       } else {
         "#"
       }
 
-
-
     SummaryListRowViewModel(
-      key     = "checkBusinessAddress.label.address",
-      value   = addressRowValue,
+      key   = "checkBusinessAddress.label.address",
+      value = addressRowValue,
       actions = Seq(
         ActionItemViewModel("site.change", "#"),
-        ActionItemViewModel("site.remove", "#"),
+        ActionItemViewModel("site.remove", "#")
       )
     )
   }

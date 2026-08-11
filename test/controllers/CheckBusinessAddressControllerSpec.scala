@@ -1,27 +1,52 @@
 package controllers
 
 import base.SpecBase
+import models.{Address, NormalMode, UserAnswers}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.CheckBusinessAddressView
+import play.api.libs.json.Json
+import views.html.BusinessAddressView
 
 class CheckBusinessAddressControllerSpec extends SpecBase {
 
+  private val baseAnswers = Json.obj(
+    "businessAddressSection" -> Json.obj(
+      "mgdRegNum" -> "XMY1000001",
+    )
+  )
+
+  val addressOnlyUa: UserAnswers = UserAnswers("id", Json.obj(
+    "businessAddressSection" -> Json.obj("mgdRegNum" -> "XMY1000002",
+    "businessAddressUk" -> Address(
+      "abc",
+      Some("abc"),
+      Some("abc"),
+      Some("abc"),
+      Some("abc"),
+      Some("abc")
+      )
+
+    )
+    )
+  )
+
+  private val ua = UserAnswers("id", baseAnswers)
+
   "CheckBusinessAddress Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET when address is present" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(addressOnlyUa)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckBusinessAddressController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[CheckBusinessAddressView]
+        val view = application.injector.instanceOf[BusinessAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(ua = addressOnlyUa, mode = NormalMode, showChangeMessage = false)(request, messages(application)).toString
       }
     }
   }

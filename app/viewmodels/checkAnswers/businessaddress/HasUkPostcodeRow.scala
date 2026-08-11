@@ -28,11 +28,10 @@ case object HasUkPostcodeRow {
   def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
     SummaryListRowViewModel(
       key = "checkBusinessAddress.question.ukPostcode",
-      value = ValueViewModel(
-        ua.get(BusinessAddressHasUkPostcodePage) match {
-          case Some(isUk) => if (isUk) "site.yes" else "site.no"
-          case None => "site.notProvided"
-        }),
+      value = ValueViewModel(ua.get(BusinessAddressHasUkPostcodePage) match {
+        case Some(isUk) => if (isUk) "site.yes" else "site.no"
+        case None       => "site.notProvided"
+      }),
       actions = Seq(ActionItemViewModel("site.change", "#"))
     )
   }

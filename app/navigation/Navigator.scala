@@ -201,11 +201,11 @@ class Navigator @Inject() () {
       case Some(true) =>
         routes.CorrespondenceAdditionalNameController.onPageLoad()
       case Some(false) =>
-        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
           routes.CorrespondenceUKAddrScreenerController.onPageLoad()
-        else
+        } else {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
-
+        }
       case None =>
         routes.SystemErrorController.onPageLoad()
     }
@@ -216,11 +216,11 @@ class Navigator @Inject() () {
         routes.CorrespondenceAdditionalInfoController.onPageLoad()
 
       case Some(false) =>
-        if (answers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+        if (answers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
           routes.CorrespondenceContactNumberController.onPageLoad()
-        else
+        } else {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
-
+        }
       case None =>
         routes.SystemErrorController.onPageLoad()
     }

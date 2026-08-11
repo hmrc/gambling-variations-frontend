@@ -29,17 +29,17 @@ case object HowToChangeBusinessAddressRow {
   def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
     SummaryListRowViewModel(
       key = "checkBusinessAddress.question.howToChange",
-      value = ValueViewModel(
-        ua.get(BusinessAddressChangeScreenerPage) match {
-          case Some(howToChange) => howToChange match {
-            case DifferentUkAddress => "checkBusinessAddress.changeOption.difUk"
+      value = ValueViewModel(ua.get(BusinessAddressChangeScreenerPage) match {
+        case Some(howToChange) =>
+          howToChange match {
+            case DifferentUkAddress   => "checkBusinessAddress.changeOption.difUk"
             case ChangeToNonUkAddress => "checkBusinessAddress.changeOption.nonUk"
-            case ChangeToUkAddress => "checkBusinessAddress.changeOption.toUk"
-            case EditCurrentAddress => "checkBusinessAddress.changeOption.edit"
-            case _ => "site.notProvided"
-        }
-          case None => "site.notProvided"
-        }),
+            case ChangeToUkAddress    => "checkBusinessAddress.changeOption.toUk"
+            case EditCurrentAddress   => "checkBusinessAddress.changeOption.edit"
+            case _                    => "site.notProvided"
+          }
+        case None => "site.notProvided"
+      }),
       actions = Seq(ActionItemViewModel("site.change", "#"))
     )
   }

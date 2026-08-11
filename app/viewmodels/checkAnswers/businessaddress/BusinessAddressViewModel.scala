@@ -17,22 +17,18 @@
 package viewmodels.checkAnswers.businessaddress
 
 import models.{Address, CheckMode, Mode, NormalMode, UserAnswers}
-import navigation.Navigator
 import pages.*
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
 
 case object BusinessAddressViewModel {
-  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages, navigator: Navigator): SummaryList = {
-    val isUk = ua.get(BusinessAddressUkPage).isDefined
-    val isNonUk = ua.get(BusinessAddressNonUkPage).isDefined
+  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
     val hasUkPostcodeIsDefined = ua.get(BusinessAddressHasUkPostcodePage).isDefined
     val addressAdditionalInfoIsDefined = ua.get(AddBusinessAddressAdditionalInformationPage).isDefined
     val howToChangeBusinessAddressIsDefined = ua.get(BusinessAddressChangeScreenerPage).isDefined
-
     val yesNoRows =
-      if(hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined) {
+      if (hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined) {
         Seq(HasUkPostcodeRow.from(ua), AddAddressAdditionalInfoRow.from(ua))
       } else if (hasUkPostcodeIsDefined) {
         Seq(HasUkPostcodeRow.from(ua))
@@ -43,12 +39,12 @@ case object BusinessAddressViewModel {
     val howToChangeBusinessAddressRow = Seq(HowToChangeBusinessAddressRow.from(ua))
 
     val addressBaseRows = Seq(
-      BusinessAddressRow(ua, isUk, isNonUk, mode).toRow,
+      BusinessAddressRow(ua, mode).toRow,
       BusinessAddressAdditionalInfoRow.from(ua)
     )
 
     SummaryListViewModel(
-      if(mode == NormalMode && (hasUkPostcodeIsDefined || addressAdditionalInfoIsDefined)) {
+      if (mode == NormalMode && (hasUkPostcodeIsDefined || addressAdditionalInfoIsDefined)) {
         yesNoRows ++ addressBaseRows
       } else if (mode == CheckMode && howToChangeBusinessAddressIsDefined) {
         howToChangeBusinessAddressRow ++ addressBaseRows
