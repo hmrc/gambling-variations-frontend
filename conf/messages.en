@@ -677,3 +677,13 @@ partnerAddEmailAddressYesNoPage.heading = Do you want to add an email address fo
 partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an email address for the partner?
 partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
 partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
+
+
+
+partnerEmailAddress.title = What is the partner’s email address?
+partnerEmailAddress.heading = What is the partner’s email address?
+partnerEmailAddress.error.required = Enter the partner’s email address
+partnerEmailAddress.error.length = The email address must be 70 characters or less
+partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+partnerEmailAddress.change.hidden = What is the partner’s email address?
+
