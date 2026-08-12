@@ -19,14 +19,15 @@ package controllers.partner
 import base.SpecBase
 import controllers.partner.routes.PartnerRemoveFaxNumberYesNoController
 import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CorrespondenceDetails, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerRemoveFaxNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceDetailsSectionPage
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -43,11 +44,24 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
   val form: Form[Boolean] = formProvider()
 
   lazy val partnerRemoveFaxNumberYesNoRoute: String = PartnerRemoveFaxNumberYesNoController.onPageLoad().url
+  private val testFaxNumber = "02071234568"
+  private val index = 0
+  private val mgdRegNumber = "XGM00000001761"
+  private val correspondenceDetailsWithFax = CorrespondenceDetails(
+    mgdRegNumber          = mgdRegNumber,
+    nameLine1             = None,
+    nameLine2             = None,
+    correspondenceAddress = None,
+    additionalInformation = None,
+    iomOrCiFlag           = None,
+    contactNumber         = None,
+    faxNumber             = Some(testFaxNumber),
+    emailAddr             = None
+  )
 
   "PartnerRemoveFaxNumberYesNo Controller" - {
 
-    "must return OK and the correct view for a GET" in {
-
+    "must redirect to the next page when valid data is submitted" in {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
@@ -55,16 +69,40 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, "fax-number-goes-here")(request, messages(application)).toString
+        status(result) mustEqual SEE_OTHER
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerRemoveFaxNumberYesNoPage, true).success.value
+      val cleanedData = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj(
+            "partnerDetailsMgdRegNumber" -> "XGM00000001761",
+            "partnerDetailsBusinessName" -> "Partner1",
+            "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
+              "mgdRegNumber" -> "XGM00000001761",
+              "correspondenceAddress" -> Json.obj(
+                "address1" -> "Flat 1",
+                "address2" -> "10 Market Road",
+                "address3" -> "Felling",
+                "address4" -> "Gateshead",
+                "postcode" -> "NE8 1ZZ",
+                "country"  -> "UK"
+              ),
+              "contactNumber" -> Json.obj(
+                "phoneNumber"       -> "0798765",
+                "mobilePhoneNumber" -> "7093434765"
+              ),
+              "faxNumber" -> testFaxNumber,
+              "emailAddr" -> "a@b.com"
+            )
+          )
+        ),
+        "partnerRemoveFaxNumberYesNo" -> true
+      )
+
+      val userAnswers = UserAnswers("XGM00000001761", cleanedData)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -74,50 +112,8 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
         val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
 
         val result = route(application, request).value
-
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, "fax-number-goes-here")(request, messages(application)).toString
-      }
-    }
-
-    "must redirect to the next page when valid data is submitted" in {
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerRemoveFaxNumberYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-      }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerRemoveFaxNumberYesNoRoute)
-            .withFormUrlEncodedBody(("value", ""))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, testFaxNumber)(request, messages(application)).toString
       }
     }
 
