@@ -72,7 +72,7 @@ class BusinessAddressViewSpec extends SpecBase {
       doc.body().select(".govuk-summary-list").text must include("address3")
       doc.body().select(".govuk-summary-list").text must include("address4")
       doc.body().select(".govuk-summary-list").text must include("postcode")
-      doc.body().select(".govuk-summary-list").text must not include("country")
+      doc.body().select(".govuk-summary-list").text must not include "country"
       doc.select(".govuk-hint").text                must include(messages("checkBusinessAddress.hint"))
 
     }
@@ -107,7 +107,7 @@ class BusinessAddressViewSpec extends SpecBase {
       doc.body().select(".govuk-summary-list").text must include("address2")
       doc.body().select(".govuk-summary-list").text must include("address3")
       doc.body().select(".govuk-summary-list").text must include("address4")
-      doc.body().select(".govuk-summary-list").text must not include("postcode")
+      doc.body().select(".govuk-summary-list").text must not include "postcode"
       doc.body().select(".govuk-summary-list").text must include("country")
       doc.select(".govuk-hint").text                must include(messages("checkBusinessAddress.hint"))
 
@@ -142,7 +142,6 @@ class BusinessAddressViewSpec extends SpecBase {
 
       doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.ukPostcode")
       doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.addInfo")
-
 
     }
 
@@ -192,13 +191,13 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "hasUkPostcode" -> true,
+            "hasUkPostcode"                           -> true,
             "addBusinessAddressAdditionalInformation" -> false
           )
         )
       )
     }
-      "must render both HasUkPostcodeRow & AddAddressAdditionalInfoRow with correct data if answered" in new Setup {
+    "must render both HasUkPostcodeRow & AddAddressAdditionalInfoRow with correct data if answered" in new Setup {
 
       val ukAddressAnswers: UserAnswers = UserAnswers(
         "id",
@@ -213,7 +212,7 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "hasUkPostcode" -> true,
+            "hasUkPostcode"                           -> true,
             "addBusinessAddressAdditionalInformation" -> false
           )
         )
@@ -230,7 +229,7 @@ class BusinessAddressViewSpec extends SpecBase {
       doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.howToChange")
     }
 
-      "must include change message when flagged" in new Setup {
+    "must include change message when flagged" in new Setup {
 
       val ukAddressAnswers: UserAnswers = UserAnswers(
         "id",
