@@ -59,11 +59,6 @@ systemError.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 systemError.p1 = Rhowch gynnig arall arni yn nes ymlaen, neu cysylltwch â 
 systemError.p1.link = Desg Gymorth Gwasanaethau Ar-lein CThEF (yn agor tab newydd)
 
-accessDenied.title = cy:Sorry, there is a problem with the service
-accessDenied.heading = cy:Sorry, there is a problem with the service
-accessDenied.p1 = cy:You do not have access to this service.
-accessDenied.p1.link = cy:Continue to your account
-
 pageNotFound.title = Heb ddod o hyd i’r dudalen
 pageNotFound.heading = Heb ddod o hyd i’r dudalen
 pageNotFound.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
