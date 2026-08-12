@@ -138,4 +138,4 @@ removeTradeName.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r enw m
 
 removeFaxNumber.title = A ydych yn siŵr eich bod am dynnu’r rhif ffacs?
 removeFaxNumber.heading = A ydych yn siŵr eich bod am dynnu’r rhif ffacs {0}?
-removeFaxNumber.error.required = cy: Select yes if you want to remove the fax number
+removeFaxNumber.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r rhif ffacs
