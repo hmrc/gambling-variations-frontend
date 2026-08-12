@@ -14,37 +14,39 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize.Large
 @import viewmodels.InputWidth._
-@import viewmodels.LabelSize
 @import views.html.components.Caption
+@import viewmodels.LabelSize
 
 @this(
-    layout: templates.Layout,
-    formHelper: FormWithCSRF,
-    govukErrorSummary: GovukErrorSummary,
-    govukInput: GovukInput,
-    govukButton: GovukButton,
-    caption: Caption
+        layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        govukErrorSummary: GovukErrorSummary,
+        govukRadios: GovukRadios,
+        govukButton: GovukButton,
+        caption: Caption
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("businessAddressAdditionalInfo.title"), Some("changeRegistrationDetails.caption"))) {
+@layout(pageTitle = title(form, messages("partnerAddEmailAddressYesNoPage.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = routes.BusinessAddressAdditionalInfoController.onSubmit(mode), Symbol("autoComplete") -> "on") {
+    @formHelper(action = controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @caption(messages("changeRegistrationDetails.caption"))
+        @caption(
+            messages("changeRegistrationDetails.caption")
+        )
 
-        @govukInput(
-            InputViewModel(
-            field = form("businessAddressAdditionalInfo"),
-            label = LabelViewModel(messages("businessAddressAdditionalInfo.heading")).asPageHeading(LabelSize.Large)
-        ).withAttribute("autocomplete" -> "on")
-        .withHint(HintViewModel(messages("businessAddressAdditionalInfo.hint")))
+        @govukRadios(
+            RadiosViewModel.yesNo(
+                field = form("value"),
+                legend = LegendViewModel(messages("partnerAddEmailAddressYesNoPage.heading")).asPageHeading(Large)
+            )
         )
 
         @govukButton(

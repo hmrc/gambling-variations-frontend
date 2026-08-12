@@ -20,8 +20,7 @@ import controllers.routes
 import models.*
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
-import pages.partner.PartnerDetailsAdditionalAddressInfoPage
-import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoYesNoPage}
+import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsAdditionalAddressInfoYesNoPage, RemoveAdditionalInfoForPartnerAddressYesNoPage}
 
 class NavigatorSpec extends SpecBase {
 
@@ -473,6 +472,55 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a different UK address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.DifferentUkAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a non-UK address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.ChangeToNonUkAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a UK address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.ChangeToUkAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to PageNotFound when editing the current address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.EditCurrentAddress)
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to SystemError when unanswered" in {
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
       "should route AddCorrespondenceAddressAdditionalInformationPage to CorrespondenceAdditionalInfo when answer is true" in {
         val answers =
           emptyAnswers
@@ -784,6 +832,36 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage, NormalMode, emptyAnswers) mustBe
           controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad() // TODO: update later.
       }
+
+      // update tests later
+
+      "should route RemoveAdditionalInfoForPartnerAddressYesNoPage to RemoveAdditionalInfoForPartnerAddressYesNoController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(RemoveAdditionalInfoForPartnerAddressYesNoPage, true)
+            .success
+            .value
+
+        navigator.nextPage(RemoveAdditionalInfoForPartnerAddressYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+      }
+
+      "should route RemoveAdditionalInfoForPartnerAddressYesNoPage to RemoveAdditionalInfoForPartnerAddressYesNoController when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(RemoveAdditionalInfoForPartnerAddressYesNoPage, false)
+            .success
+            .value
+
+        navigator.nextPage(RemoveAdditionalInfoForPartnerAddressYesNoPage, NormalMode, answers) mustBe
+          controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+      }
+
+      "should route RemoveAdditionalInfoForPartnerAddressYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(RemoveAdditionalInfoForPartnerAddressYesNoPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
     }
   }
 }

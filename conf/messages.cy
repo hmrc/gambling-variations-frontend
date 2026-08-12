@@ -83,7 +83,7 @@ accessDenied.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 accessDenied.p1 = Nid oes gennych fynediad at y gwasanaeth hwn.
 accessDenied.p1.link = Parhau i’ch cyfrif
 
-changeRegistrationDetails.caption = cy: Change registration details
+changeRegistrationDetails.caption = Newid manylion cofrestru
 changeRegistrationDetails.heading.caption = cy: MGD registration number: {0}
 changeRegistrationDetails.noChangesYet = cy: You need to change at least one detail before you can submit your changes to HMRC.
 changeRegistrationDetails.table.section = cy: Section
@@ -115,9 +115,23 @@ correspondenceChangeAddrScreener.uk.yes = cy: Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = cy: Change to a UK address
 correspondenceChangeAddrScreener.no = cy: Edit current correspondence address
 
+businessChangeAddrScreener.title = cy: How do you want to change your business address?
+businessChangeAddrScreener.heading = cy: How do you want to change your business address?
+businessChangeAddrScreener.checkYourAnswersLabel = cy: How do you want to change your business address?
+businessChangeAddrScreener.error.required = cy: Select how you want to change your business address
+businessChangeAddrScreener.change.hidden = cy: How do you want to change your business address?
+businessChangeAddrScreener.uk.differentUkAddress = cy: Change to a different UK address
+businessChangeAddrScreener.uk.changeToNonUkAddress = cy: Change to a non-UK address
+businessChangeAddrScreener.nonuk.changeToUkAddress = cy: Change to a UK address
+businessChangeAddrScreener.editCurrentAddress = cy: Edit current business address
+
 businessAddressAdditionalInfo.title = cy: What is the additional information for your business address?
 businessAddressAdditionalInfo.heading = cy: What is the additional information for your business address?
 businessAddressAdditionalInfo.hint = cy: For example, building name or floor number
 businessAddressAdditionalInfo.error.required = cy: Enter additional information for your business address
 businessAddressAdditionalInfo.error.invalid = cy: The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessAddressAdditionalInfo.error.length = cy: The additional information must be 100 characters or less
+
+removeTradeName.title = A ydych yn siŵr eich bod am dynnu’r enw masnachu
+removeTradeName.heading = A ydych yn siŵr eich bod am dynnu’r enw masnachu {0}?
+removeTradeName.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r enw masnachu
