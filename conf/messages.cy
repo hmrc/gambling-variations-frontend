@@ -59,11 +59,6 @@ systemError.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 systemError.p1 = Rhowch gynnig arall arni yn nes ymlaen, neu cysylltwch â 
 systemError.p1.link = Desg Gymorth Gwasanaethau Ar-lein CThEF (yn agor tab newydd)
 
-accessDenied.title = cy:Sorry, there is a problem with the service
-accessDenied.heading = cy:Sorry, there is a problem with the service
-accessDenied.p1 = cy:You do not have access to this service.
-accessDenied.p1.link = cy:Continue to your account
-
 pageNotFound.title = Heb ddod o hyd i’r dudalen
 pageNotFound.heading = Heb ddod o hyd i’r dudalen
 pageNotFound.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
@@ -131,6 +126,25 @@ businessAddressAdditionalInfo.hint = cy: For example, building name or floor num
 businessAddressAdditionalInfo.error.required = cy: Enter additional information for your business address
 businessAddressAdditionalInfo.error.invalid = cy: The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessAddressAdditionalInfo.error.length = cy: The additional information must be 100 characters or less
+
+soleProprietorName.title = Beth yw enw’r berchnogaeth unigol?
+soleProprietorName.heading = Beth yw enw’r berchnogaeth unigol?
+soleProprietorName.title.label = Teitl
+soleProprietorName.firstName.label = Enw cyntaf
+soleProprietorName.middleName.label = Enwau canol (dewisol)
+soleProprietorName.lastName.label = Enw olaf
+
+soleProprietorName.error.title.required = Nodwch deitl y berchnogaeth unigol
+soleProprietorName.error.title.length = Mae’n rhaid i deitl y berchnogaeth unigol fod yn 20 o gymeriadau neu lai
+soleProprietorName.error.title.invalid = Mae’n rhaid i deitl y berchnogaeth unigol gynnwys y llythrennau a i z, collnodau, cysylltnodau neu fylchau yn unig
+soleProprietorName.error.firstName.required = Nodwch enw cyntaf y berchnogaeth unigol
+soleProprietorName.error.firstName.length = Rhaid i enw cyntaf y berchnogaeth unigol fod yn 100 o gymeriadau neu lai
+soleProprietorName.error.firstName.invalid = Rhaid i enw cyntaf y berchnogaeth unigol gynnwys dim ond y llythrennau a i z, rhifau 0 i 9, bylchau, cysylltnodau a chollnodau
+soleProprietorName.error.middleName.length = Mae’n rhaid i enwau canol y berchnogaeth unigol fod yn 100 o gymeriadau neu lai
+soleProprietorName.error.middleName.invalid = Rhaid i enwau canol y berchnogaeth unigol gynnwys dim ond y llythrennau a i z, rhifau 0 i 9, bylchau, cysylltnodau a chollnodau
+soleProprietorName.error.lastName.required = Nodwch enw olaf y berchnogaeth unigol
+soleProprietorName.error.lastName.length = Rhaid i enw olaf y berchnogaeth unigol fod yn 100 o gymeriadau neu lai
+soleProprietorName.error.lastName.invalid = Rhaid i enw olaf y berchnogaeth unigol gynnwys dim ond y llythrennau a i z, rhifau 0 i 9, bylchau, cysylltnodau a chollnodau
 
 removeTradeName.title = A ydych yn siŵr eich bod am dynnu’r enw masnachu
 removeTradeName.heading = A ydych yn siŵr eich bod am dynnu’r enw masnachu {0}?
