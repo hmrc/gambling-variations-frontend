@@ -1,0 +1,67 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.InputWidth._
+@import views.html.components.{Caption, H1, Paragraph}
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukInput: GovukInput,
+    govukButton: GovukButton,
+    caption: Caption,
+    h1: H1,
+    paragraph: Paragraph
+)
+
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("partnerContactDetails.title"))) {
+
+    @formHelper(action = controllers.partner.routes.PartnerContactDetailsController.onSubmit(), Symbol("autoComplete") -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form))
+        }
+
+        @caption(messages("changeRegistrationDetails.caption"))
+
+        @h1("partnerContactDetails.heading")
+
+        @paragraph("partnerContactDetails.paragraph")
+
+        @govukInput(
+            InputViewModel(
+                field = form("phoneNumber"),
+                label = LabelViewModel(messages("partnerContactDetails.phoneNumber"))
+            )
+            .withWidth(Full)
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("mobilePhoneNumber"),
+                label = LabelViewModel(messages("partnerContactDetails.mobilePhoneNumber"))
+            )
+            .withWidth(Full)
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

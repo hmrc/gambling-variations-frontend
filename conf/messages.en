@@ -667,12 +667,40 @@ partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an em
 partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
 partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
 
+
+
 partnerEmailAddress.title = What is the partner’s email address?
 partnerEmailAddress.heading = What is the partner’s email address?
 partnerEmailAddress.error.required = Enter the partner’s email address
 partnerEmailAddress.error.length = The email address must be 70 characters or less
 partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 partnerEmailAddress.change.hidden = What is the partner’s email address?
+
+partnerContactDetails.heading = What contact numbers should we use for the partner?
+partnerContactDetails.paragraph = You must provide at least one contact number.
+partnerContactDetails.phoneNumber = Phone number
+partnerContactDetails.mobilePhoneNumber = Mobile number
+
+partnerContactDetails.error.phoneNumber.length = The phone number must be 20 characters or less XO
+partnerContactDetails.error.mobilePhoneNumber.length = The mobile number must be 20 characters or less XO
+
+partnerContactDetails.error.phoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
+partnerContactDetails.error.mobilePhoneNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
+
+partnerContactDetails.error.phoneNumber.required = Enter valid phone number
+partnerContactDetails.error.mobilePhoneNumber.required = Enter valid mobile number
+
+partnerContactDetails.error.count = At least one phone or mobile number is required
+
+#partnerContactDetails.title = partnerContactDetails
+#partnerContactDetails.heading = partnerContactDetails
+#partnerContactDetails.phoneNumber = phoneNumber
+#partnerContactDetails.mobilePhoneNumber = mobilePhoneNumber
+#partnerContactDetails.checkYourAnswersLabel = PartnerContactDetails
+
+
+#partnerContactDetails.phoneNumber.change.hidden = phoneNumber
+#partnerContactDetails.mobilePhoneNumber.change.hidden = mobilePhoneNumber
 
 businessUKAddrScreener.title = Does your business address have a UK postcode?
 businessUKAddrScreener.heading = Does your business address have a UK postcode?
