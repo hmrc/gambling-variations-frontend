@@ -25,17 +25,10 @@ class AddAddressAdditionalInfoRowSpec extends SpecBase {
   "AddAddressAdditionalInfoRow" - {
 
     "must render summary list row with correct data" in new Setup {
-      private val addressUa: Address = Address(
-        "address1",
-        Some("address2"),
-        Some("address3"),
-        Some("address4"),
-        Some("postcode"),
-        Some("country"))
+      private val addressUa: Address = Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
 
-
-      private val ua = emptyUserAnswers.
-        set(BusinessAddressUkPage, addressUa)
+      private val ua = emptyUserAnswers
+        .set(BusinessAddressUkPage, addressUa)
         .success
         .value
         .set(AddBusinessAddressAdditionalInformationPage, true)

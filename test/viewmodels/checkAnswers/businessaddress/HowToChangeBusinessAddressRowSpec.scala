@@ -25,17 +25,10 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
   "HowToChangeBusinessAddressRow" - {
 
     "must show correct data for 'different uk address' option" in new Setup {
-      private val addressUa: Address = Address(
-        "address1",
-        Some("address2"),
-        Some("address3"),
-        Some("address4"),
-        Some("postcode"),
-        Some("country"))
+      private val addressUa: Address = Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
 
-
-      private val ua = emptyUserAnswers.
-        set(BusinessAddressUkPage, addressUa)
+      private val ua = emptyUserAnswers
+        .set(BusinessAddressUkPage, addressUa)
         .success
         .value
         .set(BusinessAddressChangeScreenerPage, DifferentUkAddress)
@@ -49,17 +42,10 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
     }
 
     "must show correct data for 'change to non uk address' option" in new Setup {
-      private val addressUa: Address = Address(
-        "address1",
-        Some("address2"),
-        Some("address3"),
-        Some("address4"),
-        Some("postcode"),
-        Some("country"))
+      private val addressUa: Address = Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
 
-
-      private val ua = emptyUserAnswers.
-        set(BusinessAddressUkPage, addressUa)
+      private val ua = emptyUserAnswers
+        .set(BusinessAddressUkPage, addressUa)
         .success
         .value
         .set(BusinessAddressChangeScreenerPage, ChangeToNonUkAddress)
@@ -73,41 +59,27 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
     }
 
     "must show correct data for 'change to uk address' option" in new Setup {
-        private val addressUa: Address = Address(
-          "address1",
-          Some("address2"),
-          Some("address3"),
-          Some("address4"),
-          Some("postcode"),
-          Some("country"))
+      private val addressUa: Address = Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
 
+      private val ua: UserAnswers = emptyUserAnswers
+        .set(BusinessAddressUkPage, addressUa)
+        .success
+        .value
+        .set(BusinessAddressChangeScreenerPage, ChangeToUkAddress)
+        .success
+        .value
 
-        private val ua: UserAnswers = emptyUserAnswers.
-          set(BusinessAddressUkPage, addressUa)
-          .success
-          .value
-          .set(BusinessAddressChangeScreenerPage, ChangeToUkAddress)
-          .success
-          .value
+      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua)
 
-        private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua)
-
-        result.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
-        result.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.toUk"))
-      }
+      result.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
+      result.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.toUk"))
+    }
 
     "must show correct data for 'edit current address' option" in new Setup {
-      private val addressUa: Address = Address(
-        "address1",
-        Some("address2"),
-        Some("address3"),
-        Some("address4"),
-        Some("postcode"),
-        Some("country"))
+      private val addressUa: Address = Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
 
-
-      private val ua: UserAnswers = emptyUserAnswers.
-        set(BusinessAddressUkPage, addressUa)
+      private val ua: UserAnswers = emptyUserAnswers
+        .set(BusinessAddressUkPage, addressUa)
         .success
         .value
         .set(BusinessAddressChangeScreenerPage, EditCurrentAddress)

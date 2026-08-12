@@ -43,15 +43,14 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
       addressUa match {
         case Some(addr) =>
           ValueViewModel(
-            s"""
-                         ${addr.address1}
-                         ${addr.address2.getOrElse(messages("site.notProvided"))}
-                         ${addr.address2.getOrElse(messages("site.notProvided"))}
-                         ${addr.address3.getOrElse(messages("site.notProvided"))}
-                         ${addr.address4.getOrElse(messages("site.notProvided"))}
-                         ${if (isUk) postcodeRow else None}
-                         ${if (isNonUk) countryRow else None}
-                         """
+            Seq(
+              Some(addr.address1),
+              addr.address2,
+              addr.address3,
+              addr.address4,
+              if (isUk) Some(postcodeRow) else None,
+              if (isNonUk) Some(countryRow) else None
+            ).flatten.mkString("\n")
           )
         case None => ValueViewModel("site.notProvided")
       }
