@@ -17,6 +17,7 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
+import models.BusinessAddressChangeAddrOption.DifferentUkAddress
 import models.{Address, CheckMode, NormalMode}
 import pages.*
 import play.api.i18n.Messages
@@ -46,20 +47,20 @@ class BusinessAddressViewModelSpec extends SpecBase {
         Some("address4"),
         Some("postcode"),
         Some("country"))
-      val ua = emptyUserAnswers.
+      private val ua = emptyUserAnswers.
         set(BusinessAddressUkPage, addressUa)
         .success
         .value
 
 
-      val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
 
       result.rows.size mustEqual 2
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
       result.rows(1).key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
     }
 
-    "must show yesNo rows if NormalMode screener questions answered" in new Setup  {
+    "must show yesNo rows if NormalMode & screener questions answered" in new Setup  {
       private val addressUa: Address = Address(
         "address1",
         Some("address2"),
@@ -67,7 +68,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         Some("address4"),
         Some("postcode"),
         Some("country"))
-      val ua = emptyUserAnswers.
+      private val ua = emptyUserAnswers.
         set(BusinessAddressUkPage, addressUa)
         .success
         .value
@@ -79,7 +80,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .value
 
 
-      val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
 
       result.rows.size mustEqual 4
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.question.ukPostcode"))
@@ -88,7 +89,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
       result.rows(3).key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
     }
 
-    "must not show yesNo rows if CheckMode screener questions answered" in new Setup  {
+    "must not show yesNo rows if CheckMode & screener questions answered" in new Setup  {
       private val addressUa: Address = Address(
         "address1",
         Some("address2"),
@@ -96,7 +97,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         Some("address4"),
         Some("postcode"),
         Some("country"))
-      val ua = emptyUserAnswers.
+      private val ua = emptyUserAnswers.
         set(BusinessAddressUkPage, addressUa)
         .success
         .value
@@ -108,7 +109,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .value
 
 
-      val result: SummaryList = BusinessAddressViewModel.from(ua, CheckMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua, CheckMode)
 
       result.rows.size mustEqual 2
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
@@ -124,7 +125,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         Some("address4"),
         Some("postcode"),
         Some("country"))
-      val ua = emptyUserAnswers.
+      private val ua = emptyUserAnswers.
         set(BusinessAddressUkPage, addressUa)
         .success
         .value
@@ -133,7 +134,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .value
 
 
-      val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
 
       result.rows.size mustEqual 3
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.question.ukPostcode"))
@@ -150,7 +151,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         Some("address4"),
         Some("postcode"),
         Some("country"))
-      val ua = emptyUserAnswers.
+      private val ua = emptyUserAnswers.
         set(BusinessAddressUkPage, addressUa)
         .success
         .value
@@ -159,12 +160,62 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .value
 
 
-      val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
 
       result.rows.size mustEqual 3
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.question.addInfo"))
       result.rows(1).key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
       result.rows(2).key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
+    }
+
+    "must show HowToChangeBusinessAddressRow with base in CheckMode if answered" in new Setup  {
+      private val addressUa: Address = Address(
+        "address1",
+        Some("address2"),
+        Some("address3"),
+        Some("address4"),
+        Some("postcode"),
+        Some("country"))
+      private val ua = emptyUserAnswers.
+        set(BusinessAddressUkPage, addressUa)
+        .success
+        .value
+        .set(BusinessAddressChangeScreenerPage, DifferentUkAddress)
+        .success
+        .value
+
+
+      private val result: SummaryList = BusinessAddressViewModel.from(ua, CheckMode)
+
+      result.rows.size mustEqual 3
+      result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
+      result.rows.head.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.difUk"))
+      result.rows(1).key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
+      result.rows(2).key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
+    }
+
+    "must show not HowToChangeBusinessAddressRow with base in NormalMode if answered" in new Setup  {
+      private val addressUa: Address = Address(
+        "address1",
+        Some("address2"),
+        Some("address3"),
+        Some("address4"),
+        Some("postcode"),
+        Some("country"))
+      private val ua = emptyUserAnswers.
+        set(BusinessAddressUkPage, addressUa)
+        .success
+        .value
+        .set(BusinessAddressChangeScreenerPage, DifferentUkAddress)
+        .success
+        .value
+
+
+      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+
+      result.rows.size mustEqual 2
+      result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
+      result.rows(1).key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
     }
   }
 }
