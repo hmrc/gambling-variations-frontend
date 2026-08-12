@@ -118,6 +118,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
     case BusinessChangeAddrScreenerPage =>
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
+    case PartnerEmailAddressPage =>
+      _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()

@@ -127,29 +127,20 @@ declaration.p1 = To the best of my knowledge, I declare that the information I h
 declaration.submit = Declare and submit
 
 soleProprietorName.title = 	What is the sole proprietor’s name?
-
 soleProprietorName.heading = What is the sole proprietor’s name?
-soleProprietorName.checkYourAnswersLabel = SoleProprietorNameForm
-
 soleProprietorName.title.label = Title
-soleProprietorName.title.change.hidden = Title
+soleProprietorName.firstName.label = First name
+soleProprietorName.middleName.label = Middle names (optional)
+soleProprietorName.lastName.label = Last name
 
 soleProprietorName.error.title.required = Enter the sole proprietor’s title
 soleProprietorName.error.title.length = The sole proprietor’s title must be 20 characters or less
 soleProprietorName.error.title.invalid = The sole proprietor’s title must only include letters a to z, apostrophes, hyphens or spaces
-
-soleProprietorName.firstName.label = First name
-soleProprietorName.firstName.change.hidden = First name
-
 soleProprietorName.error.firstName.required = Enter the sole proprietor’s first name
 soleProprietorName.error.firstName.length = The sole proprietor’s first name must be 100 characters or less
 soleProprietorName.error.firstName.invalid = The sole proprietor’s first name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-
-soleProprietorName.middleName.label = Middle names (optional)
 soleProprietorName.error.middleName.length = The sole proprietor’s middle name must be 100 characters or less
 soleProprietorName.error.middleName.invalid = The sole proprietor’s middle name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-
-soleProprietorName.lastName.label = Last name
 soleProprietorName.error.lastName.required = Enter the sole proprietor’s last name
 soleProprietorName.error.lastName.length = The sole proprietor’s last name must be 100 characters or less
 soleProprietorName.error.lastName.invalid = The sole proprietor’s last name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
@@ -686,6 +677,16 @@ partnerAddEmailAddressYesNoPage.heading = Do you want to add an email address fo
 partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an email address for the partner?
 partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
 partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
+
+
+
+partnerEmailAddress.title = What is the partner’s email address?
+partnerEmailAddress.heading = What is the partner’s email address?
+partnerEmailAddress.error.required = Enter the partner’s email address
+partnerEmailAddress.error.length = The email address must be 70 characters or less
+partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+partnerEmailAddress.change.hidden = What is the partner’s email address?
+
 
 
 checkBusinessAddress.title = Check your business address
