@@ -104,7 +104,9 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           .willReturn(okJson(jsonAsString))
       )
 
-      connector.getPartnersDetails(mgdRegNumber).futureValue mustBe partnersDetailsBusinessName
+      connector.getPartnersDetails(mgdRegNumber).map { result =>
+        result mustBe partnersDetailsBusinessName
+      }
     }
 
     "return UpstreamErrorResponse when backend returns 404" in {
