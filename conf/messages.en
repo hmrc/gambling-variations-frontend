@@ -691,6 +691,7 @@ partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email addr
 checkBusinessAddress.title = Check your business address
 checkBusinessAddress.heading = Check your business address
 checkBusinessAddress.label.address = Business address
+checkBusinessAddress.label.addInfo = Additional information
 checkBusinessAddress.question.ukPostcode = Does address have a UK postcode?
 checkBusinessAddress.question.howToChange = How do you want to change your business address?
 checkBusinessAddress.changeOption.difUk = Change to a different UK address

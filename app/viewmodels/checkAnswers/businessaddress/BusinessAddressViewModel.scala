@@ -22,11 +22,13 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
 
-case object BusinessAddressViewModel {
+case object
+BusinessAddressViewModel {
   def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
     val hasUkPostcodeIsDefined = ua.get(BusinessAddressHasUkPostcodePage).isDefined
     val addressAdditionalInfoIsDefined = ua.get(AddBusinessAddressAdditionalInformationPage).isDefined
     val howToChangeBusinessAddressIsDefined = ua.get(BusinessAddressChangeScreenerPage).isDefined
+
     val yesNoRows =
       if (hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined) {
         Seq(HasUkPostcodeRow.from(ua), AddAddressAdditionalInfoRow.from(ua))
