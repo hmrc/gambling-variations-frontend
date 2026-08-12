@@ -9,25 +9,23 @@ import views.html.BusinessAddressView
 
 class CheckBusinessAddressControllerSpec extends SpecBase {
 
-
-
-
-
   "CheckBusinessAddress Controller" - {
 
     "must return OK and the correct view for a GET when address is present" in {
 
-      val addressOnlyUa: UserAnswers = UserAnswers("id", Json.obj(
-        "businessAddressSection" -> Json.obj("mgdRegNum" -> "XMY1000002",
-          "businessAddressUk" -> Address(
-            "abc",
-            Some("abc"),
-            Some("abc"),
-            Some("abc"),
-            Some("abc"),
-            Some("abc")
-            )
-          )
+      val addressOnlyUa: UserAnswers = UserAnswers(
+        "id",
+        Json.obj(
+          "businessAddressSection" -> Json.obj("mgdRegNum" -> "XMY1000002",
+                                               "businessAddressUk" -> Address(
+                                                 "abc",
+                                                 Some("abc"),
+                                                 Some("abc"),
+                                                 Some("abc"),
+                                                 Some("abc"),
+                                                 Some("abc")
+                                               )
+                                              )
         )
       )
 
@@ -41,7 +39,9 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(ua = addressOnlyUa, mode = NormalMode, showChangeMessage = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(ua = addressOnlyUa, mode = NormalMode, showChangeMessage = false)(request,
+                                                                                                                 messages(application)
+                                                                                                                ).toString
       }
     }
 
@@ -49,12 +49,11 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
 
       val regOnly = Json.obj(
         "businessAddressSection" -> Json.obj(
-          "mgdRegNum" -> "XMY1000001",
+          "mgdRegNum" -> "XMY1000001"
         )
       )
 
       val basicAnswers = UserAnswers("id", regOnly)
-
 
       val application = applicationBuilder(userAnswers = Some(basicAnswers)).build()
 
@@ -70,8 +69,7 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
     }
     "must return SystemErrorController when Business Address section is empty" in {
 
-      val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj())
+      val data = Json.obj("businessContactDetailsSection" -> Json.obj())
 
       val userAnswers = UserAnswers("id-number", data)
 

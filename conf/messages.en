@@ -698,4 +698,4 @@ checkBusinessAddress.changeOption.nonUk = Change to a non-UK address
 checkBusinessAddress.changeOption.toUk = Change to a UK address
 checkBusinessAddress.changeOption.edit = Edit current business address
 checkBusinessAddress.question.addInfo = Add additional information for address?
-checkBusinessAddress.messages.required = You must continue to the change registration details page to submit any changes.
+checkBusinessAddress.requiredToSubmit = You must continue to the change registration details page to submit any changes.

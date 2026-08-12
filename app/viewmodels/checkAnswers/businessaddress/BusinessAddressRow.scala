@@ -36,6 +36,9 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
       None
     }
 
+    val postcodeRow: String = ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode).getOrElse("site.notProvided")
+    val countryRow: String = ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country).getOrElse("site.notProvided")
+
     val addressRowValue: Value = {
       addressUa match {
         case Some(addr) =>
@@ -46,8 +49,8 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
                          ${addr.address2.getOrElse(messages("site.notProvided"))}
                          ${addr.address3.getOrElse(messages("site.notProvided"))}
                          ${addr.address4.getOrElse(messages("site.notProvided"))}
-                         ${if (isUk) addr.postcode.getOrElse("site.notProvided")}
-                         ${if (!isUk) addr.country.getOrElse("site.notProvided")}
+                         ${if (isUk) postcodeRow else None}
+                         ${if (isNonUk) countryRow else None}
                          """
           )
         case None => ValueViewModel("site.notProvided")

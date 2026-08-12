@@ -25,6 +25,7 @@ import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import viewmodels.checkAnswers.businessaddress.BusinessAddressViewModel
 import views.html.BusinessAddressView
 
 class BusinessAddressViewSpec extends SpecBase {
@@ -43,33 +44,67 @@ class BusinessAddressViewSpec extends SpecBase {
 
   "BusinessAddressView" - {
 
-    "must render page correctly" in new Setup {
+    "must render page correctly for UK address" in new Setup {
 
-      val ukAddressAnswers: UserAnswers = UserAnswers("id", Json.obj(
-        "businessAddressSection" -> Json.obj("mgdRegNum" -> "XMY1000002",
-          "businessAddressUk" -> Address(
-            "abc",
-            Some("abc"),
-            Some("abc"),
-            Some("abc"),
-            Some("abc"),
-            Some("abc")
+      val ukAddressAnswers: UserAnswers = UserAnswers(
+        "id",
+        Json.obj(
+          "businessAddressSection" -> Json.obj(
+            "mgdRegNum" -> "XMY1000002",
+            "businessAddressUk" -> Address(
+              "address1",
+              Some("address2"),
+              Some("address3"),
+              Some("address4"),
+              Some("postcode"),
+              Some("country")
+            )
           )
         )
-      )
       )
 
       val html = view(ukAddressAnswers, NormalMode, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.title             must include(messages("checkBusinessAddress.title"))
-      doc.select("h1").text must include(messages("checkBusinessAddress.heading"))
+      doc.title                                     must include(messages("checkBusinessAddress.title"))
+      doc.select("h1").text                         must include(messages("checkBusinessAddress.heading"))
+      doc.body().select(".govuk-caption-l").text    must include(messages("changeRegistrationDetails.caption"))
+      doc.body().select(".govuk-summary-list").text must include("address1")
+      doc.body().select(".govuk-summary-list").text must include("address2")
+      doc.body().select(".govuk-summary-list").text must include("address3")
+      doc.body().select(".govuk-summary-list").text must include("address4")
+      doc.body().select(".govuk-summary-list").text must include("postcode")
+      doc.body().select(".govuk-summary-list").text must not include "country"
+      doc.select(".govuk-hint").text                must include(messages("checkBusinessAddress.hint"))
 
-      doc.body().select(".govuk-caption-l").text must include(messages("changeRegistrationDetails.caption"))
+    }
 
-      doc.select(".govuk-hint").text must include(messages("checkBusinessAddress.hint"))
+    "must include change message when flagged" in new Setup {
 
+      val ukAddressAnswers: UserAnswers = UserAnswers(
+        "id",
+        Json.obj(
+          "businessAddressSection" -> Json.obj(
+            "mgdRegNum" -> "XMY1000002",
+            "businessAddressUk" -> Address(
+              "address1",
+              Some("address2"),
+              Some("address3"),
+              Some("address4"),
+              Some("postcode"),
+              Some("country")
+            ),
+            "businessAddressChanged" -> true
+          )
+        )
+      )
+
+      val html = view(ukAddressAnswers, NormalMode, true)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.select(".govuk-body").text must include(messages("checkBusinessAddress.requiredToSubmit"))
     }
 
   }

@@ -36,7 +36,6 @@ case object HowToChangeBusinessAddressRow {
             case ChangeToNonUkAddress => "checkBusinessAddress.changeOption.nonUk"
             case ChangeToUkAddress    => "checkBusinessAddress.changeOption.toUk"
             case EditCurrentAddress   => "checkBusinessAddress.changeOption.edit"
-            case _                    => "site.notProvided"
           }
         case None => "site.notProvided"
       }),
