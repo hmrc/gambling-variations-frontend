@@ -138,4 +138,4 @@ removeTradeName.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r enw m
 
 removeEmailAddress.title = A ydych yn siŵr eich bod am dynnu’r cyfeiriad e-bost?
 removeEmailAddress.heading = A ydych yn siŵr eich bod am dynnu’r cyfeiriad e-bost {0}?
-removeEmailAddress.error.required = cy: Select yes if you want to remove the email address
+removeEmailAddress.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r cyfeiriad e-bost
