@@ -26,7 +26,7 @@ import viewmodels.implicits.*
 case object BusinessAddressAdditionalInfoRow {
   def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
     SummaryListRowViewModel(
-      key = "checkBusinessAddress.question.addInfo",
+      key = "checkBusinessAddress.label.addInfo",
       value = ValueViewModel(ua.get(BusinessAddressAdditionalInformationPage) match {
         case Some(addInfo) => addInfo
         case _             => "site.notProvided"

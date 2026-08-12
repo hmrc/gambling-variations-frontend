@@ -17,15 +17,12 @@
 package views
 
 import base.SpecBase
-import forms.ChangeBusinessNameFormProvider
-import models.BusinessType.Soleproprietor
-import models.{Address, NormalMode, UserAnswers}
+import models.{Address, CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import viewmodels.checkAnswers.businessaddress.BusinessAddressViewModel
 import views.html.BusinessAddressView
 
 class BusinessAddressViewSpec extends SpecBase {
@@ -116,7 +113,124 @@ class BusinessAddressViewSpec extends SpecBase {
 
     }
 
-    "must include change message when flagged" in new Setup {
+    "must render HowToChangeBusinessAddressRow with correct data if screener has been answered" in new Setup {
+
+      val ukAddressAnswers: UserAnswers = UserAnswers(
+        "id",
+        Json.obj(
+          "businessAddressSection" -> Json.obj(
+            "mgdRegNum" -> "XMY1000003",
+            "businessAddressUk" -> Address(
+              "address1",
+              Some("address2"),
+              Some("address3"),
+              Some("address4"),
+              Some("postcode"),
+              Some("country")
+            ),
+            "businessAddressChangeScreener" -> "ukAddress"
+          )
+        )
+      )
+
+      val html = view(ukAddressAnswers, CheckMode, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.body().select(".govuk-summary-list").text must include(messages("checkBusinessAddress.question.howToChange"))
+      doc.body().select(".govuk-summary-list").text must include(messages("checkBusinessAddress.changeOption.toUk"))
+
+      doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.ukPostcode")
+      doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.addInfo")
+
+
+    }
+
+    "must render HasUkPostCodeRow with correct yesNo data if screener has been answered" in new Setup {
+
+      val ukAddressAnswers: UserAnswers = UserAnswers(
+        "id",
+        Json.obj(
+          "businessAddressSection" -> Json.obj(
+            "mgdRegNum" -> "XMY1000003",
+            "businessAddressUk" -> Address(
+              "address1",
+              Some("address2"),
+              Some("address3"),
+              Some("address4"),
+              Some("postcode"),
+              Some("country")
+            ),
+            "hasUkPostcode" -> true
+          )
+        )
+      )
+
+      val html = view(ukAddressAnswers, NormalMode, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.body().select(".govuk-summary-list").text must include(messages("checkBusinessAddress.question.ukPostcode"))
+      doc.body().select(".govuk-summary-list").text must include(messages("site.yes"))
+      doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.howToChange")
+      doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.addInfo")
+
+    }
+
+    "must render AddAddressAdditionalInfoRow with correct yesNo data if screener has been answered" in new Setup {
+
+      val ukAddressAnswers: UserAnswers = UserAnswers(
+        "id",
+        Json.obj(
+          "businessAddressSection" -> Json.obj(
+            "mgdRegNum" -> "XMY1000003",
+            "businessAddressUk" -> Address(
+              "address1",
+              Some("address2"),
+              Some("address3"),
+              Some("address4"),
+              Some("postcode"),
+              Some("country")
+            ),
+            "hasUkPostcode" -> true,
+            "addBusinessAddressAdditionalInformation" -> false
+          )
+        )
+      )
+    }
+      "must render both HasUkPostcodeRow & AddAddressAdditionalInfoRow with correct data if answered" in new Setup {
+
+      val ukAddressAnswers: UserAnswers = UserAnswers(
+        "id",
+        Json.obj(
+          "businessAddressSection" -> Json.obj(
+            "mgdRegNum" -> "XMY1000003",
+            "businessAddressUk" -> Address(
+              "address1",
+              Some("address2"),
+              Some("address3"),
+              Some("address4"),
+              Some("postcode"),
+              Some("country")
+            ),
+            "hasUkPostcode" -> true,
+            "addBusinessAddressAdditionalInformation" -> false
+          )
+        )
+      )
+
+      val html = view(ukAddressAnswers, NormalMode, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.body().select(".govuk-summary-list").text must include(messages("checkBusinessAddress.question.addInfo"))
+      doc.body().select(".govuk-summary-list").text must include(messages("checkBusinessAddress.question.ukPostcode"))
+      doc.body().select(".govuk-summary-list").text must include(messages("site.yes"))
+      doc.body().select(".govuk-summary-list").text must include(messages("site.no"))
+      doc.body().select(".govuk-summary-list").text must not include messages("checkBusinessAddress.question.howToChange")
+    }
+
+      "must include change message when flagged" in new Setup {
 
       val ukAddressAnswers: UserAnswers = UserAnswers(
         "id",
