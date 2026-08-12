@@ -660,15 +660,12 @@ partnerDetailsAdditionalAddressInfo.error.required = Enter additional informatio
 partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
 
-
 PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
 PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
 PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
 PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
 PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
 PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
-
-
 
 businessAddressAdditionalInfo.title = What is the additional information for your business address?
 businessAddressAdditionalInfo.heading = What is the additional information for your business address?
@@ -683,6 +680,13 @@ removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure 
 removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
 removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
 removeAdditionalInfoForPartnerAddressYesNo.hint = The additional information is: {0}
+
+partnerAddEmailAddressYesNoPage.title = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.heading = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
+partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
+
 
 
 partnerEmailAddress.title = What is the partner’s email address?
