@@ -64,7 +64,7 @@ class BusinessNameViewSpec extends SpecBase {
       doc
         .select("p")
         .select(".govuk-body")
-        .text() must include(messages("businessName.message.requiredToSubmit"))
+        .text() must include(messages("changeRegistrationDetails.readyToSubmit"))
 
       doc.body().select(".govuk-caption-l").text must include(messages("changeRegistrationDetails.caption"))
 
