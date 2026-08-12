@@ -119,6 +119,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       def urlOf(name: String): String = vm.sections.find(_.name == name).value.url
 
       urlOf("Business name") mustEqual routes.CheckBusinessNameController.onPageLoad().url
+      urlOf("Business address") mustEqual routes.BusinessChangeAddrScreenerController.onPageLoad().url
       urlOf("Business contact details") mustEqual routes.CheckContactDetailsController.onPageLoad().url
       urlOf("Correspondence details") mustEqual routes.CheckCorrespondenceDetailsController.onPageLoad().url
       urlOf("Trading details") mustEqual routes.CheckTradingDetailsController.onPageLoad().url
@@ -131,7 +132,6 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       val notBuiltYet = Set(
         "Controlling body details",
         "Group member details",
-        "Business address",
         "Partner details",
         "Licences and premises",
         "Return periods"
