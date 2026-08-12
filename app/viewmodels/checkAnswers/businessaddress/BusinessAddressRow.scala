@@ -36,9 +36,6 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
       None
     }
 
-    val postcodeRow: String = ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode).getOrElse("site.notProvided")
-    val countryRow: String = ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country).getOrElse("site.notProvided")
-
     val addressRowValue: Value = {
       addressUa match {
         case Some(addr) =>
@@ -48,30 +45,19 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
               addr.address2,
               addr.address3,
               addr.address4,
-              if (isUk) Some(postcodeRow) else None,
-              if (isNonUk) Some(countryRow) else None
+              if (isUk) Some(ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode).getOrElse("site.notProvided")) else None,
+              if (isNonUk) Some(ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country).getOrElse("site.notProvided")) else None
             ).flatten.mkString("\n")
           )
         case None => ValueViewModel("site.notProvided")
       }
     }
 
-    val changeRoute: String =
-      if (isUk) {
-        "#"
-      } else if (isNonUk) {
-        "#"
-      } else {
-        "#"
-      }
-
     SummaryListRowViewModel(
       key   = "checkBusinessAddress.label.address",
       value = addressRowValue,
-      actions = Seq(
-        ActionItemViewModel("site.change", "#"),
-        ActionItemViewModel("site.remove", "#")
-      )
+      actions = Seq(ActionItemViewModel("site.change", "#")) ++ Seq(if (isUk || isNonUk) { Some(ActionItemViewModel("site.remove", "#")) }
+      else None).flatten
     )
   }
 }

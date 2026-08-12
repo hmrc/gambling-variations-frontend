@@ -16,11 +16,10 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import controllers.routes
-import models.{CheckMode, Mode, UserAnswers}
+import models.UserAnswers
 import pages.BusinessAddressHasUkPostcodePage
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
