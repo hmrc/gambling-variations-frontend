@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails}
+import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -58,6 +58,82 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
   private lazy val connector =
     app.injector.instanceOf[GamblingConnector]
+
+  "GamblingConnector.getParterDetails" should {
+
+    "return partnerDetails when backend returns 200" in {
+
+      val jsonAsString: String =
+        """
+          |{"partners":[{
+          |  "mgdRegNumber": "XWM00000001762",
+          |  "dateOfJoining": "2022-01-15",
+          |  "dateOfLeaving": "2028-12-31",
+          |  "businessName": "XYZ Consulting Ltd",
+          |  "tradingName": "XYZ Consulting",
+          |  "dateOfBirth": "1985-06-20",
+          |  "nino": "AB123456C",
+          |  "utr": "1234567890",
+          |  "vrn": "GB123456789",
+          |  "crn": "09876543",
+          |  "dateOfIncorporation": "2020-03-01",
+          |  "countryOfIncorporation": "GB",
+          |  "foreignCorporateRef": "FCR-987654",
+          |  "address1": "123 High Street",
+          |  "address2": "Suite 4",
+          |  "address3": "Business Park",
+          |  "address4": "London",
+          |  "postcode": "SW1A 1AA",
+          |  "country": "GB",
+          |  "adi": "ADI123456",
+          |  "iomOrCiFlag": "N",
+          |  "phoneNumber": "02071234567",
+          |  "mobilePhoneNumber": "07700123456",
+          |  "faxNumber": "02071234568",
+          |  "emailAddr": "john.doe@example.com",
+          |  "isFutureLeaveDate": 0,
+          |  "isFutureJoinDate": 0,
+          |  "businessType": 2
+          |}],
+          |"systemDate": "2026-07-30"
+          |}
+          |""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/partner-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getPartnersDetails(mgdRegNumber).map { result =>
+        result mustBe partnersDetailsBusinessName
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/partner-details/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getPartnersDetails(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/partner-details/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getPartnersDetails(mgdRegNumber)
+      }
+    }
+
+  }
 
   "GamblingConnector.getBusinessDetails" should {
 
@@ -536,6 +612,46 @@ object GamblingConnectorISpec {
       )
     ),
     iomOrCiFlag = Some("FALSE")
+  )
+
+  val partnersDetailsBusinessName = PartnersDetails(
+    partners = Seq(
+      PartnerDetails(
+        mgdRegNumber           = "XWM00000001762",
+        dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
+        dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
+        solePropTitle          = None,
+        solePropFirstName      = None,
+        solePropMiddleName     = None,
+        solePropLastName       = None,
+        businessName           = Some("XYZ Consulting Ltd"),
+        tradingName            = Some("XYZ Consulting"),
+        dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
+        nino                   = Some("AB123456C"),
+        utr                    = Some("1234567890"),
+        vrn                    = Some("GB123456789"),
+        crn                    = Some("09876543"),
+        dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
+        countryOfIncorporation = Some("GB"),
+        foreignCorporateRef    = Some("FCR-987654"),
+        address1               = Some("123 High Street"),
+        address2               = Some("Suite 4"),
+        address3               = Some("Business Park"),
+        address4               = Some("London"),
+        postcode               = Some("SW1A 1AA"),
+        country                = Some("GB"),
+        adi                    = Some("ADI123456"),
+        iomOrCiFlag            = Some("N"),
+        phoneNumber            = Some("02071234567"),
+        mobilePhoneNumber      = Some("07700123456"),
+        faxNumber              = Some("02071234568"),
+        emailAddr              = Some("john.doe@example.com"),
+        isFutureLeaveDate      = Some(0),
+        isFutureJoinDate       = Some(0),
+        businessType           = Some(2)
+      )
+    ),
+    systemDate = Some(LocalDate.of(2026, 7, 30))
   )
 
 }

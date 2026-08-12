@@ -5,6 +5,7 @@ site.remove = Remove
 site.change = Change
 site.no = No
 site.yes = Yes
+site.or = or
 site.continue = Continue
 site.start = Start now
 site.startAgain = Start again
@@ -126,29 +127,20 @@ declaration.p1 = To the best of my knowledge, I declare that the information I h
 declaration.submit = Declare and submit
 
 soleProprietorName.title = 	What is the sole proprietor’s name?
-
 soleProprietorName.heading = What is the sole proprietor’s name?
-soleProprietorName.checkYourAnswersLabel = SoleProprietorNameForm
-
 soleProprietorName.title.label = Title
-soleProprietorName.title.change.hidden = Title
+soleProprietorName.firstName.label = First name
+soleProprietorName.middleName.label = Middle names (optional)
+soleProprietorName.lastName.label = Last name
 
 soleProprietorName.error.title.required = Enter the sole proprietor’s title
 soleProprietorName.error.title.length = The sole proprietor’s title must be 20 characters or less
 soleProprietorName.error.title.invalid = The sole proprietor’s title must only include letters a to z, apostrophes, hyphens or spaces
-
-soleProprietorName.firstName.label = First name
-soleProprietorName.firstName.change.hidden = First name
-
 soleProprietorName.error.firstName.required = Enter the sole proprietor’s first name
 soleProprietorName.error.firstName.length = The sole proprietor’s first name must be 100 characters or less
 soleProprietorName.error.firstName.invalid = The sole proprietor’s first name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-
-soleProprietorName.middleName.label = Middle names (optional)
 soleProprietorName.error.middleName.length = The sole proprietor’s middle name must be 100 characters or less
 soleProprietorName.error.middleName.invalid = The sole proprietor’s middle name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-
-soleProprietorName.lastName.label = Last name
 soleProprietorName.error.lastName.required = Enter the sole proprietor’s last name
 soleProprietorName.error.lastName.length = The sole proprietor’s last name must be 100 characters or less
 soleProprietorName.error.lastName.invalid = The sole proprietor’s last name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
@@ -608,9 +600,20 @@ correspondenceChangeAddrScreener.heading = How do you want to change this corres
 correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
 correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
 correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.uk.differentAddress = Change to a different UK address
 correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
 correspondenceChangeAddrScreener.no = Edit current correspondence address
+
+businessChangeAddrScreener.title = How do you want to change your business address?
+businessChangeAddrScreener.heading = How do you want to change your business address?
+businessChangeAddrScreener.checkYourAnswersLabel = How do you want to change your business address?
+businessChangeAddrScreener.error.required = Select how you want to change your business address
+businessChangeAddrScreener.change.hidden = How do you want to change your business address?
+businessChangeAddrScreener.uk.differentUkAddress = Change to a different UK address
+businessChangeAddrScreener.uk.changeToNonUkAddress = Change to a non-UK address
+businessChangeAddrScreener.nonuk.changeToUkAddress = Change to a UK address
+businessChangeAddrScreener.editCurrentAddress = Edit current business address
 
 correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
 correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
@@ -633,6 +636,67 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the partner
+partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
+
+
+partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.checkYourAnswersLabel = Additional Information
+partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor number
+partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
+partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
+
+PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
+PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
+PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
+
+businessAddressAdditionalInfo.title = What is the additional information for your business address?
+businessAddressAdditionalInfo.heading = What is the additional information for your business address?
+businessAddressAdditionalInfo.hint = For example, building name or floor number
+businessAddressAdditionalInfo.error.required = Enter additional information for your business address
+businessAddressAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+businessAddressAdditionalInfo.error.length = The additional information must be 100 characters or less
+
+removeAdditionalInfoForPartnerAddressYesNo.title = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.heading = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
+removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.hint = The additional information is: {0}
+
+partnerAddEmailAddressYesNoPage.title = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.heading = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
+partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
+
+
+
+partnerEmailAddress.title = What is the partner’s email address?
+partnerEmailAddress.heading = What is the partner’s email address?
+partnerEmailAddress.error.required = Enter the partner’s email address
+partnerEmailAddress.error.length = The email address must be 70 characters or less
+partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+partnerEmailAddress.change.hidden = What is the partner’s email address?
+
+
+businessUKAddrScreener.title = Does your business address have a UK postcode?
+businessUKAddrScreener.heading = Does your business address have a UK postcode?
+businessUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
+businessUKAddrScreener.error.required = Select yes if your business address has a UK postcode
+businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
+businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+
 
 businessAddrInfoScreener.title = Do you want to include additional information for your business address?
 businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
