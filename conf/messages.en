@@ -152,11 +152,9 @@ removeTradeName.change.hidden = RemoveTradeName
 
 businessTradingName.title = What is the business trading name?
 businessTradingName.heading = What is the business trading name?
-businessTradingName.checkYourAnswersLabel = What is the business trading name?
 businessTradingName.error.required = Enter the business trading name
 businessTradingName.error.invalid = The business trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessTradingName.error.length = The business trading name must be 100 characters or less
-businessTradingName.change.hidden = What is the business trading name?
 businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
 
 # Change Business Name
@@ -201,9 +199,7 @@ removeFaxNumber.change.hidden = remove fax number
 
 removeEmailAddress.title = Are you sure you want to remove the email address?
 removeEmailAddress.heading = Are you sure you want to remove the email address {0}?
-removeEmailAddress.checkYourAnswersLabel = Business email address
 removeEmailAddress.error.required = Select yes if you want to remove the email address
-removeEmailAddress.change.hidden = remove business email address
 
 removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
 removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
