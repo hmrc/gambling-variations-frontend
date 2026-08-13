@@ -17,13 +17,14 @@
 package controllers.partner
 
 import base.SpecBase
-import controllers.routes.SystemErrorController
+import controllers.routes.JourneyRecoveryController
 import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -42,9 +43,11 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
   private val formProvider = new PartnerDetailsRemoveEmailAddressYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   private val testEmail = "john.doe@example.com"
   private val mgdRegNumber = "XGM00000001761"
-
   lazy val partnerDetailsRemoveEmailAddressYesNoRoute: String =
     controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
 
@@ -94,8 +97,12 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
-        val json = cleanedData(Some(testEmail)) ++ Json.obj("partnerDetailsRemoveEmailAddressYesNo" -> Json.arr(true))
-        val userAnswers = UserAnswers(mgdRegNumber, json)
+        val baseAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testEmail)))
+
+        val userAnswers = baseAnswers
+          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), true)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -119,7 +126,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual SystemErrorController.onPageLoad().url
+          redirectLocation(result).value mustEqual JourneyRecoveryController.onPageLoad().url
 
         }
       }
@@ -132,7 +139,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual SystemErrorController.onPageLoad().url
+          redirectLocation(result).value mustEqual JourneyRecoveryController.onPageLoad().url
 
         }
       }
@@ -211,7 +218,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
       }
 
-      "must redirect to error page when submitting 'Yes' (true) but correspondence details section is missing" in {
+      "must fail when submitting 'Yes' (true) but correspondence details section is missing" in {
         val userAnswers = emptyUserAnswers
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -223,10 +230,13 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+          whenReady(result.failed) { exception =>
+            exception mustBe a[NoSuchElementException]
+            exception.getMessage mustEqual "Correspondence details section not found"
+          }
         }
       }
+
     }
   }
 }
