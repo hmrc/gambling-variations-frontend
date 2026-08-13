@@ -692,8 +692,8 @@ businessUKAddrScreener.change.hidden = Does your business address have a UK post
 businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
 
-partnerRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner''s fax number?
-partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner''s fax number?
-partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner''s fax number?
+partnerRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner’s fax number?
+partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s fax number?
+partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s fax number?
 partnerRemoveFaxNumberYesNo.error.required = Select yes to remove a fax number for the partner
-partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner''s fax number?
+partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
