@@ -26,7 +26,6 @@
         link: Link,
         paragraph: Paragraph,
         govukSummaryList : GovukSummaryList,
-        hint: GovukHint
 )
 
 @(ua: UserAnswers, mode: Mode, showChangeMessage: Boolean)(implicit request: Request[_], messages: Messages)
@@ -35,7 +34,6 @@
 
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("checkBusinessAddress.heading", classes="govuk-heading-l")
-    @hint(HintViewModel("checkBusinessAddress.hint"))
 
     @govukSummaryList(BusinessAddressViewModel.from(ua, mode))
 
