@@ -26,29 +26,25 @@ case object BusinessAddressViewModel {
   def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
     val hasUkPostcodeIsDefined = ua.get(BusinessAddressHasUkPostcodePage).isDefined
     val addressAdditionalInfoIsDefined = ua.get(AddBusinessAddressAdditionalInformationPage).isDefined
+
     val howToChangeBusinessAddressIsDefined = ua.get(BusinessAddressChangeScreenerPage).isDefined
+    val howToChangeRow = Seq(HowToChangeBusinessAddressRow.from(ua))
+    val hasPostcodeRow = Seq(HasUkPostcodeRow.from(ua))
+    val addressRow = Seq(BusinessAddressRow(ua, mode).toRow)
+    val addAddressInfoRow = Seq(AddAddressAdditionalInfoRow.from(ua))
+    val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua, mode))
 
-    val yesNoRows =
-      if (hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined) {
-        Seq(HasUkPostcodeRow.from(ua), AddAddressAdditionalInfoRow.from(ua))
-      } else if (hasUkPostcodeIsDefined) {
-        Seq(HasUkPostcodeRow.from(ua))
-      } else {
-        Seq(AddAddressAdditionalInfoRow.from(ua))
-      }
-
-    val howToChangeBusinessAddressRow = Seq(HowToChangeBusinessAddressRow.from(ua))
-
-    val addressBaseRows = Seq(
-      BusinessAddressRow(ua, mode).toRow,
-      BusinessAddressAdditionalInfoRow.from(ua)
-    )
+    val addressBaseRows = addressRow ++ addInfoRow
 
     SummaryListViewModel(
-      if (mode == NormalMode && (hasUkPostcodeIsDefined || addressAdditionalInfoIsDefined)) {
-        yesNoRows ++ addressBaseRows
+      if (mode == NormalMode && (hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined)) {
+        hasPostcodeRow ++ addressRow ++ addAddressInfoRow ++ addInfoRow
+      } else if (mode == NormalMode && hasUkPostcodeIsDefined) {
+        hasPostcodeRow ++ addressBaseRows
+      } else if (mode == NormalMode && addressAdditionalInfoIsDefined) {
+        addressRow ++ addAddressInfoRow ++ addInfoRow
       } else if (mode == CheckMode && howToChangeBusinessAddressIsDefined) {
-        howToChangeBusinessAddressRow ++ addressBaseRows
+        howToChangeRow ++ addressBaseRows
       } else {
         addressBaseRows
       }

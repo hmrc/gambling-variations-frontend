@@ -16,25 +16,30 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import models.UserAnswers
+import controllers.routes
+import models.{Mode, UserAnswers}
 import pages.BusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
 case object BusinessAddressAdditionalInfoRow {
-  def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
+  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryListRow = {
+    val addInfoValue: Value = ValueViewModel(ua.get(BusinessAddressAdditionalInformationPage) match {
+      case Some(addInfo) => addInfo
+      case _             => "site.notProvided"
+    })
+
+    val addressAdditionalInfoExists = ua.get(BusinessAddressAdditionalInformationPage).isDefined
+
     SummaryListRowViewModel(
-      key = "checkBusinessAddress.label.addInfo",
-      value = ValueViewModel(ua.get(BusinessAddressAdditionalInformationPage) match {
-        case Some(addInfo) => addInfo
-        case _             => "site.notProvided"
-      }),
-      actions = Seq(
-        ActionItemViewModel("site.change", "#"),
-        ActionItemViewModel("site.remove", "#")
-      )
+      key   = "checkBusinessAddress.label.addInfo",
+      value = addInfoValue,
+      actions = Seq(ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad(mode).url)) ++
+        Seq(if (addressAdditionalInfoExists) {
+          Some(ActionItemViewModel("site.remove", "#"))
+        } else { None }).flatten
     )
   }
 }
