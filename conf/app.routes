@@ -206,4 +206,9 @@ GET       	/change-registration-details/partner-details/email-address           
 POST       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
 
+GET        /change-registration-details/business-address/uk-postcode-yes-no                   controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/uk-postcode-yes-no                      controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/change-uk-postcode-yes-no            controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/business-address/change-uk-postcode-yes-no                controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = CheckMode)
+
 GET        /change-registration-details/business-address/check                               controllers.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)

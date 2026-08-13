@@ -152,11 +152,9 @@ removeTradeName.change.hidden = RemoveTradeName
 
 businessTradingName.title = What is the business trading name?
 businessTradingName.heading = What is the business trading name?
-businessTradingName.checkYourAnswersLabel = What is the business trading name?
 businessTradingName.error.required = Enter the business trading name
 businessTradingName.error.invalid = The business trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 businessTradingName.error.length = The business trading name must be 100 characters or less
-businessTradingName.change.hidden = What is the business trading name?
 businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
 
 # Change Business Name
@@ -201,9 +199,7 @@ removeFaxNumber.change.hidden = remove fax number
 
 removeEmailAddress.title = Are you sure you want to remove the email address?
 removeEmailAddress.heading = Are you sure you want to remove the email address {0}?
-removeEmailAddress.checkYourAnswersLabel = Business email address
 removeEmailAddress.error.required = Select yes if you want to remove the email address
-removeEmailAddress.change.hidden = remove business email address
 
 removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
 removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
@@ -687,6 +683,15 @@ partnerEmailAddress.error.length = The email address must be 70 characters or le
 partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 partnerEmailAddress.change.hidden = What is the partner’s email address?
 
+
+businessUKAddrScreener.title = Does your business address have a UK postcode?
+businessUKAddrScreener.heading = Does your business address have a UK postcode?
+businessUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
+businessUKAddrScreener.error.required = Select yes if your business address has a UK postcode
+businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
+businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
 
 
 checkBusinessAddress.title = Check your business address
