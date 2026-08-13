@@ -691,7 +691,6 @@ businessUKAddrScreener.change.hidden = Does your business address have a UK post
 businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
 
-
 businessAddrInfoScreener.title = Do you want to include additional information for your business address?
 businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
 businessAddrInfoScreener.hint = For example, building name or floor number
