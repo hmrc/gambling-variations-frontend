@@ -29,6 +29,8 @@ class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
   lazy val app: Application = applicationBuilder().build()
 
   implicit val messages: Messages = this.messages(app)
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
   "PartnerRemoveFaxNumberYesNoSummary" - {
 
@@ -39,7 +41,7 @@ class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is Yes" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerRemoveFaxNumberYesNoPage, true)
+          .set(PartnerRemoveFaxNumberYesNoPage(index), true)
           .success
           .value
 
@@ -61,7 +63,7 @@ class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is No" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerRemoveFaxNumberYesNoPage, false)
+          .set(PartnerRemoveFaxNumberYesNoPage(index), false)
           .success
           .value
 

@@ -51,11 +51,15 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
   private val testFaxNumber = "02071234568"
   private val mgdRegNumber = "XGM00000001761"
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   private def cleanedData(faxNumber: Option[String]) = Json.obj(
     "partners" -> Json.arr(
       Json.obj(
-        "partnerDetailsMgdRegNumber" -> mgdRegNumber,
-        "partnerDetailsBusinessName" -> "Partner1",
+        "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
+        "partnerRemoveFaxNumberYesNo" -> true,
+        "partnerDetailsBusinessName"  -> "Partner1",
         "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
           "mgdRegNumber" -> "mgdRegNumber",
           "correspondenceAddress" -> Json.obj(
@@ -74,8 +78,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
           "emailAddr" -> "a@b.com"
         )
       )
-    ),
-    "partnerRemoveFaxNumberYesNo" -> true
+    )
   )
 
   "PartnerRemoveFaxNumberYesNo Controller" - {
@@ -211,7 +214,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
     "must redirect to JourneyRecovery when submitting 'Yes' but correspondence details are missing" in {
 
-      val userAnswers = emptyUserAnswers.set(PartnerRemoveFaxNumberYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers.set(PartnerRemoveFaxNumberYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

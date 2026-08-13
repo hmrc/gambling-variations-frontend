@@ -57,7 +57,7 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request: DataRequest[AnyContent] =>
 
-    val preparedForm = request.userAnswers.get(PartnerRemoveFaxNumberYesNoPage) match {
+    val preparedForm = request.userAnswers.get(PartnerRemoveFaxNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -91,7 +91,7 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
           ),
         value => {
           val result = for {
-            answersWithSelection <- Future.fromTry(request.userAnswers.set(PartnerRemoveFaxNumberYesNoPage, value))
+            answersWithSelection <- Future.fromTry(request.userAnswers.set(PartnerRemoveFaxNumberYesNoPage(index), value))
 
             cleanedAnswers <- if (value) {
                                 answersWithSelection.get(PartnerDetailsCorrespondenceDetailsSectionPage(index)) match {
@@ -111,7 +111,7 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
           } yield finalAnswers
 
           result.map { updatedAnswers =>
-            Redirect(navigator.nextPage(PartnerRemoveFaxNumberYesNoPage, mode, updatedAnswers))
+            Redirect(navigator.nextPage(PartnerRemoveFaxNumberYesNoPage(index), mode, updatedAnswers))
           }
         }
       )
