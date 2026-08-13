@@ -110,6 +110,13 @@ correspondenceChangeAddrScreener.uk.yes = cy: Change to a non-UK address
 correspondenceChangeAddrScreener.nonuk.yes = cy: Change to a UK address
 correspondenceChangeAddrScreener.no = cy: Edit current correspondence address
 
+businessTradingName.title = Beth yw enw masnachu’r busnes?
+businessTradingName.heading = Beth yw enw masnachu’r busnes?
+businessTradingName.error.required = Nodwch enw masnachu’r busnes
+businessTradingName.error.invalid = Mae’n rhaid i enw masnachu’r busnes gynnwys y llythrennau a i z, rhifau 0 i 9, collnodau, cysylltnodau a bylchau yn unig
+businessTradingName.error.length = Mae’n rhaid i enw masnachu’r busnes fod yn 100 o gymeriadau neu lai
+businessTradingName.hint = Ni ddylai enw masnachu’r busnes gynnwys ‘Ltd’, ‘Limited’, ‘PLC’ na ‘LLP’. Mae’r termau hyn wedi’u diogelu o dan y gyfraith, a allai achosi ymchwiliad ac oedi.
+
 businessChangeAddrScreener.title = cy: How do you want to change your business address?
 businessChangeAddrScreener.heading = cy: How do you want to change your business address?
 businessChangeAddrScreener.checkYourAnswersLabel = cy: How do you want to change your business address?
