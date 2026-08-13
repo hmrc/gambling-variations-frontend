@@ -48,9 +48,9 @@ class RemoveBusinessAddressAddInfoControllerSpec extends SpecBase with MockitoSu
     UserAnswers(userAnswersId,
                 Json.obj(
                   "businessAddressSection" -> Json.obj(
-                    "mgdRegNum" -> userAnswersId
-                  ),
-                  "businessAddressAdditionalInformation" -> "abc"
+                    "mgdRegNum" -> userAnswersId,
+                    "businessAddressAdditionalInformation" -> "abc"
+                  )
                 )
                )
 
