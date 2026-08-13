@@ -20,6 +20,8 @@ import models.{Address, Mode, UserAnswers}
 import controllers.routes
 import play.api.i18n.Messages
 import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
+import play.twirl.api.Html
+import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
@@ -42,15 +44,19 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
     val addressRowValue: Value = {
       addressUa match {
         case Some(addr) =>
-          ValueViewModel(
-            Seq(
-              Some(addr.address1),
-              addr.address2,
-              addr.address3,
-              addr.address4,
-              if (isUk) Some(ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode).getOrElse("site.notProvided")) else None,
-              if (isNonUk) Some(ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country).getOrElse("site.notProvided")) else None
-            ).flatten.mkString("\n")
+          Value(
+            HtmlContent(
+              Html(
+                Seq(
+                  Some(addr.address1),
+                  addr.address2,
+                  addr.address3,
+                  addr.address4,
+                  if (isUk) Some(ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode).getOrElse("site.notProvided")) else None,
+                  if (isNonUk) Some(ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country).getOrElse("site.notProvided")) else None
+                ).flatten.mkString("<br>")
+              )
+            )
           )
         case None => ValueViewModel("site.notProvided")
       }

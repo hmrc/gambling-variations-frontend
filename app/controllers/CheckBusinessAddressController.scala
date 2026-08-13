@@ -40,12 +40,10 @@ class CheckBusinessAddressController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val ua = request.userAnswers
     val showChangeMessage: Boolean = checkFlag(ua, BusinessAddressChangesPage, BusinessAddressSubmittedPage)
-    val hasAddressData: Boolean =
-      ua.get(BusinessAddressUkPage).fold(false)(_ => true) || ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
 
     ua.get(BusinessAddressSectionPage) match {
       case Some(_) =>
-        if (hasAddressData) Ok(view(ua, mode, showChangeMessage)) else Redirect("#")
+        Ok(view(ua, mode, showChangeMessage))
       case None => Redirect(routes.SystemErrorController.onPageLoad().url)
 
     }
