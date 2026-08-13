@@ -17,7 +17,6 @@
 package controllers.partner
 
 import base.SpecBase
-import controllers.SystemErrorController
 import controllers.routes.JourneyRecoveryController
 import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.{NormalMode, UserAnswers}
