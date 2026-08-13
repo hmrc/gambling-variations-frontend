@@ -28,8 +28,6 @@ import viewmodels.implicits.*
 
 case class BusinessAddressRow(ua: UserAnswers, mode: Mode, isUk: Boolean, isNonUk: Boolean)(implicit messages: Messages) {
 
-  private val addressExists = isUk || isNonUk
-
   def toRow: SummaryListRow = {
 
     val addressUa: Option[Address] = if (isUk) {
