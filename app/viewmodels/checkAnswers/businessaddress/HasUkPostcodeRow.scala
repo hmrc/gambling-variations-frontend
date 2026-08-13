@@ -24,14 +24,14 @@ import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, Value
 import viewmodels.implicits.*
 
 case object HasUkPostcodeRow {
-  def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
-    SummaryListRowViewModel(
-      key = "checkBusinessAddress.question.ukPostcode",
-      value = ValueViewModel(ua.get(BusinessAddressHasUkPostcodePage) match {
-        case Some(isUk) => if (isUk) "site.yes" else "site.no"
-        case None       => "site.notProvided"
-      }),
-      actions = Seq(ActionItemViewModel("site.change", "#"))
+  def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
+    val result = ua.get(BusinessAddressHasUkPostcodePage).fold(None)(hasPostcode =>
+      Some(SummaryListRowViewModel(
+        key = "checkBusinessAddress.question.ukPostcode",
+        value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
+        actions = Seq(ActionItemViewModel("site.change", "#"))
+      ))
     )
+    result
   }
 }

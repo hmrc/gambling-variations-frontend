@@ -27,7 +27,7 @@ import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, Value
 import viewmodels.implicits.*
 
 case class BusinessAddressRow(ua: UserAnswers, mode: Mode, isUk: Boolean, isNonUk: Boolean)(implicit messages: Messages) {
-
+  
   def toRow: SummaryListRow = {
 
     val addressUa: Option[Address] = if (isUk) {
