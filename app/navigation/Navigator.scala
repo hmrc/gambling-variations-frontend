@@ -118,6 +118,10 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
     case BusinessChangeAddrScreenerPage =>
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
+    case PartnerEmailAddressPage =>
+      _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
+    case BusinessUKAddrScreenerPage =>
+      userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -245,6 +249,32 @@ class Navigator @Inject() () {
 
       case Some(false) =>
         routes.CorrespondenceNonUKAddressController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
+    }
+  }
+
+  private def navigateBusinessUKAddrScreenerPage()(answers: UserAnswers): Call = {
+
+    val previouslyUk =
+      answers.get(BusinessAddressUkPage).isDefined
+
+    val previouslyNonUk =
+      answers.get(BusinessAddressNonUkPage).isDefined
+
+    answers.get(BusinessUKAddrScreenerPage) match {
+      case Some(true) if previouslyUk =>
+        routes.PageNotFoundController.onPageLoad()
+
+      case Some(false) if previouslyNonUk =>
+        routes.PageNotFoundController.onPageLoad()
+
+      case Some(true) =>
+        routes.PageNotFoundController.onPageLoad()
+
+      case Some(false) =>
+        routes.PageNotFoundController.onPageLoad()
 
       case None =>
         routes.SystemErrorController.onPageLoad()
