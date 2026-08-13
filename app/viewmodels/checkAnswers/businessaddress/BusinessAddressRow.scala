@@ -18,15 +18,27 @@ package viewmodels.checkAnswers.businessaddress
 
 import models.{Address, Mode, UserAnswers}
 import play.api.i18n.Messages
+import navigation.Navigator
 import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Messages) {
+case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Messages, val navigator: Navigator) {
+  private val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
+  private val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
+  private val addressExists = isUk || isNonUk
+  private val changeRoute =
+    if(isUk) {
+      navigator.nextPage(BusinessAddressUkPage, mode, ua)
+    } else if (isNonUk) {
+      navigator.nextPage(BusinessAddressNonUkPage, mode, ua)
+    } else {
+      navigator.nextPage(BusinessAddressNonUkPage, mode, ua)
+
+    }
+
   def toRow: SummaryListRow = {
-    val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
-    val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
 
     val addressUa: Option[Address] = if (isUk) {
       ua.get(BusinessAddressUkPage)
@@ -56,8 +68,20 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
     SummaryListRowViewModel(
       key   = "checkBusinessAddress.label.address",
       value = addressRowValue,
-      actions = Seq(ActionItemViewModel("site.change", "#")) ++ Seq(if (isUk || isNonUk) { Some(ActionItemViewModel("site.remove", "#")) }
-      else None).flatten
+      actions = Seq(
+        ActionItemViewModel("site.change", changeRoute.url)) ++
+        Seq(if (addressExists) {
+          Some(ActionItemViewModel("site.remove", "#"))
+      } else {
+        None
+      }).flatten
     )
+    }
   }
-}
+
+
+
+
+
+
+

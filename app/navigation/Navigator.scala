@@ -120,6 +120,10 @@ class Navigator @Inject() () {
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
+    case BusinessAddressUkPage =>
+      _ => routes.IndexController.onPageLoad()
+    case BusinessAddressNonUkPage =>
+      _ => routes.IndexController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -373,5 +377,6 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
+
 
 }
