@@ -206,4 +206,4 @@ GET       	/change-registration-details/partner-details/email-address           
 POST       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
 
-GET        /change-registration-details/business-address/check                       controllers.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/check                               controllers.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)

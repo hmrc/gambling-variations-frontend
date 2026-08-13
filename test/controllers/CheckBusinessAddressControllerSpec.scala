@@ -78,8 +78,6 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[BusinessAddressView]
-
         status(result) mustEqual SEE_OTHER
       }
     }

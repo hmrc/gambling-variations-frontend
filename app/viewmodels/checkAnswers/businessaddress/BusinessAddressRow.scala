@@ -17,26 +17,17 @@
 package viewmodels.checkAnswers.businessaddress
 
 import models.{Address, Mode, UserAnswers}
+import controllers.routes
 import play.api.i18n.Messages
-import navigation.Navigator
 import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Messages, val navigator: Navigator) {
+case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Messages) {
   private val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
   private val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
   private val addressExists = isUk || isNonUk
-  private val changeRoute =
-    if(isUk) {
-      navigator.nextPage(BusinessAddressUkPage, mode, ua)
-    } else if (isNonUk) {
-      navigator.nextPage(BusinessAddressNonUkPage, mode, ua)
-    } else {
-      navigator.nextPage(BusinessAddressNonUkPage, mode, ua)
-
-    }
 
   def toRow: SummaryListRow = {
 
@@ -69,19 +60,21 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
       key   = "checkBusinessAddress.label.address",
       value = addressRowValue,
       actions = Seq(
-        ActionItemViewModel("site.change", changeRoute.url)) ++
+        ActionItemViewModel("site.change",
+                            if (isUk) {
+                              "#"
+                            } else if (isNonUk) {
+                              "#"
+                            } else {
+                              routes.BusinessChangeAddrScreenerController.onPageLoad().url
+                            }
+                           )
+      ) ++
         Seq(if (addressExists) {
           Some(ActionItemViewModel("site.remove", "#"))
-      } else {
-        None
-      }).flatten
+        } else {
+          None
+        }).flatten
     )
-    }
   }
-
-
-
-
-
-
-
+}
