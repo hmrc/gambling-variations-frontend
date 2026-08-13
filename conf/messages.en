@@ -695,3 +695,5 @@ businessAddrInfoScreener.title = Do you want to include additional information f
 businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
 businessAddrInfoScreener.hint = For example, building name or floor number
 businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
+businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
+businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
