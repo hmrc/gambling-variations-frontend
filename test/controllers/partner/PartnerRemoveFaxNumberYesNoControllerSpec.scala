@@ -96,6 +96,22 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
       }
     }
 
+    "must redirect to JourneyRecovery on a GET when correspondence details exist but fax number is None" in {
+
+      val userAnswers = UserAnswers("XGM00000001761", cleanedData(None))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, partnerRemoveFaxNumberYesNoRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+      }
+    }
+
     "must redirect to the next page when valid data is submitted" in {
       val userAnswers = UserAnswers("mgdRegNumber", cleanedData(None))
 
@@ -208,6 +224,24 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to 'there is a problem' error page when submitting 'Yes' (true) but correspondence details section is missing" in {
+
+      val userAnswers = emptyUserAnswers
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, PartnerRemoveFaxNumberYesNoController.onSubmit().url)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
       }
     }
 

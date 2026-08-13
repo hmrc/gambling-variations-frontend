@@ -92,17 +92,17 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
         value => {
           val result = for {
             answersWithSelection <- Future.fromTry(request.userAnswers.set(PartnerRemoveFaxNumberYesNoPage, value))
-
+            // TODO: This index is hardcoded but it should come from the Partner Details list selection
+            index: Int = 0
             cleanedAnswers <- if (value) {
-                                val result = for {
-                                  details <- answersWithSelection
-                                               .get(PartnerDetailsCorrespondenceDetailsSectionPage(0))
-                                               .toRight(new NoSuchElementException("Correspondence details section not found"))
-                                  updatedDetails = details.copy(faxNumber = None)
-                                  newAnswers <- answersWithSelection.set(PartnerDetailsCorrespondenceDetailsSectionPage(0), updatedDetails).toEither
-                                } yield newAnswers
+                                answersWithSelection.get(PartnerDetailsCorrespondenceDetailsSectionPage(index)) match {
+                                  case Some(details) =>
+                                    val updatedDetails = details.copy(faxNumber = None)
+                                    Future.fromTry(answersWithSelection.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), updatedDetails))
 
-                                Future.fromTry(result.toTry)
+                                  case None =>
+                                    Future.failed(new NoSuchElementException("Correspondence details section not found"))
+                                }
                               } else {
                                 Future.successful(answersWithSelection)
                               }
