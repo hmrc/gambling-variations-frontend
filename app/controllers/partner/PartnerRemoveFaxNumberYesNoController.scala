@@ -50,6 +50,9 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request: DataRequest[AnyContent] =>
@@ -58,9 +61,6 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
       case None        => form
       case Some(value) => form.fill(value)
     }
-
-    // TODO: This index is hardcoded but it should come from the Partner Details list selection
-    val index: Int = 0
 
     request.userAnswers
       .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
@@ -83,7 +83,7 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
               view(formWithErrors,
                    mode,
                    request.userAnswers
-                     .get(PartnerDetailsCorrespondenceDetailsSectionPage(0))
+                     .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
                      .flatMap(_.faxNumber)
                      .getOrElse("")
                   )
@@ -92,8 +92,7 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
         value => {
           val result = for {
             answersWithSelection <- Future.fromTry(request.userAnswers.set(PartnerRemoveFaxNumberYesNoPage, value))
-            // TODO: This index is hardcoded but it should come from the Partner Details list selection
-            index: Int = 0
+
             cleanedAnswers <- if (value) {
                                 answersWithSelection.get(PartnerDetailsCorrespondenceDetailsSectionPage(index)) match {
                                   case Some(details) =>
