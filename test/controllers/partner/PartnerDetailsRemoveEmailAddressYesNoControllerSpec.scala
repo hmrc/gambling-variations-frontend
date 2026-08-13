@@ -17,6 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
+import controllers.SystemErrorController
 import controllers.routes.JourneyRecoveryController
 import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.{NormalMode, UserAnswers}
@@ -139,7 +140,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
 
         }
       }
@@ -218,7 +219,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
       }
 
-      "must fail when submitting 'Yes' (true) but correspondence details section is missing" in {
+      "must redirect to 'there is a problem' error page when submitting 'Yes' (true) but correspondence details section is missing" in {
         val userAnswers = emptyUserAnswers
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -230,13 +231,10 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
 
           val result = route(application, request).value
 
-          whenReady(result.failed) { exception =>
-            exception mustBe a[NoSuchElementException]
-            exception.getMessage mustEqual "Correspondence details section not found"
-          }
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
         }
       }
-
     }
   }
 }

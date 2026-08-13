@@ -41,7 +41,7 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsRemoveEmailAddressYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsRemoveEmailAddressYesNoView
