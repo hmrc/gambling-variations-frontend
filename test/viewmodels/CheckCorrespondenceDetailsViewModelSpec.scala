@@ -16,6 +16,7 @@
 
 package viewmodels
 
+import models.Address
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -23,6 +24,16 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
 
   private def viewModel(
     correspondenceName: Option[String] = Some("Test Ltd"),
+    correspondenceAddress: Option[Address] = Some(
+      Address(
+        address1 = "1 Test Street",
+        address2 = None,
+        address3 = None,
+        address4 = None,
+        country  = None,
+        postcode = Some("NE1 1AA")
+      )
+    ),
     phoneNumber: Option[String] = Some("0123456789"),
     mobilePhoneNumber: Option[String] = Some("07123456789")
   ): CheckCorrespondenceDetailsViewModel =
@@ -30,7 +41,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       correspondenceName                     = correspondenceName,
       addCorrespondenceAdditionalName        = None,
       additionalCorrespondenceName           = None,
-      correspondenceAddress                  = None,
+      correspondenceAddress                  = correspondenceAddress,
       addCorrespondenceAdditionalInformation = None,
       correspondenceAdditionalInformation    = None,
       phoneNumber                            = phoneNumber,
@@ -41,7 +52,8 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       emailAddress                           = None,
       hasUkPostcode                          = None,
       isSubmitted                            = false,
-      isAddingNewCorrespondenceDetails       = None
+      isAddingNewCorrespondenceDetails       = None,
+      changeCorrespondenceAddress            = None
     )
 
   "continueCall" should {
@@ -51,6 +63,31 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
 
       vm.continueCall shouldBe
         controllers.routes.CorrespondenceNameController.onPageLoad()
+    }
+
+    "navigate to CorrespondenceUKAddrScreenerController when correspondence address is missing" in {
+      val vm = viewModel(correspondenceAddress = None)
+
+      vm.continueCall shouldBe
+        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+    }
+
+    "navigate to CorrespondenceUKAddrScreenerController when address line 1 is empty" in {
+      val vm = viewModel(
+        correspondenceAddress = Some(
+          Address(
+            address1 = "",
+            address2 = None,
+            address3 = None,
+            address4 = None,
+            country  = None,
+            postcode = Some("NE1 1AA")
+          )
+        )
+      )
+
+      vm.continueCall shouldBe
+        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
     }
 
     "navigate to CorrespondenceContactNumberController when both phone numbers are missing" in {
