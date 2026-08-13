@@ -19,34 +19,29 @@ package viewmodels.checkAnswers.businessaddress
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.*
 import play.api.i18n.Messages
+import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
 
 case object BusinessAddressViewModel {
-  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
-    val hasUkPostcodeIsDefined = ua.get(BusinessAddressHasUkPostcodePage).isDefined
-    val addressAdditionalInfoIsDefined = ua.get(AddBusinessAddressAdditionalInformationPage).isDefined
+  def from(ua: UserAnswers, mode: Mode, sRepo: SessionRepository)(implicit messages: Messages): SummaryList = {
+    val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
+    val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
+    val addressExists = isUk || isNonUk
 
-    val howToChangeBusinessAddressIsDefined = ua.get(BusinessAddressChangeScreenerPage).isDefined
     val howToChangeRow = Seq(HowToChangeBusinessAddressRow.from(ua))
     val hasPostcodeRow = Seq(HasUkPostcodeRow.from(ua))
-    val addressRow = Seq(BusinessAddressRow(ua, mode).toRow)
+    val addressRow = Seq(BusinessAddressRow(ua, mode, isUk, isNonUk).toRow)
     val addAddressInfoRow = Seq(AddAddressAdditionalInfoRow.from(ua))
     val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua, mode))
-
     val addressBaseRows = addressRow ++ addInfoRow
 
+
     SummaryListViewModel(
-      if (mode == NormalMode && (hasUkPostcodeIsDefined && addressAdditionalInfoIsDefined)) {
+      if (!addressExists) {
         hasPostcodeRow ++ addressRow ++ addAddressInfoRow ++ addInfoRow
-      } else if (mode == NormalMode && hasUkPostcodeIsDefined) {
-        hasPostcodeRow ++ addressBaseRows
-      } else if (mode == NormalMode && addressAdditionalInfoIsDefined) {
-        addressRow ++ addAddressInfoRow ++ addInfoRow
-      } else if (mode == CheckMode && howToChangeBusinessAddressIsDefined) {
-        howToChangeRow ++ addressBaseRows
       } else {
-        addressBaseRows
+        howToChangeRow ++ addressBaseRows
       }
     )
   }
