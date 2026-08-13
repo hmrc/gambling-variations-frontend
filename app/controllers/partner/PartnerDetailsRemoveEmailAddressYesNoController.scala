@@ -17,10 +17,14 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.routes
 import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.Mode
+import models.requests.DataRequest
 import navigation.Navigator
+import pages.CorrespondenceDetailsChangesPage
 import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceDetailsSectionPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,30 +49,70 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request: DataRequest[AnyContent] =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveEmailAddressYesNoPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveEmailAddressYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    val emailAddress: String = "no.email@address.yet"
-    Ok(view(preparedForm, mode, emailAddress))
+    request.userAnswers
+      .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
+      .flatMap(_.emailAddr) match {
+      case Some(email) =>
+        Ok(view(preparedForm, mode, email))
+
+      case None =>
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, ""))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemoveEmailAddressYesNoPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveEmailAddressYesNoPage, mode, updatedAnswers))
+        formWithErrors =>
+          Future.successful(
+            BadRequest(
+              view(formWithErrors,
+                   mode,
+                   request.userAnswers
+                     .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
+                     .flatMap(_.emailAddr)
+                     .getOrElse("")
+                  )
+            )
+          ),
+        value => {
+          val result = for {
+            answersWithSelection <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemoveEmailAddressYesNoPage(index), value))
+
+            cleanedAnswers <- if (value) {
+                                answersWithSelection.get(PartnerDetailsCorrespondenceDetailsSectionPage(index)) match {
+                                  case Some(details) =>
+                                    val updatedDetails = details.copy(emailAddr = None)
+                                    Future.fromTry(answersWithSelection.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), updatedDetails))
+
+                                  case None =>
+                                    Future.failed(new NoSuchElementException("Correspondence details section not found"))
+                                }
+                              } else {
+                                Future.successful(answersWithSelection)
+                              }
+
+            finalAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, value))
+            _            <- sessionRepository.set(finalAnswers)
+          } yield finalAnswers
+
+          result.map { updatedAnswers =>
+            Redirect(navigator.nextPage(PartnerDetailsRemoveEmailAddressYesNoPage(index), mode, updatedAnswers))
+          }
+        }
       )
   }
 }

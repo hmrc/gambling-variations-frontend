@@ -49,10 +49,10 @@ class PartnerDetailsRemoveEmailAddressYesNoFormProviderSpec extends SpecBase {
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsRemoveEmailAddressYesNo.heading")
+          messages(application)("partnerDetailsRemoveEmailAddressYesNo.heading", emailAddress)
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
-          messages(application)("changeRegistrationDetails.caption")
+          messages(application)("changeRegistrationDetails.caption", emailAddress)
 
         document.getElementById("value").attr("value") mustEqual "true"
 

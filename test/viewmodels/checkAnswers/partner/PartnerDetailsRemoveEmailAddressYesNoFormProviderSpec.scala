@@ -26,9 +26,12 @@ import viewmodels.implicits.*
 
 class PartnerDetailsRemoveEmailAddressYesNoFormProviderSpec extends SpecBase {
 
-  lazy val app: Application = applicationBuilder().build()
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
   implicit val messages: Messages = this.messages(app)
+
+  lazy val app: Application = applicationBuilder().build()
 
   "PartnerDetailsRemoveEmailAddressYesNoSummary" - {
 
@@ -39,7 +42,7 @@ class PartnerDetailsRemoveEmailAddressYesNoFormProviderSpec extends SpecBase {
     "must return the correct row when the answer is Yes" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsRemoveEmailAddressYesNoPage, true)
+          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), true)
           .success
           .value
 
@@ -61,7 +64,7 @@ class PartnerDetailsRemoveEmailAddressYesNoFormProviderSpec extends SpecBase {
     "must return the correct row when the answer is No" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsRemoveEmailAddressYesNoPage, false)
+          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), false)
           .success
           .value
 
