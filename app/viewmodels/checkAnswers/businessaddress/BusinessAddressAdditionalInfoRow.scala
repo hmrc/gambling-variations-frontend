@@ -36,7 +36,7 @@ case object BusinessAddressAdditionalInfoRow {
     SummaryListRowViewModel(
       key   = "checkBusinessAddress.label.addInfo",
       value = addInfoValue,
-      actions = Seq(ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad(mode).url)) ++
+      actions = Seq(ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad().url)) ++
         Seq(if (addressAdditionalInfoExists) {
           Some(ActionItemViewModel("site.remove", "#"))
         } else { None }).flatten
