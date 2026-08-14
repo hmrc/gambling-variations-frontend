@@ -34,7 +34,7 @@ case object BusinessAddressViewModel {
     val addAddressInfoRowOpt: Option[SummaryListRow] = AddAddressAdditionalInfoRow.from(ua)
     val howToChangeRowOpt: Option[SummaryListRow] = HowToChangeBusinessAddressRow.from(ua)
 
-    val addressRow = Seq(BusinessAddressRow(ua, mode, isUk, isNonUk).toRow)
+    val addressRow = Seq(BusinessAddressRow(ua, mode).toRow)
     val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua, mode))
 
     val addressBaseRows = addressRow ++ addInfoRow

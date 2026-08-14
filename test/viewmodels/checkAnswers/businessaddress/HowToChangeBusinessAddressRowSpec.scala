@@ -25,6 +25,7 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import viewmodels.govuk.all.{KeyViewModel, SummaryListRowViewModel, ValueViewModel}
 
 class HowToChangeBusinessAddressRowSpec extends SpecBase {
 
@@ -36,6 +37,10 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .instanceOf[play.api.i18n.MessagesApi]
         .preferred(request)
 
+    val emptySummaryList: SummaryListRow = SummaryListRowViewModel(
+      KeyViewModel(Text("")),
+      ValueViewModel(Text(""))
+    )
   }
 
   "HowToChangeBusinessAddressRow" - {
@@ -51,7 +56,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua)
+      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua).getOrElse(emptySummaryList)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
       result.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.difUk"))
@@ -68,7 +73,11 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua)
+      private val emptySummaryList = SummaryListRowViewModel(
+        KeyViewModel(Text("")),
+        ValueViewModel(Text(""))
+      )
+      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua).getOrElse(emptySummaryList)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
       result.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.nonUk"))
@@ -85,7 +94,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua)
+      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua).getOrElse(emptySummaryList)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
       result.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.toUk"))
@@ -102,7 +111,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua)
+      private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua).getOrElse(emptySummaryList)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
       result.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.edit"))

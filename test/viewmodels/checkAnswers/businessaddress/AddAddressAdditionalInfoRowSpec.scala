@@ -24,6 +24,7 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import viewmodels.govuk.all.{KeyViewModel, SummaryListRowViewModel, ValueViewModel}
 
 class AddAddressAdditionalInfoRowSpec extends SpecBase {
 
@@ -35,6 +36,10 @@ class AddAddressAdditionalInfoRowSpec extends SpecBase {
         .instanceOf[play.api.i18n.MessagesApi]
         .preferred(request)
 
+    val emptySummaryList: SummaryListRow = SummaryListRowViewModel(
+      KeyViewModel(Text("")),
+      ValueViewModel(Text(""))
+    )
   }
 
   "AddAddressAdditionalInfoRow" - {
@@ -50,7 +55,7 @@ class AddAddressAdditionalInfoRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = AddAddressAdditionalInfoRow.from(ua)
+      private val result: SummaryListRow = AddAddressAdditionalInfoRow.from(ua).getOrElse(emptySummaryList)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.addInfo"))
       result.value.content mustEqual Text(messages("site.yes"))

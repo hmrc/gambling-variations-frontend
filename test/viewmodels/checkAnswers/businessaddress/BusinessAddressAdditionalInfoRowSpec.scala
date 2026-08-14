@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
-import models.Address
+import models.{Address, NormalMode}
 import pages.*
 import play.api.Application
 import play.api.i18n.Messages
@@ -50,7 +50,7 @@ class BusinessAddressAdditionalInfoRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua)
+      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua, NormalMode)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
       result.value.content mustEqual Text("This is some additional info use it wisely")
@@ -64,7 +64,7 @@ class BusinessAddressAdditionalInfoRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua)
+      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua, NormalMode)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
       result.value.content mustEqual Text(messages("site.notProvided"))

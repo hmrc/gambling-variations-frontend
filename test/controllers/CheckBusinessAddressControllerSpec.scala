@@ -61,13 +61,14 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
       }
     }
 
-    "must redirect when address is not present" in {
+    "must redirect to add address route when address is not present" in {
 
       val regOnly = Json.obj(
         "businessAddressSection" -> Json.obj(
           "mgdRegNum" -> "XMY1000001"
         )
       )
+      val reroute = routes.BusinessChangeAddrScreenerController.onPageLoad().url
 
       val basicAnswers = UserAnswers("id", regOnly)
 
@@ -79,6 +80,8 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual reroute
+
       }
     }
     "must return SystemErrorController when Business Address section is empty" in {

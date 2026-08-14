@@ -23,6 +23,7 @@ import play.api.Application
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 
 class BusinessAddressRowSpec extends SpecBase {
@@ -50,13 +51,7 @@ class BusinessAddressRowSpec extends SpecBase {
       private val result: SummaryListRow = BusinessAddressRow(ua, NormalMode).toRow
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
-      result.value.content mustEqual Text(
-        s"""|address1
-           |address2
-           |address3
-           |address4
-           |postcode""".stripMargin
-      )
+      result.value.content mustEqual HtmlContent("address1<br>address2<br>address3<br>address4<br>postcode")
     }
 
     "must render non uk address without postcode and with country" in new Setup {
@@ -70,13 +65,7 @@ class BusinessAddressRowSpec extends SpecBase {
       private val result: SummaryListRow = BusinessAddressRow(ua, NormalMode).toRow
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
-      result.value.content mustEqual Text(
-        s"""|address1
-           |address2
-           |address3
-           |address4
-           |country""".stripMargin
-      )
+      result.value.content mustEqual HtmlContent(s"address1<br>address2<br>address3<br>address4<br>country")
     }
   }
 }

@@ -26,8 +26,9 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, V
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-case class BusinessAddressRow(ua: UserAnswers, mode: Mode, isUk: Boolean, isNonUk: Boolean)(implicit messages: Messages) {
-
+case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Messages) {
+  private val isUk = ua.get(BusinessAddressUkPage).isDefined
+  private val isNonUk = ua.get(BusinessAddressNonUkPage).isDefined
   def toRow: SummaryListRow = {
 
     val addressUa: Option[Address] = if (isUk) {
@@ -49,8 +50,16 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode, isUk: Boolean, isNonU
                   addr.address2,
                   addr.address3,
                   addr.address4,
-                  if (isUk && addr.postcode.isDefined) Some(ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode)) else None,
-                  if (isNonUk && addr.country.isDefined) Some(ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country)) else None
+                  if (isUk && addr.postcode.isDefined) {
+                    ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode)
+                    } else {
+                    None
+                  },
+                  if (isNonUk && addr.country.isDefined) {
+                      ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country)
+                  } else {
+                    None
+                  }
                 ).flatten.mkString("<br>")
               )
             )
