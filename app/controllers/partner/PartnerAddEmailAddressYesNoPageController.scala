@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.PartnerAddEmailAddressYesNoPageFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerAddEmailAddressYesNoPagePage
+import pages.partner.PartnerAddEmailAddressYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,7 +49,7 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPagePage) match {
+    val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -65,9 +65,9 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddEmailAddressYesNoPagePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddEmailAddressYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerAddEmailAddressYesNoPagePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerAddEmailAddressYesNoPage, mode, updatedAnswers))
       )
   }
 }

@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.partner
 
 import base.SpecBase
 import controllers.partner.routes.PartnerAddEmailAddressYesNoPageController
-import pages.partner.PartnerAddEmailAddressYesNoPagePage
+import pages.partner.PartnerAddEmailAddressYesNoPage
 import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
@@ -39,7 +39,7 @@ class PartnerAddEmailAddressYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is Yes" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerAddEmailAddressYesNoPagePage, true)
+          .set(PartnerAddEmailAddressYesNoPage, true)
           .success
           .value
 
@@ -61,7 +61,7 @@ class PartnerAddEmailAddressYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is No" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerAddEmailAddressYesNoPagePage, false)
+          .set(PartnerAddEmailAddressYesNoPage, false)
           .success
           .value
 
