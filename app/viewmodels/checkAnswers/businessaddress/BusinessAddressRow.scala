@@ -52,11 +52,11 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Me
                   addr.address4,
                   if (isUk && addr.postcode.isDefined) {
                     ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode)
-                    } else {
+                  } else {
                     None
                   },
                   if (isNonUk && addr.country.isDefined) {
-                      ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country)
+                    ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country)
                   } else {
                     None
                   }

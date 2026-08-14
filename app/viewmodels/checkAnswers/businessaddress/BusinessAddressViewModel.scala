@@ -16,17 +16,14 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import pages.*
 import play.api.i18n.Messages
-import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
 
 case object BusinessAddressViewModel {
   def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
-    val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
-    val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
 
     val addFlow = ua.get(BusinessAddressAddFlowPage).getOrElse(false)
 

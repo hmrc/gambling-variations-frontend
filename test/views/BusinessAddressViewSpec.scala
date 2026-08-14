@@ -114,7 +114,6 @@ class BusinessAddressViewSpec extends SpecBase {
       doc.body().select(".govuk-summary-list").text must include("country")
       doc.select(".govuk-button").attr("href") mustEqual reroute
 
-
     }
 
     "must render HowToChangeBusinessAddressRow in change flow with correct data if screener has been answered" in new Setup {
@@ -132,7 +131,8 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "businessAddressChangeScreener" -> "ukAddress")
+            "businessAddressChangeScreener" -> "ukAddress"
+          )
         )
       )
 
@@ -164,7 +164,7 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("country")
             ),
             "hasUkPostcode" -> true,
-            "isInAddFlow" -> true
+            "isInAddFlow"   -> true
           )
         )
       )
@@ -197,7 +197,7 @@ class BusinessAddressViewSpec extends SpecBase {
             ),
             "hasUkPostcode"                           -> true,
             "addBusinessAddressAdditionalInformation" -> false,
-            "isInAddFlow" -> true
+            "isInAddFlow"                             -> true
           )
         )
       )
@@ -219,7 +219,7 @@ class BusinessAddressViewSpec extends SpecBase {
             ),
             "hasUkPostcode"                           -> true,
             "addBusinessAddressAdditionalInformation" -> false,
-            "isInAddFlow" -> true
+            "isInAddFlow"                             -> true
           )
         )
       )
