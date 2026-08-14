@@ -685,3 +685,10 @@ businessUKAddrScreener.error.required = Select yes if your business address has 
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
 businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+
+businessAddrInfoScreener.title = Do you want to include additional information for your business address?
+businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
+businessAddrInfoScreener.hint = For example, building name or floor number
+businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
+businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
+businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
