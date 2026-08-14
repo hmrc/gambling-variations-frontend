@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.partner
+package pages.partnerdetails
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object PartnerAddEmailAddressYesNoPagePage extends QuestionPage[Boolean] {
+case class PartnerDetailsCorrespondenceEmailAddressPage(index: Int) extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "partners" \ index \ "partnerDetailsCorrespondenceDetailsSection" \ toString
 
-  override def toString: String = "partnerAddEmailAddressYesNoPage"
+  override def toString: String = "emailAddr"
+
 }

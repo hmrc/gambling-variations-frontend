@@ -14,51 +14,51 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package controllers
 
 import base.SpecBase
-import controllers.partner.routes.PartnerAddEmailAddressYesNoPageController
-import forms.PartnerAddEmailAddressYesNoPageFormProvider
+import forms.BusinessAddrInfoScreenerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerAddEmailAddressYesNoPage
-import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.partner.PartnerAddEmailAddressYesNoPageView
+import views.html.BusinessAddrInfoScreenerView
 
 import scala.concurrent.Future
 
-class PartnerAddEmailAddressYesNoPageControllerSpec extends SpecBase with MockitoSugar {
+class BusinessAddrInfoScreenerControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider: PartnerAddEmailAddressYesNoPageFormProvider = new PartnerAddEmailAddressYesNoPageFormProvider()
-  val form: Form[Boolean] = formProvider()
+  def onwardRoute = Call("GET", "/foo")
 
-  private val data = Json.obj("mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum))
+  val formProvider = new BusinessAddrInfoScreenerFormProvider()
+  val form = formProvider()
 
-  private val baseUserAnswers = Some(UserAnswers(userAnswersId, data))
+  val requiredAnswer = Json.obj(
+    "businessAddressSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+  )
 
-  lazy val partnerAddEmailAddressYesNoPageRoute: String = PartnerAddEmailAddressYesNoPageController.onPageLoad().url
+  lazy val businessAddrInfoScreenerRoute =
+    routes.BusinessAddrInfoScreenerController.onPageLoad().url
 
-  "PartnerAddEmailAddressYesNoPage Controller" - {
+  "BusinessAddrAdditionalInfoScreener Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = baseUserAnswers).build()
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", requiredAnswer))).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerAddEmailAddressYesNoPageRoute)
+        val request = FakeRequest(GET, businessAddrInfoScreenerRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PartnerAddEmailAddressYesNoPageView]
+        val view = application.injector.instanceOf[BusinessAddrInfoScreenerView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
@@ -67,14 +67,24 @@ class PartnerAddEmailAddressYesNoPageControllerSpec extends SpecBase with Mockit
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerAddEmailAddressYesNoPage, true).success.value
+      val userAnswers = Some(
+        UserAnswers(
+          "id",
+          Json.obj(
+            "businessAddressSection" -> Json.obj(
+              "mgdRegNum"                               -> mgdRegNum,
+              "addBusinessAddressAdditionalInformation" -> true
+            )
+          )
+        )
+      )
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = userAnswers).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerAddEmailAddressYesNoPageRoute)
+        val request = FakeRequest(GET, businessAddrInfoScreenerRoute)
 
-        val view = application.injector.instanceOf[PartnerAddEmailAddressYesNoPageView]
+        val view = application.injector.instanceOf[BusinessAddrInfoScreenerView]
 
         val result = route(application, request).value
 
@@ -87,12 +97,13 @@ class PartnerAddEmailAddressYesNoPageControllerSpec extends SpecBase with Mockit
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      def onwardRoute: Call = Call("GET", "/foo")
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = baseUserAnswers)
+        applicationBuilder(
+          userAnswers = Some(UserAnswers("id", requiredAnswer))
+        )
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -100,29 +111,36 @@ class PartnerAddEmailAddressYesNoPageControllerSpec extends SpecBase with Mockit
           .build()
 
       running(application) {
+
         val request =
-          FakeRequest(POST, partnerAddEmailAddressYesNoPageRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+          FakeRequest(POST, businessAddrInfoScreenerRoute)
+            .withFormUrlEncodedBody(
+              "businessAddrInfoScreener" -> "true"
+            )
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+
+        verify(mockSessionRepository).set(any())
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+      val requiredAnswer = Json.obj(
+        "businessAddressSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+      )
 
-      val application = applicationBuilder(userAnswers = baseUserAnswers).build()
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", requiredAnswer))).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerAddEmailAddressYesNoPageRoute)
-            .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, businessAddrInfoScreenerRoute)
+            .withFormUrlEncodedBody(("businessAddrInfoScreener", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("businessAddrInfoScreener" -> ""))
 
-        val view = application.injector.instanceOf[PartnerAddEmailAddressYesNoPageView]
+        val view = application.injector.instanceOf[BusinessAddrInfoScreenerView]
 
         val result = route(application, request).value
 
@@ -130,6 +148,5 @@ class PartnerAddEmailAddressYesNoPageControllerSpec extends SpecBase with Mockit
         contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
-
   }
 }

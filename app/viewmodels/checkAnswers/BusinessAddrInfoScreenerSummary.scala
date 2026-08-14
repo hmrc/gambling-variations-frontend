@@ -14,28 +14,29 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.partner
+package viewmodels.checkAnswers
 
+import controllers.routes
 import models.UserAnswers
-import pages.partner.PartnerAddEmailAddressYesNoPage
+import pages.AddBusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerAddEmailAddressYesNoPageSummary {
+object BusinessAddrInfoScreenerSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerAddEmailAddressYesNoPage).map { answer =>
+    answers.get(AddBusinessAddressAdditionalInformationPage).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "partnerAddEmailAddressYesNoPage.checkYourAnswersLabel",
+        key   = "businessAddrInfoScreener.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerAddEmailAddressYesNoPage.change.hidden"))
+          ActionItemViewModel("site.change", routes.BusinessAddrInfoScreenerController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("businessAddrInfoScreener.change.hidden"))
         )
       )
     }

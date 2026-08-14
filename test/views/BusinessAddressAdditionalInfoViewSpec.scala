@@ -38,7 +38,7 @@ class BusinessAddressAdditionalInfoViewSpec extends SpecBase {
       doc.select(".govuk-hint").text mustEqual messages("businessAddressAdditionalInfo.hint")
       doc.select("h1").text mustEqual messages("businessAddressAdditionalInfo.heading")
 
-      doc.select("form").attr("action") mustEqual controllers.routes.BusinessAddressAdditionalInfoController.onSubmit(NormalMode).url
+      doc.select("form").attr("action") mustEqual controllers.routes.BusinessAddressAdditionalInfoController.onSubmit().url
 
       doc.select("button").text must include(messages("site.continue"))
     }

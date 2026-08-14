@@ -14,42 +14,41 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package controllers
 
 import controllers.actions.*
-import forms.PartnerAddEmailAddressYesNoPageFormProvider
+import forms.BusinessAddrInfoScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerAddEmailAddressYesNoPage
-import play.api.data.Form
+import pages.{AddBusinessAddressAdditionalInformationPage, BusinessAddressSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerAddEmailAddressYesNoPageView
+import views.html.BusinessAddrInfoScreenerView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerAddEmailAddressYesNoPageController @Inject() (
+class BusinessAddrInfoScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: PartnerAddEmailAddressYesNoPageFormProvider,
+  requireData: BusinessAddressDataRequiredAction,
+  formProvider: BusinessAddrInfoScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerAddEmailAddressYesNoPageView
+  view: BusinessAddrInfoScreenerView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPage) match {
+    val preparedForm = request.userAnswers.get(AddBusinessAddressAdditionalInformationPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -58,16 +57,16 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddEmailAddressYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddBusinessAddressAdditionalInformationPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerAddEmailAddressYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddBusinessAddressAdditionalInformationPage, mode, updatedAnswers))
       )
   }
 }
