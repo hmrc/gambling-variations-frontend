@@ -24,29 +24,31 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, Summ
 import viewmodels.govuk.all.SummaryListViewModel
 
 case object BusinessAddressViewModel {
-  def from(ua: UserAnswers, mode: Mode, sRepo: SessionRepository)(implicit messages: Messages): SummaryList = {
+  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
     val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
     val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
-    
+
     val addressExists = isUk || isNonUk
 
+    val hasPostcodeRowOpt: Option[SummaryListRow] = HasUkPostcodeRow.from(ua)
+    val addAddressInfoRowOpt: Option[SummaryListRow] = AddAddressAdditionalInfoRow.from(ua)
+
     val howToChangeRow = Seq(HowToChangeBusinessAddressRow.from(ua))
-    val hasPostcodeRow = Seq(HasUkPostcodeRow.from(ua).getOrElse(Seq.empty))
-    val addAddressInfoRow = Seq(AddAddressAdditionalInfoRow.from(ua).getOrElse(Seq.empty))
     val addressRow = Seq(BusinessAddressRow(ua, mode, isUk, isNonUk).toRow)
     val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua, mode))
-    
-    val addressBaseRows = addressRow ++ addInfoRow
 
+    val addressBaseRows = addressRow ++ addInfoRow
 
     SummaryListViewModel(
       if (!addressExists) {
-        for {
-          seq <- hasPostcodeRow
-          seq <- addressRow
-          seq <- addAddressInfoRow
-          seq <- addInfoRow
-        } yield seq
+        Seq(hasPostcodeRowOpt match {
+          case Some(row) => Some(row)
+          case None      => None
+        }).flatten ++ addressRow ++
+          Seq(addAddressInfoRowOpt match {
+            case Some(row) => Some(row)
+            case None      => None
+          }).flatten ++ addInfoRow
       } else {
         howToChangeRow ++ addressBaseRows
       }

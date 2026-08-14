@@ -25,13 +25,17 @@ import viewmodels.implicits.*
 
 case object HasUkPostcodeRow {
   def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
-    val result = ua.get(BusinessAddressHasUkPostcodePage).fold(None)(hasPostcode =>
-      Some(SummaryListRowViewModel(
-        key = "checkBusinessAddress.question.ukPostcode",
-        value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
-        actions = Seq(ActionItemViewModel("site.change", "#"))
-      ))
-    )
+    val result = ua
+      .get(BusinessAddressHasUkPostcodePage)
+      .fold(None)(hasPostcode =>
+        Some(
+          SummaryListRowViewModel(
+            key     = "checkBusinessAddress.question.ukPostcode",
+            value   = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
+            actions = Seq(ActionItemViewModel("site.change", "#"))
+          )
+        )
+      )
     result
   }
 }
