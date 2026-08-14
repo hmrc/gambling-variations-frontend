@@ -65,13 +65,13 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
 
       val json =
         Json.obj(
-          "mgdRegNumber" -> "MGD123456",
-          "nameLine1"    -> "Test Name",
-          "nameLine2"    -> "Line 2",
-          "adi"          -> "Additional information",
-          "iomOrCiFlag"  -> "IOM",
-          "faxNumber"    -> "12345",
-          "emailAddr"    -> "test@test.com"
+          "mgdRegNumber"          -> "MGD123456",
+          "nameLine1"             -> "Test Name",
+          "nameLine2"             -> "Line 2",
+          "additionalInformation" -> "Additional information",
+          "iomOrCiFlag"           -> "IOM",
+          "faxNumber"             -> "12345",
+          "emailAddr"             -> "test@test.com"
         )
 
       val result =

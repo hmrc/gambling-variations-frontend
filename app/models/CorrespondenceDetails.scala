@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.functional.syntax.{toAlternativeOps, toFunctionalBuilderOps}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.*
 
 case class CorrespondenceDetails(
@@ -37,12 +37,14 @@ object CorrespondenceDetails {
 
   implicit val reads: Reads[CorrespondenceDetails] = (
     (__ \ "mgdRegNumber").read[String] and
-      (__ \ "nameLine1").readNullable[String].map(_.filter(_.nonEmpty)) and
+      (__ \ "nameLine1").readNullable[String] and
       (__ \ "nameLine2").readNullable[String].map(_.filter(_.nonEmpty)) and
-      (__ \ "correspondenceAddress").readNullable[Address] and
-      ((__ \ "additionalInformation").readNullable[String] or (__ \ "adi").readNullable[String]).map(_.filter(_.nonEmpty)) and
+      Address.reads.map(Some(_): Option[Address]).orElse(Reads.pure(None)) and
+      (__ \ "adi").readNullable[String].map(_.filter(_.nonEmpty)) and
       (__ \ "iomOrCiFlag").readNullable[String] and
-      (__ \ "contactNumber").readNullable[ContactNumber].map(_.filter(cn => cn.phoneNumber.nonEmpty || cn.mobilePhoneNumber.nonEmpty)) and
+      ContactNumber.reads
+        .map(contactNumber => if (contactNumber.phoneNumber.isEmpty && contactNumber.mobilePhoneNumber.isEmpty) None else Some(contactNumber))
+        .orElse(Reads.pure(None)) and
       (__ \ "faxNumber").readNullable[String].map(_.filter(_.nonEmpty)) and
       (__ \ "emailAddr").readNullable[String].map(_.filter(_.nonEmpty))
   )(CorrespondenceDetails.apply _)
