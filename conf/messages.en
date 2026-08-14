@@ -72,7 +72,6 @@ addressLookup.manualAddressLine3 = Town or city
 addressLookup.manualAddressLine4 = County
 addressLookup.manualAddressPostcode = Postcode
 
-changeRegistrationDetails.caption = Change registration details
 
 businessType.soleproprietor = Sole proprietor
 businessType.unincorporatedbody = Unincorporated body
@@ -95,7 +94,6 @@ businessName.notProvided = Not provided
 businessName.table.head1 = Trade Name
 businessName.table.head2 = Trade Name
 businessName.link = Cancel and return to change registration details
-businessName.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 
 changeRegistrationDetails.heading.caption = MGD registration number: {0}
@@ -118,7 +116,8 @@ changeRegistrationDetails.needsCompleting = Needs completing
 changeRegistrationDetails.approvalTime = Once HMRC approve your changes, we will update your registration certificate. This can take up to 48 hours.
 changeRegistrationDetails.submit = Submit changes
 changeRegistrationDetails.change-registration.link = Return to manage your Machine Games Duty
-
+changeRegistrationDetails.caption = Change registration details
+changeRegistrationDetails.readyToSubmit = You must continue to the change registration details page to submit any changes.
 
 
 declaration.title = Declaration
@@ -230,7 +229,6 @@ contactDetails.label.faxNumber = Fax number
 contactDetails.label.contactNumbers = Contact numbers
 contactDetails.label.emailAddr = Email address
 contactDetails.message.notProvided = Not provided
-contactDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 
 faxNumber.title = What is the fax number for this business?
 faxNumber.heading = What is the fax number for this business?
@@ -352,7 +350,6 @@ checkTradingDetails.associatedRegistrationNumbers.change.hidden = associated MGD
 
 checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
 checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
-checkTradingDetails.submit.p1 = You must continue to the change registration details page to submit any changes.
 
 businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
 businessTradeClass.adultGamingCentre = Adult gaming centre
@@ -420,7 +417,6 @@ checkCorrespondenceDetails.label.emailAddr.hidden = correspondence email address
 checkCorrespondenceDetails.label.phoneNumber = Phone number:
 checkCorrespondenceDetails.label.mobilePhoneNumber = Mobile number:
 checkCorrespondenceDetails.message.notProvided = Not provided
-checkCorrespondenceDetails.message.requiredToSubmit = You must continue to the change registration details page to submit any changes.
 checkCorrespondenceDetails.message.remove = Remove all correspondence details
 
 correspondenceEmailAddress.title = What email address should we use for correspondence?
@@ -585,7 +581,6 @@ removeCorrespondenceDetailsYesNo.title = Are you sure you want to remove all you
 removeCorrespondenceDetailsYesNo.heading = Are you sure you want to remove all your correspondence details?
 removeCorrespondenceDetailsYesNo.checkYourAnswersLabel = Are you sure you want to remove all your correspondence details?
 removeCorrespondenceDetailsYesNo.hint = If you remove your correspondence details, we will contact you through the business details you provided
-removeCorrespondenceDetailsYesNo.p1 = You must continue to the change registration details page to submit any changes.
 removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
 removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?
 
@@ -687,6 +682,13 @@ businessUKAddrScreener.error.required = Select yes if your business address has 
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
 businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+
+businessAddrInfoScreener.title = Do you want to include additional information for your business address?
+businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
+businessAddrInfoScreener.hint = For example, building name or floor number
+businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
+businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
+businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
 
 partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner''s email address?
 partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner''s email address?
