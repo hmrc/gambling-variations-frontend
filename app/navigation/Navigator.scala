@@ -124,7 +124,7 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
-    case RemoveBusinessAddressAddInfoPage            => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -184,13 +184,11 @@ class Navigator @Inject() () {
       case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
-
   private def navigateAddBusinessAddressScreenerPage()(answers: UserAnswers): Call =
     answers.get(AddBusinessAddressAdditionalInformationPage) match {
       case Some(true) => routes.BusinessAddressAdditionalInfoController.onPageLoad()
-      case _ => routes.PageNotFoundController.onPageLoad()
+      case _          => routes.PageNotFoundController.onPageLoad()
     }
-
 
   private def navigateAddAssociatedRegistrationNumberPage()(answers: UserAnswers): Call =
     answers

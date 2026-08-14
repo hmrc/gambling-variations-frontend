@@ -30,7 +30,7 @@ import views.html.RemoveBusinessAddressAddInfoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveBusinessAddressAddInfoController @Inject()(
+class RemoveBusinessAddressAddInfoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
