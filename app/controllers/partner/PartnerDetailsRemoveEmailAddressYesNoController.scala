@@ -87,7 +87,11 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
           ),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.remove(PartnerDetailsCorrespondenceEmailAddressPage(index)))
+            updatedAnswers <- if (value) {
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsCorrespondenceEmailAddressPage(index)))
+                              } else {
+                                Future.apply(request.userAnswers)
+                              }
             updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveEmailAddressYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(index), mode, updatedAnswers))
