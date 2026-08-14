@@ -191,7 +191,7 @@ POST       /change-registration-details/partner-details/additional-address-infor
 GET        /change-registration-details/partner-details/additional-address-information-yes-no              controllers.partner.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST        /change-registration-details/partner-details/additional-address-information-yes-no              controllers.partner.PartnerDetailsAdditionalAddressInfoYesNoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/additional-information                       controllers.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/additional-information                       controllers.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/additional-information                       controllers.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/business-address/change-additional-information                       controllers.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/business-address/change-additional-information                       controllers.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = CheckMode)
@@ -208,8 +208,6 @@ POST       	/change-registration-details/partner-details/email-address          
 
 GET        /change-registration-details/business-address/uk-postcode-yes-no                   controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/uk-postcode-yes-no                      controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/business-address/change-uk-postcode-yes-no            controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/business-address/change-uk-postcode-yes-no                controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/business-address/check                               controllers.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
 GET        /change-registration-details/business-address/check-redirect                               controllers.CheckBusinessAddressController.onContinue(mode: Mode = NormalMode)
