@@ -693,12 +693,6 @@ businessAddrInfoScreener.error.required = Select yes to include additional infor
 businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
 businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
 
-
-businessAddrInfoScreener.title = Do you want to include additional information for your business address?
-businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
-businessAddrInfoScreener.hint = For example, building name or floor number
-businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
-
 removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for this business address?
 removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for this business address?
 removeBusinessAddressAddInfo.paragraph = The additional information is: {0}
