@@ -16,6 +16,7 @@
 
 package views
 
+import controllers.routes
 import base.SpecBase
 import models.{Address, CheckMode, NormalMode, UserAnswers}
 import org.jsoup.Jsoup
@@ -36,6 +37,8 @@ class BusinessAddressViewSpec extends SpecBase {
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
+
+    val reroute: String = routes.CheckBusinessAddressController.onContinue().url
 
   }
 
@@ -73,7 +76,7 @@ class BusinessAddressViewSpec extends SpecBase {
       doc.body().select(".govuk-summary-list").text must include("address4")
       doc.body().select(".govuk-summary-list").text must include("postcode")
       doc.body().select(".govuk-summary-list").text must not include "country"
-      doc.select(".govuk-hint").text                must include(messages("checkBusinessAddress.hint"))
+      doc.select(".govuk-button").attr("href") mustEqual reroute
 
     }
 
@@ -109,11 +112,12 @@ class BusinessAddressViewSpec extends SpecBase {
       doc.body().select(".govuk-summary-list").text must include("address4")
       doc.body().select(".govuk-summary-list").text must not include "postcode"
       doc.body().select(".govuk-summary-list").text must include("country")
-      doc.select(".govuk-hint").text                must include(messages("checkBusinessAddress.hint"))
+      doc.select(".govuk-button").attr("href") mustEqual reroute
+
 
     }
 
-    "must render HowToChangeBusinessAddressRow with correct data if screener has been answered" in new Setup {
+    "must render HowToChangeBusinessAddressRow in change flow with correct data if screener has been answered" in new Setup {
 
       val ukAddressAnswers: UserAnswers = UserAnswers(
         "id",
@@ -128,8 +132,7 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "businessAddressChangeScreener" -> "ukAddress"
-          )
+            "businessAddressChangeScreener" -> "ukAddress")
         )
       )
 
@@ -145,7 +148,7 @@ class BusinessAddressViewSpec extends SpecBase {
 
     }
 
-    "must render HasUkPostCodeRow with correct yesNo data if screener has been answered" in new Setup {
+    "must render HasUkPostCodeRow with correct yesNo data if in add flow & screener has been answered" in new Setup {
 
       val ukAddressAnswers: UserAnswers = UserAnswers(
         "id",
@@ -160,7 +163,8 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "hasUkPostcode" -> true
+            "hasUkPostcode" -> true,
+            "isInAddFlow" -> true
           )
         )
       )
@@ -176,7 +180,7 @@ class BusinessAddressViewSpec extends SpecBase {
 
     }
 
-    "must render AddAddressAdditionalInfoRow with correct yesNo data if screener has been answered" in new Setup {
+    "must render AddAddressAdditionalInfoRow with correct yesNo data if in add flow & screener has been answered" in new Setup {
 
       val ukAddressAnswers: UserAnswers = UserAnswers(
         "id",
@@ -192,7 +196,8 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("country")
             ),
             "hasUkPostcode"                           -> true,
-            "addBusinessAddressAdditionalInformation" -> false
+            "addBusinessAddressAdditionalInformation" -> false,
+            "isInAddFlow" -> true
           )
         )
       )
@@ -213,7 +218,8 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("country")
             ),
             "hasUkPostcode"                           -> true,
-            "addBusinessAddressAdditionalInformation" -> false
+            "addBusinessAddressAdditionalInformation" -> false,
+            "isInAddFlow" -> true
           )
         )
       )
