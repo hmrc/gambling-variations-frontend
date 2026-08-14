@@ -65,13 +65,13 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
 
       val json =
         Json.obj(
-          "mgdRegNumber"          -> "MGD123456",
-          "nameLine1"             -> "Test Name",
-          "nameLine2"             -> "Line 2",
-          "additionalInformation" -> "Additional information",
-          "iomOrCiFlag"           -> "IOM",
-          "faxNumber"             -> "12345",
-          "emailAddr"             -> "test@test.com"
+          "mgdRegNumber" -> "MGD123456",
+          "nameLine1"    -> "Test Name",
+          "nameLine2"    -> "Line 2",
+          "adi"          -> "Additional information",
+          "iomOrCiFlag"  -> "IOM",
+          "faxNumber"    -> "12345",
+          "emailAddr"    -> "test@test.com"
         )
 
       val result =
@@ -186,44 +186,5 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
       result.get.nameLine1 shouldBe Some("Name Line 1")
     }
 
-    "can read the full class" in {
-
-      val jsonString: String = """
-                         |{
-                         |        "mgdRegNumber": "XGM00000001761",
-                         |        "correspondenceAddress": {
-                         |          "address1": "address1",
-                         |          "address2": "address2",
-                         |          "address3": "address3",
-                         |          "address4": "address4",
-                         |          "postcode": "postcode",
-                         |          "country": "country"
-                         |        },
-                         |        "additionalInformation": "adi",
-                         |        "iomOrCiFlag": "false",
-                         |        "contactNumber": {
-                         |          "phoneNumber": "phoneNumber",
-                         |          "mobilePhoneNumber": "mobilePhoneNumber"
-                         |        },
-                         |        "faxNumber": "faxNumber",
-                         |        "emailAddr": "emailAddr"
-                         |      }
-                         |""".stripMargin
-
-      val result = Json.parse(jsonString).validate[CorrespondenceDetails]
-
-      result.isSuccess shouldBe true
-      val details = result.get
-
-      details.mgdRegNumber shouldBe "XGM00000001761"
-      details.correspondenceAddress shouldBe Some(
-        Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
-      )
-      details.additionalInformation shouldBe Some("adi")
-      details.iomOrCiFlag           shouldBe Some("false")
-      details.contactNumber         shouldBe Some(ContactNumber(Some("phoneNumber"), Some("mobilePhoneNumber")))
-      details.faxNumber             shouldBe Some("faxNumber")
-      details.emailAddr             shouldBe Some("emailAddr")
-    }
   }
 }

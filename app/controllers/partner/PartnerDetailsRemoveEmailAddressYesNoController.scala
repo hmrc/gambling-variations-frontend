@@ -24,7 +24,7 @@ import models.requests.DataRequest
 import navigation.Navigator
 import pages.CorrespondenceDetailsChangesPage
 import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
-import pages.partnerdetails.PartnerDetailsCorrespondenceDetailsSectionPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceEmailAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,8 +62,7 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
     }
 
     request.userAnswers
-      .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
-      .flatMap(_.emailAddr) match {
+      .get(PartnerDetailsCorrespondenceEmailAddressPage(index)) match {
       case Some(email) =>
         Ok(view(preparedForm, mode, email))
 
@@ -82,37 +81,17 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
               view(formWithErrors,
                    mode,
                    request.userAnswers
-                     .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
-                     .flatMap(_.emailAddr)
+                     .get(PartnerDetailsCorrespondenceEmailAddressPage(index))
                      .getOrElse("")
                   )
             )
           ),
-        value => {
-          val result = for {
-            answersWithSelection <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemoveEmailAddressYesNoPage(index), value))
-
-            cleanedAnswers <- if (value) {
-                                answersWithSelection.get(PartnerDetailsCorrespondenceDetailsSectionPage(index)) match {
-                                  case Some(details) =>
-                                    val updatedDetails = details.copy(emailAddr = None)
-                                    Future.fromTry(answersWithSelection.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), updatedDetails))
-
-                                  case None =>
-                                    Future.failed(new NoSuchElementException("Correspondence details section not found"))
-                                }
-                              } else {
-                                Future.successful(answersWithSelection)
-                              }
-
-            finalAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, value))
-            _            <- sessionRepository.set(finalAnswers)
-          } yield finalAnswers
-
-          result.map { updatedAnswers =>
-            Redirect(navigator.nextPage(PartnerDetailsRemoveEmailAddressYesNoPage(index), mode, updatedAnswers))
-          }
-        }
+        value =>
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.remove(PartnerDetailsCorrespondenceEmailAddressPage(index)))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveEmailAddressYesNoPage(index), value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(index), mode, updatedAnswers))
       )
   }
 }
