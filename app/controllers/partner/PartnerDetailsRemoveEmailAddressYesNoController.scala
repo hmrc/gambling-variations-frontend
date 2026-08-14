@@ -22,7 +22,6 @@ import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.Mode
 import models.requests.DataRequest
 import navigation.Navigator
-import pages.CorrespondenceDetailsChangesPage
 import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
 import pages.partnerdetails.PartnerDetailsCorrespondenceEmailAddressPage
 import play.api.data.Form
