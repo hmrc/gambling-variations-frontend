@@ -41,7 +41,11 @@
         @paragraph(messages("checkBusinessAddress.requiredToSubmit"))
     }
 
-    @govukButton(
+    <p class="govuk-body">
+        @govukButton(
         ButtonViewModel(messages("site.continue"))
-    )
+            .withCssClass("button.govuk-button")
+            .asLink(routes.CheckBusinessAddressController.onContinue().url)
+        )
+    </p>
 }

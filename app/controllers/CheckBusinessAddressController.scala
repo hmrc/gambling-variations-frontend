@@ -16,7 +16,6 @@
 
 package controllers
 
-import controllers.Execution.trampoline
 import controllers.actions.{AuthorisedAction, BusinessAddressDataRequiredAction, DataRetrievalAction}
 import models.Mode
 import pages.*
@@ -61,7 +60,7 @@ class CheckBusinessAddressController @Inject() (
     }
   }
 
-  def onContinue: Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+  def onContinue(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     for {
       updated <- Future.fromTry(request.userAnswers.remove(BusinessAddressAddFlowPage))
       _       <- sessionRepository.set(updated)
