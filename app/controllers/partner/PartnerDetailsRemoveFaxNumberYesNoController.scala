@@ -18,34 +18,31 @@ package controllers.partner
 
 import controllers.actions.*
 import controllers.routes
-import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
-import models.requests.DataRequest
-import models.{Address, CorrespondenceDetails, Mode}
+import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
+import models.Mode
 import navigation.Navigator
-import pages.CorrespondenceDetailsChangesPage
-import pages.partner.PartnerRemoveFaxNumberYesNoPage
-import pages.partnerdetails.PartnerDetailsCorrespondenceDetailsSectionPage
+import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Reads
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.PartnerRemoveFaxNumberYesNoView
+import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerRemoveFaxNumberYesNoController @Inject() (
+class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerRemoveFaxNumberYesNoFormProvider,
+  formProvider: PartnerDetailsRemoveFaxNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerRemoveFaxNumberYesNoView
+  view: PartnerDetailsRemoveFaxNumberYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -55,16 +52,15 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request: DataRequest[AnyContent] =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerRemoveFaxNumberYesNoPage(index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveFaxNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
     request.userAnswers
-      .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
-      .flatMap(_.faxNumber) match {
+      .get(PartnerDetailsCorrespondenceFaxNumberPage(index)) match {
       case Some(faxNumber) =>
         Ok(view(preparedForm, mode, faxNumber))
 
@@ -83,37 +79,21 @@ class PartnerRemoveFaxNumberYesNoController @Inject() (
               view(formWithErrors,
                    mode,
                    request.userAnswers
-                     .get(PartnerDetailsCorrespondenceDetailsSectionPage(index))
-                     .flatMap(_.faxNumber)
+                     .get(PartnerDetailsCorrespondenceFaxNumberPage(index))
                      .getOrElse("")
                   )
             )
           ),
-        value => {
-          val result = for {
-            answersWithSelection <- Future.fromTry(request.userAnswers.set(PartnerRemoveFaxNumberYesNoPage(index), value))
-
-            cleanedAnswers <- if (value) {
-                                answersWithSelection.get(PartnerDetailsCorrespondenceDetailsSectionPage(index)) match {
-                                  case Some(details) =>
-                                    val updatedDetails = details.copy(faxNumber = None)
-                                    Future.fromTry(answersWithSelection.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), updatedDetails))
-
-                                  case None =>
-                                    Future.failed(new NoSuchElementException("Correspondence details section not found"))
-                                }
+        value =>
+          for {
+            updatedAnswers <- if (value) {
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsCorrespondenceFaxNumberPage(index)))
                               } else {
-                                Future.successful(answersWithSelection)
+                                Future.apply(request.userAnswers)
                               }
-
-            finalAnswers <- Future.fromTry(cleanedAnswers.set(CorrespondenceDetailsChangesPage, value))
-            _            <- sessionRepository.set(finalAnswers)
-          } yield finalAnswers
-
-          result.map { updatedAnswers =>
-            Redirect(navigator.nextPage(PartnerRemoveFaxNumberYesNoPage(index), mode, updatedAnswers))
-          }
-        }
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveFaxNumberYesNoPage(index), value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceFaxNumberPage(index), mode, updatedAnswers))
       )
   }
 }

@@ -17,15 +17,15 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
+import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
 import play.api.data.FormError
 
-class PartnerRemoveFaxNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {
+class PartnerDetailsRemoveFaxNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "partnerRemoveFaxNumberYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new PartnerRemoveFaxNumberYesNoFormProvider()()
+  val form = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()()
 
   ".value" - {
 

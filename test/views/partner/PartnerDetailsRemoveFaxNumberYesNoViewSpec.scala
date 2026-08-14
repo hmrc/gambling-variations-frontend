@@ -17,17 +17,17 @@
 package views.partner
 
 import base.SpecBase
-import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
+import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.PartnerRemoveFaxNumberYesNoView
+import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
 
-class PartnerRemoveFaxNumberYesNoViewSpec extends SpecBase {
+class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
-  private val form = new PartnerRemoveFaxNumberYesNoFormProvider()()
+  private val form = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()()
 
   "PartnerRemoveFaxNumberYesNoView" - {
 
@@ -37,7 +37,7 @@ class PartnerRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
         val html = view(form, NormalMode, "here-goes-nothing!")(FakeRequest(), messages(application))
 
@@ -65,7 +65,7 @@ class PartnerRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
         val boundForm = form.bind(Map("value" -> ""))
 

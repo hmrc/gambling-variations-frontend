@@ -16,9 +16,8 @@
 
 package viewmodels.checkAnswers.partner
 
-import controllers.partner.routes.PartnerRemoveFaxNumberYesNoController
 import models.UserAnswers
-import pages.partner.PartnerRemoveFaxNumberYesNoPage
+import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
@@ -29,7 +28,7 @@ object PartnerRemoveFaxNumberYesNoSummary {
   private val index: Int = 0
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerRemoveFaxNumberYesNoPage(index)).map { answer =>
+    answers.get(PartnerDetailsRemoveFaxNumberYesNoPage(index)).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 
@@ -37,7 +36,7 @@ object PartnerRemoveFaxNumberYesNoSummary {
         key   = "partnerRemoveFaxNumberYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", PartnerRemoveFaxNumberYesNoController.onPageLoad().url)
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url)
             .withVisuallyHiddenText(messages("partnerRemoveFaxNumberYesNo.change.hidden"))
         )
       )

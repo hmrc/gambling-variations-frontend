@@ -17,9 +17,10 @@
 package controllers.partner
 
 import base.SpecBase
-import controllers.partner.routes.PartnerRemoveFaxNumberYesNoController
+import controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController
 import controllers.routes
-import forms.partner.PartnerRemoveFaxNumberYesNoFormProvider
+import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
+
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -27,7 +28,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.CorrespondenceDetailsChangesPage
-import pages.partner.PartnerRemoveFaxNumberYesNoPage
+import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import pages.partnerdetails.PartnerDetailsCorrespondenceDetailsSectionPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -36,18 +38,18 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.PartnerRemoveFaxNumberYesNoView
+import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
 
 import scala.concurrent.Future
 
-class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new PartnerRemoveFaxNumberYesNoFormProvider()
+  private val formProvider = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
-  lazy val partnerRemoveFaxNumberYesNoRoute: String = PartnerRemoveFaxNumberYesNoController.onPageLoad().url
+  lazy val partnerRemoveFaxNumberYesNoRoute: String = PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
   private val testFaxNumber = "02071234568"
   private val mgdRegNumber = "XGM00000001761"
 
@@ -91,7 +93,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
       running(application) {
         val request = FakeRequest(GET, partnerRemoveFaxNumberYesNoRoute)
 
-        val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
         val result = route(application, request).value
         status(result) mustEqual OK
@@ -146,7 +148,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
       running(application) {
         val request =
-          FakeRequest(POST, PartnerRemoveFaxNumberYesNoController.onSubmit().url)
+          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -164,12 +166,12 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
       running(application) {
         val request =
-          FakeRequest(POST, PartnerRemoveFaxNumberYesNoController.onSubmit().url)
+          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[PartnerRemoveFaxNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
         val result = route(application, request).value
 
@@ -194,10 +196,8 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
           .build()
 
       running(application) {
-        val request =
-          FakeRequest(POST, PartnerRemoveFaxNumberYesNoController.onSubmit().url)
-            .withFormUrlEncodedBody(("value", "false"))
-
+        val request = FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url).withFormUrlEncodedBody(("value", "false"))
+          
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -207,20 +207,20 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
         verify(mockSessionRepository).set(userAnswersCaptor.capture())
 
         val savedAnswers = userAnswersCaptor.getValue
-        savedAnswers.get(PartnerDetailsCorrespondenceDetailsSectionPage(0)).flatMap(_.faxNumber) mustBe Some(testFaxNumber)
+        savedAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(0)) mustBe Some(testFaxNumber)
         savedAnswers.get(CorrespondenceDetailsChangesPage) mustBe Some(false)
       }
     }
 
     "must redirect to JourneyRecovery when submitting 'Yes' but correspondence details are missing" in {
 
-      val userAnswers = emptyUserAnswers.set(PartnerRemoveFaxNumberYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers.set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, PartnerRemoveFaxNumberYesNoController.onSubmit().url)
+          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -238,7 +238,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
       running(application) {
         val request =
-          FakeRequest(POST, PartnerRemoveFaxNumberYesNoController.onSubmit().url)
+          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -262,7 +262,7 @@ class PartnerRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSug
 
       running(application) {
         val request =
-          FakeRequest(POST, PartnerRemoveFaxNumberYesNoController.onSubmit().url)
+          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value

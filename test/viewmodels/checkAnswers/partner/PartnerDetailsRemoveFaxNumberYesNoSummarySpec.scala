@@ -17,14 +17,14 @@
 package viewmodels.checkAnswers.partner
 
 import base.SpecBase
-import controllers.partner.routes.PartnerRemoveFaxNumberYesNoController
-import pages.partner.PartnerRemoveFaxNumberYesNoPage
+import controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController
+import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
 import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
+class PartnerDetailsRemoveFaxNumberYesNoSummarySpec extends SpecBase {
 
   lazy val app: Application = applicationBuilder().build()
 
@@ -41,7 +41,7 @@ class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is Yes" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerRemoveFaxNumberYesNoPage(index), true)
+          .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
           .success
           .value
 
@@ -52,7 +52,7 @@ class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              PartnerRemoveFaxNumberYesNoController.onPageLoad().url
+              PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
               messages(s"partnerRemoveFaxNumberYesNo.change.hidden")
             )
@@ -63,7 +63,7 @@ class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is No" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerRemoveFaxNumberYesNoPage(index), false)
+          .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), false)
           .success
           .value
 
@@ -74,7 +74,7 @@ class PartnerRemoveFaxNumberYesNoSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              PartnerRemoveFaxNumberYesNoController.onPageLoad().url
+              PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
               messages(s"partnerRemoveFaxNumberYesNo.change.hidden")
             )

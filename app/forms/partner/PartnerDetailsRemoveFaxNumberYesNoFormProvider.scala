@@ -21,7 +21,7 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class PartnerRemoveFaxNumberYesNoFormProvider @Inject() extends Mappings {
+class PartnerDetailsRemoveFaxNumberYesNoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
