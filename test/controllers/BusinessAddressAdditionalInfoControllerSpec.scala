@@ -55,7 +55,7 @@ class BusinessAddressAdditionalInfoControllerSpec extends SpecBase with MockitoS
   )
 
   lazy val busAddRoute: String =
-    routes.BusinessAddressAdditionalInfoController.onPageLoad(NormalMode).url
+    routes.BusinessAddressAdditionalInfoController.onPageLoad().url
 
   "BusinessAddressAdditionalInfo Controller" - {
 
