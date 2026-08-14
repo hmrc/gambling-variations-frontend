@@ -49,8 +49,8 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode, isUk: Boolean, isNonU
                   addr.address2,
                   addr.address3,
                   addr.address4,
-                  if (isUk) Some(ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode).getOrElse("site.notProvided")) else None,
-                  if (isNonUk) Some(ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country).getOrElse("site.notProvided")) else None
+                  if (isUk && addr.postcode.isDefined) Some(ua.get(BusinessAddressUkPage).flatMap(addr => addr.postcode)) else None,
+                  if (isNonUk && addr.country.isDefined) Some(ua.get(BusinessAddressNonUkPage).flatMap(addr => addr.country)) else None
                 ).flatten.mkString("<br>")
               )
             )
@@ -63,15 +63,7 @@ case class BusinessAddressRow(ua: UserAnswers, mode: Mode, isUk: Boolean, isNonU
       key   = "checkBusinessAddress.label.address",
       value = addressRowValue,
       actions = Seq(
-        ActionItemViewModel("site.change",
-                            if (isUk) {
-                              "#"
-                            } else if (isNonUk) {
-                              "#"
-                            } else {
-                              routes.BusinessChangeAddrScreenerController.onPageLoad().url
-                            }
-                           )
+        ActionItemViewModel("site.change", routes.BusinessChangeAddrScreenerController.onPageLoad().url)
       )
     )
   }

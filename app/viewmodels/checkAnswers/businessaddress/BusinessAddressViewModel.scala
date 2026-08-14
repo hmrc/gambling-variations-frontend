@@ -28,19 +28,19 @@ case object BusinessAddressViewModel {
     val isUk = ua.get(BusinessAddressUkPage).fold(false)(_ => true)
     val isNonUk = ua.get(BusinessAddressNonUkPage).fold(false)(_ => true)
 
-    val addressExists = isUk || isNonUk
+    val addFlow = ua.get(BusinessAddressAddFlowPage).getOrElse(false)
 
     val hasPostcodeRowOpt: Option[SummaryListRow] = HasUkPostcodeRow.from(ua)
     val addAddressInfoRowOpt: Option[SummaryListRow] = AddAddressAdditionalInfoRow.from(ua)
-
     val howToChangeRowOpt: Option[SummaryListRow] = HowToChangeBusinessAddressRow.from(ua)
+
     val addressRow = Seq(BusinessAddressRow(ua, mode, isUk, isNonUk).toRow)
     val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua, mode))
 
     val addressBaseRows = addressRow ++ addInfoRow
 
     SummaryListViewModel(
-      if (!addressExists) {
+      if (addFlow) {
         Seq(hasPostcodeRowOpt.fold(None)(row => Some(row))).flatten ++ addressRow ++
           Seq(addAddressInfoRowOpt.fold(None)(row => Some(row))).flatten ++ addInfoRow
       } else {

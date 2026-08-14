@@ -16,16 +16,19 @@
 
 package controllers
 
+import controllers.Execution.trampoline
 import controllers.actions.{AuthorisedAction, BusinessAddressDataRequiredAction, DataRetrievalAction}
 import models.Mode
 import pages.*
 import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.BusinessAddressView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckBusinessAddressController @Inject() (
   override val messagesApi: MessagesApi,
@@ -33,19 +36,35 @@ class CheckBusinessAddressController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessAddressDataRequiredAction,
+  sessionRepository: SessionRepository,
   view: BusinessAddressView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val ua = request.userAnswers
     val showChangeMessage: Boolean = checkFlag(ua, BusinessAddressChangesPage, BusinessAddressSubmittedPage)
+    val addressExists: Boolean = ua.get(BusinessAddressUkPage).isDefined || ua.get(BusinessAddressNonUkPage).isDefined
 
     ua.get(BusinessAddressSectionPage) match {
       case Some(_) =>
-        Ok(view(ua, mode, showChangeMessage))
-      case None => Redirect(routes.SystemErrorController.onPageLoad().url)
-
+        if (!addressExists) {
+          for {
+            updated <- Future.fromTry(ua.set(BusinessAddressAddFlowPage, true))
+            _       <- sessionRepository.set(updated)
+          } yield Redirect(routes.BusinessChangeAddrScreenerController.onPageLoad())
+        } else {
+          Future.successful(Ok(view(ua, mode, showChangeMessage)))
+        }
+      case None => Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))
     }
+  }
+
+  def onContinue: Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    for {
+      updated <- Future.fromTry(request.userAnswers.remove(BusinessAddressAddFlowPage))
+      _       <- sessionRepository.set(updated)
+    } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
   }
 }

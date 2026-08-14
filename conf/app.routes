@@ -212,3 +212,4 @@ GET        /change-registration-details/business-address/change-uk-postcode-yes-
 POST       /change-registration-details/business-address/change-uk-postcode-yes-no                controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/business-address/check                               controllers.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/check                               controllers.CheckBusinessAddressController.onContinue()
