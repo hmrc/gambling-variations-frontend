@@ -41,19 +41,10 @@ case object BusinessAddressViewModel {
 
     SummaryListViewModel(
       if (!addressExists) {
-        Seq(hasPostcodeRowOpt match {
-          case Some(row) => Some(row)
-          case None      => None
-        }).flatten ++ addressRow ++
-          Seq(addAddressInfoRowOpt match {
-            case Some(row) => Some(row)
-            case None      => None
-          }).flatten ++ addInfoRow
+        Seq(hasPostcodeRowOpt.getOrElse(None)).flatten ++ addressRow ++
+          Seq(addAddressInfoRowOpt.getOrElse(None)).flatten ++ addInfoRow
       } else {
-        Seq(howToChangeRowOpt match {
-          case Some(row) => Some(row)
-          case None      => None
-        }).flatten ++ addressBaseRows
+        Seq(howToChangeRowOpt.getOrElse(None)).flatten ++ addressBaseRows
       }
     )
   }
