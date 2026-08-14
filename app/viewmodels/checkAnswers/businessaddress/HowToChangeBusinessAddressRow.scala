@@ -25,20 +25,24 @@ import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, Value
 import viewmodels.implicits.*
 
 case object HowToChangeBusinessAddressRow {
-  def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
-    SummaryListRowViewModel(
-      key = "checkBusinessAddress.question.howToChange",
-      value = ValueViewModel(ua.get(BusinessAddressChangeScreenerPage) match {
-        case Some(howToChange) =>
-          howToChange match {
-            case DifferentUkAddress   => "checkBusinessAddress.changeOption.difUk"
-            case ChangeToNonUkAddress => "checkBusinessAddress.changeOption.nonUk"
-            case ChangeToUkAddress    => "checkBusinessAddress.changeOption.toUk"
-            case EditCurrentAddress   => "checkBusinessAddress.changeOption.edit"
-          }
-        case None => "site.notProvided"
-      }),
-      actions = Seq(ActionItemViewModel("site.change", "#"))
-    )
+  def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
+    ua.get(BusinessAddressChangeScreenerPage) match {
+      case Some(howToChange) =>
+        Some(
+          SummaryListRowViewModel(
+            key = "checkBusinessAddress.question.howToChange",
+            value = ValueViewModel(
+              howToChange match {
+                case DifferentUkAddress   => "checkBusinessAddress.changeOption.difUk"
+                case ChangeToNonUkAddress => "checkBusinessAddress.changeOption.nonUk"
+                case ChangeToUkAddress    => "checkBusinessAddress.changeOption.toUk"
+                case EditCurrentAddress   => "checkBusinessAddress.changeOption.edit"
+              }
+            ),
+            actions = Seq(ActionItemViewModel("site.change", "#"))
+          )
+        )
+      case None => None
+    }
   }
 }

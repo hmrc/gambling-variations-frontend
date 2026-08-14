@@ -33,7 +33,7 @@ case object BusinessAddressViewModel {
     val hasPostcodeRowOpt: Option[SummaryListRow] = HasUkPostcodeRow.from(ua)
     val addAddressInfoRowOpt: Option[SummaryListRow] = AddAddressAdditionalInfoRow.from(ua)
 
-    val howToChangeRow = Seq(HowToChangeBusinessAddressRow.from(ua))
+    val howToChangeRowOpt: Option[SummaryListRow] = HowToChangeBusinessAddressRow.from(ua)
     val addressRow = Seq(BusinessAddressRow(ua, mode, isUk, isNonUk).toRow)
     val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua, mode))
 
@@ -50,7 +50,10 @@ case object BusinessAddressViewModel {
             case None      => None
           }).flatten ++ addInfoRow
       } else {
-        howToChangeRow ++ addressBaseRows
+        Seq(howToChangeRowOpt match {
+          case Some(row) => Some(row)
+          case None      => None
+        }).flatten ++ addressBaseRows
       }
     )
   }
