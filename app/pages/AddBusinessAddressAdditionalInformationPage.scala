@@ -23,7 +23,7 @@ import scala.util.Try
 
 case object AddBusinessAddressAdditionalInformationPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
 
   override def toString: String = "addBusinessAddressAdditionalInformation"
 

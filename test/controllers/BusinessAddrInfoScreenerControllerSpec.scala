@@ -72,9 +72,9 @@ class BusinessAddrInfoScreenerControllerSpec extends SpecBase with MockitoSugar 
           "id",
           Json.obj(
             "businessAddressSection" -> Json.obj(
-              "mgdRegNum" -> mgdRegNum
-            ),
-            "addBusinessAddressAdditionalInformation" -> true
+              "mgdRegNum" -> mgdRegNum,
+              "addBusinessAddressAdditionalInformation" -> true
+            )
           )
         )
       )

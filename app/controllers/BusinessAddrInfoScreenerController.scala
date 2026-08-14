@@ -36,7 +36,7 @@ class BusinessAddrInfoScreenerController @Inject()(
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessAddressDataRequiredAction,
   formProvider: BusinessAddrInfoScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessAddrInfoScreenerView

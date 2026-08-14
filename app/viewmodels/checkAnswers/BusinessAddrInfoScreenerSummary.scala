@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.UserAnswers
-import pages.BusinessAddrInfoScreenerPage
+import pages.AddBusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
@@ -27,7 +27,7 @@ import viewmodels.implicits.*
 object BusinessAddrInfoScreenerSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(BusinessAddrInfoScreenerPage).map { answer =>
+    answers.get(AddBusinessAddressAdditionalInformationPage).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 

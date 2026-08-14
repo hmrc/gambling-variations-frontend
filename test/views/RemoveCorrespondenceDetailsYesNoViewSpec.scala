@@ -62,7 +62,7 @@ class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
         )
 
         document.body().text() must include(
-          messages(application)("removeCorrespondenceDetailsYesNo.p1")
+          messages(application)("changeRegistrationDetails.readyToSubmit")
         )
 
         document.body().text() must include(

@@ -150,7 +150,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
       val doc = Jsoup.parse(html.body)
 
       doc.text must include(
-        messages("checkCorrespondenceDetails.message.requiredToSubmit")
+        messages("changeRegistrationDetails.readyToSubmit")
       )
     }
 
@@ -161,7 +161,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
       val doc = Jsoup.parse(html.body)
 
       doc.text must not include
-        messages("checkCorrespondenceDetails.message.requiredToSubmit")
+        messages("changeRegistrationDetails.readyToSubmit")
     }
   }
 }
