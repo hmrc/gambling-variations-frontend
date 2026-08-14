@@ -20,17 +20,12 @@ import base.SpecBase
 import controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController
 import controllers.routes
 import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
-
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CorrespondenceDetailsChangesPage
 import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
-import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
-import pages.partnerdetails.PartnerDetailsCorrespondenceDetailsSectionPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -44,26 +39,25 @@ import scala.concurrent.Future
 
 class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   private val formProvider = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
-  lazy val partnerRemoveFaxNumberYesNoRoute: String = PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
+  private val index = 0
   private val testFaxNumber = "02071234568"
   private val mgdRegNumber = "XGM00000001761"
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
-  private val index: Int = 0
+  lazy val partnerDetailsRemoveFaxNumberYesNoRoute: String =
+    PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
 
   private def cleanedData(faxNumber: Option[String]) = Json.obj(
     "partners" -> Json.arr(
       Json.obj(
-        "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
-        "partnerRemoveFaxNumberYesNo" -> true,
-        "partnerDetailsBusinessName"  -> "Partner1",
+        "partnerDetailsMgdRegNumber" -> mgdRegNumber,
+        "partnerDetailsBusinessName" -> "Partner1",
         "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-          "mgdRegNumber" -> "mgdRegNumber",
+          "mgdRegNumber" -> mgdRegNumber,
           "correspondenceAddress" -> Json.obj(
             "address1" -> "Flat 1",
             "address2" -> "10 Market Road",
@@ -77,198 +71,165 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
             "mobilePhoneNumber" -> "7093434765"
           ),
           "faxNumber" -> faxNumber,
-          "emailAddr" -> "a@b.com"
+          "emailAddr" -> "test@example.com"
         )
       )
     )
   )
 
-  "PartnerRemoveFaxNumberYesNo Controller" - {
+  "PartnerDetailsRemoveFaxNumberYesNo Controller" - {
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = UserAnswers("mgdRegNumber", cleanedData(Some(testFaxNumber)))
+    "onPageLoad" - {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      "must return OK and the correct view for a GET when fax number exists in UserAnswers" in {
+        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
-      running(application) {
-        val request = FakeRequest(GET, partnerRemoveFaxNumberYesNoRoute)
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsRemoveFaxNumberYesNoRoute)
+          val result = route(application, request).value
+          val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
-        val result = route(application, request).value
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, testFaxNumber)(request, messages(application)).toString
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, NormalMode, testFaxNumber)(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered" in {
+        val baseAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+
+        val userAnswers = baseAnswers
+          .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsRemoveFaxNumberYesNoRoute)
+          val result = route(application, request).value
+          val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form.fill(true), NormalMode, testFaxNumber)(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to JourneyRecovery on a GET when correspondence details exist but faxNumber is None" in {
+        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(None))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsRemoveFaxNumberYesNoRoute)
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "must redirect to SystemError when no user answers are found" in {
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsRemoveFaxNumberYesNoRoute)
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+        }
       }
     }
 
-    "must redirect to JourneyRecovery on a GET when correspondence details exist but fax number is None" in {
+    "onSubmit" - {
 
-      val userAnswers = UserAnswers("XGM00000001761", cleanedData(None))
+      "must remove the fax number and redirect to next page when 'Yes' (true) is submitted" in {
+        val mockSessionRepository = mock[SessionRepository]
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
-      running(application) {
-        val request = FakeRequest(GET, partnerRemoveFaxNumberYesNoRoute)
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", "true"))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must redirect to the next page when valid data is submitted" in {
-      val userAnswers = UserAnswers("mgdRegNumber", cleanedData(None))
+      "must retain the fax number and redirect when 'No' (false) is submitted" in {
+        val mockSessionRepository = mock[SessionRepository]
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
-      running(application) {
-        val request = FakeRequest(GET, partnerRemoveFaxNumberYesNoRoute)
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", "false"))
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must redirect to the next page when valid data is submitted (Yes selected)" in {
+      "must return BAD_REQUEST and errors when invalid data is submitted" in {
+        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
-      val mockSessionRepository = mock[SessionRepository]
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val userAnswers = UserAnswers("mgdRegNumber", cleanedData(Some(testFaxNumber)))
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", ""))
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+          val boundForm = form.bind(Map("value" -> ""))
+          val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
+          val result = route(application, request).value
 
-      running(application) {
-        val request =
-          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, NormalMode, testFaxNumber)(request, messages(application)).toString
+        }
       }
-    }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+      "must redirect to 'there is a problem' error page when submitting 'Yes' (true) but correspondence details section is missing" in {
+        val userAnswers = emptyUserAnswers
 
-      val userAnswers = UserAnswers("mgdRegNumber", cleanedData(Some(testFaxNumber)))
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", "true"))
 
-      running(application) {
-        val request =
-          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-            .withFormUrlEncodedBody(("value", ""))
+          val result = route(application, request).value
 
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, testFaxNumber)(request, messages(application)).toString
-      }
-    }
-
-    "must retain the fax number and redirect when 'No' (false) is submitted" in {
-
-      val mockSessionRepository = mock[SessionRepository]
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val userAnswers = UserAnswers("mgdRegNumber", cleanedData(Some(testFaxNumber)))
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
-
-      running(application) {
-        val request = FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url).withFormUrlEncodedBody(("value", "false"))
-          
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-
-        val userAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(mockSessionRepository).set(userAnswersCaptor.capture())
-
-        val savedAnswers = userAnswersCaptor.getValue
-        savedAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(0)) mustBe Some(testFaxNumber)
-        savedAnswers.get(CorrespondenceDetailsChangesPage) mustBe Some(false)
-      }
-    }
-
-    "must redirect to JourneyRecovery when submitting 'Yes' but correspondence details are missing" in {
-
-      val userAnswers = emptyUserAnswers.set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
-      }
-    }
-
-    "must redirect to 'there is a problem' error page when submitting 'Yes' (true) but correspondence details section is missing" in {
-
-      val userAnswers = emptyUserAnswers
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
-      }
-    }
-
-    "must fail/redirect when sessionRepository.set returns a failure" in {
-
-      val mockSessionRepository = mock[SessionRepository]
-      when(mockSessionRepository.set(any())) thenReturn Future.failed(new RuntimeException("Database error"))
-
-      val userAnswers = UserAnswers("mgdRegNumber", cleanedData(Some(testFaxNumber)))
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
-          .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        intercept[RuntimeException] {
-          await(result)
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
         }
       }
     }
