@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.partner.ChangePartnerFaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.ChangePartnerFaxNumberPage
+import pages.partner.{ChangePartnerFaxNumberPage, InterimGetPartnerFaxNumberPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,9 +47,12 @@ class ChangePartnerFaxNumberController @Inject() (
 
   val form: Form[String] = formProvider()
 
+  //todo: this will be update shortly
+  private val index: Int = 0
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(ChangePartnerFaxNumberPage) match {
+    val preparedForm = request.userAnswers.get(InterimGetPartnerFaxNumberPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -65,9 +68,10 @@ class ChangePartnerFaxNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangePartnerFaxNumberPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangePartnerFaxNumberPage(index), value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(InterimGetPartnerFaxNumberPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChangePartnerFaxNumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ChangePartnerFaxNumberPage(index), mode, updatedAnswers))
       )
   }
 }
