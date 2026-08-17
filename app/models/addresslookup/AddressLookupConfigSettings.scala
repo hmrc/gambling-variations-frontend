@@ -19,7 +19,11 @@ package models.addresslookup
 import play.api.i18n.Messages
 import play.api.libs.json.{Format, Json}
 
-case class AddressLookupConfigSettings(options: AddressLookupConfigOptions, labels: AddressLookupLabels)
+case class AddressLookupConfigSettings(
+  version: Int = 2,
+  options: AddressLookupConfigOptions,
+  labels: AddressLookupLabels
+)
 
 object AddressLookupConfigSettings {
   implicit val fmt: Format[AddressLookupConfigSettings] = Json.format[AddressLookupConfigSettings]
@@ -76,15 +80,13 @@ case class ManualAddressEntryLineContent(
   addressLine1: String = "addressLookup.manualAddressLine1",
   addressLine2: String = "addressLookup.manualAddressLine2",
   addressLine3: String = "addressLookup.manualAddressLine3",
-  town: String = "addressLookup.manualAddressLin4",
-  postcode: String = "addressLookup.manualAddressPostcode"
+  town: String = "addressLookup.manualAddressLine4"
 ) {
   def messages(implicit messages: Messages) = ManualAddressEntryLineContent(
     addressLine1 = messages(addressLine1),
     addressLine2 = messages(addressLine2),
     addressLine3 = messages(addressLine3),
-    town         = messages(town),
-    postcode     = messages(postcode)
+    town         = messages(town)
   )
 }
 
@@ -117,10 +119,24 @@ object AppLevelLabels {
   implicit val fmt: Format[AppLevelLabels] = Json.format[AppLevelLabels]
 }
 
-case class SelectPageLabels(title: String = "correspondenceAddressSelectAddress.title",
-                            heading: String = "correspondenceAddressSelectAddress.heading"
-                           ) {
-  def messages(implicit messages: Messages) = SelectPageLabels(title = messages(title), heading = messages(heading))
+case class SelectPageLabels(
+  title: String = "correspondenceAddressSelectAddress.title",
+  heading: String = "correspondenceAddressSelectAddress.heading",
+  headingWithPostcode: String = "correspondenceAddressSelectAddress.headingWithPostcode",
+  proposalListLabel: String = "correspondenceAddressSelectAddress.proposalListLabel",
+  submitLabel: String = "correspondenceAddressSelectAddress.submit",
+  searchAgainLinkText: String = "correspondenceAddressSelectAddress.searchAgain",
+  editAddressLinkText: String = "correspondenceAddressSelectAddress.manualAddress"
+) {
+  def messages(implicit messages: Messages) = SelectPageLabels(
+    title               = messages(title),
+    heading             = messages(heading),
+    headingWithPostcode = messages(headingWithPostcode),
+    proposalListLabel   = messages(proposalListLabel),
+    submitLabel         = messages(submitLabel),
+    searchAgainLinkText = messages(searchAgainLinkText),
+    editAddressLinkText = messages(editAddressLinkText)
+  )
 }
 
 object SelectPageLabels {
@@ -130,14 +146,22 @@ object SelectPageLabels {
 case class LookupPageLabels(
   title: String = "correspondenceAddressLookupAddress.title",
   heading: String = "correspondenceAddressLookupAddress.heading",
+  filterLabel: String = "correspondenceAddressLookupAddress.filter",
   postcodeLabel: String = "correspondenceAddressLookupAddress.postcode",
-  submitLabel: String = "correspondenceAddressLookupAddress.submit"
+  submitLabel: String = "correspondenceAddressLookupAddress.submit",
+  noResultsFoundMessage: String = "correspondenceAddressLookupAddress.noResults",
+  resultLimitExceededMessage: String = "correspondenceAddressLookupAddress.tooManyResults",
+  manualAddressLinkText: String = "correspondenceAddressLookupAddress.manualAddress"
 ) {
   def messages(implicit messages: Messages) = LookupPageLabels(
-    title         = messages(title),
-    heading       = messages(heading),
-    postcodeLabel = messages(postcodeLabel),
-    submitLabel   = messages(submitLabel)
+    title                      = messages(title),
+    heading                    = messages(heading),
+    filterLabel                = messages(filterLabel),
+    postcodeLabel              = messages(postcodeLabel),
+    submitLabel                = messages(submitLabel),
+    noResultsFoundMessage      = messages(noResultsFoundMessage),
+    resultLimitExceededMessage = messages(resultLimitExceededMessage),
+    manualAddressLinkText      = messages(manualAddressLinkText)
   )
 }
 
@@ -148,12 +172,18 @@ object LookupPageLabels {
 case class ConfirmPageLabels(
   title: String = "correspondenceAddressConfirmAddress.title",
   heading: String = "correspondenceAddressConfirmAddress.heading",
-  changeLinkText: String = "correspondenceAddressConfirmAddress.change"
+  submitLabel: String = "correspondenceAddressConfirmAddress.submit",
+  searchAgainLinkText: String = "correspondenceAddressConfirmAddress.searchAgain",
+  changeLinkText: String = "correspondenceAddressConfirmAddress.change",
+  confirmChangeText: String = "correspondenceAddressConfirmAddress.confirmChange"
 ) {
   def messages(implicit messages: Messages) = ConfirmPageLabels(
-    title          = messages(title),
-    heading        = messages(heading),
-    changeLinkText = messages(changeLinkText)
+    title               = messages(title),
+    heading             = messages(heading),
+    submitLabel         = messages(submitLabel),
+    searchAgainLinkText = messages(searchAgainLinkText),
+    changeLinkText      = messages(changeLinkText),
+    confirmChangeText   = messages(confirmChangeText)
   )
 }
 
@@ -162,7 +192,7 @@ object ConfirmPageLabels {
 }
 
 case class EditPageLabels(
-  title: String = "correspondenceUKAddress.title",
+  title: String = "correspondenceAddressManualAddressUk.title",
   heading: String = "correspondenceUKAddress.heading",
   line1Label: String = "correspondenceUKAddress.addressLine1",
   line2Label: String = "correspondenceUKAddress.addressLine2",
@@ -213,7 +243,7 @@ object International {
       ).messages
     )
 }
-case class SelectPageConfig(proposalListLimit: Int, showSearchLinkAgain: Boolean, showNoneOfTheseOption: Boolean)
+case class SelectPageConfig(proposalListLimit: Int, showSearchAgainLink: Boolean, showNoneOfTheseOption: Boolean)
 
 object SelectPageConfig {
   implicit val fmt: Format[SelectPageConfig] = Json.format[SelectPageConfig]

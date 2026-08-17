@@ -43,6 +43,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val addressLookupDeskProServiceName: String =
     configuration.get[String]("address-lookup.deskpro-service-name")
 
+  lazy val addressLookupTimeoutAmount: Int =
+    configuration.get[Int]("address-lookup.timeout-amount")
+
   lazy val addressLookupTimeoutUrl: String =
     configuration.get[String]("address-lookup.timeout-url")
 

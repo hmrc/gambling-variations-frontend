@@ -25,7 +25,6 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.i18n.Messages
-import play.api.test.Helpers.stubMessages
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +33,8 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
 
   implicit val ec: ExecutionContext = ExecutionContext.global
   implicit private val hc: HeaderCarrier = HeaderCarrier()
-  implicit private val messages: Messages = stubMessages()
+  private val app = applicationBuilder().build()
+  implicit private val messages: Messages = this.messages(app)
 
   private val mockConnector = mock[AddressLookupConnector]
   private val service = new AddressLookupService(mockConnector, testFrontendAppConfig)
@@ -54,9 +54,32 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
       result mustBe onRampUrl
 
       verify(mockConnector).initJourney(configCaptor.capture())(any[HeaderCarrier])
-      configCaptor.getValue.options.continueUrl mustBe
-        "http://localhost:9000/change-registration-details/correspondence-details/address-lookup/callback"
-      configCaptor.getValue.options.ukMode mustBe true
+      val config = configCaptor.getValue
+
+      config.version mustBe 2
+      config.options.continueUrl mustBe
+        "http://localhost:9000/gambling-variations/change-registration-details/correspondence-details/address-lookup/callback"
+      config.options.homeNavHref mustBe "http://gambling-variations/home"
+      config.options.accessibilityFooterUrl mustBe
+        "http://localhost:12346/accessibility-statement/gambling-variations-frontend"
+      config.options.deskProServiceName mustBe "gambling-variations-frontend"
+      config.options.ukMode mustBe true
+      config.options.selectPageConfig.showSearchAgainLink mustBe true
+      config.options.timeoutConfig mustBe models.addresslookup.TimeoutConfig(
+        timeoutAmount       = 900,
+        timeoutUrl          = "http://localhost:9000/gambling-variations/there-is-a-problem",
+        timeoutKeepAliveUrl = "http://localhost:9000/gambling-variations/refresh-session"
+      )
+
+      config.labels.en.lookupPageLabels.heading mustBe "Enter the correspondence address"
+      config.labels.en.lookupPageLabels.filterLabel mustBe "Property name or number (optional)"
+      config.labels.en.lookupPageLabels.submitLabel mustBe "Find address"
+      config.labels.en.lookupPageLabels.manualAddressLinkText mustBe "Enter the address manually"
+      config.labels.en.confirmPageLabels.heading mustBe "Review and confirm"
+      config.labels.en.confirmPageLabels.changeLinkText mustBe "Change"
+      config.labels.en.confirmPageLabels.submitLabel mustBe "Confirm address"
+      config.options.manualAddressEntryConfig.maxLengthErrorMessages.en.addressLine1 mustBe
+        "Address line 1 must be 35 characters or fewer"
     }
   }
 
