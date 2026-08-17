@@ -69,7 +69,7 @@ class PartnerContactDetailsController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(0), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(PartnerIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(PartnerIndex), mode, updatedAnswers))
       )

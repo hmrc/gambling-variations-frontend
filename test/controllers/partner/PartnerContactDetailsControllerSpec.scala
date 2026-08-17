@@ -28,23 +28,32 @@ class PartnerContactDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val partnerContactDetailsRoute: String = controllers.partner.routes.PartnerContactDetailsController.onPageLoad().url
 
-  val data: JsObject = Json.obj(
-    "partners" -> Json.arr(
-      Json.obj(
-        "partnerDetailsMgdRegNumber" -> "XWM00000001762",
-        "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-          "contactNumber" -> Json.obj(
-            "phoneNumber"       -> "123456789",
-            "mobilePhoneNumber" -> "123456789"
+  val userAnswers = UserAnswers(
+    userAnswersId,
+    Json.obj(
+      "partners" -> Json.arr(
+        Json.obj(
+          "partnerDetailsMgdRegNumber" -> "XWM00000001762",
+          "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
+            "contactNumber" -> Json.obj(
+              "phoneNumber"       -> "123456789",
+              "mobilePhoneNumber" -> "123456789"
+            )
           )
         )
       )
     )
   )
 
-  val userAnswers = UserAnswers(
+  override val emptyUserAnswers = UserAnswers(
     userAnswersId,
-    data
+    Json.obj(
+      "partners" -> Json.arr(
+        Json.obj(
+          "partnerDetailsMgdRegNumber" -> "XWM00000001762"
+        )
+      )
+    )
   )
 
   "PartnerContactDetails Controller" - {
@@ -52,22 +61,6 @@ class PartnerContactDetailsControllerSpec extends SpecBase with MockitoSugar {
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, partnerContactDetailsRoute)
-
-        val view = application.injector.instanceOf[PartnerContactDetailsView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
-      }
-    }
-
-    "must return OK and the correct view for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerContactDetailsRoute)
@@ -208,6 +201,19 @@ class PartnerContactDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must return See Other when no data is present" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, partnerContactDetailsRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
       }
     }
 
