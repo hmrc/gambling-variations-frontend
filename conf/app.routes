@@ -205,3 +205,6 @@ POST       /change-registration-details/partner-details/email-address-yes-no    
 GET       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
+
+GET        /change-registration-details/partner-details/remove-trading-name                        controllers.partner.RemovePartnerTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-trading-name                       controllers.partner.RemovePartnerTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)

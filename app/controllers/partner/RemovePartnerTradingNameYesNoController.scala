@@ -1,0 +1,116 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package controllers.partner
+
+import controllers.actions.*
+import controllers.routes
+import forms.partner.RemovePartnerTradingNameYesNoFormProvider
+import models.Mode
+import navigation.Navigator
+import pages.partner.RemovePartnerTradingNameYesNoPage
+import pages.partnerdetails.PartnerDetailsTradingNamePage
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.RemovePartnerTradingNameYesNoView
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
+class RemovePartnerTradingNameYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: PartnerDetailsDataRequiredAction,
+  formProvider: RemovePartnerTradingNameYesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RemovePartnerTradingNameYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
+
+  val form = formProvider()
+
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+      val index: Int = 0
+
+      request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
+        case Some(partnerTradingName) =>
+          val preparedForm =
+            request.userAnswers.get(RemovePartnerTradingNameYesNoPage(index)) match {
+              case None        => form
+              case Some(value) => form.fill(value)
+            }
+
+          Ok(view(preparedForm, mode, partnerTradingName))
+
+        case None =>
+          Redirect(routes.SystemErrorController.onPageLoad())
+      }
+    }
+
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val index: Int = 0
+
+      request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
+        case Some(partnerTradingName) =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(view(formWithErrors, mode, partnerTradingName))
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                                      request.userAnswers.set(
+                                        RemovePartnerTradingNameYesNoPage(index),
+                                        value
+                                      )
+                                    )
+
+                  cleanedAnswers <- if (value) {
+                                      Future.fromTry(
+                                        updatedAnswers.remove(PartnerDetailsTradingNamePage(index))
+                                      )
+                                    } else {
+                                      Future.successful(updatedAnswers)
+                                    }
+
+                  _ <- sessionRepository.set(cleanedAnswers)
+                } yield Redirect(
+                  navigator.nextPage(
+                    RemovePartnerTradingNameYesNoPage(index),
+                    mode,
+                    cleanedAnswers
+                  )
+                )
+            )
+
+        case None =>
+          Future.successful(
+            Redirect(routes.SystemErrorController.onPageLoad())
+          )
+      }
+    }
+}

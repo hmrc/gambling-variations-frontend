@@ -643,20 +643,20 @@ partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the
 partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
 
 
-partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner''s address?
-partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner’s address?
+partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner’s address?
 partnerDetailsAdditionalAddressInfo.checkYourAnswersLabel = Additional Information
 partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor number
-partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
+partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner’s address
 partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
 
-PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
-PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner’s address?
+PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner’s address?
 PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
 PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
 PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
-PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner’s address?
 
 businessAddressAdditionalInfo.title = What is the additional information for your business address?
 businessAddressAdditionalInfo.heading = What is the additional information for your business address?
@@ -687,3 +687,9 @@ partnerEmailAddress.error.length = The email address must be 70 characters or le
 partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 partnerEmailAddress.change.hidden = What is the partner’s email address?
 
+
+removePartnerTradingNameYesNo.title = Are you sure you want to remove this partner’s trading name?
+removePartnerTradingNameYesNo.heading = Are you sure you want to remove {0} as this partner’s trading name?
+removePartnerTradingNameYesNo.checkYourAnswersLabel =Are you sure you want to remove {0} as this partner's trading name?
+removePartnerTradingNameYesNo.error.required = Select yes if you want to remove this partner’s trading name
+removePartnerTradingNameYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s trading name?
