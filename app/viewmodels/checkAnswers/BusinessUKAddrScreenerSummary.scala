@@ -35,7 +35,7 @@ object BusinessUKAddrScreenerSummary {
         key   = "businessUKAddrScreener.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad().url)
             .withVisuallyHiddenText(messages("businessUKAddrScreener.change.hidden"))
         )
       )
