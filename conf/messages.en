@@ -681,8 +681,8 @@ partnerContactDetails.paragraph = You must provide at least one contact number.
 partnerContactDetails.phoneNumber = Phone number
 partnerContactDetails.mobilePhoneNumber = Mobile number
 
-partnerContactDetails.error.phoneNumber.length = The phone number must be 20 characters or less XO
-partnerContactDetails.error.mobilePhoneNumber.length = The mobile number must be 20 characters or less XO
+partnerContactDetails.error.phoneNumber.length = The phone number must be 20 characters or less
+partnerContactDetails.error.mobilePhoneNumber.length = The mobile number must be 20 characters or less
 
 partnerContactDetails.error.phoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
 partnerContactDetails.error.mobilePhoneNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
@@ -691,16 +691,6 @@ partnerContactDetails.error.phoneNumber.required = Enter valid phone number
 partnerContactDetails.error.mobilePhoneNumber.required = Enter valid mobile number
 
 partnerContactDetails.error.count = At least one phone or mobile number is required
-
-#partnerContactDetails.title = partnerContactDetails
-#partnerContactDetails.heading = partnerContactDetails
-#partnerContactDetails.phoneNumber = phoneNumber
-#partnerContactDetails.mobilePhoneNumber = mobilePhoneNumber
-#partnerContactDetails.checkYourAnswersLabel = PartnerContactDetails
-
-
-#partnerContactDetails.phoneNumber.change.hidden = phoneNumber
-#partnerContactDetails.mobilePhoneNumber.change.hidden = mobilePhoneNumber
 
 businessUKAddrScreener.title = Does your business address have a UK postcode?
 businessUKAddrScreener.heading = Does your business address have a UK postcode?

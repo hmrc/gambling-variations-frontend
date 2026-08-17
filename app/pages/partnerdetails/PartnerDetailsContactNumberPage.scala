@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package pages.partnerdetails
 
-import play.api.libs.json._
+import models.ContactNumber
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class PartnerContactDetails (phoneNumber: Option[String], mobilePhoneNumber: Option[String])
+//TODO: index will be replaced in the next ticket with `BusinessPartnerNumber`
+case class PartnerDetailsContactNumberPage(index: Int) extends QuestionPage[ContactNumber] {
 
-object PartnerContactDetails {
+  override def path: JsPath = PartnerDetailsCorrespondenceDetailsSectionPage(index).path \ toString
 
-  implicit val format: OFormat[PartnerContactDetails] = Json.format
+  override def toString: String = "contactNumber"
 }

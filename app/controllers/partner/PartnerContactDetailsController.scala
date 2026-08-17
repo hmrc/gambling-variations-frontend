@@ -17,10 +17,11 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerContactDetailsFormProvider
-import models.Mode
+import forms.ContactNumberFormProvider
+import models.{ContactNumber, Mode}
 import navigation.Navigator
-import pages.PartnerContactDetailsPage
+import pages.partnerdetails.PartnerDetailsContactNumberPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,19 +37,23 @@ class PartnerContactDetailsController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: PartnerContactDetailsFormProvider,
+  requireData: PartnerDetailsDataRequiredAction, // DataRequiredAction,
+  formProvider: ContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerContactDetailsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  // TODO: Temp solution to multiple partners
+  // Upcoming ticket will identify partner by the `BusinessPartnerNumber`
+  private val PartnerIndex: Int = 0
+
+  val form: Form[ContactNumber] = formProvider.getFormWithAtLeastOneNumberConstraint("partnerContactDetails")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerContactDetailsPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsContactNumberPage(PartnerIndex)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -64,9 +69,9 @@ class PartnerContactDetailsController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerContactDetailsPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(0), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerContactDetailsPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(PartnerIndex), mode, updatedAnswers))
       )
   }
 }

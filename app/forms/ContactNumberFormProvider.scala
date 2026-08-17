@@ -19,7 +19,7 @@ package forms
 import javax.inject.Inject
 import forms.mappings.Mappings
 import models.ContactNumber
-import play.api.data.Form
+import play.api.data.{Form, Mapping}
 import play.api.data.Forms.*
 import play.api.data.validation.*
 
@@ -66,21 +66,30 @@ class ContactNumberFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[ContactNumber] =
     Form(
-      mapping(
-        "phoneNumber" ->
-          optional(
-            text()
-              .transform(_.trim, identity)
-              .verifying(phoneConstraint(prefix))
-          ),
-        "mobileNumber" ->
-          optional(
-            text()
-              .transform(_.trim, identity)
-              .verifying(mobileConstraint(prefix))
-          )
-      )((phone: Option[String], mobile: Option[String]) => ContactNumber(phone, mobile))((b: ContactNumber) =>
-        Some((b.phoneNumber, b.mobilePhoneNumber))
-      )
+      getMapping(prefix)
     )
+
+  def getFormWithAtLeastOneNumberConstraint(prefix: String): Form[ContactNumber] = Form(
+    getMapping(prefix).verifying(
+      s"$prefix.error.count",
+      contact => {
+        contact.phoneNumber.nonEmpty || contact.mobilePhoneNumber.nonEmpty
+      }
+    )
+  )
+
+  private def getMapping(prefix: String): Mapping[ContactNumber] = mapping(
+    "phoneNumber" ->
+      optional(
+        text()
+          .transform(_.trim, identity)
+          .verifying(phoneConstraint(prefix))
+      ),
+    "mobileNumber" ->
+      optional(
+        text()
+          .transform(_.trim, identity)
+          .verifying(mobileConstraint(prefix))
+      )
+  )((phone: Option[String], mobile: Option[String]) => ContactNumber(phone, mobile))((b: ContactNumber) => Some((b.phoneNumber, b.mobilePhoneNumber)))
 }
