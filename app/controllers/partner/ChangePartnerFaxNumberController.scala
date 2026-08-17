@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import controllers.actions.*
-import forms.ChangePartnerFaxNumberFormProvider
-import javax.inject.Inject
+import forms.partner.ChangePartnerFaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.ChangePartnerFaxNumberPage
+import pages.partner.ChangePartnerFaxNumberPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChangePartnerFaxNumberView
+import views.html.partner.ChangePartnerFaxNumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChangePartnerFaxNumberController @Inject() (
@@ -36,7 +37,7 @@ class ChangePartnerFaxNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: ChangePartnerFaxNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ChangePartnerFaxNumberView
@@ -44,7 +45,7 @@ class ChangePartnerFaxNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 

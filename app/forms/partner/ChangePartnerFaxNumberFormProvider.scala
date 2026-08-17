@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.partner
 
 import forms.mappings.Mappings
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class ChangePartnerFaxNumberFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
       "value" -> text("changePartnerFaxNumber.error.required")
-        .verifying(maxLength(20, "changePartnerFaxNumber.error.length"))
+        .verifying(maxLength(20, "faxNumber.error.length"))
     )
 }

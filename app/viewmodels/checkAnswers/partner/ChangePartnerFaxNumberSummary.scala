@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.partner
 
-import controllers.routes
 import models.UserAnswers
-import pages.ChangePartnerFaxNumberPage
+import pages.partner.ChangePartnerFaxNumberPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -34,7 +33,7 @@ object ChangePartnerFaxNumberSummary {
         key   = "changePartnerFaxNumber.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.ChangePartnerFaxNumberController.onPageLoad().url)
+          ActionItemViewModel("site.change", controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url)
             .withVisuallyHiddenText(messages("changePartnerFaxNumber.change.hidden"))
         )
       )

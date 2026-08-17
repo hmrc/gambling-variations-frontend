@@ -29,7 +29,7 @@
 
 @layout(pageTitle = title(form, messages("changePartnerFaxNumber.title"))) {
 
-    @formHelper(action = routes.ChangePartnerFaxNumberController.onSubmit()) {
+    @formHelper(action = controllers.partner.routes.ChangePartnerFaxNumberController.onSubmit()) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
