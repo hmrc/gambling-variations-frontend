@@ -15,19 +15,21 @@
  *@
 
 @import viewmodels.InputWidth._
-@import viewmodels.LabelSize.Large
+@import views.html.components.Caption
+@import viewmodels.LabelSize
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("changePartnerFaxNumber.title"))) {
+@layout(pageTitle = title(form, messages("changePartnerFaxNumber.title"), Some("changeRegistrationDetails.caption"))) {
 
     @formHelper(action = controllers.partner.routes.ChangePartnerFaxNumberController.onSubmit()) {
 
@@ -35,12 +37,15 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @caption(
+            messages("changeRegistrationDetails.caption")
+        )
+
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("changePartnerFaxNumber.heading")).asPageHeading(Large)
-            )
-            .withWidth(Full)
+                label = LabelViewModel(messages("changePartnerFaxNumber.heading")).asPageHeading(LabelSize.Large)
+            ).withWidth(Fixed20)
         )
 
         @govukButton(
