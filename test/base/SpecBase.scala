@@ -88,10 +88,11 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
           |}
           |
           |address-lookup {
-          |  home-nav-href = "http://www.hmrc.gov.uk/"
+          |  home-nav-href = "http://gambling-variations/home"
           |  deskpro-service-name = "gambling-variations-frontend"
-          |  timeout-url = "/there-is-a-problem"
-          |  timeout-keep-alive-url = "/refresh-session"
+          |  timeout-amount = 900
+          |  timeout-url = "http://localhost:9000/gambling-variations/there-is-a-problem"
+          |  timeout-keep-alive-url = "http://localhost:9000/gambling-variations/refresh-session"
           |}
           |
           |microservice {

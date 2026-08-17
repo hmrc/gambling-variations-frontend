@@ -29,8 +29,7 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
       addressLine1 = "Enter address line 1",
       addressLine2 = "Enter address line 2",
       addressLine3 = "Enter address line 3",
-      town         = "Enter town or city",
-      postcode     = "Enter postcode"
+      town         = "Enter town or city"
     )
 
     val manualAddressEntryConfig = ManualAddressEntryConfig(
@@ -69,7 +68,7 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
       pageHeadingStyle       = "govuk-heading-l",
       selectPageConfig = SelectPageConfig(
         proposalListLimit     = 10,
-        showSearchLinkAgain   = true,
+        showSearchAgainLink   = true,
         showNoneOfTheseOption = true
       ),
       confirmPageConfig = ConfirmPageConfig(
@@ -94,19 +93,31 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
     val labelContent = AddressLookupLabelContent(
       appLevelLabels = AppLevelLabels(navTitle = "Manage your gambling variation"),
       selectPageLabels = SelectPageLabels(
-        title   = "Select the correspondence address",
-        heading = "Select the correspondence address"
+        title               = "Select the correspondence address",
+        heading             = "Select the correspondence address",
+        headingWithPostcode = "Select the correspondence address",
+        proposalListLabel   = "Select an address",
+        submitLabel         = "Continue",
+        searchAgainLinkText = "Search again",
+        editAddressLinkText = "Enter the address manually"
       ),
       lookupPageLabels = LookupPageLabels(
-        title         = "Enter the correspondence address",
-        heading       = "Enter the correspondence address",
-        postcodeLabel = "Postcode",
-        submitLabel   = "Find address"
+        title                      = "Enter the correspondence address",
+        heading                    = "Enter the correspondence address",
+        filterLabel                = "Property name or number (optional)",
+        postcodeLabel              = "Postcode",
+        submitLabel                = "Find address",
+        noResultsFoundMessage      = "No addresses found",
+        resultLimitExceededMessage = "Too many addresses found",
+        manualAddressLinkText      = "Enter the address manually"
       ),
       confirmPageLabels = ConfirmPageLabels(
-        title          = "Confirm the correspondence address",
-        heading        = "Review and confirm",
-        changeLinkText = "Change"
+        title               = "Confirm the correspondence address",
+        heading             = "Review and confirm",
+        submitLabel         = "Confirm address",
+        searchAgainLinkText = "Search again",
+        changeLinkText      = "Change",
+        confirmChangeText   = "The information is complete and correct"
       ),
       editPageLabels = editPageLabels,
       international  = International(editPageLabels = editPageLabels)
@@ -124,15 +135,22 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
     "serialise nested options and labels under their own keys" in {
       val json = Json.toJson(settings)
 
-      (json \ "options" \ "continueUrl").as[String]                       shouldBe "/continue"
-      (json \ "options" \ "ukMode").as[Boolean]                           shouldBe true
-      (json \ "options" \ "pageHeadingStyle").as[String]                  shouldBe "govuk-heading-l"
-      (json \ "labels" \ "en" \ "appLevelLabels" \ "navTitle").as[String] shouldBe "Manage your gambling variation"
+      (json \ "version").as[Int]                                                  shouldBe 2
+      (json \ "options" \ "continueUrl").as[String]                               shouldBe "/continue"
+      (json \ "options" \ "ukMode").as[Boolean]                                   shouldBe true
+      (json \ "options" \ "pageHeadingStyle").as[String]                          shouldBe "govuk-heading-l"
+      (json \ "options" \ "selectPageConfig" \ "showSearchAgainLink").as[Boolean] shouldBe true
+      (json \ "labels" \ "en" \ "appLevelLabels" \ "navTitle").as[String]         shouldBe "Manage your gambling variation"
     }
 
-    "print the generated JSON for use in the address-lookup-frontend stub" in {
+    "serialise the complete lookup page content" in {
       val json = Json.toJson(settings)
-      succeed
+
+      (json \ "labels" \ "en" \ "lookupPageLabels" \ "filterLabel").as[String] shouldBe
+        "Property name or number (optional)"
+      (json \ "labels" \ "en" \ "lookupPageLabels" \ "manualAddressLinkText").as[String] shouldBe
+        "Enter the address manually"
+      (json \ "labels" \ "en" \ "confirmPageLabels" \ "submitLabel").as[String] shouldBe "Confirm address"
     }
   }
 
