@@ -71,12 +71,12 @@ class RemoveBusinessAddressAddInfoController @Inject() (
             updatedAnswers <- Future.fromTry(ua.set(RemoveBusinessAddressAddInfoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressSubmittedPage, true))
             updatedAnswers <- if (value) {
-              Future.fromTry(updatedAnswers.remove(BusinessAddressAdditionalInformationPage))
-            } else {
-              Future.successful(updatedAnswers)
-            }
+                                Future.fromTry(updatedAnswers.remove(BusinessAddressAdditionalInformationPage))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangesPage, isChanged))
-            _ <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RemoveBusinessAddressAddInfoPage, mode, updatedAnswers))
       )
   }
