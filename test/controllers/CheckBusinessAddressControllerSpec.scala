@@ -55,9 +55,7 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[BusinessAddressView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(ua = addressOnlyUa, mode = NormalMode, showChangeMessage = false)(request,
-                                                                                                                 messages(application)
-                                                                                                                ).toString
+        contentAsString(result) mustEqual view(ua = addressOnlyUa, showChangeMessage = false)(request, messages(application)).toString
       }
     }
 
@@ -68,7 +66,7 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
           "mgdRegNum" -> "XMY1000001"
         )
       )
-      val reroute = routes.BusinessChangeAddrScreenerController.onPageLoad().url
+      val reroute = routes.BusinessUKAddrScreenerController.onPageLoad(NormalMode).url
 
       val basicAnswers = UserAnswers("id", regOnly)
 
@@ -82,26 +80,6 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual reroute
 
-      }
-    }
-    "must return SystemErrorController when Business Address section is empty" in {
-
-      val data = Json.obj("businessContactDetailsSection" -> Json.obj())
-
-      val userAnswers = UserAnswers("id-number", data)
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request =
-          FakeRequest(GET, routes.CheckBusinessAddressController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
       }
     }
   }

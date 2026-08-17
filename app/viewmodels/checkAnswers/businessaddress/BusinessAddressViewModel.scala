@@ -16,14 +16,14 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import models.{Mode, UserAnswers}
+import models.UserAnswers
 import pages.*
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
 
 case object BusinessAddressViewModel {
-  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryList = {
+  def from(ua: UserAnswers)(implicit messages: Messages): SummaryList = {
 
     val addFlow = ua.get(BusinessAddressAddFlowPage).getOrElse(false)
 
@@ -31,8 +31,8 @@ case object BusinessAddressViewModel {
     val addAddressInfoRowOpt: Option[SummaryListRow] = AddAddressAdditionalInfoRow.from(ua)
     val howToChangeRowOpt: Option[SummaryListRow] = HowToChangeBusinessAddressRow.from(ua)
 
-    val addressRow = Seq(BusinessAddressRow(ua, mode).toRow)
-    val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua, mode))
+    val addressRow = Seq(BusinessAddressRow(ua).toRow)
+    val addInfoRow = Seq(BusinessAddressAdditionalInfoRow.from(ua))
 
     val addressBaseRows = addressRow ++ addInfoRow
 

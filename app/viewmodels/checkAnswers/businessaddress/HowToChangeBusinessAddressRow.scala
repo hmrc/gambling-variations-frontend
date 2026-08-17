@@ -16,9 +16,9 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import models.BusinessAddressChangeAddrOption.*
+import models.BusinessChangeAddrOption.*
 import models.UserAnswers
-import pages.BusinessAddressChangeScreenerPage
+import pages.BusinessChangeAddrScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
@@ -26,7 +26,7 @@ import viewmodels.implicits.*
 
 case object HowToChangeBusinessAddressRow {
   def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
-    ua.get(BusinessAddressChangeScreenerPage) match {
+    ua.get(BusinessChangeAddrScreenerPage) match {
       case Some(howToChange) =>
         Some(
           SummaryListRowViewModel(

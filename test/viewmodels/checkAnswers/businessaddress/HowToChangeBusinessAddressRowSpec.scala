@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
-import models.BusinessAddressChangeAddrOption.*
+import models.BusinessChangeAddrOption.*
 import models.{Address, UserAnswers}
 import pages.*
 import play.api.Application
@@ -52,7 +52,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressChangeScreenerPage, DifferentUkAddress)
+        .set(BusinessChangeAddrScreenerPage, DifferentUkAddress)
         .success
         .value
 
@@ -69,7 +69,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressChangeScreenerPage, ChangeToNonUkAddress)
+        .set(BusinessChangeAddrScreenerPage, ChangeToNonUkAddress)
         .success
         .value
 
@@ -90,7 +90,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressChangeScreenerPage, ChangeToUkAddress)
+        .set(BusinessChangeAddrScreenerPage, ChangeToUkAddress)
         .success
         .value
 
@@ -107,7 +107,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressChangeScreenerPage, EditCurrentAddress)
+        .set(BusinessChangeAddrScreenerPage, EditCurrentAddress)
         .success
         .value
 

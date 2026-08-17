@@ -50,7 +50,7 @@ class BusinessAddressAdditionalInfoRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua, NormalMode)
+      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
       result.value.content mustEqual Text("This is some additional info use it wisely")
@@ -64,7 +64,7 @@ class BusinessAddressAdditionalInfoRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua, NormalMode)
+      private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua)
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
       result.value.content mustEqual Text(messages("site.notProvided"))

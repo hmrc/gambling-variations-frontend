@@ -18,7 +18,7 @@ package views
 
 import controllers.routes
 import base.SpecBase
-import models.{Address, CheckMode, NormalMode, UserAnswers}
+import models.{Address, UserAnswers}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
@@ -63,7 +63,7 @@ class BusinessAddressViewSpec extends SpecBase {
         )
       )
 
-      val html = view(ukAddressAnswers, NormalMode, false)(request, messages)
+      val html = view(ukAddressAnswers, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -99,7 +99,7 @@ class BusinessAddressViewSpec extends SpecBase {
         )
       )
 
-      val html = view(nonUkAddressAnswers, NormalMode, false)(request, messages)
+      val html = view(nonUkAddressAnswers, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -131,12 +131,12 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "businessAddressChangeScreener" -> "ukAddress"
+            "businessChangeAddrScreener" -> "changeToUkAddress"
           )
         )
       )
 
-      val html = view(ukAddressAnswers, CheckMode, false)(request, messages)
+      val html = view(ukAddressAnswers, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -169,7 +169,7 @@ class BusinessAddressViewSpec extends SpecBase {
         )
       )
 
-      val html = view(ukAddressAnswers, NormalMode, false)(request, messages)
+      val html = view(ukAddressAnswers, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -201,6 +201,12 @@ class BusinessAddressViewSpec extends SpecBase {
           )
         )
       )
+
+      val html = view(ukAddressAnswers, false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.body().select(".govuk-summary-list").text must include(messages("checkBusinessAddress.question.addInfo"))
     }
     "must render both HasUkPostcodeRow & AddAddressAdditionalInfoRow with correct data if answered" in new Setup {
 
@@ -224,7 +230,7 @@ class BusinessAddressViewSpec extends SpecBase {
         )
       )
 
-      val html = view(ukAddressAnswers, NormalMode, false)(request, messages)
+      val html = view(ukAddressAnswers, false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -255,7 +261,7 @@ class BusinessAddressViewSpec extends SpecBase {
         )
       )
 
-      val html = view(ukAddressAnswers, NormalMode, true)(request, messages)
+      val html = view(ukAddressAnswers, true)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 

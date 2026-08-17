@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import models.{Address, Mode, UserAnswers}
+import models.{Address, UserAnswers}
 import controllers.routes
 import play.api.i18n.Messages
 import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
@@ -26,7 +26,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, V
 import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-case class BusinessAddressRow(ua: UserAnswers, mode: Mode)(implicit messages: Messages) {
+case class BusinessAddressRow(ua: UserAnswers)(implicit messages: Messages) {
   private val isUk = ua.get(BusinessAddressUkPage).isDefined
   private val isNonUk = ua.get(BusinessAddressNonUkPage).isDefined
   def toRow: SummaryListRow = {

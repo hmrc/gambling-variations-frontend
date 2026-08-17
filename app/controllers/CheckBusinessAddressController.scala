@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{AuthorisedAction, BusinessAddressDataRequiredAction, DataRetrievalAction}
-import models.Mode
+import models.{Mode, NormalMode}
 import pages.*
 import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -46,17 +46,13 @@ class CheckBusinessAddressController @Inject() (
     val showChangeMessage: Boolean = checkFlag(ua, BusinessAddressChangesPage, BusinessAddressSubmittedPage)
     val addressExists: Boolean = ua.get(BusinessAddressUkPage).isDefined || ua.get(BusinessAddressNonUkPage).isDefined
 
-    ua.get(BusinessAddressSectionPage) match {
-      case Some(_) =>
-        if (!addressExists) {
-          for {
-            updated <- Future.fromTry(ua.set(BusinessAddressAddFlowPage, true))
-            _       <- sessionRepository.set(updated)
-          } yield Redirect(routes.BusinessChangeAddrScreenerController.onPageLoad())
-        } else {
-          Future.successful(Ok(view(ua, mode, showChangeMessage)))
-        }
-      case None => Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url))
+    if (!addressExists) {
+      for {
+        updated <- Future.fromTry(ua.set(BusinessAddressAddFlowPage, true))
+        _       <- sessionRepository.set(updated)
+      } yield Redirect(routes.BusinessUKAddrScreenerController.onPageLoad(NormalMode))
+    } else {
+      Future.successful(Ok(view(ua, showChangeMessage)))
     }
   }
 

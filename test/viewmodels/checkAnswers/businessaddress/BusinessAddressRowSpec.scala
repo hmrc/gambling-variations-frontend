@@ -48,7 +48,7 @@ class BusinessAddressRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = BusinessAddressRow(ua, NormalMode).toRow
+      private val result: SummaryListRow = BusinessAddressRow(ua).toRow
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
       result.value.content mustEqual HtmlContent("address1<br>address2<br>address3<br>address4<br>postcode")
@@ -62,7 +62,7 @@ class BusinessAddressRowSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryListRow = BusinessAddressRow(ua, NormalMode).toRow
+      private val result: SummaryListRow = BusinessAddressRow(ua).toRow
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
       result.value.content mustEqual HtmlContent(s"address1<br>address2<br>address3<br>address4<br>country")

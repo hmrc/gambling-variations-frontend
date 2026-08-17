@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.businessaddress
 
 import controllers.routes
-import models.{Mode, UserAnswers}
+import models.UserAnswers
 import pages.BusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
@@ -25,7 +25,7 @@ import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, Value
 import viewmodels.implicits.*
 
 case object BusinessAddressAdditionalInfoRow {
-  def from(ua: UserAnswers, mode: Mode)(implicit messages: Messages): SummaryListRow = {
+  def from(ua: UserAnswers)(implicit messages: Messages): SummaryListRow = {
     val addInfoValue: Value = ValueViewModel(ua.get(BusinessAddressAdditionalInformationPage) match {
       case Some(addInfo) => addInfo
       case _             => "site.notProvided"

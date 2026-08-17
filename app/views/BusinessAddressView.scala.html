@@ -28,14 +28,14 @@
         govukSummaryList : GovukSummaryList,
 )
 
-@(ua: UserAnswers, mode: Mode, showChangeMessage: Boolean)(implicit request: Request[_], messages: Messages)
+@(ua: UserAnswers, showChangeMessage: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkBusinessAddress.title"), Some("changeRegistrationDetails.caption"))) {
 
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("checkBusinessAddress.heading", classes="govuk-heading-l")
 
-    @govukSummaryList(BusinessAddressViewModel.from(ua, mode))
+    @govukSummaryList(BusinessAddressViewModel.from(ua))
 
     @if(showChangeMessage) {
         @paragraph(messages("checkBusinessAddress.requiredToSubmit"))

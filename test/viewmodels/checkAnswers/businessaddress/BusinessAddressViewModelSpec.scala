@@ -17,8 +17,8 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
-import models.BusinessAddressChangeAddrOption.DifferentUkAddress
-import models.{Address, CheckMode, NormalMode}
+import models.BusinessChangeAddrOption.DifferentUkAddress
+import models.Address
 import pages.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -43,7 +43,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
       private val addressUa: Address = Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
       private val ua = emptyUserAnswers.set(BusinessAddressUkPage, addressUa).success.value
 
-      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua)
 
       result.rows.size mustEqual 2
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
@@ -66,7 +66,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua)
 
       result.rows.size mustEqual 4
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.question.ukPostcode"))
@@ -88,7 +88,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua)
 
       result.rows.size mustEqual 2
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
@@ -109,7 +109,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua)
 
       result.rows.size mustEqual 3
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.question.ukPostcode"))
@@ -131,7 +131,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .success
         .value
 
-      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua)
 
       result.rows.size mustEqual 3
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.label.address"))
@@ -145,11 +145,11 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressChangeScreenerPage, DifferentUkAddress)
+        .set(BusinessChangeAddrScreenerPage, DifferentUkAddress)
         .success
         .value
 
-      private val result: SummaryList = BusinessAddressViewModel.from(ua, NormalMode)
+      private val result: SummaryList = BusinessAddressViewModel.from(ua)
 
       result.rows.size mustEqual 3
       result.rows.head.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
