@@ -26,6 +26,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveBusinessAddressAddInfoView
+import utils.FlagsUtil.checkIfChanged
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,12 +65,18 @@ class RemoveBusinessAddressAddInfoController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, addressAddInfo))),
         value =>
+          val ua = request.userAnswers
+          val isChanged: Boolean = checkIfChanged(value, ua, RemoveBusinessAddressAddInfoPage, BusinessAddressChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RemoveBusinessAddressAddInfoPage, value))
+            updatedAnswers <- Future.fromTry(ua.set(RemoveBusinessAddressAddInfoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.remove(BusinessAddressAdditionalInformationPage))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangesPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- if (value) {
+              Future.fromTry(updatedAnswers.remove(BusinessAddressAdditionalInformationPage))
+            } else {
+              Future.successful(updatedAnswers)
+            }
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangesPage, isChanged))
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RemoveBusinessAddressAddInfoPage, mode, updatedAnswers))
       )
   }

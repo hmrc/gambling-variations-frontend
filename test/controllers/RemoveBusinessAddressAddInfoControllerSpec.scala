@@ -135,7 +135,7 @@ class RemoveBusinessAddressAddInfoControllerSpec extends SpecBase with MockitoSu
       }
     }
 
-    "must update data correctly when submitted in" in {
+    "must update data correctly when submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
