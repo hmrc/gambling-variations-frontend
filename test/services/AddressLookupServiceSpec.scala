@@ -18,11 +18,14 @@ package services
 
 import base.SpecBase
 import connectors.AddressLookupConnector
-import models.{Address, AddressLookupConfigSettings}
+import models.Address
+import models.addresslookup.AddressLookupConfigSettings
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.i18n.Messages
+import play.api.test.Helpers.stubMessages
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,6 +34,7 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
 
   implicit val ec: ExecutionContext = ExecutionContext.global
   implicit private val hc: HeaderCarrier = HeaderCarrier()
+  implicit private val messages: Messages = stubMessages()
 
   private val mockConnector = mock[AddressLookupConnector]
   private val service = new AddressLookupService(mockConnector, testFrontendAppConfig)
@@ -52,7 +56,7 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
       verify(mockConnector).initJourney(configCaptor.capture())(any[HeaderCarrier])
       configCaptor.getValue.options.continueUrl mustBe
         "http://localhost:9000/change-registration-details/correspondence-details/address-lookup/callback"
-      configCaptor.getValue.options.allowedCountryCodes mustBe Seq("GB")
+      configCaptor.getValue.options.ukMode mustBe true
     }
   }
 

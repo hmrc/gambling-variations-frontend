@@ -17,7 +17,8 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.{Address, AddressLookupConfigSettings}
+import models.Address
+import models.addresslookup.AddressLookupConfigSettings
 import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.http.Status.ACCEPTED

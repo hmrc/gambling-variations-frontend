@@ -30,7 +30,7 @@ import views.html.BusinessAddrInfoScreenerView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessAddrInfoScreenerController @Inject()(
+class BusinessAddrInfoScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,

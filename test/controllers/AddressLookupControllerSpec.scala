@@ -24,10 +24,12 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{CorrespondenceAddressUkPage, CorrespondenceDetailsSectionPage, CorrespondenceDetailsSubmittedPage, isleMOrChannelFlagPage}
 import play.api.inject.bind
+import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import services.AddressLookupService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
@@ -47,7 +49,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
 
       val mockAddressLookupService = mock[AddressLookupService]
 
-      when(mockAddressLookupService.initJourney()(any()))
+      when(mockAddressLookupService.initJourney()(any[HeaderCarrier], any[Messages]))
         .thenReturn(Future.successful(addressLookupUrl))
 
       val application =

@@ -19,7 +19,8 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import models.*
+import models.Address
+import models.addresslookup.*
 import org.scalactic.Prettifier.default
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -76,13 +77,13 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
       signOutHref            = "http://localhost:9000/sign-out",
       accessibilityFooterUrl = "http://localhost:9000/accessibility",
       deskProServiceName     = "gambling-variations-frontend",
-      allowedCountryCodes    = Seq("GB"),
+      showBackButtons        = true,
+      includeHMRCBranding    = false,
+      ukMode                 = true,
+      pageHeadingStyle       = "govuk-heading-l",
       selectPageConfig       = SelectPageConfig(30, showSearchLinkAgain = true, showNoneOfTheseOption = false),
       confirmPageConfig = ConfirmPageConfig(
-        showChangeLink        = true,
-        showSubHeadingAndInfo = false,
-        showSearchAgainLink   = true,
-        showConfirmChangeText = false
+        showConfirmChangeText = true
       ),
       manualAddressEntryConfig = ManualAddressEntryConfig(
         line1MaxLength  = 35,
@@ -91,10 +92,11 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
         townMaxLength   = 35,
         mandatoryFields = Map("addressLine1" -> true),
         maxLengthErrorMessages = MaxLengthErrorMessages(
-          en = ManualAddressEntryLineContent("line1", "line2", "line3", "town"),
-          cy = ManualAddressEntryLineContent("line1", "line2", "line3", "town")
+          en = ManualAddressEntryLineContent("line1", "line2", "line3", "town", "postcode"),
+          cy = ManualAddressEntryLineContent("line1", "line2", "line3", "town", "postcode")
         )
-      )
+      ),
+      timeoutConfig = TimeoutConfig(900, "/timeout", "/keep-alive")
     ),
     labels = {
       val editPageLabels = EditPageLabels(
@@ -112,28 +114,19 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
       val labels = AddressLookupLabelContent(
         appLevelLabels = AppLevelLabels("Manage your gambling variation"),
         selectPageLabels = SelectPageLabels(
-          title               = "Select address",
-          heading             = "Select address",
-          headingWithPostcode = "Select address for {0}",
-          proposalListLabel   = "Select an address",
-          submitLabel         = "Continue",
-          searchAgainLinkText = "Search again"
+          title   = "Select address",
+          heading = "Select address"
         ),
         lookupPageLabels = LookupPageLabels(
-          title                      = "Find address",
-          heading                    = "Find address",
-          afterHeadingText           = "We will use this address to contact you.",
-          filterLabel                = "Property name or number",
-          postcodeLabel              = "Postcode",
-          submitLabel                = "Find address",
-          noResultsFoundMessage      = "No addresses found",
-          resultLimitExceededMessage = "Too many addresses found"
+          title         = "Find address",
+          heading       = "Find address",
+          postcodeLabel = "Postcode",
+          submitLabel   = "Find address"
         ),
         confirmPageLabels = ConfirmPageLabels(
-          title               = "Confirm address",
-          heading             = "Confirm address",
-          searchAgainLinkText = "Search again",
-          confirmChangeText   = "By confirming this change, you agree that the information is correct."
+          title          = "Confirm address",
+          heading        = "Confirm address",
+          changeLinkText = "Change"
         ),
         editPageLabels = editPageLabels,
         international  = International(editPageLabels)
