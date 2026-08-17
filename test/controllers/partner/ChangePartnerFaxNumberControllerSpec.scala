@@ -26,6 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.{ChangePartnerFaxNumberPage, InterimGetPartnerFaxNumberPage}
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -44,6 +45,36 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val changePartnerFaxNumberRoute: String =
     controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url
+    
+  private val mgdRegNumber = "XGM00000001761"
+  
+  private def cleanedData(faxNumber: Option[String]) = Json.obj(
+    "partners" -> Json.arr(
+      Json.obj(
+        "partnerDetailsMgdRegNumber" -> mgdRegNumber,
+        "partnerDetailsBusinessName" -> "Partner1",
+        "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
+          "mgdRegNumber" -> mgdRegNumber,
+          "correspondenceAddress" -> Json.obj(
+            "address1" -> "Flat 1",
+            "address2" -> "10 Market Road",
+            "address3" -> "Felling",
+            "address4" -> "Gateshead",
+            "postcode" -> "NE8 1ZZ",
+            "country"  -> "UK"
+          ),
+          "contactNumber" -> Json.obj(
+            "phoneNumber"       -> "0798765",
+            "mobilePhoneNumber" -> "7093434765"
+          ),
+          "faxNumber" -> faxNumber,
+          "emailAddr" -> "email@add.com"
+        )
+      )
+    )
+  )
+
+  val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
   "ChangePartnerFaxNumber Controller" - {
 
@@ -66,8 +97,6 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
-
-        val userAnswers = emptyUserAnswers.set(InterimGetPartnerFaxNumberPage(index), testFaxNumber).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
