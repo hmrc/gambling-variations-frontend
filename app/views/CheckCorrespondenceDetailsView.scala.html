@@ -51,7 +51,8 @@
     </p>
 
 
-
-    @link(messages("checkCorrespondenceDetails.message.remove"), routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad().url)
+    @if(!checkCorrespondenceDetailsViewModel.isAddingNewCorrespondenceDetails.contains(true)) {
+        @link(messages("checkCorrespondenceDetails.message.remove"), routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad().url)
+    }
 
 }
