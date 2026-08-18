@@ -1,70 +1,28 @@
-service.name = Manage your gambling tax
+PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
+PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
+PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
 
-site.back = Back
-site.remove = Remove
-site.change = Change
-site.no = No
-site.yes = Yes
-site.or = or
-site.continue = Continue
-site.start = Start now
-site.startAgain = Start again
-site.signIn = Sign in
-site.govuk = GOV.UK
-site.notProvided = Not provided
-
-date.day = Day
-date.month = Month
-date.year = Year
-date.error.day = day
-date.error.month = month
-date.error.year = year
-
-timeout.title = You’re about to be signed out
-timeout.message = For security reasons, you will be signed out of this service in
-timeout.keepAlive = Stay signed in
-timeout.signOut = Sign out
-
-error.title.prefix = Error:
-error.prefix = Error
-error.summary.title = There is a problem
-
-index.title = Manage your gambling tax
-index.heading = Manage your gambling tax
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
-
-checkYourAnswers.title = Check your answers
-checkYourAnswers.heading = Check your answers
-
-journeyRecovery.continue.title = Sorry, there is a problem with the service
-journeyRecovery.continue.heading = Sorry, there is a problem with the service
-journeyRecovery.startAgain.title = Sorry, there is a problem with the service
-journeyRecovery.startAgain.heading = Sorry, there is a problem with the service
-
-signedOut.title = For your security, we signed you out
-signedOut.heading = For your security, we signed you out
-signedOut.guidance = We did not save your answers.
-
-unauthorised.title = You can’t access this service with this account
-unauthorised.heading = You can’t access this service with this account
-
-systemError.title = Sorry, there is a problem with the service
-systemError.heading = Sorry, there is a problem with the service
-systemError.p1 = Try again later or contact the
-systemError.p1.link = HMRC Online Services Helpdesk (opens in new tab)
-
-accessDenied.title = Sorry, there is a problem with the service
 accessDenied.heading = Sorry, there is a problem with the service
 accessDenied.p1 = You do not have access to this service.
 accessDenied.p1.link = Continue to your account
+accessDenied.title = Sorry, there is a problem with the service
 
-pageNotFound.title = Page not found
-pageNotFound.heading = Page not found
-pageNotFound.p1 = If you typed the web address, check it is correct.
-pageNotFound.p2 = If you pasted the web address, check you copied the entire address.
-pageNotFound.p3 = If the web address is correct or you selected a link or button, contact the
-pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
-pageNotFound.p3.after = if you need to speak to someone.
+addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
+addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
+addCorrespondingDetailsYesNo.heading = Correspondence details
+addCorrespondingDetailsYesNo.p1 = We will contact you using the business details you provided. Alternatively, you can add correspondence details.
+addCorrespondingDetailsYesNo.title = Correspondence details
+
+addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
+addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email address for correspondence?
+addEmailAddressForCorrespondenceYesNo.title = Do you want to add an email address for correspondence?
 
 addressLookup.manualAddressLine1 = Address line 1
 addressLookup.manualAddressLine2 = Address line 2
@@ -72,623 +30,625 @@ addressLookup.manualAddressLine3 = Town or city
 addressLookup.manualAddressLine4 = County
 addressLookup.manualAddressPostcode = Postcode
 
-
-businessType.soleproprietor = Sole proprietor
-businessType.unincorporatedbody = Unincorporated body
-businessType.corporatebody = Corporate body
-businessType.partnership = Partnership
-businessType.llp = Limited liability partnership
-
-businessName.title = Check your business name
-businessName.heading = Check your business name
-businessName.name = {0}’s name
-businessName.table.paragraph.soleproprietor = If the business trades under a different name to the sole proprietor, you need to add a trading name.
-businessName.table.paragraph.unincorporatedbody = If the unincorporated body operates under a different name, you need to add a trading name.
-businessName.table.paragraph.corporatebody = If the corporate body operates under a different name, you need to add a trading name.
-businessName.table.paragraph.partnership = If the partnership operates under a different name, you need to add a trading name.
-businessName.table.paragraph.llp = If the limited liability partnership operates under a different name, you need to add a trading name.
-businessName.table.link = Change
-businessName.tradingName = Trading name
-businessName.tradingName.hidden = trading name
-businessName.notProvided = Not provided
-businessName.table.head1 = Trade Name
-businessName.table.head2 = Trade Name
-businessName.link = Cancel and return to change registration details
-
-
-changeRegistrationDetails.heading.caption = MGD registration number: {0}
-changeRegistrationDetails.noChangesYet = You need to change at least one detail before you can submit your changes to HMRC.
-changeRegistrationDetails.table.section = Section
-changeRegistrationDetails.table.status = Status
-changeRegistrationDetails.businessName = Business name
-changeRegistrationDetails.businessAddress = Business address
-changeRegistrationDetails.businessContactDetails = Business contact details
-changeRegistrationDetails.correspondenceDetails = Correspondence details
-changeRegistrationDetails.tradingDetails = Trading details
-changeRegistrationDetails.returnPeriod = Return periods
-changeRegistrationDetails.partnerDetails = Partner details
-changeRegistrationDetails.groupMemberDetails = Group member details
-changeRegistrationDetails.controllingBodyDetails = Controlling body details
-changeRegistrationDetails.licencesAndPremises = Licences and premises
-changeRegistrationDetails.noDetailsChanged = No details changed
-changeRegistrationDetails.changesReadyToSubmit = Changes ready to submit
-changeRegistrationDetails.needsCompleting = Needs completing
-changeRegistrationDetails.approvalTime = Once HMRC approve your changes, we will update your registration certificate. This can take up to 48 hours.
-changeRegistrationDetails.submit = Submit changes
-changeRegistrationDetails.change-registration.link = Return to manage your Machine Games Duty
-changeRegistrationDetails.caption = Change registration details
-changeRegistrationDetails.readyToSubmit = You must continue to the change registration details page to submit any changes.
-
-
-declaration.title = Declaration
-declaration.heading = Declaration
-declaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
-declaration.submit = Declare and submit
-
-soleProprietorName.title = 	What is the sole proprietor’s name?
-soleProprietorName.heading = What is the sole proprietor’s name?
-soleProprietorName.title.label = Title
-soleProprietorName.firstName.label = First name
-soleProprietorName.middleName.label = Middle names (optional)
-soleProprietorName.lastName.label = Last name
-
-soleProprietorName.error.title.required = Enter the sole proprietor’s title
-soleProprietorName.error.title.length = The sole proprietor’s title must be 20 characters or less
-soleProprietorName.error.title.invalid = The sole proprietor’s title must only include letters a to z, apostrophes, hyphens or spaces
-soleProprietorName.error.firstName.required = Enter the sole proprietor’s first name
-soleProprietorName.error.firstName.length = The sole proprietor’s first name must be 100 characters or less
-soleProprietorName.error.firstName.invalid = The sole proprietor’s first name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-soleProprietorName.error.middleName.length = The sole proprietor’s middle name must be 100 characters or less
-soleProprietorName.error.middleName.invalid = The sole proprietor’s middle name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-soleProprietorName.error.lastName.required = Enter the sole proprietor’s last name
-soleProprietorName.error.lastName.length = The sole proprietor’s last name must be 100 characters or less
-soleProprietorName.error.lastName.invalid = The sole proprietor’s last name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-
-removeTradeName.title = Are you sure you want to remove the trading name?
-removeTradeName.heading = Are you sure you want to remove the trading name {0}?
-removeTradeName.error.required = Select yes if you want to remove the trading name
-removeTradeName.change.hidden = RemoveTradeName
-
-businessTradingName.title = What is the business trading name?
-businessTradingName.heading = What is the business trading name?
-businessTradingName.error.required = Enter the business trading name
-businessTradingName.error.invalid = The business trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-businessTradingName.error.length = The business trading name must be 100 characters or less
-businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
-
-# Change Business Name
-changeBusinessName.title.soleproprietor=What is the sole proprietor’s name?
-changeBusinessName.title.partnership=What is the partnership’s name?
-changeBusinessName.title.corporatebody=What is the corporate body’s name?
-changeBusinessName.title.unincorporatedbody=What is the unincorporated body’s name?
-changeBusinessName.title.llp=What is the limited liability partnership’s name?
-
-changeBusinessName.heading.soleproprietor = What is the sole proprietor’s name?
-changeBusinessName.heading.partnership = What is the partnership’s name?
-changeBusinessName.heading.corporatebody = What is the corporate body’s name?
-changeBusinessName.heading.unincorporatedbody = What is the unincorporated body’s name?
-changeBusinessName.heading.llp = What is the limited liability partnership’s name?
-
-changeBusinessName.label = Business name
-
-changeBusinessName.error.required.soleproprietor = Enter the sole proprietor''s name
-changeBusinessName.error.required.partnership = Enter the partnership''s name
-changeBusinessName.error.required.corporatebody = Enter the corporate body''s name
-changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated body''s name
-changeBusinessName.error.required.llp = Enter the limited liability partnership''s name
-
-changeBusinessName.error.invalid.soleproprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
-changeBusinessName.error.invalid.corporatebody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.llp = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-
-changeBusinessName.error.length.soleproprietor = The sole proprietor''s name must be 160 characters or less
-changeBusinessName.error.length.partnership = The partnership''s name must be 34 characters or less
-changeBusinessName.error.length.corporatebody = The corporate body''s name must be 160 characters or less
-changeBusinessName.error.length.unincorporatedbody = The unincorporated body''s name must be 160 characters or less
-changeBusinessName.error.length.llp = The limited liability partnership''s name must be 160 characters or less
-
-
-removeFaxNumber.title = Are you sure you want to remove the fax number?
-removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
-removeFaxNumber.error.required = Select yes if you want to remove the fax number
-
-removeEmailAddress.title = Are you sure you want to remove the email address?
-removeEmailAddress.heading = Are you sure you want to remove the email address {0}?
-removeEmailAddress.error.required = Select yes if you want to remove the email address
-
-removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
-removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
-removePreviousRegNumber.checkYourAnswersLabel = removePreviousRegNumber
-removePreviousRegNumber.error.required = Select yes if you want to remove the previous registration number
-removePreviousRegNumber.change.hidden = remove previous registration number
-
-removeAssociatedRegNumber.title = Are you sure you want to remove the associated registration number?
-removeAssociatedRegNumber.heading = Are you sure you want to remove the associated registration number {0}?
-removeAssociatedRegNumber.checkYourAnswersLabel = removeAssociatedRegNumber
-removeAssociatedRegNumber.error.required = Select yes if you want to remove the associated registration number
-removeAssociatedRegNumber.change.hidden = remove associated registration number
-
-removeCorrespondenceFaxNumber.title = Are you sure you want to remove the correspondence fax number?
-removeCorrespondenceFaxNumber.heading = Are you sure you want to remove the correspondence fax number {0}?
-removeCorrespondenceFaxNumber.checkYourAnswersLabel = removeCorrespondenceFaxNumber
-removeCorrespondenceFaxNumber.error.required = Select yes if you want to remove the correspondence fax number
-removeCorrespondenceFaxNumber.change.hidden = remove correspondence fax number
-
-#Check Contact Details
-contactDetails.title = Check your business contact details
-contactDetails.heading = Check your business contact details
-contactDetails.error.contactNumber = You must provide at least one contact number.
-contactDetails.heading.contactNumbers = Contact numbers
-contactDetails.heading.faxNumber = Fax number
-contactDetails.heading.emailAddr = Email address
-contactDetails.label.phoneNumber = Phone number:
-contactDetails.label.mobilePhoneNumber = Mobile number:
-contactDetails.label.faxNumber = Fax number
-contactDetails.label.contactNumbers = Contact numbers
-contactDetails.label.emailAddr = Email address
-contactDetails.message.notProvided = Not provided
-
-faxNumber.title = What is the fax number for this business?
-faxNumber.heading = What is the fax number for this business?
-faxNumber.checkYourAnswersLabel = Fax Number
-faxNumber.error.required = Enter the fax number for this business
-faxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
-faxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
-faxNumber.error.length = The fax number must be 20 characters or less
-faxNumber.change.hidden = FaxNumber
-
-emailAddress.title = What is the email address for this business?
-emailAddress.heading = What is the email address for this business?
-emailAddress.checkYourAnswersLabel = Email Address
-emailAddress.error.required = Enter an email address for this business
-emailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
-emailAddress.error.length = The email address must be 70 characters or less
-
-
-businessContactNumber.title = What are your business contact numbers?
-businessContactNumber.heading = What are your business contact numbers?
-businessContactNumber.p1 = You must provide at least one contact number.
-
-businessContactNumber.phoneNumber = Phone number
-businessContactNumber.mobileNumber = Mobile number
-businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
-
-# Phone errors
-businessContactNumber.error.phoneNumber.required = Enter the phone number for this business
-businessContactNumber.error.phoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
-businessContactNumber.error.phoneNumber.length = The phone number must be 20 characters or less
-
-# Mobile errors
-businessContactNumber.error.mobileNumber.required = Enter the mobile number for this business
-businessContactNumber.error.mobileNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
-businessContactNumber.error.mobileNumber.length = The mobile number must be 20 characters or less
-
-# Change link hidden text
-businessContactNumber.phoneNumber.change.hidden = phone number
-businessContactNumber.mobileNumber.change.hidden = mobile number
-
-# Cross-field error (IMPORTANT - ADD THIS)
-businessContactNumber.error.contactRequired = Enter at least one contact number for this business
-
-businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
-businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
-
-previousRegistrationNumbers.title = Previous registration numbers
-previousRegistrationNumbers.heading = Previous registration numbers
-previousRegistrationNumbers.radios = Do you want to add another registration number?
-previousRegistrationNumbers.hint = You can only add up to 3 registration numbers
-previousRegistrationNumbers.max = You can only add up to 3 registration numbers.
-previousRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
-previousRegistrationNumbers.yesLabel = Yes, add another number
-previousRegistrationNumbers.noLabel = No, return to check your trading details
-previousRegistrationNumbers.checkYourAnswersLabel = previousRegistrationNumbers
-previousRegistrationNumbers.error.required = Select yes if you want to add another previous registration number
-previousRegistrationNumbers.change.hidden =  registration number {0}
-previousRegistrationNumbers.submitted = Submitted registration number
-previousRegistrationNumbers.submitted.plural = Submitted registration numbers
-previousRegistrationNumbers.unsubmitted = Registration number ready to submit
-previousRegistrationNumbers.unsubmitted.plural = Registration numbers ready to submit
-
-associatedRegistrationNumbers.title = Associated registration numbers
-associatedRegistrationNumbers.heading = Associated registration numbers
-associatedRegistrationNumbers.radios = Do you want to add another registration number?
-associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
-associatedRegistrationNumbers.max = You can only add up to 3 registration numbers.
-associatedRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
-associatedRegistrationNumbers.yesLabel = Yes, add another number
-associatedRegistrationNumbers.noLabel = No, return to check your trading details
-associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
-associatedRegistrationNumbers.error.required = Select yes if you want to add another associated registration number
-associatedRegistrationNumbers.change.hidden =  registration number {0}
-
-
-businessTradeClass.title = What is the business trade class?
-businessTradeClass.heading = What is the business trade class?
-businessTradeClass.adultGamingCentre = Adult gaming centre
-businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
-businessTradeClass.bingopromoter = Bingo promoter
-businessTradeClass.bookmakerorbettingactivities = Bookmaker or betting activities
-businessTradeClass.casino = Casino
-businessTradeClass.club = Club
-businessTradeClass.familyentertainmentcentre = Family entertainment centre
-businessTradeClass.publichouse = Public house
-businessTradeClass.other = Other
-businessTradeClass.checkYourAnswersLabel = What is the business trade class?
-businessTradeClass.error.required = Select the trade class for this business
-businessTradeClass.change.hidden = What is the business trade class?
-
-seasonalBusiness.title = Is this a seasonal business?
-seasonalBusiness.heading = Is this a seasonal business?
-seasonalBusiness.paragraph = A seasonal business has periods where it does not trade. If you operate a seasonal business, you must submit nil returns for any periods that you are not trading.
-seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
-seasonalBusiness.error.required = Select yes if this is a seasonal business
-seasonalBusiness.change.hidden = Is this a seasonal business?
-
-correspondenceFaxNumber.title = What fax number should we use for correspondence?
-correspondenceFaxNumber.heading = What fax number should we use for correspondence?
-correspondenceFaxNumber.checkYourAnswersLabel = What fax number should we use for correspondence?
-correspondenceFaxNumber.error.invalid.characters = The fax number for correspondence must only include numbers 0 to 9 and spaces
-correspondenceFaxNumber.error.required = Enter the fax number for correspondence
-correspondenceFaxNumber.error.length = The fax number for correspondence must be 20 characters or less
-correspondenceFaxNumber.change.hidden = What fax number should we use for correspondence?
-
-checkTradingDetails.title = Check your trading details
-checkTradingDetails.heading = Check your trading details
-checkTradingDetails.businessTradeClass.checkYourAnswersLabel = Trade class
-checkTradingDetails.businessTradeClass.change.hidden = trade class
-checkTradingDetails.seasonalBusiness.checkYourAnswersLabel = Seasonal business
-checkTradingDetails.seasonalBusiness.change.hidden = seasonal business
-checkTradingDetails.previousRegistrationNumbers.p1 = If any previous MGD registrations were allocated to your business, you can provide 3 registration numbers.
-checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel = Previous MGD registration numbers
-checkTradingDetails.previousRegistrationNumbers.change.hidden = previous MGD registration numbers
-
-checkTradingDetails.associatedRegistrationNumbers.p1 = If any MGD registrations are associated with your business, you can provide 3 registration numbers.
-checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel = Associated MGD registration numbers
-checkTradingDetails.associatedRegistrationNumbers.change.hidden = associated MGD registration numbers
-
-checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
-checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
-
-businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
-businessTradeClass.adultGamingCentre = Adult gaming centre
-businessTradeClass.familyentertainmentcentre = Family entertainment centre
-businessTradeClass.bookmakerorbettingactivities = Bookmaker or betting activities
-businessTradeClass.bingopromoter = Bingo promoter
-businessTradeClass.casino = Casino
-businessTradeClass.publichouse = Public house
-businessTradeClass.club = Club
-businessTradeClass.other = Other
-
-correspondenceContactNumber.title = What contact numbers should we use for correspondence?
-correspondenceContactNumber.heading = What contact numbers should we use for correspondence?
-correspondenceContactNumber.p1 = You must provide at least one contact number.
-correspondenceContactNumber.phoneNumber = Phone number
-correspondenceContactNumber.mobileNumber = Mobile number
-
-# Phone errors
-correspondenceContactNumber.error.phoneNumber.required = Enter the correspondence phone number
-correspondenceContactNumber.error.phoneNumber.invalid = The correspondence phone number must only include numbers 0 to 9 and spaces
-correspondenceContactNumber.error.phoneNumber.length = The correspondence phone number must be 20 characters or less
-
-# Mobile errors
-correspondenceContactNumber.error.mobileNumber.required = Enter the correspondence mobile number
-correspondenceContactNumber.error.mobileNumber.invalid = The correspondence mobile number must only include numbers 0 to 9 and spaces
-correspondenceContactNumber.error.mobileNumber.length = The correspondence mobile number must be 20 characters or less
-checkCorrespondenceDetails.title = Check your correspondence details
-checkCorrespondenceDetails.heading = Check your correspondence details
-checkCorrespondenceDetails.heading.contactNumbers = Correspondence contact numbers
-checkCorrespondenceDetails.label.contactNumbers = Contact numbers
-checkCorrespondenceDetails.label.contactNumbers.hidden = contact numbers
-checkCorrespondenceDetails.heading.correspondenceName = Correspondence name
-checkCorrespondenceDetails.label.correspondenceName = Correspondence name
-checkCorrespondenceDetails.label.correspondenceName.hidden = correspondence name
-checkCorrespondenceDetails.heading.correspondenceAddress = Correspondence address
-checkCorrespondenceDetails.label.correspondenceAddress = Correspondence address
-checkCorrespondenceDetails.label.correspondenceAddress.hidden = correspondence address
-checkCorrespondenceDetails.heading.addAdditionalCorrespondenceName = Add additional name for correspondence?
-checkCorrespondenceDetails.label.addAdditionalCorrespondenceName = Add additional name for correspondence?
-checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden = add additional name for correspondence
-checkCorrespondenceDetails.heading.additionalCorrespondenceName = Additional correspondence name
-checkCorrespondenceDetails.label.additionalCorrespondenceName = Additional correspondence name
-checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden = additional correspondence name
-checkCorrespondenceDetails.heading.addAdditionalInformation = Add additional information for correspondence address?
-checkCorrespondenceDetails.label.addAdditionalInformation = Add additional information for correspondence address?
-checkCorrespondenceDetails.label.addAdditionalInformation.hidden = add additional information for correspondence address
-correspondenceUKAddrScreener.heading.addAdditionalInformation = Does address have a UK postcode?
-correspondenceUKAddrScreener.label.addAdditionalInformation = Does address have a UK postcode?
-correspondenceUKAddrScreener.label.addAdditionalInformation.hidden = Does address have a UK postcode?
-checkCorrespondenceDetails.heading.additionalCorrespondenceInformation = Correspondence address additional information
-checkCorrespondenceDetails.label.additionalCorrespondenceInformation = Correspondence address additional information
-checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden = correspondence address additional information
-checkCorrespondenceDetails.heading.addFaxNumber = Add fax number for correspondence?
-checkCorrespondenceDetails.label.addFaxNumber = Add fax number for correspondence?
-checkCorrespondenceDetails.label.addFaxNumber.hidden = add fax number for correspondence?
-checkCorrespondenceDetails.heading.faxNumber = Correspondence fax number
-checkCorrespondenceDetails.label.faxNumber = Correspondence fax number
-checkCorrespondenceDetails.label.faxNumber.hidden = correspondence fax number
-checkCorrespondenceDetails.heading.addEmailAddress = Add email address for correspondence?
-checkCorrespondenceDetails.label.addEmailAddress = Add email address for correspondence?
-checkCorrespondenceDetails.label.addEmailAddress.hidden = add email address for correspondence
-checkCorrespondenceDetails.heading.emailAddr = Correspondence email address
-checkCorrespondenceDetails.label.emailAddr = Correspondence email address
-checkCorrespondenceDetails.label.emailAddr.hidden = correspondence email address
-checkCorrespondenceDetails.label.phoneNumber = Phone number:
-checkCorrespondenceDetails.label.mobilePhoneNumber = Mobile number:
-checkCorrespondenceDetails.message.notProvided = Not provided
-checkCorrespondenceDetails.message.remove = Remove all correspondence details
-
-correspondenceEmailAddress.title = What email address should we use for correspondence?
-correspondenceEmailAddress.heading = What email address should we use for correspondence?
-correspondenceEmailAddress.checkYourAnswersLabel = Email Address
-correspondenceEmailAddress.error.required = Enter a correspondence email address for this business
-correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
-correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
-
-correspondenceName.title = What full name should we use for correspondence?
-correspondenceName.heading = What full name should we use for correspondence?
-correspondenceName.checkYourAnswersLabel = Full Name
-correspondenceName.error.required = Enter the full name for correspondence
-correspondenceName.error.invalid = The full name for correspondence must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
-correspondenceName.error.length = The full name for correspondence must be 100 characters or less
-
-correspondenceAdditionalName.title = What additional full name should we use for correspondence?
-correspondenceAdditionalName.heading = What additional full name should we use for correspondence?
-correspondenceAdditionalName.checkYourAnswersLabel = Additional Full Name
-correspondenceAdditionalName.error.required = Enter the additional full name for correspondence
-correspondenceAdditionalName.error.invalid = The additional full name for correspondence name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
-correspondenceAdditionalName.error.length = The additional full name for correspondence must be 100 characters or less
-
-correspondenceAdditionalInfo.title = What is the additional information for the correspondence address?
-correspondenceAdditionalInfo.heading = What is the additional information for the correspondence address?
-correspondenceAdditionalInfo.checkYourAnswersLabel = Additional Information
-correspondenceAdditionalInfo.hint = For example, building name or floor number
-correspondenceAdditionalInfo.error.required = Enter additional information for the correspondence address
-correspondenceAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-correspondenceAdditionalInfo.error.length = The additional information must be 100 characters or less
-
-otherTradeClass.title = What is your business trade class? - Change registration details
-otherTradeClass.heading = What is your business trade class?
-otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
-otherTradeClass.checkYourAnswersLabel = What is your business trade class?
-otherTradeClass.error.required = Enter your business trade class
-otherTradeClass.error.invalid = Your business trade class must be in the correct format
-otherTradeClass.error.length = Your business trade class must be 300 characters or less
-otherTradeClass.textarea.label = You can enter up to 300 characters
-
-previousRegistrationNumber.title = What is your previous registration number?
-previousRegistrationNumber.heading = What is your previous registration number?
-previousRegistrationNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
-previousRegistrationNumber.checkYourAnswersLabel = Previous registration number
-previousRegistrationNumber.error.required = Enter your previous registration number
-previousRegistrationNumber.error.invalid.characters = Your previous registration number must only include letters a to z and numbers 0 to 9
-previousRegistrationNumber.error.invalid.format = Your previous registration number must be in the correct format
-previousRegistrationNumber.error.invalidReference = Enter a real previous registration number
-previousRegistrationNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
-previousRegistrationNumber.change.hidden = previous registration number
-
-
-
-associatedRegNumber.title = What is your associated registration number?
-associatedRegNumber.heading = What is your associated registration number?
-associatedRegNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
+associatedRegNumber.change.hidden = associated registration number
 associatedRegNumber.checkYourAnswersLabel = Associated registration number
-associatedRegNumber.error.required = Enter your associated registration number
+associatedRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
 associatedRegNumber.error.invalid.characters = Your associated registration number must only include letters a to z and numbers 0 to 9
 associatedRegNumber.error.invalid.format = Your associated registration number must be in the correct format
 associatedRegNumber.error.invalidReference = Enter a real associated registration number
-associatedRegNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
-associatedRegNumber.change.hidden = associated registration number
+associatedRegNumber.error.required = Enter your associated registration number
+associatedRegNumber.heading = What is your associated registration number?
+associatedRegNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
+associatedRegNumber.title = What is your associated registration number?
 
+associatedRegistrationNumbers.change.hidden = registration number {0}
+associatedRegistrationNumbers.checkYourAnswersLabel = associatedRegistrationNumbers
+associatedRegistrationNumbers.error.required = Select yes if you want to add another associated registration number
+associatedRegistrationNumbers.heading = Associated registration numbers
+associatedRegistrationNumbers.hint = You can only add up to 3 registration numbers
+associatedRegistrationNumbers.max = You can only add up to 3 registration numbers.
+associatedRegistrationNumbers.noLabel = No, return to check your trading details
+associatedRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
+associatedRegistrationNumbers.radios = Do you want to add another registration number?
+associatedRegistrationNumbers.title = Associated registration numbers
+associatedRegistrationNumbers.yesLabel = Yes, add another number
 
-removeCorrespondenceEmailAddress.title = Are you sure you want to remove the correspondence email address?
-removeCorrespondenceEmailAddress.heading = Are you sure you want to remove the correspondence email address {0}?
-removeCorrespondenceEmailAddress.checkYourAnswersLabel = removeCorrespondenceEmailAddress
-removeCorrespondenceEmailAddress.error.required = Select yes if you want to remove the correspondence email address
+businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
+businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
+businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
+businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
+businessAddrInfoScreener.hint = For example, building name or floor number
+businessAddrInfoScreener.title = Do you want to include additional information for your business address?
 
+businessAddressAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+businessAddressAdditionalInfo.error.length = The additional information must be 100 characters or less
+businessAddressAdditionalInfo.error.required = Enter additional information for your business address
+businessAddressAdditionalInfo.heading = What is the additional information for your business address?
+businessAddressAdditionalInfo.hint = For example, building name or floor number
+businessAddressAdditionalInfo.title = What is the additional information for your business address?
 
-correspondenceAddrInfoScreener.title = Do you want to include additional information for the correspondence address?
-correspondenceAddrInfoScreener.heading = Do you want to include additional information for the correspondence address?
-correspondenceAddrInfoScreener.hint = For example, building name or floor number
-correspondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
+businessChangeAddrScreener.change.hidden = How do you want to change your business address?
+businessChangeAddrScreener.checkYourAnswersLabel = How do you want to change your business address?
+businessChangeAddrScreener.editCurrentAddress = Edit current business address
+businessChangeAddrScreener.error.required = Select how you want to change your business address
+businessChangeAddrScreener.heading = How do you want to change your business address?
+businessChangeAddrScreener.nonuk.changeToUkAddress = Change to a UK address
+businessChangeAddrScreener.title = How do you want to change your business address?
+businessChangeAddrScreener.uk.changeToNonUkAddress = Change to a non-UK address
+businessChangeAddrScreener.uk.differentUkAddress = Change to a different UK address
 
-correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
-correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
+businessContactNumber.checkYourAnswersLabel = What are your business contact numbers?
+## Cross-field error (IMPORTANT - ADD THIS)
+businessContactNumber.error.contactRequired = Enter at least one contact number for this business
+businessContactNumber.error.mobileNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
+businessContactNumber.error.mobileNumber.invalidFormat = The mobile number must be in the correct format, like 01632 960 001
+businessContactNumber.error.mobileNumber.length = The mobile number must be 20 characters or less
+## Mobile errors
+businessContactNumber.error.mobileNumber.required = Enter the mobile number for this business
+businessContactNumber.error.phoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
+businessContactNumber.error.phoneNumber.invalidFormat = The phone number must be in the correct format, like 01632 960 001
+businessContactNumber.error.phoneNumber.length = The phone number must be 20 characters or less
+## Phone errors
+businessContactNumber.error.phoneNumber.required = Enter the phone number for this business
+businessContactNumber.heading = What are your business contact numbers?
+businessContactNumber.mobileNumber = Mobile number
+businessContactNumber.mobileNumber.change.hidden = mobile number
+businessContactNumber.p1 = You must provide at least one contact number.
+businessContactNumber.phoneNumber = Phone number
+## Change link hidden text
+businessContactNumber.phoneNumber.change.hidden = phone number
+businessContactNumber.title = What are your business contact numbers?
+
+businessName.heading = Check your business name
+businessName.link = Cancel and return to change registration details
+businessName.name = {0}’s name
+businessName.notProvided = Not provided
+businessName.table.head1 = Trade Name
+businessName.table.head2 = Trade Name
+businessName.table.link = Change
+businessName.table.paragraph.corporatebody = If the corporate body operates under a different name, you need to add a trading name.
+businessName.table.paragraph.llp = If the limited liability partnership operates under a different name, you need to add a trading name.
+businessName.table.paragraph.partnership = If the partnership operates under a different name, you need to add a trading name.
+businessName.table.paragraph.soleproprietor = If the business trades under a different name to the sole proprietor, you need to add a trading name.
+businessName.table.paragraph.unincorporatedbody = If the unincorporated body operates under a different name, you need to add a trading name.
+businessName.title = Check your business name
+businessName.tradingName = Trading name
+businessName.tradingName.hidden = trading name
+
+businessTradeClass.adultGamingCentre = Adult gaming centre
+businessTradeClass.amusementOrGamingMachineSupplier = Amusement or gaming machine supplier
+businessTradeClass.bingopromoter = Bingo promoter
+businessTradeClass.bookmakerorbettingactivities = Bookmaker or betting activities
+businessTradeClass.casino = Casino
+businessTradeClass.change.hidden = What is the business trade class?
+businessTradeClass.checkYourAnswersLabel = What is the business trade class?
+businessTradeClass.club = Club
+businessTradeClass.error.required = Select the trade class for this business
+businessTradeClass.familyentertainmentcentre = Family entertainment centre
+businessTradeClass.heading = What is the business trade class?
+businessTradeClass.other = Other
+businessTradeClass.publichouse = Public house
+businessTradeClass.title = What is the business trade class?
+
+businessTradingName.error.invalid = The business trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+businessTradingName.error.length = The business trading name must be 100 characters or less
+businessTradingName.error.required = Enter the business trading name
+businessTradingName.heading = What is the business trading name?
+businessTradingName.hint = The business trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
+businessTradingName.title = What is the business trading name?
+
+businessType.corporatebody = Corporate body
+businessType.llp = Limited liability partnership
+businessType.partnership = Partnership
+businessType.soleproprietor = Sole proprietor
+businessType.unincorporatedbody = Unincorporated body
+
+businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
+businessUKAddrScreener.error.required = Select yes if your business address has a UK postcode
+businessUKAddrScreener.heading = Does your business address have a UK postcode?
+businessUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+businessUKAddrScreener.title = Does your business address have a UK postcode?
+
+# Change Business Name
+changeBusinessName.error.invalid.corporatebody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.llp = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
+changeBusinessName.error.invalid.soleproprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.length.corporatebody = The corporate body''s name must be 160 characters or less
+changeBusinessName.error.length.llp = The limited liability partnership''s name must be 160 characters or less
+changeBusinessName.error.length.partnership = The partnership''s name must be 34 characters or less
+changeBusinessName.error.length.soleproprietor = The sole proprietor''s name must be 160 characters or less
+changeBusinessName.error.length.unincorporatedbody = The unincorporated body''s name must be 160 characters or less
+changeBusinessName.error.required.corporatebody = Enter the corporate body''s name
+changeBusinessName.error.required.llp = Enter the limited liability partnership''s name
+changeBusinessName.error.required.partnership = Enter the partnership''s name
+changeBusinessName.error.required.soleproprietor = Enter the sole proprietor''s name
+changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated body''s name
+changeBusinessName.heading.corporatebody = What is the corporate body’s name?
+changeBusinessName.heading.llp = What is the limited liability partnership’s name?
+changeBusinessName.heading.partnership = What is the partnership’s name?
+changeBusinessName.heading.soleproprietor = What is the sole proprietor’s name?
+changeBusinessName.heading.unincorporatedbody = What is the unincorporated body’s name?
+changeBusinessName.label = Business name
+changeBusinessName.title.corporatebody = What is the corporate body’s name?
+changeBusinessName.title.llp = What is the limited liability partnership’s name?
+changeBusinessName.title.partnership = What is the partnership’s name?
+changeBusinessName.title.soleproprietor = What is the sole proprietor’s name?
+changeBusinessName.title.unincorporatedbody = What is the unincorporated body’s name?
+
+changeRegistrationDetails.approvalTime = Once HMRC approve your changes, we will update your registration certificate. This can take up to 48 hours.
+changeRegistrationDetails.businessAddress = Business address
+changeRegistrationDetails.businessContactDetails = Business contact details
+changeRegistrationDetails.businessName = Business name
+changeRegistrationDetails.caption = Change registration details
+changeRegistrationDetails.change-registration.link = Return to manage your Machine Games Duty
+changeRegistrationDetails.changesReadyToSubmit = Changes ready to submit
+changeRegistrationDetails.controllingBodyDetails = Controlling body details
+changeRegistrationDetails.correspondenceDetails = Correspondence details
+changeRegistrationDetails.groupMemberDetails = Group member details
+changeRegistrationDetails.heading.caption = MGD registration number: {0}
+changeRegistrationDetails.licencesAndPremises = Licences and premises
+changeRegistrationDetails.needsCompleting = Needs completing
+changeRegistrationDetails.noChangesYet = You need to change at least one detail before you can submit your changes to HMRC.
+changeRegistrationDetails.noDetailsChanged = No details changed
+changeRegistrationDetails.partnerDetails = Partner details
+changeRegistrationDetails.readyToSubmit = You must continue to the change registration details page to submit any changes.
+changeRegistrationDetails.returnPeriod = Return periods
+changeRegistrationDetails.submit = Submit changes
+changeRegistrationDetails.table.section = Section
+changeRegistrationDetails.table.status = Status
+changeRegistrationDetails.tradingDetails = Trading details
+
+checkCorrespondenceDetails.heading = Check your correspondence details
+checkCorrespondenceDetails.heading.addAdditionalCorrespondenceName = Add additional name for correspondence?
+checkCorrespondenceDetails.heading.addAdditionalInformation = Add additional information for correspondence address?
+checkCorrespondenceDetails.heading.addEmailAddress = Add email address for correspondence?
+checkCorrespondenceDetails.heading.addFaxNumber = Add fax number for correspondence?
+checkCorrespondenceDetails.heading.additionalCorrespondenceInformation = Correspondence address additional information
+checkCorrespondenceDetails.heading.additionalCorrespondenceName = Additional correspondence name
+checkCorrespondenceDetails.heading.contactNumbers = Correspondence contact numbers
+checkCorrespondenceDetails.heading.correspondenceAddress = Correspondence address
+checkCorrespondenceDetails.heading.correspondenceName = Correspondence name
+checkCorrespondenceDetails.heading.emailAddr = Correspondence email address
+checkCorrespondenceDetails.heading.faxNumber = Correspondence fax number
+checkCorrespondenceDetails.label.addAdditionalCorrespondenceName = Add additional name for correspondence?
+checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden = add additional name for correspondence
+checkCorrespondenceDetails.label.addAdditionalInformation = Add additional information for correspondence address?
+checkCorrespondenceDetails.label.addAdditionalInformation.hidden = add additional information for correspondence address
+checkCorrespondenceDetails.label.addEmailAddress = Add email address for correspondence?
+checkCorrespondenceDetails.label.addEmailAddress.hidden = add email address for correspondence
+checkCorrespondenceDetails.label.addFaxNumber = Add fax number for correspondence?
+checkCorrespondenceDetails.label.addFaxNumber.hidden = add fax number for correspondence?
+checkCorrespondenceDetails.label.additionalCorrespondenceInformation = Correspondence address additional information
+checkCorrespondenceDetails.label.additionalCorrespondenceInformation.hidden = correspondence address additional information
+checkCorrespondenceDetails.label.additionalCorrespondenceName = Additional correspondence name
+checkCorrespondenceDetails.label.additionalCorrespondenceName.hidden = additional correspondence name
+checkCorrespondenceDetails.label.contactNumbers = Contact numbers
+checkCorrespondenceDetails.label.contactNumbers.hidden = contact numbers
+checkCorrespondenceDetails.label.correspondenceAddress = Correspondence address
+checkCorrespondenceDetails.label.correspondenceAddress.hidden = correspondence address
+checkCorrespondenceDetails.label.correspondenceName = Correspondence name
+checkCorrespondenceDetails.label.correspondenceName.hidden = correspondence name
+checkCorrespondenceDetails.label.emailAddr = Correspondence email address
+checkCorrespondenceDetails.label.emailAddr.hidden = correspondence email address
+checkCorrespondenceDetails.label.faxNumber = Correspondence fax number
+checkCorrespondenceDetails.label.faxNumber.hidden = correspondence fax number
+checkCorrespondenceDetails.label.mobilePhoneNumber = Mobile number:
+checkCorrespondenceDetails.label.phoneNumber = Phone number:
+checkCorrespondenceDetails.message.notProvided = Not provided
+checkCorrespondenceDetails.message.remove = Remove all correspondence details
+checkCorrespondenceDetails.title = Check your correspondence details
+
+checkTradingDetails.associatedRegistrationNumbers.change.hidden = associated MGD registration numbers
+checkTradingDetails.associatedRegistrationNumbers.checkYourAnswersLabel = Associated MGD registration numbers
+checkTradingDetails.associatedRegistrationNumbers.p1 = If any MGD registrations are associated with your business, you can provide 3 registration numbers.
+checkTradingDetails.businessTradeClass.change.hidden = trade class
+checkTradingDetails.businessTradeClass.checkYourAnswersLabel = Trade class
+checkTradingDetails.heading = Check your trading details
+checkTradingDetails.otherBusinessTradeClassDescription.change.hidden = description of business activity
+checkTradingDetails.otherBusinessTradeClassDescription.checkYourAnswersLabel = Description of business activity
+checkTradingDetails.previousRegistrationNumbers.change.hidden = previous MGD registration numbers
+checkTradingDetails.previousRegistrationNumbers.checkYourAnswersLabel = Previous MGD registration numbers
+checkTradingDetails.previousRegistrationNumbers.p1 = If any previous MGD registrations were allocated to your business, you can provide 3 registration numbers.
+checkTradingDetails.seasonalBusiness.change.hidden = seasonal business
+checkTradingDetails.seasonalBusiness.checkYourAnswersLabel = Seasonal business
+checkTradingDetails.title = Check your trading details
+
+checkYourAnswers.heading = Check your answers
+checkYourAnswers.title = Check your answers
+
+# Check Contact Details
+contactDetails.error.contactNumber = You must provide at least one contact number.
+contactDetails.heading = Check your business contact details
+contactDetails.heading.contactNumbers = Contact numbers
+contactDetails.heading.emailAddr = Email address
+contactDetails.heading.faxNumber = Fax number
+contactDetails.label.contactNumbers = Contact numbers
+contactDetails.label.emailAddr = Email address
+contactDetails.label.faxNumber = Fax number
+contactDetails.label.mobilePhoneNumber = Mobile number:
+contactDetails.label.phoneNumber = Phone number:
+contactDetails.message.notProvided = Not provided
+contactDetails.title = Check your business contact details
+
+correspondenceAdditionalInfo.checkYourAnswersLabel = Additional Information
+correspondenceAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+correspondenceAdditionalInfo.error.length = The additional information must be 100 characters or less
+correspondenceAdditionalInfo.error.required = Enter additional information for the correspondence address
+correspondenceAdditionalInfo.heading = What is the additional information for the correspondence address?
+correspondenceAdditionalInfo.hint = For example, building name or floor number
+correspondenceAdditionalInfo.title = What is the additional information for the correspondence address?
+
+correspondenceAdditionalName.checkYourAnswersLabel = Additional Full Name
+correspondenceAdditionalName.error.invalid = The additional full name for correspondence name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+correspondenceAdditionalName.error.length = The additional full name for correspondence must be 100 characters or less
+correspondenceAdditionalName.error.required = Enter the additional full name for correspondence
+correspondenceAdditionalName.heading = What additional full name should we use for correspondence?
+correspondenceAdditionalName.title = What additional full name should we use for correspondence?
+
+correspondenceAdditionalNameYesNo.change.hidden = do you want to add an additional name for correspondence?
 correspondenceAdditionalNameYesNo.checkYourAnswersLabel = Additional correspondence name
 correspondenceAdditionalNameYesNo.error.required = Select yes to add an additional name for correspondence
-correspondenceAdditionalNameYesNo.change.hidden = do you want to add an additional name for correspondence?
+correspondenceAdditionalNameYesNo.heading = Do you want to add an additional name for correspondence?
+correspondenceAdditionalNameYesNo.title = Do you want to add an additional name for correspondence?
 
-addEmailAddressForCorrespondenceYesNo.title = Do you want to add an email address for correspondence?
-addEmailAddressForCorrespondenceYesNo.heading = Do you want to add an email address for correspondence?
-addEmailAddressForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add an email address for correspondence?
-addEmailAddressForCorrespondenceYesNo.error.required = Select yes to add an email address for correspondence
-addEmailAddressForCorrespondenceYesNo.change.hidden = Do you want to add an email address for correspondence?
+correspondenceAddrInfoScreener.error.required = Select yes to include additional information for the correspondence address
+correspondenceAddrInfoScreener.heading = Do you want to include additional information for the correspondence address?
+correspondenceAddrInfoScreener.hint = For example, building name or floor number
+correspondenceAddrInfoScreener.title = Do you want to include additional information for the correspondence address?
 
-addCorrespondingDetailsYesNo.title = Correspondence details
-addCorrespondingDetailsYesNo.heading = Correspondence details
-addCorrespondingDetailsYesNo.p1 = We will contact you using the business details you provided. Alternatively, you can add correspondence details.
-addCorrespondingDetailsYesNo.doYou = Do you want to add correspondence details?
-addCorrespondingDetailsYesNo.checkYourAnswersLabel = Do you want to add correspondence details?
-addCorrespondingDetailsYesNo.error.required = Select yes if you want to add correspondence details
-addCorrespondingDetailsYesNo.change.hidden = Do you want to add correspondence details?
+correspondenceAddressConfirmAddress.change = Edit address
+correspondenceAddressConfirmAddress.heading = Review and confirm the correspondence address
+correspondenceAddressConfirmAddress.submit = Continue
+correspondenceAddressConfirmAddress.title = Review and confirm the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
 
-correspondenceUKAddress.title = Enter the correspondence address
-correspondenceUKAddress.heading = Enter the correspondence address
-correspondenceUKAddress.addressLine1 = Address line 1
-correspondenceUKAddress.addressLine2 = Address line 2
-correspondenceUKAddress.townOrCity = Town or city
-correspondenceUKAddress.County = County (optional)
-correspondenceUKAddress.Postcode = Postcode
-correspondenceUKAddress.checkYourAnswersLabel = Correspondence Address
-correspondenceUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
-correspondenceUKAddress.addressLine1.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceUKAddress.addressLine1.error.length = Address line 1 must be 27 characters or less
-correspondenceUKAddress.addressLine2.error.required = Enter address line 2 for the correspondence address
-correspondenceUKAddress.addressLine2.error.invalid = Address line 2 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceUKAddress.addressLine2.error.length = Address line 2 must be 27 characters or less
-correspondenceUKAddress.townOrCity.error.required = Enter the town or city for the correspondence address
-correspondenceUKAddress.townOrCity.error.invalid = Town or city must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceUKAddress.townOrCity.error.length = Town or city must be 27 characters or less
-correspondenceUKAddress.County.error.invalid = County must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceUKAddress.County.error.length = County must be 18 characters or less
-correspondenceUKAddress.Postcode.error.required = Enter postcode for the correspondence address
-correspondenceUKAddress.Postcode.error.invalid = Postcode must only include letters a to z, numbers 0 to 9 and spaces
-correspondenceUKAddress.Postcode.error.format = Enter a UK postcode, like E1 6AN or SW1A 2AA
-correspondenceUKAddress.Postcode.error.length = Postcode must be 8 characters or less, including the space
-
-correspondenceNonUKAddress.title = Enter the correspondence address
-correspondenceNonUKAddress.heading = Enter the correspondence address
-correspondenceNonUKAddress.addressLine1 = Address line 1
-correspondenceNonUKAddress.addressLine2 = Address line 2
-correspondenceNonUKAddress.townOrCity = Town or city
-correspondenceNonUKAddress.Country = Country
-correspondenceNonUKAddress.Region = Region or postal code (optional)
-correspondenceNonUKAddress.checkYourAnswersLabel = Correspondence Address
-correspondenceNonUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
-correspondenceNonUKAddress.addressLine1.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceNonUKAddress.addressLine1.error.length = Address line 1 must be 27 characters or less
-correspondenceNonUKAddress.addressLine2.error.required = Enter address line 2 for the correspondence address
-correspondenceNonUKAddress.addressLine2.error.invalid = Address line 2 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceNonUKAddress.addressLine2.error.length = Address line 2 must be 27 characters or less
-correspondenceNonUKAddress.townOrCity.error.required = Enter the town or city for the correspondence address
-correspondenceNonUKAddress.townOrCity.error.invalid = Town or city must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceNonUKAddress.townOrCity.error.length = Town or city must be 27 characters or less
-correspondenceNonUKAddress.Region.error.invalid = Region or postal code must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
-correspondenceNonUKAddress.Region.error.length = Region or postal code must be 18 characters or less, including spaces
-correspondenceNonUKAddress.Country.error.required = Enter the country for the correspondence address
-correspondenceNonUKAddress.Country.error.invalid = 	Country must only include letters a to z, apostrophes, hyphens or spaces
-correspondenceNonUKAddress.Country.error.length = Country must be 27 characters or less
-
-removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name?
-removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
-removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
-removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
-removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?
-
-faxNumberForCorrespondenceYesNo.title = Do you want to add a fax number for correspondence?
-faxNumberForCorrespondenceYesNo.heading = Do you want to add a fax number for correspondence?
-faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add a fax number for correspondence?
-faxNumberForCorrespondenceYesNo.change.hidden = Do you want to add a fax number for correspondence?
-faxNumberForCorrespondenceYesNo.error.required = Select yes to add a fax number for correspondence
-
-removeCorrAddressAddInfo.title = Are you sure you want to remove the additional information for this correspondence address?
-removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
-removeCorrAddressAddInfo.paragraph = The additional information is: {0}
-removeCorrAddressAddInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
-
-removeCorrespondenceDetailsYesNo.title = Are you sure you want to remove all your correspondence details?
-removeCorrespondenceDetailsYesNo.heading = Are you sure you want to remove all your correspondence details?
-removeCorrespondenceDetailsYesNo.checkYourAnswersLabel = Are you sure you want to remove all your correspondence details?
-removeCorrespondenceDetailsYesNo.hint = If you remove your correspondence details, we will contact you through the business details you provided
-removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
-removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?
-
-correspondenceChangeAddrScreener.title = How do you want to change this correspondence address?
-correspondenceChangeAddrScreener.heading = How do you want to change this correspondence address?
-correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
-correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
-correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
-correspondenceChangeAddrScreener.uk.differentAddress = Change to a different UK address
-correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
-correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
-correspondenceChangeAddrScreener.no = Edit current correspondence address
-
-businessChangeAddrScreener.title = How do you want to change your business address?
-businessChangeAddrScreener.heading = How do you want to change your business address?
-businessChangeAddrScreener.checkYourAnswersLabel = How do you want to change your business address?
-businessChangeAddrScreener.error.required = Select how you want to change your business address
-businessChangeAddrScreener.change.hidden = How do you want to change your business address?
-businessChangeAddrScreener.uk.differentUkAddress = Change to a different UK address
-businessChangeAddrScreener.uk.changeToNonUkAddress = Change to a non-UK address
-businessChangeAddrScreener.nonuk.changeToUkAddress = Change to a UK address
-businessChangeAddrScreener.editCurrentAddress = Edit current business address
-
-correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
-correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
-correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
-correspondenceUKAddrScreener.checkYourAnswersLabel = Does the correspondence address have a UK postcode?
-correspondenceUKAddrScreener.error.required = Select yes if the correspondence address has a UK postcode
-correspondenceUKAddrScreener.change.hidden = Does the correspondence address have a UK postcode?
-
-correspondenceAddressSelectAddress.title = Select the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-correspondenceAddressSelectAddress.heading = Select the correspondence address
-
-correspondenceAddressLookupAddress.title = Find the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
 correspondenceAddressLookupAddress.heading = Find the correspondence address
 correspondenceAddressLookupAddress.postcode = Postcode
 correspondenceAddressLookupAddress.submit = Continue
-
-correspondenceAddressConfirmAddress.title = Review and confirm the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-correspondenceAddressConfirmAddress.heading = Review and confirm the correspondence address
-correspondenceAddressConfirmAddress.change = Edit address
-correspondenceAddressConfirmAddress.submit = Continue
+correspondenceAddressLookupAddress.title = Find the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
-partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
-partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
-partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the partner
-partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
 
+correspondenceAddressSelectAddress.heading = Select the correspondence address
+correspondenceAddressSelectAddress.title = Select the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
 
-partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner''s address?
-partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner''s address?
-partnerDetailsAdditionalAddressInfo.checkYourAnswersLabel = Additional Information
-partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor number
-partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
-partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
+correspondenceChangeAddrScreener.change.hidden = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.checkYourAnswersLabel = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.error.required = Select how you want to change this correspondence address
+correspondenceChangeAddrScreener.heading = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.no = Edit current correspondence address
+correspondenceChangeAddrScreener.nonuk.yes = Change to a UK address
+correspondenceChangeAddrScreener.title = How do you want to change this correspondence address?
+correspondenceChangeAddrScreener.uk.differentAddress = Change to a different UK address
+correspondenceChangeAddrScreener.uk.yes = Change to a non-UK address
 
-PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
-PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
-PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
-PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
-PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
-PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
+correspondenceContactNumber.error.mobileNumber.invalid = The correspondence mobile number must only include numbers 0 to 9 and spaces
+correspondenceContactNumber.error.mobileNumber.length = The correspondence mobile number must be 20 characters or less
+## Mobile errors
+correspondenceContactNumber.error.mobileNumber.required = Enter the correspondence mobile number
+correspondenceContactNumber.error.phoneNumber.invalid = The correspondence phone number must only include numbers 0 to 9 and spaces
+correspondenceContactNumber.error.phoneNumber.length = The correspondence phone number must be 20 characters or less
+## Phone errors
+correspondenceContactNumber.error.phoneNumber.required = Enter the correspondence phone number
+correspondenceContactNumber.heading = What contact numbers should we use for correspondence?
+correspondenceContactNumber.mobileNumber = Mobile number
+correspondenceContactNumber.p1 = You must provide at least one contact number.
+correspondenceContactNumber.phoneNumber = Phone number
+correspondenceContactNumber.title = What contact numbers should we use for correspondence?
 
-businessAddressAdditionalInfo.title = What is the additional information for your business address?
-businessAddressAdditionalInfo.heading = What is the additional information for your business address?
-businessAddressAdditionalInfo.hint = For example, building name or floor number
-businessAddressAdditionalInfo.error.required = Enter additional information for your business address
-businessAddressAdditionalInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-businessAddressAdditionalInfo.error.length = The additional information must be 100 characters or less
+correspondenceEmailAddress.checkYourAnswersLabel = Email Address
+correspondenceEmailAddress.error.invalid = The correspondence email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+correspondenceEmailAddress.error.length = The correspondence email address must be 70 characters or less
+correspondenceEmailAddress.error.required = Enter a correspondence email address for this business
+correspondenceEmailAddress.heading = What email address should we use for correspondence?
+correspondenceEmailAddress.title = What email address should we use for correspondence?
 
-removeAdditionalInfoForPartnerAddressYesNo.title = Are you sure you want to remove the additional information for this partner’s address?
-removeAdditionalInfoForPartnerAddressYesNo.heading = Are you sure you want to remove the additional information for this partner’s address?
-removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
-removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
-removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
-removeAdditionalInfoForPartnerAddressYesNo.hint = The additional information is: {0}
+correspondenceFaxNumber.change.hidden = What fax number should we use for correspondence?
+correspondenceFaxNumber.checkYourAnswersLabel = What fax number should we use for correspondence?
+correspondenceFaxNumber.error.invalid.characters = The fax number for correspondence must only include numbers 0 to 9 and spaces
+correspondenceFaxNumber.error.length = The fax number for correspondence must be 20 characters or less
+correspondenceFaxNumber.error.required = Enter the fax number for correspondence
+correspondenceFaxNumber.heading = What fax number should we use for correspondence?
+correspondenceFaxNumber.title = What fax number should we use for correspondence?
 
-partnerAddEmailAddressYesNoPage.title = Do you want to add an email address for the partner?
-partnerAddEmailAddressYesNoPage.heading = Do you want to add an email address for the partner?
+correspondenceName.checkYourAnswersLabel = Full Name
+correspondenceName.error.invalid = The full name for correspondence must only include letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+correspondenceName.error.length = The full name for correspondence must be 100 characters or less
+correspondenceName.error.required = Enter the full name for correspondence
+correspondenceName.heading = What full name should we use for correspondence?
+correspondenceName.title = What full name should we use for correspondence?
+
+correspondenceNonUKAddress.Country = Country
+correspondenceNonUKAddress.Country.error.invalid = Country must only include letters a to z, apostrophes, hyphens or spaces
+correspondenceNonUKAddress.Country.error.length = Country must be 27 characters or less
+correspondenceNonUKAddress.Country.error.required = Enter the country for the correspondence address
+correspondenceNonUKAddress.Region = Region or postal code (optional)
+correspondenceNonUKAddress.Region.error.invalid = Region or postal code must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.Region.error.length = Region or postal code must be 18 characters or less, including spaces
+correspondenceNonUKAddress.addressLine1 = Address line 1
+correspondenceNonUKAddress.addressLine1.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.addressLine1.error.length = Address line 1 must be 27 characters or less
+correspondenceNonUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
+correspondenceNonUKAddress.addressLine2 = Address line 2
+correspondenceNonUKAddress.addressLine2.error.invalid = Address line 2 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.addressLine2.error.length = Address line 2 must be 27 characters or less
+correspondenceNonUKAddress.addressLine2.error.required = Enter address line 2 for the correspondence address
+correspondenceNonUKAddress.checkYourAnswersLabel = Correspondence Address
+correspondenceNonUKAddress.heading = Enter the correspondence address
+correspondenceNonUKAddress.title = Enter the correspondence address
+correspondenceNonUKAddress.townOrCity = Town or city
+correspondenceNonUKAddress.townOrCity.error.invalid = Town or city must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceNonUKAddress.townOrCity.error.length = Town or city must be 27 characters or less
+correspondenceNonUKAddress.townOrCity.error.required = Enter the town or city for the correspondence address
+
+correspondenceUKAddrScreener.change.hidden = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.checkYourAnswersLabel = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.error.required = Select yes if the correspondence address has a UK postcode
+correspondenceUKAddrScreener.heading = Does the correspondence address have a UK postcode?
+correspondenceUKAddrScreener.heading.addAdditionalInformation = Does address have a UK postcode?
+correspondenceUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
+correspondenceUKAddrScreener.label.addAdditionalInformation = Does address have a UK postcode?
+correspondenceUKAddrScreener.label.addAdditionalInformation.hidden = Does address have a UK postcode?
+correspondenceUKAddrScreener.title = Does the correspondence address have a UK postcode?
+
+correspondenceUKAddress.County = County (optional)
+correspondenceUKAddress.County.error.invalid = County must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.County.error.length = County must be 18 characters or less
+correspondenceUKAddress.Postcode = Postcode
+correspondenceUKAddress.Postcode.error.format = Enter a UK postcode, like E1 6AN or SW1A 2AA
+correspondenceUKAddress.Postcode.error.invalid = Postcode must only include letters a to z, numbers 0 to 9 and spaces
+correspondenceUKAddress.Postcode.error.length = Postcode must be 8 characters or less, including the space
+correspondenceUKAddress.Postcode.error.required = Enter postcode for the correspondence address
+correspondenceUKAddress.addressLine1 = Address line 1
+correspondenceUKAddress.addressLine1.error.invalid = Address line 1 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.addressLine1.error.length = Address line 1 must be 27 characters or less
+correspondenceUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
+correspondenceUKAddress.addressLine2 = Address line 2
+correspondenceUKAddress.addressLine2.error.invalid = Address line 2 must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.addressLine2.error.length = Address line 2 must be 27 characters or less
+correspondenceUKAddress.addressLine2.error.required = Enter address line 2 for the correspondence address
+correspondenceUKAddress.checkYourAnswersLabel = Correspondence Address
+correspondenceUKAddress.heading = Enter the correspondence address
+correspondenceUKAddress.title = Enter the correspondence address
+correspondenceUKAddress.townOrCity = Town or city
+correspondenceUKAddress.townOrCity.error.invalid = Town or city must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+correspondenceUKAddress.townOrCity.error.length = Town or city must be 27 characters or less
+correspondenceUKAddress.townOrCity.error.required = Enter the town or city for the correspondence address
+
+date.day = Day
+date.error.day = day
+date.error.month = month
+date.error.year = year
+date.month = Month
+date.year = Year
+
+declaration.heading = Declaration
+declaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+declaration.submit = Declare and submit
+declaration.title = Declaration
+
+emailAddress.checkYourAnswersLabel = Email Address
+emailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+emailAddress.error.length = The email address must be 70 characters or less
+emailAddress.error.required = Enter an email address for this business
+emailAddress.heading = What is the email address for this business?
+emailAddress.title = What is the email address for this business?
+
+error.prefix = Error
+error.summary.title = There is a problem
+error.title.prefix = Error:
+
+faxNumber.change.hidden = FaxNumber
+faxNumber.checkYourAnswersLabel = Fax Number
+faxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
+faxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
+faxNumber.error.length = The fax number must be 20 characters or less
+faxNumber.error.required = Enter the fax number for this business
+faxNumber.heading = What is the fax number for this business?
+faxNumber.title = What is the fax number for this business?
+
+faxNumberForCorrespondenceYesNo.change.hidden = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.checkYourAnswersLabel = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.error.required = Select yes to add a fax number for correspondence
+faxNumberForCorrespondenceYesNo.heading = Do you want to add a fax number for correspondence?
+faxNumberForCorrespondenceYesNo.title = Do you want to add a fax number for correspondence?
+
+index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
+index.heading = Manage your gambling tax
+index.title = Manage your gambling tax
+
+journeyRecovery.continue.heading = Sorry, there is a problem with the service
+journeyRecovery.continue.title = Sorry, there is a problem with the service
+journeyRecovery.startAgain.heading = Sorry, there is a problem with the service
+journeyRecovery.startAgain.title = Sorry, there is a problem with the service
+
+otherTradeClass.caption = You must only use letters a to z, numbers 0 to 9, apostrophes, hyphens and spaces
+otherTradeClass.checkYourAnswersLabel = What is your business trade class?
+otherTradeClass.error.invalid = Your business trade class must be in the correct format
+otherTradeClass.error.length = Your business trade class must be 300 characters or less
+otherTradeClass.error.required = Enter your business trade class
+otherTradeClass.heading = What is your business trade class?
+otherTradeClass.textarea.label = You can enter up to 300 characters
+otherTradeClass.title = What is your business trade class? - Change registration details
+
+pageNotFound.heading = Page not found
+pageNotFound.p1 = If you typed the web address, check it is correct.
+pageNotFound.p2 = If you pasted the web address, check you copied the entire address.
+pageNotFound.p3 = If the web address is correct or you selected a link or button, contact the
+pageNotFound.p3.after = if you need to speak to someone.
+pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
+pageNotFound.title = Page not found
+
+partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
 partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an email address for the partner?
 partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
-partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.heading = Do you want to add an email address for the partner?
+partnerAddEmailAddressYesNoPage.title = Do you want to add an email address for the partner?
 
+partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the partner
+partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
+partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
 
+partnerDetailsAdditionalAddressInfo.checkYourAnswersLabel = Additional Information
+partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
+partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
+partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor number
+partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner''s address?
 
-partnerEmailAddress.title = What is the partner’s email address?
-partnerEmailAddress.heading = What is the partner’s email address?
-partnerEmailAddress.error.required = Enter the partner’s email address
-partnerEmailAddress.error.length = The email address must be 70 characters or less
-partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 partnerEmailAddress.change.hidden = What is the partner’s email address?
+partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+partnerEmailAddress.error.length = The email address must be 70 characters or less
+partnerEmailAddress.error.required = Enter the partner’s email address
+partnerEmailAddress.heading = What is the partner’s email address?
+partnerEmailAddress.title = What is the partner’s email address?
 
+previousRegistrationNumber.change.hidden = previous registration number
+previousRegistrationNumber.checkYourAnswersLabel = Previous registration number
+previousRegistrationNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
+previousRegistrationNumber.error.invalid.characters = Your previous registration number must only include letters a to z and numbers 0 to 9
+previousRegistrationNumber.error.invalid.format = Your previous registration number must be in the correct format
+previousRegistrationNumber.error.invalidReference = Enter a real previous registration number
+previousRegistrationNumber.error.required = Enter your previous registration number
+previousRegistrationNumber.heading = What is your previous registration number?
+previousRegistrationNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
+previousRegistrationNumber.title = What is your previous registration number?
 
-businessUKAddrScreener.title = Does your business address have a UK postcode?
-businessUKAddrScreener.heading = Does your business address have a UK postcode?
-businessUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
-businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
-businessUKAddrScreener.error.required = Select yes if your business address has a UK postcode
-businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
-businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
-businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
+previousRegistrationNumbers.change.hidden = registration number {0}
+previousRegistrationNumbers.checkYourAnswersLabel = previousRegistrationNumbers
+previousRegistrationNumbers.error.required = Select yes if you want to add another previous registration number
+previousRegistrationNumbers.heading = Previous registration numbers
+previousRegistrationNumbers.hint = You can only add up to 3 registration numbers
+previousRegistrationNumbers.max = You can only add up to 3 registration numbers.
+previousRegistrationNumbers.noLabel = No, return to check your trading details
+previousRegistrationNumbers.paragraph = You must submit any changes you make to your registration numbers. Once HMRC approves the changes, we will update your registration certificate.
+previousRegistrationNumbers.radios = Do you want to add another registration number?
+previousRegistrationNumbers.submitted = Submitted registration number
+previousRegistrationNumbers.submitted.plural = Submitted registration numbers
+previousRegistrationNumbers.title = Previous registration numbers
+previousRegistrationNumbers.unsubmitted = Registration number ready to submit
+previousRegistrationNumbers.unsubmitted.plural = Registration numbers ready to submit
+previousRegistrationNumbers.yesLabel = Yes, add another number
 
-businessAddrInfoScreener.title = Do you want to include additional information for your business address?
-businessAddrInfoScreener.heading = Do you want to include additional information for your business address?
-businessAddrInfoScreener.hint = For example, building name or floor number
-businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
-businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
-businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
+removeAdditionalCorrespondenceNameYesNo.change.hidden = are you sure you want to remove {0} as the additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.checkYourAnswersLabel = Are you sure you want to remove your additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.error.required = Select yes to remove the additional correspondence name
+removeAdditionalCorrespondenceNameYesNo.heading = Are you sure you want to remove {0} as the additional correspondence name?
+removeAdditionalCorrespondenceNameYesNo.title = Are you sure you want to remove your additional correspondence name?
+
+removeAdditionalInfoForPartnerAddressYesNo.change.hidden = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.error.required = Select yes if you want to remove the additional information for this partner’s address
+removeAdditionalInfoForPartnerAddressYesNo.heading = Are you sure you want to remove the additional information for this partner’s address?
+removeAdditionalInfoForPartnerAddressYesNo.hint = The additional information is: {0}
+removeAdditionalInfoForPartnerAddressYesNo.title = Are you sure you want to remove the additional information for this partner’s address?
+
+removeAssociatedRegNumber.change.hidden = remove associated registration number
+removeAssociatedRegNumber.checkYourAnswersLabel = removeAssociatedRegNumber
+removeAssociatedRegNumber.error.required = Select yes if you want to remove the associated registration number
+removeAssociatedRegNumber.heading = Are you sure you want to remove the associated registration number {0}?
+removeAssociatedRegNumber.title = Are you sure you want to remove the associated registration number?
+
+removeCorrAddressAddInfo.error.required = Select yes if you want to remove the additional information for this correspondence address
+removeCorrAddressAddInfo.heading = Are you sure you want to remove the additional information for this correspondence address?
+removeCorrAddressAddInfo.paragraph = The additional information is: {0}
+removeCorrAddressAddInfo.title = Are you sure you want to remove the additional information for this correspondence address?
+
+removeCorrespondenceDetailsYesNo.change.hidden = are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.checkYourAnswersLabel = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.error.required = Select yes to remove all your correspondence details
+removeCorrespondenceDetailsYesNo.heading = Are you sure you want to remove all your correspondence details?
+removeCorrespondenceDetailsYesNo.hint = If you remove your correspondence details, we will contact you through the business details you provided
+removeCorrespondenceDetailsYesNo.title = Are you sure you want to remove all your correspondence details?
+
+removeCorrespondenceEmailAddress.checkYourAnswersLabel = removeCorrespondenceEmailAddress
+removeCorrespondenceEmailAddress.error.required = Select yes if you want to remove the correspondence email address
+removeCorrespondenceEmailAddress.heading = Are you sure you want to remove the correspondence email address {0}?
+removeCorrespondenceEmailAddress.title = Are you sure you want to remove the correspondence email address?
+
+removeCorrespondenceFaxNumber.change.hidden = remove correspondence fax number
+removeCorrespondenceFaxNumber.checkYourAnswersLabel = removeCorrespondenceFaxNumber
+removeCorrespondenceFaxNumber.error.required = Select yes if you want to remove the correspondence fax number
+removeCorrespondenceFaxNumber.heading = Are you sure you want to remove the correspondence fax number {0}?
+removeCorrespondenceFaxNumber.title = Are you sure you want to remove the correspondence fax number?
+
+removeEmailAddress.error.required = Select yes if you want to remove the email address
+removeEmailAddress.heading = Are you sure you want to remove the email address {0}?
+removeEmailAddress.title = Are you sure you want to remove the email address?
+
+removeFaxNumber.error.required = Select yes if you want to remove the fax number
+removeFaxNumber.heading = Are you sure you want to remove the fax number {0}?
+removeFaxNumber.title = Are you sure you want to remove the fax number?
+
+removePreviousRegNumber.change.hidden = remove previous registration number
+removePreviousRegNumber.checkYourAnswersLabel = removePreviousRegNumber
+removePreviousRegNumber.error.required = Select yes if you want to remove the previous registration number
+removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
+removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
+
+removeTradeName.change.hidden = RemoveTradeName
+removeTradeName.error.required = Select yes if you want to remove the trading name
+removeTradeName.heading = Are you sure you want to remove the trading name {0}?
+removeTradeName.title = Are you sure you want to remove the trading name?
+
+seasonalBusiness.change.hidden = Is this a seasonal business?
+seasonalBusiness.checkYourAnswersLabel = Is this a seasonal business?
+seasonalBusiness.error.required = Select yes if this is a seasonal business
+seasonalBusiness.heading = Is this a seasonal business?
+seasonalBusiness.paragraph = A seasonal business has periods where it does not trade. If you operate a seasonal business, you must submit nil returns for any periods that you are not trading.
+seasonalBusiness.title = Is this a seasonal business?
+
+service.name = Manage your gambling tax
+
+signedOut.guidance = We did not save your answers.
+signedOut.heading = For your security, we signed you out
+signedOut.title = For your security, we signed you out
+
+site.back = Back
+site.change = Change
+site.continue = Continue
+site.govuk = GOV.UK
+site.no = No
+site.notProvided = Not provided
+site.or = or
+site.remove = Remove
+site.signIn = Sign in
+site.start = Start now
+site.startAgain = Start again
+site.yes = Yes
+
+soleProprietorName.error.firstName.invalid = The sole proprietor’s first name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+soleProprietorName.error.firstName.length = The sole proprietor’s first name must be 100 characters or less
+soleProprietorName.error.firstName.required = Enter the sole proprietor’s first name
+soleProprietorName.error.lastName.invalid = The sole proprietor’s last name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+soleProprietorName.error.lastName.length = The sole proprietor’s last name must be 100 characters or less
+soleProprietorName.error.lastName.required = Enter the sole proprietor’s last name
+soleProprietorName.error.middleName.invalid = The sole proprietor’s middle name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+soleProprietorName.error.middleName.length = The sole proprietor’s middle name must be 100 characters or less
+soleProprietorName.error.title.invalid = The sole proprietor’s title must only include letters a to z, apostrophes, hyphens or spaces
+soleProprietorName.error.title.length = The sole proprietor’s title must be 20 characters or less
+soleProprietorName.error.title.required = Enter the sole proprietor’s title
+soleProprietorName.firstName.label = First name
+soleProprietorName.heading = What is the sole proprietor’s name?
+soleProprietorName.lastName.label = Last name
+soleProprietorName.middleName.label = Middle names (optional)
+soleProprietorName.title = What is the sole proprietor’s name?
+soleProprietorName.title.label = Title
+
+systemError.heading = Sorry, there is a problem with the service
+systemError.p1 = Try again later or contact the
+systemError.p1.link = HMRC Online Services Helpdesk (opens in new tab)
+systemError.title = Sorry, there is a problem with the service
+
+timeout.keepAlive = Stay signed in
+timeout.message = For security reasons, you will be signed out of this service in
+timeout.signOut = Sign out
+timeout.title = You’re about to be signed out
+
+unauthorised.heading = You can’t access this service with this account
+unauthorised.title = You can’t access this service with this account
