@@ -21,7 +21,7 @@ import models.UserAnswers
 import pages.BusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
-import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
+import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
 case object BusinessAddressAdditionalInfoRow {
@@ -36,9 +36,11 @@ case object BusinessAddressAdditionalInfoRow {
     SummaryListRowViewModel(
       key   = "checkBusinessAddress.label.addInfo",
       value = addInfoValue,
-      actions = Seq(ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad().url)) ++
+      actions = Seq(ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad().url)
+        .withVisuallyHiddenText("checkBusinessAddress.label.addInfo.hidden")) ++
         Seq(if (addressAdditionalInfoExists) {
-          Some(ActionItemViewModel("site.remove", "#"))
+          Some(ActionItemViewModel("site.remove", "#")
+            .withVisuallyHiddenText("checkBusinessAddress.label.addInfo.hidden"))
         } else { None }).flatten
     )
   }

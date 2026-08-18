@@ -18,10 +18,9 @@ package viewmodels.checkAnswers.businessaddress
 
 import models.UserAnswers
 import pages.AddBusinessAddressAdditionalInformationPage
-
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
+import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
 case object AddAddressAdditionalInfoRow {
@@ -33,10 +32,12 @@ case object AddAddressAdditionalInfoRow {
           SummaryListRowViewModel(
             key     = "checkBusinessAddress.question.addInfo",
             value   = ValueViewModel(if (hasAddInfo) "site.yes" else "site.no"),
-            actions = Seq(ActionItemViewModel("site.change", "#"))
-          ).withVisuallyHiddenText()
+            actions = Seq(
+              ActionItemViewModel("site.change", "#")
+                .withVisuallyHiddenText("checkBusinessAddress.question.addInfo")
+          )
         )
-      )
+      ))
     result
   }
 }
