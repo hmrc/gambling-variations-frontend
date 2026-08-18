@@ -50,8 +50,8 @@ POST       /change-registration-details/business-name/limited-liability-partners
 GET        /change-registration-details/remove-trading-name                                    controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/remove-trading-name                                    controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-trading-name                                  controllers.BusinessTradingNameController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-trading-name                                  controllers.BusinessTradingNameController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/change-trading-name                      controllers.BusinessTradingNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/change-trading-name                      controllers.BusinessTradingNameController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/business-contact-details/remove-fax-number             controllers.RemoveFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-contact-details/remove-fax-number             controllers.RemoveFaxNumberController.onSubmit(mode: Mode = NormalMode)
@@ -193,8 +193,7 @@ POST        /change-registration-details/partner-details/additional-address-info
 
 GET        /change-registration-details/business-address/additional-information                       controllers.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/additional-information                       controllers.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/business-address/change-additional-information                       controllers.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/business-address/change-additional-information                       controllers.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = CheckMode)
+
 
 GET        /change-registration-details/partner-details/remove-additional-address-information                   controllers.partner.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-additional-address-information                   controllers.partner.RemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(mode: Mode = NormalMode)
@@ -205,6 +204,14 @@ POST       /change-registration-details/partner-details/email-address-yes-no    
 GET       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
+
+GET        /change-registration-details/business-address/uk-postcode-yes-no                   controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/uk-postcode-yes-no                      controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/change-uk-postcode-yes-no            controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/business-address/change-uk-postcode-yes-no                controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/remove-trading-name                        controllers.partner.RemovePartnerTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-trading-name                       controllers.partner.RemovePartnerTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
