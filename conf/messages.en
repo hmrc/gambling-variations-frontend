@@ -676,6 +676,7 @@ partnerEmailAddress.error.length = The email address must be 70 characters or le
 partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 partnerEmailAddress.change.hidden = What is the partner’s email address?
 
+partnerContactDetails.title = What contact numbers should we use for the partner?
 partnerContactDetails.heading = What contact numbers should we use for the partner?
 partnerContactDetails.paragraph = You must provide at least one contact number.
 partnerContactDetails.phoneNumber = Phone number
@@ -690,7 +691,7 @@ partnerContactDetails.error.mobileNumber.invalid = The mobile number must only i
 partnerContactDetails.error.phoneNumber.required = Enter valid phone number
 partnerContactDetails.error.mobileNumber.required = Enter valid mobile number
 
-partnerContactDetails.error.count = At least one phone or mobile number is required
+partnerContactDetails.error.phoneNumber.missing = Enter the phone number for the partner
 
 businessUKAddrScreener.title = Does your business address have a UK postcode?
 businessUKAddrScreener.heading = Does your business address have a UK postcode?

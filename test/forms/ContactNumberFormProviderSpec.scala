@@ -17,15 +17,11 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import models.ContactNumber
 import org.scalacheck.Gen
-import play.api.data.{Form, FormError}
 
 class ContactNumberFormProviderSpec extends StringFieldBehaviours {
 
   val form = new ContactNumberFormProvider()("businessContactNumber")
-  val formWithAtLeastOneNumberConstraint: Form[ContactNumber] =
-    new ContactNumberFormProvider().getFormWithAtLeastOneNumberConstraint("partnerContactDetails")
 
   ".phoneNumber" - {
 
@@ -243,38 +239,5 @@ class ContactNumberFormProviderSpec extends StringFieldBehaviours {
 
       result.errors.map(_.message) must contain(invalidKey)
     }
-  }
-
-  ".phoneNumber and .mobileNumber" - {
-
-    "enforce at least one number provided" in {
-      val resultWithMobileNumberProvided = formWithAtLeastOneNumberConstraint.bind(
-        Map(
-          "phoneNumber"  -> "",
-          "mobileNumber" -> "01632960001"
-        )
-      )
-
-      val resultWithPhoneNumberProvided = formWithAtLeastOneNumberConstraint.bind(
-        Map(
-          "phoneNumber"  -> "01632960001",
-          "mobileNumber" -> ""
-        )
-      )
-
-      val resultWithNoNumberProvided = formWithAtLeastOneNumberConstraint.bind(
-        Map(
-          "phoneNumber" -> "",
-          "mobileNumber" -> ""
-        )
-      )
-
-      resultWithMobileNumberProvided.errors mustBe empty
-
-      resultWithPhoneNumberProvided.errors mustBe empty
-
-      resultWithNoNumberProvided.errors mustEqual Seq(FormError("", "partnerContactDetails.error.count"))
-    }
-
   }
 }

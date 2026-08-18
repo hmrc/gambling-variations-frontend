@@ -37,7 +37,7 @@ class PartnerContactDetailsController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction, // DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: ContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerContactDetailsView
@@ -49,7 +49,7 @@ class PartnerContactDetailsController @Inject() (
   // Upcoming ticket will identify partner by the `BusinessPartnerNumber`
   private val PartnerIndex: Int = 0
 
-  val form: Form[ContactNumber] = formProvider.getFormWithAtLeastOneNumberConstraint("partnerContactDetails")
+  val form: Form[ContactNumber] = formProvider("partnerContactDetails")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -63,15 +63,30 @@ class PartnerContactDetailsController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(PartnerIndex), value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(PartnerIndex), mode, updatedAnswers))
-      )
+    val boundForm = form.bindFromRequest()
+
+    val validatedForm =
+      if (
+        boundForm("phoneNumber").value.forall(_.trim.isEmpty) &&
+        boundForm("mobileNumber").value.forall(_.trim.isEmpty)
+      ) {
+        boundForm.withError(
+          "phoneNumber",
+          "partnerContactDetails.error.phoneNumber.missing"
+        )
+      } else {
+        boundForm
+      }
+
+    validatedForm.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(view(formWithErrors, mode)))
+      },
+      value =>
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(PartnerIndex), value))
+          _              <- sessionRepository.set(updatedAnswers)
+        } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(PartnerIndex), mode, updatedAnswers))
+    )
   }
 }
