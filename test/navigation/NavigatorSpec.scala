@@ -20,7 +20,7 @@ import controllers.routes
 import models.*
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
-import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsAdditionalAddressInfoYesNoPage, PartnerEmailAddressPage, RemoveAdditionalInfoForPartnerAddressYesNoPage}
+import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsAdditionalAddressInfoYesNoPage, PartnerEmailAddressPage, RemoveAdditionalInfoForPartnerAddressYesNoPage, RemovePartnerTradingNameYesNoPage}
 
 class NavigatorSpec extends SpecBase {
 
@@ -865,6 +865,33 @@ class NavigatorSpec extends SpecBase {
       "should route PartnerEmailAddressPage to PartnerEmailAddressPage" in { // change title once updated
         navigator.nextPage(PartnerEmailAddressPage, NormalMode, emptyAnswers) mustBe
           controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
+      }
+
+      "should route RemovePartnerTradingNameYesNoPage to RemovePartnerTradingNameYesNoController when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(RemovePartnerTradingNameYesNoPage(0), false)
+            .success
+            .value
+
+        navigator.nextPage(RemovePartnerTradingNameYesNoPage(0), NormalMode, answers) mustBe
+          controllers.partner.routes.RemovePartnerTradingNameYesNoController.onPageLoad()
+      }
+
+      "should route RemovePartnerTradingNameYesNoPage to CheckYourAnswers when answer is true" in { // update title and navigation
+        val answers =
+          emptyAnswers
+            .set(RemovePartnerTradingNameYesNoPage(0), true)
+            .success
+            .value
+
+        navigator.nextPage(RemovePartnerTradingNameYesNoPage(0), NormalMode, answers) mustBe
+          routes.CheckYourAnswersController.onPageLoad()
+      }
+
+      "should route RemovePartnerTradingNameYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(RemovePartnerTradingNameYesNoPage(0), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
       }
 
     }

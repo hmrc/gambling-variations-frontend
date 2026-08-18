@@ -120,6 +120,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
     case BusinessChangeAddrScreenerPage =>
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
+    case RemovePartnerTradingNameYesNoPage(index) =>
+      userAnswers => navigateRemovePartnerTradingNameYesNoPage(index)(userAnswers)
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case BusinessUKAddrScreenerPage =>
@@ -184,13 +186,11 @@ class Navigator @Inject() () {
       case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
-
   private def navigateAddBusinessAddressScreenerPage()(answers: UserAnswers): Call =
     answers.get(AddBusinessAddressAdditionalInformationPage) match {
       case Some(true) => routes.BusinessAddressAdditionalInfoController.onPageLoad()
-      case _ => routes.PageNotFoundController.onPageLoad()
+      case _          => routes.PageNotFoundController.onPageLoad()
     }
-
 
   private def navigateAddAssociatedRegistrationNumberPage()(answers: UserAnswers): Call =
     answers
@@ -408,6 +408,16 @@ class Navigator @Inject() () {
       .map {
         case false => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
         case true  => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
+  private def navigateRemovePartnerTradingNameYesNoPage(index: Int)(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(RemovePartnerTradingNameYesNoPage(index))
+      .map {
+        case false => controllers.partner.routes.RemovePartnerTradingNameYesNoController.onPageLoad() // need to update it
+        case true  => controllers.routes.CheckYourAnswersController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
