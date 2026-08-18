@@ -886,7 +886,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(RemovePartnerTradingNameYesNoPage(0), NormalMode, answers) mustBe
-          routes.CheckYourAnswersController.onPageLoad()
+          routes.IndexController.onPageLoad()
       }
 
       "should route RemovePartnerTradingNameYesNoPage to SystemError when unanswered" in {

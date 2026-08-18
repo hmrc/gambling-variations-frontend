@@ -417,7 +417,7 @@ class Navigator @Inject() () {
       .get(RemovePartnerTradingNameYesNoPage(index))
       .map {
         case false => controllers.partner.routes.RemovePartnerTradingNameYesNoController.onPageLoad() // need to update it
-        case true  => controllers.routes.CheckYourAnswersController.onPageLoad()
+        case true  => controllers.routes.IndexController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
