@@ -23,7 +23,8 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.{ChangePartnerFaxNumberPage, InterimGetPartnerFaxNumberPage}
+import pages.partner.ChangePartnerFaxNumberPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -156,7 +157,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
             .set(ChangePartnerFaxNumberPage(index), testFaxNumber)
             .success
             .value
-            .set(InterimGetPartnerFaxNumberPage(index), testFaxNumber)
+            .set(PartnerDetailsCorrespondenceFaxNumberPage(index), testFaxNumber)
             .success
             .value
 

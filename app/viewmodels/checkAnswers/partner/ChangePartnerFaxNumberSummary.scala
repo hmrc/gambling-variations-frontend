@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partner.InterimGetPartnerFaxNumberPage
+import pages.partner.ChangePartnerFaxNumberPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -27,7 +27,7 @@ import viewmodels.implicits.*
 object ChangePartnerFaxNumberSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(InterimGetPartnerFaxNumberPage(0)).map { answer =>
+    answers.get(ChangePartnerFaxNumberPage(0)).map { answer =>
 
       SummaryListRowViewModel(
         key   = "changePartnerFaxNumber.checkYourAnswersLabel",

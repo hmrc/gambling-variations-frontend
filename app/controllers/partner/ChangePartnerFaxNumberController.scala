@@ -20,7 +20,8 @@ import controllers.actions.*
 import forms.partner.ChangePartnerFaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.{ChangePartnerFaxNumberPage, InterimGetPartnerFaxNumberPage}
+import pages.partner.ChangePartnerFaxNumberPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -52,7 +53,7 @@ class ChangePartnerFaxNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(InterimGetPartnerFaxNumberPage(index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(index)) match {
       case None            => form
       case Some(faxNumber) => form.fill(faxNumber)
     }
@@ -69,7 +70,7 @@ class ChangePartnerFaxNumberController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangePartnerFaxNumberPage(index), value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(InterimGetPartnerFaxNumberPage(index), value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsCorrespondenceFaxNumberPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ChangePartnerFaxNumberPage(index), mode, updatedAnswers))
       )
