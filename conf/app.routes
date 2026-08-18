@@ -213,6 +213,9 @@ POST       /change-registration-details/business-address/additional-information-
 GET        /change-registration-details/partner-details/remove-trading-name                        controllers.partner.RemovePartnerTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-trading-name                       controllers.partner.RemovePartnerTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/partner-details/remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/partner-details/remove-email-address                        controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-email-address                        controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
 
