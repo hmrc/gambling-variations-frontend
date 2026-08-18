@@ -75,7 +75,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   )
 
   val userAnswersWithNoFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(None))
-  val userAnswersWithFax: UserAnswers   = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+  val userAnswersWithFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
   "ChangePartnerFaxNumber Controller" - {
 
