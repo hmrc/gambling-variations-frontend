@@ -16,7 +16,7 @@ object Msgman {
 
   // Resolves the platform-specific release asset for the pinned msgmanVersion, and the path
   // to the msgman binary inside it once downloaded and extracted.
-  private def releaseAsset: Option[(String, String)] =
+  private def releaseAsset(): Option[(String, String)] =
     (sys.props("os.name").toLowerCase, sys.props("os.arch").toLowerCase) match {
       case (os, arch) if os.contains("linux") && (arch.contains("amd64") || arch.contains("x86_64")) =>
         Some((s"msgman_${msgmanVersion}_amd64.deb", "usr/bin/msgman"))
@@ -31,23 +31,23 @@ object Msgman {
   // the installed binary. Returns None (having warned) if the platform has no published release
   // asset, or the download/extraction fails.
   private def download(installDir: File, log: Logger): Option[File] =
-    releaseAsset match {
+    releaseAsset() match {
       case None =>
         log.warn(
           s"No msgman release available for this platform (${sys.props("os.name")}/${sys.props("os.arch")}). " +
-            s"Install it manually from ${msgmanRepository}/releases"
+            s"Install it manually from $msgmanRepository/releases"
         )
         None
 
       case Some((assetName, entryPath)) =>
         log.info(s"msgman not found, downloading $assetName ...")
-        val downloadUrl = s"${msgmanRepository}/releases/download/v$msgmanVersion/$assetName"
+        val downloadUrl = s"$msgmanRepository/releases/download/v$msgmanVersion/$assetName"
 
         IO.withTemporaryDirectory { tempDir =>
           val downloadedFile = tempDir / assetName
 
           if (Process(Seq("curl", "-sL", "-o", downloadedFile.getAbsolutePath, downloadUrl)).! != 0) {
-            log.warn(s"Failed to download msgman from $downloadUrl. Install it manually from ${msgmanRepository}/releases")
+            log.warn(s"Failed to download msgman from $downloadUrl. Install it manually from $msgmanRepository/releases")
             None
           } else {
             val extractDir = tempDir / "extract"
@@ -59,7 +59,7 @@ object Msgman {
                 Process(Seq("tar", "-xzf", downloadedFile.getAbsolutePath, "-C", extractDir.getAbsolutePath)).!
 
             if (extractExit != 0) {
-              log.warn(s"Failed to extract msgman package. Install it manually from ${msgmanRepository}/releases")
+              log.warn(s"Failed to extract msgman package. Install it manually from $msgmanRepository/releases")
               None
             } else {
               IO.createDirectory(installDir)
