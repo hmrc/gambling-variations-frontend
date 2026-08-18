@@ -682,13 +682,13 @@ partnerContactDetails.phoneNumber = Phone number
 partnerContactDetails.mobilePhoneNumber = Mobile number
 
 partnerContactDetails.error.phoneNumber.length = The phone number must be 20 characters or less
-partnerContactDetails.error.mobilePhoneNumber.length = The mobile number must be 20 characters or less
+partnerContactDetails.error.mobileNumber.length = The mobile number must be 20 characters or less
 
 partnerContactDetails.error.phoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
-partnerContactDetails.error.mobilePhoneNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
+partnerContactDetails.error.mobileNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
 
 partnerContactDetails.error.phoneNumber.required = Enter valid phone number
-partnerContactDetails.error.mobilePhoneNumber.required = Enter valid mobile number
+partnerContactDetails.error.mobileNumber.required = Enter valid mobile number
 
 partnerContactDetails.error.count = At least one phone or mobile number is required
 

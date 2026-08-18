@@ -265,13 +265,13 @@ class ContactNumberFormProviderSpec extends StringFieldBehaviours {
       val resultWithNoNumberProvided = formWithAtLeastOneNumberConstraint.bind(
         Map(
           "phoneNumber" -> "",
-          "phoneNumber" -> ""
+          "mobileNumber" -> ""
         )
       )
 
       resultWithMobileNumberProvided.errors mustBe empty
 
-      resultWithPhoneNumberProvided.errors mustEqual Seq(FormError("", "partnerContactDetails.error.count"))
+      resultWithPhoneNumberProvided.errors mustBe empty
 
       resultWithNoNumberProvided.errors mustEqual Seq(FormError("", "partnerContactDetails.error.count"))
     }
