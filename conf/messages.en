@@ -700,5 +700,5 @@ partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to r
 partnerRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner’s fax number?
 partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s fax number?
 partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s fax number?
-partnerRemoveFaxNumberYesNo.error.required = Select yes to remove a fax number for the partner
+partnerRemoveFaxNumberYesNo.error.required = Select yes if you want to remove this partner's fax number
 partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
