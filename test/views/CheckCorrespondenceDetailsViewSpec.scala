@@ -118,9 +118,49 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
         messages("site.continue")
     }
 
-    "must render remove correspondence details link" in new Setup {
+    "must not render remove correspondence details link when isAddingNewCorrespondenceDetails is true" in new Setup {
 
-      val html = view(viewModel)
+      val html = view(viewModel.copy(isAddingNewCorrespondenceDetails = Some(true)))
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.text must not include (
+        messages("checkCorrespondenceDetails.message.remove")
+      )
+
+      doc
+        .select("a[href]")
+        .eachAttr("href")
+        .asScala must not contain (
+        routes.RemoveCorrespondenceDetailsYesNoController
+          .onPageLoad()
+          .url
+      )
+    }
+
+    "must render remove correspondence details link when isAddingNewCorrespondenceDetails is false" in new Setup {
+
+      val html = view(viewModel.copy(isAddingNewCorrespondenceDetails = Some(false)))
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.text must include(
+        messages("checkCorrespondenceDetails.message.remove")
+      )
+
+      doc
+        .select("a[href]")
+        .eachAttr("href")
+        .asScala must contain(
+        routes.RemoveCorrespondenceDetailsYesNoController
+          .onPageLoad()
+          .url
+      )
+    }
+
+    "must render remove correspondence details link when isAddingNewCorrespondenceDetails is None" in new Setup {
+
+      val html = view(viewModel.copy(isAddingNewCorrespondenceDetails = None))
 
       val doc = Jsoup.parse(html.body)
 
