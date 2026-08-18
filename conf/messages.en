@@ -625,7 +625,6 @@ correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Continue
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-
 partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
@@ -690,6 +689,12 @@ businessAddrInfoScreener.hint = For example, building name or floor number
 businessAddrInfoScreener.error.required = Select yes to include additional information for your business address
 businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
 businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
+
+removePartnerTradingNameYesNo.title = Are you sure you want to remove this partner’s trading name?
+removePartnerTradingNameYesNo.heading = Are you sure you want to remove {0} as this partner’s trading name?
+removePartnerTradingNameYesNo.checkYourAnswersLabel =Are you sure you want to remove {0} as this partner's trading name?
+removePartnerTradingNameYesNo.error.required = Select yes if you want to remove this partner’s trading name
+removePartnerTradingNameYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s trading name?
 
 partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner''s email address?
 partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner''s email address?
