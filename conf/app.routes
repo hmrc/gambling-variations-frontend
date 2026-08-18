@@ -202,7 +202,6 @@ POST       /change-registration-details/partner-details/email-address-yes-no    
 GET       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       	/change-registration-details/partner-details/email-address                                          controllers.partner.PartnerEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
-
 GET        /change-registration-details/business-address/uk-postcode-yes-no                   controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/uk-postcode-yes-no                      controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/business-address/change-uk-postcode-yes-no            controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = CheckMode)
@@ -216,3 +215,9 @@ POST       /change-registration-details/partner-details/remove-trading-name     
 
 GET        /change-registration-details/partner-details/remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/remove-email-address                        controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-email-address                        controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/remove-fax-number                           controllers.partner.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-fax-number                           controllers.partner.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)

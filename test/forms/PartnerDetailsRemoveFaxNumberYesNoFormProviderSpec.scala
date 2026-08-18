@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms.partner
+package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
 import play.api.data.FormError
 
-class PartnerAddFaxNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {
+class PartnerDetailsRemoveFaxNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "partnerAddFaxNumberYesNo.error.required"
+  val requiredKey = "partnerRemoveFaxNumberYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new PartnerAddFaxNumberYesNoFormProvider()()
+  val form = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()()
 
   ".value" - {
 
