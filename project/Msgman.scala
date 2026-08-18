@@ -9,20 +9,21 @@ import scala.sys.process.Process
 // downloading it from GitHub releases into a local cache if it isn't already installed.
 object Msgman {
 
-  private val releaseVersion = "1.0.0"
+  private val msgmanRepository = "https://github.com/dboresjo/msgman"
+  private val msgmanVersion = "1.0.0"
 
   val verify = taskKey[Unit]("Verify conf/messages files are in canonical order via msgman")
 
-  // Resolves the platform-specific release asset for the pinned releaseVersion, and the path
+  // Resolves the platform-specific release asset for the pinned msgmanVersion, and the path
   // to the msgman binary inside it once downloaded and extracted.
   private def releaseAsset: Option[(String, String)] =
     (sys.props("os.name").toLowerCase, sys.props("os.arch").toLowerCase) match {
       case (os, arch) if os.contains("linux") && (arch.contains("amd64") || arch.contains("x86_64")) =>
-        Some((s"msgman_${releaseVersion}_amd64.deb", "usr/bin/msgman"))
+        Some((s"msgman_${msgmanVersion}_amd64.deb", "usr/bin/msgman"))
       case (os, arch) if os.contains("linux") && (arch.contains("aarch64") || arch.contains("arm64")) =>
-        Some((s"msgman_${releaseVersion}_arm64.deb", "usr/bin/msgman"))
+        Some((s"msgman_${msgmanVersion}_arm64.deb", "usr/bin/msgman"))
       case (os, arch) if os.contains("mac") && (arch.contains("aarch64") || arch.contains("arm64")) =>
-        Some((s"msgman_${releaseVersion}_darwin_arm64_macos15.tar.gz", "msgman"))
+        Some((s"msgman_${msgmanVersion}_darwin_arm64_macos15.tar.gz", "msgman"))
       case _ => None
     }
 
@@ -34,19 +35,19 @@ object Msgman {
       case None =>
         log.warn(
           s"No msgman release available for this platform (${sys.props("os.name")}/${sys.props("os.arch")}). " +
-            "Install it manually from https://github.com/dboresjo/msgman/releases"
+            s"Install it manually from ${msgmanRepository}/releases"
         )
         None
 
       case Some((assetName, entryPath)) =>
         log.info(s"msgman not found, downloading $assetName ...")
-        val downloadUrl = s"https://github.com/dboresjo/msgman/releases/download/v$releaseVersion/$assetName"
+        val downloadUrl = s"${msgmanRepository}/releases/download/v$msgmanVersion/$assetName"
 
         IO.withTemporaryDirectory { tempDir =>
           val downloadedFile = tempDir / assetName
 
           if (Process(Seq("curl", "-sL", "-o", downloadedFile.getAbsolutePath, downloadUrl)).! != 0) {
-            log.warn(s"Failed to download msgman from $downloadUrl. Install it manually from https://github.com/dboresjo/msgman/releases")
+            log.warn(s"Failed to download msgman from $downloadUrl. Install it manually from ${msgmanRepository}/releases")
             None
           } else {
             val extractDir = tempDir / "extract"
@@ -58,7 +59,7 @@ object Msgman {
                 Process(Seq("tar", "-xzf", downloadedFile.getAbsolutePath, "-C", extractDir.getAbsolutePath)).!
 
             if (extractExit != 0) {
-              log.warn("Failed to extract msgman package. Install it manually from https://github.com/dboresjo/msgman/releases")
+              log.warn(s"Failed to extract msgman package. Install it manually from ${msgmanRepository}/releases")
               None
             } else {
               IO.createDirectory(installDir)
@@ -89,7 +90,7 @@ object Msgman {
         }
 
       exitCode.foreach { code =>
-        if (code != 0) throw new MessageOnlyException("msgman verify failed: conf/messages files are not in canonical order")
+        if (code != 0) throw new MessageOnlyException("msgman verify failed: conf/messages files are malformed")
       }
     },
     Compile / compile := (Compile / compile).dependsOn(verify).value
