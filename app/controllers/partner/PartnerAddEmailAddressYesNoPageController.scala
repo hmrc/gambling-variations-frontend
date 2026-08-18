@@ -47,9 +47,12 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPagePage) match {
+    val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPagePage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -65,9 +68,9 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddEmailAddressYesNoPagePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddEmailAddressYesNoPagePage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerAddEmailAddressYesNoPagePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerAddEmailAddressYesNoPagePage(index), mode, updatedAnswers))
       )
   }
 }

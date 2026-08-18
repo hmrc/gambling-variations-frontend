@@ -37,6 +37,9 @@ class PartnerAddFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar 
 
   def onwardRoute = Call("GET", "/foo")
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   val formProvider = new PartnerAddFaxNumberYesNoFormProvider()
   val form = formProvider()
 
@@ -62,7 +65,7 @@ class PartnerAddFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar 
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerAddFaxNumberYesNoPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerAddFaxNumberYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

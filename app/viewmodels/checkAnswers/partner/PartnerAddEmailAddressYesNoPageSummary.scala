@@ -25,8 +25,11 @@ import viewmodels.implicits.*
 
 object PartnerAddEmailAddressYesNoPageSummary {
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerAddEmailAddressYesNoPagePage).map { answer =>
+    answers.get(PartnerAddEmailAddressYesNoPagePage(index)).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 

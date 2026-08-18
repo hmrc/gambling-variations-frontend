@@ -40,7 +40,8 @@ class PartnerAddEmailAddressYesNoPageControllerSpec extends SpecBase with Mockit
 
   val formProvider: PartnerAddEmailAddressYesNoPageFormProvider = new PartnerAddEmailAddressYesNoPageFormProvider()
   val form: Form[Boolean] = formProvider()
-
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
   private val data = Json.obj("mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum))
 
   private val baseUserAnswers = Some(UserAnswers(userAnswersId, data))
@@ -67,7 +68,7 @@ class PartnerAddEmailAddressYesNoPageControllerSpec extends SpecBase with Mockit
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerAddEmailAddressYesNoPagePage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerAddEmailAddressYesNoPagePage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

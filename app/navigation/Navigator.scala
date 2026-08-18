@@ -110,8 +110,8 @@ class Navigator @Inject() () {
       userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage =>
       userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
-    case PartnerAddFaxNumberYesNoPage =>
-      userAnswers => navigatePartnerAddFaxNumberYesNoPage(userAnswers)
+    case PartnerAddFaxNumberYesNoPage(index) =>
+      userAnswers => navigatePartnerAddFaxNumberYesNoPage(index)(userAnswers)
     case RemoveAdditionalInfoForPartnerAddressYesNoPage =>
       userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers)
     case PartnerDetailsAdditionalAddressInfoPage =>
@@ -383,9 +383,9 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigatePartnerAddFaxNumberYesNoPage(answers: UserAnswers): Call =
+  private def navigatePartnerAddFaxNumberYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers
-      .get(PartnerAddFaxNumberYesNoPage)
+      .get(PartnerAddFaxNumberYesNoPage(index))
       .map {
         case false => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
         case true  => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
