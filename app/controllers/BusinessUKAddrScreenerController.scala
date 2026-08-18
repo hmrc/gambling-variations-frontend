@@ -30,7 +30,7 @@ import views.html.BusinessUKAddrScreenerView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessUKAddrScreenerController @Inject()(
+class BusinessUKAddrScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
