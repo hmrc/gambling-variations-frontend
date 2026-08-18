@@ -74,7 +74,8 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     )
   )
 
-  val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+  val userAnswersWithNoFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(None))
+  val userAnswersWithFax: UserAnswers   = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
   "ChangePartnerFaxNumber Controller" - {
 
@@ -82,7 +83,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       "must return OK and the correct view for a GET when no previous data exists" in {
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithNoFax)).build()
 
         running(application) {
           val request = FakeRequest(GET, changePartnerFaxNumberRoute)
@@ -98,7 +99,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithFax)).build()
 
         running(application) {
           val request = FakeRequest(GET, changePartnerFaxNumberRoute)
@@ -122,7 +123,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
     }
@@ -137,7 +138,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
         when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
         val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          applicationBuilder(userAnswers = Some(userAnswersWithNoFax))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -151,7 +152,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          val expectedAnswers = emptyUserAnswers
+          val expectedAnswers = userAnswersWithNoFax
             .set(ChangePartnerFaxNumberPage(index), testFaxNumber)
             .success
             .value
@@ -169,7 +170,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
         val mockSessionRepository = mock[SessionRepository]
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithNoFax))
           .overrides(
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
@@ -204,7 +205,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
     }
