@@ -47,14 +47,14 @@ class ChangePartnerFaxNumberController @Inject() (
 
   val form: Form[String] = formProvider()
 
-  //todo: this will be update shortly
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val preparedForm = request.userAnswers.get(InterimGetPartnerFaxNumberPage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+      case None            => form
+      case Some(faxNumber) => form.fill(faxNumber)
     }
 
     Ok(view(preparedForm, mode))

@@ -45,9 +45,9 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val changePartnerFaxNumberRoute: String =
     controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url
-    
+
   private val mgdRegNumber = "XGM00000001761"
-  
+
   private def cleanedData(faxNumber: Option[String]) = Json.obj(
     "partners" -> Json.arr(
       Json.obj(
