@@ -693,6 +693,12 @@ businessAddrInfoScreener.error.required = Select yes to include additional infor
 businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
 businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
 
+removePartnerTradingNameYesNo.title = Are you sure you want to remove this partner’s trading name?
+removePartnerTradingNameYesNo.heading = Are you sure you want to remove {0} as this partner’s trading name?
+removePartnerTradingNameYesNo.checkYourAnswersLabel =Are you sure you want to remove {0} as this partner's trading name?
+removePartnerTradingNameYesNo.error.required = Select yes if you want to remove this partner’s trading name
+removePartnerTradingNameYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s trading name?
+
 removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for your business address?
 removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for your business address?
 removeBusinessAddressAddInfo.paragraph = The additional information is: {0}
