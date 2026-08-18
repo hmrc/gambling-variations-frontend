@@ -18,6 +18,7 @@ object Msgman {
   private val manualInstallHint = s"Install it manually from $repository/releases"
 
   val msgmanVerify = taskKey[Unit]("Verify conf/messages files are in canonical order via msgman")
+  val msgmanFormat = taskKey[Unit]("Rewrite conf/messages files into canonical order, adding missing translations, via msgman")
 
   // A published release asset, and the path of the msgman binary inside it.
   private case class ReleaseAsset(name: String, binaryPath: String)
@@ -98,22 +99,34 @@ object Msgman {
       case None         => download(log)
     }
 
+  // Runs msgman with the given arguments against the messages files under baseDir. The step is
+  // skipped with a warning, rather than failing, when no msgman could be found or installed, so that
+  // an unsupported platform or an unreachable GitHub does not stop anyone from building.
+  private def runMsgman(arguments: Seq[String], baseDir: File, log: Logger, failureMessage: String): Unit =
+    resolve(log) match {
+      case Left(reason) =>
+        log.warn(s"Skipping msgman ${arguments.mkString(" ")}. $reason")
+
+      case Right(binary) =>
+        if (Process(binary.getAbsolutePath +: arguments, baseDir).! != 0)
+          throw new MessageOnlyException(failureMessage)
+    }
+
   val settings: Seq[Def.Setting[?]] = Seq(
-    msgmanVerify := {
-      val log = streams.value.log
-      val base = baseDirectory.value
-
-      resolve(log) match {
-        // Verification is skipped rather than failing the build, so that an unsupported platform or
-        // an unreachable GitHub does not stop anyone from compiling.
-        case Left(reason) =>
-          log.warn(s"Skipping messages file verification. $reason")
-
-        case Right(binary) =>
-          if (Process(Seq(binary.getAbsolutePath, "verify"), base).! != 0)
-            throw new MessageOnlyException("msgman verify failed: conf/messages files are malformed")
-      }
-    },
+    msgmanVerify := runMsgman(
+      Seq("verify"),
+      baseDirectory.value,
+      streams.value.log,
+      "msgman verify failed: conf/messages files are malformed"
+    ),
+    // --fix also adds any missing translation as a placeholder, so that a formatted tree is one that
+    // msgmanVerify accepts, and compiling is not blocked by a translation that nobody has written yet.
+    msgmanFormat := runMsgman(
+      Seq("format", "--fix"),
+      baseDirectory.value,
+      streams.value.log,
+      "msgman format failed: conf/messages files could not be rewritten"
+    ),
     Compile / compile := (Compile / compile).dependsOn(msgmanVerify).value
   )
 }

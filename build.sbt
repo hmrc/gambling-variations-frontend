@@ -5,6 +5,8 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "gambling-variations-frontend"
 
+lazy val format = taskKey[Unit]("Rewrite Scala sources and conf/messages files into their canonical format")
+
 ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := "3.3.5"
 
@@ -14,6 +16,7 @@ lazy val microservice = (project in file("."))
   .settings(inConfig(Test)(testSettings): _*)
   .settings(ThisBuild / useSuperShell := false)
   .settings(Msgman.settings: _*)
+  .settings(formatCheckSettings: _*)
   .settings(
     name := appName,
     RoutesKeys.routesImport ++= Seq(
@@ -38,8 +41,16 @@ lazy val microservice = (project in file("."))
     ScoverageKeys.coverageMinimumStmtTotal := 78,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
-    Compile / scalafmtOnCompile := true,
-    Test / scalafmtOnCompile := true,
+    // build.sbt and project/*.scala belong to the build as a whole, so they are only checked here.
+    Compile / compile := (Compile / compile).dependsOn(Compile / scalafmtSbtCheck).value,
+    format := Def
+      .sequential(
+        scalafmtAll,
+        Compile / scalafmtSbt,
+        LocalProject("it") / scalafmtAll,
+        Msgman.msgmanFormat
+      )
+      .value,
     scalacOptions ++= Seq(
       "-feature",
       "-deprecation",
@@ -53,6 +64,13 @@ lazy val microservice = (project in file("."))
     Assets / pipelineStages := Seq(concat)
   )
 
+// Compiling fails when sources are not formatted, instead of rewriting them behind your back.
+// Run `sbt format` to fix them, along with the conf/messages files.
+lazy val formatCheckSettings: Seq[Def.Setting[?]] = Seq(
+  Compile / compile := (Compile / compile).dependsOn(Compile / scalafmtCheck).value,
+  Test / compile := (Test / compile).dependsOn(Test / scalafmtCheck).value
+)
+
 lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   fork := true,
   unmanagedSourceDirectories += baseDirectory.value / "test-utils",
@@ -63,3 +81,4 @@ lazy val it =
   (project in file("it"))
     .enablePlugins(PlayScala)
     .dependsOn(microservice % "test->test")
+    .settings(formatCheckSettings: _*)
