@@ -132,7 +132,7 @@ class Navigator @Inject() () {
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
-    routes.CheckYourAnswersController.onPageLoad()
+    routes.ChangeRegistrationDetailsController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {
