@@ -17,42 +17,45 @@
 package viewmodels.checkAnswers.partner
 
 import base.SpecBase
-import controllers.partner.routes.PartnerAddEmailAddressYesNoPageController
-import pages.partner.PartnerAddEmailAddressYesNoPage
+import controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController
+import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
 import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-class PartnerAddEmailAddressYesNoSummarySpec extends SpecBase {
+class PartnerDetailsRemoveEmailAddressYesNoFormProviderSpec extends SpecBase {
 
-  lazy val app: Application = applicationBuilder().build()
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
   implicit val messages: Messages = this.messages(app)
 
-  "PartnerAddEmailAddressYesNoPageSummary" - {
+  lazy val app: Application = applicationBuilder().build()
+
+  "PartnerDetailsRemoveEmailAddressYesNoSummary" - {
 
     "must return None when the question has not been answered" in {
-      PartnerAddEmailAddressYesNoPageSummary.row(emptyUserAnswers) mustBe None
+      PartnerDetailsRemoveEmailAddressYesNoSummary.row(emptyUserAnswers) mustBe None
     }
 
     "must return the correct row when the answer is Yes" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerAddEmailAddressYesNoPage, true)
+          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), true)
           .success
           .value
 
-      PartnerAddEmailAddressYesNoPageSummary.row(answers).value mustBe
+      PartnerDetailsRemoveEmailAddressYesNoSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key   = "partnerAddEmailAddressYesNoPage.checkYourAnswersLabel",
+          key   = "partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel",
           value = ValueViewModel("site.yes"),
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              PartnerAddEmailAddressYesNoPageController.onPageLoad().url
+              PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
-              messages("partnerAddEmailAddressYesNoPage.change.hidden")
+              messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden")
             )
           )
         )
@@ -61,20 +64,20 @@ class PartnerAddEmailAddressYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is No" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerAddEmailAddressYesNoPage, false)
+          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), false)
           .success
           .value
 
-      PartnerAddEmailAddressYesNoPageSummary.row(answers).value mustBe
+      PartnerDetailsRemoveEmailAddressYesNoSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key   = "partnerAddEmailAddressYesNoPage.checkYourAnswersLabel",
+          key   = "partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel",
           value = ValueViewModel("site.no"),
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              PartnerAddEmailAddressYesNoPageController.onPageLoad().url
+              PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
-              messages("partnerAddEmailAddressYesNoPage.change.hidden")
+              messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden")
             )
           )
         )
