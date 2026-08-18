@@ -23,7 +23,7 @@ import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}
-import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
+import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
 case class BusinessAddressRow(ua: UserAnswers)(implicit messages: Messages) {
@@ -73,6 +73,7 @@ case class BusinessAddressRow(ua: UserAnswers)(implicit messages: Messages) {
       value = addressRowValue,
       actions = Seq(
         ActionItemViewModel("site.change", routes.BusinessChangeAddrScreenerController.onPageLoad().url)
+          .withVisuallyHiddenText("checkBusinessAddress.label.address.hidden")
       )
     )
   }

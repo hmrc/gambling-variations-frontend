@@ -21,7 +21,7 @@ import models.UserAnswers
 import pages.BusinessChangeAddrScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
+import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
 case object HowToChangeBusinessAddressRow {
@@ -39,7 +39,8 @@ case object HowToChangeBusinessAddressRow {
                 case EditCurrentAddress   => "checkBusinessAddress.changeOption.edit"
               }
             ),
-            actions = Seq(ActionItemViewModel("site.change", "#"))
+            actions = Seq(ActionItemViewModel("site.change", "#")
+              .withVisuallyHiddenText("checkBusinessAddress.question.howToChange.hidden"))
           )
         )
       case None => None

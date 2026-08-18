@@ -20,7 +20,7 @@ import models.UserAnswers
 import pages.BusinessAddressHasUkPostcodePage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.all.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
+import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
 case object HasUkPostcodeRow {
@@ -32,7 +32,9 @@ case object HasUkPostcodeRow {
           SummaryListRowViewModel(
             key     = "checkBusinessAddress.question.ukPostcode",
             value   = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
-            actions = Seq(ActionItemViewModel("site.change", "#"))
+            actions = Seq(ActionItemViewModel("site.change", "#")
+                .withVisuallyHiddenText("checkBusinessAddress.question.ukPostcode.hidden")
+            )
           )
         )
       )
