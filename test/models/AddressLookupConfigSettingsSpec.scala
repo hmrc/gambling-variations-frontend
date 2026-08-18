@@ -19,7 +19,7 @@ package models
 import models.addresslookup.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.{JsSuccess, Json}
+import play.api.libs.json.{JsSuccess, JsValue, Json}
 
 class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
 
@@ -131,7 +131,8 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
     }
 
     "print the generated JSON for use in the address-lookup-frontend stub" in {
-      val json = Json.toJson(settings)
+      val json: JsValue = Json.toJson(settings)
+      println(json)
       succeed
     }
   }
