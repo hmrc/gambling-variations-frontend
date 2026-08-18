@@ -35,7 +35,6 @@ class BusinessAddressRowSpec extends SpecBase {
       app.injector
         .instanceOf[play.api.i18n.MessagesApi]
         .preferred(request)
-
   }
 
   "BusinessAddressRow" - {
