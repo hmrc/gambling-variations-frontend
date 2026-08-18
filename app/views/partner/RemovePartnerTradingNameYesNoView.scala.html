@@ -26,7 +26,7 @@
 
 @(form: Form[_], mode: Mode, partnerTradingName: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removePartnerTradingNameYesNo.title"))) {
+@layout(pageTitle = title(form, messages("removePartnerTradingNameYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
     @formHelper(action = controllers.partner.routes.RemovePartnerTradingNameYesNoController.onSubmit(), Symbol("autoComplete") -> "off") {
 
