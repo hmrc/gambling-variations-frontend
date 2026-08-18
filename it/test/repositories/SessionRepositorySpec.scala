@@ -33,10 +33,10 @@ import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import java.time.{Clock, Instant, ZoneId}
 import java.time.temporal.ChronoUnit
-import scala.concurrent.{ExecutionContext, Future, ExecutionContextExecutorService}
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService, Future}
 
 class SessionRepositorySpec
-  extends AnyFreeSpec
+    extends AnyFreeSpec
     with Matchers
     with DefaultPlayMongoRepositorySupport[UserAnswers]
     with ScalaFutures
@@ -66,7 +66,7 @@ class SessionRepositorySpec
 
       val expectedResult = userAnswers copy (lastUpdated = instant)
 
-      val setResult     = repository.set(userAnswers).futureValue
+      val setResult = repository.set(userAnswers).futureValue
       val updatedRecord = find(Filters.equal("_id", userAnswers.id)).futureValue.headOption.value
 
       updatedRecord mustEqual expectedResult
@@ -83,7 +83,7 @@ class SessionRepositorySpec
 
         insert(userAnswers).futureValue
 
-        val result         = repository.get(userAnswers.id).futureValue
+        val result = repository.get(userAnswers.id).futureValue
         val expectedResult = userAnswers copy (lastUpdated = instant)
 
         result.value mustEqual expectedResult
