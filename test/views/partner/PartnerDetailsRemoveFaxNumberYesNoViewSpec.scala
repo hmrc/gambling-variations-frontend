@@ -17,19 +17,19 @@
 package views.partner
 
 import base.SpecBase
-import forms.partner.PartnerAddFaxNumberYesNoFormProvider
+import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.partner.PartnerAddFaxNumberYesNoView
+import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
 
-class PartnerAddFaxNumberYesNoViewSpec extends SpecBase {
+class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
-  private val form = new PartnerAddFaxNumberYesNoFormProvider()()
+  private val form = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()()
 
-  "PartnerAddFaxNumberYesNoView" - {
+  "PartnerRemoveFaxNumberYesNoView" - {
 
     "render the page correctly" in {
 
@@ -37,25 +37,18 @@ class PartnerAddFaxNumberYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerAddFaxNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
-        val html = view(
-          form,
-          NormalMode
-        )(FakeRequest(), messages(application))
+        val html = view(form, NormalMode, "here-goes-nothing!")(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("partnerAddFaxNumberYesNo.title")
+          messages(application)(s"partnerRemoveFaxNumberYesNo.title")
         )
 
-        document.select("h1").text() mustEqual
-          messages(application)("partnerAddFaxNumberYesNo.heading")
-
-        document.body().text() must include(
-          messages(application)("changeRegistrationDetails.caption")
-        )
+        document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
+          messages(application)(s"partnerRemoveFaxNumberYesNo.heading", "here-goes-nothing!")
 
         document.getElementById("value").attr("value") mustEqual "true"
 
@@ -72,21 +65,18 @@ class PartnerAddFaxNumberYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerAddFaxNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(
-          boundForm,
-          NormalMode
-        )(FakeRequest(), messages(application))
+        val html = view(boundForm, NormalMode, "here-goes-nothing!")(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("partnerAddFaxNumberYesNo.error.required")
+          messages(application)(s"partnerRemoveFaxNumberYesNo.error.required")
         )
       }
     }

@@ -185,5 +185,6 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
       result.isSuccess     shouldBe true
       result.get.nameLine1 shouldBe Some("Name Line 1")
     }
+
   }
 }
