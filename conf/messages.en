@@ -667,15 +667,12 @@ partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an em
 partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
 partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
 
-
-
 partnerEmailAddress.title = What is the partner’s email address?
 partnerEmailAddress.heading = What is the partner’s email address?
 partnerEmailAddress.error.required = Enter the partner’s email address
 partnerEmailAddress.error.length = The email address must be 70 characters or less
 partnerEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 partnerEmailAddress.change.hidden = What is the partner’s email address?
-
 
 businessUKAddrScreener.title = Does your business address have a UK postcode?
 businessUKAddrScreener.heading = Does your business address have a UK postcode?
@@ -698,6 +695,12 @@ removePartnerTradingNameYesNo.heading = Are you sure you want to remove {0} as t
 removePartnerTradingNameYesNo.checkYourAnswersLabel =Are you sure you want to remove {0} as this partner's trading name?
 removePartnerTradingNameYesNo.error.required = Select yes if you want to remove this partner’s trading name
 removePartnerTradingNameYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s trading name?
+
+partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner’s email address?
+partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner’s email address?
+partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s email address?
+partnerDetailsRemoveEmailAddressYesNo.error.required = Select yes if you want to remove this partner’s email address
+partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s email address?
 
 removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for your business address?
 removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for your business address?
