@@ -17,7 +17,6 @@
 package controllers.partner
 
 import base.SpecBase
-import controllers.actions.{DataRequiredAction, DataRequiredActionImpl}
 import forms.FaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -28,7 +27,6 @@ import pages.partner.ChangePartnerFaxNumberPage
 import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -37,43 +35,12 @@ import views.html.partner.ChangePartnerFaxNumberView
 
 import scala.concurrent.Future
 
-class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
+class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val form: Form[String] = (new FaxNumberFormProvider())("partnerDetailsFaxNumber")
 
-  val index: Int = 0
-  val testFaxNumber: String = "0123456789"
-
   lazy val changePartnerFaxNumberRoute: String =
     controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url
-
-  private val mgdRegNumber = "XGM00000001761"
-
-  private def cleanedData(faxNumber: Option[String]) = Json.obj(
-    "partners" -> Json.arr(
-      Json.obj(
-        "partnerDetailsMgdRegNumber" -> mgdRegNumber,
-        "partnerDetailsBusinessName" -> "Partner1",
-        "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-          "mgdRegNumber" -> mgdRegNumber,
-          "correspondenceAddress" -> Json.obj(
-            "address1" -> "Flat 1",
-            "address2" -> "10 Market Road",
-            "address3" -> "Felling",
-            "address4" -> "Gateshead",
-            "postcode" -> "NE8 1ZZ",
-            "country"  -> "UK"
-          ),
-          "contactNumber" -> Json.obj(
-            "phoneNumber"       -> "0798765",
-            "mobilePhoneNumber" -> "7093434765"
-          ),
-          "faxNumber" -> faxNumber,
-          "emailAddr" -> "email@add.com"
-        )
-      )
-    )
-  )
 
   val userAnswersWithNoFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(None))
   val userAnswersWithFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
@@ -149,7 +116,7 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
         running(application) {
           val request =
             FakeRequest(POST, changePartnerFaxNumberRoute)
-              .withFormUrlEncodedBody(("value", testFaxNumber))
+              .withFormUrlEncodedBody(("faxNumber", testFaxNumber))
 
           val result = route(application, request).value
 
@@ -172,9 +139,6 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
         val mockSessionRepository = mock[SessionRepository]
 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithNoFax))
-          .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
           .build()
 
         running(application) {
