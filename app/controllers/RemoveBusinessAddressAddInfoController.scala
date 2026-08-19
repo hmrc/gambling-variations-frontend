@@ -66,7 +66,6 @@ class RemoveBusinessAddressAddInfoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, addressAddInfo))),
         value =>
           val ua = request.userAnswers
-          val isChanged: Boolean = checkIfChanged(value, ua, RemoveBusinessAddressAddInfoPage, BusinessAddressChangesPage)
           for {
             updatedAnswers <- Future.fromTry(ua.set(RemoveBusinessAddressAddInfoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressSubmittedPage, true))
@@ -75,7 +74,7 @@ class RemoveBusinessAddressAddInfoController @Inject() (
                               } else {
                                 Future.successful(updatedAnswers)
                               }
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangesPage, isChanged))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangesPage, value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RemoveBusinessAddressAddInfoPage, mode, updatedAnswers))
       )
