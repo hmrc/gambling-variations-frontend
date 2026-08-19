@@ -302,7 +302,7 @@ class NavigatorSpec extends SpecBase {
           routes.CorrespondenceUKAddrScreenerController.onPageLoad()
       }
 
-      "should route CorrespondenceUKAddrScreenerPage to CorrespondenceUKAddress when answer is true" in {
+      "should route CorrespondenceUKAddrScreenerPage to Address Lookup when answer is true" in {
         val answers =
           emptyAnswers
             .set(CorrespondenceUKAddrScreenerPage, true)
@@ -310,7 +310,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          routes.AddressLookupController.initialise()
       }
 
       "should route CorrespondenceUKAddrScreenerPage to CorrespondenceNonUKAddress when answer is false" in {

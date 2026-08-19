@@ -158,6 +158,9 @@ POST       /change-registration-details/correspondence-details                  
 GET        /change-registration-details/correspondence-details/enter-uk-address                       controllers.CorrespondenceUKAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/enter-uk-address                       controllers.CorrespondenceUKAddressController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/correspondence-details/address-lookup                          controllers.AddressLookupController.initialise()
+GET        /change-registration-details/correspondence-details/address-lookup/callback                 controllers.AddressLookupController.callback(id: String)
+
 
 GET        /change-registration-details/correspondence-details/enter-non-uk-address                     controllers.CorrespondenceNonUKAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/enter-non-uk-address                       controllers.CorrespondenceNonUKAddressController.onSubmit(mode: Mode = NormalMode)
@@ -204,8 +207,6 @@ POST       	/change-registration-details/partner-details/email-address          
 
 GET        /change-registration-details/business-address/uk-postcode-yes-no                   controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/uk-postcode-yes-no                      controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/business-address/change-uk-postcode-yes-no            controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/business-address/change-uk-postcode-yes-no                controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/business-address/enter-uk-address                     controllers.BusinessUKAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/enter-uk-address                     controllers.BusinessUKAddressController.onSubmit(mode: Mode = NormalMode)
@@ -215,6 +216,10 @@ POST       /change-registration-details/business-address/additional-information-
 
 GET        /change-registration-details/partner-details/remove-trading-name                        controllers.partner.RemovePartnerTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-trading-name                       controllers.partner.RemovePartnerTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+
+GET        /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
