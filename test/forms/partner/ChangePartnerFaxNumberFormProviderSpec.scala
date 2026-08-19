@@ -18,35 +18,57 @@ package forms.partner
 
 import forms.FaxNumberFormProvider
 import forms.behaviours.StringFieldBehaviours
+import org.scalacheck.Gen
 import play.api.data.{Form, FormError}
 
 class ChangePartnerFaxNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "changePartnerFaxNumber.error.required"
-  private val lengthKey = "faxNumber.error.length"
-  private val invalidCharactersKey: String = "faxNumber.error.invalid.characters"
+  private val requiredKey = "partnerDetailsFaxNumber.error.required"
+  private val lengthKey = "partnerDetailsFaxNumber.error.length"
+  private val invalidCharactersKey = "partnerDetailsFaxNumber.error.invalid.characters"
 
   private val maxLength = 20
   private val faxNumberCharactersRegex: String = "^[0-9 ]+$"
 
-  val form: Form[String] = (new FaxNumberFormProvider())("partnerDetailsFaxNumber")
+  val form: Form[String] = new FaxNumberFormProvider()("partnerDetailsFaxNumber")
 
   ".value" - {
 
-    val fieldName = "value"
+    val fieldName = "faxNumber"
 
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      Gen.oneOf(
+        "01632960001",
+        "01632 960 001",
+        "07700900982",
+        "07700 900 982",
+        "01234567890123456789",
+        "12345678901234567890"
+      )
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    s"not bind strings longer than $maxLength characters" in {
+      val result = form.bind(Map(fieldName -> ("0" * (maxLength + 1)))).apply(fieldName)
+
+      result.errors must contain(FormError(fieldName, lengthKey, Seq(maxLength)))
+    }
+
+    "not bind invalid characters" in {
+      val result = form.bind(Map(fieldName -> "01632-960001")).apply(fieldName)
+
+      result.errors must contain only FormError(fieldName, invalidCharactersKey, Seq(faxNumberCharactersRegex))
+    }
+
+    "bind length and invalid character errors together" in {
+      val result = form.bind(Map(fieldName -> (("0" * (maxLength + 1)) + "-"))).apply(fieldName)
+
+      result.errors mustBe Seq(
+        FormError(fieldName, lengthKey, Seq(maxLength)),
+        FormError(fieldName, invalidCharactersKey, Seq(faxNumberCharactersRegex))
+      )
+    }
 
     behave like mandatoryField(
       form,

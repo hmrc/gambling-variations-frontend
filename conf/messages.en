@@ -712,8 +712,9 @@ removeBusinessAddressAddInfo.heading = Are you sure you want to remove the addit
 removeBusinessAddressAddInfo.paragraph = The additional information is: {0}
 removeBusinessAddressAddInfo.error.required = Select yes if you want to remove the additional information for your business address
 
-changePartnerFaxNumber.title = What is the partner’s fax number?
-changePartnerFaxNumber.heading = What is the partner’s fax number?
-changePartnerFaxNumber.checkYourAnswersLabel = What is the partner’s fax number?
-changePartnerFaxNumber.change.hidden = What is the partner’s fax number?
-changePartnerFaxNumber.error.required = Enter the partner’s fax number
+partnerDetailsFaxNumber.title = What is the partner’s fax number?
+partnerDetailsFaxNumber.heading = What is the partner’s fax number?
+partnerDetailsFaxNumber.checkYourAnswersLabel = What is the partner’s fax number?
+partnerDetailsFaxNumber.change.hidden = What is the partner’s fax number?
+partnerDetailsFaxNumber.error.required = Enter the partner’s fax number
+partnerDetailsFaxNumber.error.length = Enter the partner’s fax number
