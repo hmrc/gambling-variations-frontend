@@ -36,11 +36,15 @@ case object BusinessAddressAdditionalInfoRow {
     SummaryListRowViewModel(
       key   = "checkBusinessAddress.label.addInfo",
       value = addInfoValue,
-      actions = Seq(ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad().url)
-        .withVisuallyHiddenText("checkBusinessAddress.label.addInfo.hidden")) ++
+      actions = Seq(
+        ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad().url)
+          .withVisuallyHiddenText("checkBusinessAddress.label.addInfo.hidden")
+      ) ++
         Seq(if (addressAdditionalInfoExists) {
-          Some(ActionItemViewModel("site.remove", "#")
-            .withVisuallyHiddenText("checkBusinessAddress.label.addInfo.hidden"))
+          Some(
+            ActionItemViewModel("site.remove", "#")
+              .withVisuallyHiddenText(messages("checkBusinessAddress.label.addInfo.hidden"))
+          )
         } else { None }).flatten
     )
   }

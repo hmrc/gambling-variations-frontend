@@ -30,10 +30,11 @@ case object HasUkPostcodeRow {
       .fold(None)(hasPostcode =>
         Some(
           SummaryListRowViewModel(
-            key     = "checkBusinessAddress.question.ukPostcode",
-            value   = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
-            actions = Seq(ActionItemViewModel("site.change", "#")
-                .withVisuallyHiddenText("checkBusinessAddress.question.ukPostcode.hidden")
+            key   = "checkBusinessAddress.question.ukPostcode",
+            value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
+            actions = Seq(
+              ActionItemViewModel("site.change", "#")
+                .withVisuallyHiddenText(messages("checkBusinessAddress.question.ukPostcode.hidden"))
             )
           )
         )

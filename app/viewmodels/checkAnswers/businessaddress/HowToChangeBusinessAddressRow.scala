@@ -39,8 +39,10 @@ case object HowToChangeBusinessAddressRow {
                 case EditCurrentAddress   => "checkBusinessAddress.changeOption.edit"
               }
             ),
-            actions = Seq(ActionItemViewModel("site.change", "#")
-              .withVisuallyHiddenText("checkBusinessAddress.question.howToChange.hidden"))
+            actions = Seq(
+              ActionItemViewModel("site.change", "#")
+                .withVisuallyHiddenText("checkBusinessAddress.question.howToChange.hidden")
+            )
           )
         )
       case None => None

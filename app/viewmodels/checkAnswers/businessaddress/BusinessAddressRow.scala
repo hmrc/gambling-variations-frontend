@@ -73,7 +73,7 @@ case class BusinessAddressRow(ua: UserAnswers)(implicit messages: Messages) {
       value = addressRowValue,
       actions = Seq(
         ActionItemViewModel("site.change", routes.BusinessChangeAddrScreenerController.onPageLoad().url)
-          .withVisuallyHiddenText("checkBusinessAddress.label.address.hidden")
+          .withVisuallyHiddenText(messages("checkBusinessAddress.label.address.hidden"))
       )
     )
   }

@@ -30,14 +30,15 @@ case object AddAddressAdditionalInfoRow {
       .fold(None)(hasAddInfo =>
         Some(
           SummaryListRowViewModel(
-            key     = "checkBusinessAddress.question.addInfo",
-            value   = ValueViewModel(if (hasAddInfo) "site.yes" else "site.no"),
+            key   = "checkBusinessAddress.question.addInfo",
+            value = ValueViewModel(if (hasAddInfo) "site.yes" else "site.no"),
             actions = Seq(
               ActionItemViewModel("site.change", "#")
-                .withVisuallyHiddenText("checkBusinessAddress.question.addInfo")
+                .withVisuallyHiddenText(messages("checkBusinessAddress.question.addInfo"))
+            )
           )
         )
-      ))
+      )
     result
   }
 }
