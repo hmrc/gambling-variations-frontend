@@ -718,3 +718,6 @@ partnerDetailsFaxNumber.checkYourAnswersLabel = What is the partner’s fax numb
 partnerDetailsFaxNumber.change.hidden = What is the partner’s fax number?
 partnerDetailsFaxNumber.error.required = Enter the partner’s fax number
 partnerDetailsFaxNumber.error.length = Enter the partner’s fax number
+partnerDetailsFaxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
+partnerDetailsFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
+partnerDetailsFaxNumber.error.length = The fax number must be 20 characters or less
