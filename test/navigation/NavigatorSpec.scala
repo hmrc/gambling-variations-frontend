@@ -329,6 +329,38 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
+      "should route BusinessUKAddrScreenerPage to BusinessUKAddress when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessUKAddrScreenerPage, true)
+            .success
+            .value
+
+        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.BusinessUKAddressController.onPageLoad()
+      }
+
+      "should route BusinessUKAddrScreenerPage to PageNotFound when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessUKAddrScreenerPage, false)
+            .success
+            .value
+
+        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessUKAddrScreenerPage to SystemError when unanswered" in {
+        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route BusinessAddressUkPage to BusinessAddrInfoScreener" in {
+        navigator.nextPage(BusinessAddressUkPage, NormalMode, emptyAnswers) mustBe
+          routes.BusinessAddrInfoScreenerController.onPageLoad()
+      }
+
       "should route CorrespondenceAddressUkPage to CorrespondenceAddrInfoScreener when adding correspondence details" in {
         val answers =
           emptyAnswers
