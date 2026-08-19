@@ -28,6 +28,7 @@ import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
 import pages.*
 import models.*
+import pages.tradingdetails.{BusinessTradeClassPage, IsSeasonalBusinessPage, OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 
 import scala.concurrent.{ExecutionContext, Future}
 

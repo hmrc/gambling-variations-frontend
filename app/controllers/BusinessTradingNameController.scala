@@ -20,8 +20,10 @@ import controllers.actions.*
 import forms.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
+import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
+import pages.tradingdetails.{TradingDetailsChangesPage, TradingNamePage}
 import utils.FlagsUtil.checkIfChanged
-import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, BusinessTypePage, GroupMemberPage, TradingDetailsChangesPage, TradingNamePage}
+import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

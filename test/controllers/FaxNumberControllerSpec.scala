@@ -24,7 +24,8 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{BusinessFaxNumberPage, ContactDetailsChangesPage, GroupMemberPage}
+import pages.contactdetails.{BusinessFaxNumberPage, ContactDetailsChangesPage}
+import pages.GroupMemberPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call

@@ -24,6 +24,9 @@ import models.Mode
 import navigation.Navigator
 import utils.FlagsUtil.{checkFlag, checkIfChanged}
 import pages.*
+import pages.correspondencedetails.ChosenAssociatedRegNumberPage
+import pages.correspondencedetails.associatedregnumbers.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage}
+import pages.tradingdetails.{TradingDetailsChangeFlagPage, TradingDetailsChangesPage, TradingDetailsSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

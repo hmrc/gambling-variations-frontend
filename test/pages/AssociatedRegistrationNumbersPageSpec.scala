@@ -17,6 +17,7 @@
 package pages
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.correspondencedetails.associatedregnumbers.AssociatedRegistrationNumbersPage
 import play.api.libs.json.JsPath
 
 class AssociatedRegistrationNumbersPageSpec extends AnyFreeSpec with Matchers {

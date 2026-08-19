@@ -25,6 +25,9 @@ import models.requests.DataRequest
 import models.RegistrationNumbers
 import navigation.Navigator
 import pages.*
+import pages.correspondencedetails.{ChosenPreviousRegNumberPage, PreviousRegNumberPage, PreviousRegNumbersUpdatedPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.correspondencedetails.previousregnumbers.AddPreviousRegistrationNumberPage
+import pages.tradingdetails.{TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import utils.FlagsUtil.checkIfChanged
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

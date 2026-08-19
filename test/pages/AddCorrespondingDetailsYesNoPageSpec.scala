@@ -17,6 +17,7 @@
 package pages
 
 import base.SpecBase
+import pages.correspondencedetails.AddCorrespondingDetailsYesNoPage
 
 class AddCorrespondingDetailsYesNoPageSpec extends SpecBase {
 

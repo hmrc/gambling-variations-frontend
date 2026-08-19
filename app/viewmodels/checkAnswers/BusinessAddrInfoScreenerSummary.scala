@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.UserAnswers
-import pages.AddBusinessAddressAdditionalInformationPage
+import pages.businessaddress.AddBusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*

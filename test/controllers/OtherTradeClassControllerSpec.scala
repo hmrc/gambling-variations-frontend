@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{OtherTradeClassPage, TradingDetailsChangesPage}
+import pages.tradingdetails.{OtherTradeClassPage, TradingDetailsChangesPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call

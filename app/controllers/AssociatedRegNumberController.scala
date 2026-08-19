@@ -21,6 +21,9 @@ import forms.AssociatedRegNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.*
+import pages.correspondencedetails.ChosenAssociatedRegNumberPage
+import pages.correspondencedetails.associatedregnumbers.{AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage}
+import pages.tradingdetails.TradingDetailsChangesPage
 import utils.FlagsUtil.checkIfChanged
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}

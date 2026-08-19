@@ -20,7 +20,8 @@ import controllers.actions.*
 import forms.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, ContactDetailsChangesPage, GroupMemberPage}
+import pages.contactdetails.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, ContactDetailsChangesPage}
+import pages.GroupMemberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
