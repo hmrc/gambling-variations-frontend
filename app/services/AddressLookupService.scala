@@ -17,14 +17,26 @@
 package services
 
 import config.FrontendAppConfig
+import connectors.AddressLookupConnector
+import controllers.routes
+import models.Address
 import models.addresslookup.*
 import play.api.i18n.Messages
 import uk.gov.hmrc.http.HeaderCarrier
+
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class AddressLookupService @Inject() (
+  connector: AddressLookupConnector,
   appConfig: FrontendAppConfig
-) {
+)(implicit ec: ExecutionContext) {
+
+  def initJourney()(implicit hc: HeaderCarrier, messages: Messages): Future[String] =
+    connector.initJourney(configSettings)
+
+  def retrieveAddress(id: String)(implicit hc: HeaderCarrier): Future[Address] =
+    connector.retrieveAddress(id)
 
   def configureAddressLookup(ukMode: Boolean)(implicit hc: HeaderCarrier, messages: Messages): AddressLookupConfigSettings =
     AddressLookupConfigSettings(
@@ -93,4 +105,14 @@ class AddressLookupService @Inject() (
         )
       )
     )
+
+  private def configSettings(implicit hc: HeaderCarrier, messages: Messages): AddressLookupConfigSettings = {
+    val settings = configureAddressLookup(ukMode = true)
+
+    settings.copy(
+      options = settings.options.copy(
+        continueUrl = appConfig.host + routes.AddressLookupController.callback("").url.stripSuffix("?id=")
+      )
+    )
+  }
 }

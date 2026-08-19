@@ -70,12 +70,12 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
           |}
           |
           |urls {
-          |  login = "http://foo.com/login"
-          |  loginContinue = "http://foo.com/bar"
-          |  signOut = "http://foo.com/sign-out"
-          |  hmrcOnlineServiceDesk = "http://foo.com/help"
-          |  gamblingManagementHome = "http://foo.com/home"
-          |  account = "http://foo.com/account"
+          |  login = "http://gambling-variations/login"
+          |  loginContinue = "http://gambling-variations/bar"
+          |  signOut = "http://gambling-variations/sign-out"
+          |  hmrcOnlineServiceDesk = "http://gambling-variations/hmrc-online-service-desk"
+          |  gamblingManagementHome = "http://gambling-variations/home"
+          |  account = "http://gambling-variations/account"
           |}
           |
           |timeout-dialog {
