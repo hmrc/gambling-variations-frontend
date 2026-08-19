@@ -15,7 +15,7 @@ To check coverage: `sbt clean coverage test it/test coverageReport`
 
 To enable test-only routes when running locally, start the server with: `sbt 'run -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes 10401'`
 
-### Formatting
+## Formatting
 
 Scala sources and the `conf/messages.[cc]` files are kept in a canonical format, which is checked every
 time the project compiles. Compiling fails when something is out of format.
