@@ -17,57 +17,83 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerAddEmailAddressYesNoPageFormProvider
+import controllers.routes
+import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerAddEmailAddressYesNoPage
+import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerAddEmailAddressYesNoPageView
+import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerAddEmailAddressYesNoPageController @Inject() (
+class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: PartnerAddEmailAddressYesNoPageFormProvider,
+  requireData: PartnerDetailsDataRequiredAction,
+  formProvider: PartnerDetailsRemoveFaxNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerAddEmailAddressYesNoPageView
+  view: PartnerDetailsRemoveFaxNumberYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
+
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveFaxNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    request.userAnswers
+      .get(PartnerDetailsCorrespondenceFaxNumberPage(index)) match {
+      case Some(faxNumber) =>
+        Ok(view(preparedForm, mode, faxNumber))
+
+      case None =>
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors =>
+          Future.successful(
+            BadRequest(
+              view(formWithErrors,
+                   mode,
+                   request.userAnswers
+                     .get(PartnerDetailsCorrespondenceFaxNumberPage(index))
+                     .getOrElse("")
+                  )
+            )
+          ),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddEmailAddressYesNoPage, value))
+            updatedAnswers <- if (value) {
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsCorrespondenceFaxNumberPage(index)))
+                              } else {
+                                Future.apply(request.userAnswers)
+                              }
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveFaxNumberYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerAddEmailAddressYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceFaxNumberPage(index), mode, updatedAnswers))
       )
   }
 }

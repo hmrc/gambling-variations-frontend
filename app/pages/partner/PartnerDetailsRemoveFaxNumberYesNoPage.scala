@@ -19,9 +19,9 @@ package pages.partner
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object PartnerAddEmailAddressYesNoPagePage extends QuestionPage[Boolean] {
+case class PartnerDetailsRemoveFaxNumberYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "partnerAddEmailAddressYesNoPage"
+  override def toString: String = "partnerRemoveFaxNumberYesNo"
 }

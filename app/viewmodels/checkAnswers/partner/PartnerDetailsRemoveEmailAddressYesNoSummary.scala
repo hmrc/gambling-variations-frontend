@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.partner
 
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages.BusinessUKAddrScreenerPage
+import models.UserAnswers
+import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object BusinessUKAddrScreenerSummary {
+object PartnerDetailsRemoveEmailAddressYesNoSummary {
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(BusinessUKAddrScreenerPage).map { answer =>
+    answers.get(PartnerDetailsRemoveEmailAddressYesNoPage(index)).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "businessUKAddrScreener.checkYourAnswersLabel",
+        key   = "partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("businessUKAddrScreener.change.hidden"))
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden"))
         )
       )
     }

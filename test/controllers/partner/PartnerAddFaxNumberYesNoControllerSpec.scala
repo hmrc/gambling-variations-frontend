@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import base.SpecBase
-import forms.PartnerAddFaxNumberYesNoFormProvider
+import forms.partner.PartnerAddFaxNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

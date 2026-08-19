@@ -120,19 +120,23 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
     case BusinessChangeAddrScreenerPage =>
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
+    case RemovePartnerTradingNameYesNoPage(index) =>
+      userAnswers => navigateRemovePartnerTradingNameYesNoPage(index)(userAnswers)
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
     case BusinessAddressUkPage =>
       _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
+    case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
+      userAnswers => navigatePartnerRemoveEmailYesNoPage(userAnswers, index)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
-    routes.CheckYourAnswersController.onPageLoad()
+    routes.ChangeRegistrationDetailsController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {
@@ -392,6 +396,15 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
+  private def navigatePartnerRemoveEmailYesNoPage(answers: UserAnswers, index: Int): Call =
+    answers
+      .get(PartnerDetailsRemoveEmailAddressYesNoPage(index))
+      .map {
+        case false => controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad()
+        case true  => controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
   private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers: UserAnswers): Call = {
     userAnswers
       .get(PartnerDetailsAdditionalAddressInfoYesNoPage)
@@ -408,6 +421,16 @@ class Navigator @Inject() () {
       .map {
         case false => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
         case true  => controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
+  private def navigateRemovePartnerTradingNameYesNoPage(index: Int)(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(RemovePartnerTradingNameYesNoPage(index))
+      .map {
+        case false => controllers.partner.routes.RemovePartnerTradingNameYesNoController.onPageLoad() // need to update it
+        case true  => controllers.routes.IndexController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }

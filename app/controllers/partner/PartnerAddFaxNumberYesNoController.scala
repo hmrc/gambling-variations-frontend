@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerAddFaxNumberYesNoFormProvider
+import forms.partner.PartnerAddFaxNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partner.PartnerAddFaxNumberYesNoPage

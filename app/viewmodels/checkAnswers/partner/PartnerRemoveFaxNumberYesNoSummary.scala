@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.tradingdetails
+package viewmodels.checkAnswers.partner
 
-import controllers.routes
 import models.UserAnswers
-import pages.IsSeasonalBusinessPage
+import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object SeasonalBusinessSummary {
+object PartnerRemoveFaxNumberYesNoSummary {
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(IsSeasonalBusinessPage).map { answer =>
+    answers.get(PartnerDetailsRemoveFaxNumberYesNoPage(index)).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "seasonalBusiness.checkYourAnswersLabel",
+        key   = "partnerRemoveFaxNumberYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SeasonalBusinessController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("seasonalBusiness.change.hidden"))
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerRemoveFaxNumberYesNo.change.hidden"))
         )
       )
     }

@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partner.PartnerAddEmailAddressYesNoPagePage
+import pages.partner.PartnerAddEmailAddressYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
@@ -26,7 +26,7 @@ import viewmodels.implicits.*
 object PartnerAddEmailAddressYesNoPageSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerAddEmailAddressYesNoPagePage).map { answer =>
+    answers.get(PartnerAddEmailAddressYesNoPage).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 
