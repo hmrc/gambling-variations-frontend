@@ -38,7 +38,7 @@ case object BusinessAddressAdditionalInfoRow {
       value = addInfoValue,
       actions = Seq(
         ActionItemViewModel("site.change", routes.BusinessAddressAdditionalInfoController.onPageLoad().url)
-          .withVisuallyHiddenText("checkBusinessAddress.label.addInfo.hidden")
+          .withVisuallyHiddenText(messages("checkBusinessAddress.label.addInfo.hidden"))
       ) ++
         Seq(if (addressAdditionalInfoExists) {
           Some(
