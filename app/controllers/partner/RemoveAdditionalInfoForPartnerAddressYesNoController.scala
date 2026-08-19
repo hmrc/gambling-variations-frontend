@@ -36,7 +36,7 @@ class RemoveAdditionalInfoForPartnerAddressYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: RemoveAdditionalInfoForPartnerAddressYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveAdditionalInfoForPartnerAddressYesNoView

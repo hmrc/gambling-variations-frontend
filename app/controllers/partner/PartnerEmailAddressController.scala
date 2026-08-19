@@ -36,7 +36,7 @@ class PartnerEmailAddressController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerEmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerEmailAddressView

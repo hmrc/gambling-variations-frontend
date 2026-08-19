@@ -37,7 +37,7 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerAddEmailAddressYesNoPageFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerAddEmailAddressYesNoPageView

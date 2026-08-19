@@ -17,6 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
+import controllers.actions.{DataRequiredAction, DataRequiredActionImpl}
 import forms.FaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}

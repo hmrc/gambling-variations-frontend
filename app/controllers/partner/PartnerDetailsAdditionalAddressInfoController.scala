@@ -36,7 +36,7 @@ class PartnerDetailsAdditionalAddressInfoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsAdditionalAddressInfoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAdditionalAddressInfoView

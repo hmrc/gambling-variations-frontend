@@ -28,7 +28,7 @@ class ChangePartnerFaxNumberFormProviderSpec extends StringFieldBehaviours {
 
   private val maxLength = 20
   private val faxNumberCharactersRegex: String = "^[0-9 ]+$"
-  
+
   val form: Form[String] = (new FaxNumberFormProvider())("partnerDetailsFaxNumber")
 
   ".value" - {
