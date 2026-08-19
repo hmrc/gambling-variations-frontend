@@ -126,6 +126,7 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
+    case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
     case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
       userAnswers => navigatePartnerRemoveEmailYesNoPage(userAnswers, index)
 
@@ -257,7 +258,7 @@ class Navigator @Inject() () {
         routes.CheckCorrespondenceDetailsController.onPageLoad()
 
       case Some(true) =>
-        routes.CorrespondenceUKAddressController.onPageLoad()
+        routes.AddressLookupController.initialise()
 
       case Some(false) =>
         routes.CorrespondenceNonUKAddressController.onPageLoad()
