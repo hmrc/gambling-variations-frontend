@@ -22,6 +22,7 @@ import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.partner.*
+import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -110,24 +111,32 @@ class Navigator @Inject() () {
       userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage =>
       userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
-    case PartnerAddFaxNumberYesNoPage(index) =>
-      userAnswers => navigatePartnerAddFaxNumberYesNoPage(index)(userAnswers)
     case RemoveAdditionalInfoForPartnerAddressYesNoPage =>
       userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage()(userAnswers)
+    case BusinessChangeAddrScreenerPage =>
+      userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
+    case BusinessUKAddrScreenerPage =>
+      userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
+
+    // Partner Details
     case PartnerDetailsAdditionalAddressInfoPage =>
       _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
     case PartnerDetailsAdditionalAddressInfoYesNoPage =>
       userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers)
-    case BusinessChangeAddrScreenerPage =>
-      userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
+    case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
+      userAnswers => navigatePartnerRemoveEmailYesNoPage(userAnswers, index)
+    case PartnerDetailsRemoveFaxNumberYesNoPage(index) =>
+      userAnswers => navigatePartnerRemoveFaxNumberYesNoPage(userAnswers, index)
+    case PartnerAddFaxNumberYesNoPage(index) =>
+      userAnswers => navigatePartnerAddFaxNumberYesNoPage(index)(userAnswers)
+    case PartnerAddEmailAddressYesNoPage(index) =>
+      userAnswers => navigatePartnerAddEmailAddressYesNoPage(index)(userAnswers)
     case RemovePartnerTradingNameYesNoPage(index) =>
       userAnswers => navigateRemovePartnerTradingNameYesNoPage(index)(userAnswers)
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
-    case BusinessUKAddrScreenerPage =>
-      userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
-    case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
-      userAnswers => navigatePartnerRemoveEmailYesNoPage(userAnswers, index)
+    case PartnerDetailsCorrespondenceFaxNumberPage(index) =>
+      _ => controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -388,19 +397,25 @@ class Navigator @Inject() () {
   private def navigatePartnerAddFaxNumberYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerAddFaxNumberYesNoPage(index))
-      .map {
-        case false => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
-        case true  => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
-      }
+      .map(_ => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad())
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerAddEmailAddressYesNoPage(index))
+      .map(_ => controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onPageLoad())
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerRemoveEmailYesNoPage(answers: UserAnswers, index: Int): Call =
     answers
       .get(PartnerDetailsRemoveEmailAddressYesNoPage(index))
-      .map {
-        case false => controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad()
-        case true  => controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad()
-      }
+      .map(_ => controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad())
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerRemoveFaxNumberYesNoPage(answers: UserAnswers, index: Int): Call =
+    answers
+      .get(PartnerDetailsRemoveFaxNumberYesNoPage(index))
+      .map(_ => controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad())
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage()(userAnswers: UserAnswers): Call = {
