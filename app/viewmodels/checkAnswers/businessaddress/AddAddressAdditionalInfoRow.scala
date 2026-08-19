@@ -34,7 +34,7 @@ case object AddAddressAdditionalInfoRow {
             value = ValueViewModel(if (hasAddInfo) "site.yes" else "site.no"),
             actions = Seq(
               ActionItemViewModel("site.change", "#")
-                .withVisuallyHiddenText(messages("checkBusinessAddress.question.addInfo"))
+                .withVisuallyHiddenText(messages("checkBusinessAddress.question.addInfo.hidden"))
             )
           )
         )

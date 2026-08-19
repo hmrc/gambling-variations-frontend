@@ -41,7 +41,7 @@ case object HowToChangeBusinessAddressRow {
             ),
             actions = Seq(
               ActionItemViewModel("site.change", "#")
-                .withVisuallyHiddenText("checkBusinessAddress.question.howToChange.hidden")
+                .withVisuallyHiddenText(messages("checkBusinessAddress.question.howToChange.hidden"))
             )
           )
         )
