@@ -48,7 +48,6 @@ InputViewModel(
 field = form("addressLine1"),
 label = LabelViewModel(messages("businessUKAddress.addressLine1"))
 )
-.withWidth(Fixed20)
 .withAttribute("autocomplete" -> "address-line1")
 )
 
@@ -57,7 +56,6 @@ InputViewModel(
 field = form("addressLine2"),
 label = LabelViewModel(messages("businessUKAddress.addressLine2"))
 )
-.withWidth(Fixed20)
 .withAttribute("autocomplete" -> "address-line2")
 )
 
@@ -66,7 +64,7 @@ InputViewModel(
 field = form("townOrCity"),
 label = LabelViewModel(messages("businessUKAddress.townOrCity"))
 )
-.withWidth(Fixed10)
+.withWidth(TwoThirds)
 .withAttribute("autocomplete" -> "address-level2")
 )
 
@@ -75,7 +73,7 @@ InputViewModel(
 field = form("county"),
 label = LabelViewModel(messages("businessUKAddress.County"))
 )
-.withWidth(Fixed10)
+.withWidth(TwoThirds)
 .withAttribute("autocomplete" -> "address-level1")
 )
 
