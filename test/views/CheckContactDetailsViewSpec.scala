@@ -37,9 +37,10 @@ class CheckContactDetailsViewSpec extends SpecBase {
   }
 
   "BusinessContactDetailsView" - {
+
     "must show expected values when data is populated" in new Setup {
 
-      val html = view(Some("1"), Some("2"), Some("3"), Some("4"), false)(request, messages)
+      val html = view(Some("1"), Some("2"), Some("3"), Some("4"), isFlagged = false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -53,11 +54,18 @@ class CheckContactDetailsViewSpec extends SpecBase {
       doc.select(".contact-numbers").text must include(messages("2"))
       doc.select(".fax-number").text      must include(messages("3"))
       doc.select(".email-address").text   must include(messages("4"))
+
+      doc.text must not include messages("contactDetails.error.contactNumber")
+      doc.text must not include messages("changeRegistrationDetails.readyToSubmit")
+
+      val continueButton = doc.select(".govuk-button")
+      continueButton.text must include(messages("site.continue"))
+      continueButton.attr("href") mustBe controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
     }
 
-    "must display 'Not provided' when value is not provided" in new Setup {
+    "must display 'Not provided' when optional values are not provided" in new Setup {
 
-      val html = view(Some("1"), Some("2"), None, Some("4"), false)(request, messages)
+      val html = view(Some("1"), Some("2"), None, None, isFlagged = false)(request, messages)
 
       val doc = Jsoup.parse(html.body)
 
@@ -66,8 +74,28 @@ class CheckContactDetailsViewSpec extends SpecBase {
       doc.select(".contact-numbers").text must include(messages("contactDetails.label.mobilePhoneNumber"))
       doc.select(".contact-numbers").text must include(messages("2"))
       doc.select(".fax-number").text      must include(messages("contactDetails.message.notProvided"))
-      doc.select(".email-address").text   must include(messages("4"))
+      doc.select(".email-address").text   must include(messages("contactDetails.message.notProvided"))
     }
 
+    "must display error message and direct continue button back to CheckContactDetails when both phone numbers are missing" in new Setup {
+
+      val html = view(None, None, Some("3"), Some("4"), isFlagged = false)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.text must include(messages("contactDetails.error.contactNumber"))
+
+      val continueButton = doc.select(".govuk-button")
+      continueButton.attr("href") mustBe controllers.routes.CheckContactDetailsController.onPageLoad().url
+    }
+
+    "must display ready to submit message when isFlagged is true" in new Setup {
+
+      val html = view(Some("1"), Some("2"), Some("3"), Some("4"), isFlagged = true)(request, messages)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.text must include(messages("changeRegistrationDetails.readyToSubmit"))
+    }
   }
 }
