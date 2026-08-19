@@ -13,3 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package pages
+
+import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
+
+class BusinessAddressHasUkPostcodePageSpec extends PlaySpec {
+
+  "BusinessAddressHasUkPostcodePage" must {
+
+    "have the correct path" in {
+
+      BusinessAddressHasUkPostcodePage.path mustEqual (JsPath \ "businessAddressSection" \ "hasUkPostcode")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessAddressHasUkPostcodePage.toString mustEqual "hasUkPostcode"
+    }
+  }
+}

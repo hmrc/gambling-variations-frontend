@@ -13,3 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package pages
+
+import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
+
+class BusinessAddressIsleMOrChannelFlagPageSpec extends PlaySpec {
+
+  "BusinessAddressIsleMOrChannelFlagPage" must {
+
+    "have the correct path" in {
+
+      BusinessAddressIsleMOrChannelFlagPage.path mustEqual (JsPath \ "businessAddressSection" \ "businessAddressIomOrCiFlag")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessAddressIsleMOrChannelFlagPage.toString mustEqual "businessAddressIomOrCiFlag"
+    }
+  }
+}

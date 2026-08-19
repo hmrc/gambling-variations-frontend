@@ -71,11 +71,12 @@ class BusinessChangeAddrScreenerControllerSpec extends SpecBase with MockitoSuga
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "businessAddressSection"                -> Json.obj("mgdRegNum" -> userAnswersId),
-        BusinessChangeAddrScreenerPage.toString -> EditCurrentAddress.toString
+        "businessAddressSection" -> Json.obj("mgdRegNum" -> userAnswersId, BusinessChangeAddrScreenerPage.toString -> EditCurrentAddress.toString)
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
+
+      val filledForm = form.fill(EditCurrentAddress)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,7 +88,7 @@ class BusinessChangeAddrScreenerControllerSpec extends SpecBase with MockitoSuga
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(EditCurrentAddress), NormalMode, false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(filledForm, NormalMode, false)(request, messages(application)).toString
       }
     }
 

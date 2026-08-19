@@ -13,3 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package pages
+
+import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
+
+class BusinessChangeAddrScreenerPageSpec extends PlaySpec {
+
+  "BusinessChangeAddrScreenerPage" must {
+
+    "have the correct path" in {
+
+      BusinessChangeAddrScreenerPage.path mustEqual (JsPath \ "businessAddressSection" \ "businessChangeAddrScreener")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessChangeAddrScreenerPage.toString mustEqual "businessChangeAddrScreener"
+    }
+  }
+}

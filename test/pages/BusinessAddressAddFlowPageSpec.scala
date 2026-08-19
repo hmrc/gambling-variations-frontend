@@ -13,3 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package pages
+
+import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
+
+class BusinessAddressAddFlowPageSpec extends PlaySpec {
+
+  "BusinessAddressAddFlowPage" must {
+
+    "have the correct path" in {
+
+      BusinessAddressAddFlowPage.path mustEqual (JsPath \ "businessAddressSection" \ "isInAddFlow")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessAddressAddFlowPage.toString mustEqual "isInAddFlow"
+    }
+  }
+}
