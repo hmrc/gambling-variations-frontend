@@ -25,31 +25,53 @@ trait PartnerDetailsHelper {
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
+  val nino: String = "AB123456C"
 
-  def cleanedData(faxNumber: Option[String] = None, phoneNumber: Option[String] = None, emailAddress: Option[String] = None): JsObject = Json.obj(
+  def cleanedData(
+    faxNumber: Option[String] = None,
+    phoneNumber: Option[String] = None,
+    mobilePhoneNumber: Option[String] = None,
+    emailAddress: Option[String] = None,
+    additionalInformation: Option[String] = Some("ADI123456")
+  ): JsObject = Json.obj(
     "partners" -> Json.arr(
       Json.obj(
-        "partnerDetailsMgdRegNumber" -> mgdRegNumber,
-        "partnerDetailsBusinessName" -> "Partner1",
+        "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
+        "partnerDetailsDateOfJoining" -> "2022-01-15",
+        "partnerDetailsDateOfLeaving" -> "2028-12-31",
         "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
           "mgdRegNumber" -> mgdRegNumber,
           "correspondenceAddress" -> Json.obj(
-            "address1" -> "Flat 1",
-            "address2" -> "10 Market Road",
-            "address3" -> "Felling",
-            "address4" -> "Gateshead",
-            "postcode" -> "NE8 1ZZ",
-            "country"  -> "UK"
+            "address1" -> "123 High Street",
+            "address2" -> "Suite 4",
+            "address3" -> "Business Park",
+            "address4" -> "London",
+            "postcode" -> "SW1A 1AA",
+            "country"  -> "GB"
           ),
+          "additionalInformation" -> additionalInformation,
+          "iomOrCiFlag"           -> "N",
           "contactNumber" -> Json.obj(
             "phoneNumber"       -> phoneNumber,
-            "mobilePhoneNumber" -> phoneNumber
+            "mobilePhoneNumber" -> mobilePhoneNumber
           ),
           "faxNumber" -> faxNumber,
           "emailAddr" -> emailAddress
-        )
+        ),
+        "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
+        "partnerDetailsCountryOfIncorporation" -> "GB",
+        "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
+        "partnerDetailsTradingName"            -> "XYZ Consulting",
+        "partnerDetailsDateOfBirth"            -> "1985-06-20",
+        "partnerDetailsNino"                   -> nino,
+        "partnerDetailsUtr"                    -> "1234567890",
+        "partnerDetailsVrn"                    -> "GB123456789",
+        "partnerDetailsCrn"                    -> "09876543",
+        "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
+        "partnerDetailsIsFutureLeaveDate"      -> 0,
+        "partnerDetailsIsFutureJoinDate"       -> 0,
+        "partnerDetailsBusinessType"           -> 2
       )
     )
   )
-
 }

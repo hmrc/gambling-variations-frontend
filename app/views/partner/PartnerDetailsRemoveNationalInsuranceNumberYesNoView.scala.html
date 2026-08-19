@@ -26,7 +26,7 @@
     caption: Caption
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, nino: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("partnerDetailsRemoveNationalInsuranceNumberYesNo.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
@@ -42,7 +42,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("partnerDetailsRemoveNationalInsuranceNumberYesNo.heading")).asPageHeading(Large)
+                legend = LegendViewModel(messages("partnerDetailsRemoveNationalInsuranceNumberYesNo.heading", nino)).asPageHeading(Large)
             )
         )
 

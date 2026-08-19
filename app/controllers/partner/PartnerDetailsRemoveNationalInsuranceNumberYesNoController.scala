@@ -17,10 +17,12 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.routes
 import forms.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -45,29 +47,53 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
+    request.userAnswers
+      .get(PartnerDetailsNinoPage(index)) match {
+      case Some(nino) =>
+        Ok(view(preparedForm, mode, nino))
 
-    Ok(view(preparedForm, mode))
+      case None =>
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
+
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors =>
+          Future.successful(
+            BadRequest(
+              view(formWithErrors,
+                   mode,
+                   request.userAnswers
+                     .get(PartnerDetailsNinoPage(index))
+                     .getOrElse("")
+                  )
+            )
+          ),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage, value))
+            updatedAnswers <- if (value) {
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsNinoPage(index)))
+                              } else {
+                                Future.apply(request.userAnswers)
+                              }
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsNinoPage(index), mode, updatedAnswers))
       )
   }
 }

@@ -28,6 +28,7 @@ import views.html.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoView
 class PartnerDetailsRemoveNationalInsuranceNumberYesNoViewSpec extends SpecBase {
 
   private val form = new PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider()()
+  private val nino = "QQ 12 34 56 A "
 
   "PartnerDetailsRemoveNationalInsuranceNumberYesNoView" - {
 
@@ -39,7 +40,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoViewSpec extends SpecBase 
 
         val view = application.injector.instanceOf[PartnerDetailsRemoveNationalInsuranceNumberYesNoView]
 
-        val html = view(form, NormalMode)(FakeRequest(), messages(application))
+        val html = view(form, NormalMode, nino)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
@@ -72,7 +73,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoViewSpec extends SpecBase 
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(boundForm, NormalMode)(FakeRequest(), messages(application))
+        val html = view(boundForm, NormalMode, nino)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 

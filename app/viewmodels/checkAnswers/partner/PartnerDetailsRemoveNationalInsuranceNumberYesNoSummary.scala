@@ -24,9 +24,10 @@ import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 object PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary {
-
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage).map { answer =>
+    answers.get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index)).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 

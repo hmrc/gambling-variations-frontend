@@ -24,7 +24,8 @@ import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 class PartnerDetailsRemoveNationalInsuranceNumberYesNoSummarySpec extends SpecBase {
-
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
   lazy val app: Application = applicationBuilder().build()
 
   implicit val messages: Messages = this.messages(app)
@@ -38,7 +39,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoSummarySpec extends SpecBa
     "must return the correct row when the answer is Yes" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage, true)
+          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), true)
           .success
           .value
 
@@ -60,7 +61,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoSummarySpec extends SpecBa
     "must return the correct row when the answer is No" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage, false)
+          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), false)
           .success
           .value
 

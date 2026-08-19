@@ -35,7 +35,7 @@ import views.html.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoView
 
 import scala.concurrent.Future
 
-class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -58,13 +58,13 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
         val view = application.injector.instanceOf[PartnerDetailsRemoveNationalInsuranceNumberYesNoView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, nino)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage, true).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,7 +76,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, nino)(request, messages(application)).toString
       }
     }
 
@@ -122,7 +122,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, nino)(request, messages(application)).toString
       }
     }
 
