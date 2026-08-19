@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.partner.ChangePartnerFaxNumberFormProvider
+import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partner.ChangePartnerFaxNumberPage
@@ -27,6 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.partner.ChangePartnerFaxNumberView
 
 import javax.inject.Inject
@@ -39,14 +40,14 @@ class ChangePartnerFaxNumberController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: ChangePartnerFaxNumberFormProvider,
+  formProvider: FaxNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ChangePartnerFaxNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[String] = formProvider()
+  val form: Form[String] = formProvider("partnerDetailsFaxNumber")
 
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
@@ -68,9 +69,13 @@ class ChangePartnerFaxNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, PartnerDetailsCorrespondenceFaxNumberPage(index), ChangePartnerFaxNumberPage(index))
+
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangePartnerFaxNumberPage(index), value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsCorrespondenceFaxNumberPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCorrespondenceFaxNumberPage(index), value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ChangePartnerFaxNumberPage(index), isChanged))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ChangePartnerFaxNumberPage(index), mode, updatedAnswers))
       )

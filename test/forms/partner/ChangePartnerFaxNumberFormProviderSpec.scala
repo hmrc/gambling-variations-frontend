@@ -16,16 +16,20 @@
 
 package forms.partner
 
+import forms.FaxNumberFormProvider
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 class ChangePartnerFaxNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "changePartnerFaxNumber.error.required"
-  val lengthKey = "faxNumber.error.length"
-  val maxLength = 20
+  private val requiredKey = "changePartnerFaxNumber.error.required"
+  private val lengthKey = "faxNumber.error.length"
+  private val invalidCharactersKey: String = "faxNumber.error.invalid.characters"
 
-  val form = new ChangePartnerFaxNumberFormProvider()()
+  private val maxLength = 20
+  private val faxNumberCharactersRegex: String = "^[0-9 ]+$"
+  
+  val form: Form[String] = (new FaxNumberFormProvider())("partnerDetailsFaxNumber")
 
   ".value" - {
 

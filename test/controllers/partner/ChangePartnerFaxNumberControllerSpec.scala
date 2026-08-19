@@ -17,7 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
-import forms.partner.ChangePartnerFaxNumberFormProvider
+import forms.FaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -38,8 +38,7 @@ import scala.concurrent.Future
 
 class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new ChangePartnerFaxNumberFormProvider()
-  val form: Form[String] = formProvider()
+  val form: Form[String] = (new FaxNumberFormProvider())("partnerDetailsFaxNumber")
 
   val index: Int = 0
   val testFaxNumber: String = "0123456789"
@@ -154,10 +153,10 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           val expectedAnswers = userAnswersWithNoFax
-            .set(ChangePartnerFaxNumberPage(index), testFaxNumber)
+            .set(PartnerDetailsCorrespondenceFaxNumberPage(index), testFaxNumber)
             .success
             .value
-            .set(PartnerDetailsCorrespondenceFaxNumberPage(index), testFaxNumber)
+            .set(ChangePartnerFaxNumberPage(index), value = true)
             .success
             .value
 
