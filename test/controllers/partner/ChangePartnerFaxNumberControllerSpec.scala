@@ -42,8 +42,8 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar wi
   lazy val changePartnerFaxNumberRoute: String =
     controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url
 
-  val userAnswersWithNoFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(None))
-  val userAnswersWithFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+  val userAnswersWithNoFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val userAnswersWithFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(faxNumber = Some(testFaxNumber)))
 
   "ChangePartnerFaxNumber Controller" - {
 
