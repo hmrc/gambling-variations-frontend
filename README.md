@@ -15,9 +15,9 @@ To check coverage: `sbt clean coverage test it/test coverageReport`
 
 To enable test-only routes when running locally, start the server with: `sbt 'run -Dplay.http.router=testOnlyDoNotUseInAppConf.Routes 10401'`
 
-## Formatting
+### Formatting
 
-Scala sources and the `conf/messages` files are kept in a canonical format, which is checked every
+Scala sources and the `conf/messages.[cc]` files are kept in a canonical format, which is checked every
 time the project compiles. Compiling fails when something is out of format.
 
 To reformat everything, run:
@@ -34,6 +34,11 @@ msgman is not part of the standard toolchain, so the build installs it into `~/.
 GitHub releases the first time it is needed. An msgman that is already installed is used as it is. On
 a platform with no published release, the messages check is skipped with a warning instead of failing
 the build.
+
+To avoid disappointment in your development workflow, use format in your usual edit-build-test cycle, eg:
+```
+sbt format compile test
+```
 
 ## Adding New Pages
 
