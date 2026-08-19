@@ -28,8 +28,6 @@ case class BusinessAddress(
 
 object BusinessAddress {
 
-  implicit val writes: OWrites[BusinessAddress] = Json.writes[BusinessAddress]
-
   // Address.reads requires address1, so the entire address block would need to be omitted if no address exists
   private val optionalAddressReads: Reads[Option[Address]] =
     Address.reads.map(Option(_)).orElse(Reads.pure(None))
