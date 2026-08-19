@@ -28,7 +28,7 @@ import views.html.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoView
 class PartnerDetailsRemoveNationalInsuranceNumberYesNoViewSpec extends SpecBase {
 
   private val form = new PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider()()
-  private val nino = "QQ 12 34 56 A "
+  private val nino = "QQ 12 34 56 A"
 
   "PartnerDetailsRemoveNationalInsuranceNumberYesNoView" - {
 
@@ -49,10 +49,10 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoViewSpec extends SpecBase 
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsRemoveNationalInsuranceNumberYesNo.heading")
+          messages(application)("partnerDetailsRemoveNationalInsuranceNumberYesNo.heading", nino)
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
-          messages(application)("changeRegistrationDetails.caption")
+          messages(application)("changeRegistrationDetails.caption", nino)
 
         document.getElementById("value").attr("value") mustEqual "true"
 
