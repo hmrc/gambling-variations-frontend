@@ -39,7 +39,6 @@ class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with 
   val formProvider = new PartnerAddEmailAddressYesNoPageFormProvider()
   val form: Form[Boolean] = formProvider()
 
-
   lazy val partnerAddEmailAddressYesNoRoute: String =
     controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onPageLoad().url
 

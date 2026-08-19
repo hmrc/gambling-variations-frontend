@@ -21,6 +21,7 @@ import forms.partner.PartnerDetailsAdditionalAddressInfoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partner.{PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsSubmittedPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,7 +37,7 @@ class PartnerDetailsAdditionalAddressInfoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
+  requireData: DataRequiredAction,
   formProvider: PartnerDetailsAdditionalAddressInfoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAdditionalAddressInfoView
@@ -44,7 +45,7 @@ class PartnerDetailsAdditionalAddressInfoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
