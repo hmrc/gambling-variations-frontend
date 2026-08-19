@@ -22,6 +22,7 @@ import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.partner.*
+import pages.partnerdetails.PartnerDetailsContactNumberPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -116,6 +117,7 @@ class Navigator @Inject() () {
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
+    case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
 
     // Partner Details
     case PartnerDetailsAdditionalAddressInfoPage =>
@@ -134,6 +136,8 @@ class Navigator @Inject() () {
       userAnswers => navigateRemovePartnerTradingNameYesNoPage(index)(userAnswers)
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
+    case PartnerDetailsContactNumberPage(index) =>
+      _ => controllers.partner.routes.PartnerContactDetailsController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -223,11 +227,11 @@ class Navigator @Inject() () {
       case Some(true) =>
         routes.CorrespondenceAdditionalNameController.onPageLoad()
       case Some(false) =>
-        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
           routes.CorrespondenceUKAddrScreenerController.onPageLoad()
-        else
+        } else {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
-
+        }
       case None =>
         routes.SystemErrorController.onPageLoad()
     }
@@ -238,11 +242,11 @@ class Navigator @Inject() () {
         routes.CorrespondenceAdditionalInfoController.onPageLoad()
 
       case Some(false) =>
-        if (answers.get(AddCorrespondingDetailsYesNoPage).contains(true))
+        if (answers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
           routes.CorrespondenceContactNumberController.onPageLoad()
-        else
+        } else {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
-
+        }
       case None =>
         routes.SystemErrorController.onPageLoad()
     }

@@ -13,15 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package pages
-
-import models.BusinessChangeAddrOption
-import play.api.libs.json.JsPath
-
-case object BusinessChangeAddrScreenerPage extends QuestionPage[BusinessChangeAddrOption] {
-
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
-
-  override def toString: String = "businessChangeAddrScreener"
-}

@@ -16,12 +16,21 @@
 
 package pages
 
-import models.BusinessChangeAddrOption
 import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
 
-case object BusinessChangeAddrScreenerPage extends QuestionPage[BusinessChangeAddrOption] {
+class BusinessAddressAddFlowPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  "BusinessAddressAddFlowPage" must {
 
-  override def toString: String = "businessChangeAddrScreener"
+    "have the correct path" in {
+
+      BusinessAddressAddFlowPage.path mustEqual (JsPath \ "businessAddressSection" \ "isInAddFlow")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessAddressAddFlowPage.toString mustEqual "isInAddFlow"
+    }
+  }
 }

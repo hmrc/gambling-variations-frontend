@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package pages.partnerdetails
 
-import models.BusinessChangeAddrOption
+import models.ContactNumber
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object BusinessChangeAddrScreenerPage extends QuestionPage[BusinessChangeAddrOption] {
+//TODO: index will be replaced in the next ticket with `BusinessPartnerNumber`
+case class PartnerDetailsContactNumberPage(index: Int) extends QuestionPage[ContactNumber] {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  override def path: JsPath = PartnerDetailsCorrespondenceDetailsSectionPage(index).path \ toString
 
-  override def toString: String = "businessChangeAddrScreener"
+  override def toString: String = "contactNumber"
 }

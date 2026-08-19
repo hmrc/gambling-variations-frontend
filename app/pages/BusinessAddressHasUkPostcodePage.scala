@@ -16,12 +16,11 @@
 
 package pages
 
-import models.BusinessChangeAddrOption
 import play.api.libs.json.JsPath
 
-case object BusinessChangeAddrScreenerPage extends QuestionPage[BusinessChangeAddrOption] {
+case object BusinessAddressHasUkPostcodePage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ "businessAddressSection" \ toString
 
-  override def toString: String = "businessChangeAddrScreener"
+  override def toString: String = "hasUkPostcode"
 }
