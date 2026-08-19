@@ -127,7 +127,8 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
-    case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+    case RemoveBusinessAddressAddInfoPage =>
+      _ => routes.CheckBusinessAddressController.onPageLoad()
     case PartnerDetailsContactNumberPage(index) =>
       _ => controllers.partner.routes.PartnerContactDetailsController.onPageLoad()
     case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
