@@ -696,12 +696,6 @@ removePartnerTradingNameYesNo.checkYourAnswersLabel =Are you sure you want to re
 removePartnerTradingNameYesNo.error.required = Select yes if you want to remove this partner’s trading name
 removePartnerTradingNameYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s trading name?
 
-partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner’s email address?
-partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner’s email address?
-partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s email address?
-partnerDetailsRemoveEmailAddressYesNo.error.required = Select yes if you want to remove this partner’s email address
-partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s email address?
-
 partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner''s email address?
 partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner''s email address?
 partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner''s email address?
@@ -713,3 +707,8 @@ partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as thi
 partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s fax number?
 partnerRemoveFaxNumberYesNo.error.required = Select yes if you want to remove this partner’s fax number
 partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
+
+removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for your business address?
+removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for your business address?
+removeBusinessAddressAddInfo.paragraph = The additional information is: {0}
+removeBusinessAddressAddInfo.error.required = Select yes if you want to remove the additional information for your business address

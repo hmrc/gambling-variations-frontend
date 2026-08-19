@@ -40,7 +40,7 @@ class BusinessUKAddrScreenerControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new BusinessUKAddrScreenerFormProvider()
   val form = formProvider()
 
-  lazy val businessUKAddrScreenerRoute = routes.BusinessUKAddrScreenerController.onPageLoad(NormalMode).url
+  lazy val businessUKAddrScreenerRoute = routes.BusinessUKAddrScreenerController.onPageLoad().url
 
   "BusinessUKAddrScreener Controller" - {
 

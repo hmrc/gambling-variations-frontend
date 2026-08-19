@@ -19,28 +19,36 @@
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
+    caption: Caption,
+    p: Paragraph,
+    h1: H1,
     govukErrorSummary: GovukErrorSummary,
+    fieldSet: GovukFieldset,
     govukRadios: GovukRadios,
-    govukButton: GovukButton,
-    caption: Caption
+    govukButton: GovukButton
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, addressAddInfo: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("businessUKAddrScreener.title"), Some(messages("changeRegistrationDetails.caption")))) {
+@layout(pageTitle = title(form, messages("removeBusinessAddressAddInfo.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = routes.BusinessUKAddrScreenerController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.RemoveBusinessAddressAddInfoController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-
         @caption(messages("changeRegistrationDetails.caption"))
+        @fieldSet(Fieldset(legend = Some(Legend(
+            content = messages("removeBusinessAddressAddInfo.heading"),
+            isPageHeading = true,
+            classes = "govuk-fieldset__legend--l"))))
+
+        @p(messages("removeBusinessAddressAddInfo.paragraph", addressAddInfo))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("businessUKAddrScreener"),
-                legend = LegendViewModel(messages("businessUKAddrScreener.heading")).asPageHeading(viewmodels.LegendSize.Large)
-            ).withHint(Hint(content = messages("businessUKAddrScreener.hint")))
+                field = form("value"),
+                legend = LegendViewModel(messages("removeBusinessAddressAddInfo.heading")).withCssClass("govuk-visually-hidden")
+            )
         )
 
         @govukButton(
