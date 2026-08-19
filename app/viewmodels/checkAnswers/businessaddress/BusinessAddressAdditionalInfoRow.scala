@@ -42,7 +42,7 @@ case object BusinessAddressAdditionalInfoRow {
       ) ++
         Seq(if (addressAdditionalInfoExists) {
           Some(
-            ActionItemViewModel("site.remove", "#")
+            ActionItemViewModel("site.remove", routes.RemoveBusinessAddressAddInfoController.onPageLoad().url)
               .withVisuallyHiddenText(messages("checkBusinessAddress.label.addInfo.hidden"))
           )
         } else { None }).flatten

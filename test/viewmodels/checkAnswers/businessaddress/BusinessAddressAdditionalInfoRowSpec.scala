@@ -17,6 +17,7 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
+import controllers.routes
 import models.Address
 import pages.*
 import play.api.Application
@@ -51,9 +52,12 @@ class BusinessAddressAdditionalInfoRowSpec extends SpecBase {
         .value
 
       private val result: SummaryListRow = BusinessAddressAdditionalInfoRow.from(ua)
-
+      private val changeRoute: String = routes.BusinessAddressAdditionalInfoController.onPageLoad().url
+      private val removalRoute: String = routes.RemoveBusinessAddressAddInfoController.onPageLoad().url
       result.key.content mustEqual Text(messages("checkBusinessAddress.label.addInfo"))
       result.value.content mustEqual Text("This is some additional info use it wisely")
+      result.actions.get.items.head.href mustEqual changeRoute
+      result.actions.get.items(1).href mustEqual removalRoute
     }
 
     "must render not provided message if no data" in new Setup {
