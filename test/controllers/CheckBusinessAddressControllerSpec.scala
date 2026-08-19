@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{Address, NormalMode, UserAnswers}
+import models.{Address, UserAnswers}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import play.api.libs.json.Json
@@ -66,7 +66,7 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
           "mgdRegNum" -> "XMY1000001"
         )
       )
-      val reroute = routes.BusinessUKAddrScreenerController.onPageLoad(NormalMode).url
+      val reroute = routes.BusinessUKAddrScreenerController.onPageLoad().url
 
       val basicAnswers = UserAnswers("id", regOnly)
 

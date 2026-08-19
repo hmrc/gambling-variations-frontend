@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{AuthorisedAction, BusinessAddressDataRequiredAction, DataRetrievalAction}
-import models.{Mode, NormalMode}
+import models.Mode
 import pages.*
 import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -50,7 +50,7 @@ class CheckBusinessAddressController @Inject() (
       for {
         updated <- Future.fromTry(ua.set(BusinessAddressAddFlowPage, true))
         _       <- sessionRepository.set(updated)
-      } yield Redirect(routes.BusinessUKAddrScreenerController.onPageLoad(NormalMode))
+      } yield Redirect(routes.BusinessUKAddrScreenerController.onPageLoad())
     } else {
       Future.successful(Ok(view(ua, showChangeMessage)))
     }

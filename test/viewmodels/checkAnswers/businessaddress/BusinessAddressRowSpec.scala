@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
-import models.{Address, NormalMode}
+import models.Address
 import pages.*
 import play.api.Application
 import play.api.i18n.Messages

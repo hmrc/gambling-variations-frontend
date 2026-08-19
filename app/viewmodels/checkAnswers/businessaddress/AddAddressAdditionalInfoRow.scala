@@ -37,7 +37,7 @@ case object AddAddressAdditionalInfoRow {
             )
           )
         )
-    )
+      )
     result
   }
 }
