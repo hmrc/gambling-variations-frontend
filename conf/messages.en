@@ -707,6 +707,11 @@ partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to rem
 partnerRemoveFaxNumberYesNo.error.required = Select yes if you want to remove this partner’s fax number
 partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
 
+removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for your business address?
+removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for your business address?
+removeBusinessAddressAddInfo.paragraph = The additional information is: {0}
+removeBusinessAddressAddInfo.error.required = Select yes if you want to remove the additional information for your business address
+
 changePartnerFaxNumber.title = What is the partner’s fax number?
 changePartnerFaxNumber.heading = What is the partner’s fax number?
 changePartnerFaxNumber.checkYourAnswersLabel = What is the partner’s fax number?

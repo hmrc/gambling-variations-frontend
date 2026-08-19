@@ -18,6 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import models.Address
+import models.addresslookup.AddressLookupConfigSettings
 import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.http.Status.ACCEPTED
@@ -36,10 +37,10 @@ class AddressLookupConnector @Inject() (
     extends HttpReadsInstances
     with Logging {
 
-  def initJourney()(implicit hc: HeaderCarrier): Future[String] = {
+  def initJourney(configSettings: AddressLookupConfigSettings)(implicit hc: HeaderCarrier): Future[String] = {
     httpClient
       .post(url"${config.addressLookupFrontendBaseUrl}/api/init")
-      .withBody(Json.obj())
+      .withBody(Json.toJson(configSettings))
       .execute[HttpResponse]
       .map { response =>
         response.status match {

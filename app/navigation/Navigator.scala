@@ -263,7 +263,7 @@ class Navigator @Inject() () {
         routes.CheckCorrespondenceDetailsController.onPageLoad()
 
       case Some(true) =>
-        routes.CorrespondenceUKAddressController.onPageLoad()
+        routes.AddressLookupController.initialise()
 
       case Some(false) =>
         routes.CorrespondenceNonUKAddressController.onPageLoad()
