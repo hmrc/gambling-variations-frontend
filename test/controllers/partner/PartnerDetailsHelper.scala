@@ -9,7 +9,7 @@ trait PartnerDetailsHelper {
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
-  
+
   def cleanedData(faxNumber: Option[String] = None, phoneNumber: Option[String] = None, emailAddress: Option[String] = None): JsObject = Json.obj(
     "partners" -> Json.arr(
       Json.obj(
