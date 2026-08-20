@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package pages.correspondencedetails
+package pages.tradingdetails.associatedregnumbers
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ChosenPreviousRegNumberPage extends QuestionPage[String] {
-  override def path: JsPath = JsPath \ toString
-  override def toString: String = "chosenPreviousRegNumber"
+case object AssociatedRegNumberSubmittedPage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \ "mgdTradeDetailsSection" \ "associatedRegNumbersSection" \ toString
+  override def toString: String = "submitted"
 }

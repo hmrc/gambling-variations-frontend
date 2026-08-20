@@ -22,8 +22,7 @@ import forms.BusinessTradeClassFormProvider
 import javax.inject.Inject
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
-import pages.*
-import pages.tradingdetails.{BusinessTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.tradingdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

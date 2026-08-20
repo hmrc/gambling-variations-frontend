@@ -23,8 +23,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.ChosenAssociatedRegNumberPage
-import pages.correspondencedetails.associatedregnumbers.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage}
+import pages.tradingdetails.associatedregnumbers.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, ChosenAssociatedRegNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

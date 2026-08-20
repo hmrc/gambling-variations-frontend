@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import pages.correspondencedetails.associatedregnumbers.AssociatedRegistrationNumbersPage
+import pages.tradingdetails.associatedregnumbers.AssociatedRegistrationNumbersPage
 import play.api.i18n.Messages
 import play.api.Application
 

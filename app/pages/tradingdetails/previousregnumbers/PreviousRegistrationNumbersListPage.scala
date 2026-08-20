@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.correspondencedetails
+package pages.tradingdetails.previousregnumbers
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object RemovePreviousRegNumberPage extends QuestionPage[Boolean] {
+case object PreviousRegistrationNumbersListPage extends QuestionPage[Seq[String]] {
 
   override def path: JsPath = JsPath \ "mgdTradeDetailsSection" \ "previousRegNumbersSection" \ toString
 
-  override def toString: String = "removePreviousRegNumber"
+  override def toString: String = "previousRegistrationNumbers"
 }

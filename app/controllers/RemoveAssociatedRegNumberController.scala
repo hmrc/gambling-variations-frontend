@@ -20,9 +20,8 @@ import controllers.actions.*
 import forms.RemoveAssociatedRegNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.correspondencedetails.associatedregnumbers.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage}
 import pages.tradingdetails.TradingDetailsChangesPage
-import pages.correspondencedetails.{ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
+import pages.tradingdetails.associatedregnumbers.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

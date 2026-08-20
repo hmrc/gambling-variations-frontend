@@ -17,7 +17,7 @@
 package pages
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import pages.correspondencedetails.PreviousRegistrationNumbersListPage
+import pages.tradingdetails.previousregnumbers.PreviousRegistrationNumbersListPage
 import play.api.libs.json.JsPath
 
 class PreviousRegistrationNumbersListPageSpec extends AnyFreeSpec with Matchers {

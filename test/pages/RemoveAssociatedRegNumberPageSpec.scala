@@ -17,7 +17,7 @@
 package pages
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import pages.correspondencedetails.RemoveAssociatedRegNumberPage
+import pages.tradingdetails.associatedregnumbers.RemoveAssociatedRegNumberPage
 import play.api.libs.json.JsPath
 
 class RemoveAssociatedRegNumberPageSpec extends AnyFreeSpec with Matchers {
