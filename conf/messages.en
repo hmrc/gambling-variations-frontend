@@ -786,7 +786,7 @@ partnerDetailsFaxNumber.error.length = The fax number must be 20 characters or l
 partnerDetailsRemoveNationalInsuranceNumberYesNo.title = Are you sure you want to remove this partner’s National Insurance number?
 partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s National Insurance number?
 partnerDetailsRemoveNationalInsuranceNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s National Insurance number?
-partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required = Select yes if you want to remove this partner's National Insurance number
+partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required = Select yes if you want to remove this partner’s National Insurance number
 partnerDetailsRemoveNationalInsuranceNumberYesNo.change.hidden = Are you sure you want to remove this partner’s National Insurance number?
 
 partnerDetailsAddNationalInsuranceNumberYesNo.title = Do you want to add a National Insurance number for the partner?
