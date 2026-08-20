@@ -31,18 +31,18 @@ import views.html.partner.PartnerTradingNameView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerTradingNameController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              sessionRepository: SessionRepository,
-                                              navigator: Navigator,
-                                              authorise: AuthorisedAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: PartnerDetailsDataRequiredAction,
-                                              formProvider: PartnerTradingNameFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: PartnerTradingNameView
-                                            )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class PartnerTradingNameController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: PartnerDetailsDataRequiredAction,
+  formProvider: PartnerTradingNameFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PartnerTradingNameView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
@@ -78,11 +78,11 @@ class PartnerTradingNameController @Inject()(
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(
-                    request.userAnswers.set(
-                      PartnerDetailsTradingNamePage(index),
-                      value
-                    )
-                  )
+                                      request.userAnswers.set(
+                                        PartnerDetailsTradingNamePage(index),
+                                        value
+                                      )
+                                    )
                   _ <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(
                   navigator.nextPage(
@@ -100,4 +100,3 @@ class PartnerTradingNameController @Inject()(
       }
     }
 }
-
