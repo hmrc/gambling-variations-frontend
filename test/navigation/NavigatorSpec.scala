@@ -343,7 +343,7 @@ class NavigatorSpec extends SpecBase {
           routes.BusinessUKAddressController.onPageLoad()
       }
 
-      "should route BusinessUKAddrScreenerPage to PageNotFound when answer is false" in {
+      "should route BusinessUKAddrScreenerPage to BusinessNonUKAddress when answer is false" in {
         val answers =
           emptyAnswers
             .set(BusinessUKAddrScreenerPage, false)
@@ -351,7 +351,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessUKAddrScreenerPage to SystemError when unanswered" in {
@@ -361,6 +361,11 @@ class NavigatorSpec extends SpecBase {
 
       "should route BusinessAddressUkPage to BusinessAddrInfoScreener" in {
         navigator.nextPage(BusinessAddressUkPage, NormalMode, emptyAnswers) mustBe
+          routes.BusinessAddrInfoScreenerController.onPageLoad()
+      }
+
+      "should route BusinessAddressNonUkPage to BusinessAddrInfoScreener" in {
+        navigator.nextPage(BusinessAddressNonUkPage, NormalMode, emptyAnswers) mustBe
           routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 
