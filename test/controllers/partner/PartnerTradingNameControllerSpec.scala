@@ -18,7 +18,7 @@ package controllers.partner
 import base.SpecBase
 import controllers.routes
 import forms.partner.PartnerTradingNameFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -141,7 +141,7 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, partnerTradingNameRoute)
-            .withFormUrlEncodedBody(("value", "New Trading Name"))
+            .withFormUrlEncodedBody(("partnerTradingName", "New Trading Name"))
 
         val result =
           route(application, request).value
@@ -168,10 +168,10 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, partnerTradingNameRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody(("partnerTradingName", ""))
 
         val boundForm =
-          form.bind(Map("value" -> ""))
+          form.bind(Map("partnerTradingName" -> ""))
 
         val view =
           application.injector.instanceOf[PartnerTradingNameView]

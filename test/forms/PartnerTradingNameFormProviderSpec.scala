@@ -33,9 +33,9 @@ class PartnerTradingNameFormProviderSpec extends StringFieldBehaviours {
 
   private val partnerNameRegex = "^[a-zA-Z0-9\\- '\\s]+$"
 
-  ".value" - {
+  ".partnerTradingName" - {
 
-    val fieldName = "value"
+    val fieldName = "partnerTradingName"
 
     behave like fieldThatBindsValidData(
       form,

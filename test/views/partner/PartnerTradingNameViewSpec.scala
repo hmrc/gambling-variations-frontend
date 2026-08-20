@@ -57,7 +57,7 @@ class PartnerTradingNameViewSpec extends SpecBase {
           messages(application)("changeRegistrationDetails.caption")
         )
 
-        document.getElementById("value").attr("value") mustEqual ""
+        document.getElementById("partnerTradingName").attr("partnerTradingName") mustEqual ""
 
         document.body().text() must include(
           messages(application)("businessTradingName.hint")
@@ -76,7 +76,7 @@ class PartnerTradingNameViewSpec extends SpecBase {
 
         val view = application.injector.instanceOf[PartnerTradingNameView]
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("partnerTradingName" -> ""))
 
         val html = view(
           boundForm,
