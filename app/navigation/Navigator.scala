@@ -140,8 +140,6 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsContactNumberPage(index) =>
       _ => controllers.partner.routes.PartnerContactDetailsController.onPageLoad()
-    case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
-      userAnswers => navigatePartnerRemoveEmailYesNoPage(userAnswers, index)
     case PartnerDetailsNinoPage(index) =>
       userAnswers => navigatePartnerNinoYesNoPage(index)(userAnswers)
 
