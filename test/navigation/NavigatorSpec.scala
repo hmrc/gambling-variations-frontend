@@ -30,7 +30,6 @@ class NavigatorSpec extends SpecBase {
   private val emptyAnswers = UserAnswers("id")
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
-
   "Navigator" - {
 
     "in Normal mode" - {
