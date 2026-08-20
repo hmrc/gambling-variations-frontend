@@ -794,3 +794,12 @@ partnerDetailsAddNationalInsuranceNumberYesNo.heading = Do you want to add a Nat
 partnerDetailsAddNationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you want to add a National Insurance number for the partner?
 partnerDetailsAddNationalInsuranceNumberYesNo.error.required = Select yes to add a National Insurance number for the partner
 partnerDetailsAddNationalInsuranceNumberYesNo.change.hidden = Do you want to add a National Insurance number for the partner?
+
+partnerTradingName.title = What is the partner’s trading name?
+partnerTradingName.heading = What is the partner’s trading name?
+partnerTradingName.hint = The partner’s trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
+partnerTradingName.checkYourAnswersLabel = What is the partner’s trading name?
+partnerTradingName.error.required = Enter the partner’s trading name
+partnerTradingName.error.length = The partner’s trading name must be 100 characters or less
+partnerTradingName.error.invalid = The partner’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
+partnerTradingName.change.hidden = What is the partner’s trading name?
