@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import models.{Address, ContactNumber, UserAnswers}
 import pages.*
-import pages.businessaddress.isleMOrChannelFlagPage
 import pages.correspondencedetails.{CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

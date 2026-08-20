@@ -22,8 +22,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.businessaddress.isleMOrChannelFlagPage
 import pages.correspondencedetails.{CorrespondenceAddressUkPage, CorrespondenceDetailsSectionPage, CorrespondenceDetailsSubmittedPage}
+import pages.isleMOrChannelFlagPage
 import play.api.inject.bind
 import play.api.i18n.Messages
 import play.api.test.FakeRequest

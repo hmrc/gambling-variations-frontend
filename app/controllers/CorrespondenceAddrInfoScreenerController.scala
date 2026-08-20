@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+* Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceAddrInfoScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.correspondencedetails.{AddCorrespondenceAddressAdditionalInformationPage, CorrespondenceDetailsSubmittedPage}
+import pages.correspondencedetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

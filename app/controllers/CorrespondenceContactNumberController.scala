@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.correspondencedetails.{CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
+import pages.correspondencedetails.*
 import repositories.SessionRepository
 import utils.FlagsUtil.checkIfChanged
 import play.api.i18n.{I18nSupport, MessagesApi}

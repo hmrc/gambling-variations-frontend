@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.*
 import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.Mode
-import pages.correspondencedetails.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsChangesPage, RemoveAdditionalCorrespondenceNameYesNoPage}
+import pages.correspondencedetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

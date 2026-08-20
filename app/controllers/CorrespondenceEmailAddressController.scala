@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceEmailPage}
+import pages.correspondencedetails.*
 import utils.FlagsUtil.checkIfChanged
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

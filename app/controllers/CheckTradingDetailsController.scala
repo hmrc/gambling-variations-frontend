@@ -26,9 +26,9 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages.*
+import pages.tradingdetails.*
 import models.*
-import pages.tradingdetails.{BusinessTradeClassPage, IsSeasonalBusinessPage, OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.GroupMemberPage
 
 import scala.concurrent.{ExecutionContext, Future}
 

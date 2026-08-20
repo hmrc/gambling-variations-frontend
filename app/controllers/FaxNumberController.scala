@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.contactdetails.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
+import pages.contactdetails.*
 import utils.FlagsUtil.checkIfChanged
 import pages.GroupMemberPage
 import play.api.i18n.{I18nSupport, MessagesApi}

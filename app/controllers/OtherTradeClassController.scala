@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.OtherTradeClassFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.tradingdetails.{IsSeasonalBusinessPage, OtherTradeClassPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
+import pages.tradingdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

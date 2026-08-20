@@ -20,8 +20,8 @@ import controllers.actions.*
 import forms.CorrespondenceNonUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.businessaddress.isleMOrChannelFlagPage
-import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
+import pages.correspondencedetails.*
+import pages.isleMOrChannelFlagPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

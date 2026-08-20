@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveEmailAddressFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.contactdetails.{BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, ContactDetailsChangesPage, RemoveEmailAddressPage}
+import pages.contactdetails.*
 import pages.GroupMemberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

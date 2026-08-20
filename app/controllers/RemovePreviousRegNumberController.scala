@@ -22,7 +22,7 @@ import forms.RemovePreviousRegNumberFormProvider
 import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.tradingdetails.previousregnumbers.{ChosenPreviousRegNumberPage, PreviousRegNumbersUpdatedPage, RemovePreviousRegNumberPage, UnsubmittedPreviousRegNumbersPage}
+import pages.tradingdetails.previousregnumbers.*
 import pages.tradingdetails.TradingDetailsChangesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

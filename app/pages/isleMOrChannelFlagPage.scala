@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.businessaddress
+package pages
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
