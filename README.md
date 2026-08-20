@@ -30,10 +30,8 @@ This applies scalafmt to `app`, `test`, `it` and the build files, and runs
 [msgman](https://github.com/dboresjo/msgman) over the `conf/messages` files, sorting them into
 canonical order and adding a placeholder for any translation that is missing.
 
-msgman is not part of the standard toolchain, so the build installs it into `~/.local/bin` from its
-GitHub releases the first time it is needed. An msgman that is already installed is used as it is. On
-a platform with no published release, the messages check is skipped with a warning instead of failing
-the build.
+msgman runs via the [sbt-msgman](https://github.com/dboresjo/msgman) plugin, in-process as part of the
+build, rather than a separately installed binary.
 
 To avoid disappointment in your development workflow, use format in your usual edit-build-test cycle, eg:
 ```
