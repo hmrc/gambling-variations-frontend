@@ -24,7 +24,7 @@ import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-class PartnerDetailsRemoveEmailAddressYesNoFormProviderSpec extends SpecBase {
+class PartnerDetailsRemoveEmailAddressYesNoSummarySpec extends SpecBase {
 
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0

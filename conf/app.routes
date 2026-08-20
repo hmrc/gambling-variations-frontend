@@ -214,6 +214,9 @@ POST       /change-registration-details/business-address/uk-postcode-yes-no     
 GET        /change-registration-details/business-address/enter-uk-address                     controllers.BusinessUKAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/enter-uk-address                     controllers.BusinessUKAddressController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/business-address/enter-non-uk-address                     controllers.BusinessNonUKAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/enter-non-uk-address                     controllers.BusinessNonUKAddressController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
 
@@ -241,3 +244,9 @@ POST       /change-registration-details/partner-details/fax-number              
 
 GET        /change-registration-details/partner-details/remove-national-insurance-number                        controllers.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-national-insurance-number                        controllers.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/national-insurance-number-yes-no                        controllers.partner.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/national-insurance-number-yes-no                        controllers.partner.PartnerDetailsAddNationalInsuranceNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/trading-name                        controllers.partner.PartnerTradingNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/trading-name                        controllers.partner.PartnerTradingNameController.onSubmit(mode: Mode = NormalMode)
