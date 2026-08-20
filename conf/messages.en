@@ -171,23 +171,23 @@ changeBusinessName.heading.llp = What is the limited liability partnership’s n
 
 changeBusinessName.label = Business name
 
-changeBusinessName.error.required.soleproprietor = Enter the sole proprietor''s name
-changeBusinessName.error.required.partnership = Enter the partnership''s name
-changeBusinessName.error.required.corporatebody = Enter the corporate body''s name
-changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated body''s name
-changeBusinessName.error.required.llp = Enter the limited liability partnership''s name
+changeBusinessName.error.required.soleproprietor = Enter the sole proprietor’s name
+changeBusinessName.error.required.partnership = Enter the partnership’s name
+changeBusinessName.error.required.corporatebody = Enter the corporate body’s name
+changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated body’s name
+changeBusinessName.error.required.llp = Enter the limited liability partnership’s name
 
-changeBusinessName.error.invalid.soleproprietor = The sole proprietor''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
-changeBusinessName.error.invalid.corporatebody = The corporate body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.llp = The limited liability partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.soleproprietor = The sole proprietor’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.partnership = The partnership’s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
+changeBusinessName.error.invalid.corporatebody = The corporate body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+changeBusinessName.error.invalid.llp = The limited liability partnership’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
-changeBusinessName.error.length.soleproprietor = The sole proprietor''s name must be 160 characters or less
-changeBusinessName.error.length.partnership = The partnership''s name must be 34 characters or less
-changeBusinessName.error.length.corporatebody = The corporate body''s name must be 160 characters or less
-changeBusinessName.error.length.unincorporatedbody = The unincorporated body''s name must be 160 characters or less
-changeBusinessName.error.length.llp = The limited liability partnership''s name must be 160 characters or less
+changeBusinessName.error.length.soleproprietor = The sole proprietor’s name must be 160 characters or less
+changeBusinessName.error.length.partnership = The partnership’s name must be 34 characters or less
+changeBusinessName.error.length.corporatebody = The corporate body’s name must be 160 characters or less
+changeBusinessName.error.length.unincorporatedbody = The unincorporated body’s name must be 160 characters or less
+changeBusinessName.error.length.llp = The limited liability partnership’s name must be 160 characters or less
 
 
 removeFaxNumber.title = Are you sure you want to remove the fax number?
@@ -632,20 +632,20 @@ partnerAddFaxNumberYesNo.error.required = Select yes to add a fax number for the
 partnerAddFaxNumberYesNo.change.hidden = Do you want to add a fax number for the partner?
 
 
-partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner''s address?
-partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner''s address?
+partnerDetailsAdditionalAddressInfo.title = What is the additional information for the partner’s address?
+partnerDetailsAdditionalAddressInfo.heading = What is the additional information for the partner’s address?
 partnerDetailsAdditionalAddressInfo.checkYourAnswersLabel = Additional Information
 partnerDetailsAdditionalAddressInfo.hint = For example, building name or floor number
-partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner''s address
+partnerDetailsAdditionalAddressInfo.error.required = Enter additional information for the partner’s address
 partnerDetailsAdditionalAddressInfo.error.invalid = The additional information must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAdditionalAddressInfo.error.length = The additional information must be 100 characters or less
 
-PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner'’s address?
-PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner'’s address?
-PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.title = Do you want to include additional information for the partner’s address?
+PartnerDetails.additionalAddressInfoYesNo.heading = Do you want to include additional information for the partner’s address?
+PartnerDetails.additionalAddressInfoYesNo.checkYourAnswersLabel = Do you want to include additional information for the partner’s address?
 PartnerDetails.additionalAddressInfoYesNo.error.required = Select yes to include additional information for the partner’s address
 PartnerDetails.additionalAddressInfoYesNo.hint = For example, building name or floor number
-PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner'’s address?
+PartnerDetails.additionalAddressInfoYesNo.change.hidden = Do you want to include additional information for the partner’s address?
 
 businessAddressAdditionalInfo.title = What is the additional information for your business address?
 businessAddressAdditionalInfo.heading = What is the additional information for your business address?
@@ -696,7 +696,6 @@ partnerContactDetails.error.phoneNumber.missing = Enter the phone number for the
 businessUKAddrScreener.title = Does your business address have a UK postcode?
 businessUKAddrScreener.heading = Does your business address have a UK postcode?
 businessUKAddrScreener.hint = You must select yes if the address is in the Channel Islands or the Isle of Man, as these territories use UK postcodes
-businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
 businessUKAddrScreener.error.required = Select yes if your business address has a UK postcode
 businessUKAddrScreener.change.hidden = Does your business address have a UK postcode?
 businessUKAddrScreener.checkYourAnswersLabel = Does your business address have a UK postcode?
@@ -709,17 +708,41 @@ businessAddrInfoScreener.error.required = Select yes to include additional infor
 businessAddrInfoScreener.checkYourAnswersLabel = Do you want to include additional information for your business address?
 businessAddrInfoScreener.change.hidden = Do you want to include additional information for your business address?
 
+businessUKAddress.title = Enter your business address
+businessUKAddress.heading = Enter your business address
+businessUKAddress.addressLine1 = Address line 1
+businessUKAddress.addressLine2 = Address line 2
+businessUKAddress.townOrCity = Town or city
+businessUKAddress.County = County (optional)
+businessUKAddress.Postcode = Postcode
+businessUKAddress.checkYourAnswersLabel = Business Address
+businessUKAddress.addressLine1.error.required = Enter address line 1 for your business address
+businessUKAddress.addressLine1.error.invalid = Address line 1 for your business must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+businessUKAddress.addressLine1.error.length = Address line 1 for your business must be 27 characters or less
+businessUKAddress.addressLine2.error.required = Enter address line 2 for your business address
+businessUKAddress.addressLine2.error.invalid = Address line 2 for your business must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+businessUKAddress.addressLine2.error.length = 	Address line 2 for your business must be 27 characters or less
+businessUKAddress.townOrCity.error.required = Enter the town or city for your business
+businessUKAddress.townOrCity.error.invalid = Town or city for your business must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+businessUKAddress.townOrCity.error.length = Town or city for your business must be 27 characters or less
+businessUKAddress.County.error.invalid = County for your business must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, dots, forward slashes, hyphens, single quotes or spaces
+businessUKAddress.County.error.length = County for your business must be 18 characters or less
+businessUKAddress.Postcode.error.required = Enter postcode for your business
+businessUKAddress.Postcode.error.invalid = Postcode for your business must only include letters a to z, numbers 0 to 9 and spaces
+businessUKAddress.Postcode.error.format = Enter a UK postcode for your business, like E1 6AN or SW1A 2AA
+businessUKAddress.Postcode.error.length = Postcode for your business must be 8 characters or less, including the space
+
 removePartnerTradingNameYesNo.title = Are you sure you want to remove this partner’s trading name?
 removePartnerTradingNameYesNo.heading = Are you sure you want to remove {0} as this partner’s trading name?
-removePartnerTradingNameYesNo.checkYourAnswersLabel =Are you sure you want to remove {0} as this partner's trading name?
+removePartnerTradingNameYesNo.checkYourAnswersLabel =Are you sure you want to remove {0} as this partner’s trading name?
 removePartnerTradingNameYesNo.error.required = Select yes if you want to remove this partner’s trading name
 removePartnerTradingNameYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s trading name?
 
-partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner''s email address?
-partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner''s email address?
-partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner''s email address?
-partnerDetailsRemoveEmailAddressYesNo.error.required = Select yes to remove a email address for the partner
-partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to remove {0} as this partner''s email address?
+partnerDetailsRemoveEmailAddressYesNo.title = Are you sure you want to remove this partner’s email address?
+partnerDetailsRemoveEmailAddressYesNo.heading = Are you sure you want to remove {0} as this partner’s email address?
+partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s email address?
+partnerDetailsRemoveEmailAddressYesNo.error.required = Select yes if you want to remove this partner’s email address
+partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s email address?
 
 partnerRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner’s fax number?
 partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s fax number?
@@ -750,3 +773,13 @@ checkBusinessAddress.changeOption.edit = Edit current business address
 checkBusinessAddress.question.addInfo = Add additional information for address?
 checkBusinessAddress.question.addInfo.hidden = add additional information for address
 checkBusinessAddress.requiredToSubmit = You must continue to the change registration details page to submit any changes.
+
+partnerDetailsFaxNumber.title = What is the partner’s fax number?
+partnerDetailsFaxNumber.heading = What is the partner’s fax number?
+partnerDetailsFaxNumber.checkYourAnswersLabel = What is the partner’s fax number?
+partnerDetailsFaxNumber.change.hidden = What is the partner’s fax number?
+partnerDetailsFaxNumber.error.required = Enter the partner’s fax number
+partnerDetailsFaxNumber.error.length = Enter the partner’s fax number
+partnerDetailsFaxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
+partnerDetailsFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
+partnerDetailsFaxNumber.error.length = The fax number must be 20 characters or less
