@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("partnerTradingName.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = controllers.partner.routes.PartnerTradingNameController.onSubmit() , Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partner.routes.PartnerTradingNameController.onSubmit(), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -43,6 +43,7 @@
                 field = form("partnerTradingName"),
                 label = LabelViewModel(messages("partnerTradingName.heading")).asPageHeading(Large)
             )
+            .withAttribute("autocomplete" -> "partnerTradingName")
             .withWidth(Full)
             .withHint(
             HintViewModel(messages("businessTradingName.hint"))
