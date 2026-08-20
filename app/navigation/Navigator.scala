@@ -22,6 +22,7 @@ import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.partner.*
+import pages.partnerdetails.{PartnerDetailsContactNumberPage, PartnerDetailsNinoPage}
 import pages.partnerdetails.{PartnerDetailsContactNumberPage, PartnerDetailsTradingNamePage}
 import play.api.mvc.Call
 
@@ -120,6 +121,7 @@ class Navigator @Inject() () {
     case BusinessAddressUkPage =>
       _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
     case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+
     // Partner Details
     case PartnerDetailsAdditionalAddressInfoPage =>
       _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
@@ -139,6 +141,9 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsContactNumberPage(index) =>
       _ => controllers.partner.routes.PartnerContactDetailsController.onPageLoad()
+    case PartnerDetailsNinoPage(index) =>
+      userAnswers => navigatePartnerNinoYesNoPage(index)(userAnswers)
+
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
     case _ =>
@@ -401,6 +406,12 @@ class Navigator @Inject() () {
     answers
       .get(PartnerAddFaxNumberYesNoPage(index))
       .map(_ => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad())
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerNinoYesNoPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index))
+      .map(_ => controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad())
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =

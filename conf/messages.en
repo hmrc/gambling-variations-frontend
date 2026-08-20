@@ -755,7 +755,6 @@ removeBusinessAddressAddInfo.heading = Are you sure you want to remove the addit
 removeBusinessAddressAddInfo.paragraph = The additional information is: {0}
 removeBusinessAddressAddInfo.error.required = Select yes if you want to remove the additional information for your business address
 
-
 checkBusinessAddress.title = Check your business address
 checkBusinessAddress.heading = Check your business address
 checkBusinessAddress.label.address = Business address
@@ -783,6 +782,13 @@ partnerDetailsFaxNumber.error.length = Enter the partner’s fax number
 partnerDetailsFaxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
 partnerDetailsFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
 partnerDetailsFaxNumber.error.length = The fax number must be 20 characters or less
+
+partnerDetailsRemoveNationalInsuranceNumberYesNo.title = Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s National Insurance number?
+partnerDetailsRemoveNationalInsuranceNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required = Select yes if you want to remove this partner's National Insurance number
+partnerDetailsRemoveNationalInsuranceNumberYesNo.change.hidden = Are you sure you want to remove this partner’s National Insurance number?
+
 partnerTradingName.title = What is the partner’s trading name?
 partnerTradingName.heading = What is the partner’s trading name?
 partnerTradingName.hint = The partner’s trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.

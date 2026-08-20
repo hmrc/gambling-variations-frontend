@@ -190,3 +190,9 @@ checkBusinessAddress.changeOption.edit = cy: Edit current business address
 checkBusinessAddress.question.addInfo = cy: Add additional information for address?
 checkBusinessAddress.question.addInfo.hidden = cy: add additional information for address
 checkBusinessAddress.requiredToSubmit = cy: You must continue to the change registration details page to submit any changes.
+
+partnerDetailsRemoveNationalInsuranceNumberYesNo.title = cy: Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s National Insurance number?
+partnerDetailsRemoveNationalInsuranceNumberYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required = cy: Select yes if you want to remove this partner's National Insurance number
+partnerDetailsRemoveNationalInsuranceNumberYesNo.change.hidden = cy: Are you sure you want to remove this partner’s National Insurance number?
