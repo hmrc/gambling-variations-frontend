@@ -98,7 +98,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
 
@@ -112,7 +112,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
     }
@@ -215,19 +215,30 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
         }
       }
 
-      "must stay on page for a POST if no existing data is found" in {
+      "must return Bad Request and stay on the same page with form errors when submitted with no selection" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val mockSessionRepository = mock[SessionRepository]
+
+        val application = applicationBuilder(userAnswers = Some(validUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
 
         running(application) {
           val request =
             FakeRequest(POST, removeNinoRoute)
-              .withFormUrlEncodedBody(("value", "true"))
+              .withFormUrlEncodedBody(("value", ""))
+
+          val boundForm = form.bind(Map("value" -> ""))
+
+          val view = application.injector.instanceOf[PartnerDetailsRemoveNationalInsuranceNumberYesNoView]
 
           val result = route(application, request).value
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
+          status(result) mustBe BAD_REQUEST
+          contentAsString(result) mustBe view(boundForm, NormalMode, nino)(request, messages(application)).toString
+          verify(mockSessionRepository, never()).set(any())
         }
       }
     }

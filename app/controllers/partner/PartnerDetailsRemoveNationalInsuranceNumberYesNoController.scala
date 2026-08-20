@@ -39,7 +39,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsRemoveNationalInsuranceNumberYesNoView
@@ -58,6 +58,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoController @Inject() (
       case None        => form
       case Some(value) => form.fill(value)
     }
+
     request.userAnswers
       .get(PartnerDetailsNinoPage(index)) match {
       case Some(nino) =>
