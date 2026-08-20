@@ -18,8 +18,7 @@ package controllers
 
 import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
-import pages.*
-import pages.businessname.{BusinessNameChangesPage, BusinessNamePage, BusinessNameSubmittedPage, SoleProprietorPage}
+import pages.businessname.*
 import pages.tradingdetails.TradingNamePage
 import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}

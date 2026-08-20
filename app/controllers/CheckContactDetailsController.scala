@@ -17,9 +17,7 @@
 package controllers
 
 import controllers.actions.*
-import pages.*
-import pages.contactdetails.{BusinessContactDetailsSubmittedPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, ContactDetailsChangesPage}
-
+import pages.contactdetails.*
 import javax.inject.Inject
 import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
