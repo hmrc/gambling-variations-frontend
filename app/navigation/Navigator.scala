@@ -117,6 +117,8 @@ class Navigator @Inject() () {
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
+    case BusinessAddressUkPage =>
+      _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
     case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
 
     // Partner Details
@@ -295,7 +297,7 @@ class Navigator @Inject() () {
         routes.PageNotFoundController.onPageLoad()
 
       case Some(true) =>
-        routes.PageNotFoundController.onPageLoad()
+        routes.BusinessUKAddressController.onPageLoad()
 
       case Some(false) =>
         routes.PageNotFoundController.onPageLoad()
