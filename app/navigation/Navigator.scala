@@ -21,15 +21,15 @@ import models.*
 import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
-import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressNonUkPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage, BusinessUKAddrScreenerPage, RemoveBusinessAddressAddInfoPage}
-import pages.businessname.{BusinessNamePage, SoleProprietorPage}
-import pages.contactdetails.{BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage, RemoveEmailAddressPage, RemoveFaxNumberPage}
-import pages.correspondencedetails.{AddCorrespondenceAddressAdditionalInformationPage, AddCorrespondenceFaxNumberPage, AddCorrespondingDetailsYesNoPage, AddEmailAddressForCorrespondenceYesNoPage, CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAdditionalNameYesNoPage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage, CorrespondenceContactNumberPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage, CorrespondenceUKAddrScreenerPage, RemoveCorrAddressAddInfoPage, RemoveCorrespondenceDetailsYesNoPage, RemoveCorrespondenceEmailAddressPage, RemoveCorrespondenceFaxNumberPage}
+import pages.businessaddress.*
+import pages.businessname.*
+import pages.contactdetails.*
+import pages.correspondencedetails.*
 import pages.partner.*
-import pages.partnerdetails.PartnerDetailsContactNumberPage
-import pages.tradingdetails.associatedregnumbers.{AddAssociatedRegistrationNumberPage, AssociatedRegNumberPage, AssociatedRegistrationNumbersPage, RemoveAssociatedRegNumberPage}
-import pages.tradingdetails.previousregnumbers.{AddPreviousRegistrationNumberPage, PreviousRegNumberPage, PreviousRegistrationNumbersListPage, RemovePreviousRegNumberPage}
-import pages.tradingdetails.{BusinessTradeClassPage, IsSeasonalBusinessPage, OtherTradeClassPage, RemoveTradeNamePage, TradingNamePage}
+import pages.partnerdetails.*
+import pages.tradingdetails.associatedregnumbers.*
+import pages.tradingdetails.previousregnumbers.*
+import pages.tradingdetails.*
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -127,6 +127,7 @@ class Navigator @Inject() () {
     case BusinessAddressUkPage =>
       _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
     case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+
     // Partner Details
     case PartnerDetailsAdditionalAddressInfoPage =>
       _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
@@ -146,6 +147,8 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsContactNumberPage(index) =>
       _ => controllers.partner.routes.PartnerContactDetailsController.onPageLoad()
+    case PartnerDetailsNinoPage(index) =>
+      userAnswers => navigatePartnerNinoYesNoPage(index)(userAnswers)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -407,6 +410,12 @@ class Navigator @Inject() () {
     answers
       .get(PartnerAddFaxNumberYesNoPage(index))
       .map(_ => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad())
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerNinoYesNoPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index))
+      .map(_ => controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad())
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
