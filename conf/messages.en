@@ -788,3 +788,13 @@ partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = Are you sure you want
 partnerDetailsRemoveNationalInsuranceNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s National Insurance number?
 partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required = Select yes if you want to remove this partner's National Insurance number
 partnerDetailsRemoveNationalInsuranceNumberYesNo.change.hidden = Are you sure you want to remove this partner’s National Insurance number?
+
+partnerTradingName.title = What is the partner’s trading name?
+partnerTradingName.heading = What is the partner’s trading name?
+partnerTradingName.hint = The partner’s trading name should not include ‘Ltd’, ‘Limited’, ‘PLC’ or ‘LLP’. These terms are legally protected, which could cause investigation and delays.
+partnerTradingName.checkYourAnswersLabel = What is the partner’s trading name?
+partnerTradingName.error.required = Enter the partner’s trading name
+partnerTradingName.error.length = The partner’s trading name must be 100 characters or less
+partnerTradingName.error.invalid = The partner’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
+partnerTradingName.change.hidden = What is the partner’s trading name?
+
