@@ -26,7 +26,8 @@ class NavigatorSpec extends SpecBase {
 
   private val navigator = new Navigator
   private val emptyAnswers = UserAnswers("id")
-
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
   "Navigator" - {
 
     "in Normal mode" - {
@@ -327,6 +328,38 @@ class NavigatorSpec extends SpecBase {
       "should route CorrespondenceUKAddrScreenerPage to SystemError when unanswered" in {
         navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route BusinessUKAddrScreenerPage to BusinessUKAddress when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessUKAddrScreenerPage, true)
+            .success
+            .value
+
+        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.BusinessUKAddressController.onPageLoad()
+      }
+
+      "should route BusinessUKAddrScreenerPage to PageNotFound when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessUKAddrScreenerPage, false)
+            .success
+            .value
+
+        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.PageNotFoundController.onPageLoad()
+      }
+
+      "should route BusinessUKAddrScreenerPage to SystemError when unanswered" in {
+        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route BusinessAddressUkPage to BusinessAddrInfoScreener" in {
+        navigator.nextPage(BusinessAddressUkPage, NormalMode, emptyAnswers) mustBe
+          routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 
       "should route CorrespondenceAddressUkPage to CorrespondenceAddrInfoScreener when adding correspondence details" in {
@@ -772,27 +805,27 @@ class NavigatorSpec extends SpecBase {
       "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is true" in {
         val answers =
           emptyAnswers
-            .set(PartnerAddFaxNumberYesNoPage, true)
+            .set(PartnerAddFaxNumberYesNoPage(index), true)
             .success
             .value
 
-        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage(index), NormalMode, answers) mustBe
           controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
       }
 
       "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is false" in {
         val answers =
           emptyAnswers
-            .set(PartnerAddFaxNumberYesNoPage, false)
+            .set(PartnerAddFaxNumberYesNoPage(index), false)
             .success
             .value
 
-        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage(index), NormalMode, answers) mustBe
           controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
       }
 
       "should route PartnerAddFaxNumberYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerAddFaxNumberYesNoPage, NormalMode, emptyAnswers) mustBe
+        navigator.nextPage(PartnerAddFaxNumberYesNoPage(index), NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
 

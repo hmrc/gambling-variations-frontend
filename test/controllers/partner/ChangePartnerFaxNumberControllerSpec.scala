@@ -17,47 +17,48 @@
 package controllers.partner
 
 import base.SpecBase
-import forms.PartnerAddEmailAddressYesNoPageFormProvider
+import forms.FaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerAddEmailAddressYesNoPage
+import pages.partner.ChangePartnerFaxNumberPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.partner.PartnerAddEmailAddressYesNoPageView
+import views.html.partner.ChangePartnerFaxNumberView
 
 import scala.concurrent.Future
 
-class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
+class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  val formProvider = new PartnerAddEmailAddressYesNoPageFormProvider()
-  val form: Form[Boolean] = formProvider()
+  val form: Form[String] = (new FaxNumberFormProvider())("partnerDetailsFaxNumber")
 
-  lazy val partnerAddEmailAddressYesNoRoute: String =
-    controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onPageLoad().url
+  lazy val changePartnerFaxNumberRoute: String =
+    controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val userAnswersWithNoFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val userAnswersWithFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(faxNumber = Some(testFaxNumber)))
 
-  "PartnerAddEmailAddressYesNoPage Controller" - {
+  "ChangePartnerFaxNumber Controller" - {
 
     "onPageLoad" - {
 
       "must return OK and the correct view for a GET when no previous data exists" in {
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithNoFax)).build()
 
         running(application) {
-          val request = FakeRequest(GET, partnerAddEmailAddressYesNoRoute)
+          val request = FakeRequest(GET, changePartnerFaxNumberRoute)
 
           val result = route(application, request).value
 
-          val view = application.injector.instanceOf[PartnerAddEmailAddressYesNoPageView]
+          val view = application.injector.instanceOf[ChangePartnerFaxNumberView]
 
           status(result) mustBe OK
           contentAsString(result) mustBe view(form, NormalMode)(request, messages(application)).toString
@@ -66,28 +67,26 @@ class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with 
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
-        val userAnswers = validUserAnswers.set(PartnerAddEmailAddressYesNoPage(index), true).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithFax)).build()
 
         running(application) {
-          val request = FakeRequest(GET, partnerAddEmailAddressYesNoRoute)
+          val request = FakeRequest(GET, changePartnerFaxNumberRoute)
 
-          val view = application.injector.instanceOf[PartnerAddEmailAddressYesNoPageView]
+          val view = application.injector.instanceOf[ChangePartnerFaxNumberView]
 
           val result = route(application, request).value
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(true), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form.fill(testFaxNumber), NormalMode)(request, messages(application)).toString
         }
       }
 
-      "must redirect to System Error Page for a GET if no existing data is found" in {
+      "must redirect to Journey Recovery for a GET if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val request = FakeRequest(GET, partnerAddEmailAddressYesNoRoute)
+          val request = FakeRequest(GET, changePartnerFaxNumberRoute)
 
           val result = route(application, request).value
 
@@ -98,7 +97,6 @@ class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with 
     }
 
     "onSubmit" - {
-
       def onwardRoute: Call = Call("GET", "/foo")
 
       "must update UserAnswers and redirect to the next page when valid data is submitted" in {
@@ -108,7 +106,7 @@ class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with 
         when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
         val application =
-          applicationBuilder(userAnswers = Some(validUserAnswers))
+          applicationBuilder(userAnswers = Some(userAnswersWithNoFax))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -117,13 +115,16 @@ class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with 
 
         running(application) {
           val request =
-            FakeRequest(POST, partnerAddEmailAddressYesNoRoute)
-              .withFormUrlEncodedBody(("value", "true"))
+            FakeRequest(POST, changePartnerFaxNumberRoute)
+              .withFormUrlEncodedBody(("faxNumber", testFaxNumber))
 
           val result = route(application, request).value
 
-          val expectedAnswers = validUserAnswers
-            .set(PartnerAddEmailAddressYesNoPage(index), true)
+          val expectedAnswers = userAnswersWithNoFax
+            .set(PartnerDetailsCorrespondenceFaxNumberPage(index), testFaxNumber)
+            .success
+            .value
+            .set(ChangePartnerFaxNumberPage(index), value = true)
             .success
             .value
 
@@ -137,20 +138,17 @@ class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with 
 
         val mockSessionRepository = mock[SessionRepository]
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers))
-          .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithNoFax))
           .build()
 
         running(application) {
           val request =
-            FakeRequest(POST, partnerAddEmailAddressYesNoRoute)
+            FakeRequest(POST, changePartnerFaxNumberRoute)
               .withFormUrlEncodedBody(("value", ""))
 
           val boundForm = form.bind(Map("value" -> ""))
 
-          val view = application.injector.instanceOf[PartnerAddEmailAddressYesNoPageView]
+          val view = application.injector.instanceOf[ChangePartnerFaxNumberView]
 
           val result = route(application, request).value
 
@@ -160,14 +158,14 @@ class PartnerEmailAddressControllerSpec extends SpecBase with MockitoSugar with 
         }
       }
 
-      "must redirect to System Error Page for a POST if no existing data is found" in {
+      "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
           val request =
-            FakeRequest(POST, partnerAddEmailAddressYesNoRoute)
-              .withFormUrlEncodedBody(("value", "true"))
+            FakeRequest(POST, changePartnerFaxNumberRoute)
+              .withFormUrlEncodedBody(("value", testFaxNumber))
 
           val result = route(application, request).value
 
