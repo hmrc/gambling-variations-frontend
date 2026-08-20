@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.*
+import pages.GroupMemberPage
 import pages.contactdetails.*
 import javax.inject.Inject
 import utils.FlagsUtil.checkFlag

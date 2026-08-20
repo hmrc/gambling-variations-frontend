@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
 import models.{BusinessType, SoleProprietorName}
+import pages.{BusinessTypePage, GroupMemberPage}
 import pages.businessname.*
 import pages.tradingdetails.TradingNamePage
 import utils.FlagsUtil.checkFlag
