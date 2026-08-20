@@ -167,6 +167,9 @@ removeEmailAddress.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r cy
 
 changeBusinessName.title.partnership = Beth yw enw’r bartneriaeth?
 
+changeBusinessName.title.corporatebody= Beth yw enw’r corff corfforaethol?
+changeBusinessName.heading.corporatebody= Beth yw enw’r corff corfforaethol?
+
 changeBusinessName.heading.partnership = Beth yw enw’r bartneriaeth?
 
 changeBusinessName.title.llp= Beth yw enw’r bartneriaeth atebolrwydd cyfyngedig?
@@ -175,6 +178,10 @@ changeBusinessName.heading.llp = Beth yw enw’r bartneriaeth atebolrwydd cyfyng
 changeBusinessName.error.required.partnership = Nodwch enw’r bartneriaeth
 changeBusinessName.error.invalid.partnership = Mae’n rhaid i enw’r bartneriaeth gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
 changeBusinessName.error.length.partnership = Mae’n rhaid i enw’r bartneriaeth fod yn 34 o gymeriadau neu lai
+
+changeBusinessName.error.required.corporatebody = Nodwch enw’r corff corfforaethol
+changeBusinessName.error.invalid.corporatebody = Mae’n rhaid i enw’r corff corfforaethol gynnwys y llythrennau a i z, y rhifau 0 i 9, bylchau, cysylltnodau a chollnodau yn unig
+changeBusinessName.error.length.corporatebody = Mae’n rhaid i enw’r corff corfforaethol fod yn 160 o gymeriadau neu lai
 
 changeBusinessName.error.required.llp = Nodwch enw’r bartneriaeth atebolrwydd cyfyngedig
 changeBusinessName.error.invalid.llp = Mae’n rhaid i enw’r bartneriaeth atebolrwydd cyfyngedig gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
