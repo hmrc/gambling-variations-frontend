@@ -23,3 +23,5 @@ addSbtPlugin("com.github.sbt" % "sbt-digest" % "2.1.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.2")
 
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.6.4")
+
+addSbtPlugin("io.github.dboresjo" % "sbt-msgman" % "1.1.1")

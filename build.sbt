@@ -11,11 +11,10 @@ ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := "3.3.5"
 
 lazy val microservice = (project in file("."))
-  .enablePlugins(PlayScala, SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin, msgman.sbtplugin.MsgmanPlugin)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(inConfig(Test)(testSettings): _*)
   .settings(ThisBuild / useSuperShell := false)
-  .settings(Msgman.settings: _*)
   .settings(formatCheckSettings: _*)
   .settings(
     name := appName,
@@ -43,12 +42,23 @@ lazy val microservice = (project in file("."))
     ScoverageKeys.coverageHighlighting := true,
     // build.sbt and project/*.scala belong to the build as a whole, so they are only checked here.
     Compile / compile := (Compile / compile).dependsOn(Compile / scalafmtSbtCheck).value,
+    // --fix adds a placeholder for any missing translation, so a formatted tree is one that
+    // msgmanVerify accepts, and compiling is not blocked by a translation nobody has written yet.
+    msgmanFix := true,
+    // msgman itself only prints when it has something to report, so a clean run is otherwise
+    // silent; the completion lines below make sure it's never unclear whether it actually ran.
+    Compile / compile := (Compile / compile)
+      .dependsOn(
+        Def.sequential(msgmanVerify, Def.task(streams.value.log.info("msgman: verify complete")))
+      )
+      .value,
     format := Def
       .sequential(
         scalafmtAll,
         Compile / scalafmtSbt,
         LocalProject("it") / scalafmtAll,
-        Msgman.msgmanFormat
+        msgmanFormat,
+        Def.task(streams.value.log.info("msgman: format complete"))
       )
       .value,
     scalacOptions ++= Seq(
