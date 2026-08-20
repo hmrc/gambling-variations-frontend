@@ -17,7 +17,6 @@
 package forms.partner
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.partner.RemovePartnerTradingNameYesNoFormProvider
 import play.api.data.FormError
 
 class RemovePartnerTradingNameYesNoFormProviderSpec extends BooleanFieldBehaviours {

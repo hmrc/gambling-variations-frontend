@@ -21,6 +21,7 @@ import forms.partner.PartnerAddFaxNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partner.PartnerAddFaxNumberYesNoPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,7 +37,7 @@ class PartnerAddFaxNumberYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerAddFaxNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerAddFaxNumberYesNoView
@@ -44,11 +45,14 @@ class PartnerAddFaxNumberYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
+
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerAddFaxNumberYesNoPage) match {
+    val preparedForm = request.userAnswers.get(PartnerAddFaxNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -64,9 +68,9 @@ class PartnerAddFaxNumberYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddFaxNumberYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddFaxNumberYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerAddFaxNumberYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerAddFaxNumberYesNoPage(index), mode, updatedAnswers))
       )
   }
 }
