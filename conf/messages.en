@@ -828,9 +828,11 @@ partnerTradingName.error.invalid = The partner’s trading name must only includ
 partnerTradingName.change.hidden = What is the partner’s trading name?
 
 partnerDetailsAddNationalInsuranceNumber.title = What is the partner’s National Insurance number?
+partnerDetailsAddNationalInsuranceNumber.paragraph = You can find this on their National Insurance card, benefit letter, payslip or P60.
 partnerDetailsAddNationalInsuranceNumber.heading = What is the partner’s National Insurance number?
 partnerDetailsAddNationalInsuranceNumber.checkYourAnswersLabel = What is the partner’s National Insurance number?
 partnerDetailsAddNationalInsuranceNumber.change.hidden = What is the partner’s National Insurance number?
+partnerDetailsAddNationalInsuranceNumber.change.hint = For example, QQ 12 34 56 C
 partnerDetailsAddNationalInsuranceNumber.error.required = Enter the partner’s National Insurance number
 partnerDetailsAddNationalInsuranceNumber.error.invalidChars = The National Insurance number must only include letters a to z, numbers 1 to 9 and spaces
 partnerDetailsAddNationalInsuranceNumber.error.invalidFormat = The National Insurance number must start with 2 letters, but not A, B, C or D, the next 6 characters must be numbers 0 to 9, and the final character must be a space, B, C, or D
