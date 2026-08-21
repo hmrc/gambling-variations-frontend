@@ -37,6 +37,8 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @caption(messages("changeRegistrationDetails.caption"))
+
         @govukInput(
             InputViewModel(
                 field = form("value"),
