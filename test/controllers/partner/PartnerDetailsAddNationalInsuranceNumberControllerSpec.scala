@@ -19,7 +19,7 @@ package controllers.partner
 import base.SpecBase
 import controllers.routes
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -44,11 +44,13 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
   lazy val partnerDetailsAddNationalInsuranceNumberRoute: String =
     controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url
 
+  def validUserAnswers(nino: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedData(nino = nino))
+
   "PartnerDetailsAddNationalInsuranceNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(validUserAnswers())).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
@@ -64,9 +66,9 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(PartnerDetailsNinoPage(index), nino).success.value
+      val userAnswers = emptyUserAnswers.set(PartnerDetailsNinoPage(index), testNino).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(validUserAnswers(nino = Some(testNino)))).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
@@ -76,7 +78,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(nino), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(testNino), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -97,7 +99,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
       running(application) {
         val request =
           FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
-            .withFormUrlEncodedBody(("value", nino))
+            .withFormUrlEncodedBody(("value", testNino))
 
         val result = route(application, request).value
 
@@ -147,7 +149,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
       running(application) {
         val request =
           FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
-            .withFormUrlEncodedBody(("value", nino))
+            .withFormUrlEncodedBody(("value", testNino))
 
         val result = route(application, request).value
 
