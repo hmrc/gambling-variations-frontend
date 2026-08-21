@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes
 import models.Address
 import pages.*
-import pages.businessaddress.BusinessAddressUkPage
+import pages.businessaddress.*
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -52,7 +52,7 @@ class HasUkPostcodeRowSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressHasUkPostcodePage, true)
+        .set(BusinessUKAddrScreenerPage, true)
         .success
         .value
 

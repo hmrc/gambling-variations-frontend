@@ -148,8 +148,6 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerAddEmailAddressYesNoPage(index)(userAnswers)
     case RemovePartnerTradingNameYesNoPage(index) =>
       userAnswers => navigateRemovePartnerTradingNameYesNoPage(index)(userAnswers)
-    case PartnerEmailAddressPage =>
-      _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
     case RemoveBusinessAddressAddInfoPage =>
@@ -160,7 +158,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
     case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
-
+    case PartnerEmailAddressPage =>
+      _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
     case _ =>

@@ -18,7 +18,6 @@ package pages.tradingdetails
 
 import models.{BusinessTradeClass, UserAnswers}
 import pages.QuestionPage
-import pages.tradingdetails.OtherTradeClassPage
 import play.api.libs.json.JsPath
 
 import scala.util.Try

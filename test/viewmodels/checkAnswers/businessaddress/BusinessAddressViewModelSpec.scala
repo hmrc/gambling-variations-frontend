@@ -20,7 +20,7 @@ import base.SpecBase
 import models.BusinessChangeAddrOption.DifferentUkAddress
 import models.Address
 import pages.*
-import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressAddFlowPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
+import pages.businessaddress.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
@@ -57,7 +57,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressHasUkPostcodePage, true)
+        .set(BusinessUKAddrScreenerPage, true)
         .success
         .value
         .set(AddBusinessAddressAdditionalInformationPage, true)
@@ -82,7 +82,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressHasUkPostcodePage, true)
+        .set(BusinessUKAddrScreenerPage, true)
         .success
         .value
         .set(AddBusinessAddressAdditionalInformationPage, true)
@@ -103,7 +103,7 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressHasUkPostcodePage, true)
+        .set(BusinessUKAddrScreenerPage, true)
         .success
         .value
         .set(BusinessAddressAddFlowPage, true)

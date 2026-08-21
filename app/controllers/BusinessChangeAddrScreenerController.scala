@@ -19,10 +19,9 @@ package controllers
 import controllers.actions.*
 import forms.BusinessChangeAddrScreenerFormProvider
 import models.BusinessChangeAddrOption
-import models.BusinessChangeAddrOption.{ChangeToNonUkAddress, ChangeToUkAddress, EditCurrentAddress}
 import models.Mode
 import navigation.Navigator
-import pages.businessaddress.{BusinessAddressChangeFlowPage, BusinessAddressNonUkPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
+import pages.businessaddress.{BusinessAddressChangeFlowPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
