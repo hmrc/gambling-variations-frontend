@@ -22,7 +22,7 @@ import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSectionPage, RemoveAdditionalCorrespondenceNameYesNoPage}
+import pages.correspondencedetails.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSectionPage, RemoveAdditionalCorrespondenceNameYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*

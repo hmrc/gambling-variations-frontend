@@ -21,6 +21,9 @@ import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{MgdTradeDetails, UserAnswers}
 import pages.*
+import pages.tradingdetails.associatedregnumbers.AssociatedRegistrationNumbersPage
+import pages.tradingdetails.previousregnumbers.PreviousRegistrationNumbersListPage
+import pages.tradingdetails.{BusinessTradeClassPage, IsSeasonalBusinessPage, MgdTradeDetailsSectionPage, OtherTradeClassPage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}

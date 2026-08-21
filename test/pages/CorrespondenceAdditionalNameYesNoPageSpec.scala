@@ -17,6 +17,7 @@
 package pages
 
 import base.SpecBase
+import pages.correspondencedetails.CorrespondenceAdditionalNameYesNoPage
 import play.api.libs.json.JsPath
 
 class CorrespondenceAdditionalNameYesNoPageSpec extends SpecBase {

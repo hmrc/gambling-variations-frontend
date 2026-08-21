@@ -21,6 +21,8 @@ import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
+import pages.businessname.{BusinessNamePage, BusinessNameSectionPage, SoleProprietorPage}
+import pages.tradingdetails.TradingNamePage
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}

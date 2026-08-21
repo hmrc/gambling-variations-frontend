@@ -20,6 +20,11 @@ import base.SpecBase
 import controllers.routes
 import models.{BusinessType, UserAnswers}
 import pages.*
+import pages.businessaddress.BusinessAddressChangesPage
+import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
+import pages.contactdetails.{BusinessContactDetailsSubmittedPage, ContactDetailsChangesPage}
+import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
+import pages.tradingdetails.{TradingDetailsChangesPage, TradingDetailsSubmittedPage}
 import play.api.Application
 import play.api.i18n.Messages
 

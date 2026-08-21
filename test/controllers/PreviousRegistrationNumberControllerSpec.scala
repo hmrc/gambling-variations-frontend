@@ -25,6 +25,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.*
+import pages.tradingdetails.previousregnumbers.{ChosenPreviousRegNumberPage, PreviousRegNumberPage, PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.tradingdetails.{MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*

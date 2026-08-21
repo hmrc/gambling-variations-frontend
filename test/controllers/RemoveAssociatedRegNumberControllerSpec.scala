@@ -24,7 +24,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, MgdTradeDetailsSectionPage, RemoveAssociatedRegNumberPage, TradingDetailsChangesPage}
+import pages.tradingdetails.{MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
+import pages.tradingdetails.associatedregnumbers.{AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage, RemoveAssociatedRegNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call

@@ -22,8 +22,8 @@ import forms.SeasonalBusinessFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
+import pages.tradingdetails.{IsSeasonalBusinessPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import utils.FlagsUtil.checkIfChanged
-import pages.{IsSeasonalBusinessPage, TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

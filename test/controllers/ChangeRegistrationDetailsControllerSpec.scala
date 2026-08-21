@@ -21,6 +21,7 @@ import models.{BusinessType, UserAnswers}
 import org.jsoup.Jsoup
 import org.scalatestplus.mockito.MockitoSugar
 import pages.*
+import pages.businessname.BusinessNameChangesPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 
