@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessChangeAddrScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.businessaddress.{BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
+import pages.businessaddress.{BusinessAddressChangeFlowPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -72,6 +72,7 @@ class BusinessChangeAddrScreenerController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessChangeAddrScreenerPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangeFlowPage, true))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(BusinessChangeAddrScreenerPage, mode, updatedAnswers))
       )

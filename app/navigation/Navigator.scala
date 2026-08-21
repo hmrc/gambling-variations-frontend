@@ -222,7 +222,7 @@ class Navigator @Inject() () {
   private def navigateAddBusinessAddressScreenerPage()(answers: UserAnswers): Call =
     answers.get(AddBusinessAddressAdditionalInformationPage) match {
       case Some(true) => routes.BusinessAddressAdditionalInfoController.onPageLoad()
-      case _          => routes.PageNotFoundController.onPageLoad()
+      case _          => routes.CheckBusinessAddressController.onPageLoad()
     }
 
   private def navigateAddAssociatedRegistrationNumberPage()(answers: UserAnswers): Call =
@@ -308,10 +308,10 @@ class Navigator @Inject() () {
 
     answers.get(BusinessUKAddrScreenerPage) match {
       case Some(true) if previouslyUk =>
-        routes.PageNotFoundController.onPageLoad()
+        routes.CheckBusinessAddressController.onPageLoad()
 
       case Some(false) if previouslyNonUk =>
-        routes.PageNotFoundController.onPageLoad()
+        routes.CheckBusinessAddressController.onPageLoad()
 
       case Some(true) =>
         routes.BusinessUKAddressController.onPageLoad()
@@ -359,16 +359,20 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 
-  private def navigateBusinessChangeAddrScreenerPage()(userAnswers: UserAnswers): Call =
+  private def navigateBusinessChangeAddrScreenerPage()(userAnswers: UserAnswers): Call = {
+    val ukRoute = routes.BusinessUKAddressController.onPageLoad()
+    val nonUkRoute = routes.BusinessNonUKAddressController.onPageLoad()
     userAnswers
       .get(BusinessChangeAddrScreenerPage)
       .map {
-        case BusinessChangeAddrOption.DifferentUkAddress   => routes.PageNotFoundController.onPageLoad()
-        case BusinessChangeAddrOption.ChangeToNonUkAddress => routes.PageNotFoundController.onPageLoad()
-        case BusinessChangeAddrOption.ChangeToUkAddress    => routes.PageNotFoundController.onPageLoad()
-        case BusinessChangeAddrOption.EditCurrentAddress   => routes.PageNotFoundController.onPageLoad()
+        case BusinessChangeAddrOption.DifferentUkAddress   => ukRoute
+        case BusinessChangeAddrOption.ChangeToNonUkAddress => nonUkRoute
+        case BusinessChangeAddrOption.ChangeToUkAddress    => ukRoute
+        case BusinessChangeAddrOption.EditCurrentAddress =>
+          if (userAnswers.get(BusinessAddressUkPage).isDefined) ukRoute else nonUkRoute
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
 
   private def navigateAddCorrespondenceFaxNumberPage()(userAnswers: UserAnswers): Call =
     userAnswers.get(AddCorrespondenceFaxNumberPage) match {
