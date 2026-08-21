@@ -26,8 +26,11 @@ import viewmodels.implicits.*
 
 object PartnerDetailsAddNationalInsuranceNumberSummary {
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsAddNationalInsuranceNumberPage).map { answer =>
+    answers.get(PartnerDetailsAddNationalInsuranceNumberPage(index)).map { answer =>
 
       SummaryListRowViewModel(
         key   = "partnerDetailsAddNationalInsuranceNumber.checkYourAnswersLabel",

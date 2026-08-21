@@ -25,17 +25,19 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
+import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
+import viewmodels.checkAnswers.partner.PartnerDetailsAddNationalInsuranceNumberSummary.index
 import views.html.partner.PartnerDetailsAddNationalInsuranceNumberView
 
 import scala.concurrent.Future
 
-class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -64,7 +66,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsAddNationalInsuranceNumberPage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsNinoPage(index), "answer").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
