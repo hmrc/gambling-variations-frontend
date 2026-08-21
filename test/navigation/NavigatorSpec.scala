@@ -353,7 +353,7 @@ class NavigatorSpec extends SpecBase {
       "should route BusinessUKAddrScreenerPage to BusinessNonUkAddressScreener when answer is false" in {
         val answers =
           emptyAnswers
-            .set(BusinessUKAddrScreenerPage, true)
+            .set(BusinessUKAddrScreenerPage, false)
             .success
             .value
 
