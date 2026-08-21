@@ -28,7 +28,7 @@ class BusinessAddressChangeFlowPageSpec extends PlaySpec {
 
       BusinessAddressChangeFlowPage.path mustEqual (JsPath \ "businessAddressSection" \ "isInChangeFlow")
     }
-    
+
     "have the correct toString value" in {
 
       BusinessAddressChangeFlowPage.toString mustEqual "isInChangeFlow"

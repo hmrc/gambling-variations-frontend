@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package pages.businessaddress
+package pages
 
-import pages.QuestionPage
 import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
+import pages.businessaddress.BusinessUKAddrScreenerPage
 
-case object BusinessAddressHasUkPostcodePage extends QuestionPage[Boolean] {
+class BusinessUKAddrScreenerPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  "BusinessUKAddrScreenerPage" must {
 
-  override def toString: String = "hasUkPostcode"
+    "have the correct path" in {
+
+      BusinessUKAddrScreenerPage.path mustEqual (JsPath \ "businessAddressSection" \ "BusinessUKAddrScreener  ")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessUKAddrScreenerPage.toString mustEqual "BusinessUKAddrScreener "
+    }
+  }
 }

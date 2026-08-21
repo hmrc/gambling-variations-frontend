@@ -570,7 +570,6 @@ class NavigatorSpec extends SpecBase {
             .success
             .value
 
-
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
           routes.BusinessUKAddressController.onPageLoad()
       }

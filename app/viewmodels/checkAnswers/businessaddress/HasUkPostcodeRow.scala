@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.businessaddress
 
 import controllers.routes
 import models.UserAnswers
-import pages.businessaddress.BusinessAddressHasUkPostcodePage
+import pages.businessaddress.BusinessUKAddrScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
@@ -27,7 +27,7 @@ import viewmodels.implicits.*
 case object HasUkPostcodeRow {
   def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
     val result = ua
-      .get(BusinessAddressHasUkPostcodePage)
+      .get(BusinessUKAddrScreenerPage)
       .map(hasPostcode => {
         SummaryListRowViewModel(
           key   = "checkBusinessAddress.question.ukPostcode",

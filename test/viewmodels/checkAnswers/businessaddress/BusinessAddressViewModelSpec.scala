@@ -20,7 +20,7 @@ import base.SpecBase
 import models.BusinessChangeAddrOption.DifferentUkAddress
 import models.Address
 import pages.*
-import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressAddFlowPage, BusinessAddressHasUkPostcodePage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
+import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressAddFlowPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
