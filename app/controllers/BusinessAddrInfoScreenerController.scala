@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessAddrInfoScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{AddBusinessAddressAdditionalInformationPage, BusinessAddressSubmittedPage}
+import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

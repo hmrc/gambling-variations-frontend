@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.RemoveBusinessAddressAddInfoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessAddressAdditionalInformationPage, BusinessAddressChangesPage, BusinessAddressSubmittedPage, RemoveBusinessAddressAddInfoPage}
+import pages.businessaddress.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

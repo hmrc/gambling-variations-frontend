@@ -20,6 +20,7 @@ import base.SpecBase
 import controllers.routes
 import models.Address
 import pages.*
+import pages.businessaddress.{BusinessAddressHasUkPostcodePage, BusinessAddressUkPage}
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.test.FakeRequest

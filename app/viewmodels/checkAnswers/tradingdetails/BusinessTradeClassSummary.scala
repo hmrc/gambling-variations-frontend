@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{BusinessTradeClass, UserAnswers}
-import pages.BusinessTradeClassPage
+import pages.tradingdetails.BusinessTradeClassPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*

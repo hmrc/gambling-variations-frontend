@@ -21,6 +21,7 @@ import forms.FaxNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import pages.*
+import pages.correspondencedetails.{CorrespondenceDetailsSectionPage, CorrespondenceFaxNumberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.CorrespondenceFaxNumberView

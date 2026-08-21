@@ -21,8 +21,15 @@ import models.*
 import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
+import pages.businessaddress.*
+import pages.businessname.*
+import pages.contactdetails.*
+import pages.correspondencedetails.*
 import pages.partner.*
-import pages.partnerdetails.PartnerDetailsContactNumberPage
+import pages.partnerdetails.*
+import pages.tradingdetails.associatedregnumbers.*
+import pages.tradingdetails.previousregnumbers.*
+import pages.tradingdetails.*
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -119,7 +126,10 @@ class Navigator @Inject() () {
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
     case BusinessAddressUkPage =>
       _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
+    case BusinessAddressNonUkPage =>
+      _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
     case RemoveBusinessAddressAddInfoPage => _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+
     // Partner Details
     case PartnerDetailsAdditionalAddressInfoPage =>
       _ => controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
@@ -143,7 +153,13 @@ class Navigator @Inject() () {
       _ => routes.CheckBusinessAddressController.onPageLoad()
     case PartnerDetailsContactNumberPage(index) =>
       _ => controllers.partner.routes.PartnerContactDetailsController.onPageLoad()
+    case PartnerDetailsNinoPage(index) =>
+      userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
+    case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
+      userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
 
+    case PartnerDetailsTradingNamePage(index) =>
+      _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -301,7 +317,7 @@ class Navigator @Inject() () {
         routes.BusinessUKAddressController.onPageLoad()
 
       case Some(false) =>
-        routes.PageNotFoundController.onPageLoad()
+        routes.BusinessNonUKAddressController.onPageLoad()
 
       case None =>
         routes.SystemErrorController.onPageLoad()
@@ -404,6 +420,25 @@ class Navigator @Inject() () {
     answers
       .get(PartnerAddFaxNumberYesNoPage(index))
       .map(_ => controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad())
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerRemoveNinoYesNoPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index))
+      .map(_ => controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad())
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerAddNinoYesNoPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index))
+      .map {
+        case false =>
+          // Should go to Add Nino
+          controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad()
+        case true =>
+          // Should go to Trading name
+          controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad()
+      }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =

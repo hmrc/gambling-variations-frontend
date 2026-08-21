@@ -21,6 +21,7 @@ import controllers.routes
 import models.BusinessChangeAddrOption.*
 import models.{Address, UserAnswers}
 import pages.*
+import pages.businessaddress.{BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.test.FakeRequest

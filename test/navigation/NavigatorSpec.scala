@@ -15,12 +15,21 @@
  */
 
 package navigation
+
 import base.SpecBase
 import controllers.routes
 import models.*
 import models.CorrespondenceChangeAddrOption.*
+import pages.businessaddress.*
+import pages.businessname.*
+import pages.contactdetails.*
+import pages.correspondencedetails.*
+import pages.partner.*
+import pages.partnerdetails.*
+import pages.tradingdetails.*
 import pages.*
-import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsAdditionalAddressInfoYesNoPage, PartnerEmailAddressPage, RemoveAdditionalInfoForPartnerAddressYesNoPage, RemovePartnerTradingNameYesNoPage}
+import pages.tradingdetails.associatedregnumbers.*
+import pages.tradingdetails.previousregnumbers.*
 
 class NavigatorSpec extends SpecBase {
 
@@ -341,7 +350,7 @@ class NavigatorSpec extends SpecBase {
           routes.BusinessUKAddressController.onPageLoad()
       }
 
-      "should route BusinessUKAddrScreenerPage to PageNotFound when answer is false" in {
+      "should route BusinessUKAddrScreenerPage to BusinessNonUKAddress when answer is false" in {
         val answers =
           emptyAnswers
             .set(BusinessUKAddrScreenerPage, false)
@@ -349,7 +358,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessUKAddrScreenerPage to SystemError when unanswered" in {
@@ -359,6 +368,11 @@ class NavigatorSpec extends SpecBase {
 
       "should route BusinessAddressUkPage to BusinessAddrInfoScreener" in {
         navigator.nextPage(BusinessAddressUkPage, NormalMode, emptyAnswers) mustBe
+          routes.BusinessAddrInfoScreenerController.onPageLoad()
+      }
+
+      "should route BusinessAddressNonUkPage to BusinessAddrInfoScreener" in {
+        navigator.nextPage(BusinessAddressNonUkPage, NormalMode, emptyAnswers) mustBe
           routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 
@@ -802,7 +816,7 @@ class NavigatorSpec extends SpecBase {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
-      "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is true" in {
+      "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answered" in {
         val answers =
           emptyAnswers
             .set(PartnerAddFaxNumberYesNoPage(index), true)
@@ -810,18 +824,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(PartnerAddFaxNumberYesNoPage(index), NormalMode, answers) mustBe
-          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
-      }
-
-      "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answer is false" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerAddFaxNumberYesNoPage(index), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerAddFaxNumberYesNoPage(index), NormalMode, answers) mustBe
-          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad() // update later
+          controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad()
       }
 
       "should route PartnerAddFaxNumberYesNoPage to SystemError when unanswered" in {
@@ -829,7 +832,71 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoYesNoController when answer is true" in {
+      "should route PartnerAddEmailAddressYesNoPage to PartnerAddEmailAddressYesNoPageController when answered" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerAddEmailAddressYesNoPage(index), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerAddEmailAddressYesNoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onPageLoad()
+      }
+
+      "should route PartnerAddEmailAddressYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerAddEmailAddressYesNoPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveEmailAddressYesNoPage to PartnerDetailsRemoveEmailAddressYesNoController when answered" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemoveEmailAddressYesNoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveEmailAddressYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsRemoveEmailAddressYesNoPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveFaxNumberYesNoPage to PartnerDetailsRemoveFaxNumberYesNoController when answered" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemoveFaxNumberYesNoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveFaxNumberYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsRemoveFaxNumberYesNoPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveNationalInsuranceNumberYesNoPage to PartnerDetailsRemoveNationalInsuranceNumberYesNoController when answered" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsNinoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad()
+      }
+
+      "should route PartnerDetailsNinoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsNinoPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoYesNoController when answered" in {
         val answers =
           emptyAnswers
             .set(PartnerDetailsAdditionalAddressInfoYesNoPage, true)
@@ -837,18 +904,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage, NormalMode, answers) mustBe
-          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad() // update later
-      }
-
-      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoYesNoController when answer is false" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAdditionalAddressInfoYesNoPage, false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage, NormalMode, answers) mustBe
-          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad() // update later
+          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad()
       }
 
       "should route PartnerDetailsAdditionalAddressInfoYesNoPage to SystemError when unanswered" in {
@@ -861,12 +917,15 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route PartnerDetailsAdditionalAddressInfoPage to itself" in {
+      "should route PartnerDetailsAdditionalAddressInfoPage to PartnerDetailsAdditionalAddressInfoController" in {
         navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage, NormalMode, emptyAnswers) mustBe
-          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad() // TODO: update later.
+          controllers.partner.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad()
       }
 
-      // update tests later
+      "should route PartnerDetailsContactNumberPage to PartnerContactDetailsController" in {
+        navigator.nextPage(PartnerDetailsContactNumberPage(index), NormalMode, emptyAnswers) mustBe
+          controllers.partner.routes.PartnerContactDetailsController.onPageLoad()
+      }
 
       "should route RemoveAdditionalInfoForPartnerAddressYesNoPage to RemoveAdditionalInfoForPartnerAddressYesNoController when answer is true" in {
         val answers =
@@ -895,7 +954,7 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route PartnerEmailAddressPage to PartnerEmailAddressPage" in { // change title once updated
+      "should route PartnerEmailAddressPage to PartnerEmailAddressController" in {
         navigator.nextPage(PartnerEmailAddressPage, NormalMode, emptyAnswers) mustBe
           controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
       }
@@ -903,27 +962,27 @@ class NavigatorSpec extends SpecBase {
       "should route RemovePartnerTradingNameYesNoPage to RemovePartnerTradingNameYesNoController when answer is false" in {
         val answers =
           emptyAnswers
-            .set(RemovePartnerTradingNameYesNoPage(0), false)
+            .set(RemovePartnerTradingNameYesNoPage(index), false)
             .success
             .value
 
-        navigator.nextPage(RemovePartnerTradingNameYesNoPage(0), NormalMode, answers) mustBe
+        navigator.nextPage(RemovePartnerTradingNameYesNoPage(index), NormalMode, answers) mustBe
           controllers.partner.routes.RemovePartnerTradingNameYesNoController.onPageLoad()
       }
 
-      "should route RemovePartnerTradingNameYesNoPage to CheckYourAnswers when answer is true" in { // update title and navigation
+      "should route RemovePartnerTradingNameYesNoPage to IndexController when answer is true" in {
         val answers =
           emptyAnswers
-            .set(RemovePartnerTradingNameYesNoPage(0), true)
+            .set(RemovePartnerTradingNameYesNoPage(index), true)
             .success
             .value
 
-        navigator.nextPage(RemovePartnerTradingNameYesNoPage(0), NormalMode, answers) mustBe
+        navigator.nextPage(RemovePartnerTradingNameYesNoPage(index), NormalMode, answers) mustBe
           routes.IndexController.onPageLoad()
       }
 
       "should route RemovePartnerTradingNameYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(RemovePartnerTradingNameYesNoPage(0), NormalMode, emptyAnswers) mustBe
+        navigator.nextPage(RemovePartnerTradingNameYesNoPage(index), NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
 

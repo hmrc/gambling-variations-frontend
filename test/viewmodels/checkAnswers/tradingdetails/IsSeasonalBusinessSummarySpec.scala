@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.tradingdetails
 import base.SpecBase
 import controllers.routes
 import org.scalatest.matchers.must.Matchers.*
-import pages.IsSeasonalBusinessPage
+import pages.tradingdetails.IsSeasonalBusinessPage
 import play.api.Application
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text

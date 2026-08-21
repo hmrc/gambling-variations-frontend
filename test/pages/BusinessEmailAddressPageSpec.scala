@@ -17,6 +17,7 @@
 package pages
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.contactdetails.BusinessEmailAddressPage
 import play.api.libs.json.JsPath
 
 class BusinessEmailAddressPageSpec extends AnyFreeSpec with Matchers {

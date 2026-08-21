@@ -18,93 +18,150 @@ package models
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.Json
+import play.api.libs.json.{JsSuccess, Json}
 
 import java.time.LocalDate
 
 class PartnerDetailsSpec extends AnyWordSpec with Matchers {
-  "PartnerDetails" should {
 
-    "read a complete address" in {
+  private val partnerModel = PartnerDetails(
+    mgdRegNumber           = "XWM00000001762",
+    dateOfJoining          = Some(LocalDate.of(2022, 1, 15)),
+    dateOfLeaving          = Some(LocalDate.of(2028, 12, 31)),
+    solePropTitle          = Some("Mr"),
+    solePropFirstName      = Some("John"),
+    solePropMiddleName     = Some("Michael"),
+    solePropLastName       = Some("Doe"),
+    businessName           = Some("XYZ Consulting Ltd"),
+    tradingName            = Some("XYZ Consulting"),
+    dateOfBirth            = Some(LocalDate.of(1985, 6, 20)),
+    nino                   = Some("AB123456C"),
+    utr                    = Some("1234567890"),
+    vrn                    = Some("GB123456789"),
+    crn                    = Some("09876543"),
+    dateOfIncorporation    = Some(LocalDate.of(2020, 3, 1)),
+    countryOfIncorporation = Some("GB"),
+    foreignCorporateRef    = Some("FCR-987654"),
+    address1               = Some("123 High Street"),
+    address2               = Some("Suite 4"),
+    address3               = Some("Business Park"),
+    address4               = Some("London"),
+    postcode               = Some("SW1A 1AA"),
+    country                = Some("GB"),
+    adi                    = Some("ADI123456"),
+    iomOrCiFlag            = Some("N"),
+    phoneNumber            = Some("02071234567"),
+    mobilePhoneNumber      = Some("07700123456"),
+    faxNumber              = Some("02071234568"),
+    emailAddr              = Some("john.doe@example.com"),
+    isFutureLeaveDate      = Some(0),
+    isFutureJoinDate       = Some(0),
+    businessType           = Some(2)
+  )
 
-      val json = Json.obj(
+  private val partnersDetailsModel = PartnersDetails(
+    partners   = Seq(partnerModel),
+    systemDate = Some(LocalDate.of(2026, 7, 30))
+  )
+
+  private val partnerJson = Json.obj(
+    "mgdRegNumber"           -> "XWM00000001762",
+    "dateOfJoining"          -> "2022-01-15",
+    "dateOfLeaving"          -> "2028-12-31",
+    "solePropTitle"          -> "Mr",
+    "solePropFirstName"      -> "John",
+    "solePropMiddleName"     -> "Michael",
+    "solePropLastName"       -> "Doe",
+    "businessName"           -> "XYZ Consulting Ltd",
+    "tradingName"            -> "XYZ Consulting",
+    "dateOfBirth"            -> "1985-06-20",
+    "nino"                   -> "AB123456C",
+    "utr"                    -> "1234567890",
+    "vrn"                    -> "GB123456789",
+    "crn"                    -> "09876543",
+    "dateOfIncorporation"    -> "2020-03-01",
+    "countryOfIncorporation" -> "GB",
+    "foreignCorporateRef"    -> "FCR-987654",
+    "address1"               -> "123 High Street",
+    "address2"               -> "Suite 4",
+    "address3"               -> "Business Park",
+    "address4"               -> "London",
+    "postcode"               -> "SW1A 1AA",
+    "country"                -> "GB",
+    "adi"                    -> "ADI123456",
+    "iomOrCiFlag"            -> "N",
+    "phoneNumber"            -> "02071234567",
+    "mobilePhoneNumber"      -> "07700123456",
+    "faxNumber"              -> "02071234568",
+    "emailAddr"              -> "john.doe@example.com",
+    "isFutureLeaveDate"      -> 0,
+    "isFutureJoinDate"       -> 0,
+    "businessType"           -> 2
+  )
+
+  private val fullJson = Json.obj(
+    "partners"   -> Json.arr(partnerJson),
+    "systemDate" -> "2026-07-30"
+  )
+
+  "PartnersDetails" should {
+
+    "read complete partner details correctly" in {
+      fullJson.validate[PartnersDetails] shouldBe JsSuccess(partnersDetailsModel)
+    }
+
+    "write complete partner details correctly" in {
+      Json.toJson(partnersDetailsModel) shouldBe fullJson
+    }
+
+    "read partner details with only required fields present" in {
+      val minJson = Json.obj(
         "partners" -> Json.arr(
-          Json.obj(
-            "mgdRegNumber"           -> "XWM00000001762",
-            "dateOfJoining"          -> "2022-01-15",
-            "dateOfLeaving"          -> "2028-12-31",
-            "solePropTitle"          -> "Mr",
-            "solePropFirstName"      -> "John",
-            "solePropMiddleName"     -> "Michael",
-            "solePropLastName"       -> "Doe",
-            "businessName"           -> "XYZ Consulting Ltd",
-            "tradingName"            -> "XYZ Consulting",
-            "dateOfBirth"            -> "1985-06-20",
-            "nino"                   -> "AB123456C",
-            "utr"                    -> "1234567890",
-            "vrn"                    -> "GB123456789",
-            "crn"                    -> "09876543",
-            "dateOfIncorporation"    -> "2020-03-01",
-            "countryOfIncorporation" -> "GB",
-            "foreignCorporateRef"    -> "FCR-987654",
-            "address1"               -> "123 High Street",
-            "address2"               -> "Suite 4",
-            "address3"               -> "Business Park",
-            "address4"               -> "London",
-            "postcode"               -> "SW1A 1AA",
-            "country"                -> "GB",
-            "adi"                    -> "ADI123456",
-            "iomOrCiFlag"            -> "N",
-            "phoneNumber"            -> "02071234567",
-            "mobilePhoneNumber"      -> "07700123456",
-            "faxNumber"              -> "02071234568",
-            "emailAddr"              -> "john.doe@example.com",
-            "isFutureLeaveDate"      -> 0,
-            "isFutureJoinDate"       -> 0,
-            "businessType"           -> 2
-          )
-        ),
-        "systemDate" -> "2026-07-30"
+          Json.obj("mgdRegNumber" -> "XWM00000001762")
+        )
       )
 
-      val result =
-        json.validate[PartnersDetails]
+      val expectedModel = PartnersDetails(
+        partners = Seq(
+          PartnerDetails(
+            mgdRegNumber           = "XWM00000001762",
+            dateOfJoining          = None,
+            dateOfLeaving          = None,
+            solePropTitle          = None,
+            solePropFirstName      = None,
+            solePropMiddleName     = None,
+            solePropLastName       = None,
+            businessName           = None,
+            tradingName            = None,
+            dateOfBirth            = None,
+            nino                   = None,
+            utr                    = None,
+            vrn                    = None,
+            crn                    = None,
+            dateOfIncorporation    = None,
+            countryOfIncorporation = None,
+            foreignCorporateRef    = None,
+            address1               = None,
+            address2               = None,
+            address3               = None,
+            address4               = None,
+            postcode               = None,
+            country                = None,
+            adi                    = None,
+            iomOrCiFlag            = None,
+            phoneNumber            = None,
+            mobilePhoneNumber      = None,
+            faxNumber              = None,
+            emailAddr              = None,
+            isFutureLeaveDate      = None,
+            isFutureJoinDate       = None,
+            businessType           = None
+          )
+        ),
+        systemDate = None
+      )
 
-      result.isSuccess                                shouldBe true
-      result.get.partners.size                        shouldBe 1
-      result.get.partners.head.mgdRegNumber           shouldBe "XWM00000001762"
-      result.get.partners.head.dateOfJoining          shouldBe Some(LocalDate.of(2022, 1, 15))
-      result.get.partners.head.dateOfLeaving          shouldBe Some(LocalDate.of(2028, 12, 31))
-      result.get.partners.head.solePropTitle          shouldBe Some("Mr")
-      result.get.partners.head.solePropFirstName      shouldBe Some("John")
-      result.get.partners.head.solePropMiddleName     shouldBe Some("Michael")
-      result.get.partners.head.solePropLastName       shouldBe Some("Doe")
-      result.get.partners.head.businessName           shouldBe Some("XYZ Consulting Ltd")
-      result.get.partners.head.tradingName            shouldBe Some("XYZ Consulting")
-      result.get.partners.head.dateOfBirth            shouldBe Some(LocalDate.of(1985, 6, 20))
-      result.get.partners.head.nino                   shouldBe Some("AB123456C")
-      result.get.partners.head.utr                    shouldBe Some("1234567890")
-      result.get.partners.head.vrn                    shouldBe Some("GB123456789")
-      result.get.partners.head.crn                    shouldBe Some("09876543")
-      result.get.partners.head.dateOfIncorporation    shouldBe Some(LocalDate.of(2020, 3, 1))
-      result.get.partners.head.countryOfIncorporation shouldBe Some("GB")
-      result.get.partners.head.foreignCorporateRef    shouldBe Some("FCR-987654")
-      result.get.partners.head.address1               shouldBe Some("123 High Street")
-      result.get.partners.head.address2               shouldBe Some("Suite 4")
-      result.get.partners.head.address3               shouldBe Some("Business Park")
-      result.get.partners.head.address4               shouldBe Some("London")
-      result.get.partners.head.postcode               shouldBe Some("SW1A 1AA")
-      result.get.partners.head.country                shouldBe Some("GB")
-      result.get.partners.head.adi                    shouldBe Some("ADI123456")
-      result.get.partners.head.iomOrCiFlag            shouldBe Some("N")
-      result.get.partners.head.phoneNumber            shouldBe Some("02071234567")
-      result.get.partners.head.mobilePhoneNumber      shouldBe Some("07700123456")
-      result.get.partners.head.faxNumber              shouldBe Some("02071234568")
-      result.get.partners.head.emailAddr              shouldBe Some("john.doe@example.com")
-      result.get.partners.head.isFutureJoinDate       shouldBe Some(0)
-      result.get.partners.head.isFutureLeaveDate      shouldBe Some(0)
-      result.get.partners.head.businessType           shouldBe Some(2)
-      result.get.systemDate                           shouldBe Some(LocalDate.of(2026, 7, 30))
+      minJson.validate[PartnersDetails] shouldBe JsSuccess(expectedModel)
     }
   }
 }

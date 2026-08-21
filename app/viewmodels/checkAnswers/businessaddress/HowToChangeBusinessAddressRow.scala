@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.businessaddress
 import controllers.routes
 import models.BusinessChangeAddrOption.*
 import models.UserAnswers
-import pages.BusinessChangeAddrScreenerPage
+import pages.businessaddress.BusinessChangeAddrScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
