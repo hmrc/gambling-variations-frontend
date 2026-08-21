@@ -16,18 +16,12 @@
 
 package forms.partner
 
-import forms.mappings.Mappings
-import play.api.data.Form
-
 import javax.inject.Inject
+import play.api.data.Form
+import forms.mappings.Mappings
+import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider.*
 
 class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Mappings {
-
-  private val ninoFormatRegex: String = """^[A-Za-z]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-Za-z\s]$"""
-
-  private val ninoCharsRegex: String = """^[E-ZE-Ze-z][A-Za-z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[B-Db-d\s]$"""
-
-  private val ninoValidRegex: String = """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TV-Z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-D]$"""
 
   private val length: Int = 9
 
@@ -36,17 +30,21 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
       "value" ->
         text("partnerDetailsAddNationalInsuranceNumber.error.required")
           .verifying(
-            maxLength(length, "partnerDetailsAddNationalInsuranceNumber.error.length")
-          )
-          .verifying(
-            regexp(ninoFormatRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidFormat")
-          )
-          .verifying(
-            regexp(ninoCharsRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidChars")
-          )
-          .verifying(
-            regexp(ninoValidRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalid")
+            firstError(
+              maxLength(length, "partnerDetailsAddNationalInsuranceNumber.error.length"),
+              regexp(ninoFormatRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidFormat"),
+              regexp(ninoCharsRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidChars"),
+              regexp(ninoValidRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalid")
+            )
           )
     )
   }
+}
+
+object PartnerDetailsAddNationalInsuranceNumberFormProvider {
+  private[forms] val ninoFormatRegex: String = """^[A-Za-z]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-Za-z]$"""
+  private[forms] val ninoCharsRegex: String =
+    """^[A-CEGHJ-PR-TW-Za-ceghj-pr-tw-z][A-CEGHJ-NPR-TV-Za-ceghj-npr-tv-z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-Da-d]$"""
+  private[forms] val ninoValidRegex: String =
+    """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TV-Z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-D]$"""
 }

@@ -17,13 +17,17 @@
 package forms.partner
 
 import forms.behaviours.StringFieldBehaviours
-import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
+import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider.*
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "partnerDetailsAddNationalInsuranceNumber.error.required"
   val lengthKey = "partnerDetailsAddNationalInsuranceNumber.error.length"
+  val invalidFormatKey = "partnerDetailsAddNationalInsuranceNumber.error.invalidFormat"
+  val invalidCharsKey = "partnerDetailsAddNationalInsuranceNumber.error.invalidChars"
+  val invalidKey = "partnerDetailsAddNationalInsuranceNumber.error.invalid"
   val maxLength = 9
 
   val form = new PartnerDetailsAddNationalInsuranceNumberFormProvider()()
@@ -32,10 +36,19 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
 
     val fieldName = "value"
 
+    val validNinoGen: Gen[String] = for {
+      firstChar  <- Gen.oneOf('A' to 'Z').filterNot(c => Seq('D', 'F', 'I', 'Q', 'U', 'V').contains(c))
+      secondChar <- Gen.oneOf('A' to 'Z').filterNot(c => Seq('D', 'F', 'I', 'O', 'Q', 'U', 'V').contains(c))
+      digits     <- Gen.listOfN(6, Gen.numChar).map(_.mkString)
+      suffix     <- Gen.oneOf('A', 'B', 'C', 'D')
+      prefix = s"$firstChar$secondChar"
+      if !Seq("BG", "GB", "KN", "NK", "NT", "TN", "ZZ").contains(prefix)
+    } yield s"$prefix$digits$suffix"
+
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      validNinoGen
     )
 
     behave like fieldWithMaxLength(
@@ -50,5 +63,32 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "fail to bind when format is invalid" in {
+      val invalidFormatInputs = Seq("123456789", "QQ1234567", "QQAAAAAAA")
+
+      for (input <- invalidFormatInputs) {
+        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
+        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoFormatRegex)))
+      }
+    }
+
+    "fail to bind when prefix uses invalid characters" in {
+      val invalidCharInputs = Seq("DA123456A", "FA123456A", "IA123456A", "QA123456A", "UA123456A", "VA123456A")
+
+      for (input <- invalidCharInputs) {
+        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
+        result.errors must contain(FormError(fieldName, invalidCharsKey, Seq(ninoCharsRegex)))
+      }
+    }
+
+    "fail to bind when NINO is structurally well-formed but not a real/valid prefix" in {
+      val disallowedPrefixes = Seq("BG123456A", "GB123456A", "KN123456A", "NK123456A", "NT123456A", "TN123456A", "ZZ123456A")
+
+      for (input <- disallowedPrefixes) {
+        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
+        result.errors must contain(FormError(fieldName, invalidKey, Seq(ninoValidRegex)))
+      }
+    }
   }
 }

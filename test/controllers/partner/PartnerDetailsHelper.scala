@@ -25,7 +25,7 @@ trait PartnerDetailsHelper {
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
-  val nino: String = "AB123456C"
+  val nino: String = "QQ123456A"
 
   def cleanedData(
     faxNumber: Option[String] = None,

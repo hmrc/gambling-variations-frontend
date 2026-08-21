@@ -19,12 +19,11 @@ package controllers.partner
 import base.SpecBase
 import controllers.routes
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
 import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -32,7 +31,6 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import viewmodels.checkAnswers.partner.PartnerDetailsAddNationalInsuranceNumberSummary.index
 import views.html.partner.PartnerDetailsAddNationalInsuranceNumberView
 
 import scala.concurrent.Future
@@ -66,7 +64,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsNinoPage(index), "answer").success.value
+      val userAnswers = emptyUserAnswers.set(PartnerDetailsNinoPage(index), nino).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -78,7 +76,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(nino), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -99,7 +97,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
       running(application) {
         val request =
           FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", nino))
 
         val result = route(application, request).value
 
@@ -128,7 +126,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
       }
     }
 
-    "must redirect to SystemError for a GET if no existing data is found" in {
+    "must redirect to Journey Recovery for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -138,23 +136,23 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
       }
     }
 
-    "must redirect to SystemError for a POST if no existing data is found" in {
+    "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request =
           FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", nino))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
       }
     }
   }
