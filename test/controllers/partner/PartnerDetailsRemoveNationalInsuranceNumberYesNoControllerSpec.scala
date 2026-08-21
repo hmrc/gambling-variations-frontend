@@ -43,7 +43,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
   lazy val removeNinoRoute: String =
     controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(nino = Some(testNino)))
 
   "PartnerDetailsRemoveNationalInsuranceNumberYesNo Controller" - {
 
