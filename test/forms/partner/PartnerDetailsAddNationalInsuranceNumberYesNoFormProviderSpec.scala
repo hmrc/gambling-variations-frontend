@@ -17,7 +17,6 @@
 package forms.partner
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.partner.PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider
 import play.api.data.FormError
 
 class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {

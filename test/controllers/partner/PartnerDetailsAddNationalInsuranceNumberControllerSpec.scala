@@ -22,8 +22,9 @@ import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
 import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -37,7 +38,7 @@ import scala.concurrent.Future
 
 class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val form: Form[String] = (new PartnerDetailsAddNationalInsuranceNumberFormProvider())()
 
@@ -45,116 +46,138 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
     controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url
 
   def validUserAnswers(nino: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedData(nino = nino))
+  val userAnswersNoNino: UserAnswers = validUserAnswers()
+  val userAnswersWithNino: UserAnswers = validUserAnswers(Some(testNino))
 
   "PartnerDetailsAddNationalInsuranceNumber Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "onPageLoad" - {
 
-      val application = applicationBuilder(userAnswers = Some(validUserAnswers())).build()
+      "must return OK and the correct view for a GET when no previous answer exists" in {
 
-      running(application) {
-        val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoNino)).build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
 
-        val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+          val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+          val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+          status(result) mustBe OK
+          contentAsString(result) mustBe view(form, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered" in {
+
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithNino)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
+
+          val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+          val result = route(application, request).value
+
+          status(result) mustBe OK
+          contentAsString(result) mustBe view(form.fill(testNino), NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to SystemErrorController for a GET if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe routes.SystemErrorController.onPageLoad().url
+        }
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "onSubmit" - {
 
-      val userAnswers = emptyUserAnswers.set(PartnerDetailsNinoPage(index), testNino).success.value
+      "must update UserAnswers for both pages and redirect when valid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(validUserAnswers(nino = Some(testNino)))).build()
+        val mockSessionRepository = mock[SessionRepository]
 
-      running(application) {
-        val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-        val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersNoNino))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
+              .withFormUrlEncodedBody(("value", testNino))
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(testNino), NormalMode)(request, messages(application)).toString
+          val result = route(application, request).value
+
+          val expectedAnswers = userAnswersNoNino
+            .set(PartnerDetailsAddNationalInsuranceNumberPage(index), testNino)
+            .success
+            .value
+            .set(PartnerDetailsNinoPage(index), testNino)
+            .success
+            .value
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe onwardRoute.url
+          verify(mockSessionRepository).set(expectedAnswers)
+        }
       }
-    }
 
-    "must redirect to the next page when valid data is submitted" in {
+      "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+        val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        val application = applicationBuilder(userAnswers = Some(userAnswersNoNino))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
-            .withFormUrlEncodedBody(("value", testNino))
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
+              .withFormUrlEncodedBody(("value", ""))
 
-        val result = route(application, request).value
+          val boundForm = form.bind(Map("value" -> ""))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+          val result = route(application, request).value
+
+          status(result) mustBe BAD_REQUEST
+          contentAsString(result) mustBe view(boundForm, NormalMode)(request, messages(application)).toString
+          verify(mockSessionRepository, never()).set(any())
+        }
       }
-    }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+      "must redirect to SystemErrorController for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
-            .withFormUrlEncodedBody(("value", ""))
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
+              .withFormUrlEncodedBody(("value", testNino))
 
-        val boundForm = form.bind(Map("value" -> ""))
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
-      }
-    }
-
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request = FakeRequest(GET, partnerDetailsAddNationalInsuranceNumberRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
-      }
-    }
-
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerDetailsAddNationalInsuranceNumberRoute)
-            .withFormUrlEncodedBody(("value", testNino))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe routes.SystemErrorController.onPageLoad().url
+        }
       }
     }
   }
