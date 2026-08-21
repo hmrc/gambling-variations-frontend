@@ -26,12 +26,12 @@ class BusinessUKAddrScreenerPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      BusinessUKAddrScreenerPage.path mustEqual (JsPath \ "businessAddressSection" \ "BusinessUKAddrScreener  ")
+      BusinessUKAddrScreenerPage.path mustEqual (JsPath \ "businessAddressSection" \ "businessUKAddrScreener")
     }
 
     "have the correct toString value" in {
 
-      BusinessUKAddrScreenerPage.toString mustEqual "BusinessUKAddrScreener "
+      BusinessUKAddrScreenerPage.toString mustEqual "businessUKAddrScreener"
     }
   }
 }

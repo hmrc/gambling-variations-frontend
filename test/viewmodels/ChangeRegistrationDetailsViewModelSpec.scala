@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes
 import models.{BusinessType, UserAnswers}
 import pages.*
-import pages.businessaddress.BusinessAddressChangesPage
+import pages.businessaddress.*
 import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
 import pages.contactdetails.{BusinessContactDetailsSubmittedPage, ContactDetailsChangesPage}
 import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
@@ -124,7 +124,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       def urlOf(name: String): String = vm.sections.find(_.name == name).value.url
 
       urlOf("Business name") mustEqual routes.CheckBusinessNameController.onPageLoad().url
-      urlOf("Business address") mustEqual routes.BusinessChangeAddrScreenerController.onPageLoad().url
+      urlOf("Business address") mustEqual routes.BusinessUKAddressController.onPageLoad().url
       urlOf("Business contact details") mustEqual routes.CheckContactDetailsController.onPageLoad().url
       urlOf("Correspondence details") mustEqual routes.CheckCorrespondenceDetailsController.onPageLoad().url
       urlOf("Trading details") mustEqual routes.CheckTradingDetailsController.onPageLoad().url
