@@ -18,20 +18,20 @@ package pages
 
 import play.api.libs.json.JsPath
 import org.scalatestplus.play.PlaySpec
-import pages.businessaddress.BusinessAddressHasUkPostcodePage
+import pages.businessaddress.BusinessUKAddrScreenerPage
 
-class BusinessAddressHasUkPostcodePageSpec extends PlaySpec {
+class BusinessUKAddrScreenerPageSpec extends PlaySpec {
 
-  "BusinessAddressHasUkPostcodePage" must {
+  "BusinessUKAddrScreenerPage" must {
 
     "have the correct path" in {
 
-      BusinessAddressHasUkPostcodePage.path mustEqual (JsPath \ "businessAddressSection" \ "hasUkPostcode")
+      BusinessUKAddrScreenerPage.path mustEqual (JsPath \ "businessAddressSection" \ "businessUKAddrScreener")
     }
 
     "have the correct toString value" in {
 
-      BusinessAddressHasUkPostcodePage.toString mustEqual "hasUkPostcode"
+      BusinessUKAddrScreenerPage.toString mustEqual "businessUKAddrScreener"
     }
   }
 }

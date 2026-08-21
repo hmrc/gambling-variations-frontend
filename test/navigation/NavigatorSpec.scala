@@ -350,6 +350,28 @@ class NavigatorSpec extends SpecBase {
           routes.BusinessUKAddressController.onPageLoad()
       }
 
+      "should route BusinessUKAddrScreenerPage to BusinessNonUkAddressScreener when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessUKAddrScreenerPage, false)
+            .success
+            .value
+
+        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
+          routes.BusinessNonUKAddressController.onPageLoad()
+      }
+
+      "should route BusinessAddressAdditionalInformationPage to CheckBusinessAddress when answered" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessAddressAdditionalInformationPage, "INFORMATION")
+            .success
+            .value
+
+        navigator.nextPage(BusinessAddressAdditionalInformationPage, NormalMode, answers) mustBe
+          routes.CheckBusinessAddressController.onPageLoad()
+      }
+
       "should route BusinessUKAddrScreenerPage to BusinessNonUKAddress when answer is false" in {
         val answers =
           emptyAnswers
@@ -519,7 +541,7 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a different UK address" in {
+      "should route BusinessChangeAddrScreenerPage to BusinessUkAddress when changing to a different UK address" in {
         val answers =
           emptyAnswers
             .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.DifferentUkAddress)
@@ -527,10 +549,10 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.BusinessUKAddressController.onPageLoad()
       }
 
-      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a non-UK address" in {
+      "should route BusinessChangeAddrScreenerPage to BusinessNonUkAddress when changing to a non-UK address" in {
         val answers =
           emptyAnswers
             .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.ChangeToNonUkAddress)
@@ -538,10 +560,10 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.BusinessNonUKAddressController.onPageLoad()
       }
 
-      "should route BusinessChangeAddrScreenerPage to PageNotFound when changing to a UK address" in {
+      "should route BusinessChangeAddrScreenerPage to BusinessUkAddress when changing to a UK address" in {
         val answers =
           emptyAnswers
             .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.ChangeToUkAddress)
@@ -549,18 +571,35 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.BusinessUKAddressController.onPageLoad()
       }
 
-      "should route BusinessChangeAddrScreenerPage to PageNotFound when editing the current address" in {
+      "should route BusinessChangeAddrScreenerPage to BusinessAddressUK when editing the current UK address" in {
         val answers =
           emptyAnswers
             .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.EditCurrentAddress)
             .success
             .value
+            .set(BusinessAddressUkPage, Address("1", Some("2"), Some("3"), Some("4"), Some("postcode"), Some("country")))
+            .success
+            .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.BusinessUKAddressController.onPageLoad()
+      }
+
+      "should route BusinessChangeAddrScreenerPage to BusinessAddressNonUK when editing the current nonUK address" in {
+        val answers =
+          emptyAnswers
+            .set(BusinessChangeAddrScreenerPage, BusinessChangeAddrOption.EditCurrentAddress)
+            .success
+            .value
+            .set(BusinessAddressNonUkPage, Address("1", Some("2"), Some("3"), Some("4"), Some("postcode"), Some("country")))
+            .success
+            .value
+
+        navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
+          routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessChangeAddrScreenerPage to SystemError when unanswered" in {

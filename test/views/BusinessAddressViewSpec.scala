@@ -131,7 +131,8 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "businessChangeAddrScreener" -> "changeToUkAddress"
+            "businessChangeAddrScreener" -> "changeToUkAddress",
+            "isInChangeFlow"             -> true
           )
         )
       )
@@ -163,8 +164,8 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "hasUkPostcode" -> true,
-            "isInAddFlow"   -> true
+            "businessUKAddrScreener" -> true,
+            "isInAddFlow"            -> true
           )
         )
       )
@@ -195,7 +196,7 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "hasUkPostcode"                           -> true,
+            "businessUKAddrScreener"                  -> true,
             "addBusinessAddressAdditionalInformation" -> false,
             "isInAddFlow"                             -> true
           )
@@ -223,7 +224,7 @@ class BusinessAddressViewSpec extends SpecBase {
               Some("postcode"),
               Some("country")
             ),
-            "hasUkPostcode"                           -> true,
+            "businessUKAddrScreener"                  -> true,
             "addBusinessAddressAdditionalInformation" -> false,
             "isInAddFlow"                             -> true
           )
