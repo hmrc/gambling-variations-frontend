@@ -350,15 +350,15 @@ class NavigatorSpec extends SpecBase {
           routes.BusinessUKAddressController.onPageLoad()
       }
 
-      "should route BusinessUKAddrScreenerPage to CheckBusinessAddress when answer is true" in {
+      "should route BusinessUKAddrScreenerPage to BusinessNonUkAddressScreener when answer is false" in {
         val answers =
           emptyAnswers
-            .set(BusinessUKAddrScreenerPage, false)
+            .set(BusinessUKAddrScreenerPage, true)
             .success
             .value
 
         navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CheckBusinessAddressController.onPageLoad()
+          routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessAddressAdditionalInformationPage to CheckBusinessAddress when answered" in {
@@ -368,7 +368,7 @@ class NavigatorSpec extends SpecBase {
             .success
             .value
 
-        navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
+        navigator.nextPage(BusinessAddressAdditionalInformationPage, NormalMode, answers) mustBe
           routes.CheckBusinessAddressController.onPageLoad()
       }
 

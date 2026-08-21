@@ -149,6 +149,9 @@ class BusinessAddressViewModelSpec extends SpecBase {
         .set(BusinessChangeAddrScreenerPage, DifferentUkAddress)
         .success
         .value
+        .set(BusinessAddressChangeFlowPage, true)
+        .success
+        .value
 
       private val result: SummaryList = BusinessAddressViewModel.from(ua)
 
