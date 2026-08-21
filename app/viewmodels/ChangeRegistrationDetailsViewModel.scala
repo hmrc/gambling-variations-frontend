@@ -19,6 +19,11 @@ package viewmodels
 import controllers.routes
 import models.{BusinessType, UserAnswers}
 import pages.*
+import pages.businessaddress.BusinessAddressChangesPage
+import pages.businessname.BusinessNameChangesPage
+import pages.contactdetails.ContactDetailsChangesPage
+import pages.correspondencedetails.CorrespondenceDetailsChangesPage
+import pages.tradingdetails.TradingDetailsChangesPage
 import play.api.i18n.Messages
 
 final case class ChangeRegistrationDetailsViewModel(

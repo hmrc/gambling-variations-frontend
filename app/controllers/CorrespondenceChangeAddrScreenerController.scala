@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceChangeAddrScreenerFormProvider
 import models.{Address, Mode}
 import navigation.Navigator
-import pages.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
+import pages.correspondencedetails.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

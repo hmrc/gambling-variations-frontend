@@ -29,120 +29,114 @@ import views.html.partner.PartnerDetailsView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          sessionRepository: SessionRepository,
-                                          authorise: AuthorisedAction,
-                                          getData: DataRetrievalAction,
-                                          requireData: PartnerDetailsDataRequiredAction,
-                                          formProvider: AddAnotherPartnerFormProvider,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: PartnerDetailsView
-                                        )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class PartnerDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: PartnerDetailsDataRequiredAction,
+  formProvider: AddAnotherPartnerFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PartnerDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
 
   def onPageLoad: Action[AnyContent] =
-    (authorise andThen getData andThen requireData) {
-      implicit request =>
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-        val preparedForm =
-          request.userAnswers
-            .get(PartnerDetailsAddAnotherPartnerYesNoPage)
-            .fold(form)(form.fill)
+      val preparedForm =
+        request.userAnswers
+          .get(PartnerDetailsAddAnotherPartnerYesNoPage)
+          .fold(form)(form.fill)
 
-        val viewModel =
-          PartnerDetailsViewModel.from(request.userAnswers)
+      val viewModel =
+        PartnerDetailsViewModel.from(request.userAnswers)
 
-        Ok(
-          view(
-            preparedForm,
-            viewModel
-          )
+      Ok(
+        view(
+          preparedForm,
+          viewModel
         )
+      )
     }
 
   def onSubmit: Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async {
-      implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => {
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
 
-              val viewModel =
-                PartnerDetailsViewModel.from(request.userAnswers)
+            val viewModel =
+              PartnerDetailsViewModel.from(request.userAnswers)
 
-              Future.successful(
-                BadRequest(
-                  view(
-                    formWithErrors,
-                    viewModel
-                  )
+            Future.successful(
+              BadRequest(
+                view(
+                  formWithErrors,
+                  viewModel
                 )
               )
-            },
-            value => {
+            )
+          },
+          value => {
 
-              for {
-                updatedAnswers <-
-                  Future.fromTry(
-                    request.userAnswers.set(
-                      PartnerDetailsAddAnotherPartnerYesNoPage,
-                      value
-                    )
+            for {
+              updatedAnswers <-
+                Future.fromTry(
+                  request.userAnswers.set(
+                    PartnerDetailsAddAnotherPartnerYesNoPage,
+                    value
                   )
+                )
 
-                _ <-
-                  sessionRepository.set(updatedAnswers)
+              _ <-
+                sessionRepository.set(updatedAnswers)
 
-              } yield {
-                if (value) {
-                  // Replace this with the actual first partner
-                  // question when that journey is ready.
-                  Redirect(
-                    controllers.partner.routes.PartnerDetailsController
-                      .onPageLoad
-                  )
-                } else {
-                  Redirect(
-                    controllers.routes.ChangeRegistrationDetailsController
-                      .onPageLoad()
-                  )
-                }
+            } yield {
+              if (value) {
+                // Replace this with the actual first partner
+                // question when that journey is ready.
+                Redirect(
+                  controllers.partner.routes.PartnerDetailsController.onPageLoad
+                )
+              } else {
+                Redirect(
+                  controllers.routes.ChangeRegistrationDetailsController
+                    .onPageLoad()
+                )
               }
             }
-          )
+          }
+        )
     }
 
   def onPartnerDetails(partnerNumber: Int): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) {
-      implicit request =>
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-        Redirect(
-          routes.PartnerDetailsController.onPageLoad
-        )
+      Redirect(
+        routes.PartnerDetailsController.onPageLoad
+      )
     }
 
   def onRemove(partnerNumber: Int): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) {
-      implicit request =>
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-        Redirect(
-          routes.PartnerDetailsController.onPageLoad
-        )
+      Redirect(
+        routes.PartnerDetailsController.onPageLoad
+      )
     }
 
   def onContinue: Action[AnyContent] =
-    (authorise andThen getData andThen requireData) {
-      implicit request =>
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-        Redirect(
-          controllers.routes.ChangeRegistrationDetailsController
-            .onPageLoad()
-        )
+      Redirect(
+        controllers.routes.ChangeRegistrationDetailsController
+          .onPageLoad()
+      )
     }
 }

@@ -18,6 +18,7 @@ package pages
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.correspondencedetails.RemoveCorrespondenceDetailsYesNoPage
 import play.api.libs.json.JsPath
 
 class RemoveCorrespondenceDetailsYesNoPageSpec extends AnyFreeSpec with Matchers {

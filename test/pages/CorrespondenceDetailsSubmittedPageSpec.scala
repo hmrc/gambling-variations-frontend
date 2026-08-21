@@ -17,6 +17,7 @@
 package pages
 
 import org.scalatestplus.play.PlaySpec
+import pages.correspondencedetails.CorrespondenceDetailsSubmittedPage
 import play.api.libs.json.JsPath
 
 class CorrespondenceDetailsSubmittedPageSpec extends PlaySpec {

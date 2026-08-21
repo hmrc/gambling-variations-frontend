@@ -20,9 +20,16 @@ import base.SpecBase
 import controllers.routes
 import models.*
 import models.CorrespondenceChangeAddrOption.*
-import pages.*
+import pages.businessaddress.*
+import pages.businessname.*
+import pages.contactdetails.*
+import pages.correspondencedetails.*
 import pages.partner.*
-import pages.partnerdetails.{PartnerDetailsContactNumberPage, PartnerDetailsNinoPage}
+import pages.partnerdetails.*
+import pages.tradingdetails.*
+import pages.*
+import pages.tradingdetails.associatedregnumbers.*
+import pages.tradingdetails.previousregnumbers.*
 
 class NavigatorSpec extends SpecBase {
 
@@ -343,7 +350,7 @@ class NavigatorSpec extends SpecBase {
           routes.BusinessUKAddressController.onPageLoad()
       }
 
-      "should route BusinessUKAddrScreenerPage to PageNotFound when answer is false" in {
+      "should route BusinessUKAddrScreenerPage to BusinessNonUKAddress when answer is false" in {
         val answers =
           emptyAnswers
             .set(BusinessUKAddrScreenerPage, false)
@@ -351,7 +358,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessUKAddrScreenerPage to SystemError when unanswered" in {
@@ -361,6 +368,11 @@ class NavigatorSpec extends SpecBase {
 
       "should route BusinessAddressUkPage to BusinessAddrInfoScreener" in {
         navigator.nextPage(BusinessAddressUkPage, NormalMode, emptyAnswers) mustBe
+          routes.BusinessAddrInfoScreenerController.onPageLoad()
+      }
+
+      "should route BusinessAddressNonUkPage to BusinessAddrInfoScreener" in {
+        navigator.nextPage(BusinessAddressNonUkPage, NormalMode, emptyAnswers) mustBe
           routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 

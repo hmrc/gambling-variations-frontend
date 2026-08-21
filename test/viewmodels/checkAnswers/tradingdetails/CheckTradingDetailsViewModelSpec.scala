@@ -19,6 +19,7 @@ package viewmodels.checkAnswers.tradingdetails
 import base.SpecBase
 import models.BusinessTradeClass
 import pages.*
+import pages.tradingdetails.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.Application
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text

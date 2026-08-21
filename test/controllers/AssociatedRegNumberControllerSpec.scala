@@ -24,7 +24,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{AssociatedRegNumberPage, AssociatedRegistrationNumbersPage, MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
+import pages.tradingdetails.associatedregnumbers.{AssociatedRegNumberPage, AssociatedRegistrationNumbersPage}
+import pages.tradingdetails.{MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*

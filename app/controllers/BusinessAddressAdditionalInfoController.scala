@@ -19,8 +19,8 @@ package controllers
 import controllers.actions.*
 import forms.BusinessAddressAdditionalInfoFormProvider
 import models.Mode
-import pages.{BusinessAddressAdditionalInformationPage, BusinessAddressChangesPage, BusinessAddressSubmittedPage}
 import navigation.Navigator
+import pages.businessaddress.*
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

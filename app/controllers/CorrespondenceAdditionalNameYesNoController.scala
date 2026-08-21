@@ -21,7 +21,7 @@ import forms.CorrespondenceAdditionalNameYesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.CorrespondenceAdditionalNameYesNoPage
+import pages.correspondencedetails.CorrespondenceAdditionalNameYesNoPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

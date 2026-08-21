@@ -20,8 +20,9 @@ import controllers.actions.*
 import forms.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
+import pages.tradingdetails.{TradingDetailsChangesPage, TradingDetailsSubmittedPage, TradingNamePage}
+import pages.{BusinessTypePage, GroupMemberPage}
 import utils.FlagsUtil.checkIfChanged
-import pages.{BusinessNameChangesPage, BusinessNameSubmittedPage, BusinessTypePage, GroupMemberPage, TradingDetailsChangesPage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -95,8 +96,8 @@ class BusinessTradingNameController @Inject() (
                 checkIfChanged(value, request.userAnswers, TradingNamePage, TradingDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsSubmittedPage, true))
+                updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
           )

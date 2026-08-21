@@ -18,6 +18,7 @@ package pages
 
 import play.api.libs.json.JsPath
 import org.scalatestplus.play.PlaySpec
+import pages.businessname.BusinessNameSubmittedPage
 
 class BusinessNameSubmittedPageSpec extends PlaySpec {
 
