@@ -28,18 +28,16 @@ case object HasUkPostcodeRow {
   def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
     val result = ua
       .get(BusinessAddressHasUkPostcodePage)
-      .fold(None)(hasPostcode =>
-        Some(
-          SummaryListRowViewModel(
-            key   = "checkBusinessAddress.question.ukPostcode",
-            value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
-            actions = Seq(
-              ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad().url)
-                .withVisuallyHiddenText(messages("checkBusinessAddress.question.ukPostcode.hidden"))
-            )
+      .map(hasPostcode => {
+        SummaryListRowViewModel(
+          key   = "checkBusinessAddress.question.ukPostcode",
+          value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad().url)
+              .withVisuallyHiddenText(messages("checkBusinessAddress.question.ukPostcode.hidden"))
           )
         )
-      )
+      })
     result
   }
 }
