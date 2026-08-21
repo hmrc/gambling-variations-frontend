@@ -17,7 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
-import forms.PartnerAddEmailAddressYesNoPageFormProvider
+import forms.partner.PartnerAddEmailAddressYesNoPageFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

@@ -16,24 +16,33 @@
 
 package forms.partner
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.StringFieldBehaviours
+import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import play.api.data.FormError
 
-class PartnerAddEmailAddressYesNoPageFormProviderSpec extends BooleanFieldBehaviours {
+class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "partnerAddEmailAddressYesNoPage.error.required"
-  val invalidKey = "error.boolean"
+  val requiredKey = "partnerDetailsAddNationalInsuranceNumber.error.required"
+  val lengthKey = "partnerDetailsAddNationalInsuranceNumber.error.length"
+  val maxLength = 9
 
-  val form = new PartnerAddEmailAddressYesNoPageFormProvider()()
+  val form = new PartnerDetailsAddNationalInsuranceNumberFormProvider()()
 
   ".value" - {
 
     val fieldName = "value"
 
-    behave like booleanField(
+    behave like fieldThatBindsValidData(
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength   = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
     )
 
     behave like mandatoryField(

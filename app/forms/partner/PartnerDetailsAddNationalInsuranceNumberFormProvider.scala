@@ -16,30 +16,16 @@
 
 package forms.partner
 
-import forms.behaviours.BooleanFieldBehaviours
-import play.api.data.FormError
+import forms.mappings.Mappings
+import play.api.data.Form
 
-class PartnerAddEmailAddressYesNoPageFormProviderSpec extends BooleanFieldBehaviours {
+import javax.inject.Inject
 
-  val requiredKey = "partnerAddEmailAddressYesNoPage.error.required"
-  val invalidKey = "error.boolean"
+class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  val form = new PartnerAddEmailAddressYesNoPageFormProvider()()
-
-  ".value" - {
-
-    val fieldName = "value"
-
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("partnerDetailsAddNationalInsuranceNumber.error.required")
+        .verifying(maxLength(9, "partnerDetailsAddNationalInsuranceNumber.error.length"))
     )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
-  }
 }
