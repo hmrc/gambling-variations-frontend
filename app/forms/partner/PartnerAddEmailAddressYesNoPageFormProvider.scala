@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms.partner
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object isleMOrChannelFlagPage extends QuestionPage[String] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ toString
+class PartnerAddEmailAddressYesNoPageFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "iomOrCiFlag"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("partnerAddEmailAddressYesNoPage.error.required")
+    )
 }
