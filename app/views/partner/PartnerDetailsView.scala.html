@@ -28,150 +28,182 @@
 )
 
 @(form: Form[Boolean], viewModel: PartnerDetailsViewModel)(
-implicit request: Request[_],
-messages: Messages
+    implicit request: Request[_],
+    messages: Messages
 )
 
-@layout(pageTitle = title(form, messages("partnerDetails.title"),Some(viewModel.caption))) {
+@layout(
+    pageTitle = title(form,
+        messages("partnerDetails.title"),
+        Some(viewModel.caption)
+    ),
+    isFullWidth = true
+    ) {
 
-@formHelper(
-action = controllers.partner.routes.PartnerDetailsController.onSubmit,Symbol("autoComplete") -> "off") {
+    @formHelper(
+        action = controllers.partner.routes.PartnerDetailsController.onSubmit,
+        Symbol("autoComplete") -> "off"
+        ) {
 
-    @if(form.errors.nonEmpty) {
-        @govukErrorSummary(
-        ErrorSummaryViewModel(form)
-    )
-    }
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(
+            ErrorSummaryViewModel(form)
+        )
+        }
 
-@caption(viewModel.caption)
+        @caption(viewModel.caption)
 
-<h1 class="govuk-heading-l">
-    @viewModel.heading
-</h1>
+        <h1 class="govuk-heading-l">
+            @viewModel.heading
+        </h1>
 
-@if(viewModel.showNoPartnersMessage) {
+        @if(viewModel.showNoPartnersMessage) {
 
-<p class="govuk-body">
-    @messages("partnerDetails.noPartners")
-</p>
+        <p class="govuk-body">
+            @messages("partnerDetails.noPartners")
+        </p>
 
-@govukRadios(
-    RadiosViewModel.yesNo(
-    field = form("value"),
-    legend = LegendViewModel(
-    messages("partnerDetails.addAnotherPartner")
-    ).withCssClass("govuk-fieldset__legend--m"),
-    yesLabel = messages("site.yes"),
-    noLabel = messages("site.no")
-    )
-)
+        @govukRadios(
+            RadiosViewModel.yesNo(
+                field = form("value"),
+                legend = LegendViewModel(
+                messages("partnerDetails.addAnotherPartner")
+                ).withCssClass("govuk-fieldset__legend--m"),
+                yesLabel = messages("site.yes"),
+                noLabel = messages("site.no")
+            )
+        )
 
-} else {
+        } else {
 
-@if(viewModel.showMinimumPartnersMessage) {
-<p class="govuk-body">
-    @messages("partnerDetails.minimumPartners")
-</p>
-}
+        @if(viewModel.showMinimumPartnersMessage) {
+        <p class="govuk-body">
+            @messages("partnerDetails.minimumPartners")
+        </p>
+        }
 
-<table class="govuk-table">
-    <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">
-            @messages("partnerDetails.partnerName")
-        </th>
-        <th scope="col" class="govuk-table__header">
-            @messages("partnerDetails.status")
-        </th>
-        <th scope="col" class="govuk-table__header">
-            @messages("partnerDetails.action")
-        </th>
-    </tr>
-    </thead>
+        <table class="govuk-table">
 
-    <tbody class="govuk-table__body">
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
 
-    @for(partner <- viewModel.partners) {
+                <th
+                        scope="col"
+                        class="govuk-table__header"
+                >
+                    @messages("partnerDetails.partnerName")
+                </th>
 
-    <tr class="govuk-table__row">
+                <th
+                        scope="col"
+                        class="govuk-table__header"
+                >
+                    @messages("partnerDetails.status")
+                </th>
 
-        <td class="govuk-table__cell">
-            <a
-                    class="govuk-link"
-                    href="@partner.partnerDetailsUrl"
-            >
-                                    <span class="govuk-visually-hidden">
-                                        @messages("partnerDetails.viewOrChange")
-                                    </span>
-                @partner.name
-            </a>
-        </td>
+                <th
+                        scope="col"
+                        class="govuk-table__header"
+                >
+                    @messages("partnerDetails.action")
+                </th>
 
-        <td class="govuk-table__cell">
-            @partner.status
+            </tr>
+            </thead>
 
-            @partner.statusDetails.map { details =>
-            <br>
-            @details
-            }
-        </td>
+            <tbody class="govuk-table__body">
 
-        <td class="govuk-table__cell">
-            @partner.removeUrl.map { removeUrl =>
-            <a
-                    class="govuk-link"
-                    href="@removeUrl"
-            >
-                @messages("site.remove")
-                <span class="govuk-visually-hidden">
-                                            @partner.name
+            @for(partner <- viewModel.partners) {
+
+            <tr class="govuk-table__row">
+
+                <td class="govuk-table__cell">
+                    <a
+                            class="govuk-link"
+                            href="@partner.partnerDetailsUrl"
+                    >
+                                            <span class="govuk-visually-hidden">
+                                                @messages("partnerDetails.viewOrChange")
+                                            </span>
+                        @partner.name
+                    </a>
+                </td>
+
+                <td class="govuk-table__cell">
+                                        <span class="govuk-!-white-space-no-wrap">
+                                            @partner.status
+                                            @partner.statusDetails.map { details =>
+                                                @details
+                                            }
                                         </span>
-            </a>
+                </td>
+
+                <td class="govuk-table__cell">
+
+                    @if(partner.canRemove) {
+
+                    @partner.removeUrl.map { removeUrl =>
+                    <a
+                            class="govuk-link"
+                            href="@removeUrl"
+                    >
+                        @messages("site.remove")
+                        <span class="govuk-visually-hidden">
+                                                        @partner.name
+                                                    </span>
+                    </a>
+                    }
+
+                    } else {
+
+                    @messages("partnerDetails.cannotRemove")
+
+                    }
+
+                </td>
+
+            </tr>
             }
-        </td>
 
-    </tr>
+            </tbody>
+        </table>
+
+        @if(viewModel.addAnotherPartner) {
+
+        @govukRadios(
+        RadiosViewModel.yesNo(
+        field = form("value"),
+        legend = LegendViewModel(
+        messages("partnerDetails.addAnotherPartner")
+        ).withCssClass("govuk-fieldset__legend--m"),
+        yesLabel = messages("partnerDetails.yesAddAnother"),
+        noLabel = messages("partnerDetails.noReturn")
+        )
+        )
+
+        <p class="govuk-body">
+            @messages("partnerDetails.maxPartners", 100)
+        </p>
+
+        } else {
+
+        <p class="govuk-body">
+            @messages("partnerDetails.maximumReached")
+        </p>
+        }
+
+        @if(viewModel.showSubmitMessage) {
+
+        <p class="govuk-body">
+            @messages("partnerDetails.mustContinue")
+        </p>
+        }
+        }
+
+        @govukButton(
+        ButtonViewModel(
+        messages("site.continue")
+        )
+        )
     }
-
-    </tbody>
-</table>
-
-@if(viewModel.addAnotherPartner) {
-
-@govukRadios(
-RadiosViewModel.yesNo(
-    field = form("value"),
-    legend = LegendViewModel(
-    messages("partnerDetails.addAnotherPartner")
-    ).withCssClass("govuk-fieldset__legend--m"),
-    yesLabel = messages("partnerDetails.yesAddAnother"),
-    noLabel = messages("partnerDetails.noReturn")
-    )
-)
-
-<p class="govuk-body">
-    @messages("partnerDetails.maxPartners", 100)
-</p>
-
-} else {
-
-<p class="govuk-body">
-    @messages("partnerDetails.maximumReached")
-</p>
-}
-
-@if(viewModel.showSubmitMessage) {
-
-<p class="govuk-body">
-    @messages("partnerDetails.mustContinue")
-</p>
-}
-}
-
-@govukButton(
-    ButtonViewModel(
-    messages("site.continue")
-    )
-)
-}
 }

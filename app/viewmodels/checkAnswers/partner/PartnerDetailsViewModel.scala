@@ -18,8 +18,11 @@ package viewmodels.checkAnswers.partner
 
 import controllers.partner.routes
 import models.UserAnswers
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsDateOfJoiningPage, PartnerDetailsDateOfLeavingPage, PartnerDetailsPage, PartnerDetailsTradingNamePage}
 import play.api.i18n.Messages
+
+import java.time.{LocalDate, ZoneOffset}
+import java.time.format.DateTimeFormatter
 
 final case class PartnerDetailsViewModel(
   caption: String,
@@ -39,17 +42,21 @@ final case class PartnerDetailsRow(
   status: String,
   statusDetails: Option[String],
   partnerDetailsUrl: String,
-  removeUrl: Option[String]
+  removeUrl: Option[String],
+  canRemove: Boolean
 )
 
 object PartnerDetailsViewModel {
 
   private val maxPartners = 100
   private val minimumActivePartners = 2
+  private val dateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def from(
     userAnswers: UserAnswers
   )(implicit messages: Messages): PartnerDetailsViewModel = {
+
+    val today = LocalDate.now(ZoneOffset.UTC)
 
     val partnerNumbers: Seq[Int] =
       (0 until maxPartners).filter { partnerNumber =>
@@ -57,9 +64,6 @@ object PartnerDetailsViewModel {
           .get(PartnerDetailsPage(partnerNumber))
           .isDefined
       }
-
-    val activeStatus =
-      messages("partnerDetails.status.active")
 
     val rows: Seq[PartnerDetailsRow] =
       partnerNumbers
@@ -78,56 +82,108 @@ object PartnerDetailsViewModel {
                   )
                   .getOrElse(mgdRegNumber)
 
+              val dateOfJoining =
+                userAnswers.get(
+                  PartnerDetailsDateOfJoiningPage(partnerNumber)
+                )
+
+              val dateOfLeaving =
+                userAnswers.get(
+                  PartnerDetailsDateOfLeavingPage(partnerNumber)
+                )
+
+              /*
+               * Status logic:
+               *
+               * 1. Future leaving date -> Due to leave
+               * 2. Future joining date -> Due to join
+               * 3. Otherwise -> Active
+               */
+              val status =
+                dateOfLeaving match {
+                  case Some(leavingDate) if leavingDate.isAfter(today) =>
+                    messages("partnerDetails.status.dueToLeave")
+
+                  case _ =>
+                    dateOfJoining match {
+                      case Some(joiningDate) if joiningDate.isAfter(today) =>
+                        messages("partnerDetails.status.dueToJoin")
+
+                      case _ =>
+                        messages("partnerDetails.status.active")
+                    }
+                }
+
+              val statusDetails =
+                dateOfLeaving match {
+                  case Some(leavingDate) if leavingDate.isAfter(today) =>
+                    Some(leavingDate.format(dateFormatter))
+
+                  case _ =>
+                    dateOfJoining match {
+                      case Some(joiningDate) if joiningDate.isAfter(today) =>
+                        Some(joiningDate.format(dateFormatter))
+
+                      case _ =>
+                        None
+                    }
+                }
+
+              /*
+               * Action logic:
+               *
+               * dateOfLeaving blank/null -> Remove
+               * dateOfLeaving populated -> Cannot remove
+               */
+              val canRemove =
+                dateOfLeaving.isEmpty
+
+              val removeUrl =
+                if (canRemove) {
+                  Some(
+                    routes.PartnerDetailsController
+                      .onRemove(partnerNumber)
+                      .url
+                  )
+                } else {
+                  None
+                }
+
               PartnerDetailsRow(
                 partnerNumber = partnerNumber,
                 name          = name,
-                status        = activeStatus,
-                statusDetails = None,
+                status        = status,
+                statusDetails = statusDetails,
                 partnerDetailsUrl = routes.PartnerDetailsController
                   .onPartnerDetails(partnerNumber)
                   .url,
-                removeUrl = None
+                removeUrl = removeUrl,
+                canRemove = canRemove
               )
             }
         }
         .sortBy(_.name.toLowerCase)
 
     val activePartnerCount =
-      rows.count(_.status == activeStatus)
-
-    val canRemovePartner =
-      activePartnerCount > minimumActivePartners
-
-    val rowsWithRemoveAction =
-      rows.map { row =>
-        row.copy(
-          removeUrl = if (canRemovePartner) {
-            Some(
-              routes.PartnerDetailsController
-                .onRemove(row.partnerNumber)
-                .url
-            )
-          } else {
-            None
-          }
-        )
+      rows.count { row =>
+        row.status == messages("partnerDetails.status.active")
       }
 
     val hasPartners =
-      rowsWithRemoveAction.nonEmpty
+      rows.nonEmpty
 
     val canAddAnotherPartner =
-      rowsWithRemoveAction.size < maxPartners
+      rows.size < maxPartners
 
     PartnerDetailsViewModel(
       caption                    = messages("changeRegistrationDetails.caption"),
       heading                    = messages("partnerDetails.heading"),
-      partners                   = rowsWithRemoveAction,
+      partners                   = rows,
       continueUrl                = routes.PartnerDetailsController.onContinue.url,
       addAnotherPartner          = canAddAnotherPartner,
       showNoPartnersMessage      = !hasPartners,
       showMinimumPartnersMessage = hasPartners && activePartnerCount < 3,
-      showMaximumPartnersMessage = rowsWithRemoveAction.size >= maxPartners,
+      showMaximumPartnersMessage = rows.size >= maxPartners,
       showSubmitMessage          = hasPartners
     )
   }

@@ -827,29 +827,22 @@ partnerTradingName.error.length = The partner’s trading name must be 100 chara
 partnerTradingName.error.invalid = The partner’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
 partnerTradingName.change.hidden = What is the partner’s trading name?
 
-partnerDetails.title=Partner details
-partnerDetails.heading=Partner details
-
-partnerDetails.status.active=Active
-
-partnerDetails.noPartners=You have not provided any partners yet.
-
-partnerDetails.minimumPartners=You must have at least 3 active partners.
-
-partnerDetails.addAnotherPartner=Do you want to add another partner?
-
-partnerDetails.yesAddAnother=Yes, add another partner
-partnerDetails.noReturn=No, return to change registration details
-
-partnerDetails.partnerName=Partner name
-partnerDetails.status=Status
-partnerDetails.action=Action
-
-partnerDetails.viewOrChange=View or change
-partnerDetails.maximumReached=You can only have up to 100 partners. If you need to add a new partner, you must change or remove a current one.
-
-partnerDetails.maxPartners=You can only add up to 100 partners.
-
-partnerDetails.mustContinue=You must continue to the change registration details page to submit any changes.
-
-partnerDetails.addAnotherPartner.error.required=Select yes if you want to add another partner, or no if you do not
+partnerDetails.title = Partner details
+partnerDetails.heading = Partner details
+partnerDetails.status.active = Active
+partnerDetails.noPartners = You have not provided any partners yet.
+partnerDetails.minimumPartners = You must have at least 3 active partners.
+partnerDetails.addAnotherPartner = Do you want to add another partner?
+partnerDetails.yesAddAnother = Yes, add another partner
+partnerDetails.noReturn = No, return to change registration details
+partnerDetails.partnerName = Partner name
+partnerDetails.status = Status
+partnerDetails.action = Action
+partnerDetails.viewOrChange = View or change
+partnerDetails.status.dueToLeave =  Due to leave
+partnerDetails.status.dueToJoin =  	Due to join
+partnerDetails.cannotRemove =  	Cannot remove
+partnerDetails.maximumReached = You can only have up to 100 partners. If you need to add a new partner, you must change or remove a current one.
+partnerDetails.maxPartners = You can only add up to 100 partners.
+partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
+partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner, or no if you do not
