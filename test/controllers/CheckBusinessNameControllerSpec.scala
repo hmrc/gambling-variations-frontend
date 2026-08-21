@@ -20,6 +20,7 @@ import base.SpecBase
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, SoleProprietorName, UserAnswers}
 import pages.*
+import pages.businessname.{BusinessNamePage, BusinessNameSectionPage, SoleProprietorPage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*

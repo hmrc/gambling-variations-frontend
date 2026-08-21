@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.tradingdetails
 import base.SpecBase
 import controllers.routes
 import models.BusinessTradeClass
-import pages.BusinessTradeClassPage
+import pages.tradingdetails.BusinessTradeClassPage
 import play.api.Application
 import play.api.i18n.Messages
 import viewmodels.govuk.summarylist.*

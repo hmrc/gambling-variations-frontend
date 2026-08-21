@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{BusinessAddressChangesPage, BusinessAddressIsleMOrChannelFlagPage, BusinessAddressNonUkPage, BusinessAddressSubmittedPage, BusinessAddressUkPage}
+import pages.businessaddress.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

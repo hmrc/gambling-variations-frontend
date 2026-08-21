@@ -25,7 +25,11 @@ import play.api.test.Helpers.*
 import org.mockito.Mockito.*
 import org.mockito.ArgumentMatchers.*
 import org.scalatestplus.mockito.MockitoSugar
+import pages.tradingdetails.associatedregnumbers.AssociatedRegistrationNumbersPage
+import pages.tradingdetails.previousregnumbers.PreviousRegistrationNumbersListPage
+import pages.tradingdetails.{BusinessTradeClassPage, IsSeasonalBusinessPage, MgdTradeDetailsSectionPage, SeasonalBusinessPage}
 import play.api.inject.bind
+
 import scala.concurrent.Future
 import java.time.LocalDate
 

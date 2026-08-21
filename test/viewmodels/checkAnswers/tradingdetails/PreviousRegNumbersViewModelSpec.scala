@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.tradingdetails
 import base.SpecBase
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.PreviousRegistrationNumbersListPage
+import pages.tradingdetails.previousregnumbers.PreviousRegistrationNumbersListPage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

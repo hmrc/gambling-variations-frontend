@@ -21,8 +21,15 @@ import models.*
 import models.BusinessType.Soleproprietor
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
+import pages.businessaddress.*
+import pages.businessname.*
+import pages.contactdetails.*
+import pages.correspondencedetails.*
 import pages.partner.*
-import pages.partnerdetails.{PartnerDetailsContactNumberPage, PartnerDetailsNinoPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.*
+import pages.tradingdetails.associatedregnumbers.*
+import pages.tradingdetails.previousregnumbers.*
+import pages.tradingdetails.*
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}

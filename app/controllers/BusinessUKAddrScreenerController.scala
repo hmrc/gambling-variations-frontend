@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.BusinessUKAddrScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.BusinessUKAddrScreenerPage
+import pages.businessaddress.BusinessUKAddrScreenerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

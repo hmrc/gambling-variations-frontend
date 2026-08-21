@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.businessaddress
 import models.{Address, UserAnswers}
 import controllers.routes
 import play.api.i18n.Messages
-import pages.{BusinessAddressNonUkPage, BusinessAddressUkPage}
+import pages.businessaddress.{BusinessAddressNonUkPage, BusinessAddressUkPage}
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryListRow, Value}

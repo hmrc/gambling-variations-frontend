@@ -18,6 +18,7 @@ package pages
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.tradingdetails.IsSeasonalBusinessPage
 import play.api.libs.json.JsPath
 
 class IsSeasonalBusinessPageSpec extends AnyFreeSpec with Matchers {

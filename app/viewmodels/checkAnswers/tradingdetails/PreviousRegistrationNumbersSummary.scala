@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.UserAnswers
-import pages.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
+import pages.tradingdetails.previousregnumbers.{PreviousRegistrationNumbersListPage, UnsubmittedPreviousRegNumbersPage}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent

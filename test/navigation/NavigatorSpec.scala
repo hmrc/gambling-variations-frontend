@@ -20,9 +20,16 @@ import base.SpecBase
 import controllers.routes
 import models.*
 import models.CorrespondenceChangeAddrOption.*
-import pages.*
+import pages.businessaddress.*
+import pages.businessname.*
+import pages.contactdetails.*
+import pages.correspondencedetails.*
 import pages.partner.*
-import pages.partnerdetails.{PartnerDetailsContactNumberPage, PartnerDetailsNinoPage}
+import pages.partnerdetails.*
+import pages.tradingdetails.*
+import pages.*
+import pages.tradingdetails.associatedregnumbers.*
+import pages.tradingdetails.previousregnumbers.*
 
 class NavigatorSpec extends SpecBase {
 

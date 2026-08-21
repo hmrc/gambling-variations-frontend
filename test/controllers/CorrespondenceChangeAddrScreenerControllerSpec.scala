@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CorrespondenceChangeAddrScreenerPage
+import pages.correspondencedetails.CorrespondenceChangeAddrScreenerPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call

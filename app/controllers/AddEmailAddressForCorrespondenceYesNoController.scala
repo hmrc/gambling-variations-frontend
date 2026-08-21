@@ -22,7 +22,7 @@ import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.{AddCorrespondingDetailsYesNoPage, AddEmailAddressForCorrespondenceYesNoPage}
+import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, AddEmailAddressForCorrespondenceYesNoPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

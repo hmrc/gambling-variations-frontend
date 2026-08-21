@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{CorrespondenceDetailsChangesPage, RemoveCorrAddressAddInfoPage}
+import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, RemoveCorrAddressAddInfoPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call

@@ -20,6 +20,7 @@ import models.ContactNumber
 import play.api.libs.json.JsPath
 import play.api.libs.json.Json
 import org.scalatestplus.play.PlaySpec
+import pages.contactdetails.BusinessContactNumberPage
 
 class BusinessContactNumberPageSpec extends PlaySpec {
 

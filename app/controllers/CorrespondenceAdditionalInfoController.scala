@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.CorrespondenceAdditionalInfoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.{CorrespondenceAdditionalInformationPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
+import pages.correspondencedetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

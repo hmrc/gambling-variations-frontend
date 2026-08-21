@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
-import pages.UnsubmittedPreviousRegNumbersPage
+import pages.tradingdetails.previousregnumbers.UnsubmittedPreviousRegNumbersPage
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

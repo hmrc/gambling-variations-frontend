@@ -18,6 +18,7 @@ package pages
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.contactdetails.RemoveFaxNumberPage
 import play.api.libs.json.JsPath
 
 class RemoveBusinessFaxNumberPageSpec extends AnyFreeSpec with Matchers {
