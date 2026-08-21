@@ -53,6 +53,14 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       val html: HtmlFormat.Appendable = view(form, NormalMode)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
 
+      println()
+      println()
+      println()
+      println(doc.body())
+      println()
+      println()
+      println()
+
       doc.title must include(
         messages("partnerDetailsAddNationalInsuranceNumber.title")
       )

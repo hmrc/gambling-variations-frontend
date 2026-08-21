@@ -37,7 +37,7 @@ object PartnerDetailsAddNationalInsuranceNumberSummary {
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
           ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDetailsAddNationalInsuranceNumber.change.hidden"))
+            .withVisuallyHiddenText(messages("partnerDetailsAddNationalInsuranceNumber.hidden"))
         )
       )
     }
