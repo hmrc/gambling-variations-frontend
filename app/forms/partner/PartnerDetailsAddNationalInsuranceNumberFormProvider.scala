@@ -23,9 +23,30 @@ import javax.inject.Inject
 
 class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  private val ninoFormatRegex: String = """^[A-Za-z]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-Za-z\s]$"""
+
+  private val ninoCharsRegex: String = """^[E-ZE-Ze-z][A-Za-z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[B-Db-d\s]$"""
+
+  private val ninoValidRegex: String = """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TV-Z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-D]$"""
+
+  private val length: Int = 9
+
+  def apply(): Form[String] = {
     Form(
-      "value" -> text("partnerDetailsAddNationalInsuranceNumber.error.required")
-        .verifying(maxLength(9, "partnerDetailsAddNationalInsuranceNumber.error.length"))
+      "value" ->
+        text("partnerDetailsAddNationalInsuranceNumber.error.required")
+          .verifying(
+            maxLength(length, "partnerDetailsAddNationalInsuranceNumber.error.length")
+          )
+          .verifying(
+            regexp(ninoFormatRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidFormat")
+          )
+          .verifying(
+            regexp(ninoCharsRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidChars")
+          )
+          .verifying(
+            regexp(ninoValidRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalid")
+          )
     )
+  }
 }
