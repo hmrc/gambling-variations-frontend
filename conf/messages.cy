@@ -198,6 +198,22 @@ checkBusinessAddress.question.addInfo = cy: Add additional information for addre
 checkBusinessAddress.question.addInfo.hidden = cy: add additional information for address
 checkBusinessAddress.requiredToSubmit = cy: You must continue to the change registration details page to submit any changes.
 
+businessContactNumber.title = Beth yw rhifau cyswllt eich busnes?
+businessContactNumber.heading = Beth yw rhifau cyswllt eich busnes?
+businessContactNumber.p1 = Mae’n rhaid i chi roi o leiaf un rhif cyswllt.
+
+businessContactNumber.phoneNumber = Rhif ffôn
+businessContactNumber.mobileNumber = Rhif ffôn symudol
+
+# Phone errors
+businessContactNumber.error.phoneNumber.required = Nodwch y rhif ffôn cyswllt ar gyfer y busnes hwn
+businessContactNumber.error.phoneNumber.invalid = Mae’n rhaid i’r rhif ffôn gynnwys y rhifau 0 i 9 a bylchau yn unig
+businessContactNumber.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn fod yn 20 o gymeriadau neu lai
+
+# Mobile errors
+businessContactNumber.error.mobileNumber.invalid = Mae’n rhaid i’r rhif ffôn symudol gynnwys y rhifau 0 i 9 a bylchau yn unig
+businessContactNumber.error.mobileNumber.length = Mae’n rhaid i’r rhif ffôn symudol fod yn 20 o gymeriadau neu lai
+
 partnerDetailsRemoveNationalInsuranceNumberYesNo.title = cy: Are you sure you want to remove this partner’s National Insurance number?
 partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s National Insurance number?
 partnerDetailsRemoveNationalInsuranceNumberYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’s National Insurance number?
