@@ -22,14 +22,6 @@ import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
-//  implicit lazy val arbitraryChangeSoleProprietorName: Arbitrary[ChangeSoleProprietorName] =
-//    Arbitrary {
-//      for {
-//        firstName  <- arbitrary[String]
-//        middleName <- arbitrary[String]
-//      } yield ChangeSoleProprietorName(firstName, middleName)
-//    }
-
   implicit lazy val arbitraryBusinessTradeClass: Arbitrary[BusinessTradeClass] =
     Arbitrary {
       Gen.oneOf(BusinessTradeClass.values)
