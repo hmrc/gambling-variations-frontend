@@ -173,6 +173,13 @@ changeBusinessName.error.required.partnership = Nodwch enw’r bartneriaeth
 changeBusinessName.error.invalid.partnership = Mae’n rhaid i enw’r bartneriaeth gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
 changeBusinessName.error.length.partnership = Mae’n rhaid i enw’r bartneriaeth fod yn 34 o gymeriadau neu lai
 
+changeBusinessName.title.unincorporatedbody = Beth yw enw’r corff anghorfforedig?
+
+changeBusinessName.heading.unincorporatedbody = Beth yw enw’r corff anghorfforedig?
+changeBusinessName.error.required.unincorporatedbody = Nodwch enw’r corff anghorfforedig
+changeBusinessName.error.length.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig gynnwys y llythrennau a i z, y rhifau 0 i 9, bylchau, cysylltnodau a chollnodau yn unig
+changeBusinessName.error.invalid.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig fod yn 160 o gymeriadau neu lai
+
 checkBusinessAddress.title = cy: Check your business address
 checkBusinessAddress.heading = cy: Check your business address
 checkBusinessAddress.label.address = cy: Business address
