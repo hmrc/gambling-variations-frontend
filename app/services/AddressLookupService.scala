@@ -33,7 +33,7 @@ class AddressLookupService @Inject() (
 )(implicit ec: ExecutionContext) {
 
   def initJourney()(implicit hc: HeaderCarrier, messages: Messages): Future[String] =
-    connector.initJourney(configSettings)
+    connector.initJourney(configureAddressLookup(ukMode = true))
 
   def retrieveAddress(id: String)(implicit hc: HeaderCarrier): Future[Address] =
     connector.retrieveAddress(id)
@@ -41,13 +41,14 @@ class AddressLookupService @Inject() (
   def configureAddressLookup(ukMode: Boolean)(implicit hc: HeaderCarrier, messages: Messages): AddressLookupConfigSettings =
     AddressLookupConfigSettings(
       options = AddressLookupConfigOptions(
-        continueUrl            = appConfig.loginContinueUrl,
-        homeNavHref            = appConfig.addressLookupHomeNavHref,
-        signOutHref            = appConfig.signOutUrl,
-        accessibilityFooterUrl = appConfig.accessibilityFooterUrl,
-        deskProServiceName     = appConfig.addressLookupDeskProServiceName,
+        continueUrl                  = appConfig.host + routes.AddressLookupController.callback("").url.stripSuffix("?id="),
+        homeNavHref                  = appConfig.addressLookupHomeNavHref,
+        signOutHref                  = appConfig.signOutUrl,
+        useNewGovUkServiceNavigation = true,
+        accessibilityFooterUrl       = appConfig.accessibilityFooterUrl,
+        deskProServiceName           = appConfig.addressLookupDeskProServiceName,
         timeoutConfig = TimeoutConfig(
-          timeoutAmount       = 900,
+          timeoutAmount       = appConfig.addressLookupTimeoutAmount,
           timeoutUrl          = appConfig.addressLookupTimeoutUrl,
           timeoutKeepAliveUrl = appConfig.addressLookupTimeoutKeepAliveUrl
         ),
@@ -57,7 +58,7 @@ class AddressLookupService @Inject() (
         pageHeadingStyle    = "govuk-heading-l",
         selectPageConfig = SelectPageConfig(
           proposalListLimit     = 10,
-          showSearchLinkAgain   = true,
+          showSearchAgainLink   = true,
           showNoneOfTheseOption = true
         ),
         confirmPageConfig = ConfirmPageConfig(
@@ -105,14 +106,4 @@ class AddressLookupService @Inject() (
         )
       )
     )
-
-  private def configSettings(implicit hc: HeaderCarrier, messages: Messages): AddressLookupConfigSettings = {
-    val settings = configureAddressLookup(ukMode = true)
-
-    settings.copy(
-      options = settings.options.copy(
-        continueUrl = appConfig.host + routes.AddressLookupController.callback("").url.stripSuffix("?id=")
-      )
-    )
-  }
 }
