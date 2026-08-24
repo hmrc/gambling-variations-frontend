@@ -129,7 +129,7 @@ class Navigator @Inject() () {
     case BusinessAddressNonUkPage =>
       _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
     case RemoveBusinessAddressAddInfoPage =>
-      _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      _ => routes.CheckBusinessAddressController.onPageLoad()
     case BusinessAddressAdditionalInformationPage =>
       _ => routes.CheckBusinessAddressController.onPageLoad()
 
