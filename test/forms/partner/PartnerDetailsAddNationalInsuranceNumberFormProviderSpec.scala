@@ -23,23 +23,17 @@ import play.api.data.FormError
 
 class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "partnerDetailsAddNino.error.required"
-  val lengthKey = "partnerDetailsAddNino.error.length"
-  val invalidFormatKey = "partnerDetailsAddNino.error.invalidFormat"
-  val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
-  val invalidKey = "partnerDetailsAddNino.error.invalid"
-  val maxLength = 9
-
   val form = new PartnerDetailsAddNationalInsuranceNumberFormProvider()()
 
   ".value" - {
 
-    val fieldName = "value"
+    val fieldName: String = "value"
+    val numbersLength: Int = 6
 
     val validNinoGen: Gen[String] = for {
       firstChar  <- Gen.oneOf('A' to 'Z').filterNot(c => Seq('D', 'F', 'I', 'Q', 'U', 'V').contains(c))
       secondChar <- Gen.oneOf('A' to 'Z').filterNot(c => Seq('D', 'F', 'I', 'O', 'Q', 'U', 'V').contains(c))
-      digits     <- Gen.listOfN(6, Gen.numChar).map(_.mkString)
+      digits     <- Gen.listOfN(numbersLength, Gen.numChar).map(_.mkString)
       suffix     <- Gen.oneOf('A', 'B', 'C', 'D')
       prefix = s"$firstChar$secondChar"
       if !Seq("BG", "GB", "KN", "NK", "NT", "TN", "ZZ").contains(prefix)
@@ -51,30 +45,14 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
       validNinoGen
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
 
-    "fail to bind when format is invalid" in {
-      val invalidFormatInputs = Seq("123456789", "QQ1234567", "QQAAAAAAA")
-
-      for (input <- invalidFormatInputs) {
-        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoFormatRegex)))
-      }
-    }
-
-    "fail to bind when prefix uses invalid characters" in {
-      val invalidCharInputs = Seq("DA123456A", "FA123456A", "IA123456A", "QA123456A", "UA123456A", "VA123456A")
+    "fail to bind when input contains invalid non-alphanumeric characters" in {
+      val invalidCharInputs = Seq("SR123456A!", "SR 12 34 56 A@", "SR-123456-A")
 
       for (input <- invalidCharInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
@@ -82,10 +60,42 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
       }
     }
 
-    "fail to bind when NINO is structurally well-formed but not a real/valid prefix" in {
-      val disallowedPrefixes = Seq("BG123456A", "GB123456A", "KN123456A", "NK123456A", "NT123456A", "TN123456A", "ZZ123456A")
+    "fail to bind when structural format layout is invalid" in {
+      val invalidFormatInputs = Seq("123456789", "SR1234567", "SRAAAAAAA")
 
-      for (input <- disallowedPrefixes) {
+      for (input <- invalidFormatInputs) {
+        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
+        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoFormatRegex)))
+      }
+    }
+
+    "fail to bind when length is not exactly 9 characters after space removal" in {
+      val invalidLengthInputs = Seq("SR123A", "SR12345678A")
+
+      for (input <- invalidLengthInputs) {
+        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
+        result.errors must contain(FormError(fieldName, lengthKey, Seq(ninoLengthRegex)))
+      }
+    }
+
+    "fail to bind when prefix uses forbidden letters or disallowed administrative prefixes" in {
+      val disallowedInputs = Seq(
+        "DA123456A",
+        "FA123456A",
+        "IA123456A",
+        "QA123456A",
+        "UA123456A",
+        "VA123456A",
+        "BG123456A",
+        "GB123456A",
+        "KN123456A",
+        "NK123456A",
+        "NT123456A",
+        "TN123456A",
+        "ZZ123456A"
+      )
+
+      for (input <- disallowedInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
         result.errors must contain(FormError(fieldName, invalidKey, Seq(ninoValidRegex)))
       }

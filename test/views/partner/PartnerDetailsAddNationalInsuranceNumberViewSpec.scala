@@ -109,7 +109,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
 
     "must render error message when input fails length check" in new Setup {
 
-      val tooLongInput = "SR123456AEXTRA"
+      val tooLongInput = "SR123A"
 
       val boundForm: Form[String] = form.bind(Map("value" -> tooLongInput))
 
@@ -141,7 +141,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
 
     "must render error message when prefix contains invalid characters" in new Setup {
 
-      val invalidCharsInput = "DA123456A"
+      val invalidCharsInput = "SR123456A!"
 
       val boundForm: Form[String] = form.bind(Map("value" -> invalidCharsInput))
 

@@ -67,10 +67,10 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
+        nino =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddNationalInsuranceNumberPage(index), value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsNinoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddNationalInsuranceNumberPage(index), nino))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsNinoPage(index), nino))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberPage(index), mode, updatedAnswers))
       )

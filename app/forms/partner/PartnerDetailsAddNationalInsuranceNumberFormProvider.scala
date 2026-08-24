@@ -16,25 +16,26 @@
 
 package forms.partner
 
-import javax.inject.Inject
-import play.api.data.Form
 import forms.mappings.Mappings
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider.*
+import play.api.data.Form
+import play.api.data.validation.Constraint
+
+import javax.inject.Inject
 
 class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Mappings {
-
-  private val length: Int = 9
 
   def apply(): Form[String] = {
     Form(
       "value" ->
-        text("partnerDetailsAddNino.error.required")
+        text(requiredKey)
+          .transform[String](_.filterNot(_.isWhitespace).toUpperCase, identity)
           .verifying(
             firstError(
-              maxLength(length, "partnerDetailsAddNino.error.length"),
-              regexp(ninoFormatRegex, "partnerDetailsAddNino.error.invalidFormat"),
-              regexp(ninoCharsRegex, "partnerDetailsAddNino.error.invalidChars"),
-              regexp(ninoValidRegex, "partnerDetailsAddNino.error.invalid")
+              regexp(ninoCharsRegex, invalidCharsKey),
+              regexp(ninoFormatRegex, invalidFormatKey),
+              regexp(ninoLengthRegex, lengthKey),
+              regexp(ninoValidRegex, invalidKey)
             )
           )
     )
@@ -42,9 +43,19 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
 }
 
 object PartnerDetailsAddNationalInsuranceNumberFormProvider {
-  private[forms] val ninoFormatRegex: String = """^[A-Za-z]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-Za-z]$"""
-  private[forms] val ninoCharsRegex: String =
-    """^[A-CEGHJ-PR-TW-Za-ceghj-pr-tw-z][A-CEGHJ-NPR-TV-Za-ceghj-npr-tv-z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-Da-d]$"""
-  private[forms] val ninoValidRegex: String =
-    """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TV-Z]\s?[0-9]{2}\s?[0-9]{2}\s?[0-9]{2}\s?[A-D]$"""
+
+  private[forms] val requiredKey = "partnerDetailsAddNino.error.required"
+  private[forms] val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
+  private[forms] val invalidFormatKey = "partnerDetailsAddNino.error.invalidFormat"
+  private[forms] val lengthKey = "partnerDetailsAddNino.error.length"
+  private[forms] val invalidKey = "partnerDetailsAddNino.error.invalid"
+
+  private[forms] val ninoCharsRegex = """^[A-Z0-9]+$"""
+
+  private[forms] val ninoFormatRegex = """^[A-Z]{2}[0-9]+[A-Z]$"""
+
+  private[forms] val ninoLengthRegex = """^[A-Z0-9]{9}$"""
+
+  private[forms] val ninoValidRegex =
+    """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TV-Z][0-9]{6}[A-D]$"""
 }
