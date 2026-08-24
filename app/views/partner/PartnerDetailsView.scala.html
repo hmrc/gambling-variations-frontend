@@ -24,21 +24,14 @@
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     govukButton: GovukButton,
-    caption: Caption
+    caption: Caption,
+    h1:H1,
+    p:Paragraph
 )
 
-@(form: Form[Boolean], viewModel: PartnerDetailsViewModel)(
-    implicit request: Request[_],
-    messages: Messages
-)
+@(form: Form[Boolean], viewModel: PartnerDetailsViewModel)(implicit request: Request[_], messages: Messages)
 
-@layout(
-    pageTitle = title(form,
-        messages("partnerDetails.title"),
-        Some(viewModel.caption)
-    ),
-    isFullWidth = true
-    ) {
+@layout(pageTitle = title(form, messages("partnerDetails.title"), Some("changeRegistrationDetails.caption")), isFullWidth = true) {
 
     @formHelper(
         action = controllers.partner.routes.PartnerDetailsController.onSubmit,
@@ -51,17 +44,12 @@
         )
         }
 
-        @caption(viewModel.caption)
+        @caption(messages("changeRegistrationDetails.caption"))
 
-        <h1 class="govuk-heading-l">
-            @viewModel.heading
-        </h1>
+        @h1("partnerDetails.heading")
 
         @if(viewModel.showNoPartnersMessage) {
-
-        <p class="govuk-body">
-            @messages("partnerDetails.noPartners")
-        </p>
+            @p("partnerDetails.noPartners")
 
         @govukRadios(
             RadiosViewModel.yesNo(

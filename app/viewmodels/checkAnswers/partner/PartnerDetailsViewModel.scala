@@ -25,8 +25,6 @@ import java.time.{LocalDate, ZoneOffset}
 import java.time.format.DateTimeFormatter
 
 final case class PartnerDetailsViewModel(
-  caption: String,
-  heading: String,
   partners: Seq[PartnerDetailsRow],
   continueUrl: String,
   addAnotherPartner: Boolean,
@@ -176,8 +174,6 @@ object PartnerDetailsViewModel {
       rows.size < maxPartners
 
     PartnerDetailsViewModel(
-      caption                    = messages("changeRegistrationDetails.caption"),
-      heading                    = messages("partnerDetails.heading"),
       partners                   = rows,
       continueUrl                = routes.PartnerDetailsController.onContinue.url,
       addAnotherPartner          = canAddAnotherPartner,
