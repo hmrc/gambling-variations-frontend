@@ -81,7 +81,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
       includeHMRCBranding    = false,
       ukMode                 = true,
       pageHeadingStyle       = "govuk-heading-l",
-      selectPageConfig       = SelectPageConfig(30, showSearchLinkAgain = true, showNoneOfTheseOption = false),
+      selectPageConfig       = SelectPageConfig(30, showSearchAgainLink = true, showNoneOfTheseOption = false),
       confirmPageConfig = ConfirmPageConfig(
         showConfirmChangeText = true
       ),
@@ -92,8 +92,8 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
         townMaxLength   = 35,
         mandatoryFields = Map("addressLine1" -> true),
         maxLengthErrorMessages = MaxLengthErrorMessages(
-          en = ManualAddressEntryLineContent("line1", "line2", "line3", "town", "postcode"),
-          cy = ManualAddressEntryLineContent("line1", "line2", "line3", "town", "postcode")
+          en = ManualAddressEntryLineContent("line1", "line2", "line3", "town"),
+          cy = ManualAddressEntryLineContent("line1", "line2", "line3", "town")
         )
       ),
       timeoutConfig = TimeoutConfig(900, "/timeout", "/keep-alive")
@@ -114,19 +114,31 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
       val labels = AddressLookupLabelContent(
         appLevelLabels = AppLevelLabels("Manage your gambling variation"),
         selectPageLabels = SelectPageLabels(
-          title   = "Select address",
-          heading = "Select address"
+          title               = "Select address",
+          heading             = "Select address",
+          headingWithPostcode = "Select address",
+          proposalListLabel   = "Select an address",
+          submitLabel         = "Continue",
+          searchAgainLinkText = "Search again",
+          editAddressLinkText = "Enter address manually"
         ),
         lookupPageLabels = LookupPageLabels(
-          title         = "Find address",
-          heading       = "Find address",
-          postcodeLabel = "Postcode",
-          submitLabel   = "Find address"
+          title                      = "Find address",
+          heading                    = "Find address",
+          filterLabel                = "Property name or number (optional)",
+          postcodeLabel              = "Postcode",
+          submitLabel                = "Find address",
+          noResultsFoundMessage      = "No addresses found",
+          resultLimitExceededMessage = "Too many addresses found",
+          manualAddressLinkText      = "Enter address manually"
         ),
         confirmPageLabels = ConfirmPageLabels(
-          title          = "Confirm address",
-          heading        = "Confirm address",
-          changeLinkText = "Change"
+          title               = "Confirm address",
+          heading             = "Confirm address",
+          submitLabel         = "Continue",
+          searchAgainLinkText = "Search again",
+          changeLinkText      = "Change",
+          confirmChangeText   = "The information is complete and correct"
         ),
         editPageLabels = editPageLabels,
         international  = International(editPageLabels)
