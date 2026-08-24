@@ -44,11 +44,11 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends Spec
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("partnerDetailsAddNationalInsuranceNumberYesNo.title")
+          messages(application)("partnerDetailsAddNinoYesNo.title")
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsAddNationalInsuranceNumberYesNo.heading")
+          messages(application)("partnerDetailsAddNinoYesNo.heading")
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption")
@@ -79,7 +79,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends Spec
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("partnerDetailsAddNationalInsuranceNumberYesNo.error.required")
+          messages(application)("partnerDetailsAddNinoYesNo.error.required")
         )
       }
     }

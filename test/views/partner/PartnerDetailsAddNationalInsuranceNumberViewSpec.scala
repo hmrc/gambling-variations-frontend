@@ -62,7 +62,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       println()
 
       doc.title must include(
-        messages("partnerDetailsAddNationalInsuranceNumber.title")
+        messages("partnerDetailsAddNino.title")
       )
 
       doc
@@ -73,7 +73,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-label-wrapper")
         .select(".govuk-label--l")
-        .text mustBe messages("partnerDetailsAddNationalInsuranceNumber.heading")
+        .text mustBe messages("partnerDetailsAddNino.heading")
 
       doc
         .select("input[name=value]")
@@ -104,7 +104,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-summary")
         .text must include(
-        messages("partnerDetailsAddNationalInsuranceNumber.error.required")
+        messages("partnerDetailsAddNino.error.required")
       )
     }
 
@@ -120,7 +120,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNationalInsuranceNumber.error.length")
+        messages("partnerDetailsAddNino.error.length")
       )
     }
 
@@ -136,7 +136,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNationalInsuranceNumber.error.invalidFormat")
+        messages("partnerDetailsAddNino.error.invalidFormat")
       )
     }
 
@@ -152,7 +152,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNationalInsuranceNumber.error.invalidChars")
+        messages("partnerDetailsAddNino.error.invalidChars")
       )
     }
 
@@ -168,7 +168,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNationalInsuranceNumber.error.invalid")
+        messages("partnerDetailsAddNino.error.invalid")
       )
     }
   }

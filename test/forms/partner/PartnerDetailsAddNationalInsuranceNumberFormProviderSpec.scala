@@ -23,11 +23,11 @@ import play.api.data.FormError
 
 class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "partnerDetailsAddNationalInsuranceNumber.error.required"
-  val lengthKey = "partnerDetailsAddNationalInsuranceNumber.error.length"
-  val invalidFormatKey = "partnerDetailsAddNationalInsuranceNumber.error.invalidFormat"
-  val invalidCharsKey = "partnerDetailsAddNationalInsuranceNumber.error.invalidChars"
-  val invalidKey = "partnerDetailsAddNationalInsuranceNumber.error.invalid"
+  val requiredKey = "partnerDetailsAddNino.error.required"
+  val lengthKey = "partnerDetailsAddNino.error.length"
+  val invalidFormatKey = "partnerDetailsAddNino.error.invalidFormat"
+  val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
+  val invalidKey = "partnerDetailsAddNino.error.invalid"
   val maxLength = 9
 
   val form = new PartnerDetailsAddNationalInsuranceNumberFormProvider()()

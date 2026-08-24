@@ -45,11 +45,11 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoViewSpec extends SpecBase 
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("partnerDetailsRemoveNationalInsuranceNumberYesNo.title")
+          messages(application)("partnerDetailsRemoveNinoYesNo.title")
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsRemoveNationalInsuranceNumberYesNo.heading", nino)
+          messages(application)("partnerDetailsRemoveNinoYesNo.heading", nino)
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption", nino)
@@ -80,7 +80,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoViewSpec extends SpecBase 
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required")
+          messages(application)("partnerDetailsRemoveNinoYesNo.error.required")
         )
       }
     }

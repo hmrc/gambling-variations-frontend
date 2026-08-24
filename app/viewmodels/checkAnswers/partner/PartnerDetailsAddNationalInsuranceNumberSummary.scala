@@ -33,11 +33,11 @@ object PartnerDetailsAddNationalInsuranceNumberSummary {
     answers.get(PartnerDetailsAddNationalInsuranceNumberPage(index)).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "partnerDetailsAddNationalInsuranceNumber.checkYourAnswersLabel",
+        key   = "partnerDetailsAddNino.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
           ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDetailsAddNationalInsuranceNumber.hidden"))
+            .withVisuallyHiddenText(messages("partnerDetailsAddNino.hidden"))
         )
       )
     }

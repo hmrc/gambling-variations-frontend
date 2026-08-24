@@ -28,13 +28,13 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
   def apply(): Form[String] = {
     Form(
       "value" ->
-        text("partnerDetailsAddNationalInsuranceNumber.error.required")
+        text("partnerDetailsAddNino.error.required")
           .verifying(
             firstError(
-              maxLength(length, "partnerDetailsAddNationalInsuranceNumber.error.length"),
-              regexp(ninoFormatRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidFormat"),
-              regexp(ninoCharsRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalidChars"),
-              regexp(ninoValidRegex, "partnerDetailsAddNationalInsuranceNumber.error.invalid")
+              maxLength(length, "partnerDetailsAddNino.error.length"),
+              regexp(ninoFormatRegex, "partnerDetailsAddNino.error.invalidFormat"),
+              regexp(ninoCharsRegex, "partnerDetailsAddNino.error.invalidChars"),
+              regexp(ninoValidRegex, "partnerDetailsAddNino.error.invalid")
             )
           )
     )
