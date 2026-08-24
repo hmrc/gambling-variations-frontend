@@ -20,23 +20,15 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import models.BusinessType
 import play.api.data.Form
+import utils.BusinessTypeKeyBuilder
 
 class ChangeBusinessNameFormProvider @Inject() extends Mappings {
 
-  private def requiredErrorKeyFor(businessType: BusinessType): String =
-    s"changeBusinessName.error.required.${businessType.toString}"
-
-  private def invalidErrorKeyFor(businessType: BusinessType): String =
-    s"changeBusinessName.error.invalid.${businessType.toString}"
-
-  private def lengthErrorKeyFor(businessType: BusinessType): String =
-    s"changeBusinessName.error.length.${businessType.toString}"
-
   def apply(businessType: BusinessType): Form[String] = {
 
-    val requiredKey = requiredErrorKeyFor(businessType)
-    val invalidKey = invalidErrorKeyFor(businessType)
-    val lengthKey = lengthErrorKeyFor(businessType)
+    val requiredKey = BusinessTypeKeyBuilder.requiredErrorKeyFor(businessType)
+    val invalidKey = BusinessTypeKeyBuilder.invalidErrorKeyFor(businessType)
+    val lengthKey = BusinessTypeKeyBuilder.lengthErrorKeyFor(businessType)
 
     val (maxLen, regex) = businessType match {
       case BusinessType.Partnership =>
