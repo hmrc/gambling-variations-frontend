@@ -125,9 +125,9 @@ class Navigator @Inject() () {
     case BusinessUKAddrScreenerPage =>
       userAnswers => navigateBusinessUKAddrScreenerPage()(userAnswers)
     case BusinessAddressUkPage =>
-      _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
+      userAnswers => navigateBusinessAddressUkOrNonUkPage()(userAnswers)
     case BusinessAddressNonUkPage =>
-      _ => routes.BusinessAddrInfoScreenerController.onPageLoad()
+      userAnswers => navigateBusinessAddressUkOrNonUkPage()(userAnswers)
     case RemoveBusinessAddressAddInfoPage =>
       _ => routes.CheckBusinessAddressController.onPageLoad()
     case BusinessAddressAdditionalInformationPage =>
@@ -495,4 +495,12 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 
+  private def navigateBusinessAddressUkOrNonUkPage(userAnswers: UserAnswers): Call = {
+    val addFlowRoute = routes.BusinessAddrInfoScreenerController.onPageLoad()
+    val normalRoute = routes.CheckBusinessAddressController.onPageLoad()
+    userAnswers.get(BusinessAddressAddFlowPage) match {
+      case Some(isInAddFlow) => if(isInAddFlow) addFlowRoute else normalRoute
+      case None => normalRoute
+    }
+  }
 }
