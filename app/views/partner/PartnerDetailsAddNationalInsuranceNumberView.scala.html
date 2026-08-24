@@ -25,6 +25,7 @@
     govukInput: GovukInput,
     govukButton: GovukButton,
     caption: Caption,
+    fieldSet: GovukFieldset,
     paragraph: Paragraph
 )
 
@@ -40,12 +41,17 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
 
+
+        @fieldSet(Fieldset(legend = Some(
+            Legend(content = messages("partnerDetailsAddNino.heading"), isPageHeading = true, classes = "govuk-fieldset__legend--l")
+        )))
+
         @paragraph(messages("partnerDetailsAddNino.paragraph"))
 
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("partnerDetailsAddNino.heading")).asPageHeading(Large)
+                label = LabelViewModel(messages("partnerDetailsAddNino.heading")).withCssClass("govuk-visually-hidden")
             )
             .withWidth(Full)
             .withHint(HintViewModel(messages("partnerDetailsAddNino.hint")))
