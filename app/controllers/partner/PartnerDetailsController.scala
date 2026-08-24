@@ -16,6 +16,7 @@
 
 package controllers.partner
 
+import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partner.AddAnotherPartnerFormProvider
 import pages.partner.PartnerDetailsAddAnotherPartnerYesNoPage
@@ -37,7 +38,8 @@ class PartnerDetailsController @Inject() (
   requireData: PartnerDetailsDataRequiredAction,
   formProvider: AddAnotherPartnerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsView
+  view: PartnerDetailsView,
+  frontendAppConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -53,7 +55,10 @@ class PartnerDetailsController @Inject() (
           .fold(form)(form.fill)
 
       val viewModel =
-        PartnerDetailsViewModel.from(request.userAnswers)
+        PartnerDetailsViewModel.from(
+          request.userAnswers,
+          frontendAppConfig
+        )
 
       Ok(
         view(
@@ -72,7 +77,10 @@ class PartnerDetailsController @Inject() (
           formWithErrors => {
 
             val viewModel =
-              PartnerDetailsViewModel.from(request.userAnswers)
+              PartnerDetailsViewModel.from(
+                request.userAnswers,
+                frontendAppConfig
+              )
 
             Future.successful(
               BadRequest(

@@ -30,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -87,10 +88,16 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setPartnerDetails(partnersDetails: PartnersDetails, answers: UserAnswers): Try[UserAnswers] = partnersDetails.partners.zipWithIndex
-    .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
-      buildPartnerDetails(partnerDetails, index, userAnswers)
-    }
+  private def setPartnerDetails(
+    partnersDetails: PartnersDetails,
+    answers: UserAnswers
+  ): Try[UserAnswers] =
+    partnersDetails.partners
+      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+      .zipWithIndex
+      .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
+        buildPartnerDetails(partnerDetails, index, userAnswers)
+      }
 
   private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
 

@@ -16,6 +16,7 @@
 
 package viewmodels.checkAnswers.partner
 
+import config.FrontendAppConfig
 import controllers.partner.routes
 import models.UserAnswers
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsDateOfJoiningPage, PartnerDetailsDateOfLeavingPage, PartnerDetailsPage, PartnerDetailsTradingNamePage}
@@ -46,13 +47,13 @@ final case class PartnerDetailsRow(
 
 object PartnerDetailsViewModel {
 
-  private val maxPartners = 100
-  private val minimumActivePartners = 2
   private val dateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def from(
-    userAnswers: UserAnswers
+    userAnswers: UserAnswers,
+    frontendAppConfig: FrontendAppConfig
   )(implicit messages: Messages): PartnerDetailsViewModel = {
+    val maxPartners = frontendAppConfig.maxPartners
 
     val today = LocalDate.now(ZoneOffset.UTC)
 
