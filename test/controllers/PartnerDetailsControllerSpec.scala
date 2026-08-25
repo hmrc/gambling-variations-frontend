@@ -29,7 +29,7 @@ import play.api.test.Helpers.*
 import repositories.SessionRepository
 import viewmodels.checkAnswers.partner.PartnerDetailsViewModel
 import views.html.partner.PartnerDetailsView
-
+import pages.partnerdetails.PartnerDetailsPage
 import scala.concurrent.Future
 
 class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
@@ -56,6 +56,20 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
       .onRemove(0)
       .url
 
+  import pages.partnerdetails.*
+
+  private val userAnswersWithPartner =
+    emptyUserAnswers
+      .set(PartnerDetailsPage(0), "XWM00000001762")
+      .success
+      .value
+      .set(PartnerDetailsTradingNamePage(0), "XYZ Consulting")
+      .success
+      .value
+      .set(PartnerDetailsBusinessNamePage(0), "XYZ Consulting Ltd")
+      .success
+      .value
+
   private lazy val onContinueRoute =
     controllers.partner.routes.PartnerDetailsController.onContinue.url
 
@@ -67,7 +81,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         val application =
           applicationBuilder(
-            userAnswers = Some(emptyUserAnswers)
+            userAnswers = Some(userAnswersWithPartner)
           ).build()
 
         running(application) {
@@ -92,7 +106,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
               form,
               viewModel(
                 application,
-                emptyUserAnswers
+                userAnswersWithPartner
               )
             )(
               request,
@@ -104,7 +118,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
       "must populate the form when the question has previously been answered" in {
 
         val userAnswers =
-          emptyUserAnswers
+          userAnswersWithPartner
             .set(
               PartnerDetailsAddAnotherPartnerYesNoPage,
               true
@@ -164,7 +178,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         val application =
           applicationBuilder(
-            userAnswers = Some(emptyUserAnswers)
+            userAnswers = Some(userAnswersWithPartner)
           )
             .overrides(
               bind[SessionRepository]
@@ -205,7 +219,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         val application =
           applicationBuilder(
-            userAnswers = Some(emptyUserAnswers)
+            userAnswers = Some(userAnswersWithPartner)
           )
             .overrides(
               bind[SessionRepository]
@@ -239,7 +253,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         val application =
           applicationBuilder(
-            userAnswers = Some(emptyUserAnswers)
+            userAnswers = Some(userAnswersWithPartner)
           ).build()
 
         running(application) {
@@ -273,7 +287,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
               boundForm,
               viewModel(
                 application,
-                emptyUserAnswers
+                userAnswersWithPartner
               )
             )(
               request,
@@ -289,7 +303,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         val application =
           applicationBuilder(
-            userAnswers = Some(emptyUserAnswers)
+            userAnswers = Some(userAnswersWithPartner)
           ).build()
 
         running(application) {
@@ -317,7 +331,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         val application =
           applicationBuilder(
-            userAnswers = Some(emptyUserAnswers)
+            userAnswers = Some(userAnswersWithPartner)
           ).build()
 
         running(application) {
@@ -345,7 +359,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
         val application =
           applicationBuilder(
-            userAnswers = Some(emptyUserAnswers)
+            userAnswers = Some(userAnswersWithPartner)
           ).build()
 
         running(application) {
