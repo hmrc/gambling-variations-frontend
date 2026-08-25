@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.businessaddress
 
 import models.UserAnswers
 import pages.*
-import pages.businessaddress.BusinessAddressAddFlowPage
+import pages.businessaddress.{BusinessAddressAddFlowPage, BusinessAddressChangeFlowPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{SummaryList, SummaryListRow}
 import viewmodels.govuk.all.SummaryListViewModel
@@ -27,6 +27,7 @@ case object BusinessAddressViewModel {
   def from(ua: UserAnswers)(implicit messages: Messages): SummaryList = {
 
     val addFlow = ua.get(BusinessAddressAddFlowPage).getOrElse(false)
+    val changeFlow = ua.get(BusinessAddressChangeFlowPage).getOrElse(false)
 
     val hasPostcodeRowOpt: Option[SummaryListRow] = HasUkPostcodeRow.from(ua)
     val addAddressInfoRowOpt: Option[SummaryListRow] = AddAddressAdditionalInfoRow.from(ua)
@@ -41,8 +42,10 @@ case object BusinessAddressViewModel {
       if (addFlow) {
         Seq(hasPostcodeRowOpt.fold(None)(row => Some(row))).flatten ++ addressRow ++
           Seq(addAddressInfoRowOpt.fold(None)(row => Some(row))).flatten ++ addInfoRow
-      } else {
+      } else if (changeFlow) {
         Seq(howToChangeRowOpt.fold(None)(row => Some(row))).flatten ++ addressBaseRows
+      } else {
+        addressBaseRows
       }
     )
   }

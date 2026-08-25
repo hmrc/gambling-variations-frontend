@@ -66,11 +66,10 @@ pageNotFound.p3 = If the web address is correct or you selected a link or button
 pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
 pageNotFound.p3.after = if you need to speak to someone.
 
-addressLookup.manualAddressLine1 = Address line 1
-addressLookup.manualAddressLine2 = Address line 2
-addressLookup.manualAddressLine3 = Town or city
-addressLookup.manualAddressLine4 = County
-addressLookup.manualAddressPostcode = Postcode
+addressLookup.manualAddressLine1 = Address line 1 must be 35 characters or fewer
+addressLookup.manualAddressLine2 = Address line 2 must be 35 characters or fewer
+addressLookup.manualAddressLine3 = Town or city must be 35 characters or fewer
+addressLookup.manualAddressLine4 = County must be 35 characters or fewer
 
 
 businessType.soleproprietor = Sole proprietor
@@ -611,20 +610,31 @@ correspondenceUKAddrScreener.checkYourAnswersLabel = Does the correspondence add
 correspondenceUKAddrScreener.error.required = Select yes if the correspondence address has a UK postcode
 correspondenceUKAddrScreener.change.hidden = Does the correspondence address have a UK postcode?
 
-correspondenceAddressSelectAddress.title = Select the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+correspondenceAddressSelectAddress.title = Select the correspondence address
 correspondenceAddressSelectAddress.heading = Select the correspondence address
+correspondenceAddressSelectAddress.headingWithPostcode = Select the correspondence address
+correspondenceAddressSelectAddress.proposalListLabel = Select an address
+correspondenceAddressSelectAddress.submit = Continue
+correspondenceAddressSelectAddress.searchAgain = Search again
+correspondenceAddressSelectAddress.manualAddress = Enter the address manually
 
-correspondenceAddressLookupAddress.title = Find the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-correspondenceAddressLookupAddress.heading = Find the correspondence address
+correspondenceAddressLookupAddress.title = Enter the correspondence address
+correspondenceAddressLookupAddress.heading = Enter the correspondence address
+correspondenceAddressLookupAddress.filter = Property name or number (optional)
 correspondenceAddressLookupAddress.postcode = Postcode
-correspondenceAddressLookupAddress.submit = Continue
+correspondenceAddressLookupAddress.submit = Find address
+correspondenceAddressLookupAddress.noResults = Sorry, we couldn''t find anything for that postcode.
+correspondenceAddressLookupAddress.tooManyResults = There were too many results. Please add additional details to limit the number of results.
+correspondenceAddressLookupAddress.manualAddress = Enter the address manually
 
-correspondenceAddressConfirmAddress.title = Review and confirm the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
-correspondenceAddressConfirmAddress.heading = Review and confirm the correspondence address
-correspondenceAddressConfirmAddress.change = Edit address
-correspondenceAddressConfirmAddress.submit = Continue
+correspondenceAddressConfirmAddress.title = Confirm the correspondence address
+correspondenceAddressConfirmAddress.heading = Review and confirm
+correspondenceAddressConfirmAddress.change = Change
+correspondenceAddressConfirmAddress.submit = Confirm address
+correspondenceAddressConfirmAddress.searchAgain = Search again
+correspondenceAddressConfirmAddress.confirmChange = By confirming this change, you agree that the information you have given is complete and correct.
 
-correspondenceAddressManualAddressUk.title = Enter the correspondence address - Change registration details - Manage your gambling tax - GOV.UK
+correspondenceAddressManualAddressUk.title = Enter the correspondence address
 partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?

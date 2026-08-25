@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package pages.businessaddress
+package pages
 
-import pages.QuestionPage
 import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
+import pages.businessaddress.BusinessAddressChangeFlowPage
 
-case object BusinessAddressHasUkPostcodePage extends QuestionPage[Boolean] {
+class BusinessAddressChangeFlowPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "businessAddressSection" \ toString
+  "BusinessAddressChangeFlowPage" must {
 
-  override def toString: String = "hasUkPostcode"
+    "have the correct path" in {
+
+      BusinessAddressChangeFlowPage.path mustEqual (JsPath \ "businessAddressSection" \ "isInChangeFlow")
+    }
+
+    "have the correct toString value" in {
+
+      BusinessAddressChangeFlowPage.toString mustEqual "isInChangeFlow"
+    }
+  }
 }

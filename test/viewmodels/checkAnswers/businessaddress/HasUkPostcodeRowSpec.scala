@@ -17,9 +17,10 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
+import controllers.routes
 import models.Address
 import pages.*
-import pages.businessaddress.{BusinessAddressHasUkPostcodePage, BusinessAddressUkPage}
+import pages.businessaddress.*
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -51,14 +52,16 @@ class HasUkPostcodeRowSpec extends SpecBase {
         .set(BusinessAddressUkPage, addressUa)
         .success
         .value
-        .set(BusinessAddressHasUkPostcodePage, true)
+        .set(BusinessUKAddrScreenerPage, true)
         .success
         .value
 
       private val result: SummaryListRow = HasUkPostcodeRow.from(ua).getOrElse(emptySummaryList)
+      private val route: String = routes.BusinessUKAddrScreenerController.onPageLoad().url
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.ukPostcode"))
       result.value.content mustEqual Text(messages("site.yes"))
+      result.actions.get.items.head.href mustEqual route
     }
   }
 }

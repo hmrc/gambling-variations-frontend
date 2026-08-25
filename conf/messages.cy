@@ -173,6 +173,13 @@ changeBusinessName.error.required.partnership = Nodwch enw’r bartneriaeth
 changeBusinessName.error.invalid.partnership = Mae’n rhaid i enw’r bartneriaeth gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
 changeBusinessName.error.length.partnership = Mae’n rhaid i enw’r bartneriaeth fod yn 34 o gymeriadau neu lai
 
+changeBusinessName.title.unincorporatedbody = Beth yw enw’r corff anghorfforedig?
+
+changeBusinessName.heading.unincorporatedbody = Beth yw enw’r corff anghorfforedig?
+changeBusinessName.error.required.unincorporatedbody = Nodwch enw’r corff anghorfforedig
+changeBusinessName.error.length.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig gynnwys y llythrennau a i z, y rhifau 0 i 9, bylchau, cysylltnodau a chollnodau yn unig
+changeBusinessName.error.invalid.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig fod yn 160 o gymeriadau neu lai
+
 checkBusinessAddress.title = cy: Check your business address
 checkBusinessAddress.heading = cy: Check your business address
 checkBusinessAddress.label.address = cy: Business address
@@ -190,6 +197,22 @@ checkBusinessAddress.changeOption.edit = cy: Edit current business address
 checkBusinessAddress.question.addInfo = cy: Add additional information for address?
 checkBusinessAddress.question.addInfo.hidden = cy: add additional information for address
 checkBusinessAddress.requiredToSubmit = cy: You must continue to the change registration details page to submit any changes.
+
+businessContactNumber.title = Beth yw rhifau cyswllt eich busnes?
+businessContactNumber.heading = Beth yw rhifau cyswllt eich busnes?
+businessContactNumber.p1 = Mae’n rhaid i chi roi o leiaf un rhif cyswllt.
+
+businessContactNumber.phoneNumber = Rhif ffôn
+businessContactNumber.mobileNumber = Rhif ffôn symudol
+
+# Phone errors
+businessContactNumber.error.phoneNumber.required = Nodwch y rhif ffôn cyswllt ar gyfer y busnes hwn
+businessContactNumber.error.phoneNumber.invalid = Mae’n rhaid i’r rhif ffôn gynnwys y rhifau 0 i 9 a bylchau yn unig
+businessContactNumber.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn fod yn 20 o gymeriadau neu lai
+
+# Mobile errors
+businessContactNumber.error.mobileNumber.invalid = Mae’n rhaid i’r rhif ffôn symudol gynnwys y rhifau 0 i 9 a bylchau yn unig
+businessContactNumber.error.mobileNumber.length = Mae’n rhaid i’r rhif ffôn symudol fod yn 20 o gymeriadau neu lai
 
 partnerDetailsRemoveNationalInsuranceNumberYesNo.title = cy: Are you sure you want to remove this partner’s National Insurance number?
 partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s National Insurance number?
