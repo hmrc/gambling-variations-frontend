@@ -136,7 +136,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     for {
       updatedAnswers <- userAnswers
       updatedAnswers <- setIfDefinedBusinessDetails(partnerDetails, updatedAnswers, index)
-
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessPartnerNumberPage(index), partnerDetails.businessPartnerNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfJoiningPage(index), partnerDetails.dateOfJoining)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfLeavingPage(index), partnerDetails.dateOfLeaving)
 
@@ -145,7 +145,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfIncorporation(index), partnerDetails.dateOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCountryOfIncorporation(index), partnerDetails.countryOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsForeignCorporateRefPage(index), partnerDetails.foreignCorporateRef)
-      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessPartnerNumberPage(index), partnerDetails.businessPartnerNumber)
 
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfBirthPage(index), partnerDetails.dateOfBirth)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsNinoPage(index), partnerDetails.nino)
