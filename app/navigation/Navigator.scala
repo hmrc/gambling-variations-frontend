@@ -495,7 +495,7 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 
-  private def navigateBusinessAddressUkOrNonUkPage(userAnswers: UserAnswers): Call = {
+  private def navigateBusinessAddressUkOrNonUkPage()(userAnswers: UserAnswers): Call = {
     val addFlowRoute = routes.BusinessAddrInfoScreenerController.onPageLoad()
     val normalRoute = routes.CheckBusinessAddressController.onPageLoad()
     userAnswers.get(BusinessAddressAddFlowPage) match {

@@ -30,6 +30,7 @@ import pages.tradingdetails.*
 import pages.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
+import play.api.libs.json.Json
 
 class NavigatorSpec extends SpecBase {
 
@@ -388,14 +389,34 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route BusinessAddressUkPage to BusinessAddrInfoScreener" in {
-        navigator.nextPage(BusinessAddressUkPage, NormalMode, emptyAnswers) mustBe
+      "should route BusinessAddressUkPage to BusinessAddrInfoScreener if in Add flow" in {
+        val ua = UserAnswers("id", Json.obj(
+          "mgdRegNumber" -> "ABC00000001",
+        "businessAddressSection" -> Json.obj(
+          "isInAddFlow" -> true
+          )
+        ))
+
+        navigator.nextPage(BusinessAddressUkPage, NormalMode, ua) mustBe
           routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 
-      "should route BusinessAddressNonUkPage to BusinessAddrInfoScreener" in {
-        navigator.nextPage(BusinessAddressNonUkPage, NormalMode, emptyAnswers) mustBe
+      "should route BusinessAddressNonUkPage to BusinessAddrInfoScreener if in Add flow" in {
+        val ua = UserAnswers("id", Json.obj(
+          "mgdRegNumber" -> "ABC00000001",
+          "businessAddressSection" -> Json.obj(
+            "isInAddFlow" -> true
+          )
+        ))
+
+        navigator.nextPage(BusinessAddressNonUkPage, NormalMode, ua) mustBe
           routes.BusinessAddrInfoScreenerController.onPageLoad()
+      }
+
+      "should route BusinessAddressUk or NonUk to BusinessAddressPage if in normal flow" in {
+
+        navigator.nextPage(BusinessAddressNonUkPage, NormalMode, emptyAnswers) mustBe
+          routes.CheckBusinessAddressController.onPageLoad()
       }
 
       "should route CorrespondenceAddressUkPage to CorrespondenceAddrInfoScreener when adding correspondence details" in {
