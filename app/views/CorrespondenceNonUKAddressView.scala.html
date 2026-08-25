@@ -82,9 +82,10 @@ label = LabelViewModel(messages("correspondenceNonUKAddress.Region"))
 @govukInput(
 InputViewModel(
 field = form("country"),
-label = LabelViewModel(messages("correspondenceNonUKAddress.Country"))
+label = LabelViewModel(messages("correspondenceNonUkAddress.Country"))
 )
 .withAttribute("autocomplete" -> "country-name")
+)
 
 @govukButton(
 ButtonViewModel(messages("site.continue"))
