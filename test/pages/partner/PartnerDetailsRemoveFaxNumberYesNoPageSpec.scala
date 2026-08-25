@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package forms.partner
+package pages.partner
 
-import forms.mappings.Mappings
-import play.api.data.Form
+import base.SpecBase
+import play.api.libs.json.JsPath
 
-import javax.inject.Inject
+class PartnerDetailsRemoveFaxNumberYesNoPageSpec extends SpecBase {
 
-class PartnerDetailsRemoveFaxNumberYesNoFormProvider @Inject() extends Mappings {
+  "PartnerDetailsRemoveFaxNumberYesNoPage" - {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("partnerDetailsRemoveFaxNumberYesNo.error.required")
-    )
+    "must have the correct path" in {
+      PartnerDetailsRemoveFaxNumberYesNoPage(0).path mustEqual (JsPath \ "partners" \ 0 \ "partnerDetailsRemoveFaxNumberYesNo")
+    }
+
+    "must have the correct string representation" in {
+      PartnerDetailsRemoveFaxNumberYesNoPage(0).toString mustEqual "partnerDetailsRemoveFaxNumberYesNo"
+    }
+  }
 }

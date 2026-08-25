@@ -767,11 +767,11 @@ partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you w
 partnerDetailsRemoveEmailAddressYesNo.error.required = Select yes if you want to remove this partner’s email address
 partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s email address?
 
-partnerRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner’s fax number?
-partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s fax number?
-partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s fax number?
-partnerRemoveFaxNumberYesNo.error.required = Select yes if you want to remove this partner’s fax number
-partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.error.required = Select yes if you want to remove this partner’s fax number
+partnerDetailsRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
 
 removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for your business address?
 removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for your business address?

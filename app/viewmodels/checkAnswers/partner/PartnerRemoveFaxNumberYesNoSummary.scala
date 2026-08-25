@@ -33,11 +33,11 @@ object PartnerRemoveFaxNumberYesNoSummary {
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "partnerRemoveFaxNumberYesNo.checkYourAnswersLabel",
+        key   = "partnerDetailsRemoveFaxNumberYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
           ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerRemoveFaxNumberYesNo.change.hidden"))
+            .withVisuallyHiddenText(messages("partnerDetailsRemoveFaxNumberYesNo.change.hidden"))
         )
       )
     }
