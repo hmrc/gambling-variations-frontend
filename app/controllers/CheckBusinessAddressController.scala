@@ -58,7 +58,6 @@ class CheckBusinessAddressController @Inject() (
 
   def onContinue(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     for {
-      updated <- Future.fromTry(request.userAnswers.remove(BusinessAddressAddFlowPage))
       updated <- Future.fromTry(updated.remove(BusinessAddressChangeFlowPage))
       _       <- sessionRepository.set(updated)
     } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
