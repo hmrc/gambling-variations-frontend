@@ -390,24 +390,28 @@ class NavigatorSpec extends SpecBase {
       }
 
       "should route BusinessAddressUkPage to BusinessAddrInfoScreener if in Add flow" in {
-        val ua = UserAnswers("id", Json.obj(
-          "mgdRegNumber" -> "ABC00000001",
-        "businessAddressSection" -> Json.obj(
-          "isInAddFlow" -> true
-          )
-        ))
+        val ua = UserAnswers("id",
+                             Json.obj(
+                               "mgdRegNumber" -> "ABC00000001",
+                               "businessAddressSection" -> Json.obj(
+                                 "isInAddFlow" -> true
+                               )
+                             )
+                            )
 
         navigator.nextPage(BusinessAddressUkPage, NormalMode, ua) mustBe
           routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 
       "should route BusinessAddressNonUkPage to BusinessAddrInfoScreener if in Add flow" in {
-        val ua = UserAnswers("id", Json.obj(
-          "mgdRegNumber" -> "ABC00000001",
-          "businessAddressSection" -> Json.obj(
-            "isInAddFlow" -> true
-          )
-        ))
+        val ua = UserAnswers("id",
+                             Json.obj(
+                               "mgdRegNumber" -> "ABC00000001",
+                               "businessAddressSection" -> Json.obj(
+                                 "isInAddFlow" -> true
+                               )
+                             )
+                            )
 
         navigator.nextPage(BusinessAddressNonUkPage, NormalMode, ua) mustBe
           routes.BusinessAddrInfoScreenerController.onPageLoad()

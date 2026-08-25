@@ -499,8 +499,8 @@ class Navigator @Inject() () {
     val addFlowRoute = routes.BusinessAddrInfoScreenerController.onPageLoad()
     val normalRoute = routes.CheckBusinessAddressController.onPageLoad()
     userAnswers.get(BusinessAddressAddFlowPage) match {
-      case Some(isInAddFlow) => if(isInAddFlow) addFlowRoute else normalRoute
-      case None => normalRoute
+      case Some(isInAddFlow) => if (isInAddFlow) addFlowRoute else normalRoute
+      case None              => normalRoute
     }
   }
 }

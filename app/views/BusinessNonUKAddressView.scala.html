@@ -84,7 +84,7 @@ label = LabelViewModel(messages("businessNonUKAddress.Country"))
 )
 .withWidth(TwoThirds)
 .withAttribute("autocomplete" -> "country-name")
-)
+.withAttribute("aria-controls" -> "ba-address-country__listbox"))
 
 @govukButton(
 ButtonViewModel(messages("site.continue"))
