@@ -85,8 +85,6 @@ field = form("country"),
 label = LabelViewModel(messages("correspondenceNonUKAddress.Country"))
 )
 .withAttribute("autocomplete" -> "country-name")
-.withAttribute("aria-autocomplete" -> "list")
-.withAttribute("aria-controls" -> "ba-address-country__listbox"))
 
 @govukButton(
 ButtonViewModel(messages("site.continue"))
