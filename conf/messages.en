@@ -618,8 +618,8 @@ correspondenceAddressSelectAddress.submit = Continue
 correspondenceAddressSelectAddress.searchAgain = Search again
 correspondenceAddressSelectAddress.manualAddress = Enter the address manually
 
-correspondenceAddressLookupAddress.title = Enter the correspondence address
-correspondenceAddressLookupAddress.heading = Enter the correspondence address
+correspondenceAddressLookupAddress.title = Find the correspondence address
+correspondenceAddressLookupAddress.heading = Find the correspondence address
 correspondenceAddressLookupAddress.filter = Property name or number (optional)
 correspondenceAddressLookupAddress.postcode = Postcode
 correspondenceAddressLookupAddress.submit = Find address

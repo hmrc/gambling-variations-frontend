@@ -344,13 +344,13 @@ class Navigator @Inject() () {
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
         case DifferentUkAddress =>
-          routes.PageNotFoundController.onPageLoad()
+          routes.AddressLookupController.initialise()
 
         case ChangeToNonUkAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
 
         case ChangeToUkAddress =>
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          routes.AddressLookupController.initialise()
 
         case EditCurrentAddress if isUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()
