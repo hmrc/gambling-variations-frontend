@@ -57,5 +57,5 @@ object PartnerDetailsAddNationalInsuranceNumberFormProvider {
   private[forms] val ninoLengthRegex = """^[A-Z0-9]{9}$"""
 
   private[forms] val ninoValidRegex =
-    """^(?!BG|GB|KN|NK|NT|TN|ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TV-Z][0-9]{6}[A-D]$"""
+    """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
 }

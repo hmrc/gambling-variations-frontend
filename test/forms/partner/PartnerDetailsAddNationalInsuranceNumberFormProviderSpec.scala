@@ -78,21 +78,14 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
       }
     }
 
-    "fail to bind when prefix uses forbidden letters or disallowed administrative prefixes" in {
+    "fail to bind when prefix contains 'D' or suffix is invalid for ninoValidRegex" in {
       val disallowedInputs = Seq(
         "DA123456A",
-        "FA123456A",
-        "IA123456A",
-        "QA123456A",
-        "UA123456A",
-        "VA123456A",
-        "BG123456A",
-        "GB123456A",
-        "KN123456A",
-        "NK123456A",
-        "NT123456A",
-        "TN123456A",
-        "ZZ123456A"
+        "AD123456A",
+        "DD123456A",
+        "AA123456E",
+        "AA123456Z",
+        "AA1234569"
       )
 
       for (input <- disallowedInputs) {

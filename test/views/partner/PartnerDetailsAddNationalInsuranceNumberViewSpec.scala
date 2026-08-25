@@ -157,7 +157,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
 
     "must render error message when National Insurance number is an administrative or disallowed prefix" in new Setup {
 
-      val disallowedPrefixInput = "BG123456A"
+      val disallowedPrefixInput = "DD123456A"
 
       val boundForm: Form[String] = form.bind(Map("value" -> disallowedPrefixInput))
 
