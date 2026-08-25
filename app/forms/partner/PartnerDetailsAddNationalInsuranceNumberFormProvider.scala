@@ -31,12 +31,12 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
         text(requiredKey)
           .transform[String](_.filterNot(_.isWhitespace).toUpperCase, identity)
           .verifying(
-            firstError(
+            Seq(
               regexp(ninoCharsRegex, invalidCharsKey),
               regexp(ninoFormatRegex, invalidFormatKey),
               regexp(ninoLengthRegex, lengthKey),
               regexp(ninoValidRegex, invalidKey)
-            )
+            )*
           )
     )
   }
