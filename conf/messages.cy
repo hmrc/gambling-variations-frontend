@@ -169,9 +169,16 @@ changeBusinessName.title.partnership = Beth yw enw’r bartneriaeth?
 
 changeBusinessName.heading.partnership = Beth yw enw’r bartneriaeth?
 
+changeBusinessName.title.llp= Beth yw enw’r bartneriaeth atebolrwydd cyfyngedig?
+changeBusinessName.heading.llp = Beth yw enw’r bartneriaeth atebolrwydd cyfyngedig?
+
 changeBusinessName.error.required.partnership = Nodwch enw’r bartneriaeth
 changeBusinessName.error.invalid.partnership = Mae’n rhaid i enw’r bartneriaeth gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
 changeBusinessName.error.length.partnership = Mae’n rhaid i enw’r bartneriaeth fod yn 34 o gymeriadau neu lai
+
+changeBusinessName.error.required.llp = Nodwch enw’r bartneriaeth atebolrwydd cyfyngedig
+changeBusinessName.error.invalid.llp = Mae’n rhaid i enw’r bartneriaeth atebolrwydd cyfyngedig gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
+changeBusinessName.error.length.llp = Mae’n rhaid i enw’r bartneriaeth atebolrwydd cyfyngedig fod yn 160 o gymeriadau neu lai
 
 changeBusinessName.title.unincorporatedbody = Beth yw enw’r corff anghorfforedig?
 
