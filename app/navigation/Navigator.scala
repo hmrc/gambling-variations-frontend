@@ -25,6 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
+import pages.licencespremises.LicencesNumberPage
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.associatedregnumbers.*
@@ -162,8 +163,14 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
+
+    // License and Premises Details
+    case LicencesNumberPage =>
+      _ => controllers.licencespremises.routes.LicencesNumberController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
+
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>

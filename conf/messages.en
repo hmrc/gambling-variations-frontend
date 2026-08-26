@@ -836,3 +836,12 @@ partnerTradingName.error.required = Enter the partner’s trading name
 partnerTradingName.error.length = The partner’s trading name must be 100 characters or less
 partnerTradingName.error.invalid = The partner’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
 partnerTradingName.change.hidden = What is the partner’s trading name?
+
+# Licences & Premises
+licencesNumber.title = What is the Gambling Commission operating or personal licence number?
+licencesNumber.heading = What is the Gambling Commission operating or personal licence number?
+licencesNumber.checkYourAnswersLabel = What is the Gambling Commission operating or personal licence number?
+licencesNumber.hint = It is 23 characters long, including the hyphens, like 003-123456-N-987654-001
+licencesNumber.error.required = Enter the Gambling Commission operating or personal licence number
+licencesNumber.error.invalidCharacters = The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
+licencesNumber.error.invalidFormat = The Gambling Commission operating or personal licence number must be in the correct format
