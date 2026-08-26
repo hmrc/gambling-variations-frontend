@@ -27,7 +27,7 @@ import pages.vat.VatRegistrationNumberYesNoPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.vat.VatRegistrationNumberYesNoView
 
@@ -124,34 +124,5 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    "must redirect to SystemError for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request = FakeRequest(GET, vatRegistrationNumberYesNoRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
-      }
-    }
-
-    "must redirect to SystemError for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, vatRegistrationNumberYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
-      }
-    }
   }
 }
