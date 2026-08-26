@@ -17,19 +17,20 @@
 package views.partner
 
 import base.SpecBase
-import forms.partner.PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider
+import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.partner.PartnerDetailsAddNationalInsuranceNumberYesNoView
+import views.html.partner.PartnerDetailsRemoveEmailAddressYesNoView
 
-class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends SpecBase {
+class PartnerDetailsRemoveEmailAddressYesNoFormViewSpec extends SpecBase {
 
-  private val form = new PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider()()
+  private val form = new PartnerDetailsRemoveEmailAddressYesNoFormProvider()()
+  private val emailAddress: String = "no.email@address.yet"
 
-  "PartnerDetailsAddNationalInsuranceNumberYesNoView" - {
+  "PartnerDetailsRemoveEmailAddressYesNoView" - {
 
     "render the page correctly" in {
 
@@ -37,21 +38,21 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends Spec
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
 
-        val html = view(form, NormalMode)(FakeRequest(), messages(application))
+        val html = view(form, NormalMode, emailAddress)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("partnerDetailsAddNinoYesNo.title")
+          messages(application)("partnerDetailsRemoveEmailAddressYesNo.title")
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsAddNinoYesNo.heading")
+          messages(application)("partnerDetailsRemoveEmailAddressYesNo.heading", emailAddress)
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
-          messages(application)("changeRegistrationDetails.caption")
+          messages(application)("changeRegistrationDetails.caption", emailAddress)
 
         document.getElementById("value").attr("value") mustEqual "true"
 
@@ -68,18 +69,18 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends Spec
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(boundForm, NormalMode)(FakeRequest(), messages(application))
+        val html = view(boundForm, NormalMode, emailAddress)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("partnerDetailsAddNinoYesNo.error.required")
+          messages(application)("partnerDetailsRemoveEmailAddressYesNo.error.required")
         )
       }
     }
