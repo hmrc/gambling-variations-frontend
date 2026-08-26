@@ -19,13 +19,13 @@ package controllers
 import base.SpecBase
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
-import models.{BusinessType, NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, SoleProprietorName, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsBusinessNamePage
+import pages.partnerdetails.addpartnerdetails.AddPartnerDetailsBusinessNamePage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -42,45 +42,42 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
 
     def onwardRoute: Call = Call("GET", "/foo")
 
-    val formProvider = new ChangeBusinessNameFormProvider()
+    val businessFormProvider = new ChangeBusinessNameFormProvider()
+    val soleProprietorNameFormProvider = new SoleProprietorNameFormProvider()
 
     val businessName = "Test Business"
+    val soleProprietorName = new SoleProprietorName(
+      title      = "Mr",
+      firstName  = "Tom",
+      middleName = Some("Bob"),
+      lastName   = "Smith"
+    )
 
-    val form = formProvider(businessType)
-
-    // TODO to be removed later
-    val Index: Int = 0
+    val businessForm = businessFormProvider(businessType)
+    val soleProprietorForm = soleProprietorNameFormProvider()
 
     val businessData = Json.obj(
-      "partners" -> Json.arr(
-        Json.obj(
-          "partnerDetailsMgdRegNumber" -> mgdRegNum,
-          "partnerDetailsBusinessType" -> businessType.code,
-          "partnerDetailsBusinessName" -> businessName
-        )
+      "newPartner" -> Json.obj(
+        "partnerDetailsBusinessType" -> BusinessType.Partnership.code,
+        "partnerDetailsBusinessName" -> businessName
       )
     )
 
     val soleProprietorData = Json.obj(
-      "partners" -> Json.arr(
-        Json.obj(
-          "partnerDetailsMgdRegNumber" -> mgdRegNum,
-          "partnerDetailsBusinessType" -> businessType.code,
-          "partnerDetailsSoleProprietor" -> Json.obj(
-            "title"      -> "Mr",
-            "firstName"  -> "Tom",
-            "middleName" -> "Bob",
-            "lastName"   -> "Smith"
-          )
+      "newPartner" -> Json.obj(
+        "partnerDetailsBusinessType" -> BusinessType.Soleproprietor.code,
+        "partnerDetailsSoleProprietor" -> Json.obj(
+          "title"      -> "Mr",
+          "firstName"  -> "Tom",
+          "middleName" -> "Bob",
+          "lastName"   -> "Smith"
         )
       )
     )
 
     val noAnswers = UserAnswers(
       userAnswersId,
-      Json.obj(
-        "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
+      Json.obj()
     )
 
     lazy val changePartnerDetailsBusinessNameRoute =
@@ -108,7 +105,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill(businessName), NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
+          view(businessForm.fill(businessName), NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
       }
     }
 
@@ -124,7 +121,11 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
 
         val result = route(application, request).value
 
+        val view = application.injector.instanceOf[ChangePartnerDetailsSoleProprietorNameView]
+
         status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(soleProprietorForm.fill(soleProprietorName), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -158,6 +159,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
+            println(redirectLocation(result).value)
             redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
           }
         }
@@ -293,7 +295,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(PartnerDetailsBusinessNamePage(Index)).value mustEqual "Updated Business Name"
+        savedAnswersCaptor.getValue.get(AddPartnerDetailsBusinessNamePage).value mustEqual "Updated Business Name"
       }
     }
 
@@ -307,7 +309,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
           FakeRequest(POST, changePartnerDetailsBusinessNameRoute)
             .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = businessForm.bind(Map("value" -> ""))
 
         val view = application.injector.instanceOf[ChangePartnerDetailsBusinessNameView]
 

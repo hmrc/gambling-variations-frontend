@@ -40,7 +40,7 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
+  requireData: DataRequiredAction,
   businessNameFormProvider: ChangeBusinessNameFormProvider,
   soleProprietorFormProvider: SoleProprietorNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -50,45 +50,31 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: Temporary solution, to be replaced
-  private val Index: Int = 0
+  def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    request.userAnswers.get(AddPartnerDetailsBusinessTypePage) match {
+      case Some(businessType @ BusinessType.Soleproprietor) =>
+        val newForm = request.userAnswers
+          .get(AddPartnerDetailsSoleProprietorPage)
+          .fold(soleProprietorFormProvider())(soleProp => soleProprietorFormProvider().fill(soleProp))
+        Ok(changeSoleProprietorView(newForm, mode))
+      case Some(businessType) =>
+        val newForm = request.userAnswers
+          .get(AddPartnerDetailsBusinessNamePage)
+          .fold(businessNameFormProvider(businessType))(businessName => businessNameFormProvider(businessType).fill(businessName))
+        val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
+        val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
 
-  def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
-    (authorise andThen getData andThen requireData) { implicit request =>
-      // TODO temp idea
-//      for {
-//        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPartnerDetailsBusinessTypePage, businessType))
-//        _              <- sessionRepository.set(updatedAnswers)
-//      } yield ()
-
-      request.userAnswers.get(AddPartnerDetailsBusinessTypePage) match {
-
-        case Some(businessType) =>
-          businessType match {
-            case BusinessType.Soleproprietor =>
-              val newForm = request.userAnswers
-                .get(AddPartnerDetailsSoleProprietorPage)
-                .fold(soleProprietorFormProvider())(soleProp => soleProprietorFormProvider().fill(soleProp))
-              Ok(changeSoleProprietorView(newForm, mode))
-            case businessType =>
-              val newForm = request.userAnswers
-                .get(AddPartnerDetailsBusinessNamePage)
-                .fold(businessNameFormProvider(businessType))(businessName => businessNameFormProvider(businessType).fill(businessName))
-              val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
-              val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
-
-              Ok(changeBusinessNameView(newForm, mode, businessType, headingKey, titleKey))
-          }
-        case _ =>
-          Redirect(routes.SystemErrorController.onPageLoad())
-      }
+        Ok(changeBusinessNameView(newForm, mode, businessType, headingKey, titleKey))
+      case _ =>
+        Redirect(routes.SystemErrorController.onPageLoad())
     }
   }
 
-  def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
-    (authorise andThen getData andThen requireData).async { implicit request =>
-      businessType match {
-        case BusinessType.Soleproprietor =>
+  def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async {
+    implicit request =>
+      request.userAnswers.get(AddPartnerDetailsBusinessTypePage) match {
+
+        case Some(businessType @ BusinessType.Soleproprietor) =>
           soleProprietorFormProvider()
             .bindFromRequest()
             .fold(
@@ -101,7 +87,7 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(AddPartnerDetailsSoleProprietorPage, mode, updatedAnswers))
             )
-        case businessType =>
+        case Some(businessType) =>
           val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
           val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
 
@@ -115,8 +101,9 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(AddPartnerDetailsBusinessNamePage, mode, updatedAnswers))
             )
+        case _ =>
+          Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
       }
-    }
   }
 
 }
