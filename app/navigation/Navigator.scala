@@ -160,6 +160,9 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
+    case PartnerDetailsAddTradingNameYesNoPage(index) =>
+      _ => controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad() // change it
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
