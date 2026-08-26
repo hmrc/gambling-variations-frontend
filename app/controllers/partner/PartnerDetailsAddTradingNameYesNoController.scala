@@ -37,7 +37,7 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsAddTradingNameYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAddTradingNameYesNoView
@@ -45,11 +45,14 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddTradingNameYesNoPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -65,9 +68,9 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddTradingNameYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddTradingNameYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(index), mode, updatedAnswers))
       )
   }
 }
