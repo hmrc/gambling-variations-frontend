@@ -16,8 +16,9 @@
 
 package viewmodels.checkAnswers.businessaddress
 
+import controllers.routes
 import models.UserAnswers
-import pages.businessaddress.BusinessAddressHasUkPostcodePage
+import pages.businessaddress.BusinessUKAddrScreenerPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.all.{ActionItemViewModel, FluentActionItem, SummaryListRowViewModel, ValueViewModel}
@@ -26,19 +27,17 @@ import viewmodels.implicits.*
 case object HasUkPostcodeRow {
   def from(ua: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] = {
     val result = ua
-      .get(BusinessAddressHasUkPostcodePage)
-      .fold(None)(hasPostcode =>
-        Some(
-          SummaryListRowViewModel(
-            key   = "checkBusinessAddress.question.ukPostcode",
-            value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
-            actions = Seq(
-              ActionItemViewModel("site.change", "#")
-                .withVisuallyHiddenText(messages("checkBusinessAddress.question.ukPostcode.hidden"))
-            )
+      .get(BusinessUKAddrScreenerPage)
+      .map(hasPostcode => {
+        SummaryListRowViewModel(
+          key   = "checkBusinessAddress.question.ukPostcode",
+          value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad().url)
+              .withVisuallyHiddenText(messages("checkBusinessAddress.question.ukPostcode.hidden"))
           )
         )
-      )
+      })
     result
   }
 }

@@ -19,9 +19,7 @@ package pages.businessaddress
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object BusinessUKAddrScreenerPage extends QuestionPage[Boolean] {
-
+case object BusinessAddressChangeFlowPage extends QuestionPage[Boolean] {
   override def path: JsPath = JsPath \ "businessAddressSection" \ toString
-
-  override def toString: String = "businessUKAddrScreener"
+  override def toString: String = "isInChangeFlow"
 }
