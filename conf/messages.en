@@ -848,3 +848,9 @@ partnerDetailsAddNino.error.length = The National Insurance number must be 9 cha
 partnerDetailsAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 1 to 9 and spaces
 partnerDetailsAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not A, B, C or D, the next 6 characters must be numbers 0 to 9, and the final character must be a space, B, C, or D
 partnerDetailsAddNino.error.invalid = Enter a real National Insurance number
+
+partnerDetailsAddTradingNameYesNo.title = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.heading = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
+partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?

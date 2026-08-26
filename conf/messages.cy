@@ -239,3 +239,10 @@ partnerDetailsAddNinoYesNo.heading = cy: Do you want to add a National Insurance
 partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a National Insurance number for the partner?
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
+
+partnerDetailsAddTradingNameYesNo.title = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the partner
+partnerDetailsAddTradingNameYesNo.change.hidden = cy: Do you want to add a trading name for the partner?
+
