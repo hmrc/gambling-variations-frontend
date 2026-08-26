@@ -22,6 +22,7 @@ import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
 import navigation.Navigator
 import pages.*
+import pages.partnerdetails.addpartnerdetails.{AddPartnerDetailsBusinessNamePage, AddPartnerDetailsBusinessTypePage, AddPartnerDetailsSoleProprietorPage}
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsSoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -54,32 +55,52 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
 
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData) { implicit request =>
-      (request.userAnswers.get(PartnerDetailsBusinessTypePage(Index)) flatMap {
-        case Soleproprietor =>
-          request.userAnswers.get(PartnerDetailsSoleProprietorPage(Index)).map { soleProp =>
-            val form = soleProprietorFormProvider()
-            val preparedForm = form.fill(soleProp)
 
-            Ok(changeSoleProprietorView(preparedForm, mode))
-          }
+      // TODO temp idea
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPartnerDetailsBusinessTypePage, businessType))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield ()
+
+      businessType match {
+        case BusinessType.Soleproprietor =>
+          val newForm = request.userAnswers
+            .get(AddPartnerDetailsSoleProprietorPage)
+            .fold(soleProprietorFormProvider())(soleProp => soleProprietorFormProvider().fill(soleProp))
+          Ok(changeSoleProprietorView(newForm, mode))
+
+//          request.userAnswers.get(AddPartnerDetailsSoleProprietorPage).map { soleProp =>
+//            val form = soleProprietorFormProvider()
+//            val preparedForm = form.fill(soleProp)
+//
+//            Ok(changeSoleProprietorView(preparedForm, mode))
+//          }
         case businessType =>
-          request.userAnswers.get(PartnerDetailsBusinessNamePage(Index)).map { businessName =>
-            val form = businessNameFormProvider(businessType)
-            val preparedForm = form.fill(businessName)
+          val newForm = request.userAnswers
+            .get(AddPartnerDetailsBusinessNamePage)
+            .fold(businessNameFormProvider(businessType))(businessName => businessNameFormProvider(businessType).fill(businessName))
+          val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
+          val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
 
-            val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
-            val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
+          Ok(changeBusinessNameView(newForm, mode, businessType, headingKey, titleKey))
 
-            Ok(changeBusinessNameView(preparedForm, mode, businessType, headingKey, titleKey))
-          }
-      }).getOrElse(Redirect(routes.SystemErrorController.onPageLoad()))
+//          request.userAnswers.get(PartnerDetailsBusinessNamePage(Index)).map { businessName =>
+//            val form = businessNameFormProvider(businessType)
+//            val preparedForm = form.fill(businessName)
+//
+//            val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
+//            val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
+//
+//            Ok(changeBusinessNameView(preparedForm, mode, businessType, headingKey, titleKey))
+//          }
+      } // .getOrElse(Redirect(routes.SystemErrorController.onPageLoad()))
     }
   }
 
   def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
-      request.userAnswers.get(PartnerDetailsBusinessTypePage(Index)) map {
-        case Soleproprietor =>
+      businessType match {
+        case BusinessType.Soleproprietor =>
           soleProprietorFormProvider()
             .bindFromRequest()
             .fold(
@@ -88,9 +109,9 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
               },
               value =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsSoleProprietorPage(Index), value))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPartnerDetailsSoleProprietorPage, value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(PartnerDetailsSoleProprietorPage(Index), mode, updatedAnswers))
+                } yield Redirect(navigator.nextPage(AddPartnerDetailsSoleProprietorPage, mode, updatedAnswers))
             )
         case businessType =>
           val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
@@ -102,11 +123,11 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
               formWithErrors => Future.successful(BadRequest(changeBusinessNameView(formWithErrors, mode, businessType, headingKey, titleKey))),
               value =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessNamePage(Index), value))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPartnerDetailsBusinessNamePage, value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(PartnerDetailsBusinessNamePage(Index), mode, updatedAnswers))
+                } yield Redirect(navigator.nextPage(AddPartnerDetailsBusinessNamePage, mode, updatedAnswers))
             )
-      } getOrElse Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+      }
     }
   }
 
