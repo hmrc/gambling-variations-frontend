@@ -17,42 +17,43 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.partner.PartnerAddEmailAddressYesNoPageFormProvider
+import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerAddEmailAddressYesNoPage
+import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
+import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerAddEmailAddressYesNoPageView
+import views.html.partner.PartnerDetailsAddNationalInsuranceNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerAddEmailAddressYesNoPageController @Inject() (
+class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerAddEmailAddressYesNoPageFormProvider,
+  formProvider: PartnerDetailsAddNationalInsuranceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerAddEmailAddressYesNoPageView
+  view: PartnerDetailsAddNationalInsuranceNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  val form: Form[String] = formProvider()
 
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPage(index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -66,11 +67,12 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
+        nino =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerAddEmailAddressYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddNationalInsuranceNumberPage(index), nino))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsNinoPage(index), nino))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerAddEmailAddressYesNoPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberPage(index), mode, updatedAnswers))
       )
   }
 }

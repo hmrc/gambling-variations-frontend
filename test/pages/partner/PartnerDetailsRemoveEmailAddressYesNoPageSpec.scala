@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package pages.partner
 
-import javax.inject.Inject
+import base.SpecBase
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class PartnerDetailsRemoveEmailAddressYesNoPageSpec extends SpecBase {
 
-class PartnerAddEmailAddressYesNoPageFormProvider @Inject() extends Mappings {
+  "PartnerDetailsRemoveEmailAddressYesNoPage" - {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("partnerAddEmailAddressYesNoPage.error.required")
-    )
+    "must have the correct path" in {
+      PartnerDetailsRemoveEmailAddressYesNoPage(0).path mustEqual (JsPath \ "partners" \ 0 \ "partnerDetailsRemoveEmailAddressYesNo")
+    }
+
+    "must have the correct string representation" in {
+      PartnerDetailsRemoveEmailAddressYesNoPage(0).toString mustEqual "partnerDetailsRemoveEmailAddressYesNo"
+    }
+  }
 }

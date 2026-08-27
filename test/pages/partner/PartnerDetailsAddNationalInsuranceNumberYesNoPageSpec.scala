@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package forms.partner
+package pages.partner
 
-import forms.mappings.Mappings
-import play.api.data.Form
+import base.SpecBase
+import play.api.libs.json.JsPath
 
-import javax.inject.Inject
+class PartnerDetailsAddNationalInsuranceNumberYesNoPageSpec extends SpecBase {
 
-class PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider @Inject() extends Mappings {
+  "PartnerDetailsAddNationalInsuranceNumberYesNoPage" - {
 
-  def apply(): Form[Boolean] =
-    Form(
-      "value" -> boolean("partnerDetailsAddNinoYesNo.error.required")
-    )
+    "must have the correct path" in {
+      PartnerDetailsAddNationalInsuranceNumberYesNoPage(0).path mustEqual (JsPath \ "partners" \ 0 \ "partnerDetailsAddNationalInsuranceNumberYesNo")
+    }
+
+    "must have the correct string representation" in {
+      PartnerDetailsAddNationalInsuranceNumberYesNoPage(0).toString mustEqual "partnerDetailsAddNationalInsuranceNumberYesNo"
+    }
+  }
 }

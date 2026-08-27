@@ -25,6 +25,6 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider @Inject() ext
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required")
+      "value" -> boolean("partnerDetailsRemoveNinoYesNo.error.required")
     )
 }
