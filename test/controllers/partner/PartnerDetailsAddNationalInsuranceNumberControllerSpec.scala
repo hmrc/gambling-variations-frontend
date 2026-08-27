@@ -28,7 +28,6 @@ import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
 import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -37,8 +36,6 @@ import views.html.partner.PartnerDetailsAddNationalInsuranceNumberView
 import scala.concurrent.Future
 
 class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
-
-  def onwardRoute: Call = Call("GET", "/foo")
 
   val form: Form[String] = (new PartnerDetailsAddNationalInsuranceNumberFormProvider())()
 
