@@ -23,5 +23,5 @@ case class PartnerDetailsRemoveFaxNumberYesNoPage(index: Int) extends QuestionPa
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "partnerRemoveFaxNumberYesNo"
+  override def toString: String = "partnerDetailsRemoveFaxNumberYesNo"
 }

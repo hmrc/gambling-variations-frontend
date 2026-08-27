@@ -44,11 +44,11 @@ class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)(s"partnerRemoveFaxNumberYesNo.title")
+          messages(application)(s"partnerDetailsRemoveFaxNumberYesNo.title")
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)(s"partnerRemoveFaxNumberYesNo.heading", "here-goes-nothing!")
+          messages(application)(s"partnerDetailsRemoveFaxNumberYesNo.heading", "here-goes-nothing!")
 
         document.getElementById("value").attr("value") mustEqual "true"
 
@@ -76,7 +76,7 @@ class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)(s"partnerRemoveFaxNumberYesNo.error.required")
+          messages(application)(s"partnerDetailsRemoveFaxNumberYesNo.error.required")
         )
       }
     }
