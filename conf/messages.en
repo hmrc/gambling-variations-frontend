@@ -836,3 +836,14 @@ partnerTradingName.error.required = Enter the partner’s trading name
 partnerTradingName.error.length = The partner’s trading name must be 100 characters or less
 partnerTradingName.error.invalid = The partner’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
 partnerTradingName.change.hidden = What is the partner’s trading name?
+
+partnerDetailsBusinessType.title = What type of business is the partner?
+partnerDetailsBusinessType.heading = What type of business is the partner?
+partnerDetailsBusinessType.corporateBody = Corporate body
+partnerDetailsBusinessType.limitedLiabilityPartnership = Limited liability partnership
+partnerDetailsBusinessType.partnership = Partnership
+partnerDetailsBusinessType.soleProprietor = Sole proprietor
+partnerDetailsBusinessType.unincorporatedBody = Unincorporated body
+partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
+partnerDetailsBusinessType.error.required = Select the type of business for the partner
+partnerDetailsBusinessType.change.hidden = What type of business is the partner?
