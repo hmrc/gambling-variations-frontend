@@ -99,7 +99,7 @@ class PartnerAddFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar 
 
     "onSubmit" - {
 
-      def onwardRoute: Call = Call("GET", "/foo")
+
 
       "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 

@@ -17,6 +17,7 @@
 package controllers.partner
 
 import play.api.libs.json.{JsObject, Json}
+import play.api.mvc.Call
 
 trait PartnerDetailsHelper {
 
@@ -26,6 +27,8 @@ trait PartnerDetailsHelper {
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
   val nino: String = "AB123456C"
+
+  lazy val onwardRoute: Call = Call("GET", "/foo")
 
   def cleanedData(
     faxNumber: Option[String] = None,

@@ -101,9 +101,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoControllerSpec extends SpecBa
     }
 
     "onSubmit" - {
-
-      def onwardRoute: Call = Call("GET", "/foo")
-
+      
       "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]

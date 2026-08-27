@@ -119,7 +119,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
 
     "onSubmit" - {
 
-      def onwardRoute: Call = Call("GET", "/foo")
+
 
       "must remove NINO, update UserAnswers and redirect when 'Yes' (true) is submitted" in {
 
