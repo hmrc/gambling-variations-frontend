@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerAddEmailAddressYesNoPageFormProvider
+import forms.partner.PartnerAddEmailAddressYesNoPageFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partner.PartnerAddEmailAddressYesNoPage

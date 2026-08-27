@@ -17,7 +17,7 @@
 package views.partner
 
 import base.SpecBase
-import forms.PartnerAddEmailAddressYesNoPageFormProvider
+import forms.partner.PartnerAddEmailAddressYesNoPageFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
