@@ -867,4 +867,4 @@ partnerDetails.cannotRemove =  	Cannot remove
 partnerDetails.maximumReached = You can only have up to 100 partners. If you need to add a new partner, you must change or remove a current one.
 partnerDetails.maxPartners = You can only add up to 100 partners.
 partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
-partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner, or no if you do not
+partnerDetails.addAnotherPartner.error.required = Select yes if you want to add a partner
