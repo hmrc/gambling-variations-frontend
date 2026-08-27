@@ -27,7 +27,7 @@ import play.api.libs.json.{JsError, JsString, Json}
 class PartnerDetailsBusinessTypeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
   "PartnerDetailsBusinessType" - {
-    
-    //todo: bring test back!
+
+    // todo: bring test back!
   }
 }

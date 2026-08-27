@@ -48,7 +48,7 @@ class PartnerDetailsBusinessTypeSummarySpec extends SpecBase {
 
       val expectedValue = ValueViewModel(
         HtmlContent(
-          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.$Corporatebody.code"))
+          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.${Corporatebody.code}"))
         )
       )
 

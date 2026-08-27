@@ -58,7 +58,7 @@ class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
           val label = document.select(s"label[for=${radioInput.id()}]")
 
           radioInput.attr("value") mustEqual option.toString
-          label.text() mustEqual messages(application)(s"partnerDetailsBusinessType.${option.toString}")
+          label.text() mustEqual messages(application)(s"businessType.${option.toString}")
         }
 
         document.select(".govuk-button").text() mustEqual

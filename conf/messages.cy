@@ -242,11 +242,6 @@ partnerDetailsAddNationalInsuranceNumberYesNo.change.hidden = cy: Do you want to
 
 partnerDetailsBusinessType.title = cy: What type of business is the partner?
 partnerDetailsBusinessType.heading = cy: What type of business is the partner?
-partnerDetailsBusinessType.corporateBody = cy: Corporate body
-partnerDetailsBusinessType.limitedLiabilityPartnership = cy: Limited liability partnership
-partnerDetailsBusinessType.partnership = cy: Partnership
-partnerDetailsBusinessType.soleProprietor = cy: Sole proprietor
-partnerDetailsBusinessType.unincorporatedBody = cy: Unincorporated body
 partnerDetailsBusinessType.checkYourAnswersLabel = cy: What type of business is the partner?
 partnerDetailsBusinessType.error.required = cy: Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = cy: What type of business is the partner?

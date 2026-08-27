@@ -839,11 +839,6 @@ partnerTradingName.change.hidden = What is the partner’s trading name?
 
 partnerDetailsBusinessType.title = What type of business is the partner?
 partnerDetailsBusinessType.heading = What type of business is the partner?
-partnerDetailsBusinessType.corporateBody = Corporate body
-partnerDetailsBusinessType.limitedLiabilityPartnership = Limited liability partnership
-partnerDetailsBusinessType.partnership = Partnership
-partnerDetailsBusinessType.soleProprietor = Sole proprietor
-partnerDetailsBusinessType.unincorporatedBody = Unincorporated body
 partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
