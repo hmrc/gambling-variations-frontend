@@ -57,8 +57,7 @@ class LicencesAndPremisesSpec extends AnyWordSpec with Matchers {
         totalRows = Some(1),
         premises  = Seq(premisesDetails)
       )
-    ),
-    systemDate = Some(LocalDate.now())
+    )
   )
 
   "LicencesAndPremises" should {
@@ -89,7 +88,6 @@ class LicencesAndPremisesSpec extends AnyWordSpec with Matchers {
         serveAlcohol          = None,
         premisesNotCovered    = None,
         premisesDetails       = None,
-        systemDate            = None
       )
 
       val json = Json.toJson(licencesAndPremisesWithNone)

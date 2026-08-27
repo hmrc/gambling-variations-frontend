@@ -38,7 +38,6 @@ case class LicencesAndPremises(mgdRegNumber: String,
                                serveAlcohol: Option[String],
                                premisesNotCovered: Option[String],
                                premisesDetails: Option[PremisesDetailsResponse],
-                               systemDate: Option[LocalDate]
                               )
 
 object LicencesAndPremises {

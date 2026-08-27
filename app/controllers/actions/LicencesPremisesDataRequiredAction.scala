@@ -70,7 +70,7 @@ class LicencesPremisesDataRequiredActionImpl @Inject() (
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
     gamblingConnector.getLicencesAndPremises(answers.id) flatMap { licenceAndPremisesDetails =>
 
-      setlicenceAndPremisesDetails(licenceAndPremisesDetails, answers) map { updatedAnswers =>
+      setLicenceAndPremisesDetails(licenceAndPremisesDetails, answers) map { updatedAnswers =>
         logger.info("User Answers updated with License and Premises Details. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
@@ -88,7 +88,7 @@ class LicencesPremisesDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setlicenceAndPremisesDetails(licenceAndPremisesDetails: LicencesAndPremises, answers: UserAnswers): Try[UserAnswers] = {
+  private def setLicenceAndPremisesDetails(licenceAndPremisesDetails: LicencesAndPremises, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Licenses and Premises")
     for {
       updatedAnswers <- answers.set(LicencesPremisesSectionPage, licenceAndPremisesDetails.mgdRegNumber)

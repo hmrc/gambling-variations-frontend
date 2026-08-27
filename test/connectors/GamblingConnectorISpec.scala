@@ -524,7 +524,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
            |        "address3": "A Place",
            |        "address4": "Earth",
            |        "postcode": "SM12 0NL",
-           |        "systemDate": "2023-04-01"
+           |        "systemDate": ${LocalDate.of(2023, 4, 1)}
            |      },
            |      {
            |        "mgdRegNumber": "XGM00000001763",
@@ -533,15 +533,14 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
            |        "address3": "ANOTHERPlace",
            |        "address4": "Earth II",
            |        "postcode": "SM12 1MO",
-           |        "systemDate": "2023-04-01"
+           |        "systemDate": ${LocalDate.of(2023,4,1)}
            |      }
            |    ]
-           |  },
-           |  "systemDate": "2026-08-26"
+           |  }
            |}""".stripMargin
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/licences-and-premises/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/licences-and-premises-details/mgd/$mgdRegNumber"))
           .willReturn(okJson(jsonAsString))
       )
 
@@ -551,7 +550,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "return UpstreamErrorResponse when backend returns 404" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/licences-and-premises/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/licences-and-premises-details/mgd/$mgdRegNumber"))
           .willReturn(aResponse().withStatus(404))
       )
 
@@ -563,7 +562,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     "return UpstreamErrorResponse when backend returns 500" in {
 
       wireMockServer.stubFor(
-        get(urlEqualTo(s"/gambling/licences-and-premises/mgd/$mgdRegNumber"))
+        get(urlEqualTo(s"/gambling/licences-and-premises-details/mgd/$mgdRegNumber"))
           .willReturn(serverError())
       )
 
@@ -765,7 +764,7 @@ object GamblingConnectorISpec {
   )
 
   val licencesAndPremisesResponse: LicencesAndPremises = LicencesAndPremises(
-    mgdRegNumber          = "XEM00000001335",
+    mgdRegNumber          = mgdRegNumber,
     haveGamblingLicenceNo = Some("1"),
     gamblingLicenceNo     = Some("123-456789-A-123456-789"),
     heldByLandlord        = Some("1"),
@@ -783,7 +782,5 @@ object GamblingConnectorISpec {
     serveAlcohol          = Some("0"),
     premisesNotCovered    = Some("0"),
     premisesDetails       = Some(premisesDetailsResponse),
-    systemDate            = Some(LocalDate.now())
   )
-
 }
