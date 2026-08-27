@@ -21,10 +21,10 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider @Inject() extends Mappings {
+class PartnerAddEmailAddressYesNoPageFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("partnerDetailsAddNinoYesNo.error.required")
+      "value" -> boolean("partnerAddEmailAddressYesNoPage.error.required")
     )
 }

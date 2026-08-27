@@ -28,7 +28,7 @@
 
 @(form: Form[_], mode: Mode, faxNumber: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("partnerRemoveFaxNumberYesNo.title"), Some(messages("changeRegistrationDetails.caption")))) {
+@layout(pageTitle = title(form, messages("partnerDetailsRemoveFaxNumberYesNo.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(), Symbol("autoComplete") -> "off") {
 
@@ -41,7 +41,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("partnerRemoveFaxNumberYesNo.heading", faxNumber)).asPageHeading(Large)
+                legend = LegendViewModel(messages("partnerDetailsRemoveFaxNumberYesNo.heading", faxNumber)).asPageHeading(Large)
             )
         )
 

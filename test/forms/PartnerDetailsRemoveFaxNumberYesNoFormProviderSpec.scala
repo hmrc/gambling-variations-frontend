@@ -22,7 +22,7 @@ import play.api.data.FormError
 
 class PartnerDetailsRemoveFaxNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "partnerRemoveFaxNumberYesNo.error.required"
+  val requiredKey = "partnerDetailsRemoveFaxNumberYesNo.error.required"
   val invalidKey = "error.boolean"
 
   val form = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()()

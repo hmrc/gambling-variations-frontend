@@ -48,14 +48,14 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoSummarySpec extends SpecBase 
 
       PartnerDetailsAddNationalInsuranceNumberYesNoSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key   = "partnerDetailsAddNationalInsuranceNumberYesNo.checkYourAnswersLabel",
+          key   = "partnerDetailsAddNinoYesNo.checkYourAnswersLabel",
           value = ValueViewModel("site.yes"),
           actions = Seq(
             ActionItemViewModel(
               "site.change",
               PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
-              messages("partnerDetailsAddNationalInsuranceNumberYesNo.change.hidden")
+              messages("partnerDetailsAddNinoYesNo.change.hidden")
             )
           )
         )
@@ -70,14 +70,14 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoSummarySpec extends SpecBase 
 
       PartnerDetailsAddNationalInsuranceNumberYesNoSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key   = "partnerDetailsAddNationalInsuranceNumberYesNo.checkYourAnswersLabel",
+          key   = "partnerDetailsAddNinoYesNo.checkYourAnswersLabel",
           value = ValueViewModel("site.no"),
           actions = Seq(
             ActionItemViewModel(
               "site.change",
               PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
-              messages("partnerDetailsAddNationalInsuranceNumberYesNo.change.hidden")
+              messages("partnerDetailsAddNinoYesNo.change.hidden")
             )
           )
         )
