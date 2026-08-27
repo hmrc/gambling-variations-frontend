@@ -45,7 +45,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection | ADD NEW PARTNER
   private val index: Int = 0
 
   val form: Form[BusinessType] = formProvider()
