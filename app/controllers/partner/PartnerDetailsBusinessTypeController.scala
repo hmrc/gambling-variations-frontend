@@ -18,9 +18,9 @@ package controllers.partner
 
 import controllers.actions.*
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
-import models.{Mode, PartnerDetailsBusinessType}
+import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.partner.PartnerDetailsBusinessTypePage
+import pages.partnerdetails.PartnerDetailsBusinessTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,13 +48,13 @@ class PartnerDetailsBusinessTypeController @Inject() (
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
 
-  val form: Form[PartnerDetailsBusinessType] = formProvider()
+  val form: Form[BusinessType] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+    val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(index)).flatMap(BusinessType.fromCode) match {
+      case None               => form
+      case Some(businessType) => form.fill(businessType)
     }
 
     Ok(view(preparedForm, mode))
@@ -66,9 +66,9 @@ class PartnerDetailsBusinessTypeController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
+        businessType =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(index), businessType.code))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(index), mode, updatedAnswers))
       )

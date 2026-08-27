@@ -17,8 +17,7 @@
 package viewmodels.checkAnswers.partner
 
 import base.SpecBase
-import models.PartnerDetailsBusinessType.CorporateBody
-import pages.partner.PartnerDetailsBusinessTypePage
+import models.BusinessType.CorporateBody
 import play.api.Application
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat

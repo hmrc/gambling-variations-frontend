@@ -20,12 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.PartnerDetailsBusinessType
+import models.BusinessType
 
 class PartnerDetailsBusinessTypeFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[PartnerDetailsBusinessType] =
+  def apply(): Form[BusinessType] =
     Form(
-      "value" -> enumerable[PartnerDetailsBusinessType]("partnerDetailsBusinessType.error.required")
+      "value" -> enumerable[BusinessType]("partnerDetailsBusinessType.error.required")
     )
 }

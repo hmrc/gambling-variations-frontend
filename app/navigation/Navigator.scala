@@ -25,11 +25,11 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.partner.{PartnerDetailsBusinessTypePage, *}
+import pages.partner.*
 import pages.partnerdetails.*
+import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
-import pages.tradingdetails.*
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -160,7 +160,7 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
     case PartnerDetailsBusinessTypePage(index) =>
       userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
-      
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -449,28 +449,29 @@ class Navigator @Inject() () {
   private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
-      .map {
-        case PartnerDetailsBusinessType.CorporateBody =>
-          //TODO: should go to Change corporate body name
+      .flatMap(BusinessType.fromCode)
+      .fold(routes.SystemErrorController.onPageLoad()) {
+        case BusinessType.Corporatebody =>
+          // TODO: should go to Change corporate body name
           controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-          
-        case PartnerDetailsBusinessType.LimitedLiabilityPartnership =>
-          //TODO: should go to Change Limited Liability Partnership name
+
+        case BusinessType.LimitedLiabilityPartnership =>
+          // TODO: should go to Change Limited Liability Partnership name
           controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-        
-        case PartnerDetailsBusinessType.Partnership =>
-          //TODO: should go to Change partnership name
-        controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-        
-        case PartnerDetailsBusinessType.SoleProprietor => 
-          //TODO: should go to Change proprietor name
+
+        case BusinessType.Partnership =>
+          // TODO: should go to Change partnership name
           controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-        
-        case PartnerDetailsBusinessType.UnincorporatedBody => 
-          //TODO: should go to Change unincorporated body name
+
+        case BusinessType.Soleproprietor =>
+          // TODO: should go to Change proprietor name
           controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
+
+        case BusinessType.Unincorporatedbody =>
+          // TODO: should go to Change unincorporated body name
+          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
+
       }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

@@ -19,13 +19,12 @@ package controllers.partner
 import base.SpecBase
 import controllers.partner.routes.PartnerDetailsBusinessTypeController
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
-import models.PartnerDetailsBusinessType.CorporateBody
+import models.BusinessType.CorporateBody
 import models.{NormalMode, PartnerDetailsBusinessType, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsBusinessTypePage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
