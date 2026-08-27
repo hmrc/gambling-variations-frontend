@@ -48,7 +48,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
 
   val form: Form[String] = formProvider()
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection | ADD NEW PARTNER
   private val index: Int = 0
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
