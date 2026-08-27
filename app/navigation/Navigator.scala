@@ -25,7 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.partner.*
+import pages.partner.{PartnerDetailsBusinessTypePage, *}
 import pages.partnerdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -158,6 +158,9 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
+    case PartnerDetailsBusinessTypePage(index) =>
+      userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
+      
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -440,6 +443,32 @@ class Navigator @Inject() () {
         case true =>
           // Should go to Trading name
           controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsBusinessTypePage(index))
+      .map {
+        case PartnerDetailsBusinessType.CorporateBody =>
+          //TODO: should go to Change corporate body name
+          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
+          
+        case PartnerDetailsBusinessType.LimitedLiabilityPartnership =>
+          //TODO: should go to Change Limited Liability Partnership name
+          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
+        
+        case PartnerDetailsBusinessType.Partnership =>
+          //TODO: should go to Change partnership name
+        controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
+        
+        case PartnerDetailsBusinessType.SoleProprietor => 
+          //TODO: should go to Change proprietor name
+          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
+        
+        case PartnerDetailsBusinessType.UnincorporatedBody => 
+          //TODO: should go to Change unincorporated body name
+          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
