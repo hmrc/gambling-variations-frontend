@@ -251,5 +251,5 @@ POST       /change-registration-details/partner-details/national-insurance-numbe
 GET        /change-registration-details/partner-details/trading-name                        controllers.partner.PartnerTradingNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/trading-name                        controllers.partner.PartnerTradingNameController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/partner-details/business-type                       controllers.PartnerDetailsBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/partner-details/business-type                       controllers.PartnerDetailsBusinessTypeController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onSubmit(mode: Mode = NormalMode)

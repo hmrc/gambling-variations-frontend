@@ -22,6 +22,9 @@ import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryPartnerDetailsBusinessType: Arbitrary[PartnerDetailsBusinessType] =
+    Arbitrary(Gen.oneOf(PartnerDetailsBusinessType.values))
+
   implicit lazy val arbitraryBusinessTradeClass: Arbitrary[BusinessTradeClass] =
     Arbitrary {
       Gen.oneOf(BusinessTradeClass.values)
