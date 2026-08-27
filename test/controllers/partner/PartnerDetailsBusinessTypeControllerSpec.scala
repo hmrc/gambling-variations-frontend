@@ -18,14 +18,15 @@ package controllers.partner
 
 import base.SpecBase
 import controllers.partner.routes.PartnerDetailsBusinessTypeController
-import controllers.routes
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
+import models.PartnerDetailsBusinessType.CorporateBody
 import models.{NormalMode, PartnerDetailsBusinessType, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsBusinessTypePage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -37,13 +38,145 @@ import scala.concurrent.Future
 
 class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  def onwardRoute = Call("GET", "/foo")
+  val form: Form[PartnerDetailsBusinessType] = (new PartnerDetailsBusinessTypeFormProvider())()
 
-  lazy val partnerDetailsBusinessTypeRoute: String = {
+  lazy val partnerDetailsBusinessTypeRoute: String =
     PartnerDetailsBusinessTypeController.onPageLoad().url
+
+  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+
+  "PartnerDetailsBusinessType Controller" - {
+
+    "onPageLoad" - {
+
+      "must return OK and the correct view for a GET when no previous data exists" in {
+
+        val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsBusinessTypeRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered" in {
+
+        val userAnswers = validUserAnswers
+          .set(PartnerDetailsBusinessTypePage(index), CorporateBody)
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsBusinessTypeRoute)
+
+          val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form.fill(CorporateBody), NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to SystemError when no user answers are found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsBusinessTypeRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+        }
+      }
+    }
+
+    "onSubmit" - {
+
+      "must update UserAnswers and redirect to the next page when valid data is submitted" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val application =
+          applicationBuilder(userAnswers = Some(validUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsBusinessTypeController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", CorporateBody.toString))
+
+          val result = route(application, request).value
+
+          val expectedAnswers = validUserAnswers
+            .set(PartnerDetailsBusinessTypePage(index), CorporateBody)
+            .success
+            .value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+          verify(mockSessionRepository).set(expectedAnswers)
+        }
+      }
+
+      "must return BAD_REQUEST and errors when invalid data is submitted" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        val application = applicationBuilder(userAnswers = Some(validUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsBusinessTypeController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", "invalid value"))
+
+          val boundForm = form.bind(Map("value" -> "invalid value"))
+
+          val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+          verify(mockSessionRepository, never()).set(any())
+        }
+      }
+
+      "must redirect to SystemError for a POST if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsBusinessTypeController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", CorporateBody.toString))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+        }
+      }
+    }
   }
-
-  val formProvider: PartnerDetailsBusinessTypeFormProvider = new PartnerDetailsBusinessTypeFormProvider()
-
-  "PartnerDetailsBusinessType Controller" - {}
 }
