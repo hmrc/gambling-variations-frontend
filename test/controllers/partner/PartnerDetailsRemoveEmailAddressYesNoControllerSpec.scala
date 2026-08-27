@@ -27,8 +27,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -37,15 +35,14 @@ import views.html.partner.PartnerDetailsRemoveEmailAddressYesNoView
 import scala.concurrent.Future
 
 class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
-  
+
   private val form: Form[Boolean] = (new PartnerDetailsRemoveEmailAddressYesNoFormProvider())()
 
   private lazy val partnerDetailsRemoveEmailAddressYesNoRoute: String =
     controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
 
   private val baseUserAnswers = UserAnswers(mgdRegNumber, cleanedData(emailAddress = Some(testEmailAddress)))
-  
-  
+
   "PartnerDetailsRemoveEmailAddressYesNo Controller" - {
 
     "onPageLoad" - {
@@ -163,7 +160,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
       }
 
       "must return BAD_REQUEST and errors when invalid data is submitted" in {
-        
+
         val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
         running(application) {

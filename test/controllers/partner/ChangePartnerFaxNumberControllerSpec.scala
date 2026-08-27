@@ -98,7 +98,6 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar wi
 
     "onSubmit" - {
 
-
       "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]

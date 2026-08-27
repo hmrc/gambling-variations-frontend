@@ -28,7 +28,7 @@ import views.html.partner.PartnerDetailsBusinessTypeView
 class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
 
   private val form = new PartnerDetailsBusinessTypeFormProvider()()
-  
+
   "PartnerDetailsBusinessTypeView" - {
 
     "render the page correctly" in {
@@ -42,7 +42,7 @@ class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
         val html = view(form, NormalMode)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
-                
+
         document.title() must include(
           messages(application)("partnerDetailsBusinessType.title")
         )
@@ -52,7 +52,7 @@ class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption")
-        
+
         PartnerDetailsBusinessType.values.zipWithIndex.foreach { case (option, index) =>
           val radioInput = document.getElementById(s"value_$index")
           val label = document.select(s"label[for=${radioInput.id()}]")
@@ -60,7 +60,6 @@ class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
           radioInput.attr("value") mustEqual option.toString
           label.text() mustEqual messages(application)(s"partnerDetailsBusinessType.${option.toString}")
         }
-
 
         document.select(".govuk-button").text() mustEqual
           messages(application)("site.continue")

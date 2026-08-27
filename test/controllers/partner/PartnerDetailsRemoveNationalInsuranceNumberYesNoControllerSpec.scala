@@ -119,8 +119,6 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
 
     "onSubmit" - {
 
-
-
       "must remove NINO, update UserAnswers and redirect when 'Yes' (true) is submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]
