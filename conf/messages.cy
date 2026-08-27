@@ -245,4 +245,3 @@ partnerDetailsAddTradingNameYesNo.heading = cy: Do you want to add a trading nam
 partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = cy: Do you want to add a trading name for the partner?
-
