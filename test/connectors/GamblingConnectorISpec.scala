@@ -781,6 +781,6 @@ object GamblingConnectorISpec {
     amusement             = Some("0"),
     serveAlcohol          = Some("0"),
     premisesNotCovered    = Some("0"),
-    premisesDetails       = Some(premisesDetailsResponse),
+    premisesDetails       = Some(premisesDetailsResponse)
   )
 }

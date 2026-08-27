@@ -18,8 +18,6 @@ package models.licencespremises
 
 import play.api.libs.json.{Json, OWrites, Reads}
 
-import java.time.LocalDate
-
 case class LicencesAndPremises(mgdRegNumber: String,
                                haveGamblingLicenceNo: Option[String],
                                gamblingLicenceNo: Option[String],
@@ -37,7 +35,7 @@ case class LicencesAndPremises(mgdRegNumber: String,
                                amusement: Option[String],
                                serveAlcohol: Option[String],
                                premisesNotCovered: Option[String],
-                               premisesDetails: Option[PremisesDetailsResponse],
+                               premisesDetails: Option[PremisesDetailsResponse]
                               )
 
 object LicencesAndPremises {

@@ -87,7 +87,7 @@ class LicencesAndPremisesSpec extends AnyWordSpec with Matchers {
         amusement             = None,
         serveAlcohol          = None,
         premisesNotCovered    = None,
-        premisesDetails       = None,
+        premisesDetails       = None
       )
 
       val json = Json.toJson(licencesAndPremisesWithNone)
