@@ -22,7 +22,7 @@ import models.UserAnswers
 import models.licencespremises.LicencesAndPremises
 import models.requests.{DataRequest, OptionalDataRequest}
 import pages.*
-import pages.licencespremises.{LicencesNumberPage, LicencesPremisesSectionPage}
+import pages.licencespremises.{LicenceNumberPage, LicencesPremisesSectionPage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -92,7 +92,7 @@ class LicencesPremisesDataRequiredActionImpl @Inject() (
     logger.info("Setting User Answers for Licenses and Premises")
     for {
       updatedAnswers <- answers.set(LicencesPremisesSectionPage, licenceAndPremisesDetails.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicencesNumberPage, licenceAndPremisesDetails.gamblingLicenceNo)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceNumberPage, licenceAndPremisesDetails.gamblingLicenceNo)
     } yield updatedAnswers
   }
 

@@ -21,7 +21,7 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class LicencesNumberFormProvider @Inject() extends Mappings {
+class LicenceNumberFormProvider @Inject() extends Mappings {
 
   private val allowedCharactersRegex = "^[A-Z0-9-]+$"
 
@@ -30,18 +30,18 @@ class LicencesNumberFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "gamblingLicenceNo" -> text("licencesNumber.error.required")
+      "gamblingLicenceNo" -> text("licenceNumber.error.required")
         .transform[String](_.replace(" ", ""), identity)
         .verifying(
-          "licencesNumber.error.required",
+          "licenceNumber.error.required",
           _.nonEmpty
         )
         .verifying(
-          "licencesNumber.error.invalidCharacters",
+          "licenceNumber.error.invalidCharacters",
           _.matches(allowedCharactersRegex)
         )
         .verifying(
-          "licencesNumber.error.invalidFormat",
+          "licenceNumber.error.invalidFormat",
           _.matches(licenceNumberRegex)
         )
     )

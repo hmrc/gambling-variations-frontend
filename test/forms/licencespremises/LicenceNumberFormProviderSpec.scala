@@ -20,13 +20,13 @@ import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class LicencesNumberFormProviderSpec extends StringFieldBehaviours {
+class LicenceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "licencesNumber.error.required"
-  private val invalidCharactersKey = "licencesNumber.error.invalidCharacters"
-  private val invalidFormatKey = "licencesNumber.error.invalidFormat"
+  private val requiredKey = "licenceNumber.error.required"
+  private val invalidCharactersKey = "licenceNumber.error.invalidCharacters"
+  private val invalidFormatKey = "licenceNumber.error.invalidFormat"
 
-  private val formProvider = new LicencesNumberFormProvider()
+  private val formProvider = new LicenceNumberFormProvider()
   private val form = formProvider()
 
   ".gamblingLicenceNo" - {

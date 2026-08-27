@@ -17,7 +17,7 @@
 package views.licencespremises
 
 import base.SpecBase
-import forms.licencespremises.LicencesNumberFormProvider
+import forms.licencespremises.LicenceNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -38,7 +38,7 @@ class LicenceNumberViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new LicencesNumberFormProvider()
+    private val formProvider = new LicenceNumberFormProvider()
     private val form = formProvider()
 
     private val html = view(form, NormalMode)(request, messages)

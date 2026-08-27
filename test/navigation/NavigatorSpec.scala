@@ -28,7 +28,7 @@ import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
 import pages.*
-import pages.licencespremises.LicencesNumberPage
+import pages.licencespremises.LicenceNumberPage
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -212,8 +212,8 @@ class NavigatorSpec extends SpecBase {
       }
 
       "should route LicencesNumberPage to LicencesNumberController" in {
-        navigator.nextPage(LicencesNumberPage, NormalMode, emptyAnswers) mustBe
-          controllers.licencespremises.routes.LicencesNumberController.onPageLoad()
+        navigator.nextPage(LicenceNumberPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
       }
 
     }

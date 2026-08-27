@@ -28,7 +28,7 @@ class LicencesPremisesDetailsChangesPageSpec extends PlaySpec {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "licencesPremisesDetailsChanged"
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "licencesPremisesDetailsChanged"
       LicencesPremisesDetailsChangesPage.path mustBe expectedPath
     }
   }

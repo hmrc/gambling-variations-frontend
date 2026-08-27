@@ -28,7 +28,7 @@ class LicencesPremisesDetailsSubmittedPageSpec extends PlaySpec {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "licensesPremisesSection" \ "submitted"
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "submitted"
       LicencesPremisesDetailsSubmittedPage.path mustBe expectedPath
     }
   }

@@ -19,9 +19,9 @@ package pages.licencespremises
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object LicencesNumberPage extends QuestionPage[String] {
+case object LicenceNumberPage extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
 
   override def toString: String = "gamblingLicenceNo"
 }

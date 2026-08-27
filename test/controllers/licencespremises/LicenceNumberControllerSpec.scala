@@ -17,14 +17,14 @@
 package controllers.licencespremises
 
 import base.SpecBase
-import forms.licencespremises.LicencesNumberFormProvider
+import forms.licencespremises.LicenceNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.{LicencesNumberPage, LicencesPremisesDetailsChangesPage}
+import pages.licencespremises.{LicenceNumberPage, LicencesPremisesDetailsChangesPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -36,23 +36,23 @@ import views.html.licencespremises.LicenceNumberView
 
 import scala.concurrent.Future
 
-class LicencesNumberControllerSpec extends SpecBase with MockitoSugar {
+class LicenceNumberControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new LicencesNumberFormProvider()
+  val formProvider = new LicenceNumberFormProvider()
   val form: Form[String] = formProvider()
 
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("licensesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
 
   lazy val licenceAndPremisesRoute: String =
-    routes.LicencesNumberController.onPageLoad().url
+    routes.LicenceNumberController.onPageLoad().url
 
-  "LicencesNumberController Controller" - {
+  "LicenceNumberController Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -74,8 +74,10 @@ class LicencesNumberControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "licensesPremisesSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
-        LicencesNumberPage.toString -> "123-456789-A-123456-789"
+        "licencesPremisesSection"  -> Json.obj(
+          "mgdRegNum" -> userAnswersId,
+          "gamblingLicenceNo" -> "123-456789-A-123456-789")
+
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
@@ -144,7 +146,7 @@ class LicencesNumberControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(LicencesNumberPage).value mustEqual "123-456789-A-123456-000"
+        savedAnswersCaptor.getValue.get(LicenceNumberPage).value mustEqual "123-456789-A-123456-000"
       }
     }
 
@@ -172,7 +174,7 @@ class LicencesNumberControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(LicencesNumberPage).value mustEqual "123-456789-A-123456-000"
+        savedAnswersCaptor.getValue.get(LicenceNumberPage).value mustEqual "123-456789-A-123456-000"
         savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
       }
     }

@@ -19,17 +19,17 @@ package pages.licencespremises
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-class LicencesNumberPageSpec extends PlaySpec {
+class LicenceNumberPageSpec extends PlaySpec {
 
-  "LicencesNumberPage" must {
+  "LicenceNumberPage" must {
 
     "must have the correct toString" in {
-      LicencesNumberPage.toString mustBe "gamblingLicenceNo"
+      LicenceNumberPage.toString mustBe "gamblingLicenceNo"
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "gamblingLicenceNo"
-      LicencesNumberPage.path mustBe expectedPath
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "gamblingLicenceNo"
+      LicenceNumberPage.path mustBe expectedPath
     }
   }
 }

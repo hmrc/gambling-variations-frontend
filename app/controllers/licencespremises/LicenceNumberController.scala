@@ -17,10 +17,10 @@
 package controllers.licencespremises
 
 import controllers.actions.*
-import forms.licencespremises.LicencesNumberFormProvider
+import forms.licencespremises.LicenceNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.licencespremises.{LicencesNumberPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage}
+import pages.licencespremises.{LicenceNumberPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -32,14 +32,14 @@ import views.html.licencespremises.LicenceNumberView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LicencesNumberController @Inject() (
+class LicenceNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: LicencesPremisesDataRequiredAction,
-  formProvider: LicencesNumberFormProvider,
+  formProvider: LicenceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: LicenceNumberView
 )(implicit ec: ExecutionContext)
@@ -50,7 +50,7 @@ class LicencesNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(LicencesNumberPage)
+      .get(LicenceNumberPage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
@@ -64,14 +64,14 @@ class LicencesNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, LicencesNumberPage, LicencesPremisesDetailsChangesPage)
+            checkIfChanged(value, request.userAnswers, LicenceNumberPage, LicencesPremisesDetailsChangesPage)
 
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(LicencesNumberPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(LicenceNumberPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsSubmittedPage, true))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LicencesNumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(LicenceNumberPage, mode, updatedAnswers))
       )
   }
 }
