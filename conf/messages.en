@@ -777,11 +777,11 @@ partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel = Are you sure you w
 partnerDetailsRemoveEmailAddressYesNo.error.required = Select yes if you want to remove this partner’s email address
 partnerDetailsRemoveEmailAddressYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s email address?
 
-partnerRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner’s fax number?
-partnerRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s fax number?
-partnerRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s fax number?
-partnerRemoveFaxNumberYesNo.error.required = Select yes if you want to remove this partner’s fax number
-partnerRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.title = Are you sure you want to remove this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s fax number?
+partnerDetailsRemoveFaxNumberYesNo.error.required = Select yes if you want to remove this partner’s fax number
+partnerDetailsRemoveFaxNumberYesNo.change.hidden = Are you sure you want to remove {0} as this partner’s fax number?
 
 removeBusinessAddressAddInfo.title = Are you sure you want to remove the additional information for your business address?
 removeBusinessAddressAddInfo.heading = Are you sure you want to remove the additional information for your business address?
@@ -816,17 +816,17 @@ partnerDetailsFaxNumber.error.invalid.format = The fax number must be in the cor
 partnerDetailsFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
 partnerDetailsFaxNumber.error.length = The fax number must be 20 characters or less
 
-partnerDetailsRemoveNationalInsuranceNumberYesNo.title = Are you sure you want to remove this partner’s National Insurance number?
-partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = Are you sure you want to remove {0} as this partner’s National Insurance number?
-partnerDetailsRemoveNationalInsuranceNumberYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s National Insurance number?
-partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required = Select yes if you want to remove this partner’s National Insurance number
-partnerDetailsRemoveNationalInsuranceNumberYesNo.change.hidden = Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.title = Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.heading = Are you sure you want to remove {0} as this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.error.required = Select yes if you want to remove this partner’s National Insurance number
+partnerDetailsRemoveNinoYesNo.change.hidden = Are you sure you want to remove this partner’s National Insurance number?
 
-partnerDetailsAddNationalInsuranceNumberYesNo.title = Do you want to add a National Insurance number for the partner?
-partnerDetailsAddNationalInsuranceNumberYesNo.heading = Do you want to add a National Insurance number for the partner?
-partnerDetailsAddNationalInsuranceNumberYesNo.checkYourAnswersLabel = Do you want to add a National Insurance number for the partner?
-partnerDetailsAddNationalInsuranceNumberYesNo.error.required = Select yes to add a National Insurance number for the partner
-partnerDetailsAddNationalInsuranceNumberYesNo.change.hidden = Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.title = Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.heading = Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.checkYourAnswersLabel = Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.error.required = Select yes to add a National Insurance number for the partner
+partnerDetailsAddNinoYesNo.change.hidden = Do you want to add a National Insurance number for the partner?
 
 partnerTradingName.title = What is the partner’s trading name?
 partnerTradingName.heading = What is the partner’s trading name?
@@ -836,6 +836,18 @@ partnerTradingName.error.required = Enter the partner’s trading name
 partnerTradingName.error.length = The partner’s trading name must be 100 characters or less
 partnerTradingName.error.invalid = The partner’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
 partnerTradingName.change.hidden = What is the partner’s trading name?
+
+partnerDetailsAddNino.title = What is the partner’s National Insurance number?
+partnerDetailsAddNino.paragraph = You can find this on their National Insurance card, benefit letter, payslip or P60.
+partnerDetailsAddNino.heading = What is the partner’s National Insurance number?
+partnerDetailsAddNino.checkYourAnswersLabel = What is the partner’s National Insurance number?
+partnerDetailsAddNino.hidden = What is the partner’s National Insurance number?
+partnerDetailsAddNino.hint = For example, QQ 12 34 56 C
+partnerDetailsAddNino.error.required = Enter the partner’s National Insurance number
+partnerDetailsAddNino.error.length = The National Insurance number must be 9 characters long, including spaces
+partnerDetailsAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 1 to 9 and spaces
+partnerDetailsAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not A, B, C or D, the next 6 characters must be numbers 0 to 9, and the final character must be a space, B, C, or D
+partnerDetailsAddNino.error.invalid = Enter a real National Insurance number
 
 partnerDetailsBusinessType.title = What type of business is the partner?
 partnerDetailsBusinessType.heading = What type of business is the partner?

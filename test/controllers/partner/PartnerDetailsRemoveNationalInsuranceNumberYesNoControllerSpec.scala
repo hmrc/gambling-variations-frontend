@@ -42,7 +42,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
   lazy val removeNinoRoute: String =
     controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(nino = Some(testNino)))
 
   "PartnerDetailsRemoveNationalInsuranceNumberYesNo Controller" - {
 
@@ -60,7 +60,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val view = application.injector.instanceOf[PartnerDetailsRemoveNationalInsuranceNumberYesNoView]
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form, NormalMode, nino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form, NormalMode, testNino)(request, messages(application)).toString
         }
       }
 
@@ -81,7 +81,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(true), NormalMode, nino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form.fill(true), NormalMode, testNino)(request, messages(application)).toString
         }
       }
 
@@ -207,7 +207,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe BAD_REQUEST
-          contentAsString(result) mustBe view(boundForm, NormalMode, nino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(boundForm, NormalMode, testNino)(request, messages(application)).toString
           verify(mockSessionRepository, never()).set(any())
         }
       }
@@ -234,7 +234,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe BAD_REQUEST
-          contentAsString(result) mustBe view(boundForm, NormalMode, nino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(boundForm, NormalMode, testNino)(request, messages(application)).toString
           verify(mockSessionRepository, never()).set(any())
         }
       }

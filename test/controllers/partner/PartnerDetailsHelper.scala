@@ -26,7 +26,7 @@ trait PartnerDetailsHelper {
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
-  val nino: String = "AB123456C"
+  val testNino: String = "SR123456A"
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
@@ -35,7 +35,8 @@ trait PartnerDetailsHelper {
     phoneNumber: Option[String] = None,
     mobilePhoneNumber: Option[String] = None,
     emailAddress: Option[String] = None,
-    additionalInformation: Option[String] = Some("ADI123456")
+    additionalInformation: Option[String] = Some("ADI123456"),
+    nino: Option[String] = None
   ): JsObject = Json.obj(
     "partners" -> Json.arr(
       Json.obj(

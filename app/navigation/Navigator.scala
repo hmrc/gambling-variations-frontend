@@ -154,6 +154,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
     case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
+    case PartnerDetailsAddNationalInsuranceNumberPage(index) =>
+      _ => controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad() // change it
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>

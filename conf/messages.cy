@@ -228,17 +228,17 @@ businessContactNumber.error.phoneNumber.length = Mae’n rhaid i’r rhif ffôn 
 businessContactNumber.error.mobileNumber.invalid = Mae’n rhaid i’r rhif ffôn symudol gynnwys y rhifau 0 i 9 a bylchau yn unig
 businessContactNumber.error.mobileNumber.length = Mae’n rhaid i’r rhif ffôn symudol fod yn 20 o gymeriadau neu lai
 
-partnerDetailsRemoveNationalInsuranceNumberYesNo.title = cy: Are you sure you want to remove this partner’s National Insurance number?
-partnerDetailsRemoveNationalInsuranceNumberYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s National Insurance number?
-partnerDetailsRemoveNationalInsuranceNumberYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’s National Insurance number?
-partnerDetailsRemoveNationalInsuranceNumberYesNo.error.required = cy: Select yes if you want to remove this partner’s National Insurance number
-partnerDetailsRemoveNationalInsuranceNumberYesNo.change.hidden = cy: Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.title = cy: Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’s National Insurance number?
+partnerDetailsRemoveNinoYesNo.error.required = cy: Select yes if you want to remove this partner’s National Insurance number
+partnerDetailsRemoveNinoYesNo.change.hidden = cy: Are you sure you want to remove this partner’s National Insurance number?
 
-partnerDetailsAddNationalInsuranceNumberYesNo.title = cy: Do you want to add a National Insurance number for the partner?
-partnerDetailsAddNationalInsuranceNumberYesNo.heading = cy: Do you want to add a National Insurance number for the partner?
-partnerDetailsAddNationalInsuranceNumberYesNo.checkYourAnswersLabel = cy: Do you want to add a National Insurance number for the partner?
-partnerDetailsAddNationalInsuranceNumberYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
-partnerDetailsAddNationalInsuranceNumberYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.title = cy: Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.heading = cy: Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a National Insurance number for the partner?
+partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
+partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
 
 partnerDetailsBusinessType.title = cy: What type of business is the partner?
 partnerDetailsBusinessType.heading = cy: What type of business is the partner?
