@@ -497,7 +497,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
       val jsonAsString: String =
         s"""{
-           |  "mgdRegNumber": "XEM00000001335",
+           |  "mgdRegNumber": "XWM00000001762",
            |  "haveGamblingLicenceNo": "1",
            |  "gamblingLicenceNo": "123-456789-A-123456-789",
            |  "heldByLandlord": "1",
@@ -524,7 +524,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
            |        "address3": "A Place",
            |        "address4": "Earth",
            |        "postcode": "SM12 0NL",
-           |        "systemDate": ${LocalDate.of(2023, 4, 1)}
+           |        "systemDate": "2023-04-01"
            |      },
            |      {
            |        "mgdRegNumber": "XGM00000001763",
@@ -533,7 +533,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
            |        "address3": "ANOTHERPlace",
            |        "address4": "Earth II",
            |        "postcode": "SM12 1MO",
-           |        "systemDate": ${LocalDate.of(2023,4,1)}
+           |        "systemDate": "2023-04-01"
            |      }
            |    ]
            |  }
