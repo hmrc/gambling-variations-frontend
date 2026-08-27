@@ -51,10 +51,10 @@ class LicenceNumberViewSpec extends SpecBase {
 
     "must render page correctly" in new Setup {
 
-      doc.title must include(messages("licencesNumber.title"))
+      doc.title must include(messages("licenceNumber.title"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
-      doc.select("h1").select(".govuk-label--l").text()    must include(messages("licencesNumber.heading"))
+      doc.select("h1").select(".govuk-label--l").text()    must include(messages("licenceNumber.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
