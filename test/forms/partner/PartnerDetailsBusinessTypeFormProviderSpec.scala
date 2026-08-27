@@ -29,10 +29,10 @@ class PartnerDetailsBusinessTypeFormProviderSpec extends OptionFieldBehaviours {
     val fieldName = "value"
     val requiredKey = "partnerDetailsBusinessType.error.required"
 
-    behave like optionsField[PartnerDetailsBusinessType](
+    behave like optionsField[BusinessType](
       form,
       fieldName,
-      validValues  = PartnerDetailsBusinessType.values,
+      validValues  = BusinessType.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

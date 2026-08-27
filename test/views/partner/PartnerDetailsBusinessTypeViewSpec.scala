@@ -18,7 +18,7 @@ package views.partner
 
 import base.SpecBase
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
-import models.{NormalMode, PartnerDetailsBusinessType}
+import models.{BusinessType, NormalMode}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
@@ -53,7 +53,7 @@ class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption")
 
-        PartnerDetailsBusinessType.values.zipWithIndex.foreach { case (option, index) =>
+        BusinessType.values.zipWithIndex.foreach { case (option, index) =>
           val radioInput = document.getElementById(s"value_$index")
           val label = document.select(s"label[for=${radioInput.id()}]")
 

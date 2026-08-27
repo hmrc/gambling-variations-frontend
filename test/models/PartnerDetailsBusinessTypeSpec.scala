@@ -30,27 +30,27 @@ class PartnerDetailsBusinessTypeSpec extends AnyFreeSpec with Matchers with Scal
 
     "must deserialise valid values" in {
 
-      val gen = Gen.oneOf(PartnerDetailsBusinessType.values.toSeq)
+      val gen = Gen.oneOf(BusinessType.values.toSeq)
 
       forAll(gen) { partnerDetailsBusinessType =>
 
-        JsString(partnerDetailsBusinessType.toString).validate[PartnerDetailsBusinessType].asOpt.value mustEqual partnerDetailsBusinessType
+        JsString(partnerDetailsBusinessType.toString).validate[BusinessType].asOpt.value mustEqual partnerDetailsBusinessType
       }
     }
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!PartnerDetailsBusinessType.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!BusinessType.values.map(_.toString).contains(_))
 
       forAll(gen) { invalidValue =>
 
-        JsString(invalidValue).validate[PartnerDetailsBusinessType] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[BusinessType] mustEqual JsError("error.invalid")
       }
     }
 
     "must serialise" in {
 
-      val gen = Gen.oneOf(PartnerDetailsBusinessType.values.toSeq)
+      val gen = Gen.oneOf(BusinessType.values.toSeq)
 
       forAll(gen) { partnerDetailsBusinessType =>
 

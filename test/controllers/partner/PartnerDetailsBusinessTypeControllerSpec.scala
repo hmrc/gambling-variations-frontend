@@ -19,8 +19,9 @@ package controllers.partner
 import base.SpecBase
 import controllers.partner.routes.PartnerDetailsBusinessTypeController
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
-import models.BusinessType.CorporateBody
-import models.{NormalMode, PartnerDetailsBusinessType, UserAnswers}
+import pages.partnerdetails.PartnerDetailsBusinessTypePage
+import models.BusinessType.Corporatebody
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
@@ -36,7 +37,7 @@ import scala.concurrent.Future
 
 class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  val form: Form[PartnerDetailsBusinessType] = (new PartnerDetailsBusinessTypeFormProvider())()
+  val form: Form[BusinessType] = (new PartnerDetailsBusinessTypeFormProvider())()
 
   lazy val partnerDetailsBusinessTypeRoute: String =
     PartnerDetailsBusinessTypeController.onPageLoad().url
@@ -66,7 +67,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsBusinessTypePage(index), CorporateBody)
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody.code)
           .success
           .value
 
@@ -80,7 +81,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(CorporateBody), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form.fill(Corporatebody), NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -118,12 +119,12 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
         running(application) {
           val request =
             FakeRequest(POST, PartnerDetailsBusinessTypeController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", CorporateBody.toString))
+              .withFormUrlEncodedBody(("value", Corporatebody.toString))
 
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsBusinessTypePage(index), CorporateBody)
+            .set(PartnerDetailsBusinessTypePage(index), Corporatebody.code)
             .success
             .value
 
@@ -167,7 +168,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
         running(application) {
           val request =
             FakeRequest(POST, PartnerDetailsBusinessTypeController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", CorporateBody.toString))
+              .withFormUrlEncodedBody(("value", Corporatebody.toString))
 
           val result = route(application, request).value
 

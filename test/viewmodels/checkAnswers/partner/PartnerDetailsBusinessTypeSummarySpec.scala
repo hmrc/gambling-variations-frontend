@@ -17,7 +17,8 @@
 package viewmodels.checkAnswers.partner
 
 import base.SpecBase
-import models.BusinessType.CorporateBody
+import models.BusinessType.Corporatebody
+import pages.partnerdetails.PartnerDetailsBusinessTypePage
 import play.api.Application
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -41,13 +42,13 @@ class PartnerDetailsBusinessTypeSummarySpec extends SpecBase {
     "must return the correct row when an answer exists" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsBusinessTypePage(index), CorporateBody)
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody.code)
           .success
           .value
 
       val expectedValue = ValueViewModel(
         HtmlContent(
-          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.$CorporateBody"))
+          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.$Corporatebody.code"))
         )
       )
 
