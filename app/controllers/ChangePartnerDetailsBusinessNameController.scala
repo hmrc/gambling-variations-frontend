@@ -49,29 +49,27 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: Temporary solution, to be replaced
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
   private val Index: Int = 0
 
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData) { implicit request =>
-      (request.userAnswers.get(PartnerDetailsBusinessTypePage(Index)) flatMap {
+      (request.userAnswers.get(PartnerDetailsBusinessTypePage(Index)) map {
         case Soleproprietor =>
-          request.userAnswers.get(PartnerDetailsSoleProprietorPage(Index)).map { soleProp =>
-            val form = soleProprietorFormProvider()
-            val preparedForm = form.fill(soleProp)
-
-            Ok(changeSoleProprietorView(preparedForm, mode))
-          }
+          val form = request.userAnswers
+            .get(PartnerDetailsSoleProprietorPage(Index))
+            .fold(soleProprietorFormProvider())(soleProp => soleProprietorFormProvider().fill(soleProp))
+          Ok(changeSoleProprietorView(form, mode))
         case businessType =>
-          request.userAnswers.get(PartnerDetailsBusinessNamePage(Index)).map { businessName =>
-            val form = businessNameFormProvider(businessType)
-            val preparedForm = form.fill(businessName)
-
-            val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
-            val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
-
-            Ok(changeBusinessNameView(preparedForm, mode, businessType, headingKey, titleKey))
-          }
+          val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
+          val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
+          val form = request.userAnswers
+            .get(PartnerDetailsBusinessNamePage(Index))
+            .fold(businessNameFormProvider(businessType))(businessName => businessNameFormProvider(businessType).fill(businessName))
+          Ok(changeBusinessNameView(form, mode, businessType, headingKey, titleKey))
       }).getOrElse(Redirect(routes.SystemErrorController.onPageLoad()))
     }
   }

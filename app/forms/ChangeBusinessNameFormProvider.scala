@@ -33,7 +33,7 @@ class ChangeBusinessNameFormProvider @Inject() extends Mappings {
     val (maxLen, regex) = businessType match {
       case BusinessType.Partnership =>
         (
-          34,
+          35,
           """^[A-Za-z0-9&'().,!\/ -]+$"""
         )
 

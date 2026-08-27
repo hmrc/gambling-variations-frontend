@@ -138,7 +138,6 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec {
         )
       )
 
-
       PartnerDetailsCorrespondenceDetailsSectionPage(Index).path
         .asSingleJson(json)
         .validate[CorrespondenceDetails]

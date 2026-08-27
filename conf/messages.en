@@ -183,7 +183,7 @@ changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body’
 changeBusinessName.error.invalid.llp = The limited liability partnership’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
 changeBusinessName.error.length.soleproprietor = The sole proprietor’s name must be 160 characters or less
-changeBusinessName.error.length.partnership = The partnership’s name must be 34 characters or less
+changeBusinessName.error.length.partnership = The partnership’s name must be 35 characters or less
 changeBusinessName.error.length.corporatebody = The corporate body’s name must be 160 characters or less
 changeBusinessName.error.length.unincorporatedbody = The unincorporated body’s name must be 160 characters or less
 changeBusinessName.error.length.llp = The limited liability partnership’s name must be 160 characters or less

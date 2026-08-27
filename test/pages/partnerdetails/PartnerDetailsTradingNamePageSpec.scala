@@ -19,7 +19,6 @@ package pages.partnerdetails
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-
 class PartnerDetailsTradingNamePageSpec extends PlaySpec {
 
   val Index = 0

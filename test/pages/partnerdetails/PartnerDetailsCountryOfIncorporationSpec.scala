@@ -19,8 +19,6 @@ package pages.partnerdetails
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-
-
 class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec {
 
   val Index = 0
