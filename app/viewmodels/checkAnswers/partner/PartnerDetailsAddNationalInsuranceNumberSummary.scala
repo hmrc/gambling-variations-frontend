@@ -17,27 +17,27 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
+import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerRemoveFaxNumberYesNoSummary {
+object PartnerDetailsAddNationalInsuranceNumberSummary {
+
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsRemoveFaxNumberYesNoPage(index)).map { answer =>
-
-      val value = if (answer) "site.yes" else "site.no"
+    answers.get(PartnerDetailsAddNationalInsuranceNumberPage(index)).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "partnerDetailsRemoveFaxNumberYesNo.checkYourAnswersLabel",
-        value = ValueViewModel(value),
+        key   = "partnerDetailsAddNino.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDetailsRemoveFaxNumberYesNo.change.hidden"))
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerDetailsAddNino.hidden"))
         )
       )
     }

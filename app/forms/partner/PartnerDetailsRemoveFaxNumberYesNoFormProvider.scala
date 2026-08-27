@@ -25,6 +25,6 @@ class PartnerDetailsRemoveFaxNumberYesNoFormProvider @Inject() extends Mappings 
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("partnerRemoveFaxNumberYesNo.error.required")
+      "value" -> boolean("partnerDetailsRemoveFaxNumberYesNo.error.required")
     )
 }
