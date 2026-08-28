@@ -26,9 +26,9 @@ class VatRegistrationNumberYesNoFormProviderSpec extends BooleanFieldBehaviours 
 
   val form = new VatRegistrationNumberYesNoFormProvider()()
 
-  ".vrn" - {
+  ".value" - {
 
-    val fieldName = "vrn"
+    val fieldName = "value"
 
     behave like booleanField(
       form,

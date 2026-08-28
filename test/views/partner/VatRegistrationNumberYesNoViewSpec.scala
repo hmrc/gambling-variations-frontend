@@ -63,9 +63,9 @@ class VatRegistrationNumberYesNoViewSpec extends SpecBase {
           messages(application)("changeRegistrationDetails.caption")
         )
 
-        document.getElementById("vrn").attr("value") mustEqual "true"
+        document.getElementById("value").attr("value") mustEqual "true"
 
-        document.getElementById("vrn-no").attr("value") mustEqual "false"
+        document.getElementById("value-no").attr("value") mustEqual "false"
       }
     }
 
@@ -78,7 +78,7 @@ class VatRegistrationNumberYesNoViewSpec extends SpecBase {
         val view = application.injector.instanceOf[VatRegistrationNumberYesNoView]
 
         val boundForm = form.bind(
-          Map("vrn" -> "")
+          Map("value" -> "")
         )
 
         val html = view(
