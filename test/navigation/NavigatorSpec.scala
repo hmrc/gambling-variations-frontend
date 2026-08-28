@@ -28,6 +28,7 @@ import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
 import pages.*
+import pages.licencespremises.LicenceNumberPage
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -209,6 +210,12 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(RemovePreviousRegNumberPage, NormalMode, emptyAnswers) mustBe
           routes.PreviousRegistrationNumbersListController.onPageLoad()
       }
+
+      "should route LicencesNumberPage to LicencesNumberController" in {
+        navigator.nextPage(LicenceNumberPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+      }
+
     }
 
     "normal mode correspondence details navigation" - {

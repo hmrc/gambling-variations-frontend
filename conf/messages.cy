@@ -239,3 +239,12 @@ partnerDetailsAddNinoYesNo.heading = cy: Do you want to add a National Insurance
 partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a National Insurance number for the partner?
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
+
+# Licences & Premises
+licenceNumber.title = cy: What is the Gambling Commission operating or personal licence number?
+licenceNumber.heading = cy:  What is the Gambling Commission operating or personal licence number?
+licenceNumber.checkYourAnswersLabel = cy:  What is the Gambling Commission operating or personal licence number?
+licenceNumber.hint = cy: It is 23 characters long, including the hyphens, like 003-123456-N-987654-001
+licenceNumber.error.required = cy:  Enter the Gambling Commission operating or personal licence number
+licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
+licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
