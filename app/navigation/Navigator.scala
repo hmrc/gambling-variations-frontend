@@ -162,8 +162,7 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
     case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
       _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
-    
-    
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
