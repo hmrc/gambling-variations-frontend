@@ -848,3 +848,13 @@ partnerDetailsAddNino.error.length = The National Insurance number must be 9 cha
 partnerDetailsAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 1 to 9 and spaces
 partnerDetailsAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not A, B, C or D, the next 6 characters must be numbers 0 to 9, and the final character must be a space, B, C, or D
 partnerDetailsAddNino.error.invalid = Enter a real National Insurance number
+
+partnerDateOfIncorporation.title = When was the partner’s date of incorporation?
+partnerDateOfIncorporation.heading = When was the partner’s date of incorporation?
+partnerDateOfIncorporation.hint = For example, 27 3 2007.
+partnerDateOfIncorporation.checkYourAnswersLabel = When was the partner’s date of incorporation?
+partnerDateOfIncorporation.error.required.all = Enter a date of incorporation for the partner
+partnerDateOfIncorporation.error.required.two = Date of incorporation must include a {0} and {1}
+partnerDateOfIncorporation.error.required = Date of incorporation must include {0}
+partnerDateOfIncorporation.error.invalid = 	Date of incorporation must be a real date
+partnerDateOfIncorporation.change.hidden = When was the partner’s date of incorporation?
