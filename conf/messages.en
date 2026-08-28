@@ -894,3 +894,14 @@ partnerDetailsBusinessType.heading = What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
+
+
+partnerDetailsAddDateOfJoiningPartnership.title = PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.heading = PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.hint = For example, 12 11 2007.
+partnerDetailsAddDateOfJoiningPartnership.checkYourAnswersLabel = PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.error.required.all = Enter the partnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.error.required.two = The partnerDetailsAddDateOfJoiningPartnership must include {0} and {1}
+partnerDetailsAddDateOfJoiningPartnership.error.required = The partnerDetailsAddDateOfJoiningPartnership must include {0}
+partnerDetailsAddDateOfJoiningPartnership.error.invalid = Enter a real PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.change.hidden = PartnerDetailsAddDateOfJoiningPartnership
