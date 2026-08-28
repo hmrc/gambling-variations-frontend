@@ -1050,6 +1050,33 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
+      "should route VatRegistrationNumberYesNoPage to VatRegistrationNumberYesNoPage when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(VatRegistrationNumberYesNoPage(index), false)
+            .success
+            .value
+
+        navigator.nextPage(VatRegistrationNumberYesNoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
+      }
+
+      "should route VatRegistrationNumberYesNoPage to VatRegistrationNumberYesNoPage when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(VatRegistrationNumberYesNoPage(index), true)
+            .success
+            .value
+
+        navigator.nextPage(VatRegistrationNumberYesNoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
+      }
+
+      "should route VatRegistrationNumberYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(VatRegistrationNumberYesNoPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
     }
   }
 }
