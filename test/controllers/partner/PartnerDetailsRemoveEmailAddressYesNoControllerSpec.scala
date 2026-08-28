@@ -131,7 +131,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
       }
 
-      "must redirect to JourneyRecovery when no user answers are found" in {
+      "must redirect to SystemErrorController when no user answers are found" in {
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {

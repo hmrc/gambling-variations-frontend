@@ -81,7 +81,8 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar wi
         }
       }
 
-      "must redirect to Journey Recovery for a GET if no existing data is found" in {
+      "must redirect to SystemErrorController
+ for a GET if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -158,7 +159,8 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar wi
         }
       }
 
-      "must redirect to Journey Recovery for a POST if no existing data is found" in {
+      "must redirect to SystemErrorController
+ for a POST if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
