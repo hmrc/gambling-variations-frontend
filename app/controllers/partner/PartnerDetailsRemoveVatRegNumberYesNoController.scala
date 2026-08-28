@@ -92,7 +92,8 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
                               } else {
                                 Future.apply(request.userAnswers)
                               }
-            _ <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), value))
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), mode, updatedAnswers))
       )
   }

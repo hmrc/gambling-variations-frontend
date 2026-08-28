@@ -17,18 +17,16 @@
 package controllers.partner
 
 import base.SpecBase
-import controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController
 import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{never, verify, when}
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsRemoveVatRegNumberYesNoPage
 import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -41,8 +39,9 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
   private val formProvider = new PartnerDetailsRemoveVatRegNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
-  private lazy val removeVatRoute = routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url
+  private lazy val removeVrnRoute = routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url
 
+  val userAnswersWithNoVrn: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
   val userAnswersWithVrn: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(vrn = Some(testVRN)))
 
   "PartnerDetailsRemoveVatRegNumberYesNo Controller" - {
@@ -54,7 +53,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithVrn)).build()
 
         running(application) {
-          val request = FakeRequest(GET, removeVatRoute)
+          val request = FakeRequest(GET, removeVrnRoute)
           val result = route(application, request).value
           val view = application.injector.instanceOf[PartnerDetailsRemoveVatRegNumberYesNoView]
 
@@ -73,7 +72,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, removeVatRoute)
+          val request = FakeRequest(GET, removeVrnRoute)
           val view = application.injector.instanceOf[PartnerDetailsRemoveVatRegNumberYesNoView]
           val result = route(application, request).value
 
@@ -82,29 +81,29 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
         }
       }
 
-      "must redirect to Journey Recovery for a GET if no VRN is found in UserAnswers" in {
+      "must redirect to SystemErrorController for a GET if no VRN is found in UserAnswers" in {
 
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, removeVatRoute)
+          val request = FakeRequest(GET, removeVrnRoute)
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
 
-      "must redirect to Journey Recovery for a GET if no existing data is found" in {
+      "must redirect to SystemErrorController for a GET if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val request = FakeRequest(GET, removeVatRoute)
+          val request = FakeRequest(GET, removeVrnRoute)
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
     }
@@ -112,7 +111,6 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
     "onSubmit" - {
 
       "must remove VRN, save updated answers, and redirect to the next page when Yes is selected" in {
-
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -124,7 +122,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           .build()
 
         running(application) {
-          val request = FakeRequest(POST, removeVatRoute)
+          val request = FakeRequest(POST, removeVrnRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
@@ -132,7 +130,12 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          val expectedAnswers = emptyUserAnswers // PartnerDetailsVrnPage removed
+          val expectedAnswers = userAnswersWithVrn
+            .remove(PartnerDetailsVrnPage(index))
+            .flatMap(_.set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), true))
+            .success
+            .value
+
           verify(mockSessionRepository).set(expectedAnswers)
         }
       }
@@ -150,7 +153,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           .build()
 
         running(application) {
-          val request = FakeRequest(POST, removeVatRoute)
+          val request = FakeRequest(POST, removeVrnRoute)
             .withFormUrlEncodedBody(("value", "false"))
 
           val result = route(application, request).value
@@ -158,7 +161,12 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
 
-          verify(mockSessionRepository).set(userAnswersWithVrn)
+          val expectedAnswers = userAnswersWithVrn
+            .set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), false)
+            .success
+            .value
+
+          verify(mockSessionRepository).set(expectedAnswers)
         }
       }
 
@@ -167,7 +175,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithVrn)).build()
 
         running(application) {
-          val request = FakeRequest(POST, removeVatRoute)
+          val request = FakeRequest(POST, removeVrnRoute)
             .withFormUrlEncodedBody(("value", ""))
 
           val boundForm = form.bind(Map("value" -> ""))
@@ -180,18 +188,18 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
         }
       }
 
-      "must redirect to Journey Recovery for a POST if no existing data is found" in {
+      "must redirect to SystemErrorController for a POST if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val request = FakeRequest(POST, removeVatRoute)
+          val request = FakeRequest(POST, removeVrnRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
     }

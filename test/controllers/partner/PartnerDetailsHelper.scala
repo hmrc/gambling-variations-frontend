@@ -23,8 +23,7 @@ trait PartnerDetailsHelper {
 
   val index: Int = 0
   def onwardRoute = Call("GET", "/foo")
-  
-  
+
   val mgdRegNumber: String = "XGM00000001761"
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
