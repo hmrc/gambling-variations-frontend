@@ -39,7 +39,7 @@
         @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("value"),
+                field = form("vrn"),
                 legend = LegendViewModel(messages("vatRegistrationNumberYesNo.heading")).asPageHeading(Large)
             )
         )

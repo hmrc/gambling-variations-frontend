@@ -134,7 +134,7 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
       running(application) {
         val request =
           FakeRequest(POST, vatRegistrationNumberYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("vrn", "true"))
 
         val result =
           route(application, request).value
@@ -169,7 +169,7 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
       running(application) {
         val request =
           FakeRequest(POST, vatRegistrationNumberYesNoRoute)
-            .withFormUrlEncodedBody(("value", "false"))
+            .withFormUrlEncodedBody(("vrn", "false"))
 
         val result =
           route(application, request).value
@@ -193,10 +193,10 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
       running(application) {
         val request =
           FakeRequest(POST, vatRegistrationNumberYesNoRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody(("vrn", ""))
 
         val boundForm =
-          form.bind(Map("value" -> ""))
+          form.bind(Map("vrn" -> ""))
 
         val view =
           application.injector.instanceOf[VatRegistrationNumberYesNoView]
