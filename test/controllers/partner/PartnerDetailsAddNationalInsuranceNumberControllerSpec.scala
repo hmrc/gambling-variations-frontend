@@ -38,8 +38,6 @@ import scala.concurrent.Future
 
 class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  def onwardRoute: Call = Call("GET", "/foo")
-
   val form: Form[String] = (new PartnerDetailsAddNationalInsuranceNumberFormProvider())()
 
   lazy val partnerDetailsAddNationalInsuranceNumberRoute: String =
