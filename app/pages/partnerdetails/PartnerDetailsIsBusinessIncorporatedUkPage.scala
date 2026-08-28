@@ -19,11 +19,9 @@ package pages.partnerdetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-//TODO UK?
-//TODO in the other package that's not here yet
-case object PartnerDetailsIsBusinessIncorporatedPage extends QuestionPage[Boolean] {
+case class PartnerDetailsIsBusinessIncorporatedUkPage(index: Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ "newPartner" \ toString
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "partnerDetailsIsBusinessIncorporatedUK"
+  override def toString: String = "partnerDetailsIsBusinessIncorporatedUk"
 }

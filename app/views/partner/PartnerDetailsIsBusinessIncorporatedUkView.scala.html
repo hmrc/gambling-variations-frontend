@@ -28,9 +28,9 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("partnerDetailsIsBusinessIncorporated.title"))) {
+@layout(pageTitle = title(form, messages("partnerDetailsIsBusinessIncorporatedUk.title"))) {
 
-    @formHelper(action = controllers.partner.routes.PartnerDetailsIsBusinessIncorporatedController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partner.routes.PartnerDetailsIsBusinessIncorporatedUkController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -41,7 +41,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("partnerDetailsIsBusinessIncorporated.heading")).asPageHeading(Large)
+                legend = LegendViewModel(messages("partnerDetailsIsBusinessIncorporatedUk.heading")).asPageHeading(Large)
             )
         )
 

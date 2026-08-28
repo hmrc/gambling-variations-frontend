@@ -17,39 +17,41 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerDetailsIsBusinessIncorporatedFormProvider
+import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedPage
+import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsIsBusinessIncorporatedView
+import views.html.partner.PartnerDetailsIsBusinessIncorporatedUkView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO PartnerDetailsIsBusinessIncorporatedUKController
-class PartnerDetailsIsBusinessIncorporatedController @Inject() (
+class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  formProvider: PartnerDetailsIsBusinessIncorporatedFormProvider,
+  requireData: PartnerDetailsDataRequiredAction,
+  formProvider: PartnerDetailsIsBusinessIncorporatedUkFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsIsBusinessIncorporatedView
+  view: PartnerDetailsIsBusinessIncorporatedUkView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
 
+  // TODO: To be replaced later
+  private val Index: Int = 0
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(Index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -65,9 +67,9 @@ class PartnerDetailsIsBusinessIncorporatedController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsIsBusinessIncorporatedPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsIsBusinessIncorporatedUkPage(Index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsIsBusinessIncorporatedPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(Index), mode, updatedAnswers))
       )
   }
 }
