@@ -239,3 +239,9 @@ partnerDetailsAddNinoYesNo.heading = cy: Do you want to add a National Insurance
 partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a National Insurance number for the partner?
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
+
+partnerDetailsRemoveVatRegNumberYesNo.title = cy: Are you sure you want to remove this partner’ VAT registration number?
+partnerDetailsRemoveVatRegNumberYesNo.heading = cy: Are you sure you want to remove this partner’ VAT registration number?
+partnerDetailsRemoveVatRegNumberYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’ VAT registration number?
+partnerDetailsRemoveVatRegNumberYesNo.error.required = cy: Select yes if you want to remove this partner’ VAT registration number
+partnerDetailsRemoveVatRegNumberYesNo.change.hidden = cy: Are you sure you want to remove this partner’ VAT registration number?
