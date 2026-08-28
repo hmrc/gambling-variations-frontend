@@ -1042,3 +1042,13 @@ premisesNotCoveredYesNo.checkYourAnswersLabel = Do you have any other premises t
 premisesNotCoveredYesNo.error.required = Select yes if you have any other premises that are not covered by licences or permits
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
+
+partnerDetailsAddDateOfJoiningPartnership.title = PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.heading = PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.hint = For example, 12 11 2007.
+partnerDetailsAddDateOfJoiningPartnership.checkYourAnswersLabel = PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.error.required.all = Enter the partnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.error.required.two = The partnerDetailsAddDateOfJoiningPartnership must include {0} and {1}
+partnerDetailsAddDateOfJoiningPartnership.error.required = The partnerDetailsAddDateOfJoiningPartnership must include {0}
+partnerDetailsAddDateOfJoiningPartnership.error.invalid = Enter a real PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.change.hidden = PartnerDetailsAddDateOfJoiningPartnership
