@@ -25,12 +25,12 @@ class LicenceServeAlcoholPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      LicenceServeAlcoholPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "licenceServeAlcohol")
+      LicenceServeAlcoholPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "serveAlcohol")
     }
 
     "have the correct toString value" in {
 
-      LicenceServeAlcoholPage.toString mustEqual "licenceServeAlcohol"
+      LicenceServeAlcoholPage.toString mustEqual "serveAlcohol"
     }
   }
 }

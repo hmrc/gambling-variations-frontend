@@ -25,12 +25,12 @@ class LicenceHeldByLandlordPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      LicenceHeldByLandlordPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "licenceHeldByLandlord")
+      LicenceHeldByLandlordPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "heldByLandlord")
     }
 
     "have the correct toString value" in {
 
-      LicenceHeldByLandlordPage.toString mustEqual "licenceHeldByLandlord"
+      LicenceHeldByLandlordPage.toString mustEqual "heldByLandlord"
     }
   }
 }

@@ -25,12 +25,12 @@ class LicenceOnPremisesPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      LicenceOnPremisesPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "licenceOnPremises")
+      LicenceOnPremisesPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "onPremises")
     }
 
     "have the correct toString value" in {
 
-      LicenceOnPremisesPage.toString mustEqual "licenceOnPremises"
+      LicenceOnPremisesPage.toString mustEqual "onPremises"
     }
   }
 }

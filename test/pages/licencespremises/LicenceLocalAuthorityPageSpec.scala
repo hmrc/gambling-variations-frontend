@@ -16,12 +16,21 @@
 
 package pages.licencespremises
 
-import pages.QuestionPage
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case object LicenceClubGamingPage extends QuestionPage[String] {
+class LicenceLocalAuthorityPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
+  "LicenceLocalAuthorityPage" must {
 
-  override def toString: String = "clubGaming"
+    "have the correct path" in {
+
+      LicenceLocalAuthorityPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "localAuthority")
+    }
+
+    "have the correct toString value" in {
+
+      LicenceLocalAuthorityPage.toString mustEqual "localAuthority"
+    }
+  }
 }

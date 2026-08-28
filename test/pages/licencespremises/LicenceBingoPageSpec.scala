@@ -25,12 +25,12 @@ class LicenceBingoPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      LicenceBingoPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "licenceBingo")
+      LicenceBingoPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "bingo")
     }
 
     "have the correct toString value" in {
 
-      LicenceBingoPage.toString mustEqual "licenceBingo"
+      LicenceBingoPage.toString mustEqual "bingo"
     }
   }
 }

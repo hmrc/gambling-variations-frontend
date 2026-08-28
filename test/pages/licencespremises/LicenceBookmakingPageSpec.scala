@@ -25,12 +25,12 @@ class LicenceBookmakingPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      LicenceBookmakingPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "licenceBookmaking")
+      LicenceBookmakingPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "bookmaking")
     }
 
     "have the correct toString value" in {
 
-      LicenceBookmakingPage.toString mustEqual "licenceBookmaking"
+      LicenceBookmakingPage.toString mustEqual "bookmaking"
     }
   }
 }

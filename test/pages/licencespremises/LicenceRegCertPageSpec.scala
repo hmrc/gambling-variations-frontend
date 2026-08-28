@@ -25,12 +25,12 @@ class LicenceRegCertPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      LicenceRegCertPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "licenceRegCert")
+      LicenceRegCertPage.path mustEqual (JsPath \ "licencesPremisesSection" \ "regCert")
     }
 
     "have the correct toString value" in {
 
-      LicenceRegCertPage.toString mustEqual "licenceRegCert"
+      LicenceRegCertPage.toString mustEqual "regCert"
     }
   }
 }
