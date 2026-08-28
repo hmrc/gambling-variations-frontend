@@ -226,9 +226,29 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
     }
 
     "retrieveAddress" should {
-      "retrieveAddress" in {
-        val address = Address("address_one", None, None, None, None, None)
-        val json = Json.toJson(address).toString
+      "convert the confirmed Address Lookup response to an Address" in {
+        val address = Address(
+          "10 Other Place",
+          Some("Some District"),
+          Some("Anytown"),
+          None,
+          Some("ZZ1 1ZZ"),
+          Some("GB")
+        )
+        val json = Json
+          .obj(
+            "auditRef" -> "test-audit-ref",
+            "id"       -> "GB990091234524",
+            "address" -> Json.obj(
+              "lines"    -> Json.arr("10 Other Place", "Some District", "Anytown"),
+              "postcode" -> "ZZ1 1ZZ",
+              "country" -> Json.obj(
+                "code" -> "GB",
+                "name" -> "United Kingdom"
+              )
+            )
+          )
+          .toString
         val id = "test-id"
 
         wireMockServer.stubFor(

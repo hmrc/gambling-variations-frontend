@@ -71,13 +71,16 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
         timeoutKeepAliveUrl = "http://localhost:9000/gambling-variations/refresh-session"
       )
 
-      config.labels.en.lookupPageLabels.heading mustBe "Enter the correspondence address"
+      config.labels.en.lookupPageLabels.title mustBe "Find the correspondence address"
+      config.labels.en.lookupPageLabels.heading mustBe "Find the correspondence address"
+      config.labels.en.lookupPageLabels.postcodeLabel mustBe "Postcode"
       config.labels.en.lookupPageLabels.filterLabel mustBe "Property name or number (optional)"
       config.labels.en.lookupPageLabels.submitLabel mustBe "Find address"
       config.labels.en.lookupPageLabels.manualAddressLinkText mustBe "Enter the address manually"
       config.labels.en.confirmPageLabels.heading mustBe "Review and confirm"
       config.labels.en.confirmPageLabels.changeLinkText mustBe "Change"
       config.labels.en.confirmPageLabels.submitLabel mustBe "Confirm address"
+      config.labels.en.editPageLabels.townLabel mustBe "County"
       config.options.manualAddressEntryConfig.maxLengthErrorMessages.en.addressLine1 mustBe
         "Address line 1 must be 35 characters or fewer"
     }
