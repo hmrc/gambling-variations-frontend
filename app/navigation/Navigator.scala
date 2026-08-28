@@ -154,6 +154,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
     case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
+    case VatRegistrationNumberYesNoPage(index) =>
+      userAnswers => navigateVatRegistrationNumberYesNoPage(index)(userAnswers)
     case PartnerDetailsAddNationalInsuranceNumberPage(index) =>
       _ => controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad() // change it
     case PartnerEmailAddressPage =>
@@ -519,6 +521,16 @@ class Navigator @Inject() () {
       .map {
         case false => controllers.partner.routes.RemovePartnerTradingNameYesNoController.onPageLoad() // need to update it
         case true  => controllers.routes.IndexController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
+  private def navigateVatRegistrationNumberYesNoPage(index: Int)(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(VatRegistrationNumberYesNoPage(index))
+      .map {
+        case false => controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad() // need to update it
+        case true  => controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
