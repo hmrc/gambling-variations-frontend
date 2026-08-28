@@ -34,11 +34,11 @@ object PartnerDetailsRemoveVatRegNumberYesNoSummary {
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "partnerDetailsRemoveVatRegNumberYesNo.checkYourAnswersLabel",
+        key   = "partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
           ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDetailsRemoveVatRegNumberYesNo.change.hidden"))
+            .withVisuallyHiddenText(messages("partnerDetailsRemoveVRNYesNo.change.hidden"))
         )
       )
     }

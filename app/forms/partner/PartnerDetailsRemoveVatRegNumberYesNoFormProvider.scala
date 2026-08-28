@@ -25,6 +25,6 @@ class PartnerDetailsRemoveVatRegNumberYesNoFormProvider @Inject() extends Mappin
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("partnerDetailsRemoveVatRegNumberYesNo.error.required")
+      "value" -> boolean("partnerDetailsRemoveVRNYesNo.error.required")
     )
 }

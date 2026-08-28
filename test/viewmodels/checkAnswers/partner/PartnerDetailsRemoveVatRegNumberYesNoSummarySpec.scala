@@ -47,14 +47,14 @@ class PartnerDetailsRemoveVatRegNumberYesNoSummarySpec extends SpecBase {
 
       PartnerDetailsRemoveVatRegNumberYesNoSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key   = "partnerDetailsRemoveVatRegNumberYesNo.checkYourAnswersLabel",
+          key   = "partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel",
           value = ValueViewModel("site.yes"),
           actions = Seq(
             ActionItemViewModel(
               "site.change",
               PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
-              messages("partnerDetailsRemoveVatRegNumberYesNo.change.hidden")
+              messages("partnerDetailsRemoveVRNYesNo.change.hidden")
             )
           )
         )
@@ -69,14 +69,14 @@ class PartnerDetailsRemoveVatRegNumberYesNoSummarySpec extends SpecBase {
 
       PartnerDetailsRemoveVatRegNumberYesNoSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key   = "partnerDetailsRemoveVatRegNumberYesNo.checkYourAnswersLabel",
+          key   = "partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel",
           value = ValueViewModel("site.no"),
           actions = Seq(
             ActionItemViewModel(
               "site.change",
               PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url
             ).withVisuallyHiddenText(
-              messages("partnerDetailsRemoveVatRegNumberYesNo.change.hidden")
+              messages("partnerDetailsRemoveVRNYesNo.change.hidden")
             )
           )
         )

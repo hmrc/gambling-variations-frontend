@@ -28,6 +28,7 @@ import views.html.partner.PartnerDetailsRemoveVatRegNumberYesNoView
 class PartnerDetailsRemoveVatRegNumberYesNoViewSpec extends SpecBase {
 
   private val form = new PartnerDetailsRemoveVatRegNumberYesNoFormProvider()()
+  private val vatRegNumber = "GB123456789"
 
   "PartnerDetailsRemoveVatRegNumberYesNoView" - {
 
@@ -39,16 +40,16 @@ class PartnerDetailsRemoveVatRegNumberYesNoViewSpec extends SpecBase {
 
         val view = application.injector.instanceOf[PartnerDetailsRemoveVatRegNumberYesNoView]
 
-        val html = view(form, NormalMode)(FakeRequest(), messages(application))
+        val html = view(form, NormalMode, vatRegNumber)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("partnerDetailsRemoveVatRegNumberYesNo.title")
+          messages(application)("partnerDetailsRemoveVRNYesNo.title")
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsRemoveVatRegNumberYesNo.heading")
+          messages(application)("partnerDetailsRemoveVRNYesNo.heading", vatRegNumber)
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption")
@@ -72,14 +73,14 @@ class PartnerDetailsRemoveVatRegNumberYesNoViewSpec extends SpecBase {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(boundForm, NormalMode)(FakeRequest(), messages(application))
+        val html = view(boundForm, NormalMode, vatRegNumber)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("partnerDetailsRemoveVatRegNumberYesNo.error.required")
+          messages(application)("partnerDetailsRemoveVRNYesNo.error.required")
         )
       }
     }

@@ -26,6 +26,7 @@ trait PartnerDetailsHelper {
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
   val testNino: String = "SR123456A"
+  val testVRN: String = "GB123456789"
 
   def cleanedData(
     faxNumber: Option[String] = None,
@@ -33,7 +34,8 @@ trait PartnerDetailsHelper {
     mobilePhoneNumber: Option[String] = None,
     emailAddress: Option[String] = None,
     additionalInformation: Option[String] = Some("ADI123456"),
-    nino: Option[String] = None
+    nino: Option[String] = None,
+    vrn: Option[String] = None
   ): JsObject = Json.obj(
     "partners" -> Json.arr(
       Json.obj(
@@ -66,7 +68,7 @@ trait PartnerDetailsHelper {
         "partnerDetailsDateOfBirth"            -> "1985-06-20",
         "partnerDetailsNino"                   -> nino,
         "partnerDetailsUtr"                    -> "1234567890",
-        "partnerDetailsVrn"                    -> "GB123456789",
+        "partnerDetailsVrn"                    -> vrn,
         "partnerDetailsCrn"                    -> "09876543",
         "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
         "partnerDetailsIsFutureLeaveDate"      -> 0,

@@ -23,5 +23,5 @@ case class PartnerDetailsRemoveVatRegNumberYesNoPage(index: Int) extends Questio
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "partnerDetailsRemoveVatRegNumberYesNo"
+  override def toString: String = "partnerDetailsRemoveVRNYesNo"
 }

@@ -17,12 +17,12 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.routes
 import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.partner.PartnerDetailsRemoveVatRegNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -30,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.partner.PartnerDetailsRemoveVatRegNumberYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
@@ -58,7 +59,14 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, mode))
+    request.userAnswers
+      .get(PartnerDetailsVrnPage(index)) match {
+      case Some(vatRegNumber) =>
+        Ok(view(preparedForm, mode, vatRegNumber))
+
+      case None =>
+        Redirect(routes.JourneyRecoveryController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -66,11 +74,25 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+        formWithErrors =>
+          Future.successful(
+            BadRequest(
+              view(formWithErrors,
+                   mode,
+                   request.userAnswers
+                     .get(PartnerDetailsVrnPage(index))
+                     .getOrElse("")
+                  )
+            )
+          ),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), value))
-            _              <- sessionRepository.set(updatedAnswers)
+            updatedAnswers <- if (value) {
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsVrnPage(index)))
+                              } else {
+                                Future.apply(request.userAnswers)
+                              }
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), mode, updatedAnswers))
       )
   }

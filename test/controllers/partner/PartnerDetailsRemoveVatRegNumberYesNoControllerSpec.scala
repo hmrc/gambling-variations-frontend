@@ -61,7 +61,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           val view = application.injector.instanceOf[PartnerDetailsRemoveVatRegNumberYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, NormalMode, testVRN)(request, messages(application)).toString
         }
       }
 
@@ -82,7 +82,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form.fill(true), NormalMode, testVRN)(request, messages(application)).toString
         }
       }
 
@@ -157,7 +157,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, NormalMode, testVRN)(request, messages(application)).toString
           verify(mockSessionRepository, never()).set(any())
         }
       }
