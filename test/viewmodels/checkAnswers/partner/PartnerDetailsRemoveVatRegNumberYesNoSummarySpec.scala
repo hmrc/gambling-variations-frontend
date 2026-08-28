@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.partner
 
 import base.SpecBase
-import controllers.routes.PartnerDetailsRemoveVatRegNumberYesNoController
+import controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController
 import pages.partner.PartnerDetailsRemoveVatRegNumberYesNoPage
 import play.api.Application
 import play.api.i18n.Messages
@@ -26,8 +26,10 @@ import viewmodels.implicits.*
 
 class PartnerDetailsRemoveVatRegNumberYesNoSummarySpec extends SpecBase {
 
-  lazy val app: Application = applicationBuilder().build()
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
 
+  lazy val app: Application = applicationBuilder().build()
   implicit val messages: Messages = this.messages(app)
 
   "PartnerDetailsRemoveVatRegNumberYesNoSummary" - {
@@ -39,7 +41,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is Yes" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsRemoveVatRegNumberYesNoPage, true)
+          .set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), true)
           .success
           .value
 
@@ -61,7 +63,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoSummarySpec extends SpecBase {
     "must return the correct row when the answer is No" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsRemoveVatRegNumberYesNoPage, false)
+          .set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), false)
           .success
           .value
 
