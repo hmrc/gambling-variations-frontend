@@ -22,7 +22,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceAddressUkPage, CorrespondenceDetailsSectionPage, CorrespondenceDetailsSubmittedPage}
+import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSectionPage, CorrespondenceDetailsSubmittedPage}
 import pages.isleMOrChannelFlagPage
 import play.api.inject.bind
 import play.api.i18n.Messages
@@ -73,13 +73,18 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
       val address = Address("1 Test Street", Some("Testtown"), None, None, Some("JE1 1AA"), Some("GB"))
+      val existingNonUkAddress = Address("1 Old Street", Some("Paris"), None, None, None, Some("FR"))
+      val userAnswersWithNonUkAddress = userAnswers
+        .set(CorrespondenceAddressNonUkPage, existingNonUkAddress)
+        .success
+        .value
 
       when(mockAddressLookupService.retrieveAddress(any())(any()))
         .thenReturn(Future.successful(address))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithNonUkAddress))
           .overrides(
             bind[AddressLookupService].toInstance(mockAddressLookupService),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -95,8 +100,10 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
 
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(CorrespondenceAddressUkPage).value mustBe address
+        savedAnswersCaptor.getValue.get(CorrespondenceAddressNonUkPage) mustBe None
         savedAnswersCaptor.getValue.get(isleMOrChannelFlagPage).value mustBe "true"
         savedAnswersCaptor.getValue.get(CorrespondenceDetailsSubmittedPage).value mustBe true
+        savedAnswersCaptor.getValue.get(CorrespondenceDetailsChangesPage).value mustBe true
       }
     }
   }

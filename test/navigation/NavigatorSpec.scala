@@ -491,7 +491,7 @@ class NavigatorSpec extends SpecBase {
           routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
 
-      "should route CorrespondenceChangeAddrScreenerPage to PageNotFound when changing to a different UK address" in {
+      "should route CorrespondenceChangeAddrScreenerPage to Address Lookup when changing to a different UK address" in {
         val answers =
           emptyAnswers
             .set(
@@ -512,7 +512,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.AddressLookupController.initialise()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when editing a UK address" in {
@@ -539,7 +539,7 @@ class NavigatorSpec extends SpecBase {
           routes.CorrespondenceUKAddressController.onPageLoad()
       }
 
-      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when changing from a non-UK address" in {
+      "should route CorrespondenceChangeAddrScreenerPage to Address Lookup when changing from a non-UK address" in {
         val answers =
           emptyAnswers
             .set(CorrespondenceChangeAddrScreenerPage, ChangeToUkAddress)
@@ -547,7 +547,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          routes.AddressLookupController.initialise()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when editing a non-UK address" in {
