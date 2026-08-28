@@ -517,7 +517,7 @@ correspondenceUKAddress.heading = Enter the correspondence address
 correspondenceUKAddress.addressLine1 = Address line 1
 correspondenceUKAddress.addressLine2 = Address line 2
 correspondenceUKAddress.townOrCity = Town or city
-correspondenceUKAddress.County = County (optional)
+correspondenceUKAddress.County = County
 correspondenceUKAddress.Postcode = Postcode
 correspondenceUKAddress.checkYourAnswersLabel = Correspondence Address
 correspondenceUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
@@ -635,6 +635,7 @@ correspondenceAddressConfirmAddress.searchAgain = Search again
 correspondenceAddressConfirmAddress.confirmChange = By confirming this change, you agree that the information you have given is complete and correct.
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address
+correspondenceAddressManualAddressUk.county = County
 partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?

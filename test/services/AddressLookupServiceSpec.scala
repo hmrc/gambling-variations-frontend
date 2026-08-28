@@ -80,6 +80,7 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
       config.labels.en.confirmPageLabels.heading mustBe "Review and confirm"
       config.labels.en.confirmPageLabels.changeLinkText mustBe "Change"
       config.labels.en.confirmPageLabels.submitLabel mustBe "Confirm address"
+      config.labels.en.editPageLabels.townLabel mustBe "County"
       config.options.manualAddressEntryConfig.maxLengthErrorMessages.en.addressLine1 mustBe
         "Address line 1 must be 35 characters or fewer"
     }
