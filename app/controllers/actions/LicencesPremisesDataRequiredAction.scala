@@ -22,7 +22,7 @@ import models.UserAnswers
 import models.licencespremises.LicencesAndPremises
 import models.requests.{DataRequest, OptionalDataRequest}
 import pages.*
-import pages.licencespremises.{LicenceNumberPage, LicencesPremisesSectionPage}
+import pages.licencespremises.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -88,11 +88,26 @@ class LicencesPremisesDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setLicenceAndPremisesDetails(licenceAndPremisesDetails: LicencesAndPremises, answers: UserAnswers): Try[UserAnswers] = {
+  private def setLicenceAndPremisesDetails(licencesAndPremisesDetails: LicencesAndPremises, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Licenses and Premises")
     for {
-      updatedAnswers <- answers.set(LicencesPremisesSectionPage, licenceAndPremisesDetails.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceNumberPage, licenceAndPremisesDetails.gamblingLicenceNo)
+      updatedAnswers <- answers.set(LicencesPremisesSectionPage, licencesAndPremisesDetails.mgdRegNumber)
+      updatedAnswers <- updatedAnswers.setIfDefined(HaveGamblingLicenceNoPage, licencesAndPremisesDetails.haveGamblingLicenceNo)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceNumberPage, licencesAndPremisesDetails.gamblingLicenceNo)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceHeldByLandlordPage, licencesAndPremisesDetails.heldByLandlord)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceLocalAuthorityPage, licencesAndPremisesDetails.localAuthority)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceFamilyEntertainmentPage, licencesAndPremisesDetails.familyEntertainment)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceClubGamingPage, licencesAndPremisesDetails.clubGaming)
+      updatedAnswers <- updatedAnswers.setIfDefined(ClubLicencePage, licencesAndPremisesDetails.clubLicence)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicencePrizeGamingPage, licencesAndPremisesDetails.prizeGaming)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceOnPremisesPage, licencesAndPremisesDetails.onPremises)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceRegCertPage, licencesAndPremisesDetails.regCert)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceBookmakingPage, licencesAndPremisesDetails.bookmaking)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceBingoPage, licencesAndPremisesDetails.bingo)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceAmusementPage, licencesAndPremisesDetails.amusement)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceServeAlcoholPage, licencesAndPremisesDetails.serveAlcohol)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicencePremisesNotCoveredPage, licencesAndPremisesDetails.premisesNotCovered)
+      updatedAnswers <- updatedAnswers.setIfDefined(PremisesDetailsPage, licencesAndPremisesDetails.premisesDetails)
     } yield updatedAnswers
   }
 
