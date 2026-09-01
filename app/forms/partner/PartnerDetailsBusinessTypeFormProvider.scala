@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package pages.partner
+package forms.partner
 
-import base.SpecBase
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-class PartnerDetailsAddNationalInsuranceNumberPageSpec extends SpecBase {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.BusinessType
 
-  "PartnerDetailsAddNationalInsuranceNumberPage" - {
+class PartnerDetailsBusinessTypeFormProvider @Inject() extends Mappings {
 
-    "must have the correct path" in {
-      PartnerDetailsAddNationalInsuranceNumberPage(0).path mustEqual (JsPath \ "partners" \ 0 \ "partnerDetailsAddNationalInsuranceNumber")
-    }
-
-    "must have the correct string representation" in {
-      PartnerDetailsAddNationalInsuranceNumberPage(0).toString mustEqual "partnerDetailsAddNationalInsuranceNumber"
-    }
-  }
+  def apply(): Form[BusinessType] =
+    Form(
+      "value" -> enumerable[BusinessType]("partnerDetailsBusinessType.error.required")
+    )
 }

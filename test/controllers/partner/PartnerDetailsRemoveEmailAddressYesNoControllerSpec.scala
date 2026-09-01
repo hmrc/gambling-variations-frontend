@@ -27,8 +27,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -36,55 +34,22 @@ import views.html.partner.PartnerDetailsRemoveEmailAddressYesNoView
 
 import scala.concurrent.Future
 
-class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  def onwardRoute: Call = Call("GET", "/foo")
+  private val form: Form[Boolean] = (new PartnerDetailsRemoveEmailAddressYesNoFormProvider())()
 
-  private val formProvider = new PartnerDetailsRemoveEmailAddressYesNoFormProvider()
-  val form: Form[Boolean] = formProvider()
-
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
-  private val index: Int = 0
-
-  private val testEmail = "john.doe@example.com"
-  private val mgdRegNumber = "XGM00000001761"
-  lazy val partnerDetailsRemoveEmailAddressYesNoRoute: String =
+  private lazy val partnerDetailsRemoveEmailAddressYesNoRoute: String =
     controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
 
-  private def cleanedData(emailAddr: Option[String]) = Json.obj(
-    "partners" -> Json.arr(
-      Json.obj(
-        "partnerDetailsMgdRegNumber" -> mgdRegNumber,
-        "partnerDetailsBusinessName" -> "Partner1",
-        "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-          "mgdRegNumber" -> mgdRegNumber,
-          "correspondenceAddress" -> Json.obj(
-            "address1" -> "Flat 1",
-            "address2" -> "10 Market Road",
-            "address3" -> "Felling",
-            "address4" -> "Gateshead",
-            "postcode" -> "NE8 1ZZ",
-            "country"  -> "UK"
-          ),
-          "contactNumber" -> Json.obj(
-            "phoneNumber"       -> "0798765",
-            "mobilePhoneNumber" -> "7093434765"
-          ),
-          "faxNumber" -> "02071234568",
-          "emailAddr" -> emailAddr
-        )
-      )
-    )
-  )
+  private val baseUserAnswers = UserAnswers(mgdRegNumber, cleanedData(emailAddress = Some(testEmailAddress)))
 
   "PartnerDetailsRemoveEmailAddressYesNo Controller" - {
 
     "onPageLoad" - {
 
       "must return OK and the correct view for a GET when email address exists in UserAnswers" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testEmail)))
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
         running(application) {
           val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRoute)
@@ -92,14 +57,13 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, NormalMode, testEmail)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, NormalMode, testEmailAddress)(request, messages(application)).toString
         }
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
-        val baseAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testEmail)))
 
-        val userAnswers = baseAnswers
+        val userAnswers = baseUserAnswers
           .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), true)
           .success
           .value
@@ -112,7 +76,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(true), NormalMode, testEmail)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form.fill(true), NormalMode, testEmailAddress)(request, messages(application)).toString
         }
       }
 
@@ -151,10 +115,8 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testEmail)))
-
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -177,10 +139,8 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testEmail)))
-
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -200,9 +160,8 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
       }
 
       "must return BAD_REQUEST and errors when invalid data is submitted" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testEmail)))
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
 
         running(application) {
           val request =
@@ -214,7 +173,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, NormalMode, testEmail)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, NormalMode, testEmailAddress)(request, messages(application)).toString
         }
       }
 

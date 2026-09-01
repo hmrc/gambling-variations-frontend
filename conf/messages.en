@@ -888,3 +888,9 @@ partnerDetails.maxPartners.hint = You can only add up to 100 partners.
 partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
 partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner
 partnerDetails.addPartner.error.required = Select yes if you want to add a partner
+
+partnerDetailsBusinessType.title = What type of business is the partner?
+partnerDetailsBusinessType.heading = What type of business is the partner?
+partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
+partnerDetailsBusinessType.error.required = Select the type of business for the partner
+partnerDetailsBusinessType.change.hidden = What type of business is the partner?
