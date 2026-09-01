@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.partnerIndexOffset
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator
@@ -45,12 +46,15 @@ class PartnerDetailsBusinessTypeController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection | ADD NEW PARTNER
-  private val index: Int = 0
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
 
   val form: Form[BusinessType] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val index: Int = partnerIndexOffset(request.userAnswers)
 
     val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
       case None               => form
@@ -61,6 +65,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val index: Int = partnerIndexOffset(request.userAnswers)
 
     form
       .bindFromRequest()

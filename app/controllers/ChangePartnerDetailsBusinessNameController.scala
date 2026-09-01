@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.partnerIndexOffset
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode, UserAnswers}
@@ -51,9 +52,14 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
+
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData) { implicit request =>
-      val newIndex = getPartnersSize(request.userAnswers)
+      val newIndex = partnerIndexOffset(request.userAnswers)
 
       (request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) map {
         case Soleproprietor =>
@@ -74,7 +80,7 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
 
   def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val newIndex = getPartnersSize(request.userAnswers)
+      val newIndex = partnerIndexOffset(request.userAnswers)
 
       request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) map {
         case Soleproprietor =>
@@ -107,14 +113,5 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
       } getOrElse Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
     }
   }
-
-  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
-     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
-     Lack of it implies data is ONLY in the cache and has not been submitted yet.
-   */
-  private def getPartnersSize(userAnswers: UserAnswers) = (userAnswers.data \ "partners")
-    .validate[JsArray]
-    .asOpt
-    .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 
 }
