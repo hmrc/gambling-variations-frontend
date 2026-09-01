@@ -287,7 +287,3 @@ POST       /change-registration-details/partner-details                      con
 GET        /change-registration-details/partner-details/continue              controllers.partner.PartnerDetailsController.onContinue
 GET        /change-registration-details/partner-details/:partnerNumber/remove  controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
 GET        /change-registration-details/partner-details/:partnerNumber         controllers.partner.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
-
-
-GET        /change-registration-details/partner-details/business-incorporated-uk                        controllers.partner.PartnerDetailsIsBusinessIncorporatedController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/partner-details/business-incorporated-uk                        controllers.partner.PartnerDetailsIsBusinessIncorporatedController.onSubmit(mode: Mode = NormalMode)

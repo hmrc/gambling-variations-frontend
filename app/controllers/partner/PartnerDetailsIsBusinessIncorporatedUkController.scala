@@ -18,10 +18,12 @@ package controllers.partner
 
 import controllers.actions.*
 import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.JsArray
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -44,14 +46,12 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
-
-  // TODO: To be replaced later
-  private val Index: Int = 0
+  private val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val newIndex = getPartnersSize(request.userAnswers)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(Index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -60,6 +60,7 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val newIndex = getPartnersSize(request.userAnswers)
 
     form
       .bindFromRequest()
@@ -67,9 +68,15 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsIsBusinessIncorporatedUkPage(Index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(Index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex), mode, updatedAnswers))
       )
   }
+
+  // TODO delete, luca made extension object
+  private def getPartnersSize(userAnswers: UserAnswers): Int = (userAnswers.data \ "partners")
+    .validate[JsArray]
+    .asOpt
+    .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 }
