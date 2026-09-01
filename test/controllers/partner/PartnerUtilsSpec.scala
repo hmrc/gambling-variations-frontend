@@ -27,12 +27,12 @@ class PartnerUtilsSpec extends SpecBase {
 
     "lastPartnerIndex" - {
       "must return 0 when no partners exist" in {
-        emptyUserAnswers.lastPartnerIndex mustBe 0
+        emptyUserAnswers.getPartnersSize mustBe 0
       }
 
       "must return size - 1 when partners exist" in {
         val answers = UserAnswers("id", Json.obj("partners" -> Json.arr(Json.obj("name" -> "A"), Json.obj("name" -> "B"))))
-        answers.lastPartnerIndex mustBe 1
+        answers.getPartnersSize mustBe 1
       }
     }
 
