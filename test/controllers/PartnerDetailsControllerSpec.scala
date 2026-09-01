@@ -29,7 +29,7 @@ import play.api.test.Helpers.*
 import repositories.SessionRepository
 import viewmodels.checkAnswers.partner.PartnerDetailsViewModel
 import views.html.partner.PartnerDetailsView
-import pages.partnerdetails.PartnerDetailsPage
+
 import scala.concurrent.Future
 
 class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
@@ -37,8 +37,11 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
   private val formProvider =
     new AddAnotherPartnerFormProvider()
 
-  private val form =
-    formProvider()
+  private val addPartnerForm =
+    formProvider("partnerDetails.addPartner.error.required")
+
+  private val addAnotherPartnerForm =
+    formProvider("partnerDetails.addAnotherPartner.error.required")
 
   private lazy val partnerDetailsRoute =
     controllers.partner.routes.PartnerDetailsController.onPageLoad.url
@@ -103,7 +106,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
           contentAsString(result) mustEqual
             view(
-              form,
+              addAnotherPartnerForm,
               viewModel(
                 application,
                 userAnswersWithPartner
@@ -150,7 +153,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
           contentAsString(result) mustEqual
             view(
-              form.fill(true),
+              addAnotherPartnerForm.fill(true),
               viewModel(
                 application,
                 userAnswers
@@ -267,7 +270,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
             )
 
           val boundForm =
-            form.bind(
+            addAnotherPartnerForm.bind(
               Map(
                 "value" -> ""
               )
@@ -295,6 +298,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
             ).toString
         }
       }
+
     }
 
     "onPartnerDetails" - {

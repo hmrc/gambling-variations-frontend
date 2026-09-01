@@ -44,21 +44,27 @@ class PartnerDetailsController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider()
-
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-
-      val preparedForm =
-        request.userAnswers
-          .get(PartnerDetailsAddAnotherPartnerYesNoPage)
-          .fold(form)(form.fill)
 
       val viewModel =
         PartnerDetailsViewModel.from(
           request.userAnswers,
           frontendAppConfig
         )
+
+      val errorMessage =
+        if (viewModel.showNoPartnersMessage)
+          "partnerDetails.addPartner.error.required"
+        else
+          "partnerDetails.addAnotherPartner.error.required"
+
+      val form = formProvider(errorMessage)
+
+      val preparedForm =
+        request.userAnswers
+          .get(PartnerDetailsAddAnotherPartnerYesNoPage)
+          .fold(form)(form.fill)
 
       Ok(
         view(
@@ -71,17 +77,22 @@ class PartnerDetailsController @Inject() (
   def onSubmit: Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      form
+      val viewModel =
+        PartnerDetailsViewModel.from(
+          request.userAnswers,
+          frontendAppConfig
+        )
+
+      val errorMessage =
+        if (viewModel.showNoPartnersMessage)
+          "partnerDetails.addPartner.error.required"
+        else
+          "partnerDetails.addAnotherPartner.error.required"
+
+      formProvider(errorMessage)
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-
-            val viewModel =
-              PartnerDetailsViewModel.from(
-                request.userAnswers,
-                frontendAppConfig
-              )
-
+          formWithErrors =>
             Future.successful(
               BadRequest(
                 view(
@@ -89,10 +100,8 @@ class PartnerDetailsController @Inject() (
                   viewModel
                 )
               )
-            )
-          },
-          value => {
-
+            ),
+          value =>
             for {
               updatedAnswers <-
                 Future.fromTry(
@@ -102,13 +111,9 @@ class PartnerDetailsController @Inject() (
                   )
                 )
 
-              _ <-
-                sessionRepository.set(updatedAnswers)
-
+              _ <- sessionRepository.set(updatedAnswers)
             } yield {
               if (value) {
-                // Replace this with the actual first partner
-                // question when that journey is ready.
                 Redirect(
                   controllers.partner.routes.PartnerDetailsController.onPageLoad
                 )
@@ -119,7 +124,6 @@ class PartnerDetailsController @Inject() (
                 )
               }
             }
-          }
         )
     }
 

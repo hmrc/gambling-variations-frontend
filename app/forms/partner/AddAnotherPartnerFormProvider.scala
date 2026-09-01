@@ -23,8 +23,9 @@ import javax.inject.Inject
 
 class AddAnotherPartnerFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(errorMessage: String): Form[Boolean] =
     Form(
-      "value" -> boolean("partnerDetails.addAnotherPartner.error.required")
+      "value" -> boolean(errorMessage)
     )
+
 }
