@@ -404,7 +404,9 @@ class PartnerDetailsViewModelSpec extends SpecBase {
       )
     }
 
-    "show active status when joining date is today" in {
+    "show due to join status when joining date is today" in {
+
+      val joinDate = LocalDate.now()
 
       val answers =
         emptyUserAnswers
@@ -416,7 +418,7 @@ class PartnerDetailsViewModelSpec extends SpecBase {
           .value
           .set(
             PartnerDetailsDateOfJoiningPage(0),
-            LocalDate.now()
+            joinDate
           )
           .success
           .value
@@ -429,11 +431,13 @@ class PartnerDetailsViewModelSpec extends SpecBase {
 
       val row = viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.active")
+      row.status mustBe messages("partnerDetails.status.dueToJoin")
       row.statusDetails mustBe None
     }
 
-    "show active status when leaving date is today" in {
+    "show due to leave status when leaving date is today" in {
+
+      val leavingDate = LocalDate.now()
 
       val answers =
         emptyUserAnswers
@@ -445,7 +449,7 @@ class PartnerDetailsViewModelSpec extends SpecBase {
           .value
           .set(
             PartnerDetailsDateOfLeavingPage(0),
-            LocalDate.now()
+            leavingDate
           )
           .success
           .value
@@ -458,7 +462,7 @@ class PartnerDetailsViewModelSpec extends SpecBase {
 
       val row = viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.active")
+      row.status mustBe messages("partnerDetails.status.dueToLeave")
       row.statusDetails mustBe None
     }
 
