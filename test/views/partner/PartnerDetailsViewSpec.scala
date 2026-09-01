@@ -413,7 +413,7 @@ class PartnerDetailsViewSpec extends SpecBase {
 
       doc
         .text() must include(
-        messages("partnerDetails.maxPartners", 100)
+        messages("partnerDetails.maxPartners.hint")
       )
     }
 

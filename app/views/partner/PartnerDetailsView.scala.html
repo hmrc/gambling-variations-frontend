@@ -52,14 +52,14 @@
             @p("partnerDetails.noPartners")
 
         @govukRadios(
-            RadiosViewModel.yesNo(
-                field = form("value"),
-                legend = LegendViewModel(
-                messages("partnerDetails.addPartner")
-                ).withCssClass("govuk-fieldset__legend--m"),
-                yesLabel = messages("site.yes"),
-                noLabel = messages("site.no")
-            )
+        RadiosViewModel.yesNo(
+        field = form("value"),
+        legend = LegendViewModel(
+        messages("partnerDetails.addPartner")
+        ).withCssClass("govuk-fieldset__legend--m"),
+        yesLabel = messages("site.yes"),
+        noLabel = messages("site.no")
+        )
         )
 
         } else {
@@ -166,12 +166,10 @@
         ).withCssClass("govuk-fieldset__legend--m"),
         yesLabel = messages("partnerDetails.yesAddAnother"),
         noLabel = messages("partnerDetails.noReturn")
+        ).withHint(
+        Hint(content = messages("partnerDetails.maxPartners.hint"))
         )
         )
-
-        <p class="govuk-body">
-            @messages("partnerDetails.maxPartners", 100)
-        </p>
 
         } else {
 
