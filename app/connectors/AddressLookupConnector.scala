@@ -22,7 +22,8 @@ import models.addresslookup.AddressLookupConfigSettings
 import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.http.Status.ACCEPTED
-import play.api.libs.json.Json
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
+import play.api.libs.json.{Json, Reads, __}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -36,6 +37,21 @@ class AddressLookupConnector @Inject() (
 )(implicit ec: ExecutionContext)
     extends HttpReadsInstances
     with Logging {
+
+  private implicit val confirmedAddressReads: Reads[Address] = (
+    (__ \ "address" \ "lines").readNullable[Seq[String]].map(_.getOrElse(Seq.empty)) and
+      (__ \ "address" \ "postcode").readNullable[String] and
+      (__ \ "address" \ "country" \ "code").readNullable[String]
+  ) { (lines, postcode, country) =>
+    Address(
+      address1 = lines.headOption.getOrElse(""),
+      address2 = lines.lift(1),
+      address3 = lines.lift(2),
+      address4 = lines.lift(3),
+      postcode = postcode,
+      country  = country
+    )
+  }
 
   def initJourney(configSettings: AddressLookupConfigSettings)(implicit hc: HeaderCarrier): Future[String] = {
     httpClient
@@ -62,7 +78,9 @@ class AddressLookupConnector @Inject() (
     id: String
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Address] = {
     val fullUrl = s"${config.retrieveAddressUrl}?id=$id"
-    httpClient.get(url"$fullUrl").execute[Address]
+    httpClient
+      .get(url"$fullUrl")
+      .execute[Address]
   }
 
 }

@@ -19,6 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
+import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
 import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -490,6 +491,88 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
   }
+
+  "GamblingConnector.getLicencesAndPremises" should {
+
+    "return LicencesAndPremises when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "XWM00000001762",
+           |  "haveGamblingLicenceNo": "1",
+           |  "gamblingLicenceNo": "123-456789-A-123456-789",
+           |  "heldByLandlord": "1",
+           |  "localAuthority": "1",
+           |  "familyEntertainment": "1",
+           |  "clubGaming": "0",
+           |  "clubLicence": "1",
+           |  "prizeGaming": "0",
+           |  "onPremises": "1",
+           |  "clubPremises": "0",
+           |  "regCert": "0",
+           |  "bookmaking": "0",
+           |  "bingo": "0",
+           |  "amusement": "0",
+           |  "serveAlcohol": "0",
+           |  "premisesNotCovered": "0",
+           |  "premisesDetails": {
+           |    "totalRows": 2,
+           |    "premises": [
+           |      {
+           |        "mgdRegNumber": "XGM00000001762",
+           |        "address1": "123 Road",
+           |        "address2": "Somewhere",
+           |        "address3": "A Place",
+           |        "address4": "Earth",
+           |        "postcode": "SM12 0NL",
+           |        "systemDate": "2023-04-01"
+           |      },
+           |      {
+           |        "mgdRegNumber": "XGM00000001763",
+           |        "address1": "345 Road",
+           |        "address2": "SomewhereElse",
+           |        "address3": "ANOTHERPlace",
+           |        "address4": "Earth II",
+           |        "postcode": "SM12 1MO",
+           |        "systemDate": "2023-04-01"
+           |      }
+           |    ]
+           |  }
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/licences-and-premises-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getLicencesAndPremises(mgdRegNumber).futureValue mustBe licencesAndPremisesResponse
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/licences-and-premises-details/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getLicencesAndPremises(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/licences-and-premises-details/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getLicencesAndPremises(mgdRegNumber)
+      }
+    }
+
+  }
 }
 
 object GamblingConnectorISpec {
@@ -656,4 +739,50 @@ object GamblingConnectorISpec {
     systemDate = Some(LocalDate.of(2026, 7, 30))
   )
 
+  val premisesDetails: Seq[PremisesDetails] = Seq(
+    PremisesDetails(
+      mgdRegNumber = "XGM00000001762",
+      address1     = Some("123 Road"),
+      address2     = Some("Somewhere"),
+      address3     = Some("A Place"),
+      address4     = Some("Earth"),
+      postcode     = Some("SM12 0NL"),
+      systemDate   = Some(LocalDate.of(2023, 4, 1))
+    ),
+    PremisesDetails(
+      mgdRegNumber = "XGM00000001763",
+      address1     = Some("345 Road"),
+      address2     = Some("SomewhereElse"),
+      address3     = Some("ANOTHERPlace"),
+      address4     = Some("Earth II"),
+      postcode     = Some("SM12 1MO"),
+      systemDate   = Some(LocalDate.of(2023, 4, 1))
+    )
+  )
+
+  val premisesDetailsResponse: PremisesDetailsResponse = PremisesDetailsResponse(
+    totalRows = Some(2),
+    premises  = premisesDetails
+  )
+
+  val licencesAndPremisesResponse: LicencesAndPremises = LicencesAndPremises(
+    mgdRegNumber          = mgdRegNumber,
+    haveGamblingLicenceNo = Some("1"),
+    gamblingLicenceNo     = Some("123-456789-A-123456-789"),
+    heldByLandlord        = Some("1"),
+    localAuthority        = Some("1"),
+    familyEntertainment   = Some("1"),
+    clubGaming            = Some("0"),
+    clubLicence           = Some("1"),
+    prizeGaming           = Some("0"),
+    onPremises            = Some("1"),
+    clubPremises          = Some("0"),
+    regCert               = Some("0"),
+    bookmaking            = Some("0"),
+    bingo                 = Some("0"),
+    amusement             = Some("0"),
+    serveAlcohol          = Some("0"),
+    premisesNotCovered    = Some("0"),
+    premisesDetails       = Some(premisesDetailsResponse)
+  )
 }

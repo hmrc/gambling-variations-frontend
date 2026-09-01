@@ -160,10 +160,10 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
   private def setIfDefinedBusinessDetails(partnerDetails: PartnerDetails, answers: UserAnswers, index: Int): Try[UserAnswers] = for {
     updatedAnswers <- answers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
     updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(index), partnerDetails.tradingName)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), partnerDetails.businessType)
+    businessType = partnerDetails.businessType.flatMap(BusinessType.fromCode)
+    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), businessType)
 
-    updatedAnswers <- partnerDetails.businessType
-                        .flatMap(BusinessType.fromCode)
+    updatedAnswers <- businessType
                         // If BusinessType is None, stop and return updatedAnswers
                         .fold(Try(updatedAnswers)) {
                           case BusinessType.Soleproprietor =>
