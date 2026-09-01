@@ -43,33 +43,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
   lazy val partnerDetailsRemoveFaxNumberYesNoRoute: String =
     PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
 
-  private def cleanedData(faxNumber: Option[String]) = Json.obj(
-    "partners" -> Json.arr(
-      Json.obj(
-        "partnerDetailsMgdRegNumber" -> mgdRegNumber,
-        "partnerDetailsBusinessName" -> "Partner1",
-        "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-          "mgdRegNumber" -> mgdRegNumber,
-          "correspondenceAddress" -> Json.obj(
-            "address1" -> "Flat 1",
-            "address2" -> "10 Market Road",
-            "address3" -> "Felling",
-            "address4" -> "Gateshead",
-            "postcode" -> "NE8 1ZZ",
-            "country"  -> "UK"
-          ),
-          "contactNumber" -> Json.obj(
-            "phoneNumber"       -> "0798765",
-            "mobilePhoneNumber" -> "7093434765"
-          ),
-          "faxNumber" -> faxNumber,
-          "emailAddr" -> "test@example.com"
-        )
-      )
-    )
-  )
-
-  val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+  val userAnswers = UserAnswers(mgdRegNumber, cleanedData(faxNumber = Some(testFaxNumber)))
 
   "PartnerDetailsRemoveFaxNumberYesNo Controller" - {
 

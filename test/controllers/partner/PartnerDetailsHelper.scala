@@ -15,7 +15,6 @@
  */
 
 package controllers.partner
-import play.api.mvc.Call
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -23,7 +22,6 @@ import play.api.mvc.Call
 trait PartnerDetailsHelper {
 
   val index: Int = 0
-  def onwardRoute = Call("GET", "/foo")
 
   val mgdRegNumber: String = "XGM00000001761"
   val testFaxNumber: String = "0123456789"
