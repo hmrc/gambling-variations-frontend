@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getPartnersSize
 import controllers.routes
 import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.Mode
@@ -47,20 +48,23 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
-  private val index: Int = 0
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
 
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val newIndex = getPartnersSize(request.userAnswers)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
     request.userAnswers
-      .get(PartnerDetailsVrnPage(index)) match {
+      .get(PartnerDetailsVrnPage(newIndex)) match {
       case Some(vatRegNumber) =>
         Ok(view(preparedForm, mode, vatRegNumber))
 
@@ -70,6 +74,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val newIndex = getPartnersSize(request.userAnswers)
 
     form
       .bindFromRequest()
@@ -80,7 +85,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
               view(formWithErrors,
                    mode,
                    request.userAnswers
-                     .get(PartnerDetailsVrnPage(index))
+                     .get(PartnerDetailsVrnPage(newIndex))
                      .getOrElse("")
                   )
             )
@@ -88,13 +93,13 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- if (value) {
-                                Future.fromTry(request.userAnswers.remove(PartnerDetailsVrnPage(index)))
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsVrnPage(newIndex)))
                               } else {
                                 Future.apply(request.userAnswers)
                               }
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex), mode, updatedAnswers))
       )
   }
 }
