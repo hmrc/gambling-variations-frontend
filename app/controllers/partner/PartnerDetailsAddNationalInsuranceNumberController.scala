@@ -17,11 +17,10 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.partnerIndexOffset
+import controllers.partner.PartnerUtils.lastPartnerIndex
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
 import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -55,7 +54,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
    */
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = partnerIndexOffset(request.userAnswers)
+    val index: Int = lastPartnerIndex(request.userAnswers)
 
     val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
       case None        => form
@@ -66,7 +65,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = partnerIndexOffset(request.userAnswers)
+    val index: Int = lastPartnerIndex(request.userAnswers)
 
     form
       .bindFromRequest()
@@ -74,10 +73,9 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         nino =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddNationalInsuranceNumberPage(index), nino))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsNinoPage(index), nino))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), nino))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsNinoPage(index), mode, updatedAnswers))
       )
   }
 }

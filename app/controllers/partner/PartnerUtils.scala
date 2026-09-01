@@ -17,29 +17,14 @@
 package controllers.partner
 
 import models.UserAnswers
-import play.api.libs.json.{JsArray, JsObject}
+import play.api.libs.json.JsArray
 
 object PartnerUtils:
-
   extension (userAnswers: UserAnswers)
-
-    private def maybePartners: Option[JsArray] = (userAnswers.data \ "partners")
+    def lastPartnerIndex: Int = (userAnswers.data \ "partners")
       .validate[JsArray]
       .asOpt
+      .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 
-    private def partnersCount: Int =
-      maybePartners
-        .map(_.value.size)
-        .getOrElse(0)
-
-    def partnerIndexOffset: Int =
-      val count = partnersCount
-      if count == 0 then 0 else count - 1
-
-    private def allPartners: Seq[JsObject] =
-      maybePartners
-        .map(_.value.collect { case obj: JsObject => obj }.toSeq)
-        .getOrElse(Seq.empty)
-
-    def partnerAt(index: Int): Option[JsObject] =
-      allPartners.lift(index)
+    // TODO: this has to be fixed with the indexing ticket
+    def addNewPartnerIndex(): Int = lastPartnerIndex + 1

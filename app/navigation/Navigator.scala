@@ -18,7 +18,7 @@ package navigation
 
 import controllers.routes
 import models.*
-import models.BusinessType.Soleproprietor
+import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.businessaddress.*
@@ -157,8 +157,6 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
     case VatRegistrationNumberYesNoPage(index) =>
       userAnswers => navigateVatRegistrationNumberYesNoPage(index)(userAnswers)
-    case PartnerDetailsAddNationalInsuranceNumberPage(index) =>
-      _ => controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad() // change it
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
@@ -459,28 +457,7 @@ class Navigator @Inject() () {
   private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
-      .fold(routes.SystemErrorController.onPageLoad()) {
-        case BusinessType.Corporatebody =>
-          // TODO: should go to Change corporate body name
-          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-
-        case BusinessType.LimitedLiabilityPartnership =>
-          // TODO: should go to Change Limited Liability Partnership name
-          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-
-        case BusinessType.Partnership =>
-          // TODO: should go to Change partnership name
-          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-
-        case BusinessType.Soleproprietor =>
-          // TODO: should go to Change proprietor name
-          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-
-        case BusinessType.Unincorporatedbody =>
-          // TODO: should go to Change unincorporated body name
-          controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
-
-      }
+      .fold(routes.SystemErrorController.onPageLoad())(routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

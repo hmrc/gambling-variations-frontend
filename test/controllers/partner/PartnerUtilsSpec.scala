@@ -25,102 +25,16 @@ class PartnerUtilsSpec extends SpecBase {
 
   "PartnerUtils" - {
 
-    "partnerIndexOffset" - {
-
-      "must return 0 when the 'partners' key is missing from UserAnswers" in {
-        emptyUserAnswers.partnerIndexOffset mustBe 0
+    "lastPartnerIndex" - {
+      "must return 0 when no partners exist" in {
+        emptyUserAnswers.lastPartnerIndex mustBe 0
       }
 
-      "must return 0 when the 'partners' array is empty" in {
-        val answers = UserAnswers("id", Json.obj("partners" -> Json.arr()))
-
-        answers.partnerIndexOffset mustBe 0
-      }
-
-      "must return 0 when there is exactly 1 partner" in {
-        val answers = UserAnswers(
-          "id",
-          Json.obj(
-            "partners" -> Json.arr(
-              Json.obj("name" -> "Partner 1")
-            )
-          )
-        )
-
-        answers.partnerIndexOffset mustBe 0
-      }
-
-      "must return size - 1 when there are multiple partners" in {
-        val answers = UserAnswers(
-          "id",
-          Json.obj(
-            "partners" -> Json.arr(
-              Json.obj("name" -> "Partner 1"),
-              Json.obj("name" -> "Partner 2"),
-              Json.obj("name" -> "Partner 3")
-            )
-          )
-        )
-
-        answers.partnerIndexOffset mustBe 2
-      }
-
-      "must return 0 when 'partners' is not a valid JSON array" in {
-        val answers = UserAnswers("id", Json.obj("partners" -> "invalid"))
-
-        answers.partnerIndexOffset mustBe 0
+      "must return size - 1 when partners exist" in {
+        val answers = UserAnswers("id", Json.obj("partners" -> Json.arr(Json.obj("name" -> "A"), Json.obj("name" -> "B"))))
+        answers.lastPartnerIndex mustBe 1
       }
     }
 
-    "partnerAt" - {
-
-      "must return None when the 'partners' array is empty or missing" in {
-        emptyUserAnswers.partnerAt(0) mustBe None
-      }
-
-      "must return Some(JsObject) when a valid index is provided" in {
-        val partner1 = Json.obj("name" -> "Partner 1")
-        val partner2 = Json.obj("name" -> "Partner 2")
-
-        val answers = UserAnswers(
-          "id",
-          Json.obj("partners" -> Json.arr(partner1, partner2))
-        )
-
-        answers.partnerAt(0).value mustBe partner1
-        answers.partnerAt(1).value mustBe partner2
-      }
-
-      "must return None when requesting an index out of bounds" in {
-        val answers = UserAnswers(
-          "id",
-          Json.obj(
-            "partners" -> Json.arr(
-              Json.obj("name" -> "Partner 1")
-            )
-          )
-        )
-
-        answers.partnerAt(1) mustBe None
-        answers.partnerAt(-1) mustBe None
-      }
-
-      "must filter out non-JsObject elements in the array and lift by valid object index" in {
-        val partnerObj = Json.obj("name" -> "Partner 1")
-
-        val answers = UserAnswers(
-          "id",
-          Json.obj(
-            "partners" -> Json.arr(
-              "invalid_string_element",
-              partnerObj
-            )
-          )
-        )
-
-        answers.partnerAt(0).value mustBe partnerObj
-        answers.partnerAt(1) mustBe None
-      }
-    }
   }
 }

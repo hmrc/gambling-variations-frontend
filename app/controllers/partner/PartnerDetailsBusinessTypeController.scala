@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.partnerIndexOffset
+import controllers.partner.PartnerUtils.addNewPartnerIndex
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator
@@ -54,7 +54,8 @@ class PartnerDetailsBusinessTypeController @Inject() (
   val form: Form[BusinessType] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = partnerIndexOffset(request.userAnswers)
+    // TODO: this has to be fixed with the indexing ticket
+    val index: Int = addNewPartnerIndex(request.userAnswers)()
 
     val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
       case None               => form
@@ -65,7 +66,8 @@ class PartnerDetailsBusinessTypeController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = partnerIndexOffset(request.userAnswers)
+    // TODO: this has to be fixed with the indexing ticket
+    val index: Int = addNewPartnerIndex(request.userAnswers)()
 
     form
       .bindFromRequest()
