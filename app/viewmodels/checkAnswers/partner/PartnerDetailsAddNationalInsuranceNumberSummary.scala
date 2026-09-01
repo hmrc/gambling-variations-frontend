@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partner.PartnerDetailsAddNationalInsuranceNumberPage
+import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -30,7 +30,7 @@ object PartnerDetailsAddNationalInsuranceNumberSummary {
   private val index: Int = 0
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsAddNationalInsuranceNumberPage(index)).map { answer =>
+    answers.get(PartnerDetailsNinoPage(index)).map { answer =>
 
       SummaryListRowViewModel(
         key   = "partnerDetailsAddNino.checkYourAnswersLabel",

@@ -28,8 +28,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -37,16 +35,10 @@ import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
 
 import scala.concurrent.Future
 
-class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar {
-
-  def onwardRoute: Call = Call("GET", "/foo")
+class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private val formProvider = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
-
-  private val index = 0
-  private val testFaxNumber = "02071234568"
-  private val mgdRegNumber = "XGM00000001761"
 
   lazy val partnerDetailsRemoveFaxNumberYesNoRoute: String =
     PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url

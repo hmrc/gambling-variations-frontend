@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package pages.partner
+package pages.licencespremises
 
-import base.SpecBase
+import models.licencespremises.PremisesDetailsResponse
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-class PartnerDetailsAddNationalInsuranceNumberPageSpec extends SpecBase {
+case object PremisesDetailsPage extends QuestionPage[PremisesDetailsResponse] {
 
-  "PartnerDetailsAddNationalInsuranceNumberPage" - {
+  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
 
-    "must have the correct path" in {
-      PartnerDetailsAddNationalInsuranceNumberPage(0).path mustEqual (JsPath \ "partners" \ 0 \ "partnerDetailsAddNationalInsuranceNumber")
-    }
-
-    "must have the correct string representation" in {
-      PartnerDetailsAddNationalInsuranceNumberPage(0).toString mustEqual "partnerDetailsAddNationalInsuranceNumber"
-    }
-  }
+  override def toString: String = "premisesDetails"
 }

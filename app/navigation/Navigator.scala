@@ -18,18 +18,19 @@ package navigation
 
 import controllers.routes
 import models.*
-import models.BusinessType.Soleproprietor
+import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
+import pages.licencespremises.LicenceNumberPage
 import pages.partner.*
 import pages.partnerdetails.*
+import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
-import pages.tradingdetails.*
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -156,8 +157,6 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
     case VatRegistrationNumberYesNoPage(index) =>
       userAnswers => navigateVatRegistrationNumberYesNoPage(index)(userAnswers)
-    case PartnerDetailsAddNationalInsuranceNumberPage(index) =>
-      _ => controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad() // change it
     case PartnerEmailAddressPage =>
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
@@ -165,8 +164,16 @@ class Navigator @Inject() () {
     case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
       _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
 
+    case PartnerDetailsBusinessTypePage(index) =>
+      userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
+
+    // License and Premises Details
+    case LicenceNumberPage =>
+      _ => controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
+
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
@@ -347,13 +354,13 @@ class Navigator @Inject() () {
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
         case DifferentUkAddress =>
-          routes.PageNotFoundController.onPageLoad()
+          routes.AddressLookupController.initialise()
 
         case ChangeToNonUkAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
 
         case ChangeToUkAddress =>
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          routes.AddressLookupController.initialise()
 
         case EditCurrentAddress if isUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()
@@ -449,6 +456,11 @@ class Navigator @Inject() () {
           controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsBusinessTypePage(index))
+      .fold(routes.SystemErrorController.onPageLoad())(routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

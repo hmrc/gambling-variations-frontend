@@ -26,7 +26,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsAddNationalInsuranceNumberYesNoPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -101,8 +100,6 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoControllerSpec extends SpecBa
     }
 
     "onSubmit" - {
-
-      def onwardRoute: Call = Call("GET", "/foo")
 
       "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
