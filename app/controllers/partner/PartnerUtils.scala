@@ -27,4 +27,4 @@ object PartnerUtils:
       .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 
     // TODO: this has to be fixed with the indexing ticket
-    def addNewPartnerIndex(): Int = getPartnersSize + 1
+    def addNewPartnerIndex(): Int = getPartnersSize

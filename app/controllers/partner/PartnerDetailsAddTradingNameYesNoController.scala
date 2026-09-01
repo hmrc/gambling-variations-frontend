@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getPartnersSize
 import forms.partner.PartnerDetailsAddTradingNameYesNoFormProvider
 import models.Mode
 import navigation.Navigator
@@ -45,14 +46,18 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection | ADD NEW PARTNER
-  private val index: Int = 0
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
 
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)) match {
+    val newIndex = getPartnersSize(request.userAnswers)
+
+    val preparedForm = request.userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(newIndex)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -61,6 +66,7 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val newIndex = getPartnersSize(request.userAnswers)
 
     form
       .bindFromRequest()
@@ -68,9 +74,9 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddTradingNameYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddTradingNameYesNoPage(newIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newIndex), mode, updatedAnswers))
       )
   }
 }
