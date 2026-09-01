@@ -19,6 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import models.*
+import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
 import pages.businessaddress.*
 import pages.businessname.*
@@ -39,6 +40,7 @@ class NavigatorSpec extends SpecBase {
   private val emptyAnswers = UserAnswers("id")
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
+
   "Navigator" - {
 
     "in Normal mode" - {
@@ -1081,6 +1083,22 @@ class NavigatorSpec extends SpecBase {
 
       "should route VatRegistrationNumberYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(VatRegistrationNumberYesNoPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to the correct Partner Details controller when answered" in {
+        val businessData = Json.obj(
+          "partners" -> Json.arr(
+            Json.obj("partnerDetailsBusinessType" -> 2)
+          )
+        )
+
+        navigator.nextPage(PartnerDetailsBusinessTypePage(index), NormalMode, emptyAnswers.copy(data = businessData)) mustBe
+          routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Corporatebody)
+      }
+
+      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsBusinessTypePage(index), NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
 
