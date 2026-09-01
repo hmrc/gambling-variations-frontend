@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.*
 import forms.PartnerDateOfIncorporationFormProvider
 import javax.inject.Inject
 import models.Mode
@@ -30,40 +30,40 @@ import views.html.PartnerDateOfIncorporationView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDateOfIncorporationController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        sessionRepository: SessionRepository,
-                                        navigator: Navigator,
-                                        authorise: AuthorisedAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: PartnerDetailsDataRequiredAction,
-                                        formProvider: PartnerDateOfIncorporationFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: PartnerDateOfIncorporationView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class PartnerDateOfIncorporationController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: PartnerDetailsDataRequiredAction,
+  formProvider: PartnerDateOfIncorporationFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: PartnerDateOfIncorporationView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-      val form = formProvider()
+    val form = formProvider()
 
-      val preparedForm = request.userAnswers.get(PartnerDateOfIncorporationPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    val preparedForm = request.userAnswers.get(PartnerDateOfIncorporationPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-      val form = formProvider()
+    val form = formProvider()
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDateOfIncorporationPage, value))

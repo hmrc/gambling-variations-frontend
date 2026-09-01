@@ -25,6 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
+import pages.licencespremises.LicenceNumberPage
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.associatedregnumbers.*
@@ -162,8 +163,14 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
+
+    // License and Premises Details
+    case LicenceNumberPage =>
+      _ => controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
+
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
@@ -344,13 +351,13 @@ class Navigator @Inject() () {
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
         case DifferentUkAddress =>
-          routes.PageNotFoundController.onPageLoad()
+          routes.AddressLookupController.initialise()
 
         case ChangeToNonUkAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
 
         case ChangeToUkAddress =>
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          routes.AddressLookupController.initialise()
 
         case EditCurrentAddress if isUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()

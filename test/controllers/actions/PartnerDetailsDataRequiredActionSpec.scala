@@ -61,9 +61,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val data = Json.obj(
             "partners" -> Json.arr(
               Json.obj(
-                "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-                "partnerDetailsDateOfJoining" -> "2022-01-15",
-                "partnerDetailsDateOfLeaving" -> "2028-12-31",
+                "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+                "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+                "partnerDetailsDateOfJoining"         -> "2022-01-15",
+                "partnerDetailsDateOfLeaving"         -> "2028-12-31",
                 "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                   "mgdRegNumber" -> "XWM00000001762",
                   "correspondenceAddress" -> Json.obj(
@@ -203,9 +204,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val expectedResponse = Json.obj(
             "partners" -> Json.arr(
               Json.obj(
-                "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-                "partnerDetailsDateOfJoining" -> "2022-01-15",
-                "partnerDetailsDateOfLeaving" -> "2028-12-31",
+                "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+                "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+                "partnerDetailsDateOfJoining"         -> "2022-01-15",
+                "partnerDetailsDateOfLeaving"         -> "2028-12-31",
                 "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                   "mgdRegNumber" -> "XWM00000001762",
                   "correspondenceAddress" -> Json.obj(
@@ -275,9 +277,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val data = Json.obj(
           "partners" -> Json.arr(
             Json.obj(
-              "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-              "partnerDetailsDateOfJoining" -> "2022-01-15",
-              "partnerDetailsDateOfLeaving" -> "2028-12-31",
+              "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+              "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+              "partnerDetailsDateOfJoining"         -> "2022-01-15",
+              "partnerDetailsDateOfLeaving"         -> "2028-12-31",
               "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                 "mgdRegNumber" -> "XWM00000001762",
                 "correspondenceAddress" -> Json.obj(
@@ -348,9 +351,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val data = Json.obj(
           "partners" -> Json.arr(
             Json.obj(
-              "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-              "partnerDetailsDateOfJoining" -> "2022-01-15",
-              "partnerDetailsDateOfLeaving" -> "2028-12-31",
+              "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+              "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+              "partnerDetailsDateOfJoining"         -> "2022-01-15",
+              "partnerDetailsDateOfLeaving"         -> "2028-12-31",
               "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                 "mgdRegNumber" -> "XWM00000001762",
                 "correspondenceAddress" -> Json.obj(
@@ -416,9 +420,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val data = Json.obj(
           "partners" -> Json.arr(
             Json.obj(
-              "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-              "partnerDetailsDateOfJoining" -> "2022-01-15",
-              "partnerDetailsDateOfLeaving" -> "2028-12-31",
+              "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+              "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+              "partnerDetailsDateOfJoining"         -> "2022-01-15",
+              "partnerDetailsDateOfLeaving"         -> "2028-12-31",
               "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                 "mgdRegNumber" -> "XWM00000001762",
                 "correspondenceAddress" -> Json.obj(
@@ -481,9 +486,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val data = Json.obj(
             "partners" -> Json.arr(
               Json.obj(
-                "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-                "partnerDetailsDateOfJoining" -> "2022-01-15",
-                "partnerDetailsDateOfLeaving" -> "2028-12-31",
+                "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+                "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+                "partnerDetailsDateOfJoining"         -> "2022-01-15",
+                "partnerDetailsDateOfLeaving"         -> "2028-12-31",
                 "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                   "mgdRegNumber" -> "XWM00000001762",
                   "correspondenceAddress" -> Json.obj(
@@ -547,9 +553,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val data = Json.obj(
           "partners" -> Json.arr(
             Json.obj(
-              "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-              "partnerDetailsDateOfJoining" -> "2022-01-15",
-              "partnerDetailsDateOfLeaving" -> "2028-12-31",
+              "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+              "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+              "partnerDetailsDateOfJoining"         -> "2022-01-15",
+              "partnerDetailsDateOfLeaving"         -> "2028-12-31",
               "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                 "mgdRegNumber" -> "XWM00000001762",
                 "correspondenceAddress" -> Json.obj(
@@ -611,9 +618,10 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val data = Json.obj(
           "partners" -> Json.arr(
             Json.obj(
-              "partnerDetailsMgdRegNumber"  -> "XWM00000001762",
-              "partnerDetailsDateOfJoining" -> "2022-01-15",
-              "partnerDetailsDateOfLeaving" -> "2028-12-31",
+              "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
+              "partnerDetailsBusinessPartnerNumber" -> "0100049899",
+              "partnerDetailsDateOfJoining"         -> "2022-01-15",
+              "partnerDetailsDateOfLeaving"         -> "2028-12-31",
               "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
                 "mgdRegNumber" -> "XWM00000001762",
                 "correspondenceAddress" -> Json.obj(
@@ -671,6 +679,7 @@ object PartnerDetailsDataRequiredActionSpec {
 
   val partnerDetailsBusiness = PartnerDetails(
     mgdRegNumber           = "XWM00000001762",
+    businessPartnerNumber  = Some("0100049899"),
     dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
     dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
     solePropTitle          = None,
@@ -706,6 +715,7 @@ object PartnerDetailsDataRequiredActionSpec {
 
   val partnerDetailsSoleProprietor = PartnerDetails(
     mgdRegNumber           = "XWM00000001762",
+    businessPartnerNumber  = Some("0100049899"),
     dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
     dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
     solePropTitle          = Some("Mr"),

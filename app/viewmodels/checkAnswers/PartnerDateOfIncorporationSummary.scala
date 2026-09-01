@@ -25,21 +25,20 @@ import utils.DateTimeFormats.dateTimeFormat
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerDateOfIncorporationSummary  {
+object PartnerDateOfIncorporationSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDateOfIncorporationPage).map {
-      answer =>
+    answers.get(PartnerDateOfIncorporationPage).map { answer =>
 
-        implicit val lang: Lang = messages.lang
+      implicit val lang: Lang = messages.lang
 
-        SummaryListRowViewModel(
-          key     = "partnerDateOfIncorporation.checkYourAnswersLabel",
-          value   = ValueViewModel(answer.format(dateTimeFormat())),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.PartnerDateOfIncorporationController.onPageLoad().url)
-              .withVisuallyHiddenText(messages("partnerDateOfIncorporation.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "partnerDateOfIncorporation.checkYourAnswersLabel",
+        value = ValueViewModel(answer.format(dateTimeFormat())),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.PartnerDateOfIncorporationController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerDateOfIncorporation.change.hidden"))
         )
+      )
     }
 }
