@@ -19,6 +19,7 @@ package viewmodels.checkAnswers.partner
 import config.FrontendAppConfig
 import controllers.partner.routes
 import models.UserAnswers
+import pages.partner.PartnerDetailsChangedPage
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsDateOfJoiningPage, PartnerDetailsDateOfLeavingPage, PartnerDetailsPage, PartnerDetailsTradingNamePage}
 import play.api.i18n.Messages
 
@@ -181,7 +182,7 @@ object PartnerDetailsViewModel {
       showNoPartnersMessage      = !hasPartners,
       showMinimumPartnersMessage = hasPartners && activePartnerCount < 3,
       showMaximumPartnersMessage = rows.size >= maxPartners,
-      showSubmitMessage          = hasPartners
+      showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage()).contains(true)
     )
   }
 }

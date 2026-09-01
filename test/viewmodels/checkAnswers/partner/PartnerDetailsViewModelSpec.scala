@@ -18,6 +18,7 @@ package viewmodels.checkAnswers.partner
 
 import base.SpecBase
 import config.FrontendAppConfig
+import pages.partner.PartnerDetailsChangedPage
 import pages.partnerdetails.*
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
@@ -476,6 +477,9 @@ class PartnerDetailsViewModelSpec extends SpecBase {
           )
           .success
           .value
+          .set(PartnerDetailsChangedPage(), true)
+          .success
+          .value
 
       val viewModel =
         PartnerDetailsViewModel.from(
@@ -497,6 +501,9 @@ class PartnerDetailsViewModelSpec extends SpecBase {
               PartnerDetailsPage(index),
               s"XWM0000000176$index"
             )
+            .success
+            .value
+            .set(PartnerDetailsChangedPage(), true)
             .success
             .value
         }
@@ -521,6 +528,9 @@ class PartnerDetailsViewModelSpec extends SpecBase {
               PartnerDetailsPage(index),
               s"XWM0000000${index.toString.reverse.padTo(4, '0').reverse}"
             )
+            .success
+            .value
+            .set(PartnerDetailsChangedPage(), true)
             .success
             .value
         }
@@ -558,7 +568,33 @@ class PartnerDetailsViewModelSpec extends SpecBase {
       viewModel.showMaximumPartnersMessage mustBe false
     }
 
-    "show submit message when at least one partner exists" in {
+    "show submit message when partner details have been changed" in {
+
+      val answers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsPage(0),
+            "XWM00000001762"
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsChangedPage(),
+            true
+          )
+          .success
+          .value
+
+      val viewModel =
+        PartnerDetailsViewModel.from(
+          answers,
+          frontendAppConfig
+        )
+
+      viewModel.showSubmitMessage mustBe true
+    }
+
+    "not show submit message when partner details have not been changed" in {
 
       val answers =
         emptyUserAnswers
@@ -575,7 +611,7 @@ class PartnerDetailsViewModelSpec extends SpecBase {
           frontendAppConfig
         )
 
-      viewModel.showSubmitMessage mustBe true
+      viewModel.showSubmitMessage mustBe false
     }
 
     "not show submit message when there are no partners" in {
