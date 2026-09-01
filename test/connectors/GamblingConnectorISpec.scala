@@ -68,6 +68,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         """
           |{"partners":[{
           |  "mgdRegNumber": "XWM00000001762",
+          |  "businessPartnerNumber" : "0100049899",
           |  "dateOfJoining": "2022-01-15",
           |  "dateOfLeaving": "2028-12-31",
           |  "businessName": "XYZ Consulting Ltd",
@@ -701,6 +702,7 @@ object GamblingConnectorISpec {
     partners = Seq(
       PartnerDetails(
         mgdRegNumber           = "XWM00000001762",
+        businessPartnerNumber  = Some("0100049899"),
         dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
         dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
         solePropTitle          = None,
