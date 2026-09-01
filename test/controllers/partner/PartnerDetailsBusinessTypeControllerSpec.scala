@@ -67,7 +67,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsBusinessTypePage(index), Corporatebody.code)
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
           .success
           .value
 
@@ -124,7 +124,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsBusinessTypePage(index), Corporatebody.code)
+            .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
             .success
             .value
 

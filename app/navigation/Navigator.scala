@@ -166,7 +166,6 @@ class Navigator @Inject() () {
     case PartnerDetailsBusinessTypePage(index) =>
       userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
 
-
     // License and Premises Details
     case LicenceNumberPage =>
       _ => controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
@@ -460,7 +459,6 @@ class Navigator @Inject() () {
   private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
-      .flatMap(BusinessType.fromCode)
       .fold(routes.SystemErrorController.onPageLoad()) {
         case BusinessType.Corporatebody =>
           // TODO: should go to Change corporate body name

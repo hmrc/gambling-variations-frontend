@@ -25,7 +25,7 @@ import pages.*
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsSoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Reads.JsArrayReads
-import play.api.libs.json.{JsArray, JsPath, Reads}
+import play.api.libs.json.{JsArray, Reads}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController

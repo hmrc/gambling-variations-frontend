@@ -42,13 +42,13 @@ class PartnerDetailsBusinessTypeSummarySpec extends SpecBase {
     "must return the correct row when an answer exists" in {
       val answers =
         emptyUserAnswers
-          .set(PartnerDetailsBusinessTypePage(index), Corporatebody.code)
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
           .success
           .value
 
       val expectedValue = ValueViewModel(
         HtmlContent(
-          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.${Corporatebody.code}"))
+          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.${Corporatebody.toString}"))
         )
       )
 

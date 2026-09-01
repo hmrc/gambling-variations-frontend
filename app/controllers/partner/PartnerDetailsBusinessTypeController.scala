@@ -52,7 +52,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(index)).flatMap(BusinessType.fromCode) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
       case None               => form
       case Some(businessType) => form.fill(businessType)
     }
@@ -68,7 +68,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         businessType =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(index), businessType.code))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(index), businessType))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(index), mode, updatedAnswers))
       )
