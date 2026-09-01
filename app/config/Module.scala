@@ -35,6 +35,7 @@ class Module extends AbstractModule {
     bind(classOf[BusinessDetailsDataRequiredAction]).to(classOf[BusinessDetailsDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[OtherTradeClassDataRequiredAction]).to(classOf[OtherTradeClassDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[PartnerDetailsDataRequiredAction]).to(classOf[PartnerDetailsDataRequiredActionImpl]).asEagerSingleton()
+    bind(classOf[LicencesPremisesDataRequiredAction]).to(classOf[LicencesPremisesDataRequiredActionImpl]).asEagerSingleton()
     // For session based storage instead of cred based, change to SessionIdentifierAction
     bind(classOf[AuthorisedAction]).to(classOf[DefaultAuthorisedAction]).asEagerSingleton()
 

@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import uk.gov.hmrc.hmrcfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import views.html.components.FullWidthMainContent
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 
 @this(
@@ -28,9 +29,11 @@
     alphaBanner: StandardAlphaBanner,
     hmrcStandardPage: HmrcStandardPage,
     stylesheets: Stylesheets,
+    twoThirdsMainContent: TwoThirdsMainContent,
+    fullWidthMainContent: FullWidthMainContent
 )
 
-@(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = true, showHmrcBanner: Boolean = false)(contentBlock: Html)(implicit rh: RequestHeader, messages: Messages)
+@(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = true, showHmrcBanner: Boolean = false, isFullWidth: Boolean = false)(contentBlock: Html)(implicit rh: RequestHeader, messages: Messages)
 
 @head = {
 
@@ -60,7 +63,14 @@
 @hmrcStandardPage(HmrcStandardPageParams(
     pageTitle = Some(pageTitle),
     templateOverrides = TemplateOverrides(
-        additionalHeadBlock = Some(head)
+        additionalHeadBlock = Some(head),
+        mainContentLayout = Some(
+            if (isFullWidth) {
+            fullWidthMainContent(_)
+            } else {
+            twoThirdsMainContent(_)
+            }
+        )
     ),
     serviceURLs = ServiceURLs(
         serviceUrl = Some(appConfig.gamblingManagementHomeUrl),

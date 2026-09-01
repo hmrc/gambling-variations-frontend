@@ -27,7 +27,6 @@ import pages.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoPage
 import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -118,8 +117,6 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
     }
 
     "onSubmit" - {
-
-      def onwardRoute: Call = Call("GET", "/foo")
 
       "must remove NINO, update UserAnswers and redirect when 'Yes' (true) is submitted" in {
 

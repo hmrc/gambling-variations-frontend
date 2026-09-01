@@ -30,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -87,10 +88,16 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setPartnerDetails(partnersDetails: PartnersDetails, answers: UserAnswers): Try[UserAnswers] = partnersDetails.partners.zipWithIndex
-    .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
-      buildPartnerDetails(partnerDetails, index, userAnswers)
-    }
+  private def setPartnerDetails(
+    partnersDetails: PartnersDetails,
+    answers: UserAnswers
+  ): Try[UserAnswers] =
+    partnersDetails.partners
+      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+      .zipWithIndex
+      .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
+        buildPartnerDetails(partnerDetails, index, userAnswers)
+      }
 
   private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
 
@@ -129,7 +136,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     for {
       updatedAnswers <- userAnswers
       updatedAnswers <- setIfDefinedBusinessDetails(partnerDetails, updatedAnswers, index)
-
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessPartnerNumberPage(index), partnerDetails.businessPartnerNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfJoiningPage(index), partnerDetails.dateOfJoining)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfLeavingPage(index), partnerDetails.dateOfLeaving)
 
@@ -153,10 +160,10 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
   private def setIfDefinedBusinessDetails(partnerDetails: PartnerDetails, answers: UserAnswers, index: Int): Try[UserAnswers] = for {
     updatedAnswers <- answers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
     updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(index), partnerDetails.tradingName)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), partnerDetails.businessType)
+    businessType = partnerDetails.businessType.flatMap(BusinessType.fromCode)
+    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), businessType)
 
-    updatedAnswers <- partnerDetails.businessType
-                        .flatMap(BusinessType.fromCode)
+    updatedAnswers <- businessType
                         // If BusinessType is None, stop and return updatedAnswers
                         .fold(Try(updatedAnswers)) {
                           case BusinessType.Soleproprietor =>

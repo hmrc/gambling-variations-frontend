@@ -26,6 +26,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
 
   private val partnerModel = PartnerDetails(
     mgdRegNumber           = "XWM00000001762",
+    businessPartnerNumber  = Some("0100049899"),
     dateOfJoining          = Some(LocalDate.of(2022, 1, 15)),
     dateOfLeaving          = Some(LocalDate.of(2028, 12, 31)),
     solePropTitle          = Some("Mr"),
@@ -66,6 +67,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
 
   private val partnerJson = Json.obj(
     "mgdRegNumber"           -> "XWM00000001762",
+    "businessPartnerNumber"  -> "0100049899",
     "dateOfJoining"          -> "2022-01-15",
     "dateOfLeaving"          -> "2028-12-31",
     "solePropTitle"          -> "Mr",
@@ -125,6 +127,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
         partners = Seq(
           PartnerDetails(
             mgdRegNumber           = "XWM00000001762",
+            businessPartnerNumber  = None,
             dateOfJoining          = None,
             dateOfLeaving          = None,
             solePropTitle          = None,

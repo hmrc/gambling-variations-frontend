@@ -19,6 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import models.*
+import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
 import pages.businessaddress.*
 import pages.businessname.*
@@ -28,6 +29,7 @@ import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
 import pages.*
+import pages.licencespremises.LicenceNumberPage
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -38,6 +40,7 @@ class NavigatorSpec extends SpecBase {
   private val emptyAnswers = UserAnswers("id")
   // TODO: This index is hardcoded but it should come from the Partner Details list selection
   private val index: Int = 0
+
   "Navigator" - {
 
     "in Normal mode" - {
@@ -209,6 +212,12 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(RemovePreviousRegNumberPage, NormalMode, emptyAnswers) mustBe
           routes.PreviousRegistrationNumbersListController.onPageLoad()
       }
+
+      "should route LicencesNumberPage to LicencesNumberController" in {
+        navigator.nextPage(LicenceNumberPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+      }
+
     }
 
     "normal mode correspondence details navigation" - {
@@ -491,7 +500,7 @@ class NavigatorSpec extends SpecBase {
           routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
 
-      "should route CorrespondenceChangeAddrScreenerPage to PageNotFound when changing to a different UK address" in {
+      "should route CorrespondenceChangeAddrScreenerPage to Address Lookup when changing to a different UK address" in {
         val answers =
           emptyAnswers
             .set(
@@ -512,7 +521,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.PageNotFoundController.onPageLoad()
+          routes.AddressLookupController.initialise()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when editing a UK address" in {
@@ -539,7 +548,7 @@ class NavigatorSpec extends SpecBase {
           routes.CorrespondenceUKAddressController.onPageLoad()
       }
 
-      "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when changing from a non-UK address" in {
+      "should route CorrespondenceChangeAddrScreenerPage to Address Lookup when changing from a non-UK address" in {
         val answers =
           emptyAnswers
             .set(CorrespondenceChangeAddrScreenerPage, ChangeToUkAddress)
@@ -547,7 +556,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          routes.AddressLookupController.initialise()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when editing a non-UK address" in {
@@ -1074,6 +1083,22 @@ class NavigatorSpec extends SpecBase {
 
       "should route VatRegistrationNumberYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(VatRegistrationNumberYesNoPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to the correct Partner Details controller when answered" in {
+        val businessData = Json.obj(
+          "partners" -> Json.arr(
+            Json.obj("partnerDetailsBusinessType" -> 2)
+          )
+        )
+
+        navigator.nextPage(PartnerDetailsBusinessTypePage(index), NormalMode, emptyAnswers.copy(data = businessData)) mustBe
+          routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Corporatebody)
+      }
+
+      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsBusinessTypePage(index), NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
 
