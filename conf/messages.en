@@ -183,7 +183,7 @@ changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body’
 changeBusinessName.error.invalid.llp = The limited liability partnership’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 
 changeBusinessName.error.length.soleproprietor = The sole proprietor’s name must be 160 characters or less
-changeBusinessName.error.length.partnership = The partnership’s name must be 34 characters or less
+changeBusinessName.error.length.partnership = The partnership’s name must be 35 characters or less
 changeBusinessName.error.length.corporatebody = The corporate body’s name must be 160 characters or less
 changeBusinessName.error.length.unincorporatedbody = The unincorporated body’s name must be 160 characters or less
 changeBusinessName.error.length.llp = The limited liability partnership’s name must be 160 characters or less
@@ -517,7 +517,7 @@ correspondenceUKAddress.heading = Enter the correspondence address
 correspondenceUKAddress.addressLine1 = Address line 1
 correspondenceUKAddress.addressLine2 = Address line 2
 correspondenceUKAddress.townOrCity = Town or city
-correspondenceUKAddress.County = County (optional)
+correspondenceUKAddress.County = County
 correspondenceUKAddress.Postcode = Postcode
 correspondenceUKAddress.checkYourAnswersLabel = Correspondence Address
 correspondenceUKAddress.addressLine1.error.required = Enter address line 1 for the correspondence address
@@ -618,8 +618,8 @@ correspondenceAddressSelectAddress.submit = Continue
 correspondenceAddressSelectAddress.searchAgain = Search again
 correspondenceAddressSelectAddress.manualAddress = Enter the address manually
 
-correspondenceAddressLookupAddress.title = Enter the correspondence address
-correspondenceAddressLookupAddress.heading = Enter the correspondence address
+correspondenceAddressLookupAddress.title = Find the correspondence address
+correspondenceAddressLookupAddress.heading = Find the correspondence address
 correspondenceAddressLookupAddress.filter = Property name or number (optional)
 correspondenceAddressLookupAddress.postcode = Postcode
 correspondenceAddressLookupAddress.submit = Find address
@@ -635,6 +635,7 @@ correspondenceAddressConfirmAddress.searchAgain = Search again
 correspondenceAddressConfirmAddress.confirmChange = By confirming this change, you agree that the information you have given is complete and correct.
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address
+correspondenceAddressManualAddressUk.county = County
 partnerAddFaxNumberYesNo.title = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.heading = Do you want to add a fax number for the partner?
 partnerAddFaxNumberYesNo.checkYourAnswersLabel = Do you want to add a fax number for the partner?
@@ -855,6 +856,15 @@ vatRegistrationNumberYesNo.heading = Do you want to add a VAT registration numbe
 vatRegistrationNumberYesNo.checkYourAnswersLabel = Do you want to add a VAT registration number for the partner?
 vatRegistrationNumberYesNo.error.required = Select yes to add a VAT registration number for the partner
 vatRegistrationNumberYesNo.change.hidden = do you want to add a VAT registration number for the partner
+
+# Licences & Premises
+licenceNumber.title = What is the Gambling Commission operating or personal licence number?
+licenceNumber.heading = What is the Gambling Commission operating or personal licence number?
+licenceNumber.checkYourAnswersLabel = What is the Gambling Commission operating or personal licence number?
+licenceNumber.hint = It is 23 characters long, including the hyphens, like 003-123456-N-987654-001
+licenceNumber.error.required = Enter the Gambling Commission operating or personal licence number
+licenceNumber.error.invalidCharacters = The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
+licenceNumber.error.invalidFormat = The Gambling Commission operating or personal licence number must be in the correct format
 
 partnerDetailsBusinessType.title = What type of business is the partner?
 partnerDetailsBusinessType.heading = What type of business is the partner?

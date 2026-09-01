@@ -27,6 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.BusinessTypeKeyBuilder
 import utils.FlagsUtil.checkIfChanged
 import views.html.{ChangeBusinessNameView, SoleProprietorNameView}
 
@@ -48,12 +49,6 @@ class ChangeBusinessNameController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
-
-  private def headingKeyFor(businessType: BusinessType): String =
-    s"changeBusinessName.heading.${businessType.toString}"
-
-  private def titleKeyFor(businessType: BusinessType): String =
-    s"changeBusinessName.title.${businessType.toString}"
 
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -79,8 +74,8 @@ class ChangeBusinessNameController @Inject() (
                   val form = formProvider(businessType)
                   val preparedForm = form.fill(businessName)
 
-                  val headingKey = headingKeyFor(businessType)
-                  val titleKey = titleKeyFor(businessType)
+                  val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
+                  val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
 
                   Ok(view(preparedForm, mode, businessType, headingKey, titleKey))
                 }
@@ -123,8 +118,8 @@ class ChangeBusinessNameController @Inject() (
                     } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
                 )
             case businessType => {
-              val headingKey = headingKeyFor(businessType)
-              val titleKey = titleKeyFor(businessType)
+              val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
+              val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
 
               formProvider(businessType)
                 .bindFromRequest()

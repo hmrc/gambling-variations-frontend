@@ -177,7 +177,7 @@ changeBusinessName.heading.llp = Beth yw enw’r bartneriaeth atebolrwydd cyfyng
 
 changeBusinessName.error.required.partnership = Nodwch enw’r bartneriaeth
 changeBusinessName.error.invalid.partnership = Mae’n rhaid i enw’r bartneriaeth gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
-changeBusinessName.error.length.partnership = Mae’n rhaid i enw’r bartneriaeth fod yn 34 o gymeriadau neu lai
+changeBusinessName.error.length.partnership = Mae’n rhaid i enw’r bartneriaeth fod yn 35 o gymeriadau neu lai
 
 changeBusinessName.error.required.corporatebody = Nodwch enw’r corff corfforaethol
 changeBusinessName.error.invalid.corporatebody = Mae’n rhaid i enw’r corff corfforaethol gynnwys y llythrennau a i z, y rhifau 0 i 9, bylchau, cysylltnodau a chollnodau yn unig
@@ -245,3 +245,12 @@ partnerDetailsBusinessType.heading = cy: What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = cy: What type of business is the partner?
 partnerDetailsBusinessType.error.required = cy: Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = cy: What type of business is the partner?
+
+# Licences & Premises
+licenceNumber.title = cy: What is the Gambling Commission operating or personal licence number?
+licenceNumber.heading = cy:  What is the Gambling Commission operating or personal licence number?
+licenceNumber.checkYourAnswersLabel = cy:  What is the Gambling Commission operating or personal licence number?
+licenceNumber.hint = cy: It is 23 characters long, including the hyphens, like 003-123456-N-987654-001
+licenceNumber.error.required = cy:  Enter the Gambling Commission operating or personal licence number
+licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
+licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
