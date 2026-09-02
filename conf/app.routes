@@ -285,6 +285,5 @@ GET     /change-registration-details/partner-details/continue              contr
 GET     /change-registration-details/partner-details/:partnerNumber/remove  controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
 GET     /change-registration-details/partner-details/:partnerNumber         controllers.partner.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
 
-
-GET        /change-registration-details/partner-details/date-of-joining                  controllers.PartnerDetailsAddDateOfJoiningPartnershipController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/partner-details/date-of-joining                  controllers.PartnerDetailsAddDateOfJoiningPartnershipController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/date-of-joining                  controllers.partner.PartnerDetailsAddDateOfJoiningPartnershipController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/date-of-joining                  controllers.partner.PartnerDetailsAddDateOfJoiningPartnershipController.onSubmit(mode: Mode = NormalMode)

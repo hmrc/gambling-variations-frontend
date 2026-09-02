@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.partner
 
 import forms.mappings.Mappings
 import play.api.data.Form
@@ -25,13 +25,21 @@ import javax.inject.Inject
 
 class PartnerDetailsAddDateOfJoiningPartnershipFormProvider @Inject() extends Mappings {
 
-  def apply()(implicit messages: Messages): Form[LocalDate] =
+  def apply(dateOfJoining: LocalDate)(implicit messages: Messages): Form[LocalDate] = {
+    val twoWeeks = dateOfJoining.plusDays(14)
+
     Form(
       "value" -> localDate(
         invalidKey     = "partnerDetailsAddDateOfJoiningPartnership.error.invalid",
         allRequiredKey = "partnerDetailsAddDateOfJoiningPartnership.error.required.all",
         twoRequiredKey = "partnerDetailsAddDateOfJoiningPartnership.error.required.two",
         requiredKey    = "partnerDetailsAddDateOfJoiningPartnership.error.required"
+      ).verifying(
+        messages("partnerDetailsAddDateOfJoiningPartnership.error.invalid.range", dateOfJoining, twoWeeks),
+        date =>
+          (date.isAfter(dateOfJoining) || date.isEqual(dateOfJoining)) &&
+            (date.isBefore(twoWeeks) || date.isEqual(twoWeeks))
       )
     )
+  }
 }
