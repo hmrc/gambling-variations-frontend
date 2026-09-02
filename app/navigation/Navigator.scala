@@ -161,6 +161,8 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
+    case PartnerDetailsAddTradingNameYesNoPage(index) =>
+      userAnswers => navigatePartnerAddTradingNameYesNoPage(index)(userAnswers)
     case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
       _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
 
@@ -454,6 +456,19 @@ class Navigator @Inject() () {
         case true =>
           // Should go to Trading name
           controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerAddTradingNameYesNoPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsAddTradingNameYesNoPage(index))
+      .map {
+        case false =>
+          // Should go to Add/change trading name
+          controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad()
+        case true =>
+          // Should go to Is the partner's business incorporated in the UK? or PT-UTR - UTR Taxpayer Reference
+          controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 

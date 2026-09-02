@@ -901,3 +901,10 @@ partnerDetailsBusinessType.heading = What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
+
+
+partnerDetailsAddTradingNameYesNo.title = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.heading = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
+partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?

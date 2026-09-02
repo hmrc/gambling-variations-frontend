@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package pages.partner
 
-import models.UserAnswers
-import play.api.libs.json.JsArray
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-object PartnerUtils:
-  extension (userAnswers: UserAnswers)
-    def getPartnersSize: Int = (userAnswers.data \ "partners")
-      .validate[JsArray]
-      .asOpt
-      .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
+case class PartnerDetailsAddTradingNameYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-    // TODO: this has to be fixed with the indexing ticket
-    def addNewPartnerIndex(): Int = getPartnersSize
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
+
+  override def toString: String = "partnerDetailsAddTradingNameYesNo"
+}
