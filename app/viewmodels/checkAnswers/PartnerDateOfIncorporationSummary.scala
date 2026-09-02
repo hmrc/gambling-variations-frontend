@@ -16,9 +16,8 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.UserAnswers
-import pages.PartnerDateOfIncorporationPage
+import pages.partner.PartnerDateOfIncorporationPage
 import play.api.i18n.{Lang, Messages}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormats.dateTimeFormat
@@ -27,8 +26,8 @@ import viewmodels.implicits.*
 
 object PartnerDateOfIncorporationSummary {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDateOfIncorporationPage).map { answer =>
+  def row(answers: UserAnswers, index: Int)(implicit messages: Messages): Option[SummaryListRow] =
+    answers.get(PartnerDateOfIncorporationPage(index)).map { answer =>
 
       implicit val lang: Lang = messages.lang
 
@@ -36,7 +35,7 @@ object PartnerDateOfIncorporationSummary {
         key   = "partnerDateOfIncorporation.checkYourAnswersLabel",
         value = ValueViewModel(answer.format(dateTimeFormat())),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.PartnerDateOfIncorporationController.onPageLoad().url)
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDateOfIncorporationController.onPageLoad().url)
             .withVisuallyHiddenText(messages("partnerDateOfIncorporation.change.hidden"))
         )
       )

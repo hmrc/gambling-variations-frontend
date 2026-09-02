@@ -891,7 +891,7 @@ partnerDetails.addPartner.error.required = Select yes if you want to add a partn
 
 partnerDateOfIncorporation.title = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.heading = When was the partner’s date of incorporation?
-partnerDateOfIncorporation.hint = For example, 27 3 2007.
+partnerDateOfIncorporation.hint = For example, 27 3 2007
 partnerDateOfIncorporation.checkYourAnswersLabel = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.error.required.all = Enter a date of incorporation for the partner
 partnerDateOfIncorporation.error.required.two = Date of incorporation must include a {0} and {1}

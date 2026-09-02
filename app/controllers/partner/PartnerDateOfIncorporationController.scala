@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerDateOfIncorporationFormProvider
-import javax.inject.Inject
+import forms.partner.PartnerDateOfIncorporationFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.PartnerDateOfIncorporationPage
+import pages.partner.PartnerDateOfIncorporationPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.PartnerDateOfIncorporationView
+import views.html.partner.PartnerDateOfIncorporationView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerDateOfIncorporationController @Inject() (
@@ -44,11 +44,13 @@ class PartnerDateOfIncorporationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private val index: Int = 0
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val form = formProvider()
 
-    val preparedForm = request.userAnswers.get(PartnerDateOfIncorporationPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDateOfIncorporationPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -66,9 +68,9 @@ class PartnerDateOfIncorporationController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDateOfIncorporationPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDateOfIncorporationPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDateOfIncorporationPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDateOfIncorporationPage(index), mode, updatedAnswers))
       )
   }
 }
