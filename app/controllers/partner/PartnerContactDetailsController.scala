@@ -30,7 +30,7 @@ import views.html.partner.PartnerContactDetailsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import controllers.partner.PartnerUtils.getPartnersSize
+import utils.PartnerUtils.getPartnersSize
 
 class PartnerContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,

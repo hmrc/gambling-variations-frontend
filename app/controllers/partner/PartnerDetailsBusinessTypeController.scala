@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.addNewPartnerIndex
+import utils.PartnerUtils.addNewPartnerIndex
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator

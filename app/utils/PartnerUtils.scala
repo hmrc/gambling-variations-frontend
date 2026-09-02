@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package utils
 
 import models.UserAnswers
 import play.api.libs.json.{JsArray, JsObject}
 
 object PartnerUtils:
+
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  def interimIndex: Int = 0
 
   extension (userAnswers: UserAnswers)
 

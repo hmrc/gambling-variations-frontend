@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getPartnersSize
+import utils.PartnerUtils.getPartnersSize
 import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator

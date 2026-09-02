@@ -28,7 +28,7 @@ class PartnerAddFaxNumberYesNoSummarySpec extends SpecBase {
   lazy val app: Application = applicationBuilder().build()
   implicit val messages: Messages = this.messages(app)
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  // TODO: Interim solution - will be refactored with the indexing ticket
   private val index: Int = 0
 
   "PartnerAddFaxNumberYesNoSummary" - {

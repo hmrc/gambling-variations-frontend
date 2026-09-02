@@ -17,7 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
-import controllers.partner.PartnerUtils.addNewPartnerIndex
+import utils.PartnerUtils.addNewPartnerIndex
 import controllers.partner.routes.PartnerDetailsBusinessTypeController
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
 import models.BusinessType.Corporatebody

@@ -475,7 +475,7 @@ class Navigator @Inject() () {
   private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
-      .fold(routes.SystemErrorController.onPageLoad())(routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
+      .fold(routes.SystemErrorController.onPageLoad())(controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

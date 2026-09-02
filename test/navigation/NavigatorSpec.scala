@@ -38,7 +38,7 @@ class NavigatorSpec extends SpecBase {
 
   private val navigator = new Navigator
   private val emptyAnswers = UserAnswers("id")
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  // TODO: Interim solution - will be refactored with the indexing ticket
   private val index: Int = 0
 
   "Navigator" - {
@@ -1094,7 +1094,7 @@ class NavigatorSpec extends SpecBase {
         )
 
         navigator.nextPage(PartnerDetailsBusinessTypePage(index), NormalMode, emptyAnswers.copy(data = businessData)) mustBe
-          routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Corporatebody)
+          controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Corporatebody)
       }
 
       "should route PartnerDetailsBusinessTypePage to SystemError when unanswered" in {

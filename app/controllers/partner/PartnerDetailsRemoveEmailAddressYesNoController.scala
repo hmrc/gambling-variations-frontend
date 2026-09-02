@@ -33,7 +33,7 @@ import views.html.partner.PartnerDetailsRemoveEmailAddressYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import controllers.partner.PartnerUtils.getPartnersSize
+import utils.PartnerUtils.getPartnersSize
 
 class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
   override val messagesApi: MessagesApi,

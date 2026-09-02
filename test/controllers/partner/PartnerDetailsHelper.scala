@@ -21,7 +21,7 @@ import play.api.mvc.Call
 
 trait PartnerDetailsHelper {
 
-  val index: Int = 0
+  val index: Int = utils.PartnerUtils.interimIndex
 
   val mgdRegNumber: String = "XGM00000001761"
   val testFaxNumber: String = "0123456789"

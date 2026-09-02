@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package utils
 
 import base.SpecBase
-import controllers.partner.PartnerUtils.*
+import utils.PartnerUtils.*
 import models.UserAnswers
 import play.api.libs.json.Json
 
