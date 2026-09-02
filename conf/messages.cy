@@ -240,6 +240,12 @@ partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a Nati
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
 
+partnerDetailsBusinessType.title = cy: What type of business is the partner?
+partnerDetailsBusinessType.heading = cy: What type of business is the partner?
+partnerDetailsBusinessType.checkYourAnswersLabel = cy: What type of business is the partner?
+partnerDetailsBusinessType.error.required = cy: Select the type of business for the partner
+partnerDetailsBusinessType.change.hidden = cy: What type of business is the partner?
+
 # Licences & Premises
 licenceNumber.title = cy: What is the Gambling Commission operating or personal licence number?
 licenceNumber.heading = cy:  What is the Gambling Commission operating or personal licence number?

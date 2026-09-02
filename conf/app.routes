@@ -272,6 +272,9 @@ POST       /change-registration-details/partner-details/national-insurance-numbe
 GET        /change-registration-details/partner-details/vat-registration-number-yes-no               controllers.partner.VatRegistrationNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/vat-registration-number-yes-no               controllers.partner.VatRegistrationNumberYesNoController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/partner-details/business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onSubmit(mode: Mode = NormalMode)
 

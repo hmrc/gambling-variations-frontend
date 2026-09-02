@@ -17,15 +17,15 @@
 package controllers
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getPartnersSize
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
-import models.{BusinessType, Mode, UserAnswers}
+import models.{BusinessType, Mode}
 import navigation.Navigator
 import pages.*
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsSoleProprietorPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Reads.JsArrayReads
-import play.api.libs.json.{JsArray, Reads}
+import play.api.libs.json.Reads
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -50,6 +50,11 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
+
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
 
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -107,14 +112,5 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
       } getOrElse Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
     }
   }
-
-  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
-     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
-     Lack of it implies data is ONLY in the cache and has not been submitted yet.
-   */
-  private def getPartnersSize(userAnswers: UserAnswers) = (userAnswers.data \ "partners")
-    .validate[JsArray]
-    .asOpt
-    .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 
 }

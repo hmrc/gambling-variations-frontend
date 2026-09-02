@@ -889,6 +889,12 @@ partnerDetails.mustContinue = You must continue to the change registration detai
 partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner
 partnerDetails.addPartner.error.required = Select yes if you want to add a partner
 
+partnerDetailsBusinessType.title = What type of business is the partner?
+partnerDetailsBusinessType.heading = What type of business is the partner?
+partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
+partnerDetailsBusinessType.error.required = Select the type of business for the partner
+partnerDetailsBusinessType.change.hidden = What type of business is the partner?
+
 partnerDateOfIncorporation.title = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.heading = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.hint = For example, 27 3 2007

@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getPartnersSize
 import forms.partner.PartnerDateOfIncorporationFormProvider
 import models.Mode
 import navigation.Navigator
@@ -44,10 +45,9 @@ class PartnerDateOfIncorporationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val index: Int = 0
-
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
+    val index = getPartnersSize(request.userAnswers)
     val form = formProvider()
 
     val preparedForm = request.userAnswers.get(PartnerDateOfIncorporationPage(index)) match {
@@ -60,6 +60,7 @@ class PartnerDateOfIncorporationController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
+    val index = getPartnersSize(request.userAnswers)
     val form = formProvider()
 
     form

@@ -27,7 +27,6 @@ import pages.partner.ChangePartnerFaxNumberPage
 import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -97,7 +96,6 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar wi
     }
 
     "onSubmit" - {
-      def onwardRoute: Call = Call("GET", "/foo")
 
       "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
