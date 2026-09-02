@@ -15,24 +15,36 @@
  *@
 
 @import viewmodels.LegendSize.Large
+@import views.html.components._
+@import java.time.LocalDate
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukDateInput: GovukDateInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption,
+    paragraph: Paragraph,
+    h1: H1,
+    h2: H2,
+    h3: H3,
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, dateOfJoining: String, twoWeeksLater: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("partnerDetailsAddDateOfJoiningPartnership.title"))) {
 
-    @formHelper(action = routes.PartnerDetailsAddDateOfJoiningPartnershipController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partner.routes.PartnerDetailsAddDateOfJoiningPartnershipController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
         }
+
+        @caption(messages("changeRegistrationDetails.caption"))
+
+        //TODO
+        <p class="govuk-body">@messages("test", dateOfJoining, twoWeeksLater)</p>
 
         @govukDateInput(
             DateViewModel(
@@ -41,6 +53,7 @@
             )
             .withHint(HintViewModel(messages("partnerDetailsAddDateOfJoiningPartnership.hint")))
         )
+
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))
