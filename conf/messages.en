@@ -894,3 +894,9 @@ partnerDetailsBusinessType.heading = What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
+
+licenceDetailsLandlordLicenceYesNo.title = Are you a pub tenant whose landlord holds the alcohol licence?
+licenceDetailsLandlordLicenceYesNo.heading = Are you a pub tenant whose landlord holds the alcohol licence?
+licenceDetailsLandlordLicenceYesNo.checkYourAnswersLabel = Are you a pub tenant whose landlord holds the alcohol licence?
+licenceDetailsLandlordLicenceYesNo.error.required = Select yes if you are a pub tenant whose landlord holds the alcohol licence
+licenceDetailsLandlordLicenceYesNo.change.hidden = Are you a pub tenant whose landlord holds the alcohol licence?
