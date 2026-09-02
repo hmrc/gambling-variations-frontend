@@ -32,6 +32,7 @@ import views.html.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import controllers.partner.PartnerUtils.getPartnersSize
 
 class PartnerDetailsRemoveNationalInsuranceNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
@@ -47,12 +48,10 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
-  private val index: Int = 0
-
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val index = getPartnersSize(request.userAnswers)
 
     val preparedForm = request.userAnswers.get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index)) match {
       case None        => form
@@ -71,6 +70,8 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val index = getPartnersSize(request.userAnswers)
+
     form
       .bindFromRequest()
       .fold(
