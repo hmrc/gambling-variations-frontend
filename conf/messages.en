@@ -895,14 +895,8 @@ partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the 
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
 
-
-partnerDetailsIsBusinessIncorporated.title = Is the partner's business incorporated in the UK?
-partnerDetailsIsBusinessIncorporated.heading = Is the partner's business incorporated in the UK?
-partnerDetailsIsBusinessIncorporated.checkYourAnswersLabel = Is the partner's business incorporated in the UK?
-partnerDetailsIsBusinessIncorporated.error.required = Select yes if the partner's address is incorporated in the UK
-partnerDetailsIsBusinessIncorporated.change.hidden = Is the partner's business incorporated in the UK?
-partnerDetailsIsBusinessIncorporatedUk.title = Is the partner's business incorporated in the UK?
-partnerDetailsIsBusinessIncorporatedUk.heading = Is the partner's business incorporated in the UK?
-partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = Is the partner's business incorporated in the UK?
-partnerDetailsIsBusinessIncorporatedUk.error.required = Select yes if the partner's address is incorporated in the UK
-partnerDetailsIsBusinessIncorporatedUk.change.hidden = Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.title = Is the partner''s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.heading = Is the partner''s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = Is the partner''s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.error.required = Select yes if the partner''s address is incorporated in the UK
+partnerDetailsIsBusinessIncorporatedUk.change.hidden = Is the partner''s business incorporated in the UK?

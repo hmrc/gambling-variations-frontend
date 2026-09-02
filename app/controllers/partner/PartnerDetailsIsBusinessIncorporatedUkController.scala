@@ -17,13 +17,13 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getPartnersSize
 import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.JsArray
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -49,7 +49,7 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
   private val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     val preparedForm = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex)) match {
       case None        => form
@@ -60,7 +60,7 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     form
       .bindFromRequest()
@@ -73,10 +73,4 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
           } yield Redirect(navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex), mode, updatedAnswers))
       )
   }
-
-  // TODO delete, luca made extension object
-  private def getPartnersSize(userAnswers: UserAnswers): Int = (userAnswers.data \ "partners")
-    .validate[JsArray]
-    .asOpt
-    .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 }
