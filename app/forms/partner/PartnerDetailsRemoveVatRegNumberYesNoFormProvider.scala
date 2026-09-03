@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package forms.partner
 
-import models.UserAnswers
-import play.api.libs.json.JsArray
+import javax.inject.Inject
 
-object PartnerUtils:
-  extension (userAnswers: UserAnswers)
-    def getPartnersSize: Int = (userAnswers.data \ "partners")
-      .validate[JsArray]
-      .asOpt
-      .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
+import forms.mappings.Mappings
+import play.api.data.Form
 
-    // TODO: this has to be fixed with the indexing ticket
-    def addNewPartnerIndex(): Int = getPartnersSize
+class PartnerDetailsRemoveVatRegNumberYesNoFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("partnerDetailsRemoveVRNYesNo.error.required")
+    )
+}

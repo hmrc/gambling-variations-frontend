@@ -17,11 +17,13 @@
 package controllers.partner
 
 import controllers.actions.*
+import utils.PartnerUtils.getPartnersSize
 import controllers.routes
 import forms.partner.PartnerTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsTradingNamePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,11 +47,11 @@ class PartnerTradingNameController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val index: Int = 0
+      val index = request.userAnswers.getPartnersSize
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(partnerTradingName) =>
@@ -64,7 +66,7 @@ class PartnerTradingNameController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val index: Int = 0
+      val index = request.userAnswers.getPartnersSize
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(_) =>

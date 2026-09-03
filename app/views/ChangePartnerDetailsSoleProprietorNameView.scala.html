@@ -32,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages("soleProprietorName.title"))) {
 
-    @formHelper(action = routes.ChangePartnerDetailsBusinessNameController.onSubmit(BusinessType.Soleproprietor), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onSubmit(BusinessType.Soleproprietor), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

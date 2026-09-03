@@ -48,7 +48,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
 
     val form = formProvider(businessType)
 
-    // TODO to be removed later
+    // TODO: Interim solution - will be refactored with the indexing ticket
     val Index: Int = 0
 
     val businessData = Json.obj(
@@ -84,7 +84,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
     )
 
     lazy val changePartnerDetailsBusinessNameRoute =
-      routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Partnership).url
+      controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Partnership).url
 
   }
 
@@ -120,7 +120,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.ChangePartnerDetailsBusinessNameController.onPageLoad(BusinessType.Soleproprietor).url)
+          FakeRequest(GET, controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad(BusinessType.Soleproprietor).url)
 
         val result = route(application, request).value
 
@@ -207,7 +207,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
         val request =
           FakeRequest(
             POST,
-            routes.ChangePartnerDetailsBusinessNameController
+            controllers.partner.routes.ChangePartnerDetailsBusinessNameController
               .onSubmit(BusinessType.Soleproprietor)
               .url
           )
@@ -234,7 +234,7 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
         val request =
           FakeRequest(
             POST,
-            routes.ChangePartnerDetailsBusinessNameController
+            controllers.partner.routes.ChangePartnerDetailsBusinessNameController
               .onSubmit(BusinessType.Soleproprietor)
               .url
           )

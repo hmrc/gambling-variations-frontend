@@ -19,49 +19,54 @@ package controllers.partner
 import controllers.actions.*
 import utils.PartnerUtils.getPartnersSize
 import controllers.routes
-import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
+import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
-import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
+import pages.partner.PartnerDetailsRemoveVatRegNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
+import views.html.partner.PartnerDetailsRemoveVatRegNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
+class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerDetailsRemoveFaxNumberYesNoFormProvider,
+  formProvider: PartnerDetailsRemoveVatRegNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsRemoveFaxNumberYesNoView
+  view: PartnerDetailsRemoveVatRegNumberYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
+
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index = request.userAnswers.getPartnersSize
+    val newIndex = request.userAnswers.getPartnersSize
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveFaxNumberYesNoPage(index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
     request.userAnswers
-      .get(PartnerDetailsCorrespondenceFaxNumberPage(index)) match {
-      case Some(faxNumber) =>
-        Ok(view(preparedForm, mode, faxNumber))
+      .get(PartnerDetailsVrnPage(newIndex)) match {
+      case Some(vatRegNumber) =>
+        Ok(view(preparedForm, mode, vatRegNumber))
 
       case None =>
         Redirect(routes.JourneyRecoveryController.onPageLoad())
@@ -69,7 +74,7 @@ class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index = request.userAnswers.getPartnersSize
+    val newIndex = request.userAnswers.getPartnersSize
 
     form
       .bindFromRequest()
@@ -80,7 +85,7 @@ class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
               view(formWithErrors,
                    mode,
                    request.userAnswers
-                     .get(PartnerDetailsCorrespondenceFaxNumberPage(index))
+                     .get(PartnerDetailsVrnPage(newIndex))
                      .getOrElse("")
                   )
             )
@@ -88,13 +93,13 @@ class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- if (value) {
-                                Future.fromTry(request.userAnswers.remove(PartnerDetailsCorrespondenceFaxNumberPage(index)))
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsVrnPage(newIndex)))
                               } else {
                                 Future.apply(request.userAnswers)
                               }
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveFaxNumberYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceFaxNumberPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex), mode, updatedAnswers))
       )
   }
 }

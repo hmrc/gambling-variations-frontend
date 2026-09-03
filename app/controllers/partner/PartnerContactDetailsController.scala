@@ -30,6 +30,7 @@ import views.html.partner.PartnerContactDetailsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import utils.PartnerUtils.getPartnersSize
 
 class PartnerContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -45,15 +46,12 @@ class PartnerContactDetailsController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: Temp solution to multiple partners
-  // Upcoming ticket will identify partner by the `BusinessPartnerNumber`
-  private val PartnerIndex: Int = 0
-
   val form: Form[ContactNumber] = formProvider("partnerContactDetails")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val index = request.userAnswers.getPartnersSize
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsContactNumberPage(PartnerIndex)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsContactNumberPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -62,6 +60,7 @@ class PartnerContactDetailsController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val index = request.userAnswers.getPartnersSize
 
     val boundForm = form.bindFromRequest()
 
@@ -84,9 +83,9 @@ class PartnerContactDetailsController @Inject() (
       },
       value =>
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(PartnerIndex), value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(index), value))
           _              <- sessionRepository.set(updatedAnswers)
-        } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(PartnerIndex), mode, updatedAnswers))
+        } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(index), mode, updatedAnswers))
     )
   }
 }

@@ -38,7 +38,7 @@ class NavigatorSpec extends SpecBase {
 
   private val navigator = new Navigator
   private val emptyAnswers = UserAnswers("id")
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  // TODO: Interim solution - will be refactored with the indexing ticket
   private val index: Int = 0
 
   "Navigator" - {
@@ -1086,7 +1086,7 @@ class NavigatorSpec extends SpecBase {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to the correct Partner Details controller when answered" in {
+      "should route PartnerDetailsBusinessTypePage to the correct Partner Details controller when answered" in {
         val businessData = Json.obj(
           "partners" -> Json.arr(
             Json.obj("partnerDetailsBusinessType" -> 2)
@@ -1094,12 +1094,34 @@ class NavigatorSpec extends SpecBase {
         )
 
         navigator.nextPage(PartnerDetailsBusinessTypePage(index), NormalMode, emptyAnswers.copy(data = businessData)) mustBe
-          routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Corporatebody)
+          controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Corporatebody)
       }
 
-      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to SystemError when unanswered" in {
+      "should route PartnerDetailsBusinessTypePage to SystemError when unanswered" in {
         navigator.nextPage(PartnerDetailsBusinessTypePage(index), NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to PartnerDetailsRemoveVatRegNumberYesNoPage when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad()
+      }
+
+      "should route PartnerDetailsRemoveVatRegNumberYesNoPage to PartnerDetailsRemoveVatRegNumberYesNoPage when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad()
       }
 
     }

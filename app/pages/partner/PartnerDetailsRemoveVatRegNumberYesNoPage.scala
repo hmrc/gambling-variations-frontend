@@ -14,27 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package pages.partner
 
-import base.SpecBase
-import controllers.partner.PartnerUtils.*
-import models.UserAnswers
-import play.api.libs.json.Json
+import play.api.libs.json.JsPath
+import pages.QuestionPage
 
-class PartnerUtilsSpec extends SpecBase {
+case class PartnerDetailsRemoveVatRegNumberYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  "PartnerUtils" - {
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-    "lastPartnerIndex" - {
-      "must return 0 when no partners exist" in {
-        emptyUserAnswers.getPartnersSize mustBe 0
-      }
-
-      "must return size - 1 when partners exist" in {
-        val answers = UserAnswers("id", Json.obj("partners" -> Json.arr(Json.obj("name" -> "A"), Json.obj("name" -> "B"))))
-        answers.getPartnersSize mustBe 1
-      }
-    }
-
-  }
+  override def toString: String = "partnerDetailsRemoveVRNYesNo"
 }

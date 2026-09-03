@@ -857,6 +857,13 @@ vatRegistrationNumberYesNo.checkYourAnswersLabel = Do you want to add a VAT regi
 vatRegistrationNumberYesNo.error.required = Select yes to add a VAT registration number for the partner
 vatRegistrationNumberYesNo.change.hidden = do you want to add a VAT registration number for the partner
 
+partnerDetailsRemoveVRNYesNo.title = Are you sure you want to remove this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.heading = Are you sure you want to remove {0} as this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.error.required = Select yes if you want to remove this partner’s VAT registration number
+partnerDetailsRemoveVRNYesNo.change.hidden = Are you sure you want to remove this partner’s VAT registration number?
+
+
 # Licences & Premises
 licenceNumber.title = What is the Gambling Commission operating or personal licence number?
 licenceNumber.heading = What is the Gambling Commission operating or personal licence number?
