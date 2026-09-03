@@ -55,19 +55,18 @@ class PartnerDetailsVatRegistrationNumberViewSpec extends SpecBase {
       val doc: Document = render(form)
 
       // text
-      doc.title must include("What is the partner’s VAT registration number?")
+      doc.title must include(messages("partnerDetailsVatRegistrationNumber.title"))
 
-      doc.select(".govuk-caption-l").text mustEqual "Change registration details"
+      doc.select(".govuk-caption-l").text mustEqual messages("changeRegistrationDetails.caption")
 
-      doc.select(".govuk-fieldset__legend--l").text mustBe "What is the partner’s VAT registration number?"
+      doc.select(".govuk-fieldset__legend--l").text mustBe messages("partnerDetailsVatRegistrationNumber.heading")
 
       doc.select(s"label[for=$fieldName].govuk-visually-hidden").text mustBe
-        "What is the partner’s VAT registration number?"
+        messages("partnerDetailsVatRegistrationNumber.heading")
 
-      doc.select(".govuk-body").text must include("You can find it on their VAT registration certificate.")
+      doc.select(".govuk-body").text must include(messages("partnerDetailsVatRegistrationNumber.paragraph"))
 
-      doc.select(".govuk-hint").text mustBe
-        messages("It must be 9 digits long, and may have GB at the start, for example 123456789 or GB123456789")
+      doc.select(".govuk-hint").text mustBe messages("partnerDetailsVatRegistrationNumber.hint")
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
@@ -99,8 +98,8 @@ class PartnerDetailsVatRegistrationNumberViewSpec extends SpecBase {
       val doc: Document = render(form.bind(Map(fieldName -> "")))
 
       doc.select(".govuk-error-summary").size() mustEqual 1
-      doc.select(".govuk-error-summary").text must include("Enter the partner's VAT registration number")
-      doc.select(".govuk-error-message").text must include("Enter the partner's VAT registration number")
+      doc.select(".govuk-error-summary").text must include(messages("partnerDetailsVatRegistrationNumber.error.required"))
+      doc.select(".govuk-error-message").text must include(messages("partnerDetailsVatRegistrationNumber.error.required"))
     }
 
     "must render the length error for fewer than 9 characters" in new Setup {
@@ -108,7 +107,7 @@ class PartnerDetailsVatRegistrationNumberViewSpec extends SpecBase {
       val doc: Document = render(form.bind(Map(fieldName -> "12345678")))
 
       doc.select(".govuk-error-message").text must include(
-        "The VAT registration number must be 9 characters"
+        messages("partnerDetailsVatRegistrationNumber.error.length")
       )
     }
 
@@ -117,7 +116,7 @@ class PartnerDetailsVatRegistrationNumberViewSpec extends SpecBase {
       val doc: Document = render(form.bind(Map(fieldName -> "3538X8127")))
 
       doc.select(".govuk-error-message").text must include(
-        "The VAT registration number must only include numbers 1 to 9"
+        messages("partnerDetailsVatRegistrationNumber.error.invalid.characters")
       )
     }
 
@@ -126,7 +125,7 @@ class PartnerDetailsVatRegistrationNumberViewSpec extends SpecBase {
       // 353868127 is valid; 353868128 fails both the mod-97 and the total + 55 fallback checks
       val doc: Document = render(form.bind(Map(fieldName -> "353868128")))
 
-      doc.select(".govuk-error-message").text must include("Enter a real VAT registration number")
+      doc.select(".govuk-error-message").text must include(messages("partnerDetailsVatRegistrationNumber.error.invalid"))
     }
   }
 

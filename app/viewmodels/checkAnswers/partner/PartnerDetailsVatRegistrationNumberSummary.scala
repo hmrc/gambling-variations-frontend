@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partnerdetails.PartnerDetailsVatRegistrationNumberPage
+import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -26,8 +26,11 @@ import viewmodels.implicits.*
 
 object PartnerDetailsVatRegistrationNumberSummary {
 
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  private val index: Int = utils.PartnerUtils.interimIndex
+
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsVatRegistrationNumberPage).map { answer =>
+    answers.get(PartnerDetailsVrnPage(index)).map { answer =>
 
       SummaryListRowViewModel(
         key   = "partnerDetailsVatRegistrationNumber.checkYourAnswersLabel",
