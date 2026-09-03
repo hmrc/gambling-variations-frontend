@@ -973,3 +973,11 @@ partnerSoleProprietorDob.error.required = Date of birth must include a {0}
 partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
 partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
+
+licencesPremises.title = How will you provide premises addresses?
+licencesPremises.heading = How will you provide premises addresses?
+licencesPremises.online = Online
+licencesPremises.byPost = By post
+licencesPremises.checkYourAnswersLabel = How will you provide premises addresses?
+licencesPremises.error.required = Select how you will provide premises addresses
+licencesPremises.change.hidden = how you will provide premises addresses

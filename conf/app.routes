@@ -316,3 +316,6 @@ POST      /change-registration-details/partner-details/date-of-birth          co
 
 GET        /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/licences-premises/li-me                    controllers.LicencesPremisesController.onPageLoad()
+POST       /change-registration-details/licences-premises/li-me                    controllers.LicencesPremisesController.onSubmit()
