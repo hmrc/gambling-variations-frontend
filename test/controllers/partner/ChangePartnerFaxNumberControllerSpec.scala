@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.ChangePartnerFaxNumberPage
+import pages.partner.{ChangePartnerFaxNumberPage, PartnerDetailsAddPartnerCompletedPage}
 import pages.partnerdetails.PartnerDetailsCorrespondenceFaxNumberPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -41,8 +41,17 @@ class ChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar wi
   lazy val changePartnerFaxNumberRoute: String =
     controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url
 
-  val userAnswersWithNoFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
-  val userAnswersWithFax: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(faxNumber = Some(testFaxNumber)))
+  val userAnswersWithNoFax: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData())
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+
+  val userAnswersWithFax: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData(faxNumber = Some(testFaxNumber)))
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
 
   "ChangePartnerFaxNumber Controller" - {
 
