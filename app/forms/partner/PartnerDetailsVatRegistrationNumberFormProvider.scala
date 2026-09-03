@@ -16,16 +16,35 @@
 
 package forms.partner
 
-import forms.mappings.Mappings
+import forms.mappings.{ChecksumConstraints, Mappings}
+import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider.*
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class PartnerDetailsVatRegistrationNumberFormProvider @Inject() extends Mappings {
+class PartnerDetailsVatRegistrationNumberFormProvider @Inject() extends Mappings with ChecksumConstraints {
 
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("partnerDetailsVatRegistrationNumber.error.required")
-        .verifying(maxLength(11, "partnerDetailsVatRegistrationNumber.error.length"))
-    )
+  def apply(): Form[String] = Form(
+    "partnerDetailsVatRegistrationNumber" ->
+      text(required)
+        .transform[String](_.trim, identity)
+        .verifying(
+          regexp(lengthRegex, invalidLength),
+          regexp(oneToNineRegex, invalidChars),
+          vatChecksum(invalidRealVat)
+        )
+  )
+}
+
+object PartnerDetailsVatRegistrationNumberFormProvider {
+
+  // message keys
+  private[forms] val required = "partnerDetailsVatRegistrationNumber.error.required"
+  private[forms] val invalidLength = "partnerDetailsVatRegistrationNumber.error.length"
+  private[forms] val invalidChars = "partnerDetailsVatRegistrationNumber.error.invalid.characters"
+  private[forms] val invalidRealVat = "partnerDetailsVatRegistrationNumber.error.invalid"
+
+  // Regex
+  private[forms] val lengthRegex = "^(?:[Gg][Bb])?.{9}$" // 9 chars, or GB + 9
+  private[forms] val oneToNineRegex = "^(?:[Gg][Bb])?[1-9]+$" // all digits 1-9
 }

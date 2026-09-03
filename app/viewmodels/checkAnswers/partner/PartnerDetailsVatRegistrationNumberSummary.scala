@@ -24,19 +24,18 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerDetailsVatRegistrationNumberSummary  {
+object PartnerDetailsVatRegistrationNumberSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsVatRegistrationNumberPage).map {
-      answer =>
+    answers.get(PartnerDetailsVatRegistrationNumberPage).map { answer =>
 
-        SummaryListRowViewModel(
-          key     = "partnerDetailsVatRegistrationNumber.checkYourAnswersLabel",
-          value   = ValueViewModel(HtmlFormat.escape(answer).toString),
-          actions = Seq(
-            ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url)
-              .withVisuallyHiddenText(messages("partnerDetailsVatRegistrationNumber.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "partnerDetailsVatRegistrationNumber.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
+        actions = Seq(
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerDetailsVatRegistrationNumber.change.hidden"))
         )
+      )
     }
 }
