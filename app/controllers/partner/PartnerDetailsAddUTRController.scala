@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.addNewPartnerIndex
 import forms.partner.PartnerDetailsAddUTRFormProvider
 import models.Mode
 import navigation.Navigator
@@ -37,7 +38,7 @@ class PartnerDetailsAddUTRController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsAddUTRFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAddUTRView
@@ -45,11 +46,18 @@ class PartnerDetailsAddUTRController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
+
   val form: Form[String] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    // TODO: this has to be fixed with the indexing ticket
+    val index: Int = addNewPartnerIndex(request.userAnswers)()
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddUTRPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsAddUTRPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -58,6 +66,8 @@ class PartnerDetailsAddUTRController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    // TODO: this has to be fixed with the indexing ticket
+    val index: Int = addNewPartnerIndex(request.userAnswers)()
 
     form
       .bindFromRequest()
@@ -65,9 +75,9 @@ class PartnerDetailsAddUTRController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddUTRPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddUTRPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddUTRPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsAddUTRPage(index), mode, updatedAnswers))
       )
   }
 }

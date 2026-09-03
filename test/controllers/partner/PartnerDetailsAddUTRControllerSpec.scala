@@ -34,9 +34,7 @@ import views.html.partner.PartnerDetailsAddUTRView
 
 import scala.concurrent.Future
 
-class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar {
-
-  def onwardRoute = Call("GET", "/foo")
+class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val form: Form[String] = (new PartnerDetailsAddUTRFormProvider())()
 
@@ -62,7 +60,7 @@ class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsAddUTRPage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsAddUTRPage(index), "answer").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
