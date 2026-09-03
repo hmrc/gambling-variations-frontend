@@ -906,3 +906,13 @@ partnerDetailsAddTradingNameYesNo.heading = Do you want to add a trading name fo
 partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?
+
+partnerDetailsAddUTRPage.title = Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTRPage.heading = Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTRPage.checkYourAnswersLabel = Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTRPage.error.length = The Unique Taxpayer Reference (UTR) must be 10 characters or less
+partnerDetailsAddUTRPage.error.required = Enter the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTRPage.error.invalidChars = The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+partnerDetailsAddUTRPage.error.incorrect = The Unique Taxpayer Reference (UTR) must be in the correct format
+partnerDetailsAddUTRPage.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTRPage.change.hidden = Tell us the partner’s Unique Taxpayer Reference

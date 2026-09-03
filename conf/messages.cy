@@ -266,3 +266,13 @@ partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business i
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
+
+partnerDetailsAddUTRPage.title = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTRPage.heading = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTRPage.checkYourAnswersLabel = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTRPage.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 characters or less
+partnerDetailsAddUTRPage.error.required = cy: Enter the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTRPage.error.invalidChars = cy: The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+partnerDetailsAddUTRPage.error.incorrect = cy: The Unique Taxpayer Reference (UTR) must be in the correct format
+partnerDetailsAddUTRPage.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTRPage.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
