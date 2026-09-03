@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import forms.ContactNumberFormProvider
 import models.{ContactNumber, Mode}
 import navigation.Navigator
@@ -45,15 +46,11 @@ class PartnerContactDetailsController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: Temp solution to multiple partners
-  // Upcoming ticket will identify partner by the `BusinessPartnerNumber`
-  private val PartnerIndex: Int = 0
-
   val form: Form[ContactNumber] = formProvider("partnerContactDetails")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(PartnerDetailsContactNumberPage(PartnerIndex)) match {
+    val index: Int = request.userAnswers.getIndex
+    val preparedForm = request.userAnswers.get(PartnerDetailsContactNumberPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -62,7 +59,7 @@ class PartnerContactDetailsController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
+    val index: Int = request.userAnswers.getIndex
     val boundForm = form.bindFromRequest()
 
     val validatedForm =
@@ -84,9 +81,9 @@ class PartnerContactDetailsController @Inject() (
       },
       value =>
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(PartnerIndex), value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsContactNumberPage(index), value))
           _              <- sessionRepository.set(updatedAnswers)
-        } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(PartnerIndex), mode, updatedAnswers))
+        } yield Redirect(navigator.nextPage(PartnerDetailsContactNumberPage(index), mode, updatedAnswers))
     )
   }
 }

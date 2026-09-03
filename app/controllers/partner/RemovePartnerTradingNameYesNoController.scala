@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import controllers.routes
 import forms.partner.RemovePartnerTradingNameYesNoFormProvider
 import models.Mode
@@ -50,7 +51,7 @@ class RemovePartnerTradingNameYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val index: Int = 0
+      val index: Int = request.userAnswers.getIndex
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(partnerTradingName) =>
@@ -69,7 +70,7 @@ class RemovePartnerTradingNameYesNoController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val index: Int = 0
+      val index: Int = request.userAnswers.getIndex
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(partnerTradingName) =>

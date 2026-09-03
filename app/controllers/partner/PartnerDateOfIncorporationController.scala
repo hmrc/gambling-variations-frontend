@@ -19,9 +19,10 @@ package controllers.partner
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getPartnersSize
 import forms.partner.PartnerDateOfIncorporationFormProvider
-import models.Mode
+import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
 import pages.partner.PartnerDateOfIncorporationPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,18 +46,23 @@ class PartnerDateOfIncorporationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+      val index = getPartnersSize(request.userAnswers)
 
-    val index = getPartnersSize(request.userAnswers)
-    val form = formProvider()
+      if (!shouldShowDateOfIncorporation(request.userAnswers, index)) {
+        Redirect(controllers.routes.SystemErrorController.onPageLoad())
+      } else {
+        val form = formProvider()
 
-    val preparedForm = request.userAnswers.get(PartnerDateOfIncorporationPage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+        val preparedForm =
+          request.userAnswers
+            .get(PartnerDateOfIncorporationPage(index))
+            .fold(form)(form.fill)
+
+        Ok(view(preparedForm, mode))
+      }
     }
-
-    Ok(view(preparedForm, mode))
-  }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
@@ -74,4 +80,15 @@ class PartnerDateOfIncorporationController @Inject() (
           } yield Redirect(navigator.nextPage(PartnerDateOfIncorporationPage(index), mode, updatedAnswers))
       )
   }
+
+  private def shouldShowDateOfIncorporation(userAnswers: UserAnswers, index: Int): Boolean =
+    userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
+      case Some(BusinessType.Corporatebody) =>
+        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)).contains(true)
+      case Some(BusinessType.LimitedLiabilityPartnership) =>
+        true
+
+      case _ =>
+        false
+    }
 }

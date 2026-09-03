@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package pages.partnerdetails
 
-import models.UserAnswers
-import pages.partner.PartnerDetailsAddPartnerCompletedPage
-import play.api.libs.json.JsArray
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-object PartnerUtils {
+case class PartnerDetailsIsBusinessIncorporatedUkPage(index: Int) extends QuestionPage[Boolean] {
 
-  extension (userAnswers: UserAnswers)
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-    def getPartnersSize: Int =
-      (userAnswers.data \ "partners")
-        .validate[JsArray]
-        .asOpt
-        .fold(0)(partners => if partners.value.isEmpty then 0 else partners.value.size - 1)
-
-    def getIndex: Int =
-      if userAnswers.get(PartnerDetailsAddPartnerCompletedPage).contains(false) then userAnswers.getPartnersSize
-      else userAnswers.getPartnersSize + 1
+  override def toString: String = "partnerDetailsIsBusinessIncorporatedUk"
 }

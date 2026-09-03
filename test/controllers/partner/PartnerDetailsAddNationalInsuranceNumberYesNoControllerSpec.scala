@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsAddNationalInsuranceNumberYesNoPage
+import pages.partner.{PartnerDetailsAddNationalInsuranceNumberYesNoPage, PartnerDetailsAddPartnerCompletedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -41,7 +41,11 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoControllerSpec extends SpecBa
   lazy val addNinoRoute: String =
     controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val validUserAnswers: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData())
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
 
   "PartnerDetailsAddNationalInsuranceNumberYesNo Controller" - {
 

@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerAddEmailAddressYesNoPageFormProvider
 import models.Mode
 import navigation.Navigator
@@ -47,11 +48,8 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
-  private val index: Int = 0
-
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
+    val index: Int = request.userAnswers.getIndex
     val preparedForm = request.userAnswers.get(PartnerAddEmailAddressYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -61,7 +59,7 @@ class PartnerAddEmailAddressYesNoPageController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
+    val index: Int = request.userAnswers.getIndex
     form
       .bindFromRequest()
       .fold(

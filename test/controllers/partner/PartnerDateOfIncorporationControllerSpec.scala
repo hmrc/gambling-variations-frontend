@@ -19,13 +19,13 @@ package controllers.partner
 import base.SpecBase
 import controllers.routes
 import forms.partner.PartnerDateOfIncorporationFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDateOfIncorporationPage
-import pages.partnerdetails.PartnerDetailsPage
+import pages.partner.{PartnerDateOfIncorporationPage, PartnerDetailsAddPartnerCompletedPage}
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -58,6 +58,15 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
   private val partnerDetailsUserAnswers =
     emptyUserAnswers
       .set(PartnerDetailsPage(0), userAnswersId)
+      .success
+      .value
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+      .set(PartnerDetailsBusinessTypePage(0), BusinessType.Corporatebody)
+      .success
+      .value
+      .set(PartnerDetailsIsBusinessIncorporatedUkPage(0), true)
       .success
       .value
 

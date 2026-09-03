@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoPage
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveNationalInsuranceNumberYesNoPage}
 import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -42,7 +42,11 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
   lazy val removeNinoRoute: String =
     controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(nino = Some(testNino)))
+  val validUserAnswers: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData(nino = Some(testNino)))
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
 
   "PartnerDetailsRemoveNationalInsuranceNumberYesNo Controller" - {
 
