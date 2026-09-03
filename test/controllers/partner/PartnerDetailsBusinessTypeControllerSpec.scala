@@ -17,7 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
-import utils.PartnerUtils.addNewPartnerIndex
+import utils.PartnerUtils.getIndex
 import controllers.partner.routes.PartnerDetailsBusinessTypeController
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
 import models.BusinessType.Corporatebody
@@ -45,7 +45,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
   val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
 
-  private val expectedIndex: Int = validUserAnswers.addNewPartnerIndex()
+  private val expectedIndex: Int = validUserAnswers.getIndex
 
   "PartnerDetailsBusinessType Controller" - {
 
@@ -68,12 +68,9 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" ignore {
-
         // TODO: this has to be fixed with the indexing ticket
-        val targetIndex = validUserAnswers.addNewPartnerIndex()
-
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsBusinessTypePage(targetIndex), Corporatebody)
+          .set(PartnerDetailsBusinessTypePage(expectedIndex), Corporatebody)
           .success
           .value
 

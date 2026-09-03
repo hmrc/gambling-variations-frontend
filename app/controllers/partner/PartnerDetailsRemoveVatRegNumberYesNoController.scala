@@ -56,7 +56,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     val preparedForm = request.userAnswers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex)) match {
       case None        => form
@@ -74,7 +74,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     form
       .bindFromRequest()

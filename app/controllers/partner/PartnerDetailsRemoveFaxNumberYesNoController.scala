@@ -51,7 +51,7 @@ class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index = getPartnersSize(request.userAnswers)
+    val index = request.userAnswers.getPartnersSize
 
     val preparedForm = request.userAnswers.get(PartnerDetailsRemoveFaxNumberYesNoPage(index)) match {
       case None        => form
@@ -69,7 +69,7 @@ class PartnerDetailsRemoveFaxNumberYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index = getPartnersSize(request.userAnswers)
+    val index = request.userAnswers.getPartnersSize
 
     form
       .bindFromRequest()

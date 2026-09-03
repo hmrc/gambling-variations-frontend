@@ -54,7 +54,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
    */
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = getPartnersSize(request.userAnswers)
+    val index: Int = request.userAnswers.getPartnersSize
 
     val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
       case None        => form
@@ -65,7 +65,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = getPartnersSize(request.userAnswers)
+    val index: Int = request.userAnswers.getPartnersSize
 
     form
       .bindFromRequest()

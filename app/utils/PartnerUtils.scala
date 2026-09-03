@@ -36,7 +36,7 @@ object PartnerUtils:
         .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 
     // TODO: Interim solution - will be refactored with the indexing ticket
-    def addNewPartnerIndex(): Int =
+    def getIndex: Int =
       getPartnersSize
 
     // TODO: Interim solution - will be refactored with the indexing ticket

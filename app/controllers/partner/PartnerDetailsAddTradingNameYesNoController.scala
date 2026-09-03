@@ -55,7 +55,7 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     val preparedForm = request.userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(newIndex)) match {
       case None        => form
@@ -66,7 +66,7 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     form
       .bindFromRequest()

@@ -52,7 +52,7 @@ class RemovePartnerTradingNameYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val index = getPartnersSize(request.userAnswers)
+      val index = request.userAnswers.getPartnersSize
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(partnerTradingName) =>
@@ -71,7 +71,7 @@ class RemovePartnerTradingNameYesNoController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val index = getPartnersSize(request.userAnswers)
+      val index = request.userAnswers.getPartnersSize
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(partnerTradingName) =>
