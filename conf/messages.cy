@@ -254,3 +254,9 @@ licenceNumber.hint = cy: It is 23 characters long, including the hyphens, like 0
 licenceNumber.error.required = cy:  Enter the Gambling Commission operating or personal licence number
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
+
+partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
+partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
