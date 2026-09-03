@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.addNewPartnerIndex
+import utils.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsAddUTRFormProvider
 import models.Mode
 import navigation.Navigator
@@ -55,7 +55,7 @@ class PartnerDetailsAddUTRController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     // TODO: this has to be fixed with the indexing ticket
-    val index: Int = addNewPartnerIndex(request.userAnswers)()
+    val index: Int = request.userAnswers.getIndex
 
     val preparedForm = request.userAnswers.get(PartnerDetailsAddUTRPage(index)) match {
       case None        => form
@@ -67,7 +67,7 @@ class PartnerDetailsAddUTRController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     // TODO: this has to be fixed with the indexing ticket
-    val index: Int = addNewPartnerIndex(request.userAnswers)()
+    val index: Int = request.userAnswers.getIndex
 
     form
       .bindFromRequest()

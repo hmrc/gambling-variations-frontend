@@ -26,8 +26,11 @@ import viewmodels.implicits.*
 
 object PartnerDetailsAddUTRPageSummary {
 
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  private val index: Int = utils.PartnerUtils.interimIndex
+
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsAddUTRPage).map { answer =>
+    answers.get(PartnerDetailsAddUTRPage(index)).map { answer =>
 
       SummaryListRowViewModel(
         key   = "partnerDetailsAddUTR.checkYourAnswersLabel",
