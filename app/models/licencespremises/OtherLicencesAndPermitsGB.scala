@@ -65,7 +65,6 @@ object OtherLicencesAndPermitsGB extends Enumerable.Implicits {
   val positiveValues: Seq[OtherLicencesAndPermitsGB] =
     Seq(clubGaming, clubMachine, clubPremises, familyEntertainment, localAuthority, onPremises, prizeGaming)
 
-
   implicit val enumerable: Enumerable[OtherLicencesAndPermitsGB] =
     Enumerable(allValues.map(v => v.toString -> v)*)
 }
