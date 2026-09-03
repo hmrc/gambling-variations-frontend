@@ -165,6 +165,9 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
     case PartnerDetailsAddTradingNameYesNoPage(index) =>
       userAnswers => navigatePartnerAddTradingNameYesNoPage(index)(userAnswers)
+    case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
+      _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
+
     case PartnerDetailsBusinessTypePage(index) =>
       userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
 
@@ -474,7 +477,7 @@ class Navigator @Inject() () {
   private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
-      .fold(routes.SystemErrorController.onPageLoad())(routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
+      .fold(routes.SystemErrorController.onPageLoad())(controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

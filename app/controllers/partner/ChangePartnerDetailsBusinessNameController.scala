@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getPartnersSize
+import utils.PartnerUtils.getPartnersSize
+import controllers.routes
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
@@ -58,7 +59,7 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
 
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData) { implicit request =>
-      val newIndex = getPartnersSize(request.userAnswers)
+      val newIndex = request.userAnswers.getPartnersSize
 
       (request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) map {
         case Soleproprietor =>
@@ -79,7 +80,7 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
 
   def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val newIndex = getPartnersSize(request.userAnswers)
+      val newIndex = request.userAnswers.getPartnersSize
 
       request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) map {
         case Soleproprietor =>

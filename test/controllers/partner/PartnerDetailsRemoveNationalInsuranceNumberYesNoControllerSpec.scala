@@ -85,7 +85,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
         }
       }
 
-      "must redirect to JourneyRecovery for a GET if PartnerDetailsNinoPage is missing" in {
+      "must redirect to SystemErrorController for a GET if PartnerDetailsNinoPage is missing" in {
 
         val userAnswersNoNino = emptyUserAnswers
 
@@ -101,7 +101,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
         }
       }
 
-      "must redirect to JourneyRecovery for a GET if no existing data is found" in {
+      "must redirect to SystemErrorController for a GET if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 

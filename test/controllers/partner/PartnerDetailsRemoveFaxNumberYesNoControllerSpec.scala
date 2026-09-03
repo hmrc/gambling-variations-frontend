@@ -43,12 +43,13 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
   lazy val partnerDetailsRemoveFaxNumberYesNoRoute: String =
     PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
 
+  val userAnswers = UserAnswers(mgdRegNumber, cleanedData(faxNumber = Some(testFaxNumber)))
+
   "PartnerDetailsRemoveFaxNumberYesNo Controller" - {
 
     "onPageLoad" - {
 
       "must return OK and the correct view for a GET when fax number exists in UserAnswers" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -115,20 +116,16 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
-            .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-              bind[SessionRepository].toInstance(mockSessionRepository)
-            )
-            .build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
 
         running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", "true"))
+          val request = FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 
@@ -141,8 +138,6 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
-
         val application =
           applicationBuilder(userAnswers = Some(userAnswers))
             .overrides(
@@ -153,7 +148,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
 
         running(application) {
           val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+            FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
               .withFormUrlEncodedBody(("value", "false"))
 
           val result = route(application, request).value
@@ -164,13 +159,11 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
       }
 
       "must return BAD_REQUEST and errors when invalid data is submitted" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
-
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
           val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+            FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
               .withFormUrlEncodedBody(("value", ""))
 
           val boundForm = form.bind(Map("value" -> ""))
@@ -188,9 +181,8 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", "true"))
+          val request = FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 
