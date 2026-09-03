@@ -16,18 +16,22 @@
 
 @import viewmodels.InputWidth._
 @import viewmodels.LabelSize.Large
+@import views.html.components._
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption,
+    fieldSet: GovukFieldset,
+    paragraph: Paragraph
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("partnerDetailsVatRegistrationNumber.title"))) {
+@layout(pageTitle = title(form, messages("partnerDetailsVatRegistrationNumber.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onSubmit()) {
 
@@ -35,12 +39,23 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @caption(messages("changeRegistrationDetails.caption"))
+
+        @fieldSet(Fieldset(legend = Some(
+            Legend(content = messages("partnerDetailsVatRegistrationNumber.heading"), isPageHeading = true, classes = "govuk-fieldset__legend--l")
+        )))
+
+        @paragraph(messages("partnerDetailsVatRegistrationNumber.paragraph"))
+
         @govukInput(
             InputViewModel(
-                field = form("value"),
-                label = LabelViewModel(messages("partnerDetailsVatRegistrationNumber.heading")).asPageHeading(Large)
+                field = form("partnerDetailsVatRegistrationNumber"),
+                label = LabelViewModel(messages("partnerDetailsVatRegistrationNumber.heading")).withCssClass("govuk-visually-hidden")
             )
-            .withWidth(Full)
+            .withWidth(Fixed10)
+            .withHint(HintViewModel(messages("partnerDetailsVatRegistrationNumber.hint"))
+            )
+            .withCssClass("govuk-input--width-10")
         )
 
         @govukButton(
