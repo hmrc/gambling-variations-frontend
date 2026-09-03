@@ -21,7 +21,6 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 
-<<<<<<<< HEAD:app/forms/partner/PartnerDetailsAddTradingNameYesNoFormProvider.scala
 class PartnerDetailsAddTradingNameYesNoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
@@ -29,7 +28,3 @@ class PartnerDetailsAddTradingNameYesNoFormProvider @Inject() extends Mappings {
       "value" -> boolean("partnerDetailsAddTradingNameYesNo.error.required")
     )
 }
-========
-    // TODO: this has to be fixed with the indexing ticket
-    def addNewPartnerIndex(): Int = getPartnersSize
->>>>>>>> main:app/controllers/partner/PartnerUtils.scala
