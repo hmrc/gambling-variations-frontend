@@ -913,3 +913,11 @@ partnerDetailsAddTradingNameYesNo.heading = Do you want to add a trading name fo
 partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?
+
+licencesPremises.title = How will you provide premises addresses?
+licencesPremises.heading = How will you provide premises addresses?
+licencesPremises.online = Online
+licencesPremises.byPost = By post
+licencesPremises.checkYourAnswersLabel = How will you provide premises addresses?
+licencesPremises.error.required = Select how you will provide premises addresses
+licencesPremises.change.hidden = how you will provide premises addresses
