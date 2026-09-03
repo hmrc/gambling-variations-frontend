@@ -914,7 +914,6 @@ partnerDetailsAddUTRPage.hint = It must be 10 digits long, for example 123456789
 partnerDetailsAddUTRPage.paragraph = You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
 partnerDetailsAddUTRPage.linkText = Get more help to find your UTR (opens in new tab).
 partnerDetailsAddUTRPage.checkYourAnswersLabel = Tell us the partner’s Unique Taxpayer Reference
-partnerDetailsAddUTRPage.error.length = The Unique Taxpayer Reference (UTR) must be 10 characters or less
 partnerDetailsAddUTRPage.error.required = Enter the partner’s Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTRPage.error.invalidChars = The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
 partnerDetailsAddUTRPage.error.incorrect = The Unique Taxpayer Reference (UTR) must be in the correct format
