@@ -45,11 +45,11 @@ class BusinessTypeSpec extends AnyWordSpec with Matchers {
 
     "contain all business types in the expected order" in {
       BusinessType.values shouldBe Seq(
-        BusinessType.Soleproprietor,
         BusinessType.Corporatebody,
-        BusinessType.Unincorporatedbody,
+        BusinessType.LimitedLiabilityPartnership,
         BusinessType.Partnership,
-        BusinessType.LimitedLiabilityPartnership
+        BusinessType.Soleproprietor,
+        BusinessType.Unincorporatedbody
       )
     }
   }
@@ -77,11 +77,11 @@ class BusinessTypeSpec extends AnyWordSpec with Matchers {
       val options = BusinessType.options
 
       options.map(_.value) shouldBe Seq(
-        Some("soleproprietor"),
         Some("corporatebody"),
-        Some("unincorporatedbody"),
+        Some("llp"),
         Some("partnership"),
-        Some("llp")
+        Some("soleproprietor"),
+        Some("unincorporatedbody")
       )
 
       options.map(_.id) shouldBe Seq(

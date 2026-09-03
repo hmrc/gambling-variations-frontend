@@ -133,6 +133,8 @@ class Navigator @Inject() () {
       _ => routes.CheckBusinessAddressController.onPageLoad()
     case BusinessAddressAdditionalInformationPage =>
       _ => routes.CheckBusinessAddressController.onPageLoad()
+    case PartnerDetailsIsBusinessIncorporatedUkPage(index) =>
+      userAnswers => navigatePartnerDetailsIsBusinessIncorporatedUkPage(index, userAnswers)
 
     // Partner Details
     case PartnerDetailsAdditionalAddressInfoPage =>
@@ -542,5 +544,16 @@ class Navigator @Inject() () {
       case Some(isInAddFlow) => if (isInAddFlow) addFlowRoute else normalRoute
       case None              => normalRoute
     }
+  }
+
+  private def navigatePartnerDetailsIsBusinessIncorporatedUkPage(index: Int, userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
+      .map {
+        case true  => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
+        case false => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
   }
 }
