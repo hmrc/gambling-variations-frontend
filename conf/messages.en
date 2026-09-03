@@ -913,3 +913,10 @@ partnerDetailsAddTradingNameYesNo.heading = Do you want to add a trading name fo
 partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?
+
+partnerDetailsVatRegistrationNumber.title = partnerDetailsVatRegistrationNumber
+partnerDetailsVatRegistrationNumber.heading = partnerDetailsVatRegistrationNumber
+partnerDetailsVatRegistrationNumber.checkYourAnswersLabel = partnerDetailsVatRegistrationNumber
+partnerDetailsVatRegistrationNumber.error.required = Enter partnerDetailsVatRegistrationNumber
+partnerDetailsVatRegistrationNumber.error.length = PartnerDetailsVatRegistrationNumber must be 11 characters or less
+partnerDetailsVatRegistrationNumber.change.hidden = PartnerDetailsVatRegistrationNumber
