@@ -25,10 +25,7 @@
     govukDateInput: GovukDateInput,
     govukButton: GovukButton,
     caption: Caption,
-    paragraph: Paragraph,
-    h1: H1,
-    h2: H2,
-    h3: H3,
+    paragraph: Paragraph
 )
 
 @(form: Form[_], mode: Mode, dateOfJoining: String, twoWeeksLater: String)(implicit request: Request[_], messages: Messages)
@@ -43,9 +40,6 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
 
-        //TODO
-        <p class="govuk-body">@messages("test", dateOfJoining, twoWeeksLater)</p>
-
         @govukDateInput(
             DateViewModel(
                 field  = form("value"),
@@ -54,6 +48,7 @@
             .withHint(HintViewModel(messages("partnerDetailsAddDateOfJoiningPartnership.hint")))
         )
 
+        @paragraph(messages("partnerDetailsAddDateOfJoiningPartnership.tip", dateOfJoining, twoWeeksLater))
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

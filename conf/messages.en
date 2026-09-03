@@ -900,15 +900,14 @@ partnerDetailsAddDateOfJoiningPartnership.title = PartnerDetailsAddDateOfJoining
 partnerDetailsAddDateOfJoiningPartnership.heading = PartnerDetailsAddDateOfJoiningPartnership
 partnerDetailsAddDateOfJoiningPartnership.hint = For example, 12 11 2007.
 
-test = The date must be after {0} and before {1}.
 
 partnerDetailsAddDateOfJoiningPartnership.title = When is the partner’s date of joining?
 partnerDetailsAddDateOfJoiningPartnership.heading = When is the partner’s date of joining?
 partnerDetailsAddDateOfJoiningPartnership.hint = For example, 27 3 2000
-partnerDetailsAddDateOfJoiningPartnership.checkYourAnswersLabel = PartnerDetailsAddDateOfJoiningPartnership
-partnerDetailsAddDateOfJoiningPartnership.error.required.all = Enter the partnerDetailsAddDateOfJoiningPartnership
-partnerDetailsAddDateOfJoiningPartnership.error.required.two = The partnerDetailsAddDateOfJoiningPartnership must include {0} and {1}
-partnerDetailsAddDateOfJoiningPartnership.error.required = Enter a real PartnerDetailsAddDateOfJoiningPartnership
+partnerDetailsAddDateOfJoiningPartnership.tip = The date must be after {0} and before {1}.
+partnerDetailsAddDateOfJoiningPartnership.error.required.all = The date must include day and month and year
+partnerDetailsAddDateOfJoiningPartnership.error.required.two = The date must include {0} and {1}
+partnerDetailsAddDateOfJoiningPartnership.error.required = The date must include {0}
 partnerDetailsAddDateOfJoiningPartnership.error.invalid = The date of joining must be a real date
 partnerDetailsAddDateOfJoiningPartnership.error.invalid.range = The date of joining must be the same as or after {0} and {1}
 partnerDetailsAddDateOfJoiningPartnership.change.hidden = Enter a date of joining for the partner

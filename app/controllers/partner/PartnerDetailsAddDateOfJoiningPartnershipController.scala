@@ -17,19 +17,18 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getPartnersSize
 import controllers.routes
 import forms.partner.PartnerDetailsAddDateOfJoiningPartnershipFormProvider
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.{PartnerDetailsDateOfIncorporation, PartnerDetailsDateOfJoiningPage}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.JsArray
+import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsAddDateOfJoiningPartnershipView
 import utils.DateTimeFormats.dateTimeFormat
-import play.api.i18n.Lang
+import views.html.partner.PartnerDetailsAddDateOfJoiningPartnershipView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,9 +47,12 @@ class PartnerDetailsAddDateOfJoiningPartnershipController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  private val TwoWeeks: Int = 14
+  private val formatter = dateTimeFormat()(Lang("en"))
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     request.userAnswers.get(PartnerDetailsDateOfJoiningPage(newIndex)) match {
       case None =>
@@ -60,17 +62,16 @@ class PartnerDetailsAddDateOfJoiningPartnershipController @Inject() (
           .get(PartnerDetailsDateOfIncorporation(newIndex))
           .fold(formProvider(dateOfJoining))(formProvider(dateOfJoining).fill)
 
-        val formatter = dateTimeFormat()(Lang("en"))
         val dateOfJoiningFormatted = dateOfJoining.format(formatter)
-        val twoWeeksLaterFormatted = dateOfJoining.plusDays(14).format(formatter)
+        val twoWeeksLaterFormatted = dateOfJoining.plusDays(TwoWeeks).format(formatter)
 
-        Ok(view(form, mode, dateOfJoiningFormatted, twoWeeksLaterFormatted)) // TODO
+        Ok(view(form, mode, dateOfJoiningFormatted, twoWeeksLaterFormatted))
     }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-    val newIndex = getPartnersSize(request.userAnswers)
+    val newIndex = request.userAnswers.getPartnersSize
 
     request.userAnswers.get(PartnerDetailsDateOfJoiningPage(newIndex)) match {
       case None =>
@@ -82,11 +83,10 @@ class PartnerDetailsAddDateOfJoiningPartnershipController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors =>
-              val formatter = dateTimeFormat()(Lang("en"))
               val dateOfJoiningFormatted = dateOfJoining.format(formatter)
-              val twoWeeksLaterFormatted = dateOfJoining.plusDays(14).format(formatter)
+              val twoWeeksLaterFormatted = dateOfJoining.plusDays(TwoWeeks).format(formatter)
               Future.successful(BadRequest(view(formWithErrors, mode, dateOfJoiningFormatted, twoWeeksLaterFormatted)))
-            , // TODO
+            ,
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsDateOfIncorporation(newIndex), value))
@@ -95,10 +95,4 @@ class PartnerDetailsAddDateOfJoiningPartnershipController @Inject() (
           )
     }
   }
-
-  // TODO TODO TODO I WONT NEED IT HERE
-  private def getPartnersSize(userAnswers: UserAnswers): Int = (userAnswers.data \ "partners")
-    .validate[JsArray]
-    .asOpt
-    .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
 }
