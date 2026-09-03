@@ -22,11 +22,10 @@ import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsVatRegistrationNumberPage
+import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -34,22 +33,27 @@ import views.html.partner.PartnerDetailsVatRegistrationNumberView
 
 import scala.concurrent.Future
 
-class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with MockitoSugar {
-
-  def onwardRoute = Call("GET", "/foo")
+class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsVatRegistrationNumberFormProvider()
   val form = formProvider()
 
-  lazy val partnerDetailsVatRegistrationNumberRoute = controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url
+  def validUserAnswers(vrn: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedData(vrn = vrn))
+  val userAnswersNoVrn: UserAnswers = validUserAnswers()
+  val userAnswersWithVrn: UserAnswers = validUserAnswers(Some(testVRN))
+
+  val fieldName = "partnerDetailsVatRegistrationNumber"
+
+  lazy val partnerVatRegistrationNumberRoute = controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url
+
   "PartnerDetailsVatRegistrationNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersNoVrn)).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerDetailsVatRegistrationNumberRoute)
+        val request = FakeRequest(GET, partnerVatRegistrationNumberRoute)
 
         val result = route(application, request).value
 
@@ -62,19 +66,17 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsVatRegistrationNumberPage, "answer").success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithVrn)).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerDetailsVatRegistrationNumberRoute)
+        val request = FakeRequest(GET, partnerVatRegistrationNumberRoute)
 
         val view = application.injector.instanceOf[PartnerDetailsVatRegistrationNumberView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(testVRN), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -85,7 +87,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersNoVrn))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -94,26 +96,28 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerDetailsVatRegistrationNumberRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+          FakeRequest(POST, partnerVatRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, testVRN))
 
         val result = route(application, request).value
+        val expectedAnswers = userAnswersNoVrn.set(PartnerDetailsVrnPage(index), testVRN).success.value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository).set(expectedAnswers)
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersNoVrn)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerDetailsVatRegistrationNumberRoute)
-            .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, partnerVatRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "xyz"))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map(fieldName -> "xyz"))
 
         val view = application.injector.instanceOf[PartnerDetailsVatRegistrationNumberView]
 
@@ -129,7 +133,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerDetailsVatRegistrationNumberRoute)
+        val request = FakeRequest(GET, partnerVatRegistrationNumberRoute)
 
         val result = route(application, request).value
 
@@ -144,8 +148,8 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerDetailsVatRegistrationNumberRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+          FakeRequest(POST, partnerVatRegistrationNumberRoute)
+            .withFormUrlEncodedBody((fieldName, "GB353868127"))
 
         val result = route(application, request).value
 

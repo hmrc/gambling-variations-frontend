@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsVatRegistrationNumberPage
+import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,7 +36,7 @@ class PartnerDetailsVatRegistrationNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsVatRegistrationNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsVatRegistrationNumberView
@@ -44,11 +44,14 @@ class PartnerDetailsVatRegistrationNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
+  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  private val index: Int = 0
+
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsVatRegistrationNumberPage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsVrnPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -62,11 +65,11 @@ class PartnerDetailsVatRegistrationNumberController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
+        vrn =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsVatRegistrationNumberPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsVrnPage(index), vrn))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsVatRegistrationNumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsVrnPage(index), mode, updatedAnswers))
       )
   }
 }
