@@ -29,6 +29,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.OtherLicencesAndPermitsViewModel
 import views.html.licencespremises.OtherLicencesAndPermitsGBView
 
 import javax.inject.Inject
@@ -53,7 +54,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = form.fill(getSelectedLicencesAndPermits(request.userAnswers))
-    Ok(view(preparedForm, mode, otherLPCheckboxItems(preparedForm)))
+    Ok(view(preparedForm, mode, OtherLicencesAndPermitsViewModel(preparedForm)))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -62,13 +63,21 @@ class OtherLicencesAndPermitsGBController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, otherLPCheckboxItems(formWithErrors)))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, OtherLicencesAndPermitsViewModel(formWithErrors)))),
         values =>
           for {
             updatedAnswers <- Future.fromTry(updateValuesAndCombine(values, ua))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherLicencesAndPermitsGBPage, NormalMode, ua))
       )
+  }
+
+  private def getSelectedLicencesAndPermits(ua: UserAnswers): Set[OtherLicencesAndPermitsGB] = {
+    val trueVal = "1"
+
+    // iterates the types and their corresponding pages to check for a "1"
+    // then converts to a set for the form to read
+    mappedValuesWithPages.keys.filter(value => ua.get(mappedValuesWithPages(value)).contains(trueVal)).toSet
   }
 
   private def updateValuesAndCombine(formValues: Set[OtherLicencesAndPermitsGB], ua: UserAnswers): Try[UserAnswers] = {
