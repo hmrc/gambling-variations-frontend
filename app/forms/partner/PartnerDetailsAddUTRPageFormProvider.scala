@@ -16,16 +16,27 @@
 
 package forms.partner
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import javax.inject.Inject
 import play.api.data.Form
+import utils.UtrChecksumValidator.isValidUtr
 
 class PartnerDetailsAddUTRPageFormProvider @Inject() extends Mappings {
+
+  private val digitsOnlyRegex = """^\d+$"""
 
   def apply(): Form[String] =
     Form(
       "value" -> text("partnerDetailsAddUTRPage.error.required")
-        .verifying(maxLength(10, "partnerDetailsAddUTRPage.error.length"))
+        .verifying(
+          regexp(digitsOnlyRegex, "partnerDetailsAddUTRPage.error.invalidChars")
+        )
+        .verifying(
+          maxLength(10, "partnerDetailsAddUTRPage.error.incorrect")
+        )
+        .verifying(
+          "partnerDetailsAddUTRPage.error.invalid",
+          isValidUtr _
+        )
     )
 }

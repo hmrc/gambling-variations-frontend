@@ -22,7 +22,9 @@ import play.api.data.FormError
 class PartnerDetailsAddUTRPageFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "partnerDetailsAddUTRPage.error.required"
-  val lengthKey = "partnerDetailsAddUTRPage.error.length"
+  val invalidCharsKey = "partnerDetailsAddUTRPage.error.invalidChars"
+  val incorrectKey = "partnerDetailsAddUTRPage.error.incorrect"
+  val invalidKey = "partnerDetailsAddUTRPage.error.invalid"
   val maxLength = 10
 
   val form = new PartnerDetailsAddUTRPageFormProvider()()
@@ -31,18 +33,28 @@ class PartnerDetailsAddUTRPageFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "value"
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
+    val validUtr = "1121766916"
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    "must bind valid UTR with correct Modulo 11 checksum" in {
+      val result = form.bind(Map(fieldName -> validUtr))
+      result.errors mustBe empty
+      result.value.value mustBe validUtr
+    }
+
+    "must fail to bind non-numeric characters" in {
+      val result = form.bind(Map(fieldName -> "12345ABCDE"))
+      result.errors must contain(FormError(fieldName, invalidCharsKey, Seq("""^\d+$""")))
+    }
+
+    "must fail to bind string exceeding 10 characters" in {
+      val result = form.bind(Map(fieldName -> "112176691612"))
+      result.errors must contain(FormError(fieldName, incorrectKey, Seq(maxLength)))
+    }
+
+    "must fail to bind 10-digit string with invalid checksum" in {
+      val result = form.bind(Map(fieldName -> "1234567890"))
+      result.errors must contain(FormError(fieldName, invalidKey))
+    }
 
     behave like mandatoryField(
       form,
