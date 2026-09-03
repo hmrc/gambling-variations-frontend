@@ -17,19 +17,19 @@
 package views.partner
 
 import base.SpecBase
-import forms.partner.PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider
+import forms.partner.PartnerDetailsAddTradingNameYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.partner.PartnerDetailsAddNationalInsuranceNumberYesNoView
+import views.html.partner.PartnerDetailsAddTradingNameYesNoView
 
-class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends SpecBase {
+class PartnerDetailsAddTradingNameYesNoViewSpec extends SpecBase {
 
-  private val form = new PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider()()
+  private val form = new PartnerDetailsAddTradingNameYesNoFormProvider()()
 
-  "PartnerDetailsAddNationalInsuranceNumberYesNoView" - {
+  "PartnerDetailsAddTradingNameYesNoView" - {
 
     "render the page correctly" in {
 
@@ -37,18 +37,18 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends Spec
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsAddTradingNameYesNoView]
 
         val html = view(form, NormalMode)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("partnerDetailsAddNinoYesNo.title")
+          messages(application)("partnerDetailsAddTradingNameYesNo.title")
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsAddNinoYesNo.heading")
+          messages(application)("partnerDetailsAddTradingNameYesNo.heading")
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption")
@@ -68,7 +68,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends Spec
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsAddTradingNameYesNoView]
 
         val boundForm = form.bind(Map("value" -> ""))
 
@@ -79,7 +79,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoFormProviderSpec extends Spec
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("partnerDetailsAddNinoYesNo.error.required")
+          messages(application)("partnerDetailsAddTradingNameYesNo.error.required")
         )
       }
     }
