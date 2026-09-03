@@ -894,3 +894,9 @@ partnerDetailsBusinessType.heading = What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
+
+premisesNotCoveredYesNo.title = Do you have any other premises that are not covered by licences or permits?
+premisesNotCoveredYesNo.heading = Do you have any other premises that are not covered by licences or permits?
+premisesNotCoveredYesNo.checkYourAnswersLabel = Do you have any other premises that are not covered by licences or permits?
+premisesNotCoveredYesNo.error.required = Select yes if you have any other premises that are not covered by licences or permits
+premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
