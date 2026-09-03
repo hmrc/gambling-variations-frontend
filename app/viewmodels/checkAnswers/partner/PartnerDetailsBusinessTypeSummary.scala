@@ -27,8 +27,8 @@ import viewmodels.implicits.*
 
 object PartnerDetailsBusinessTypeSummary {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
-  private val index: Int = 0
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  private val index: Int = utils.PartnerUtils.interimIndex
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(PartnerDetailsBusinessTypePage(index)).map { answer =>

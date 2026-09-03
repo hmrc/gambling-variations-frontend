@@ -133,6 +133,8 @@ class Navigator @Inject() () {
       _ => routes.CheckBusinessAddressController.onPageLoad()
     case BusinessAddressAdditionalInformationPage =>
       _ => routes.CheckBusinessAddressController.onPageLoad()
+    case PartnerDetailsIsBusinessIncorporatedUkPage(index) =>
+      userAnswers => navigatePartnerDetailsIsBusinessIncorporatedUkPage(index, userAnswers)
 
     // Partner Details
     case PartnerDetailsAdditionalAddressInfoPage =>
@@ -161,6 +163,11 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerEmailAddressController.onPageLoad()
     case PartnerDetailsTradingNamePage(index) =>
       _ => controllers.partner.routes.PartnerTradingNameController.onPageLoad() // change it
+    case PartnerDetailsAddTradingNameYesNoPage(index) =>
+      userAnswers => navigatePartnerAddTradingNameYesNoPage(index)(userAnswers)
+    case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
+      _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
+
     case PartnerDetailsBusinessTypePage(index) =>
       userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
 
@@ -454,10 +461,23 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
+  private def navigatePartnerAddTradingNameYesNoPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsAddTradingNameYesNoPage(index))
+      .map {
+        case false =>
+          // Should go to Add/change trading name
+          controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad()
+        case true =>
+          // Should go to Is the partner's business incorporated in the UK? or PT-UTR - UTR Taxpayer Reference
+          controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
   private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
-      .fold(routes.SystemErrorController.onPageLoad())(routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
+      .fold(routes.SystemErrorController.onPageLoad())(controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers
@@ -524,5 +544,16 @@ class Navigator @Inject() () {
       case Some(isInAddFlow) => if (isInAddFlow) addFlowRoute else normalRoute
       case None              => normalRoute
     }
+  }
+
+  private def navigatePartnerDetailsIsBusinessIncorporatedUkPage(index: Int, userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
+      .map {
+        case true  => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
+        case false => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
   }
 }

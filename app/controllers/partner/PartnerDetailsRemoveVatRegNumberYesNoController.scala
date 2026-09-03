@@ -18,52 +18,56 @@ package controllers.partner
 
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
+import utils.PartnerUtils.getPartnersSize
 import controllers.routes
-import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
+import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.Mode
-import models.requests.DataRequest
 import navigation.Navigator
-import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
-import pages.partnerdetails.PartnerDetailsCorrespondenceEmailAddressPage
+import pages.partner.PartnerDetailsRemoveVatRegNumberYesNoPage
+import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsRemoveEmailAddressYesNoView
+import views.html.partner.PartnerDetailsRemoveVatRegNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import utils.PartnerUtils.getPartnersSize
 
-class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
+class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerDetailsRemoveEmailAddressYesNoFormProvider,
+  formProvider: PartnerDetailsRemoveVatRegNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsRemoveEmailAddressYesNoView
+  view: PartnerDetailsRemoveVatRegNumberYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
+  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
+     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
+     Lack of it implies data is ONLY in the cache and has not been submitted yet.
+   */
+
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request: DataRequest[AnyContent] =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val index: Int = request.userAnswers.getIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveEmailAddressYesNoPage(index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
     request.userAnswers
-      .get(PartnerDetailsCorrespondenceEmailAddressPage(index)) match {
-      case Some(email) =>
-        Ok(view(preparedForm, mode, email))
+      .get(PartnerDetailsVrnPage(index)) match {
+      case Some(vatRegNumber) =>
+        Ok(view(preparedForm, mode, vatRegNumber))
 
       case None =>
         Redirect(routes.JourneyRecoveryController.onPageLoad())
@@ -72,6 +76,7 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val index: Int = request.userAnswers.getIndex
+
     form
       .bindFromRequest()
       .fold(
@@ -81,7 +86,7 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
               view(formWithErrors,
                    mode,
                    request.userAnswers
-                     .get(PartnerDetailsCorrespondenceEmailAddressPage(index))
+                     .get(PartnerDetailsVrnPage(index))
                      .getOrElse("")
                   )
             )
@@ -89,13 +94,13 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- if (value) {
-                                Future.fromTry(request.userAnswers.remove(PartnerDetailsCorrespondenceEmailAddressPage(index)))
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsVrnPage(index)))
                               } else {
                                 Future.apply(request.userAnswers)
                               }
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveEmailAddressYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), mode, updatedAnswers))
       )
   }
 }

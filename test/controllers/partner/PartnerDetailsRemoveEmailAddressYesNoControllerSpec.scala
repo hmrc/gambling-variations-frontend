@@ -17,6 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
+import controllers.partner.PartnerUtils.getIndex
 import controllers.routes.JourneyRecoveryController
 import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.{NormalMode, UserAnswers}
@@ -24,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsRemoveEmailAddressYesNoPage
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveEmailAddressYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -41,7 +42,16 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
   private lazy val partnerDetailsRemoveEmailAddressYesNoRoute: String =
     controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
 
-  private val baseUserAnswers = UserAnswers(mgdRegNumber, cleanedData(emailAddress = Some(testEmailAddress)))
+  private val baseUserAnswers: UserAnswers =
+    UserAnswers(
+      mgdRegNumber,
+      cleanedData(emailAddress = Some(testEmailAddress))
+    )
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+
+  private val index: Int = baseUserAnswers.getIndex
 
   "PartnerDetailsRemoveEmailAddressYesNo Controller" - {
 
@@ -95,7 +105,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
       }
 
-      "must redirect to JourneyRecovery when no user answers are found" in {
+      "must redirect to SystemErrorController when no user answers are found" in {
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {

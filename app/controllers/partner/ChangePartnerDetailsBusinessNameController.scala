@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getPartnersSize
+import controllers.partner.PartnerUtils.getIndex
+import utils.PartnerUtils.getPartnersSize
+import controllers.routes
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
@@ -58,19 +60,19 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
 
   def onPageLoad(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData) { implicit request =>
-      val newIndex = getPartnersSize(request.userAnswers)
+      val index: Int = request.userAnswers.getIndex
 
-      (request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) map {
+      (request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) map {
         case Soleproprietor =>
           val form = request.userAnswers
-            .get(PartnerDetailsSoleProprietorPage(newIndex))
+            .get(PartnerDetailsSoleProprietorPage(index))
             .fold(soleProprietorFormProvider())(soleProp => soleProprietorFormProvider().fill(soleProp))
           Ok(changeSoleProprietorView(form, mode))
         case businessType =>
           val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
           val titleKey = BusinessTypeKeyBuilder.titleKeyFor(businessType)
           val form = request.userAnswers
-            .get(PartnerDetailsBusinessNamePage(newIndex))
+            .get(PartnerDetailsBusinessNamePage(index))
             .fold(businessNameFormProvider(businessType))(businessName => businessNameFormProvider(businessType).fill(businessName))
           Ok(changeBusinessNameView(form, mode, businessType, headingKey, titleKey))
       }).getOrElse(Redirect(routes.SystemErrorController.onPageLoad()))
@@ -79,9 +81,9 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
 
   def onSubmit(businessType: BusinessType, mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val newIndex = getPartnersSize(request.userAnswers)
+      val index: Int = request.userAnswers.getIndex
 
-      request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) map {
+      request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) map {
         case Soleproprietor =>
           soleProprietorFormProvider()
             .bindFromRequest()
@@ -91,9 +93,9 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
               },
               value =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsSoleProprietorPage(newIndex), value))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsSoleProprietorPage(index), value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(PartnerDetailsSoleProprietorPage(newIndex), mode, updatedAnswers))
+                } yield Redirect(navigator.nextPage(PartnerDetailsSoleProprietorPage(index), mode, updatedAnswers))
             )
         case businessType =>
           val headingKey = BusinessTypeKeyBuilder.headingKeyFor(businessType)
@@ -105,9 +107,9 @@ class ChangePartnerDetailsBusinessNameController @Inject() (
               formWithErrors => Future.successful(BadRequest(changeBusinessNameView(formWithErrors, mode, businessType, headingKey, titleKey))),
               value =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessNamePage(newIndex), value))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessNamePage(index), value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(PartnerDetailsBusinessNamePage(newIndex), mode, updatedAnswers))
+                } yield Redirect(navigator.nextPage(PartnerDetailsBusinessNamePage(index), mode, updatedAnswers))
             )
       } getOrElse Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
     }

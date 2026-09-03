@@ -21,12 +21,14 @@ import play.api.mvc.Call
 
 trait PartnerDetailsHelper {
 
-  val index: Int = 0
+  val index: Int = utils.PartnerUtils.interimIndex
+
   val mgdRegNumber: String = "XGM00000001761"
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
   val testNino: String = "SR123456A"
+  val testVRN: String = "GB123456789"
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
@@ -36,7 +38,8 @@ trait PartnerDetailsHelper {
     mobilePhoneNumber: Option[String] = None,
     emailAddress: Option[String] = None,
     additionalInformation: Option[String] = Some("ADI123456"),
-    nino: Option[String] = None
+    nino: Option[String] = None,
+    vrn: Option[String] = None
   ): JsObject = Json.obj(
     "partners" -> Json.arr(
       Json.obj(
@@ -69,7 +72,7 @@ trait PartnerDetailsHelper {
         "partnerDetailsDateOfBirth"            -> "1985-06-20",
         "partnerDetailsNino"                   -> nino,
         "partnerDetailsUtr"                    -> "1234567890",
-        "partnerDetailsVrn"                    -> "GB123456789",
+        "partnerDetailsVrn"                    -> vrn,
         "partnerDetailsCrn"                    -> "09876543",
         "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
         "partnerDetailsIsFutureLeaveDate"      -> 0,

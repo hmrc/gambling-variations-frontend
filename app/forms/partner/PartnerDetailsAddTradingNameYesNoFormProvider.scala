@@ -14,27 +14,17 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package forms.partner
 
-import base.SpecBase
-import controllers.partner.PartnerUtils.*
-import models.UserAnswers
-import play.api.libs.json.Json
+import javax.inject.Inject
 
-class PartnerUtilsSpec extends SpecBase {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  "PartnerUtils" - {
+class PartnerDetailsAddTradingNameYesNoFormProvider @Inject() extends Mappings {
 
-    "lastPartnerIndex" - {
-      "must return 0 when no partners exist" in {
-        emptyUserAnswers.getPartnersSize mustBe 0
-      }
-
-      "must return size - 1 when partners exist" in {
-        val answers = UserAnswers("id", Json.obj("partners" -> Json.arr(Json.obj("name" -> "A"), Json.obj("name" -> "B"))))
-        answers.getPartnersSize mustBe 1
-      }
-    }
-
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("partnerDetailsAddTradingNameYesNo.error.required")
+    )
 }

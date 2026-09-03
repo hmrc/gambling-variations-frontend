@@ -857,6 +857,13 @@ vatRegistrationNumberYesNo.checkYourAnswersLabel = Do you want to add a VAT regi
 vatRegistrationNumberYesNo.error.required = Select yes to add a VAT registration number for the partner
 vatRegistrationNumberYesNo.change.hidden = do you want to add a VAT registration number for the partner
 
+partnerDetailsRemoveVRNYesNo.title = Are you sure you want to remove this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.heading = Are you sure you want to remove {0} as this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.error.required = Select yes if you want to remove this partner’s VAT registration number
+partnerDetailsRemoveVRNYesNo.change.hidden = Are you sure you want to remove this partner’s VAT registration number?
+
+
 # Licences & Premises
 licenceNumber.title = What is the Gambling Commission operating or personal licence number?
 licenceNumber.heading = What is the Gambling Commission operating or personal licence number?
@@ -894,6 +901,18 @@ partnerDetailsBusinessType.heading = What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
+
+partnerDetailsIsBusinessIncorporatedUk.title = Is the partner’s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.heading = Is the partner’s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = Is the partner’s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.error.required = Select yes if the partner’s address is incorporated in the UK
+partnerDetailsIsBusinessIncorporatedUk.change.hidden = Is the partner’s business incorporated in the UK?
+
+partnerDetailsAddTradingNameYesNo.title = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.heading = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
+partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?
 
 partnerDateOfIncorporation.title = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.heading = When was the partner’s date of incorporation?

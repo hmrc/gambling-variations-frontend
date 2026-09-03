@@ -17,6 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
+import controllers.partner.PartnerUtils.getIndex
 import controllers.routes
 import forms.partner.PartnerDateOfIncorporationFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
@@ -42,15 +43,20 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
   private implicit val messages: Messages = stubMessages()
 
   private val formProvider = new PartnerDateOfIncorporationFormProvider()
-  private def form = formProvider()
+  private val form = formProvider()
 
-  private def onwardRoute = Call("GET", "/foo")
+  private val onwardRoute = Call("GET", "/foo")
 
   private val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val partnerDateOfIncorporationRoute =
+  private val getRoute =
     controllers.partner.routes.PartnerDateOfIncorporationController
       .onPageLoad()
+      .url
+
+  private val postRoute =
+    controllers.partner.routes.PartnerDateOfIncorporationController
+      .onSubmit()
       .url
 
   override val emptyUserAnswers = UserAnswers(userAnswersId)
@@ -63,18 +69,27 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       .set(PartnerDetailsAddPartnerCompletedPage, false)
       .success
       .value
-      .set(PartnerDetailsBusinessTypePage(0), BusinessType.Corporatebody)
+      .set(
+        PartnerDetailsBusinessTypePage(0),
+        BusinessType.Corporatebody
+      )
       .success
       .value
-      .set(PartnerDetailsIsBusinessIncorporatedUkPage(0), true)
+      .set(
+        PartnerDetailsIsBusinessIncorporatedUkPage(0),
+        true
+      )
       .success
       .value
+
+  private val index: Int =
+    partnerDetailsUserAnswers.getIndex
 
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest(GET, partnerDateOfIncorporationRoute)
+    FakeRequest(GET, getRoute)
 
   private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
-    FakeRequest(POST, partnerDateOfIncorporationRoute)
+    FakeRequest(POST, postRoute)
       .withFormUrlEncodedBody(
         "value.day"   -> validAnswer.getDayOfMonth.toString,
         "value.month" -> validAnswer.getMonthValue.toString,
@@ -86,10 +101,14 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(partnerDetailsUserAnswers)).build()
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        ).build()
 
       running(application) {
-        val result = route(application, getRequest()).value
+
+        val result =
+          route(application, getRequest()).value
 
         val view =
           application.injector.instanceOf[PartnerDateOfIncorporationView]
@@ -108,18 +127,25 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers =
         partnerDetailsUserAnswers
-          .set(PartnerDateOfIncorporationPage(0), validAnswer)
+          .set(
+            PartnerDateOfIncorporationPage(index),
+            validAnswer
+          )
           .success
           .value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
 
       running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
         val view =
           application.injector.instanceOf[PartnerDateOfIncorporationView]
-
-        val result = route(application, getRequest()).value
 
         status(result) mustEqual OK
 
@@ -133,21 +159,30 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
 
     "must redirect to the next page when valid data is submitted" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+      val mockSessionRepository =
+        mock[SessionRepository]
 
       when(mockSessionRepository.set(any()))
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(partnerDetailsUserAnswers))
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        )
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
+            bind[Navigator].toInstance(
+              new FakeNavigator(onwardRoute)
+            ),
+            bind[SessionRepository].toInstance(
+              mockSessionRepository
+            )
           )
           .build()
 
       running(application) {
-        val result = route(application, postRequest()).value
+
+        val result =
+          route(application, postRequest()).value
 
         status(result) mustEqual SEE_OTHER
 
@@ -158,22 +193,28 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(partnerDetailsUserAnswers)).build()
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        ).build()
 
       val request =
-        FakeRequest(POST, partnerDateOfIncorporationRoute)
+        FakeRequest(POST, postRoute)
           .withFormUrlEncodedBody(
             "value" -> "invalid value"
           )
 
       running(application) {
+
         val boundForm =
-          form.bind(Map("value" -> "invalid value"))
+          form.bind(
+            Map("value" -> "invalid value")
+          )
 
         val view =
           application.injector.instanceOf[PartnerDateOfIncorporationView]
 
-        val result = route(application, request).value
+        val result =
+          route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
 
@@ -185,13 +226,174 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
+    "must return OK for an LLP" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsPage(0),
+            userAnswersId
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage,
+            false
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessTypePage(0),
+            BusinessType.LimitedLiabilityPartnership
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual OK
+      }
+    }
+
+    "must redirect to SystemError when a corporate body is not incorporated in the UK" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsPage(0),
+            userAnswersId
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage,
+            false
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessTypePage(0),
+            BusinessType.Corporatebody
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsIsBusinessIncorporatedUkPage(0),
+            false
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError when the business type is missing" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsPage(0),
+            userAnswersId
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage,
+            false
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError when a corporate body has no incorporated in UK answer" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsPage(0),
+            userAnswersId
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage,
+            false
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessTypePage(0),
+            BusinessType.Corporatebody
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
     "must redirect to SystemError for a GET if no existing data is found" in {
 
       val application =
-        applicationBuilder(userAnswers = None).build()
+        applicationBuilder(
+          userAnswers = None
+        ).build()
 
       running(application) {
-        val result = route(application, getRequest()).value
+
+        val result =
+          route(application, getRequest()).value
 
         status(result) mustEqual SEE_OTHER
 
@@ -203,10 +405,14 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
     "must redirect to SystemError for a POST if no existing data is found" in {
 
       val application =
-        applicationBuilder(userAnswers = None).build()
+        applicationBuilder(
+          userAnswers = None
+        ).build()
 
       running(application) {
-        val result = route(application, postRequest()).value
+
+        val result =
+          route(application, postRequest()).value
 
         status(result) mustEqual SEE_OTHER
 

@@ -73,12 +73,14 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
-        val baseAnswers = validUserAnswers
-
-        val userAnswers = baseAnswers
-          .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
-          .success
-          .value
+        val userAnswers =
+          validUserAnswers
+            .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
+            .success
+            .value
+            .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
+            .success
+            .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -136,9 +138,8 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
             .build()
 
         running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", "true"))
+          val request = FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 
@@ -163,7 +164,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
 
         running(application) {
           val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+            FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
               .withFormUrlEncodedBody(("value", "false"))
 
           val result = route(application, request).value
@@ -180,7 +181,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
 
         running(application) {
           val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+            FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
               .withFormUrlEncodedBody(("value", ""))
 
           val boundForm = form.bind(Map("value" -> ""))
@@ -198,9 +199,8 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", "true"))
+          val request = FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 

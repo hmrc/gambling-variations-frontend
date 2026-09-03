@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getPartnersSize
+import controllers.partner.PartnerUtils.{getIndex, getPartnersSize}
 import forms.partner.PartnerDateOfIncorporationFormProvider
 import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
@@ -48,8 +48,7 @@ class PartnerDateOfIncorporationController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val index = getPartnersSize(request.userAnswers)
-
+      val index: Int = request.userAnswers.getIndex
       if (!shouldShowDateOfIncorporation(request.userAnswers, index)) {
         Redirect(controllers.routes.SystemErrorController.onPageLoad())
       } else {
@@ -66,7 +65,7 @@ class PartnerDateOfIncorporationController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-    val index = getPartnersSize(request.userAnswers)
+    val index: Int = request.userAnswers.getIndex
     val form = formProvider()
 
     form

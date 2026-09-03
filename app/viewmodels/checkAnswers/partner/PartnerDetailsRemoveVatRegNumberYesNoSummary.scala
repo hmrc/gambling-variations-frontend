@@ -17,26 +17,28 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoPage
+import pages.partner.PartnerDetailsRemoveVatRegNumberYesNoPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary {
+object PartnerDetailsRemoveVatRegNumberYesNoSummary {
+
   // TODO: Interim solution - will be refactored with the indexing ticket
   private val index: Int = utils.PartnerUtils.interimIndex
+
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index)).map { answer =>
+    answers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(index)).map { answer =>
 
       val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "partnerDetailsRemoveNinoYesNo.checkYourAnswersLabel",
+        key   = "partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDetailsRemoveNinoYesNo.change.hidden"))
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerDetailsRemoveVRNYesNo.change.hidden"))
         )
       )
     }

@@ -240,6 +240,18 @@ partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a Nati
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
 
+partnerDetailsAddTradingNameYesNo.title = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the partner
+partnerDetailsAddTradingNameYesNo.change.hidden = cy: Do you want to add a trading name for the partner?
+
+partnerDetailsRemoveVRNYesNo.title = cy: Are you sure you want to remove this partner’ VAT registration number?
+partnerDetailsRemoveVRNYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’ VAT registration number?
+partnerDetailsRemoveVRNYesNo.error.required = cy: Select yes if you want to remove this partner’ VAT registration number
+partnerDetailsRemoveVRNYesNo.change.hidden = cy: Are you sure you want to remove this partner’ VAT registration number?
+
 partnerDetailsBusinessType.title = cy: What type of business is the partner?
 partnerDetailsBusinessType.heading = cy: What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = cy: What type of business is the partner?
@@ -254,3 +266,9 @@ licenceNumber.hint = cy: It is 23 characters long, including the hyphens, like 0
 licenceNumber.error.required = cy:  Enter the Gambling Commission operating or personal licence number
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
+
+partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
+partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
