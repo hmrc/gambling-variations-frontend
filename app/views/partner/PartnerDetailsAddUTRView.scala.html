@@ -31,9 +31,9 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("partnerDetailsAddUTRPage.title"), Some(messages("changeRegistrationDetails.caption")))) {
+@layout(pageTitle = title(form, messages("partnerDetailsAddUTR.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action =  controllers.partner.routes.PartnerDetailsAddUTRPageController.onSubmit()) {
+    @formHelper(action =  controllers.partner.routes.PartnerDetailsAddUTRController.onSubmit()) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -42,21 +42,21 @@
         @caption(messages("changeRegistrationDetails.caption"))
 
         @fieldSet(Fieldset(legend = Some(
-            Legend(content = messages("partnerDetailsAddUTRPage.heading"), isPageHeading = true, classes = "govuk-fieldset__legend--l")
+            Legend(content = messages("partnerDetailsAddUTR.heading"), isPageHeading = true, classes = "govuk-fieldset__legend--l")
         )))
 
-        @paragraph(messages("partnerDetailsAddUTRPage.paragraph"))
+        @paragraph(messages("partnerDetailsAddUTR.paragraph"))
         <p class="govuk-body">
             <a class="govuk-link" href="https://www.gov.uk/find-utr-number" target="_blank" rel="noreferrer noopener">
-            @messages("partnerDetailsAddUTRPage.linkText")
+            @messages("partnerDetailsAddUTR.linkText")
             </a>
         </p>
 
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("partnerDetailsAddUTRPage.subtitle")).asPageHeading(Medium)
-            ).withWidth(Fixed10).withHint(HintViewModel(messages("partnerDetailsAddUTRPage.hint")))
+                label = LabelViewModel(messages("partnerDetailsAddUTR.subtitle")).asPageHeading(Medium)
+            ).withWidth(Fixed10).withHint(HintViewModel(messages("partnerDetailsAddUTR.hint")))
         )
 
         @govukButton(

@@ -17,30 +17,30 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.partner.PartnerDetailsAddUTRPageFormProvider
+import forms.partner.PartnerDetailsAddUTRFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerDetailsAddUTRPagePage
+import pages.partner.PartnerDetailsAddUTRPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsAddUTRPageView
+import views.html.partner.PartnerDetailsAddUTRView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsAddUTRPageController @Inject() (
+class PartnerDetailsAddUTRController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: PartnerDetailsAddUTRPageFormProvider,
+  formProvider: PartnerDetailsAddUTRFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsAddUTRPageView
+  view: PartnerDetailsAddUTRView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,7 +49,7 @@ class PartnerDetailsAddUTRPageController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddUTRPagePage) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsAddUTRPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -65,9 +65,9 @@ class PartnerDetailsAddUTRPageController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddUTRPagePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddUTRPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddUTRPagePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsAddUTRPage, mode, updatedAnswers))
       )
   }
 }

@@ -19,15 +19,15 @@ package forms.partner
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
-class PartnerDetailsAddUTRPageFormProviderSpec extends StringFieldBehaviours {
+class PartnerDetailsAddUTRFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "partnerDetailsAddUTRPage.error.required"
-  val invalidCharsKey = "partnerDetailsAddUTRPage.error.invalidChars"
-  val incorrectKey = "partnerDetailsAddUTRPage.error.incorrect"
-  val invalidKey = "partnerDetailsAddUTRPage.error.invalid"
+  val requiredKey = "partnerDetailsAddUTR.error.required"
+  val invalidCharsKey = "partnerDetailsAddUTR.error.invalidChars"
+  val incorrectKey = "partnerDetailsAddUTR.error.incorrect"
+  val invalidKey = "partnerDetailsAddUTR.error.invalid"
   val maxLength = 10
 
-  val form = new PartnerDetailsAddUTRPageFormProvider()()
+  val form = new PartnerDetailsAddUTRFormProvider()()
 
   ".value" - {
 

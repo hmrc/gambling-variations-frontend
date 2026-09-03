@@ -284,8 +284,8 @@ POST       /change-registration-details/licences-and-premises/gambling-commissio
 GET        /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRPageController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRPageController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details                                             controllers.partner.PartnerDetailsController.onPageLoad
 POST       /change-registration-details/partner-details                                             controllers.partner.PartnerDetailsController.onSubmit

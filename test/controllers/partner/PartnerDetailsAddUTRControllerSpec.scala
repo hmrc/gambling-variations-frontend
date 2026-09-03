@@ -17,30 +17,30 @@
 package controllers.partner
 
 import base.SpecBase
-import forms.partner.PartnerDetailsAddUTRPageFormProvider
+import forms.partner.PartnerDetailsAddUTRFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsAddUTRPagePage
+import pages.partner.PartnerDetailsAddUTRPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.partner.PartnerDetailsAddUTRPageView
+import views.html.partner.PartnerDetailsAddUTRView
 
 import scala.concurrent.Future
 
-class PartnerDetailsAddUTRPageControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val form: Form[String] = (new PartnerDetailsAddUTRPageFormProvider())()
+  val form: Form[String] = (new PartnerDetailsAddUTRFormProvider())()
 
-  lazy val partnerDetailsAddUTRPageRoute: String = routes.PartnerDetailsAddUTRPageController.onPageLoad().url
+  lazy val partnerDetailsAddUTRPageRoute: String = routes.PartnerDetailsAddUTRController.onPageLoad().url
 
   "PartnerDetailsAddUTRPage Controller" - {
 
@@ -53,7 +53,7 @@ class PartnerDetailsAddUTRPageControllerSpec extends SpecBase with MockitoSugar 
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PartnerDetailsAddUTRPageView]
+        val view = application.injector.instanceOf[PartnerDetailsAddUTRView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
@@ -62,14 +62,14 @@ class PartnerDetailsAddUTRPageControllerSpec extends SpecBase with MockitoSugar 
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsAddUTRPagePage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsAddUTRPage, "answer").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerDetailsAddUTRPageRoute)
 
-        val view = application.injector.instanceOf[PartnerDetailsAddUTRPageView]
+        val view = application.injector.instanceOf[PartnerDetailsAddUTRView]
 
         val result = route(application, request).value
 
@@ -115,7 +115,7 @@ class PartnerDetailsAddUTRPageControllerSpec extends SpecBase with MockitoSugar 
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[PartnerDetailsAddUTRPageView]
+        val view = application.injector.instanceOf[PartnerDetailsAddUTRView]
 
         val result = route(application, request).value
 

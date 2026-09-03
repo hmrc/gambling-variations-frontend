@@ -21,21 +21,21 @@ import javax.inject.Inject
 import play.api.data.Form
 import utils.UtrChecksumValidator.isValidUtr
 
-class PartnerDetailsAddUTRPageFormProvider @Inject() extends Mappings {
+class PartnerDetailsAddUTRFormProvider @Inject() extends Mappings {
 
   private val digitsOnlyRegex = """^\d+$"""
 
   def apply(): Form[String] =
     Form(
-      "value" -> text("partnerDetailsAddUTRPage.error.required")
+      "value" -> text("partnerDetailsAddUTR.error.required")
         .verifying(
-          regexp(digitsOnlyRegex, "partnerDetailsAddUTRPage.error.invalidChars")
+          regexp(digitsOnlyRegex, "partnerDetailsAddUTR.error.invalidChars")
         )
         .verifying(
-          maxLength(10, "partnerDetailsAddUTRPage.error.incorrect")
+          maxLength(10, "partnerDetailsAddUTR.error.incorrect")
         )
         .verifying(
-          "partnerDetailsAddUTRPage.error.invalid",
+          "partnerDetailsAddUTR.error.invalid",
           isValidUtr _
         )
     )

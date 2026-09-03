@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partner.PartnerDetailsAddUTRPagePage
+import pages.partner.PartnerDetailsAddUTRPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -27,14 +27,14 @@ import viewmodels.implicits.*
 object PartnerDetailsAddUTRPageSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsAddUTRPagePage).map { answer =>
+    answers.get(PartnerDetailsAddUTRPage).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "partnerDetailsAddUTRPage.checkYourAnswersLabel",
+        key   = "partnerDetailsAddUTR.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsAddUTRPageController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDetailsAddUTRPage.change.hidden"))
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsAddUTRController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerDetailsAddUTR.change.hidden"))
         )
       )
     }
