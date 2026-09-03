@@ -54,11 +54,25 @@ class AddressLookupConnector @Inject() (
   }
 
   def initJourney(configSettings: AddressLookupConfigSettings)(implicit hc: HeaderCarrier): Future[String] = {
+    logger.info(s"[AddressLookup]: Initialising journey using endpoint ${config.addressLookupFrontendBaseUrl}/api/init")
+
     httpClient
       .post(url"${config.addressLookupFrontendBaseUrl}/api/init")
       .withBody(Json.toJson(configSettings))
       .execute[HttpResponse]
+      .recoverWith { case exception =>
+        logger.error(
+          s"[AddressLookup]: Failed to initialise journey using endpoint ${config.addressLookupFrontendBaseUrl}/api/init",
+          exception
+        )
+        Future.failed(exception)
+      }
       .map { response =>
+        logger.info(
+          s"[AddressLookup]: Initialisation response status=${response.status}, " +
+            s"locationHeaderPresent=${response.header(HeaderNames.LOCATION).isDefined}"
+        )
+
         response.status match {
           case ACCEPTED =>
             response.header(HeaderNames.LOCATION) match {
@@ -68,8 +82,9 @@ class AddressLookupConnector @Inject() (
                 throw new RuntimeException("[AddressLookup]: No Location Header returned from Address Lookup")
             }
           case status =>
-            logger.error("[AddressLookup]: Unexpected response, status $status returned")
-            throw new RuntimeException("[AddressLookup]: Unexpected response, status $status returned")
+            val message = s"[AddressLookup]: Unexpected response, status $status returned"
+            logger.error(message)
+            throw new RuntimeException(message)
         }
       }
   }
@@ -78,9 +93,23 @@ class AddressLookupConnector @Inject() (
     id: String
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Address] = {
     val fullUrl = s"${config.retrieveAddressUrl}?id=$id"
+
+    logger.info(s"[AddressLookup]: Retrieving confirmed address using endpoint ${config.retrieveAddressUrl}")
+
     httpClient
       .get(url"$fullUrl")
       .execute[Address]
+      .map { address =>
+        logger.info("[AddressLookup]: Successfully retrieved confirmed address")
+        address
+      }
+      .recoverWith { case exception =>
+        logger.error(
+          s"[AddressLookup]: Failed to retrieve confirmed address using endpoint ${config.retrieveAddressUrl}",
+          exception
+        )
+        Future.failed(exception)
+      }
   }
 
 }
