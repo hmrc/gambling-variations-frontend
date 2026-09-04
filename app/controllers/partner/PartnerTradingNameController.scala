@@ -18,7 +18,6 @@ package controllers.partner
 
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
-import utils.PartnerUtils.getPartnersSize
 import controllers.routes
 import forms.partner.PartnerTradingNameFormProvider
 import models.Mode
@@ -29,6 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.PartnerUtils.getPartnersSize
 import views.html.partner.PartnerTradingNameView
 
 import javax.inject.Inject

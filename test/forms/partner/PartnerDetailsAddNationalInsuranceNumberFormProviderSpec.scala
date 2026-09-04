@@ -56,7 +56,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
 
       for (input <- invalidCharInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors must contain(FormError(fieldName, invalidCharsKey, Seq(ninoCharsRegex)))
+        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoValidRegex)))
       }
     }
 
@@ -65,7 +65,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
 
       for (input <- invalidFormatInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoFormatRegex)))
+        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoValidRegex)))
       }
     }
 
@@ -74,7 +74,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
 
       for (input <- invalidLengthInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors must contain(FormError(fieldName, lengthKey, Seq(ninoLengthRegex)))
+        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoValidRegex)))
       }
     }
 
@@ -90,7 +90,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
 
       for (input <- disallowedInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors must contain(FormError(fieldName, invalidKey, Seq(ninoValidRegex)))
+        result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoValidRegex)))
       }
     }
   }

@@ -30,14 +30,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
       "value" ->
         text(requiredKey)
           .transform[String](_.filterNot(_.isWhitespace).toUpperCase, identity)
-          .verifying(
-            Seq(
-              regexp(ninoCharsRegex, invalidCharsKey),
-              regexp(ninoFormatRegex, invalidFormatKey),
-              regexp(ninoLengthRegex, lengthKey),
-              regexp(ninoValidRegex, invalidKey)
-            )*
-          )
+          .verifying(regexp(ninoValidRegex, invalidFormatKey))
     )
   }
 }
@@ -45,16 +38,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
 object PartnerDetailsAddNationalInsuranceNumberFormProvider {
 
   private[forms] val requiredKey = "partnerDetailsAddNino.error.required"
-  private[forms] val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
   private[forms] val invalidFormatKey = "partnerDetailsAddNino.error.invalidFormat"
-  private[forms] val lengthKey = "partnerDetailsAddNino.error.length"
-  private[forms] val invalidKey = "partnerDetailsAddNino.error.invalid"
-
-  private[forms] val ninoCharsRegex = """^[A-Z0-9]+$"""
-
-  private[forms] val ninoFormatRegex = """^[A-Z]{2}[0-9]+[A-Z]$"""
-
-  private[forms] val ninoLengthRegex = """^[A-Z0-9]{9}$"""
 
   private[forms] val ninoValidRegex =
     """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""

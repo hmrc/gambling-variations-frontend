@@ -119,7 +119,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNino.error.length")
+        messages("partnerDetailsAddNino.error.invalidFormat")
       )
     }
 
@@ -151,7 +151,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNino.error.invalidChars")
+        messages("partnerDetailsAddNino.error.invalidFormat")
       )
     }
 
@@ -167,7 +167,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNino.error.invalid")
+        messages("partnerDetailsAddNino.error.invalidFormat")
       )
     }
   }
