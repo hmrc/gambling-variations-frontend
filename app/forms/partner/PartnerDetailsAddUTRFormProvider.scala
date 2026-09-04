@@ -16,12 +16,12 @@
 
 package forms.partner
 
-import forms.mappings.Mappings
+import forms.mappings.{ChecksumConstraints, Mappings}
+
 import javax.inject.Inject
 import play.api.data.Form
-import utils.UtrChecksumValidator.isValidUtr
 
-class PartnerDetailsAddUTRFormProvider @Inject() extends Mappings {
+class PartnerDetailsAddUTRFormProvider @Inject() extends Mappings with ChecksumConstraints {
 
   private val digitsOnlyRegex = """^\d+$"""
 
@@ -34,9 +34,6 @@ class PartnerDetailsAddUTRFormProvider @Inject() extends Mappings {
         .verifying(
           maxLength(10, "partnerDetailsAddUTR.error.incorrect")
         )
-        .verifying(
-          "partnerDetailsAddUTR.error.invalid",
-          isValidUtr _
-        )
+        .verifying(utrChecksum("partnerDetailsAddUTR.error.invalid"))
     )
 }

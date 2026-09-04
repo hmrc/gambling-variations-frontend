@@ -18,7 +18,6 @@ package controllers.partner
 
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
-import utils.PartnerUtils.getPartnersSize
 import controllers.routes
 import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.Mode
