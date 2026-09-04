@@ -17,23 +17,35 @@
 package forms.partner
 
 import forms.mappings.{ChecksumConstraints, Mappings}
+import forms.partner.PartnerDetailsAddUTRFormProvider.*
+import play.api.data.Form
+import utils.ChecksumValidator
 
 import javax.inject.Inject
-import play.api.data.Form
 
 class PartnerDetailsAddUTRFormProvider @Inject() extends Mappings with ChecksumConstraints {
 
-  private val digitsOnlyRegex = """^\d+$"""
-
   def apply(): Form[String] =
     Form(
-      "value" -> text("partnerDetailsAddUTR.error.required")
+      "value" -> text(requiredKey)
+        .transform[String](_.trim, identity)
         .verifying(
-          regexp(digitsOnlyRegex, "partnerDetailsAddUTR.error.invalidChars")
+          regexp(digitsOnlyRegex, invalidCharsKey),
+          regexp(lengthRegex, incorrectKey),
+          utrChecksum(invalidKey)
         )
-        .verifying(
-          maxLength(10, "partnerDetailsAddUTR.error.incorrect")
-        )
-        .verifying(utrChecksum("partnerDetailsAddUTR.error.invalid"))
     )
+}
+
+object PartnerDetailsAddUTRFormProvider {
+
+  // message keys
+  private[forms] val requiredKey = "partnerDetailsAddUTR.error.required"
+  private[forms] val invalidCharsKey = "partnerDetailsAddUTR.error.invalidChars"
+  private[forms] val incorrectKey = "partnerDetailsAddUTR.error.incorrect"
+  private[forms] val invalidKey = "partnerDetailsAddUTR.error.invalid"
+
+  // Regex
+  private[forms] val lengthRegex = ChecksumValidator.utrFormatRegex
+  private[forms] val digitsOnlyRegex = """^\d+$"""
 }

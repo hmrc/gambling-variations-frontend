@@ -19,7 +19,6 @@ package controllers.partner
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
 import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
-import utils.PartnerUtils.getPartnersSize
 import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage

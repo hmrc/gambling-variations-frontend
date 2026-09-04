@@ -17,15 +17,10 @@
 package forms.partner
 
 import forms.behaviours.StringFieldBehaviours
+import forms.partner.PartnerDetailsAddUTRFormProvider.*
 import play.api.data.FormError
 
 class PartnerDetailsAddUTRFormProviderSpec extends StringFieldBehaviours {
-
-  val requiredKey = "partnerDetailsAddUTR.error.required"
-  val invalidCharsKey = "partnerDetailsAddUTR.error.invalidChars"
-  val incorrectKey = "partnerDetailsAddUTR.error.incorrect"
-  val invalidKey = "partnerDetailsAddUTR.error.invalid"
-  val maxLength = 10
 
   val form = new PartnerDetailsAddUTRFormProvider()()
 
@@ -33,6 +28,7 @@ class PartnerDetailsAddUTRFormProviderSpec extends StringFieldBehaviours {
 
     val fieldName = "value"
 
+    // Valid sample passing Modulo 11 UTR checksum
     val validUtr = "1121766916"
 
     "must bind valid UTR with correct Modulo 11 checksum" in {
@@ -41,17 +37,26 @@ class PartnerDetailsAddUTRFormProviderSpec extends StringFieldBehaviours {
       result.value.value mustBe validUtr
     }
 
+    "must trim leading and trailing whitespace before binding" in {
+      val result = form.bind(Map(fieldName -> s"  $validUtr  "))
+      result.errors mustBe empty
+      result.value.value mustBe validUtr
+    }
+
     "must fail to bind non-numeric characters" in {
       val result = form.bind(Map(fieldName -> "12345ABCDE"))
-      result.errors must contain(FormError(fieldName, invalidCharsKey, Seq("""^\d+$""")))
+      result.errors must contain(FormError(fieldName, invalidCharsKey, Seq(digitsOnlyRegex)))
     }
 
-    "must fail to bind string exceeding 10 characters" in {
-      val result = form.bind(Map(fieldName -> "112176691612"))
-      result.errors must contain(FormError(fieldName, incorrectKey, Seq(maxLength)))
+    "must fail to bind numeric string that is not exactly 10 digits" in {
+      val tooShort = form.bind(Map(fieldName -> "112176691"))
+      tooShort.errors must contain(FormError(fieldName, incorrectKey, Seq(lengthRegex)))
+
+      val tooLong = form.bind(Map(fieldName -> "11217669160"))
+      tooLong.errors must contain(FormError(fieldName, incorrectKey, Seq(lengthRegex)))
     }
 
-    "must fail to bind 10-digit string with invalid checksum" in {
+    "must fail to bind 10 digits with invalid checksum" in {
       val result = form.bind(Map(fieldName -> "1234567890"))
       result.errors must contain(FormError(fieldName, invalidKey))
     }
