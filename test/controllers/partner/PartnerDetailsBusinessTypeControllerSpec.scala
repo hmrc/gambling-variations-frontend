@@ -17,7 +17,7 @@
 package controllers.partner
 
 import base.SpecBase
-import utils.PartnerUtils.getIndex
+import controllers.partner.PartnerUtils.getIndex
 import controllers.partner.routes.PartnerDetailsBusinessTypeController
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
 import models.BusinessType.Corporatebody
@@ -26,6 +26,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import pages.partnerdetails.PartnerDetailsBusinessTypePage
 import play.api.data.Form
 import play.api.inject.bind
@@ -43,7 +44,11 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
   lazy val partnerDetailsBusinessTypeRoute: String =
     PartnerDetailsBusinessTypeController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val validUserAnswers: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData())
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
 
   private val expectedIndex: Int = validUserAnswers.getIndex
 
@@ -68,7 +73,10 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" ignore {
+
         // TODO: this has to be fixed with the indexing ticket
+        val targetIndex = validUserAnswers.getIndex
+
         val userAnswers = validUserAnswers
           .set(PartnerDetailsBusinessTypePage(expectedIndex), Corporatebody)
           .success

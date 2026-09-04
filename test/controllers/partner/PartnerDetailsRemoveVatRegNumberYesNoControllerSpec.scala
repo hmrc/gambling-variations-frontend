@@ -17,13 +17,14 @@
 package controllers.partner
 
 import base.SpecBase
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsRemoveVatRegNumberYesNoPage
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveVatRegNumberYesNoPage}
 import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -41,9 +42,19 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
 
   private lazy val removeVrnRoute = routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url
 
-  val userAnswersWithNoVrn: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
-  val userAnswersWithVrn: UserAnswers = UserAnswers(mgdRegNumber, cleanedData(vrn = Some(testVRN)))
+  private val userAnswersWithNoVrn: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData())
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
 
+  private val userAnswersWithVrn: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData(vrn = Some(testVRN)))
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+
+  private val index: Int = userAnswersWithVrn.getIndex
   "PartnerDetailsRemoveVatRegNumberYesNo Controller" - {
 
     "onPageLoad" - {

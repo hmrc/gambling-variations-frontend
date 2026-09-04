@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import utils.PartnerUtils.getPartnersSize
 import forms.partner.PartnerDetailsAddTradingNameYesNoFormProvider
 import models.Mode
@@ -46,18 +47,13 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
-     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
-     Lack of it implies data is ONLY in the cache and has not been submitted yet.
-   */
-
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val newIndex = request.userAnswers.getPartnersSize
+    val index: Int = request.userAnswers.getIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(newIndex)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -66,7 +62,7 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val newIndex = request.userAnswers.getPartnersSize
+    val index: Int = request.userAnswers.getIndex
 
     form
       .bindFromRequest()
@@ -74,9 +70,9 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddTradingNameYesNoPage(newIndex), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddTradingNameYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newIndex), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(index), mode, updatedAnswers))
       )
   }
 }
