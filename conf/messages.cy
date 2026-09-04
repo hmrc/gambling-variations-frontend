@@ -267,6 +267,14 @@ licenceNumber.error.required = cy:  Enter the Gambling Commission operating or p
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
 
+removePremisesDetailsYesNo.title = cy: This change will remove your premises details
+removePremisesDetailsYesNo.heading = cy: This change will remove your premises details
+removePremisesDetailsYesNo.p1 = cy: If you submit this change, HMRC will remove the premises details you have provided.
+removePremisesDetailsYesNo.doYou = cy: Are you sure you want to make this change?
+removePremisesDetailsYesNo.checkYourAnswersLabel = cy: Are you sure you want to make this change?
+removePremisesDetailsYesNo.error.required = cy: Select yes if you want to make this change
+removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make this change?
+
 partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
