@@ -31,7 +31,7 @@ class PartnerDetailsAddUTRFormProvider @Inject() extends Mappings with ChecksumC
         .transform[String](_.trim, identity)
         .verifying(
           regexp(digitsOnlyRegex, invalidCharsKey),
-          regexp(lengthRegex, incorrectKey),
+          regexp(lengthRegex, invalidLengthKey),
           utrChecksum(invalidKey)
         )
     )
@@ -42,7 +42,7 @@ object PartnerDetailsAddUTRFormProvider {
   // message keys
   private[forms] val requiredKey = "partnerDetailsAddUTR.error.required"
   private[forms] val invalidCharsKey = "partnerDetailsAddUTR.error.invalidChars"
-  private[forms] val incorrectKey = "partnerDetailsAddUTR.error.incorrect"
+  private[forms] val invalidLengthKey = "partnerDetailsAddUTR.error.length"
   private[forms] val invalidKey = "partnerDetailsAddUTR.error.invalid"
 
   // Regex

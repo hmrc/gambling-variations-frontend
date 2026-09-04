@@ -50,10 +50,10 @@ class PartnerDetailsAddUTRFormProviderSpec extends StringFieldBehaviours {
 
     "must fail to bind numeric string that is not exactly 10 digits" in {
       val tooShort = form.bind(Map(fieldName -> "112176691"))
-      tooShort.errors must contain(FormError(fieldName, incorrectKey, Seq(lengthRegex)))
+      tooShort.errors must contain(FormError(fieldName, invalidLengthKey, Seq(lengthRegex)))
 
       val tooLong = form.bind(Map(fieldName -> "11217669160"))
-      tooLong.errors must contain(FormError(fieldName, incorrectKey, Seq(lengthRegex)))
+      tooLong.errors must contain(FormError(fieldName, invalidLengthKey, Seq(lengthRegex)))
     }
 
     "must fail to bind 10 digits with invalid checksum" in {
