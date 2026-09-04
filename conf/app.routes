@@ -281,15 +281,24 @@ POST       /change-registration-details/partner-details/remove-vat-registration-
 GET        /change-registration-details/partner-details/business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onSubmit(mode: Mode = NormalMode)
-
 GET        /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details                                             controllers.partner.PartnerDetailsController.onPageLoad
 POST       /change-registration-details/partner-details                                             controllers.partner.PartnerDetailsController.onSubmit
 
+GET        /change-registration-details/partner-details                       controllers.partner.PartnerDetailsController.onPageLoad
+POST       /change-registration-details/partner-details                      controllers.partner.PartnerDetailsController.onSubmit
+
 GET        /change-registration-details/partner-details/continue                                    controllers.partner.PartnerDetailsController.onContinue
 GET        /change-registration-details/partner-details/:partnerNumber/remove                       controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
 GET        /change-registration-details/partner-details/:partnerNumber                              controllers.partner.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
+
+GET        /change-registration-details/licences-and-premises/check              controllers.licencespremises.CheckLicencesAndPremisesController.onPageLoad()
+
+GET        /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onSubmit(mode: Mode = NormalMode)
+
