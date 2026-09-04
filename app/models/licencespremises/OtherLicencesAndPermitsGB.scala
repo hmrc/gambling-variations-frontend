@@ -44,7 +44,7 @@ object OtherLicencesAndPermitsGB extends Enumerable.Implicits {
     prizeGaming         -> LicencePrizeGamingPage
   )
 
-  val allValues: Seq[OtherLicencesAndPermitsGB] = Seq(
+  val values: Seq[OtherLicencesAndPermitsGB] = Seq(
     clubGaming,
     clubMachine,
     clubPremises,
@@ -65,5 +65,5 @@ object OtherLicencesAndPermitsGB extends Enumerable.Implicits {
   }
 
   implicit val enumerable: Enumerable[OtherLicencesAndPermitsGB] =
-    Enumerable(allValues.map(v => v.toString -> v)*)
+    Enumerable(values.map(v => v.toString -> v)*)
 }
