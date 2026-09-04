@@ -34,6 +34,7 @@ object OtherLicencesAndPermitsViewModel {
           LegendViewModel(Text(messages("otherLicencesAndPermitsGB.heading"))).asPageHeading(LegendSize.Large)
         )
       ),
+      name = "permitsGB",
       hint = Some(HintViewModel(Text(messages("otherLicencesAndPermitsGB.hint")))),
       items = positiveValues.zipWithIndex.map { case (checkedBox, index) =>
         CheckboxItem(
@@ -47,7 +48,7 @@ object OtherLicencesAndPermitsViewModel {
         ++ Seq(
           CheckboxItem(
             id        = Some(s"permitsGB-none"),
-            name = Some(s"permitsGB[${noneIndex}]"),
+            name = Some(s"permitsGB[$noneIndex]"),
             content   = Text(messages(s"otherLicencesAndPermitsGB.option.none")),
             value     = "none",
             behaviour = Some(ExclusiveCheckbox)
