@@ -845,10 +845,7 @@ partnerDetailsAddNino.checkYourAnswersLabel = What is the partner’s National I
 partnerDetailsAddNino.hidden = What is the partner’s National Insurance number?
 partnerDetailsAddNino.hint = For example, QQ 12 34 56 C
 partnerDetailsAddNino.error.required = Enter the partner’s National Insurance number
-partnerDetailsAddNino.error.length = The National Insurance number must be 9 characters long, including spaces
-partnerDetailsAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 1 to 9 and spaces
-partnerDetailsAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not A, B, C or D, the next 6 characters must be numbers 0 to 9, and the final character must be a space, B, C, or D
-partnerDetailsAddNino.error.invalid = Enter a real National Insurance number
+partnerDetailsAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not D, followed by 6 numbers and the final letter must be B, C, or D
 
 
 vatRegistrationNumberYesNo.title = Do you want to add a VAT registration number for the partner?
