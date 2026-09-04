@@ -95,7 +95,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
-      val set = mappedValuesWithPages.keys.filter(value => userAnswers.get(mappedValuesWithPages(value)).contains("1")).toSet
+      val set = getSelectedLicencesAndPermits(userAnswers)
 
       running(application) {
         val request =
