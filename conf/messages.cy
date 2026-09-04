@@ -272,3 +272,16 @@ partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business i
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
+
+partnerDetailsAddUTR.title = cy: Tell us the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.subtitle = cy:  What is the Unique Taxpayer Reference?
+partnerDetailsAddUTR.heading = cy: Tell us the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.hint = cy: It must be 10 digits long, for example 1234567890
+partnerDetailsAddUTR.paragraph = cy: You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+partnerDetailsAddUTR.linkText = cy: Get more help to find your UTR (opens in new tab).
+partnerDetailsAddUTR.checkYourAnswersLabel = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.error.required = cy: Enter the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
+partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference

@@ -21,15 +21,15 @@ import controllers.routes
 import models.*
 import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
+import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
+import pages.licencespremises.LicenceNumberPage
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.LicenceNumberPage
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -1122,6 +1122,22 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), NormalMode, answers) mustBe
           controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad()
+      }
+
+      "should route PartnerDetailsAddUTRPage to SystemErrorController when answer is false" in {
+        navigator.nextPage(PartnerDetailsAddUTRPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsAddUTRPage to VatRegistrationNumberYesNoController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsAddUTRPage(index), "123")
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsAddUTRPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
       }
 
     }

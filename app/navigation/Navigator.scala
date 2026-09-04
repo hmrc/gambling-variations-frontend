@@ -167,9 +167,10 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerAddTradingNameYesNoPage(index)(userAnswers)
     case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
       _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
-
     case PartnerDetailsBusinessTypePage(index) =>
-      userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
+      userAnswers => navigatePartnerDetailsBusinessTypePage(index)(userAnswers) // change it
+    case PartnerDetailsAddUTRPage(index) =>
+      userAnswers => navigatePartnerDetailsUTRPage(index)(userAnswers)
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -474,10 +475,15 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
+  private def navigatePartnerDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
       .fold(routes.SystemErrorController.onPageLoad())(controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
+
+  private def navigatePartnerDetailsUTRPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsAddUTRPage(index))
+      .fold(routes.SystemErrorController.onPageLoad())(_ => controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad())
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

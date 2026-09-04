@@ -43,4 +43,38 @@ class ChecksumValidatorSpec extends AnyFreeSpec with Matchers {
       ChecksumValidator.isValidMgdrn("XAM00001234567") mustBe false
     }
   }
+
+  "isValidUtr" - {
+
+    "return true for a blank value" in {
+      ChecksumValidator.isValidUtr("") mustBe true
+      ChecksumValidator.isValidUtr("   ") mustBe true
+    }
+
+    "return true when the format and Modulo 11 checksum are valid" in {
+      // Valid documented UTR sample
+      ChecksumValidator.isValidUtr("1121766916") mustBe true
+    }
+
+    "return true when valid UTR contains spaces" in {
+      ChecksumValidator.isValidUtr("112 176 6916") mustBe true
+    }
+
+    "return false when the value contains non-numeric characters" in {
+      ChecksumValidator.isValidUtr("112176691A") mustBe false
+      ChecksumValidator.isValidUtr("ABCDEFGHIJ") mustBe false
+    }
+
+    "return false when the length is less than 10 digits" in {
+      ChecksumValidator.isValidUtr("112176691") mustBe false
+    }
+
+    "return false when the length is greater than 10 digits" in {
+      ChecksumValidator.isValidUtr("11217669160") mustBe false
+    }
+
+    "return false when 10 digits are provided but the checksum calculation fails" in {
+      ChecksumValidator.isValidUtr("1234567890") mustBe false
+    }
+  }
 }

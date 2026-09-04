@@ -24,6 +24,10 @@ object ChecksumValidator {
   val mgdrnChecksumLookup: String = "ABCDEFGHXJKLMNYPQRSTZVW"
   val mgdrnCheckCharacterIndex: Int = 1
 
+  val utrFormatRegex: String = "^[0-9]{10}$"
+  val utrChecksumWeights: IndexedSeq[Int] = IndexedSeq(6, 7, 8, 9, 10, 5, 4, 3, 2)
+  val utrCheckCharacterIndex: Int = 0
+
   def isValidMgdrn(value: String): Boolean =
     isValidModulo23(
       value,
@@ -65,4 +69,31 @@ object ChecksumValidator {
       lookup(total % 23) == value(checkCharacterIndex)
     }
   }
+
+  def isValidUtr(value: String): Boolean = {
+    val cleanedValue = value.replaceAll("\\s", "")
+
+    if (cleanedValue.isBlank) {
+      true
+    } else if (!cleanedValue.matches(utrFormatRegex) || cleanedValue.length != 10) {
+      false
+    } else {
+      val expectedCheckDigit = cleanedValue(utrCheckCharacterIndex) - '0'
+      val payload = cleanedValue.substring(1)
+
+      val total = payload
+        .zip(utrChecksumWeights)
+        .map { case (character, weight) =>
+          (character - '0') * weight
+        }
+        .sum
+
+      val modResult = total % 11
+      val rawChecksum = 11 - modResult
+      val calculatedChecksum = if (rawChecksum > 9) rawChecksum - 9 else rawChecksum
+
+      calculatedChecksum == expectedCheckDigit
+    }
+  }
+
 }
