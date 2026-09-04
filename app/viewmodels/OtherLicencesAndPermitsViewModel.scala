@@ -27,7 +27,6 @@ import viewmodels.govuk.all.{FieldsetViewModel, HintViewModel, LegendViewModel}
 
 object OtherLicencesAndPermitsViewModel {
   def apply(form: Form[Set[OtherLicencesAndPermitsGB]])(implicit messages: Messages): Checkboxes = {
-    val noneIndex = 8
     Checkboxes(
       fieldset = Some(
         FieldsetViewModel(
@@ -39,7 +38,6 @@ object OtherLicencesAndPermitsViewModel {
       items = positiveValues.zipWithIndex.map { case (checkedBox, index) =>
         CheckboxItem(
           id      = Some(s"permitsGB-${checkedBox.toString}"),
-          name = Some(s"permitsGB[$index]"),
           content = Text(messages(s"otherLicencesAndPermitsGB.option.${checkedBox.toString}")),
           value   = checkedBox.toString,
           checked = form.value.exists(_.contains(checkedBox))
@@ -48,7 +46,6 @@ object OtherLicencesAndPermitsViewModel {
         ++ Seq(
           CheckboxItem(
             id        = Some(s"permitsGB-none"),
-            name = Some(s"permitsGB[$noneIndex]"),
             content   = Text(messages(s"otherLicencesAndPermitsGB.option.none")),
             value     = "none",
             behaviour = Some(ExclusiveCheckbox)

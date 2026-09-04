@@ -19,14 +19,10 @@ package viewmodels
 import base.SpecBase
 import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
 import models.licencespremises.OtherLicencesAndPermitsGB.getSelectedLicencesAndPermits
-import models.{Address, UserAnswers}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.mockito.MockitoSugar
+import models.UserAnswers
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers.stubMessages
 import uk.gov.hmrc.govukfrontend.views.Aliases
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Checkboxes, Text}
 
@@ -61,12 +57,10 @@ class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
 
   }
 
-
-
   "OtherLicencesAndPermitsViewModel" - {
     "apply" - {
       "should render correct view content" in new Setup {
-
+        val index = 1
         viewModel.items.head.content mustEqual Text(messages("otherLicencesAndPermitsGB.option.clubGaming"))
         viewModel.items(1).content mustEqual Text(messages("otherLicencesAndPermitsGB.option.clubMachine"))
         viewModel.items(2).content mustEqual Text(messages("otherLicencesAndPermitsGB.option.clubPremises"))
@@ -74,7 +68,7 @@ class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
         viewModel.items(4).content mustEqual Text(messages("otherLicencesAndPermitsGB.option.localAuthority"))
         viewModel.items(5).content mustEqual Text(messages("otherLicencesAndPermitsGB.option.onPremises"))
         viewModel.items(6).content mustEqual Text(messages("otherLicencesAndPermitsGB.option.prizeGaming"))
-        viewModel.items(7).divider mustEqual Some(messages("site.or"))
+        viewModel.items(7).divider mustBe Some(messages("site.or"))
         viewModel.items(8).content mustEqual Text(messages("otherLicencesAndPermitsGB.option.none"))
       }
 
@@ -82,19 +76,15 @@ class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
 
         viewModel.name mustEqual "permitsGB"
 
-        viewModel.items.head.id mustEqual Some("permitsGB-clubGaming")
-        viewModel.items.head.name mustEqual Some("permitsGB[0]")
-        viewModel.items.head.id mustEqual Some("permitsGB-clubMachine")
-        viewModel.items.head.name mustEqual Some("permitsGB[1]")
-        viewModel.items.head.id mustEqual Some("permitsGB-clubPremises")
-        viewModel.items.head.name mustEqual Some("permitsGB[2]")
-        viewModel.items.head.id mustEqual Some("permitsGB-familyEntertainment")
-        viewModel.items.head.name mustEqual Some("permitsGB[3]")
-        viewModel.items.head.id mustEqual Some("permitsGB-localAuthority")
-        viewModel.items.head.name mustEqual Some("permitsGB[4]")
+        viewModel.items.head.id mustBe Some("permitsGB-clubGaming")
+        viewModel.items(1).id mustBe Some("permitsGB-clubMachine")
+        viewModel.items(2).id mustBe Some("permitsGB-clubPremises")
+        viewModel.items(3).id mustBe Some("permitsGB-familyEntertainment")
+        viewModel.items(4).id mustBe Some("permitsGB-localAuthority")
+        viewModel.items(5).id mustBe Some("permitsGB-onPremises")
+        viewModel.items(6).id mustBe Some("permitsGB-prizeGaming")
+        viewModel.items(8).id mustBe Some("permitsGB-none")
       }
-     }
     }
   }
-
-
+}
