@@ -19,13 +19,6 @@ package models.licencespremises
 import models.{Enumerable, UserAnswers, WithName}
 import pages.{QuestionPage, licencespremises}
 import pages.licencespremises.*
-import play.api.data.Form
-import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, Checkboxes, ExclusiveCheckbox}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
-import viewmodels.LegendSize.Large
-import viewmodels.govuk.all.{FieldsetViewModel, FluentLegend, HintViewModel, LegendViewModel}
 import viewmodels.govuk.checkbox.*
 
 sealed trait OtherLicencesAndPermitsGB
@@ -64,6 +57,12 @@ object OtherLicencesAndPermitsGB extends Enumerable.Implicits {
 
   val positiveValues: Seq[OtherLicencesAndPermitsGB] =
     Seq(clubGaming, clubMachine, clubPremises, familyEntertainment, localAuthority, onPremises, prizeGaming)
+
+  def getSelectedLicencesAndPermits(ua: UserAnswers): Set[OtherLicencesAndPermitsGB] = {
+    // iterates the licence/permit pages to check which has a checked "1"
+    // then converts to a Set type so the form can populate previous answers
+    mappedValuesWithPages.keys.filter(value => ua.get(mappedValuesWithPages(value)).contains("1")).toSet
+  }
 
   implicit val enumerable: Enumerable[OtherLicencesAndPermitsGB] =
     Enumerable(allValues.map(v => v.toString -> v)*)

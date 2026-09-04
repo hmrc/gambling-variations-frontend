@@ -22,7 +22,6 @@ import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
 import models.{Mode, NormalMode, UserAnswers}
 import models.licencespremises.*
 import models.licencespremises.OtherLicencesAndPermitsGB.*
-import viewmodels.OtherLicencesAndPermitsViewModel.*
 import navigation.Navigator
 import pages.licencespremises.*
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -72,19 +71,11 @@ class OtherLicencesAndPermitsGBController @Inject() (
       )
   }
 
-  private def getSelectedLicencesAndPermits(ua: UserAnswers): Set[OtherLicencesAndPermitsGB] = {
-    val trueVal = "1"
-
-    // iterates the types and their corresponding pages to check for a "1"
-    // then converts to a set for the form to read
-    mappedValuesWithPages.keys.filter(value => ua.get(mappedValuesWithPages(value)).contains(trueVal)).toSet
-  }
-
   private def updateValuesAndCombine(formValues: Set[OtherLicencesAndPermitsGB], ua: UserAnswers): Try[UserAnswers] = {
     val trueVal = "1"
     val falseVal = "0"
 
-    def checkIfFormDataContains(value: OtherLicencesAndPermitsGB): String = {
+    def returnIfSelected(value: OtherLicencesAndPermitsGB): String = {
       if (formValues.contains(value)) trueVal else falseVal
     }
 
@@ -101,13 +92,13 @@ class OtherLicencesAndPermitsGBController @Inject() (
       } yield ua
     } else {
       for {
-        ua <- ua.set(LicenceClubPremisesPage, checkIfFormDataContains(clubGaming))
-        ua <- ua.set(ClubLicencePage, checkIfFormDataContains(clubMachine))
-        ua <- ua.set(LicenceClubPremisesPage, checkIfFormDataContains(clubPremises))
-        ua <- ua.set(LicenceFamilyEntertainmentPage, checkIfFormDataContains(familyEntertainment))
-        ua <- ua.set(LicenceLocalAuthorityPage, checkIfFormDataContains(localAuthority))
-        ua <- ua.set(LicenceOnPremisesPage, checkIfFormDataContains(onPremises))
-        ua <- ua.set(LicencePrizeGamingPage, checkIfFormDataContains(prizeGaming))
+        ua <- ua.set(LicenceClubPremisesPage, returnIfSelected(clubGaming))
+        ua <- ua.set(ClubLicencePage, returnIfSelected(clubMachine))
+        ua <- ua.set(LicenceClubPremisesPage, returnIfSelected(clubPremises))
+        ua <- ua.set(LicenceFamilyEntertainmentPage, returnIfSelected(familyEntertainment))
+        ua <- ua.set(LicenceLocalAuthorityPage, returnIfSelected(localAuthority))
+        ua <- ua.set(LicenceOnPremisesPage, returnIfSelected(onPremises))
+        ua <- ua.set(LicencePrizeGamingPage, returnIfSelected(prizeGaming))
       } yield ua
     }
   }

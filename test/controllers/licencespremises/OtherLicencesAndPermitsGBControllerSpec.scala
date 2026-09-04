@@ -31,18 +31,18 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
   val form = formProvider()
   val blankAnswers = UserAnswers(userAnswersId, Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> "XGM000001761")))
 
-  val userAnswers = UserAnswers(
+  private val userAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
       "licencesPremisesSection" -> Json.obj(
         "mgdRegNum"           -> "XGM000001761",
         "clubGaming"          -> "1",
-        "clubLicence"         -> "0",
-        "clubPremises"        -> "1",
-        "familyEntertainment" -> "0",
-        "localAuthority"      -> "1",
-        "onPremises"          -> "0",
-        "prizeGaming"         -> "1"
+        "clubMachine"         -> "0",
+        "clubPremises"        -> "0",
+        "familyEntertainment" -> "1",
+        "localAuthority"      -> "0",
+        "onPremises"          -> "1",
+        "prizeGaming"         -> "0"
       )
     )
   )
@@ -75,9 +75,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
         val view = application.injector.instanceOf[OtherLicencesAndPermitsGBView]
 
         val result = route(application, request).value
-        val preparedForm = form.fill(
-          mappedValuesWithPages.keys.filter(value => userAnswers.get(mappedValuesWithPages(value)).contains("1")).toSet
-        )
+        val preparedForm = form.fill(getSelectedLicencesAndPermits(userAnswers))
         val checkboxes = OtherLicencesAndPermitsViewModel(preparedForm)(messages(application))
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(preparedForm, NormalMode, checkboxes)(request, messages(application)).toString
@@ -97,8 +95,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
-      val set =  mappedValuesWithPages.keys.filter(
-        value => userAnswers.get(mappedValuesWithPages(value)).contains("1")).toSet
+      val set = mappedValuesWithPages.keys.filter(value => userAnswers.get(mappedValuesWithPages(value)).contains("1")).toSet
 
       running(application) {
         val request =

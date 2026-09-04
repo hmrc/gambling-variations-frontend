@@ -29,8 +29,7 @@ object OtherLicencesAndPermitsViewModel {
   def apply(form: Form[Set[OtherLicencesAndPermitsGB]])(implicit messages: Messages): Checkboxes = {
     Checkboxes(
       // form mapping doesn't work without [] in the name
-      name     = s"permitsGB[]",
-      idPrefix = Some("permitsGB"),
+      name = s"permitsGB[]",
       fieldset = Some(
         FieldsetViewModel(
           LegendViewModel(Text(messages("otherLicencesAndPermitsGB.heading"))).asPageHeading(LegendSize.Large)
@@ -39,6 +38,7 @@ object OtherLicencesAndPermitsViewModel {
       hint = Some(HintViewModel(Text(messages("otherLicencesAndPermitsGB.hint")))),
       items = positiveValues.zipWithIndex.map { case (checkedBox, index) =>
         CheckboxItem(
+          id      = Some(s"permitsGB-${checkedBox.toString}"),
           content = Text(messages(s"otherLicencesAndPermitsGB.option.${checkedBox.toString}")),
           value   = checkedBox.toString,
           checked = form.value.exists(_.contains(checkedBox))
@@ -46,6 +46,7 @@ object OtherLicencesAndPermitsViewModel {
       } ++ Seq(CheckboxItem(divider = Some(messages("site.or"))))
         ++ Seq(
           CheckboxItem(
+            id        = Some(s"permitsGB-none"),
             content   = Text(messages(s"otherLicencesAndPermitsGB.option.none")),
             value     = "none",
             behaviour = Some(ExclusiveCheckbox)
