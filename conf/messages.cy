@@ -272,3 +272,16 @@ partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business i
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
+
+otherLicencesAndPermitsGB.title = cy: Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.heading = cy: Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.hint = cy: Select all that apply
+otherLicencesAndPermitsGB.option.clubGaming = cy: Club gaming permit
+otherLicencesAndPermitsGB.option.clubMachine = cy: Club machine permit
+otherLicencesAndPermitsGB.option.clubPremises = cy: Club premises certificate
+otherLicencesAndPermitsGB.option.familyEntertainment = cy: Family entertainment centre gaming machine permit
+otherLicencesAndPermitsGB.option.localAuthority = cy: Local authority premises licence
+otherLicencesAndPermitsGB.option.onPremises = cy: On-premises alcohol licence
+otherLicencesAndPermitsGB.option.prizeGaming = cy: Prize gaming permit
+otherLicencesAndPermitsGB.option.none = cy: No, I do not have any other licences and permits in Great Britain
+otherLicencesAndPermitsGB.error.noneSelected = cy: Select otherLicencesAndPermitsGB

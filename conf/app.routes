@@ -302,5 +302,5 @@ GET       /change-registration-details/partner-details/details/:partnerNumber   
 GET       /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onSubmit(mode: Mode = NormalMode)
 
-
-
+GET        /change-registration-details/licences-and-premises/permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onSubmit(mode: Mode = NormalMode)
