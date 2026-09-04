@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import utils.PartnerUtils.getPartnersSize
 import controllers.routes
 import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
@@ -56,15 +57,15 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val newIndex = request.userAnswers.getPartnersSize
+    val index: Int = request.userAnswers.getIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsRemoveVatRegNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
     request.userAnswers
-      .get(PartnerDetailsVrnPage(newIndex)) match {
+      .get(PartnerDetailsVrnPage(index)) match {
       case Some(vatRegNumber) =>
         Ok(view(preparedForm, mode, vatRegNumber))
 
@@ -74,7 +75,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val newIndex = request.userAnswers.getPartnersSize
+    val index: Int = request.userAnswers.getIndex
 
     form
       .bindFromRequest()
@@ -85,7 +86,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
               view(formWithErrors,
                    mode,
                    request.userAnswers
-                     .get(PartnerDetailsVrnPage(newIndex))
+                     .get(PartnerDetailsVrnPage(index))
                      .getOrElse("")
                   )
             )
@@ -93,13 +94,13 @@ class PartnerDetailsRemoveVatRegNumberYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- if (value) {
-                                Future.fromTry(request.userAnswers.remove(PartnerDetailsVrnPage(newIndex)))
+                                Future.fromTry(request.userAnswers.remove(PartnerDetailsVrnPage(index)))
                               } else {
                                 Future.apply(request.userAnswers)
                               }
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex), value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsRemoveVatRegNumberYesNoPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(newIndex), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsRemoveVatRegNumberYesNoPage(index), mode, updatedAnswers))
       )
   }
 }

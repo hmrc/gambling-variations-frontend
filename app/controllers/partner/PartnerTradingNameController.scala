@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import utils.PartnerUtils.getPartnersSize
 import controllers.routes
 import forms.partner.PartnerTradingNameFormProvider
@@ -51,7 +52,7 @@ class PartnerTradingNameController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val index = request.userAnswers.getPartnersSize
+      val index: Int = request.userAnswers.getIndex
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(partnerTradingName) =>
@@ -66,7 +67,7 @@ class PartnerTradingNameController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val index = request.userAnswers.getPartnersSize
+      val index: Int = request.userAnswers.getIndex
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(index)) match {
         case Some(_) =>

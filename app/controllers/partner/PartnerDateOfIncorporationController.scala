@@ -17,59 +17,77 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getIndex
-import forms.partner.PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider
-import models.Mode
+import controllers.partner.PartnerUtils.{getIndex, getPartnersSize}
+import forms.partner.PartnerDateOfIncorporationFormProvider
+import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
-import pages.partner.PartnerDetailsAddNationalInsuranceNumberYesNoPage
-import play.api.data.Form
+import pages.partner.PartnerDateOfIncorporationPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsAddNationalInsuranceNumberYesNoView
+import views.html.partner.PartnerDateOfIncorporationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsAddNationalInsuranceNumberYesNoController @Inject() (
+class PartnerDateOfIncorporationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider,
+  formProvider: PartnerDateOfIncorporationFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsAddNationalInsuranceNumberYesNoView
+  view: PartnerDateOfIncorporationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+      val index: Int = request.userAnswers.getIndex
+      if (!shouldShowDateOfIncorporation(request.userAnswers, index)) {
+        Redirect(controllers.routes.SystemErrorController.onPageLoad())
+      } else {
+        val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = request.userAnswers.getIndex
+        val preparedForm =
+          request.userAnswers
+            .get(PartnerDateOfIncorporationPage(index))
+            .fold(form)(form.fill)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+        Ok(view(preparedForm, mode))
+      }
     }
 
-    Ok(view(preparedForm, mode))
-  }
-
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+
     val index: Int = request.userAnswers.getIndex
+    val form = formProvider()
+
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDateOfIncorporationPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDateOfIncorporationPage(index), mode, updatedAnswers))
       )
   }
+
+  private def shouldShowDateOfIncorporation(userAnswers: UserAnswers, index: Int): Boolean =
+    userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
+      case Some(BusinessType.Corporatebody) =>
+        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)).contains(true)
+      case Some(BusinessType.LimitedLiabilityPartnership) =>
+        true
+
+      case _ =>
+        false
+    }
 }

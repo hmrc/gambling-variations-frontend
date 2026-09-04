@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerAddFaxNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
@@ -30,7 +31,6 @@ import views.html.partner.PartnerAddFaxNumberYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import utils.PartnerUtils.getPartnersSize
 
 class PartnerAddFaxNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
@@ -49,8 +49,7 @@ class PartnerAddFaxNumberYesNoController @Inject() (
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index = request.userAnswers.getPartnersSize
-
+    val index: Int = request.userAnswers.getIndex
     val preparedForm = request.userAnswers.get(PartnerAddFaxNumberYesNoPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -60,8 +59,7 @@ class PartnerAddFaxNumberYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index = request.userAnswers.getPartnersSize
-
+    val index: Int = request.userAnswers.getIndex
     form
       .bindFromRequest()
       .fold(

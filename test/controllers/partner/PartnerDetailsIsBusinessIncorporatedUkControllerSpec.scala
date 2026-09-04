@@ -19,11 +19,12 @@ package controllers.partner
 import base.SpecBase
 import controllers.routes
 import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -41,17 +42,18 @@ class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with
   val formProvider = new PartnerDetailsIsBusinessIncorporatedUkFormProvider()
   val form = formProvider()
 
-  val userAnswers = UserAnswers(
+  private val userAnswers = UserAnswers(
     userAnswersId,
     Json.obj(
       "partners" -> Json.arr(
         Json.obj(
           "partnerDetailsMgdRegNumber"             -> "XWM00000001762",
+          "partnerDetailsBusinessType"             -> BusinessType.Corporatebody.code,
           "partnerDetailsIsBusinessIncorporatedUk" -> true
         )
       )
     )
-  )
+  ).set(PartnerDetailsAddPartnerCompletedPage, false).success.value
 
   override val emptyUserAnswers = UserAnswers(
     userAnswersId,
@@ -62,7 +64,7 @@ class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with
         )
       )
     )
-  )
+  ).set(PartnerDetailsAddPartnerCompletedPage, false).success.value
 
   lazy val partnerDetailsIsBusinessIncorporatedUkRoute =
     controllers.partner.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad().url

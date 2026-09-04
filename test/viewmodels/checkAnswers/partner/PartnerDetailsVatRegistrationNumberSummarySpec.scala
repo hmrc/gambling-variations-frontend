@@ -49,7 +49,7 @@ class PartnerDetailsVatRegistrationNumberSummarySpec extends SpecBase {
 
       PartnerDetailsVatRegistrationNumberSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key = "partnerDetailsVatRegistrationNumber.checkYourAnswersLabel",
+          key   = "partnerDetailsVatRegistrationNumber.checkYourAnswersLabel",
           value = ValueViewModel(HtmlFormat.escape(vrn).toString),
           actions = Seq(
             ActionItemViewModel(
