@@ -31,7 +31,7 @@
 
 @(form: Form[Set[OtherLicencesAndPermitsGB]], mode: Mode, checkboxes: Checkboxes)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("otherLicencesAndPermitsGB.title"))) {
+@layout(pageTitle = title(form, messages("otherLicencesAndPermitsGB.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = controllers.licencespremises.routes.OtherLicencesAndPermitsGBController.onSubmit(), Symbol("autoComplete") -> "off") {
 
