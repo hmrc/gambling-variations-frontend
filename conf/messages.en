@@ -933,6 +933,6 @@ partnerDetailsAddUTR.linkText = Get more help to find your UTR (opens in new tab
 partnerDetailsAddUTR.checkYourAnswersLabel = Tell us the partner’s Unique Taxpayer Reference
 partnerDetailsAddUTR.error.required = Enter the partner’s Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.error.invalidChars = The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
-partnerDetailsAddUTR.error.length = The Unique Taxpayer Reference (UTR) must be exactly 10 digits long
+partnerDetailsAddUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10 digits long
 partnerDetailsAddUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = Tell us the partner’s Unique Taxpayer Reference

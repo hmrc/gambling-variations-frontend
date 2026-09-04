@@ -282,6 +282,6 @@ partnerDetailsAddUTR.linkText = cy: Get more help to find your UTR (opens in new
 partnerDetailsAddUTR.checkYourAnswersLabel = cy: Tell us the partner’s Unique Taxpayer Reference
 partnerDetailsAddUTR.error.required = cy: Enter the partner’s Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
-partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be exactly 10 digits long
+partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
 partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
