@@ -115,7 +115,7 @@ class PartnerDetailsController @Inject() (
             } yield {
               if (value) {
                 Redirect(
-                  controllers.partner.routes.PartnerDetailsController.onPageLoad
+                  controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad()
                 )
               } else {
                 Redirect(

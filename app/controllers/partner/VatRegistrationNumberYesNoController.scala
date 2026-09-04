@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import utils.PartnerUtils.getPartnersSize
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.VatRegistrationNumberYesNoFormProvider
 import models.Mode
 import navigation.Navigator
@@ -50,7 +50,7 @@ class VatRegistrationNumberYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val index = request.userAnswers.getPartnersSize
+      val index: Int = request.userAnswers.getIndex
 
       val preparedForm =
         request.userAnswers.get(VatRegistrationNumberYesNoPage(index)) match {
@@ -64,7 +64,7 @@ class VatRegistrationNumberYesNoController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val index = request.userAnswers.getPartnersSize
+      val index: Int = request.userAnswers.getIndex
 
       form
         .bindFromRequest()

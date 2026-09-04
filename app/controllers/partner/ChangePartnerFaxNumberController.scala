@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import utils.PartnerUtils.getPartnersSize
+import controllers.partner.PartnerUtils.getIndex
 import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
@@ -51,8 +51,7 @@ class ChangePartnerFaxNumberController @Inject() (
   val form: Form[String] = formProvider("partnerDetailsFaxNumber")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index = request.userAnswers.getPartnersSize
-
+    val index: Int = request.userAnswers.getIndex
     val preparedForm = request.userAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(index)) match {
       case None            => form
       case Some(faxNumber) => form.fill(faxNumber)
@@ -62,8 +61,7 @@ class ChangePartnerFaxNumberController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index = request.userAnswers.getPartnersSize
-
+    val index: Int = request.userAnswers.getIndex
     form
       .bindFromRequest()
       .fold(

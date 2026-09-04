@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import utils.PartnerUtils.getPartnersSize
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import models.Mode
 import navigation.Navigator
@@ -54,7 +54,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
    */
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = request.userAnswers.getPartnersSize
+    val index: Int = request.userAnswers.getIndex
 
     val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
       case None        => form
@@ -65,7 +65,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = request.userAnswers.getPartnersSize
+    val index: Int = request.userAnswers.getIndex
 
     form
       .bindFromRequest()

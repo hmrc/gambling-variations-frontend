@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import controllers.partner.PartnerUtils.getIndex
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
 import models.{BusinessType, NormalMode, UserAnswers}
@@ -25,6 +26,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import pages.partnerdetails.PartnerDetailsBusinessNamePage
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -43,13 +45,8 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
     def onwardRoute: Call = Call("GET", "/foo")
 
     val formProvider = new ChangeBusinessNameFormProvider()
-
     val businessName = "Test Business"
-
     val form = formProvider(businessType)
-
-    // TODO: Interim solution - will be refactored with the indexing ticket
-    val Index: Int = 0
 
     val businessData = Json.obj(
       "partners" -> Json.arr(
@@ -60,6 +57,14 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
         )
       )
     )
+
+    val userAnswers: UserAnswers =
+      UserAnswers("id", businessData)
+        .set(PartnerDetailsAddPartnerCompletedPage, false)
+        .success
+        .value
+
+    val index: Int = userAnswers.getIndex
 
     val soleProprietorData = Json.obj(
       "partners" -> Json.arr(
@@ -76,6 +81,12 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
       )
     )
 
+    val soleProprietorUserAnswers: UserAnswers =
+      UserAnswers("id", soleProprietorData)
+        .set(PartnerDetailsAddPartnerCompletedPage, false)
+        .success
+        .value
+
     val noAnswers = UserAnswers(
       userAnswersId,
       Json.obj(
@@ -84,8 +95,9 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
     )
 
     lazy val changePartnerDetailsBusinessNameRoute =
-      controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad(Partnership).url
-
+      controllers.partner.routes.ChangePartnerDetailsBusinessNameController
+        .onPageLoad(Partnership)
+        .url
   }
 
   "ChangePartnerDetailsBusinessName Controller" - {
@@ -93,34 +105,46 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
     "must return OK and the correct view for a GET" in new Setup(BusinessType.Partnership) {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", businessData))).build()
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, changePartnerDetailsBusinessNameRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ChangePartnerDetailsBusinessNameView]
+        val view =
+          application.injector.instanceOf[ChangePartnerDetailsBusinessNameView]
 
         val headingKey = "changeBusinessName.heading.partnership"
-
         val titleKey = "changeBusinessName.title.partnership"
 
         status(result) mustEqual OK
+
         contentAsString(result) mustEqual
-          view(form.fill(businessName), NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
+          view(
+            form.fill(businessName),
+            NormalMode,
+            Partnership,
+            headingKey,
+            titleKey
+          )(request, messages(application)).toString
       }
     }
 
     "must return OK and sole proprietor view for a GET" in new Setup(BusinessType.Soleproprietor) {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", soleProprietorData))).build()
+        applicationBuilder(userAnswers = Some(soleProprietorUserAnswers)).build()
 
       running(application) {
 
         val request =
-          FakeRequest(GET, controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad(BusinessType.Soleproprietor).url)
+          FakeRequest(
+            GET,
+            controllers.partner.routes.ChangePartnerDetailsBusinessNameController
+              .onPageLoad(BusinessType.Soleproprietor)
+              .url
+          )
 
         val result = route(application, request).value
 
@@ -134,21 +158,25 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
 
         "when GET" in new Setup(BusinessType.Partnership) {
 
-          val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
+          val application =
+            applicationBuilder(userAnswers = Some(noAnswers)).build()
 
           running(application) {
-            val request = FakeRequest(GET, changePartnerDetailsBusinessNameRoute)
+            val request =
+              FakeRequest(GET, changePartnerDetailsBusinessNameRoute)
 
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+            redirectLocation(result).value mustEqual
+              routes.SystemErrorController.onPageLoad().url
           }
         }
 
         "when POST" in new Setup(BusinessType.Partnership) {
 
-          val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
+          val application =
+            applicationBuilder(userAnswers = Some(noAnswers)).build()
 
           running(application) {
             val request =
@@ -158,7 +186,8 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+            redirectLocation(result).value mustEqual
+              routes.SystemErrorController.onPageLoad().url
           }
         }
       }
@@ -166,10 +195,11 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
       "to the next page when valid data is submitted" in new Setup(BusinessType.Partnership) {
 
         val mockSessionRepository = mock[SessionRepository]
+
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
-          applicationBuilder(userAnswers = Some(UserAnswers("id", businessData)))
+          applicationBuilder(userAnswers = Some(userAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -189,138 +219,157 @@ class ChangePartnerDetailsBusinessNameControllerSpec extends SpecBase with Mocki
       }
     }
 
-    "must redirect to next page when valid sole proprietor data is submitted" in new Setup(BusinessType.Soleproprietor) {
+    "must redirect to next page when valid sole proprietor data is submitted" in
+      new Setup(BusinessType.Soleproprietor) {
 
-      val mockSessionRepository = mock[SessionRepository]
+        val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", soleProprietorData)))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
-
-      running(application) {
-        val request =
-          FakeRequest(
-            POST,
-            controllers.partner.routes.ChangePartnerDetailsBusinessNameController
-              .onSubmit(BusinessType.Soleproprietor)
-              .url
-          )
-            .withFormUrlEncodedBody(
-              "title"      -> "Mr",
-              "firstName"  -> "John",
-              "middleName" -> "Bob",
-              "lastName"   -> "Smith"
+        val application =
+          applicationBuilder(userAnswers = Some(soleProprietorUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
             )
+            .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(
+              POST,
+              controllers.partner.routes.ChangePartnerDetailsBusinessNameController
+                .onSubmit(BusinessType.Soleproprietor)
+                .url
+            )
+              .withFormUrlEncodedBody(
+                "title"      -> "Mr",
+                "firstName"  -> "John",
+                "middleName" -> "Bob",
+                "lastName"   -> "Smith"
+              )
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must return bad request when invalid sole proprietor data is submitted" in new Setup(BusinessType.Soleproprietor) {
+    "must return bad request when invalid sole proprietor data is submitted" in
+      new Setup(BusinessType.Soleproprietor) {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", soleProprietorData))).build()
+        val application =
+          applicationBuilder(userAnswers = Some(soleProprietorUserAnswers)).build()
 
-      running(application) {
+        running(application) {
 
-        val request =
-          FakeRequest(
-            POST,
-            controllers.partner.routes.ChangePartnerDetailsBusinessNameController
-              .onSubmit(BusinessType.Soleproprietor)
-              .url
-          )
-            .withFormUrlEncodedBody(
-              "title"      -> "",
-              "firstName"  -> "",
-              "middleName" -> "",
-              "lastName"   -> ""
+          val request =
+            FakeRequest(
+              POST,
+              controllers.partner.routes.ChangePartnerDetailsBusinessNameController
+                .onSubmit(BusinessType.Soleproprietor)
+                .url
             )
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[ChangePartnerDetailsSoleProprietorNameView]
-
-        val boundForm =
-          new SoleProprietorNameFormProvider()()
-            .bind(
-              Map(
+              .withFormUrlEncodedBody(
                 "title"      -> "",
                 "firstName"  -> "",
                 "middleName" -> "",
                 "lastName"   -> ""
               )
+
+          val result = route(application, request).value
+
+          val view =
+            application.injector.instanceOf[ChangePartnerDetailsSoleProprietorNameView]
+
+          val boundForm =
+            new SoleProprietorNameFormProvider()()
+              .bind(
+                Map(
+                  "title"      -> "",
+                  "firstName"  -> "",
+                  "middleName" -> "",
+                  "lastName"   -> ""
+                )
+              )
+
+          status(result) mustEqual BAD_REQUEST
+
+          contentAsString(result) mustEqual
+            view(
+              boundForm,
+              NormalMode
+            )(request, messages(application)).toString
+        }
+      }
+
+    "must update data correctly when submitted in" in
+      new Setup(BusinessType.Partnership) {
+
+        val mockSessionRepository = mock[SessionRepository]
+        val savedAnswersCaptor =
+          ArgumentCaptor.forClass(classOf[UserAnswers])
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
             )
+            .build()
 
-        status(result) mustEqual BAD_REQUEST
+        running(application) {
+          val request =
+            FakeRequest(POST, changePartnerDetailsBusinessNameRoute)
+              .withFormUrlEncodedBody(("value", "Updated Business Name"))
 
-        contentAsString(result) mustEqual
-          view(boundForm, NormalMode)(
-            request,
-            messages(application)
-          ).toString
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+          savedAnswersCaptor.getValue
+            .get(PartnerDetailsBusinessNamePage(index))
+            .value mustEqual "Updated Business Name"
+        }
       }
-    }
 
-    "must update data correctly when submitted in" in new Setup(BusinessType.Partnership) {
-      val mockSessionRepository = mock[SessionRepository]
-      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+    "must return a Bad Request and errors when invalid data is submitted" in
+      new Setup(BusinessType.Partnership) {
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", businessData)))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+        running(application) {
+          val request =
+            FakeRequest(POST, changePartnerDetailsBusinessNameRoute)
+              .withFormUrlEncodedBody(("value", ""))
 
-      running(application) {
-        val request =
-          FakeRequest(POST, changePartnerDetailsBusinessNameRoute)
-            .withFormUrlEncodedBody(("value", "Updated Business Name"))
+          val boundForm = form.bind(Map("value" -> ""))
 
-        val result = route(application, request).value
+          val view =
+            application.injector.instanceOf[ChangePartnerDetailsBusinessNameView]
 
-        status(result) mustEqual SEE_OTHER
-        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(PartnerDetailsBusinessNamePage(Index)).value mustEqual "Updated Business Name"
+          val result = route(application, request).value
+
+          val headingKey = "changeBusinessName.heading.partnership"
+          val titleKey = "changeBusinessName.title.partnership"
+
+          status(result) mustEqual BAD_REQUEST
+
+          contentAsString(result) mustEqual
+            view(
+              boundForm,
+              NormalMode,
+              Partnership,
+              headingKey,
+              titleKey
+            )(request, messages(application)).toString
+        }
       }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted" in new Setup(BusinessType.Partnership) {
-
-      val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", businessData))).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, changePartnerDetailsBusinessNameRoute)
-            .withFormUrlEncodedBody(("value", ""))
-
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[ChangePartnerDetailsBusinessNameView]
-
-        val result = route(application, request).value
-
-        val headingKey = "changeBusinessName.heading.partnership"
-
-        val titleKey = "changeBusinessName.title.partnership"
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual
-          view(boundForm, NormalMode, Partnership, headingKey, titleKey)(request, messages(application)).toString
-      }
-    }
   }
 }

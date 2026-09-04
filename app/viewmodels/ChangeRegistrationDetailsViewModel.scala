@@ -103,7 +103,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(isPartnership)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.partnerDetails"),
-            routes.PageNotFoundController.onPageLoad().url,
+            controllers.partner.routes.PartnerDetailsController.onPageLoad.url,
             NoDetailsChanged
           )
         ),

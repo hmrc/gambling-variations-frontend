@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsAddTradingNameYesNoPage
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsAddTradingNameYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -42,7 +42,11 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
   lazy val partnerDetailsAddTradingNameYesNoRoute: String =
     controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val validUserAnswers: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData())
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
 
   "PartnerDetailsAddTradingNameYesNo Controller" - {
 

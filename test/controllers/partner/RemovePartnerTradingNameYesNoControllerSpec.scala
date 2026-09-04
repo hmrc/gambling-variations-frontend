@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.RemovePartnerTradingNameYesNoPage
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, RemovePartnerTradingNameYesNoPage}
 import pages.partnerdetails.{PartnerDetailsPage, PartnerDetailsTradingNamePage}
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -45,21 +45,30 @@ class RemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoS
   lazy val removePartnerTradingNameYesNoRoute =
     controllers.partner.routes.RemovePartnerTradingNameYesNoController.onPageLoad().url
 
+  private val userAnswersWithoutRemoveAnswer =
+    emptyUserAnswers
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+      .set(PartnerDetailsPage(0), "123456789")
+      .success
+      .value
+      .set(PartnerDetailsTradingNamePage(0), "Trading Name")
+      .success
+      .value
+
+  private val userAnswersWithRemoveAnswer =
+    userAnswersWithoutRemoveAnswer
+      .set(RemovePartnerTradingNameYesNoPage(0), true)
+      .success
+      .value
+
   "RemovePartnerTradingNameYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithoutRemoveAnswer)).build()
 
       running(application) {
         val request =
@@ -83,20 +92,8 @@ class RemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoS
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
-          .set(RemovePartnerTradingNameYesNoPage(0), true)
-          .success
-          .value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithRemoveAnswer)).build()
 
       running(application) {
         val request =
@@ -120,15 +117,6 @@ class RemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoS
 
     "must redirect to the next page when true is submitted" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
-
       val mockSessionRepository =
         mock[SessionRepository]
 
@@ -136,7 +124,7 @@ class RemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithoutRemoveAnswer))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -158,15 +146,6 @@ class RemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoS
 
     "must redirect to the next page when false is submitted" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
-
       val mockSessionRepository =
         mock[SessionRepository]
 
@@ -174,7 +153,7 @@ class RemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithoutRemoveAnswer))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -196,17 +175,8 @@ class RemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoS
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithoutRemoveAnswer)).build()
 
       running(application) {
         val request =
