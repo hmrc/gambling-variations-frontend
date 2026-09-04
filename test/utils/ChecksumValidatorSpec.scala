@@ -42,5 +42,70 @@ class ChecksumValidatorSpec extends AnyFreeSpec with Matchers {
     "return false when the checksum is invalid" in {
       ChecksumValidator.isValidMgdrn("XAM00001234567") mustBe false
     }
+
+  }
+
+  "isValidVatNumber" - {
+    "return true for a checksum-valid number" in {
+      val validVrn = "353868127"
+
+      // weighted 167 + check 27 = 194; 194 % 97 = 0
+      ChecksumValidator.isValidVatNumber(validVrn) mustBe true
+    }
+
+    "return true for a checksum-valid number when prefixed with valid GB" in {
+      Seq("GB353868127", "gb353868127", "Gb353868127", "gB353868127")
+        .foreach(ChecksumValidator.isValidVatNumber(_) mustBe true)
+    }
+
+    "return true for a checksum-valid number that only passes the 9755 fallback" in {
+      // weighted 112 + check 27 = 139; 139 % 97 = 42, but (139 + 55) % 97 = 0
+      ChecksumValidator.isValidVatNumber("123456727") mustBe true
+    }
+
+    "return true for a checksum-valid number ignoring leading and trailing spaces" in {
+      val formatted = Seq("   GB353868127", "GB353868127   ", "   GB353868127   ")
+      for (input <- formatted)
+        withClue(s"[$input] ") {
+          ChecksumValidator.isValidVatNumber(input) mustBe true
+        }
+    }
+
+    "return false for a well-formed number that fails the checksum" in {
+      ChecksumValidator.isValidVatNumber("353868121") mustBe false
+    }
+
+    "return false when there are not exactly 9 digits" in {
+      val incorrectLength = Seq("12345678", "GB12345678", "1234567890", "GB1234567890", "GB", "GB0")
+      for (input <- incorrectLength)
+        withClue(s"[$input] ") {
+          ChecksumValidator.isValidVatNumber(input) mustBe false
+        }
+    }
+
+    "return false when spaces and hyphens exist" in {
+      val formatted = Seq("GB35 3868127", "35386812 7", "GB353-868127")
+      for (input <- formatted)
+        withClue(s"[$input] ") {
+          ChecksumValidator.isValidVatNumber(input) mustBe false
+        }
+    }
+
+    "return false for non-digit characters" in {
+      ChecksumValidator.isValidVatNumber("3538X8127") mustBe false
+    }
+
+    "return false for a non-GB prefix" in {
+      ChecksumValidator.isValidVatNumber("XY353868127") mustBe false
+    }
+
+    "return false for empty or blank input" in {
+      Seq("", "   ", "GB").foreach(ChecksumValidator.isValidVatNumber(_) mustBe false)
+    }
+
+    "return false for any zeros" in {
+      Seq("000000000", "GB000000000", "123406727").foreach(ChecksumValidator.isValidVatNumber(_) mustBe false)
+    }
+
   }
 }

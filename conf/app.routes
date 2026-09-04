@@ -272,6 +272,9 @@ POST       /change-registration-details/partner-details/national-insurance-numbe
 GET        /change-registration-details/partner-details/business-incorporated-uk                        controllers.partner.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/business-incorporated-uk                        controllers.partner.PartnerDetailsIsBusinessIncorporatedUkController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/partner-details/vat-registration-number                  controllers.partner.PartnerDetailsVatRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/vat-registration-number                  controllers.partner.PartnerDetailsVatRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/partner-details/vat-registration-number-yes-no          controllers.partner.VatRegistrationNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/vat-registration-number-yes-no           controllers.partner.VatRegistrationNumberYesNoController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/partner-details/vat-registration-number-yes-no               controllers.partner.VatRegistrationNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
