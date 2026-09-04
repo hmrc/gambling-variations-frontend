@@ -13,7 +13,6 @@ import play.api.test.Helpers.stubMessages
 class OtherLicencesAndPermitsGBFormProviderSpec extends CheckboxFieldBehaviours {
 
   val form = new OtherLicencesAndPermitsGBFormProvider()()
-  private implicit val messages: Messages = stubMessages()
   val userAnswers = UserAnswers(
     "id",
     Json.obj(
