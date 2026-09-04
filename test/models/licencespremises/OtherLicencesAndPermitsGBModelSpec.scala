@@ -29,14 +29,14 @@ class OtherLicencesAndPermitsGBModelSpec extends SpecBase {
           "id",
           Json.obj(
             "licencesPremisesSection" -> Json.obj(
-              "mgdRegNum" -> "XGM000001761",
-              "clubGaming" -> "1",
-              "clubMachine" -> "0",
-              "clubPremises" -> "0",
+              "mgdRegNum"           -> "XGM000001761",
+              "clubGaming"          -> "1",
+              "clubMachine"         -> "0",
+              "clubPremises"        -> "0",
               "familyEntertainment" -> "1",
-              "localAuthority" -> "0",
-              "onPremises" -> "1",
-              "prizeGaming" -> "0"
+              "localAuthority"      -> "0",
+              "onPremises"          -> "1",
+              "prizeGaming"         -> "0"
             )
           )
         )

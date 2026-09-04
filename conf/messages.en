@@ -914,6 +914,19 @@ partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a t
 partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?
 
+otherLicencesAndPermitsGB.title = Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.heading = Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.hint = Select all that apply
+otherLicencesAndPermitsGB.option.clubGaming = Club gaming permit
+otherLicencesAndPermitsGB.option.clubMachine = Club machine permit
+otherLicencesAndPermitsGB.option.clubPremises = Club premises certificate
+otherLicencesAndPermitsGB.option.familyEntertainment = Family entertainment centre gaming machine permit
+otherLicencesAndPermitsGB.option.localAuthority = Local authority premises licence
+otherLicencesAndPermitsGB.option.onPremises = On-premises alcohol licence
+otherLicencesAndPermitsGB.option.prizeGaming = Prize gaming permit
+otherLicencesAndPermitsGB.option.none = No, I do not have any other licences and permits in Great Britain
+otherLicencesAndPermitsGB.error.required = Select all the licences and permits you have in Great Britain
+
 partnerDateOfIncorporation.title = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.heading = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.hint = For example, 27 3 2007
