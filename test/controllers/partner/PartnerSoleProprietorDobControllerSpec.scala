@@ -19,65 +19,81 @@ package controllers.partner
 import base.SpecBase
 import controllers.partner.PartnerUtils.getIndex
 import controllers.routes
-import forms.partner.PartnerDateOfIncorporationFormProvider
+import forms.partner.PartnerSoleProprietorDobFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsAddPartnerCompletedPage
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporation, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsPage}
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.partner.PartnerDateOfIncorporationView
+import views.html.partner.PartnerSoleProprietorDobView
 
-import java.time.{LocalDate, ZoneOffset}
+import java.time.{Clock, LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
+class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar {
 
-  private implicit val messages: Messages = stubMessages()
+  private implicit val msgs: Messages =
+    stubMessages()
 
-  private val formProvider = new PartnerDateOfIncorporationFormProvider()
-  private val form = formProvider()
+  private val today: LocalDate =
+    LocalDate.of(2026, 9, 5)
 
-  private val onwardRoute = Call("GET", "/foo")
+  private val clock: Clock =
+    Clock.fixed(
+      today.atStartOfDay(ZoneOffset.UTC).toInstant,
+      ZoneOffset.UTC
+    )
 
-  private val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  private val formProvider =
+    new PartnerSoleProprietorDobFormProvider(clock)
 
-  private val getRoute =
-    controllers.partner.routes.PartnerDateOfIncorporationController
+  private val form =
+    formProvider()
+
+  private val validAnswer: LocalDate =
+    today.minusYears(30)
+
+  private val onwardRoute: Call =
+    Call("GET", "/foo")
+
+  private val getRoute: String =
+    controllers.partner.routes.PartnerSoleProprietorDobController
       .onPageLoad()
       .url
 
-  private val postRoute =
-    controllers.partner.routes.PartnerDateOfIncorporationController
+  private val postRoute: String =
+    controllers.partner.routes.PartnerSoleProprietorDobController
       .onSubmit()
       .url
 
-  override val emptyUserAnswers = UserAnswers(userAnswersId)
+  override val emptyUserAnswers: UserAnswers =
+    UserAnswers(userAnswersId)
 
-  private val partnerDetailsUserAnswers =
+  private val partnerDetailsUserAnswers: UserAnswers =
     emptyUserAnswers
-      .set(PartnerDetailsPage(0), userAnswersId)
-      .success
-      .value
-      .set(PartnerDetailsAddPartnerCompletedPage, false)
-      .success
-      .value
       .set(
-        PartnerDetailsBusinessTypePage(0),
-        BusinessType.Corporatebody
+        PartnerDetailsPage(0),
+        userAnswersId
       )
       .success
       .value
       .set(
-        PartnerDetailsIsBusinessIncorporatedUkPage(0),
-        true
+        PartnerDetailsAddPartnerCompletedPage,
+        false
+      )
+      .success
+      .value
+      .set(
+        PartnerDetailsBusinessTypePage(0),
+        BusinessType.Soleproprietor
       )
       .success
       .value
@@ -96,13 +112,18 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
         "value.year"  -> validAnswer.getYear.toString
       )
 
-  "PartnerDateOfIncorporation Controller" - {
+  "PartnerSoleProprietorDob Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET for a sole proprietor" in {
+      println("....................." + getRoute)
       val application =
         applicationBuilder(
           userAnswers = Some(partnerDetailsUserAnswers)
-        ).build()
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
 
       running(application) {
 
@@ -110,7 +131,8 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
           route(application, getRequest()).value
 
         val view =
-          application.injector.instanceOf[PartnerDateOfIncorporationView]
+          application.injector
+            .instanceOf[PartnerSoleProprietorDobView]
 
         status(result) mustEqual OK
 
@@ -127,7 +149,7 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val userAnswers =
         partnerDetailsUserAnswers
           .set(
-            PartnerDetailsDateOfIncorporation(index),
+            PartnerDetailsDateOfBirthPage(index),
             validAnswer
           )
           .success
@@ -136,7 +158,11 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val application =
         applicationBuilder(
           userAnswers = Some(userAnswers)
-        ).build()
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
 
       running(application) {
 
@@ -144,7 +170,8 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
           route(application, getRequest()).value
 
         val view =
-          application.injector.instanceOf[PartnerDateOfIncorporationView]
+          application.injector
+            .instanceOf[PartnerSoleProprietorDobView]
 
         status(result) mustEqual OK
 
@@ -161,7 +188,7 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val mockSessionRepository =
         mock[SessionRepository]
 
-      when(mockSessionRepository.set(any()))
+      when(mockSessionRepository.set(any[UserAnswers]))
         .thenReturn(Future.successful(true))
 
       val application =
@@ -169,6 +196,7 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
           userAnswers = Some(partnerDetailsUserAnswers)
         )
           .overrides(
+            bind[Clock].toInstance(clock),
             bind[Navigator].toInstance(
               new FakeNavigator(onwardRoute)
             ),
@@ -185,7 +213,11 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual
+          onwardRoute.url
+
+        verify(mockSessionRepository)
+          .set(any[UserAnswers])
       }
     }
 
@@ -194,23 +226,34 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val application =
         applicationBuilder(
           userAnswers = Some(partnerDetailsUserAnswers)
-        ).build()
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
 
       val request =
         FakeRequest(POST, postRoute)
           .withFormUrlEncodedBody(
-            "value" -> "invalid value"
+            "value.day"   -> "31",
+            "value.month" -> "2",
+            "value.year"  -> "2020"
           )
 
       running(application) {
 
         val boundForm =
           form.bind(
-            Map("value" -> "invalid value")
+            Map(
+              "value.day"   -> "31",
+              "value.month" -> "2",
+              "value.year"  -> "2020"
+            )
           )
 
         val view =
-          application.injector.instanceOf[PartnerDateOfIncorporationView]
+          application.injector
+            .instanceOf[PartnerSoleProprietorDobView]
 
         val result =
           route(application, request).value
@@ -225,44 +268,114 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    "must return OK for an LLP" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(
-            PartnerDetailsPage(0),
-            userAnswersId
-          )
-          .success
-          .value
-          .set(
-            PartnerDetailsAddPartnerCompletedPage,
-            false
-          )
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessTypePage(0),
-            BusinessType.LimitedLiabilityPartnership
-          )
-          .success
-          .value
+    "must return a Bad Request when the date is earlier than 120 years ago" in {
 
       val application =
         applicationBuilder(
-          userAnswers = Some(userAnswers)
-        ).build()
+          userAnswers = Some(partnerDetailsUserAnswers)
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
+
+      val invalidAnswer =
+        today.minusYears(120).minusDays(1)
+
+      val request =
+        FakeRequest(POST, postRoute)
+          .withFormUrlEncodedBody(
+            "value.day"   -> invalidAnswer.getDayOfMonth.toString,
+            "value.month" -> invalidAnswer.getMonthValue.toString,
+            "value.year"  -> invalidAnswer.getYear.toString
+          )
 
       running(application) {
 
-        val result =
-          route(application, getRequest()).value
+        val boundForm =
+          form.bind(
+            Map(
+              "value.day"   -> invalidAnswer.getDayOfMonth.toString,
+              "value.month" -> invalidAnswer.getMonthValue.toString,
+              "value.year"  -> invalidAnswer.getYear.toString
+            )
+          )
 
-        status(result) mustEqual OK
+        val view =
+          application.injector
+            .instanceOf[PartnerSoleProprietorDobView]
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        boundForm.errors
+          .map(_.message) must contain(
+          "partnerSoleProprietorDob.error.beforeEarliestDate"
+        )
+
+        contentAsString(result) mustEqual
+          view(
+            boundForm,
+            NormalMode
+          )(request, messages(application)).toString
       }
     }
 
-    "must redirect to SystemError when a corporate body is not incorporated in the UK" in {
+    "must return a Bad Request when today's date is submitted" in {
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
+
+      val request =
+        FakeRequest(POST, postRoute)
+          .withFormUrlEncodedBody(
+            "value.day"   -> today.getDayOfMonth.toString,
+            "value.month" -> today.getMonthValue.toString,
+            "value.year"  -> today.getYear.toString
+          )
+
+      running(application) {
+
+        val boundForm =
+          form.bind(
+            Map(
+              "value.day"   -> today.getDayOfMonth.toString,
+              "value.month" -> today.getMonthValue.toString,
+              "value.year"  -> today.getYear.toString
+            )
+          )
+
+        val view =
+          application.injector
+            .instanceOf[PartnerSoleProprietorDobView]
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        boundForm.errors
+          .map(_.message) must contain(
+          "partnerSoleProprietorDob.error.afterLatestDate"
+        )
+
+        contentAsString(result) mustEqual
+          view(
+            boundForm,
+            NormalMode
+          )(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to SystemError when the business type is not sole proprietor" in {
 
       val userAnswers =
         emptyUserAnswers
@@ -284,17 +397,15 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
           )
           .success
           .value
-          .set(
-            PartnerDetailsIsBusinessIncorporatedUkPage(0),
-            false
-          )
-          .success
-          .value
 
       val application =
         applicationBuilder(
           userAnswers = Some(userAnswers)
-        ).build()
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
 
       running(application) {
 
@@ -328,47 +439,11 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val application =
         applicationBuilder(
           userAnswers = Some(userAnswers)
-        ).build()
-
-      running(application) {
-
-        val result =
-          route(application, getRequest()).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
-      }
-    }
-
-    "must redirect to SystemError when a corporate body has no incorporated in UK answer" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(
-            PartnerDetailsPage(0),
-            userAnswersId
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
           )
-          .success
-          .value
-          .set(
-            PartnerDetailsAddPartnerCompletedPage,
-            false
-          )
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessTypePage(0),
-            BusinessType.Corporatebody
-          )
-          .success
-          .value
-
-      val application =
-        applicationBuilder(
-          userAnswers = Some(userAnswers)
-        ).build()
+          .build()
 
       running(application) {
 
@@ -387,7 +462,11 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val application =
         applicationBuilder(
           userAnswers = None
-        ).build()
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
 
       running(application) {
 
@@ -406,7 +485,11 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val application =
         applicationBuilder(
           userAnswers = None
-        ).build()
+        )
+          .overrides(
+            bind[Clock].toInstance(clock)
+          )
+          .build()
 
       running(application) {
 

@@ -18,49 +18,54 @@ package controllers.partner
 
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
-import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
-import models.Mode
+import forms.partner.PartnerSoleProprietorDobFormProvider
+import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage
-import play.api.data.Form
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsIsBusinessIncorporatedUkView
+import views.html.partner.PartnerSoleProprietorDobView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
+class PartnerSoleProprietorDobController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerDetailsIsBusinessIncorporatedUkFormProvider,
+  formProvider: PartnerSoleProprietorDobFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsIsBusinessIncorporatedUkView
+  view: PartnerSoleProprietorDobView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider()
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
+      val index: Int = request.userAnswers.getIndex
+      if (!shouldShowPartnerSoleProprietorDob(request.userAnswers, index)) {
+        Redirect(controllers.routes.SystemErrorController.onPageLoad())
+      } else {
+        val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = request.userAnswers.getIndex
+        val preparedForm =
+          request.userAnswers
+            .get(PartnerDetailsDateOfBirthPage(index))
+            .fold(form)(form.fill)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+        Ok(view(preparedForm, mode))
+      }
     }
 
-    Ok(view(preparedForm, mode))
-  }
-
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+
     val index: Int = request.userAnswers.getIndex
+    val form = formProvider()
 
     form
       .bindFromRequest()
@@ -68,9 +73,12 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsIsBusinessIncorporatedUkPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsDateOfBirthPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsDateOfBirthPage(index), mode, updatedAnswers))
       )
   }
+
+  private def shouldShowPartnerSoleProprietorDob(userAnswers: UserAnswers, index: Int): Boolean =
+    userAnswers.get(PartnerDetailsBusinessTypePage(index)).contains(BusinessType.Soleproprietor)
 }

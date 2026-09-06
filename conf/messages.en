@@ -923,3 +923,17 @@ partnerDateOfIncorporation.error.required.two = Date of incorporation must inclu
 partnerDateOfIncorporation.error.required = Date of incorporation must include {0}
 partnerDateOfIncorporation.error.invalid = 	Date of incorporation must be a real date
 partnerDateOfIncorporation.change.hidden = When was the partner’s date of incorporation?
+
+
+partnerSoleProprietorDob.title = What is the sole proprietor’s date of birth?
+partnerSoleProprietorDob.heading = What is the sole proprietor’s date of birth?
+partnerSoleProprietorDob.hint = For example, 31 3 1980
+partnerSoleProprietorDob.checkYourAnswersLabel = What is the sole proprietor’s date of birth?
+partnerSoleProprietorDob.error.required.all = Enter a date of birth for the sole proprietor
+partnerSoleProprietorDob.error.required.two = Date of birth must include a {0} and {1}
+partnerSoleProprietorDob.error.required = Date of birth must include include {0}
+partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
+partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
+
+partnerSoleProprietorDob.error.beforeEarliestDate = Date of birth must be the same as or after {0}
+partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
