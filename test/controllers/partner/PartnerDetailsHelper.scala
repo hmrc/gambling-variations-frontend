@@ -28,8 +28,9 @@ trait PartnerDetailsHelper {
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
   val testNino: String = "SR123456A"
-  val testVRN: String = "GB123456789"
+  val testVRN: String = "GB353868127"
   val testUtr: String = "1121766916"
+
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
   def cleanedData(
