@@ -56,9 +56,7 @@ class PartnerDetailsAddUTRViewSpec extends SpecBase {
 
         document
           .select(".govuk-fieldset__legend--l")
-          .text() must include(
-          messages(application)("partnerDetailsAddUTR.heading")
-        )
+          .text() must include(messages(application)("partnerDetailsAddUTR.heading"))
 
         document.body().text() must include(
           messages(application)("partnerDetailsAddUTR.paragraph")
