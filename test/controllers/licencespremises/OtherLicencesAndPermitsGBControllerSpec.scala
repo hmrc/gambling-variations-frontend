@@ -146,6 +146,41 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
       }
     }
 
+    "must set all to 0 if none option submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+      val set: Set[OtherLicencesAndPermitsGB] = Seq(noOtherLicencesAndPermits).toSet
+
+      running(application) {
+        val request =
+          FakeRequest(POST, otherLicencesAndPermitsGBRoute)
+            .withFormUrlEncodedBody(form.fill(set).data.toSeq*)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(LicenceClubGamingPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(ClubLicencePage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicenceClubPremisesPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicenceFamilyEntertainmentPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicenceLocalAuthorityPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicenceOnPremisesPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicencePrizeGamingPage).value mustEqual "0"
+      }
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(blankAnswers)).build()
