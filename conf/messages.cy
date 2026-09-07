@@ -284,4 +284,4 @@ otherLicencesAndPermitsGB.option.localAuthority = cy: Local authority premises l
 otherLicencesAndPermitsGB.option.onPremises = cy: On-premises alcohol licence
 otherLicencesAndPermitsGB.option.prizeGaming = cy: Prize gaming permit
 otherLicencesAndPermitsGB.option.none = cy: No, I do not have any other licences and permits in Great Britain
-otherLicencesAndPermitsGB.error.noneSelected = cy: Select otherLicencesAndPermitsGB
+otherLicencesAndPermitsGB.error.required = cy: Select otherLicencesAndPermitsGB

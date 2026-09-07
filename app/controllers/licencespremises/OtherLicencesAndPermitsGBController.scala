@@ -92,7 +92,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
       } yield ua
     } else {
       for {
-        ua <- ua.set(LicenceClubPremisesPage, returnIfSelected(clubGaming))
+        ua <- ua.set(LicenceClubGamingPage, returnIfSelected(clubGaming))
         ua <- ua.set(ClubLicencePage, returnIfSelected(clubMachine))
         ua <- ua.set(LicenceClubPremisesPage, returnIfSelected(clubPremises))
         ua <- ua.set(LicenceFamilyEntertainmentPage, returnIfSelected(familyEntertainment))
