@@ -62,7 +62,7 @@ class RemovePremisesDetailsYesNoViewSpec extends SpecBase {
         )
 
         document.body().text() must include(
-          messages(application)("removePremisesDetailsYesNo.doYou")
+          messages(application)("removePremisesDetailsYesNo.confirmationPrompt")
         )
 
         document.getElementById("value").attr("value") mustEqual "true"
