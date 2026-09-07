@@ -54,7 +54,9 @@ class PartnerDetailsAddUTRViewSpec extends SpecBase {
           messages(application)("changeRegistrationDetails.caption")
         )
 
-        document.body().text() must include(
+        document
+          .select(".govuk-fieldset__legend--l")
+          .text() must include(
           messages(application)("partnerDetailsAddUTR.heading")
         )
 

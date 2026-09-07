@@ -41,9 +41,11 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
 
-        @fieldSet(Fieldset(legend = Some(
-            Legend(content = messages("partnerDetailsAddUTR.heading"), isPageHeading = true, classes = "govuk-fieldset__legend--l")
-        )))
+        @fieldSet(Fieldset(legend = Some(Legend(
+            content = messages("partnerDetailsAddUTR.heading"),
+            isPageHeading = true,
+            classes = "govuk-fieldset__legend--l govuk-!-margin-bottom-6"
+        ))))
 
         @paragraph(messages("partnerDetailsAddUTR.paragraph"))
         <p class="govuk-body">
