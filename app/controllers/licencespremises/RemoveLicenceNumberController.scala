@@ -47,7 +47,7 @@ class RemoveLicenceNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[String] = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -70,21 +70,15 @@ class RemoveLicenceNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, licenceNumber))),
             value =>
               for {
-                updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                updatedAnswersWithSubmitted <- Future.fromTry(
-                                                 updatedAnswers.set(LicencesPremisesDetailsSubmittedPage, true)
-                                               )
-                finalAnswers <- Future.fromTry(
-                                  updatedAnswersWithSubmitted.set(LicencesPremisesDetailsChangesPage, value)
-                                )
-                _ <- sessionRepository.set(finalAnswers)
-              } yield Redirect(
-                navigator.nextPage(RemoveLicenceNumberPage, mode, finalAnswers)
-              )
+                updatedAnswers              <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                updatedAnswersWithSubmitted <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsSubmittedPage, true))
+                finalAnswers                <- Future.fromTry(updatedAnswersWithSubmitted.set(LicencesPremisesDetailsChangesPage, value))
+                _                           <- sessionRepository.set(finalAnswers)
+              } yield Redirect(navigator.nextPage(RemoveLicenceNumberPage, mode, finalAnswers))
           )
       }
       .getOrElse {
-        Future.successful(Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()))
+        Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
       }
   }
 

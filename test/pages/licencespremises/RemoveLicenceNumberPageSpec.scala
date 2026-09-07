@@ -16,12 +16,20 @@
 
 package pages.licencespremises
 
-import pages.QuestionPage
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case object RemoveLicenceNumberPage extends QuestionPage[Boolean] {
+class RemoveLicenceNumberPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
+  "RemoveLicenceNumberPage" must {
 
-  override def toString: String = "removeGamblingLicenceNo"
+    "must have the correct toString" in {
+      RemoveLicenceNumberPage.toString mustBe "removeGamblingLicenceNo"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "removeGamblingLicenceNo"
+      RemoveLicenceNumberPage.path mustBe expectedPath
+    }
+  }
 }
