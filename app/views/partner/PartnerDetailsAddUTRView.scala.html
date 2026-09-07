@@ -57,7 +57,7 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("partnerDetailsAddUTR.subtitle")).asPageHeading(Medium)
+                label = LabelViewModel(messages("partnerDetailsAddUTR.subtitle")).withCssClass("govuk-label govuk-label--m")
             ).withWidth(Fixed10).withHint(HintViewModel(messages("partnerDetailsAddUTR.hint")))
         )
 
