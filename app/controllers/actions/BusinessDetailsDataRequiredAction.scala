@@ -139,6 +139,11 @@ class BusinessDetailsDataRequiredActionImpl @Inject() (
                           GroupMemberPage,
                           details.groupReg
                         )
+
+      updatedAnswers <- updatedAnswers.setIfDefined(
+                          DateOfRegistrationPage,
+                          details.dateOfRegistration
+                        )
     } yield updatedAnswers
   }
 }
