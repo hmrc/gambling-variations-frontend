@@ -273,7 +273,7 @@ partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partne
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
 
- = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.title = cy: Tell us the partner’s Unique Taxpayer Reference
 partnerDetailsAddUTR.subtitle = cy:  What is the Unique Taxpayer Reference?
 partnerDetailsAddUTR.heading = cy: Tell us the partner’s Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.hint = cy: It must be 10 digits long, for example 1234567890
