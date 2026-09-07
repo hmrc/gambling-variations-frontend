@@ -25,9 +25,7 @@ import javax.inject.Inject
 
 class PartnerDetailsAddDateOfJoiningPartnershipFormProvider @Inject() extends Mappings {
 
-  def apply(dateOfJoining: LocalDate)(implicit messages: Messages): Form[LocalDate] = {
-    val twoWeeks = dateOfJoining.plusDays(14)
-
+  def apply(dateOfJoining: LocalDate, twoWeeksFromNow: LocalDate)(implicit messages: Messages): Form[LocalDate] = {
     Form(
       "value" -> localDate(
         invalidKey     = "partnerDetailsAddDateOfJoiningPartnership.error.invalid",
@@ -35,10 +33,10 @@ class PartnerDetailsAddDateOfJoiningPartnershipFormProvider @Inject() extends Ma
         twoRequiredKey = "partnerDetailsAddDateOfJoiningPartnership.error.required.two",
         requiredKey    = "partnerDetailsAddDateOfJoiningPartnership.error.required"
       ).verifying(
-        messages("partnerDetailsAddDateOfJoiningPartnership.error.invalid.range", dateOfJoining, twoWeeks),
-        date =>
-          (date.isAfter(dateOfJoining) || date.isEqual(dateOfJoining)) &&
-            (date.isBefore(twoWeeks) || date.isEqual(twoWeeks))
+        messages("partnerDetailsAddDateOfJoiningPartnership.error.invalid.range", dateOfJoining, twoWeeksFromNow),
+        inputDate =>
+          // (inputDate.isAfter(dateOfJoining) || inputDate.isEqual(dateOfJoining)) &&
+          inputDate.isBefore(twoWeeksFromNow) /*|| inputDate.isEqual(twoWeeksFromNow)*/
       )
     )
   }
