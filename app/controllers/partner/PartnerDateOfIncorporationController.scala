@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.{getIndex, getPartnersSize}
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDateOfIncorporationFormProvider
 import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator

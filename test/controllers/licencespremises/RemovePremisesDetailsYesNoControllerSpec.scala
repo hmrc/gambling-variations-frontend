@@ -48,12 +48,12 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
     premises = Seq(
       PremisesDetails(
         mgdRegNumber = userAnswersId,
-        address1 = Some("1 Test Street"),
-        address2 = None,
-        address3 = None,
-        address4 = None,
-        postcode = Some("AA1 1AA"),
-        systemDate = None
+        address1     = Some("1 Test Street"),
+        address2     = None,
+        address3     = None,
+        address4     = None,
+        postcode     = Some("AA1 1AA"),
+        systemDate   = None
       )
     )
   )

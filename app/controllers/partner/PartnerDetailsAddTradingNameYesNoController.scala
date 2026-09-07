@@ -18,7 +18,6 @@ package controllers.partner
 
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
-import utils.PartnerUtils.getPartnersSize
 import forms.partner.PartnerDetailsAddTradingNameYesNoFormProvider
 import models.Mode
 import navigation.Navigator

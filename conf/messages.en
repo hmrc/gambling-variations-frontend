@@ -943,3 +943,15 @@ partnerDetailsVatRegistrationNumber.error.invalid = Enter a real VAT registratio
 partnerDetailsVatRegistrationNumber.error.invalid.characters = The VAT registration number must only include numbers 1 to 9
 partnerDetailsVatRegistrationNumber.change.hidden = What is the partner’s VAT registration number?
 
+partnerDetailsAddUTR.title = Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.subtitle =  What is the Unique Taxpayer Reference?
+partnerDetailsAddUTR.heading = Tell us the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.hint = It must be 10 digits long, for example 1234567890
+partnerDetailsAddUTR.paragraph = You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+partnerDetailsAddUTR.linkText = Get more help to find your UTR (opens in new tab).
+partnerDetailsAddUTR.checkYourAnswersLabel = Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.error.required = Enter the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.error.invalidChars = The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+partnerDetailsAddUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10 digits long
+partnerDetailsAddUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.change.hidden = Tell us the partner’s Unique Taxpayer Reference
