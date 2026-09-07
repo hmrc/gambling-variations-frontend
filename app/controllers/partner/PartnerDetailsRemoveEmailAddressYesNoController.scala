@@ -34,7 +34,6 @@ import views.html.partner.PartnerDetailsRemoveEmailAddressYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import utils.PartnerUtils.getPartnersSize
 
 class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
   override val messagesApi: MessagesApi,

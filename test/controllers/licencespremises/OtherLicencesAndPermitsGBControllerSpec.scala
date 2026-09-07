@@ -1,14 +1,16 @@
 package controllers.licencespremises
 
-import base.SpecBase
 import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
+import base.SpecBase
 import models.licencespremises.OtherLicencesAndPermitsGB
 import models.licencespremises.OtherLicencesAndPermitsGB.*
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.ArgumentCaptor
+import pages.licencespremises.*
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -89,7 +91,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(blankAnswers))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -106,6 +108,41 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must save correct user answers data" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+      val set = getSelectedLicencesAndPermits(userAnswers)
+
+      running(application) {
+        val request =
+          FakeRequest(POST, otherLicencesAndPermitsGBRoute)
+            .withFormUrlEncodedBody(form.fill(set).data.toSeq*)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(LicenceClubGamingPage).value mustEqual "1"
+        savedAnswersCaptor.getValue.get(ClubLicencePage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicenceClubPremisesPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicenceFamilyEntertainmentPage).value mustEqual "1"
+        savedAnswersCaptor.getValue.get(LicenceLocalAuthorityPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(LicenceOnPremisesPage).value mustEqual "1"
+        savedAnswersCaptor.getValue.get(LicencePrizeGamingPage).value mustEqual "0"
       }
     }
 
