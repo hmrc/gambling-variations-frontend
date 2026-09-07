@@ -25,7 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.LicenceNumberPage
+import pages.licencespremises.{LicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
@@ -157,6 +157,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
     case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
+    case PartnerDetailsVrnPage(index) =>
+      userAnswers => controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad() // TODO: to be plumbed in
     case VatRegistrationNumberYesNoPage(index) =>
       userAnswers => navigateVatRegistrationNumberYesNoPage(index)(userAnswers)
     case PartnerEmailAddressPage =>
@@ -174,6 +176,8 @@ class Navigator @Inject() () {
     // License and Premises Details
     case LicenceNumberPage =>
       _ => controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+    case RemovePremisesDetailsYesNoPage =>
+      _ => controllers.licencespremises.routes.RemovePremisesDetailsYesNoController.onPageLoad() // change it
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
