@@ -1124,6 +1124,17 @@ class NavigatorSpec extends SpecBase {
           controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad()
       }
 
+      "should route PartnerDetailsVrnPage to PartnerDetailsVatRegistrationNumberController regardless of the stored answer" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsVrnPage(index), "GB123456789")
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsVrnPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad()
+      }
+
     }
   }
 }

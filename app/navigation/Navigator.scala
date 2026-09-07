@@ -157,6 +157,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
     case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
+    case PartnerDetailsVrnPage(index) =>
+      userAnswers => controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad() // TODO: to be plumbed in
     case VatRegistrationNumberYesNoPage(index) =>
       userAnswers => navigateVatRegistrationNumberYesNoPage(index)(userAnswers)
     case PartnerEmailAddressPage =>
