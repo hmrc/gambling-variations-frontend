@@ -25,7 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.LicenceNumberPage
+import pages.licencespremises.{LicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
@@ -176,6 +176,8 @@ class Navigator @Inject() () {
     // License and Premises Details
     case LicenceNumberPage =>
       _ => controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+    case RemovePremisesDetailsYesNoPage =>
+      _ => controllers.licencespremises.routes.RemovePremisesDetailsYesNoController.onPageLoad() // change it
 
     case _ =>
       _ => routes.IndexController.onPageLoad()

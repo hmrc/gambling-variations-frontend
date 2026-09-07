@@ -873,6 +873,14 @@ licenceNumber.error.required = Enter the Gambling Commission operating or person
 licenceNumber.error.invalidCharacters = The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = The Gambling Commission operating or personal licence number must be in the correct format
 
+removePremisesDetailsYesNo.title = This change will remove your premises details
+removePremisesDetailsYesNo.heading = This change will remove your premises details
+removePremisesDetailsYesNo.p1 = If you submit this change, HMRC will remove the premises details you have provided.
+removePremisesDetailsYesNo.confirmationPrompt = Are you sure you want to make this change?
+removePremisesDetailsYesNo.checkYourAnswersLabel = Are you sure you want to make this change?
+removePremisesDetailsYesNo.error.required = Select yes if you want to make this change
+removePremisesDetailsYesNo.change.hidden = Are you sure you want to make this change?
+
 partnerDetails.title = Partner details
 partnerDetails.heading = Partner details
 partnerDetails.status.active = Active
