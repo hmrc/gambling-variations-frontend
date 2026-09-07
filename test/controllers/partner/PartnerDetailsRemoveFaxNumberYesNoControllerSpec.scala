@@ -25,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsRemoveFaxNumberYesNoPage
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveFaxNumberYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -43,12 +43,22 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
   lazy val partnerDetailsRemoveFaxNumberYesNoRoute: String =
     PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url
 
+  private val validUserAnswers: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+
   "PartnerDetailsRemoveFaxNumberYesNo Controller" - {
 
     "onPageLoad" - {
 
       "must return OK and the correct view for a GET when fax number exists in UserAnswers" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+        val userAnswers =
+          validUserAnswers
+            .set(PartnerDetailsAddPartnerCompletedPage, false)
+            .success
+            .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -63,12 +73,14 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
-        val baseAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
-
-        val userAnswers = baseAnswers
-          .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
-          .success
-          .value
+        val userAnswers =
+          validUserAnswers
+            .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
+            .success
+            .value
+            .set(PartnerDetailsRemoveFaxNumberYesNoPage(index), true)
+            .success
+            .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -115,7 +127,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+        val userAnswers = validUserAnswers
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers))
@@ -126,9 +138,8 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
             .build()
 
         running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", "true"))
+          val request = FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 
@@ -141,7 +152,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         val mockSessionRepository = mock[SessionRepository]
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+        val userAnswers = validUserAnswers
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswers))
@@ -153,7 +164,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
 
         running(application) {
           val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+            FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
               .withFormUrlEncodedBody(("value", "false"))
 
           val result = route(application, request).value
@@ -164,13 +175,13 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
       }
 
       "must return BAD_REQUEST and errors when invalid data is submitted" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
+        val userAnswers = validUserAnswers
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
           val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
+            FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
               .withFormUrlEncodedBody(("value", ""))
 
           val boundForm = form.bind(Map("value" -> ""))
@@ -188,9 +199,8 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsRemoveFaxNumberYesNoController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", "true"))
+          val request = FakeRequest(POST, partnerDetailsRemoveFaxNumberYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 

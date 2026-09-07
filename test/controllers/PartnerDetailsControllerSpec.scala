@@ -205,7 +205,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partner.routes.PartnerDetailsController.onPageLoad.url
+            controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
         }
       }
 

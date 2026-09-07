@@ -24,6 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import pages.partnerdetails.PartnerDetailsNinoPage
 import play.api.data.Form
 import play.api.inject.bind
@@ -41,7 +42,12 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
   lazy val partnerDetailsAddNationalInsuranceNumberRoute: String =
     controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url
 
-  def validUserAnswers(nino: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedData(nino = nino))
+  def validUserAnswers(nino: Option[String] = None): UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData(nino = nino))
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+
   val userAnswersNoNino: UserAnswers = validUserAnswers()
   val userAnswersWithNino: UserAnswers = validUserAnswers(Some(testNino))
 

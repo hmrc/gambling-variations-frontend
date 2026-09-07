@@ -195,9 +195,8 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
               )
           )
 
-          recoverToSucceededIf[RuntimeException] {
-            connector.initJourney(addressLookupConfig)
-          }
+          recoverToExceptionIf[RuntimeException](connector.initJourney(addressLookupConfig))
+            .map(_.getMessage mustBe "[AddressLookup]: No Location Header returned from Address Lookup")
         }
 
         "return a Left(DefaultedUnexpectedFailure) when unexpected response" in {
@@ -216,9 +215,8 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
               )
           )
 
-          recoverToSucceededIf[RuntimeException] {
-            connector.initJourney(addressLookupConfig)
-          }
+          recoverToExceptionIf[RuntimeException](connector.initJourney(addressLookupConfig))
+            .map(_.getMessage mustBe "[AddressLookup]: Unexpected response, status 400 returned")
         }
 
       }

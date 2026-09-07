@@ -137,7 +137,6 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       val notBuiltYet = Set(
         "Controlling body details",
         "Group member details",
-        "Partner details",
         "Licences and premises",
         "Return periods"
       )
@@ -147,9 +146,25 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
           viewModel(partnershipAnswers, isGroupMember = true).sections
 
       val placeholderUrls =
-        allSections.filter(section => notBuiltYet.contains(section.name)).map(_.url).distinct
+        allSections
+          .filter(section => notBuiltYet.contains(section.name))
+          .map(_.url)
+          .distinct
 
-      placeholderUrls mustEqual Seq(routes.PageNotFoundController.onPageLoad().url)
+      placeholderUrls mustEqual Seq(
+        routes.PageNotFoundController.onPageLoad().url
+      )
+    }
+
+    "must link partner details to the partner details journey" in {
+
+      val vm = viewModel(partnershipAnswers, isGroupMember = false)
+
+      val partnerDetails =
+        vm.sections.find(_.name == "Partner details").value
+
+      partnerDetails.url mustEqual
+        controllers.partner.routes.PartnerDetailsController.onPageLoad.url
     }
 
     "must point the submit link at the declaration page" in {

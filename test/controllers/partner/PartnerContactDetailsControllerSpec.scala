@@ -23,6 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
@@ -44,22 +45,23 @@ class PartnerContactDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val partnerContactDetailsRoute: String = controllers.partner.routes.PartnerContactDetailsController.onPageLoad().url
 
-  val userAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      "partners" -> Json.arr(
-        Json.obj(
-          "partnerDetailsMgdRegNumber" -> "XWM00000001762",
-          "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-            "contactNumber" -> Json.obj(
-              "phoneNumber"       -> "123456789",
-              "mobilePhoneNumber" -> "123456789"
+  val userAnswers: UserAnswers =
+    UserAnswers(
+      userAnswersId,
+      Json.obj(
+        "partners" -> Json.arr(
+          Json.obj(
+            "partnerDetailsMgdRegNumber" -> "XWM00000001762",
+            "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
+              "contactNumber" -> Json.obj(
+                "phoneNumber"       -> "123456789",
+                "mobilePhoneNumber" -> "123456789"
+              )
             )
           )
         )
       )
-    )
-  )
+    ).set(PartnerDetailsAddPartnerCompletedPage, false).success.value
 
   override val emptyUserAnswers = UserAnswers(
     userAnswersId,
@@ -70,7 +72,7 @@ class PartnerContactDetailsControllerSpec extends SpecBase with MockitoSugar {
         )
       )
     )
-  )
+  ).set(PartnerDetailsAddPartnerCompletedPage, false).success.value
 
   "PartnerContactDetails Controller" - {
 
