@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsAddUTRPage
+import pages.partnerdetails.PartnerDetailsUtrPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -46,8 +46,6 @@ class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with
   val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
 
   private val expectedIndex: Int = validUserAnswers.getIndex
-
-  val validUtr = "1121766916"
 
   "PartnerDetailsAddUTR Controller" - {
 
@@ -72,7 +70,7 @@ class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsAddUTRPage(expectedIndex), validUtr)
+          .set(PartnerDetailsUtrPage(expectedIndex), testUtr)
           .success
           .value
 
@@ -86,7 +84,7 @@ class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with
           val result = route(application, request).value
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(validUtr), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form.fill(testUtr), NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -124,12 +122,12 @@ class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with
         running(application) {
           val request =
             FakeRequest(POST, PartnerDetailsAddUTRController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", validUtr))
+              .withFormUrlEncodedBody(("value", testUtr))
 
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsAddUTRPage(expectedIndex), validUtr)
+            .set(PartnerDetailsUtrPage(expectedIndex), testUtr)
             .success
             .value
 
@@ -173,7 +171,7 @@ class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with
         running(application) {
           val request =
             FakeRequest(POST, PartnerDetailsAddUTRController.onSubmit().url)
-              .withFormUrlEncodedBody(("value", validUtr))
+              .withFormUrlEncodedBody(("value", testUtr))
 
           val result = route(application, request).value
 

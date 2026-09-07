@@ -1124,19 +1124,19 @@ class NavigatorSpec extends SpecBase {
           controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad()
       }
 
-      "should route PartnerDetailsAddUTRPage to SystemErrorController when answer is false" in {
-        navigator.nextPage(PartnerDetailsAddUTRPage(index), NormalMode, emptyAnswers) mustBe
+      "should route PartnerDetailsUtrPage to SystemErrorController when answer is false" in {
+        navigator.nextPage(PartnerDetailsUtrPage(index), NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route PartnerDetailsAddUTRPage to VatRegistrationNumberYesNoController when answer is true" in {
+      "should route PartnerDetailsUtrPage to VatRegistrationNumberYesNoController when answer is true" in {
         val answers =
           emptyAnswers
-            .set(PartnerDetailsAddUTRPage(index), "123")
+            .set(PartnerDetailsUtrPage(index), "123")
             .success
             .value
 
-        navigator.nextPage(PartnerDetailsAddUTRPage(index), NormalMode, answers) mustBe
+        navigator.nextPage(PartnerDetailsUtrPage(index), NormalMode, answers) mustBe
           controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
       }
 

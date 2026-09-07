@@ -169,7 +169,7 @@ class Navigator @Inject() () {
       _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
     case PartnerDetailsBusinessTypePage(index) =>
       userAnswers => navigatePartnerDetailsBusinessTypePage(index)(userAnswers) // change it
-    case PartnerDetailsAddUTRPage(index) =>
+    case PartnerDetailsUtrPage(index) =>
       userAnswers => navigatePartnerDetailsUTRPage(index)(userAnswers)
 
     // License and Premises Details
@@ -482,7 +482,7 @@ class Navigator @Inject() () {
 
   private def navigatePartnerDetailsUTRPage(index: Int)(answers: UserAnswers): Call =
     answers
-      .get(PartnerDetailsAddUTRPage(index))
+      .get(PartnerDetailsUtrPage(index))
       .fold(routes.SystemErrorController.onPageLoad())(_ => controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad())
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =

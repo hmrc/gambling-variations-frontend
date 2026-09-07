@@ -50,6 +50,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       .success
       .value
 
+  // TODO: this has to be fixed with the indexing ticket
   private val expectedIndex: Int = validUserAnswers.getIndex
 
   "PartnerDetailsBusinessType Controller" - {
@@ -73,9 +74,6 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" ignore {
-
-        // TODO: this has to be fixed with the indexing ticket
-        val targetIndex = validUserAnswers.getIndex
 
         val userAnswers = validUserAnswers
           .set(PartnerDetailsBusinessTypePage(expectedIndex), Corporatebody)

@@ -17,16 +17,16 @@
 package controllers.partner
 
 import controllers.actions.*
-import utils.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsAddUTRFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partner.PartnerDetailsAddUTRPage
+import pages.partnerdetails.PartnerDetailsUtrPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.PartnerUtils.getIndex
 import views.html.partner.PartnerDetailsAddUTRView
 
 import javax.inject.Inject
@@ -57,7 +57,7 @@ class PartnerDetailsAddUTRController @Inject() (
     // TODO: this has to be fixed with the indexing ticket
     val index: Int = request.userAnswers.getIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddUTRPage(index)) match {
+    val preparedForm = request.userAnswers.get(PartnerDetailsUtrPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -75,9 +75,9 @@ class PartnerDetailsAddUTRController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddUTRPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsUtrPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsAddUTRPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsUtrPage(index), mode, updatedAnswers))
       )
   }
 }
