@@ -55,20 +55,6 @@ class PartnerSoleProprietorDobFormProviderSpec extends DateBehaviours {
     )
   }
 
-  "must accept a date exactly 120 years ago" in {
-    val date = today.minusYears(120)
-
-    val result = form.bind(
-      Map(
-        "value.day"   -> date.getDayOfMonth.toString,
-        "value.month" -> date.getMonthValue.toString,
-        "value.year"  -> date.getYear.toString
-      )
-    )
-
-    result.hasErrors mustBe false
-  }
-
   "must accept yesterday" in {
     val date = today.minusDays(1)
 
@@ -83,7 +69,7 @@ class PartnerSoleProprietorDobFormProviderSpec extends DateBehaviours {
     result.hasErrors mustBe false
   }
 
-  "must reject a date more than 120 years ago" in {
+  "must accept any date in past" in {
     val date = today.minusYears(120).minusDays(1)
 
     val result = form.bind(
@@ -94,8 +80,7 @@ class PartnerSoleProprietorDobFormProviderSpec extends DateBehaviours {
       )
     )
 
-    result.errors.head.message mustBe
-      "partnerSoleProprietorDob.error.beforeEarliestDate"
+    result.hasErrors mustBe false
   }
 
   "must reject today" in {

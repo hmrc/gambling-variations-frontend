@@ -30,9 +30,7 @@ class PartnerSoleProprietorDobFormProvider @Inject() (clock: Clock) extends Mapp
 
   def apply()(implicit messages: Messages): Form[LocalDate] = {
 
-    val today = LocalDate.now(clock)
-    val earliestDate = today.minusYears(120)
-    val latestDate = today.minusDays(1)
+    val latestDate = LocalDate.now(clock).minusDays(1)
 
     Form(
       "value" -> localDate(
@@ -41,24 +39,16 @@ class PartnerSoleProprietorDobFormProvider @Inject() (clock: Clock) extends Mapp
         twoRequiredKey = "partnerSoleProprietorDob.error.required.two",
         requiredKey    = "partnerSoleProprietorDob.error.required"
       ).verifying(
-        dateOfBirthConstraint(earliestDate, latestDate)
+        dateOfBirthConstraint(latestDate)
       )
     )
   }
 
   private def dateOfBirthConstraint(
-    earliestDate: LocalDate,
     latestDate: LocalDate
   )(implicit messages: Messages): Constraint[LocalDate] =
     Constraint { dateOfBirth =>
-      if (dateOfBirth.isBefore(earliestDate)) {
-        Invalid(
-          ValidationError(
-            "partnerSoleProprietorDob.error.beforeEarliestDate",
-            formatDate(earliestDate)
-          )
-        )
-      } else if (dateOfBirth.isAfter(latestDate)) {
+      if (dateOfBirth.isAfter(latestDate)) {
         Invalid(
           ValidationError(
             "partnerSoleProprietorDob.error.afterLatestDate",
