@@ -27,6 +27,7 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsPage}
+import play.api.Application
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -51,12 +52,6 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       today.atStartOfDay(ZoneOffset.UTC).toInstant,
       ZoneOffset.UTC
     )
-
-  private val formProvider =
-    new PartnerSoleProprietorDobFormProvider(clock)
-
-  private val form =
-    formProvider()
 
   private val validAnswer: LocalDate =
     today.minusYears(30)
@@ -101,21 +96,42 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
   private val index: Int =
     partnerDetailsUserAnswers.getIndex
 
+  private def controller(
+    application: Application
+  ): PartnerSoleProprietorDobController =
+    application.injector
+      .instanceOf[PartnerSoleProprietorDobController]
+
+  private def form(
+    application: Application
+  ) =
+    application.injector
+      .instanceOf[PartnerSoleProprietorDobFormProvider]
+      .apply()
+
+  private def view(
+    application: Application
+  ): PartnerSoleProprietorDobView =
+    application.injector
+      .instanceOf[PartnerSoleProprietorDobView]
+
   private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, getRoute)
 
-  private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
+  private def postRequest(
+    answer: LocalDate = validAnswer
+  ): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, postRoute)
       .withFormUrlEncodedBody(
-        "value.day"   -> validAnswer.getDayOfMonth.toString,
-        "value.month" -> validAnswer.getMonthValue.toString,
-        "value.year"  -> validAnswer.getYear.toString
+        "value.day"   -> answer.getDayOfMonth.toString,
+        "value.month" -> answer.getMonthValue.toString,
+        "value.year"  -> answer.getYear.toString
       )
 
   "PartnerSoleProprietorDob Controller" - {
 
     "must return OK and the correct view for a GET for a sole proprietor" in {
-      println("....................." + getRoute)
+
       val application =
         applicationBuilder(
           userAnswers = Some(partnerDetailsUserAnswers)
@@ -127,20 +143,21 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
 
       running(application) {
 
-        val result =
-          route(application, getRequest()).value
+        val request =
+          getRequest()
 
-        val view =
-          application.injector
-            .instanceOf[PartnerSoleProprietorDobView]
+        val result =
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(request)
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(
-            form,
+          view(application)(
+            form(application),
             NormalMode
-          )(getRequest(), messages(application)).toString
+          )(request, messages(application)).toString
       }
     }
 
@@ -166,20 +183,21 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
 
       running(application) {
 
-        val result =
-          route(application, getRequest()).value
+        val request =
+          getRequest()
 
-        val view =
-          application.injector
-            .instanceOf[PartnerSoleProprietorDobView]
+        val result =
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(request)
 
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(
-            form.fill(validAnswer),
+          view(application)(
+            form(application).fill(validAnswer),
             NormalMode
-          )(getRequest(), messages(application)).toString
+          )(request, messages(application)).toString
       }
     }
 
@@ -208,8 +226,13 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
 
       running(application) {
 
+        val request =
+          postRequest()
+
         val result =
-          route(application, postRequest()).value
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
 
         status(result) mustEqual SEE_OTHER
 
@@ -221,7 +244,7 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "must return a Bad Request and errors when an invalid date is submitted" in {
 
       val application =
         applicationBuilder(
@@ -232,36 +255,40 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
           )
           .build()
 
-      val request =
-        FakeRequest(POST, postRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> "31",
-            "value.month" -> "2",
-            "value.year"  -> "2020"
-          )
-
       running(application) {
 
-        val boundForm =
-          form.bind(
-            Map(
+        val request =
+          FakeRequest(POST, postRoute)
+            .withFormUrlEncodedBody(
               "value.day"   -> "31",
               "value.month" -> "2",
               "value.year"  -> "2020"
             )
-          )
 
-        val view =
-          application.injector
-            .instanceOf[PartnerSoleProprietorDobView]
+        val boundForm =
+          form(application)
+            .bind(
+              Map(
+                "value.day"   -> "31",
+                "value.month" -> "2",
+                "value.year"  -> "2020"
+              )
+            )
 
         val result =
-          route(application, request).value
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
 
         status(result) mustEqual BAD_REQUEST
 
+        boundForm.errors
+          .map(_.message) must contain(
+          "partnerSoleProprietorDob.error.invalid"
+        )
+
         contentAsString(result) mustEqual
-          view(
+          view(application)(
             boundForm,
             NormalMode
           )(request, messages(application)).toString
@@ -270,6 +297,9 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
 
     "must return a Bad Request when the date is earlier than 120 years ago" in {
 
+      val invalidAnswer =
+        today.minusYears(120).minusDays(1)
+
       val application =
         applicationBuilder(
           userAnswers = Some(partnerDetailsUserAnswers)
@@ -279,34 +309,28 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
           )
           .build()
 
-      val invalidAnswer =
-        today.minusYears(120).minusDays(1)
-
-      val request =
-        FakeRequest(POST, postRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> invalidAnswer.getDayOfMonth.toString,
-            "value.month" -> invalidAnswer.getMonthValue.toString,
-            "value.year"  -> invalidAnswer.getYear.toString
-          )
-
       running(application) {
 
-        val boundForm =
-          form.bind(
-            Map(
-              "value.day"   -> invalidAnswer.getDayOfMonth.toString,
-              "value.month" -> invalidAnswer.getMonthValue.toString,
-              "value.year"  -> invalidAnswer.getYear.toString
-            )
-          )
+        val request =
+          postRequest(invalidAnswer)
 
-        val view =
-          application.injector
-            .instanceOf[PartnerSoleProprietorDobView]
+        val boundForm =
+          form(application)
+            .bind(
+              Map(
+                "value.day" ->
+                  invalidAnswer.getDayOfMonth.toString,
+                "value.month" ->
+                  invalidAnswer.getMonthValue.toString,
+                "value.year" ->
+                  invalidAnswer.getYear.toString
+              )
+            )
 
         val result =
-          route(application, request).value
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
 
         status(result) mustEqual BAD_REQUEST
 
@@ -316,10 +340,53 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
         )
 
         contentAsString(result) mustEqual
-          view(
+          view(application)(
             boundForm,
             NormalMode
           )(request, messages(application)).toString
+      }
+    }
+
+    "must accept a date exactly 120 years ago" in {
+
+      val earliestValidAnswer =
+        today.minusYears(120)
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      when(mockSessionRepository.set(any[UserAnswers]))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        )
+          .overrides(
+            bind[Clock].toInstance(clock),
+            bind[Navigator].toInstance(
+              new FakeNavigator(onwardRoute)
+            ),
+            bind[SessionRepository].toInstance(
+              mockSessionRepository
+            )
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          postRequest(earliestValidAnswer)
+
+        val result =
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          onwardRoute.url
       }
     }
 
@@ -334,31 +401,28 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
           )
           .build()
 
-      val request =
-        FakeRequest(POST, postRoute)
-          .withFormUrlEncodedBody(
-            "value.day"   -> today.getDayOfMonth.toString,
-            "value.month" -> today.getMonthValue.toString,
-            "value.year"  -> today.getYear.toString
-          )
-
       running(application) {
 
-        val boundForm =
-          form.bind(
-            Map(
-              "value.day"   -> today.getDayOfMonth.toString,
-              "value.month" -> today.getMonthValue.toString,
-              "value.year"  -> today.getYear.toString
-            )
-          )
+        val request =
+          postRequest(today)
 
-        val view =
-          application.injector
-            .instanceOf[PartnerSoleProprietorDobView]
+        val boundForm =
+          form(application)
+            .bind(
+              Map(
+                "value.day" ->
+                  today.getDayOfMonth.toString,
+                "value.month" ->
+                  today.getMonthValue.toString,
+                "value.year" ->
+                  today.getYear.toString
+              )
+            )
 
         val result =
-          route(application, request).value
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
 
         status(result) mustEqual BAD_REQUEST
 
@@ -368,10 +432,53 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
         )
 
         contentAsString(result) mustEqual
-          view(
+          view(application)(
             boundForm,
             NormalMode
           )(request, messages(application)).toString
+      }
+    }
+
+    "must accept yesterday's date" in {
+
+      val latestValidAnswer =
+        today.minusDays(1)
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      when(mockSessionRepository.set(any[UserAnswers]))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        )
+          .overrides(
+            bind[Clock].toInstance(clock),
+            bind[Navigator].toInstance(
+              new FakeNavigator(onwardRoute)
+            ),
+            bind[SessionRepository].toInstance(
+              mockSessionRepository
+            )
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          postRequest(latestValidAnswer)
+
+        val result =
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          onwardRoute.url
       }
     }
 
@@ -410,7 +517,9 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       running(application) {
 
         val result =
-          route(application, getRequest()).value
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(getRequest())
 
         status(result) mustEqual SEE_OTHER
 
@@ -448,7 +557,9 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       running(application) {
 
         val result =
-          route(application, getRequest()).value
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(getRequest())
 
         status(result) mustEqual SEE_OTHER
 
@@ -457,7 +568,7 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       }
     }
 
-    "must redirect to SystemError for a GET if no existing data is found" in {
+    "must redirect to SystemError for a GET when no existing data can be loaded" in {
 
       val application =
         applicationBuilder(
@@ -471,7 +582,9 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       running(application) {
 
         val result =
-          route(application, getRequest()).value
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(getRequest())
 
         status(result) mustEqual SEE_OTHER
 
@@ -480,7 +593,7 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       }
     }
 
-    "must redirect to SystemError for a POST if no existing data is found" in {
+    "must redirect to SystemError for a POST when no existing data can be loaded" in {
 
       val application =
         applicationBuilder(
@@ -494,7 +607,9 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       running(application) {
 
         val result =
-          route(application, postRequest()).value
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(postRequest())
 
         status(result) mustEqual SEE_OTHER
 
