@@ -946,5 +946,4 @@ partnerSoleProprietorDob.error.required.two = Date of birth must include a {0} a
 partnerSoleProprietorDob.error.required = Date of birth must include include {0}
 partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
 partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
-
 partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
