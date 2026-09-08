@@ -873,7 +873,7 @@ licenceNumber.error.required = Enter the Gambling Commission operating or person
 licenceNumber.error.invalidCharacters = The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = The Gambling Commission operating or personal licence number must be in the correct format
 
-removeLicenceNumber.title = Are you sure you want to remove the licence number {0}?
+removeLicenceNumber.title = Are you sure you want to remove the licence number?
 removeLicenceNumber.heading = Are you sure you want to remove the licence number {0}?
 removeLicenceNumber.error.required = Select yes if you want to remove the licence number
 
