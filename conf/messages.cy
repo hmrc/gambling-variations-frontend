@@ -267,8 +267,29 @@ licenceNumber.error.required = cy:  Enter the Gambling Commission operating or p
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
 
+removePremisesDetailsYesNo.title = cy: This change will remove your premises details
+removePremisesDetailsYesNo.heading = cy: This change will remove your premises details
+removePremisesDetailsYesNo.p1 = cy: If you submit this change, HMRC will remove the premises details you have provided.
+removePremisesDetailsYesNo.confirmationPrompt = cy: Are you sure you want to make this change?
+removePremisesDetailsYesNo.checkYourAnswersLabel = cy: Are you sure you want to make this change?
+removePremisesDetailsYesNo.error.required = cy: Select yes if you want to make this change
+removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make this change?
+
 partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
+
+partnerDetailsAddUTR.title = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.subtitle = cy:  What is the Unique Taxpayer Reference?
+partnerDetailsAddUTR.heading = cy: Tell us the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.hint = cy: It must be 10 digits long, for example 1234567890
+partnerDetailsAddUTR.paragraph = cy: You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+partnerDetailsAddUTR.linkText = cy: Get more help to find your UTR (opens in new tab).
+partnerDetailsAddUTR.checkYourAnswersLabel = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.error.required = cy: Enter the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
+partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
