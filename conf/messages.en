@@ -976,7 +976,7 @@ partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same 
 
 licencesPremises.title = How will you provide premises addresses?
 licencesPremises.heading = How will you provide premises addresses?
-licencesPremises.online = Online
+licencesPremises.online = Online only
 licencesPremises.online.hint = You can only provide up to 100 premises addresses online
 licencesPremises.byPost = By post
 licencesPremises.byPost.hint = Providing premises addresses by post will delay updates to your records

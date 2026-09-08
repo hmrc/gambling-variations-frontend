@@ -277,7 +277,7 @@ removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make thi
 
 licencesPremises.title = cy: How will you provide premises addresses?
 licencesPremises.heading = cy: How will you provide premises addresses?
-licencesPremises.online = cy: Online
+licencesPremises.online = cy: Online only
 licencesPremises.online.hint = cy: You can only provide up to 100 premises addresses online
 licencesPremises.byPost = cy: By post
 licencesPremises.byPost.hint = cy: Providing premises addresses by post will delay updates to your records
