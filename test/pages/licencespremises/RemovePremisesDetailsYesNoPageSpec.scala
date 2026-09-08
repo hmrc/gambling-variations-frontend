@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package pages.partner
+package pages.licencespremises
 
-import pages.QuestionPage
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case class PartnerAddEmailAddressYesNoPage(index: Int) extends QuestionPage[Boolean] {
+class RemovePremisesDetailsYesNoPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "partners" \ index \ toString
+  "RemovePremisesDetailsYesNoPage" must {
 
-  override def toString: String = "partnerAddEmailAddressYesNo"
+    "must have the correct toString" in {
+      RemovePremisesDetailsYesNoPage.toString mustBe "removePremisesDetailsYesNo"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "removePremisesDetailsYesNo"
+      RemovePremisesDetailsYesNoPage.path mustBe expectedPath
+    }
+  }
 }
