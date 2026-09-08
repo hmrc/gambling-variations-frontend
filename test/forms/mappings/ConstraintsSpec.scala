@@ -219,27 +219,30 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
 
   "fixedLength" - {
 
+    val fieldLength = 10
+
     "must return Valid for a string of exactly the required length" in {
-      val result = fixedLength(10, "error.length")("1" * 10)
+      val result = fixedLength(fieldLength, "error.length")("a" * fieldLength)
+      result mustEqual Valid
     }
 
     "must return Invalid for a string shorter than the required length" in {
-      val result = fixedLength(10, "error.length")("a" * 9)
-      result mustEqual Invalid("error.length", 10)
+      val result = fixedLength(fieldLength, "error.length")("a" * (fieldLength - 1))
+      result mustEqual Invalid("error.length", fieldLength)
     }
 
     "must return Invalid for a string longer than the required length" in {
-      val result = fixedLength(10, "error.length")("a" * 11)
-      result mustEqual Invalid("error.length", 10)
+      val result = fixedLength(fieldLength, "error.length")("a" * (fieldLength + 1))
+      result mustEqual Invalid("error.length", fieldLength)
     }
 
     "must return Invalid for an empty string" in {
-      val result = fixedLength(10, "error.length")("")
-      result mustEqual Invalid("error.length", 10)
+      val result = fixedLength(fieldLength, "error.length")("")
+      result mustEqual Invalid("error.length", fieldLength)
     }
 
     "must count every character, including whitespace" in {
-      val result = fixedLength(10, "error.length")("1234 67890")
+      val result = fixedLength(fieldLength, "error.length")("1234 67890")
       result mustEqual Valid
     }
 
