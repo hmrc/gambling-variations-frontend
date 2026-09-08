@@ -25,7 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.LicenceNumberPage
+import pages.licencespremises.{LicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
@@ -169,13 +169,16 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerAddTradingNameYesNoPage(index)(userAnswers)
     case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
       _ => controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad() // change it
-
     case PartnerDetailsBusinessTypePage(index) =>
-      userAnswers => navigateDetailsBusinessTypePage(index)(userAnswers) // change it
+      userAnswers => navigatePartnerDetailsBusinessTypePage(index)(userAnswers) // change it
+    case PartnerDetailsUtrPage(index) =>
+      userAnswers => navigatePartnerDetailsUTRPage(index)(userAnswers)
 
     // License and Premises Details
     case LicenceNumberPage =>
       _ => controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+    case RemovePremisesDetailsYesNoPage =>
+      _ => controllers.licencespremises.routes.RemovePremisesDetailsYesNoController.onPageLoad() // change it
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -476,10 +479,15 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigateDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
+  private def navigatePartnerDetailsBusinessTypePage(index: Int)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsBusinessTypePage(index))
       .fold(routes.SystemErrorController.onPageLoad())(controllers.partner.routes.ChangePartnerDetailsBusinessNameController.onPageLoad)
+
+  private def navigatePartnerDetailsUTRPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsUtrPage(index))
+      .fold(routes.SystemErrorController.onPageLoad())(_ => controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad())
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

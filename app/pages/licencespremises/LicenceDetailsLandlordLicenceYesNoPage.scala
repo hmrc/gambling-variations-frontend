@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package pages.partner
+package pages.licencespremises
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-import java.time.LocalDate
+case object LicenceDetailsLandlordLicenceYesNoPage extends QuestionPage[Boolean] {
 
-case class PartnerDateOfIncorporationPage(index: Int) extends QuestionPage[LocalDate] {
+  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
 
-  override def path: JsPath = JsPath \ "partners" \ index \ toString
-
-  override def toString: String = "partnerDateOfIncorporation"
+  override def toString: String = "licenceDetailsLandlordLicenceYesNo"
 }

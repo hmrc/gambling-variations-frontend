@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.licensepremises
 
 import models.UserAnswers
-import pages.partnerdetails.PartnerDetailsDateOfIncorporation
-import play.api.i18n.{Lang, Messages}
+import pages.licencespremises.LicenceDetailsLandlordLicenceYesNoPage
+import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import utils.DateTimeFormats.dateTimeFormat
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerDateOfIncorporationSummary {
+object LicenceDetailsLandlordLicenceYesNoSummary {
+  
 
-  def row(answers: UserAnswers, index: Int)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsDateOfIncorporation(index)).map { answer =>
+  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+    answers.get(LicenceDetailsLandlordLicenceYesNoPage).map { answer =>
 
-      implicit val lang: Lang = messages.lang
+      val value = if (answer) "site.yes" else "site.no"
 
       SummaryListRowViewModel(
-        key   = "partnerDateOfIncorporation.checkYourAnswersLabel",
-        value = ValueViewModel(answer.format(dateTimeFormat())),
+        key   = "licenceDetailsLandlordLicenceYesNo.checkYourAnswersLabel",
+        value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDateOfIncorporationController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDateOfIncorporation.change.hidden"))
+          ActionItemViewModel("site.change", controllers.licencespremises.routes.LicenceDetailsLandlordLicenceYesNoController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("licenceDetailsLandlordLicenceYesNo.change.hidden"))
         )
       )
     }

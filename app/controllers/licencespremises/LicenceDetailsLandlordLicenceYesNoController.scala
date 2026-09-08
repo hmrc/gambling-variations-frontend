@@ -14,44 +14,42 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package controllers.licencespremises
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getIndex
-import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
+import forms.licencespremises.LicenceDetailsLandlordLicenceYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage
+import pages.licencespremises.LicenceDetailsLandlordLicenceYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partner.PartnerDetailsIsBusinessIncorporatedUkView
+import views.html.licencespremises.LicenceDetailsLandlordLicenceYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
+class LicenceDetailsLandlordLicenceYesNoController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerDetailsIsBusinessIncorporatedUkFormProvider,
+  requireData: LicencesPremisesDataRequiredAction,
+  formProvider:LicenceDetailsLandlordLicenceYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsIsBusinessIncorporatedUkView
+  view: LicenceDetailsLandlordLicenceYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form: Form[Boolean] = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = request.userAnswers.getIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)) match {
+    val preparedForm = request.userAnswers.get(LicenceDetailsLandlordLicenceYesNoPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -60,7 +58,6 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = request.userAnswers.getIndex
 
     form
       .bindFromRequest()
@@ -68,9 +65,9 @@ class PartnerDetailsIsBusinessIncorporatedUkController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsIsBusinessIncorporatedUkPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(LicenceDetailsLandlordLicenceYesNoPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(LicenceDetailsLandlordLicenceYesNoPage, mode, updatedAnswers))
       )
   }
 }
