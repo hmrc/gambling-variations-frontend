@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.licencespremises
 
 import base.SpecBase
-import forms.LicencesPremisesFormProvider
-import models.{LicencesPremises, UserAnswers}
+import forms.licencespremises.LicencesPremisesFormProvider
+import models.UserAnswers
+import models.licencespremises.LicencesPremises
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.LicencesPremisesPage
+import pages.licencespremises.LicencesPremisesPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.LicencesPremisesView
+import views.html.licencespremises.LicencesPremisesView
 
 import scala.concurrent.Future
 
@@ -173,7 +174,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
 
@@ -190,7 +191,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
   }

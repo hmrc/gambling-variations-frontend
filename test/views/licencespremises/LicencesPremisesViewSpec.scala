@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package views
+package views.licencespremises
 
 import base.SpecBase
-import controllers.routes
-import forms.LicencesPremisesFormProvider
-import models.LicencesPremises
+import controllers.licencespremises.routes
+import forms.licencespremises.LicencesPremisesFormProvider
+import models.licencespremises.LicencesPremises
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.LicencesPremisesView
+import views.html.licencespremises.LicencesPremisesView
 
 import scala.jdk.CollectionConverters.*
 
@@ -44,6 +44,8 @@ class LicencesPremisesViewSpec extends SpecBase {
         val document: Document = Jsoup.parse(view(form)(request, messages(application)).toString)
 
         document.title() must include(messages(application)("licencesPremises.title"))
+        document.select(".govuk-caption-l").text() mustEqual
+          messages(application)("changeRegistrationDetails.caption")
         document.select("h1.govuk-fieldset__heading").text() mustEqual
           messages(application)("licencesPremises.heading")
 
@@ -54,6 +56,8 @@ class LicencesPremisesViewSpec extends SpecBase {
           input.attr("data-testid") mustEqual s"licences-premises-${option.toString}"
           document.select(s"label[for=value_$index]").text() mustEqual
             messages(application)(s"licencesPremises.${option.toString}")
+          document.select(s"#value_$index-item-hint").text() mustEqual
+            messages(application)(s"licencesPremises.${option.toString}.hint")
         }
 
         document.select("form[data-testid=licences-premises-form]").attr("action") mustEqual

@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.licencespremises
 
 import controllers.actions.*
-import forms.LicencesPremisesFormProvider
+import forms.licencespremises.LicencesPremisesFormProvider
 import javax.inject.Inject
-import models.{LicencesPremises, NormalMode}
+import models.NormalMode
+import models.licencespremises.LicencesPremises
 import navigation.Navigator
-import pages.LicencesPremisesPage
+import pages.licencespremises.LicencesPremisesPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.LicencesPremisesView
+import views.html.licencespremises.LicencesPremisesView
 
 import scala.concurrent.{ExecutionContext, Future}
 

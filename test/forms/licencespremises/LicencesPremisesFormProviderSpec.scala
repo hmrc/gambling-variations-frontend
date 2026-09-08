@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.licencespremises
 
 import forms.behaviours.OptionFieldBehaviours
-import models.LicencesPremises
+import models.licencespremises.LicencesPremises
 import play.api.data.FormError
 
 class LicencesPremisesFormProviderSpec extends OptionFieldBehaviours {

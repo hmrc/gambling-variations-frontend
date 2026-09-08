@@ -15,21 +15,24 @@
  *@
 
 @import viewmodels.LegendSize.Large
+@import views.html.components.Caption
+@import models.licencespremises.LicencesPremises
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("licencesPremises.title"))) {
+@layout(pageTitle = title(form, messages("licencesPremises.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(
-        action = routes.LicencesPremisesController.onSubmit(),
+        action = controllers.licencespremises.routes.LicencesPremisesController.onSubmit(),
         Symbol("autoComplete") -> "off",
         Symbol("data-testid") -> "licences-premises-form"
     ) {
@@ -40,6 +43,8 @@
                     .withAttribute("data-testid" -> "licences-premises-error-summary")
             )
         }
+
+        @caption(messages("changeRegistrationDetails.caption"))
 
         @govukRadios(
             RadiosViewModel(

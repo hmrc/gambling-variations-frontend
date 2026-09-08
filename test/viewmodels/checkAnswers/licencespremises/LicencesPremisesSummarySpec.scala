@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.licencespremises
 
 import base.SpecBase
-import controllers.routes
-import models.LicencesPremises
-import pages.LicencesPremisesPage
+import controllers.licencespremises.routes
+import models.licencespremises.LicencesPremises
+import pages.licencespremises.LicencesPremisesPage
 import play.api.Application
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat

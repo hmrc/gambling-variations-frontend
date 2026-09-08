@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.licencespremises
 
+import models.{Enumerable, WithName}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
 sealed trait LicencesPremises
@@ -37,6 +39,7 @@ object LicencesPremises extends Enumerable.Implicits {
       content    = Text(messages(s"licencesPremises.${value.toString}")),
       value      = Some(value.toString),
       id         = Some(s"value_$index"),
+      hint       = Some(Hint(content = Text(messages(s"licencesPremises.${value.toString}.hint")))),
       attributes = Map("data-testid" -> s"licences-premises-${value.toString}")
     )
   }

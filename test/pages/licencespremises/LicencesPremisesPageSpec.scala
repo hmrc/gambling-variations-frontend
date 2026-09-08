@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package pages
+package pages.licencespremises
 
-import models.LicencesPremises
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case object LicencesPremisesPage extends QuestionPage[LicencesPremises] {
+class LicencesPremisesPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ toString
+  "LicencesPremisesPage" must {
 
-  override def toString: String = "licencesPremises"
+    "must have the correct toString" in {
+      LicencesPremisesPage.toString mustBe "licencesPremises"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "licencesPremises"
+      LicencesPremisesPage.path mustBe expectedPath
+    }
+  }
 }

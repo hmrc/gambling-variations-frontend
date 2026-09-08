@@ -275,6 +275,16 @@ removePremisesDetailsYesNo.checkYourAnswersLabel = cy: Are you sure you want to 
 removePremisesDetailsYesNo.error.required = cy: Select yes if you want to make this change
 removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make this change?
 
+licencesPremises.title = cy: How will you provide premises addresses?
+licencesPremises.heading = cy: How will you provide premises addresses?
+licencesPremises.online = cy: Online
+licencesPremises.online.hint = cy: You can only provide up to 100 premises addresses online
+licencesPremises.byPost = cy: By post
+licencesPremises.byPost.hint = cy: Providing premises addresses by post will delay updates to your records
+licencesPremises.checkYourAnswersLabel = cy: How will you provide premises addresses?
+licencesPremises.error.required = cy: Select how you will provide premises addresses
+licencesPremises.change.hidden = cy: how you will provide premises addresses
+
 partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
