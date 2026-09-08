@@ -295,62 +295,10 @@ class PartnerSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar 
       }
     }
 
-    "must return a Bad Request when the date is earlier than 120 years ago" in {
-
-      val invalidAnswer =
-        today.minusYears(120).minusDays(1)
-
-      val application =
-        applicationBuilder(
-          userAnswers = Some(partnerDetailsUserAnswers)
-        )
-          .overrides(
-            bind[Clock].toInstance(clock)
-          )
-          .build()
-
-      running(application) {
-
-        val request =
-          postRequest(invalidAnswer)
-
-        val boundForm =
-          form(application)
-            .bind(
-              Map(
-                "value.day" ->
-                  invalidAnswer.getDayOfMonth.toString,
-                "value.month" ->
-                  invalidAnswer.getMonthValue.toString,
-                "value.year" ->
-                  invalidAnswer.getYear.toString
-              )
-            )
-
-        val result =
-          controller(application)
-            .onSubmit(NormalMode)
-            .apply(request)
-
-        status(result) mustEqual BAD_REQUEST
-
-        boundForm.errors
-          .map(_.message) must contain(
-          "partnerSoleProprietorDob.error.beforeEarliestDate"
-        )
-
-        contentAsString(result) mustEqual
-          view(application)(
-            boundForm,
-            NormalMode
-          )(request, messages(application)).toString
-      }
-    }
-
-    "must accept a date exactly 120 years ago" in {
+    "must accept any date in past" in {
 
       val earliestValidAnswer =
-        today.minusYears(120)
+        today.minusYears(130)
 
       val mockSessionRepository =
         mock[SessionRepository]
