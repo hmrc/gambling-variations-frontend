@@ -17,10 +17,10 @@
 package forms.mappings
 
 import java.time.LocalDate
-
 import config.CurrencyFormatter
 import generators.Generators
 import org.scalacheck.Gen
+import org.scalactic.Prettifier.default
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -215,5 +215,33 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
       val result = maximumCurrency(1, "error.max").apply(1.01)
       result mustEqual Invalid("error.max", CurrencyFormatter.currencyFormat(1))
     }
+  }
+
+  "fixedLength" - {
+
+    "must return Valid for a string of exactly the required length" in {
+      val result = fixedLength(10, "error.length")("1" * 10)
+    }
+
+    "must return Invalid for a string shorter than the required length" in {
+      val result = fixedLength(10, "error.length")("a" * 9)
+      result mustEqual Invalid("error.length", 10)
+    }
+
+    "must return Invalid for a string longer than the required length" in {
+      val result = fixedLength(10, "error.length")("a" * 11)
+      result mustEqual Invalid("error.length", 10)
+    }
+
+    "must return Invalid for an empty string" in {
+      val result = fixedLength(10, "error.length")("")
+      result mustEqual Invalid("error.length", 10)
+    }
+
+    "must count every character, including whitespace" in {
+      val result = fixedLength(10, "error.length")("1234 67890")
+      result mustEqual Valid
+    }
+
   }
 }
