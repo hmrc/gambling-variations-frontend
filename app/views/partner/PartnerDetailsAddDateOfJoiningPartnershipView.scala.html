@@ -28,7 +28,7 @@
     paragraph: Paragraph
 )
 
-@(form: Form[_], mode: Mode, dateOfJoining: String, twoWeeksLater: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, twoWeeksLater: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("partnerDetailsAddDateOfJoiningPartnership.title"))) {
 
@@ -45,10 +45,8 @@
                 field  = form("value"),
                 legend = LegendViewModel(messages("partnerDetailsAddDateOfJoiningPartnership.heading")).asPageHeading(Large)
             )
-            .withHint(HintViewModel(messages("partnerDetailsAddDateOfJoiningPartnership.hint")))
+            .withHint(HintViewModel(messages("partnerDetailsAddDateOfJoiningPartnership.tip", twoWeeksLater)))
         )
-
-        @paragraph(messages("partnerDetailsAddDateOfJoiningPartnership.tip", dateOfJoining, twoWeeksLater))
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

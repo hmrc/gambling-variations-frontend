@@ -21,19 +21,19 @@ import play.api.libs.json.{JsPath, Json}
 
 import java.time.LocalDate
 
-class PartnerDetailsDateOfIncorporationSpec extends PlaySpec {
+class PartnerDetailsDateOfIncorporationPageSpec extends PlaySpec {
 
   val Index = 0
 
   "PartnerDetailsDateOfIncorporation" must {
 
     "have the correct path" in {
-      PartnerDetailsDateOfIncorporation(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsDateOfIncorporation")
+      PartnerDetailsDateOfIncorporationPage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsDateOfIncorporation")
     }
 
     "have the correct toString value" in {
 
-      PartnerDetailsDateOfIncorporation(Index).toString mustEqual "partnerDetailsDateOfIncorporation"
+      PartnerDetailsDateOfIncorporationPage(Index).toString mustEqual "partnerDetailsDateOfIncorporation"
     }
 
     "be able to read and write PartnerDetailsDateOfIncorporation values with correct index" in {
@@ -44,20 +44,20 @@ class PartnerDetailsDateOfIncorporationSpec extends PlaySpec {
       val json = Json.obj(
         "partners" -> Json.arr(
           Json.obj(
-            PartnerDetailsDateOfIncorporation(Index).toString -> Json.toJson(value1)
+            PartnerDetailsDateOfIncorporationPage(Index).toString -> Json.toJson(value1)
           ),
           Json.obj(
-            PartnerDetailsDateOfIncorporation(Index + 1).toString -> Json.toJson(value2)
+            PartnerDetailsDateOfIncorporationPage(Index + 1).toString -> Json.toJson(value2)
           )
         )
       )
 
-      PartnerDetailsDateOfIncorporation(Index).path
+      PartnerDetailsDateOfIncorporationPage(Index).path
         .asSingleJson(json)
         .validate[LocalDate]
         .get mustEqual value1
 
-      PartnerDetailsDateOfIncorporation(Index + 1).path
+      PartnerDetailsDateOfIncorporationPage(Index + 1).path
         .asSingleJson(json)
         .validate[LocalDate]
         .get mustEqual value2

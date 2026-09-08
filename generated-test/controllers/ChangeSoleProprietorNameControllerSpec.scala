@@ -18,6 +18,7 @@ import views.html.ChangeSoleProprietorNameView
 
 import scala.concurrent.Future
 
+//TODO this is my older ticket, i left it here by accident, move it to right place and make sure tests work
 class ChangeSoleProprietorNameControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
