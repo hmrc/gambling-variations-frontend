@@ -17,7 +17,7 @@
 package forms.partner
 
 import forms.behaviours.StringFieldBehaviours
-import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider.{lengthRegex, oneToNineRegex}
+import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider.{lengthRegex, zeroToNineRegex}
 import play.api.data.FormError
 
 class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBehaviours {
@@ -45,59 +45,67 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
       result.errors mustBe empty
     }
 
-    "bind a GB-prefixed VAT valid registration number" in {
+    "bind a checksum-valid 9-digit number containing a 0" in {
+      val result = form.bind(Map(fieldName -> "239088635")).apply(fieldName) // from the Confluence set, contains 0s
+      result.value.value mustBe "239088635"
+      result.errors mustBe empty
+    }
+
+    "fail to bind a GB-prefixed VAT valid registration number" in {
       val validInputs = Seq("GB353868127", "gb353868127", "Gb353868127", "gB353868127")
       for (input <- validInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors mustBe empty
+        result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
+        result.errors must contain(FormError(fieldName, lengthKey, Seq(lengthRegex)))
+        result.errors must contain(FormError(fieldName, realKey))
       }
     }
 
-    "bind a checksum-valid VAT valid registration number ignoring leading and trailing spaces" in {
-      val validInputs = Seq("   GB353868127", "GB353868127   ", "   GB353868127   ")
-      for (input <- validInputs) {
-        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors mustBe empty
+    "bind a checksum-valid VAT number ignoring leading and trailing spaces" in {
+      Seq("   353868127", "353868127   ", "   353868127   ").foreach { input =>
+        val bound = form.bind(Map(fieldName -> input))
+        bound.value.value mustBe "353868127"
+        bound.errors mustBe empty
       }
+    }
+
+    "fail to bind a value with spaces between the digits" in {
+      val result = form.bind(Map(fieldName -> "353 868 127")).apply(fieldName)
+      result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
     }
 
     "fail to bind a non-digit char in a 9 chars number" in {
       val result = form.bind(Map(fieldName -> "3538X8127")).apply(fieldName)
-      result.errors must contain(FormError(fieldName, digitsOnly, Seq(oneToNineRegex)))
+      result.errors mustEqual Seq(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)), FormError(fieldName, realKey))
     }
 
-    "fail to bind a 9-digits containing a 0, reporting the characters and real-VAT number errors but not the length error" in {
+    "fail to bind a checksum-invalid 9-digits containing a 0, reporting the real-VAT number errors but not the characters and length error" in {
       val invalidInputs = Seq("123406789", "100000000")
       for (input <- invalidInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
-        result.errors                must contain(FormError(fieldName, digitsOnly, Seq(oneToNineRegex)))
-        result.errors                must contain(FormError(fieldName, realKey))
-        result.errors.map(_.message) must not contain lengthKey
-      }
-    }
-
-    "fail to bind fewer than 9 digits with no GB prefix" in {
-      val result = form.bind(Map(fieldName -> "12345678")).apply(fieldName)
-      result.errors must contain(FormError(fieldName, lengthKey, Seq(lengthRegex)))
-    }
-
-    "fail to bind more than 9 digits with no GB prefix, reporting length and real-VAT number error" in {
-      val result = form.bind(Map(fieldName -> "1234567891")).apply(fieldName)
-      result.errors                must contain(FormError(fieldName, lengthKey, Seq(lengthRegex)))
-      result.errors                must contain(FormError(fieldName, realKey))
-      result.errors.map(_.message) must not contain digitsOnly
-    }
-
-    "fail to bind a non GB prefix with valid 9-digit VAT registration number" in {
-      val invalidInputs = Seq("XY353868127", "xY353868127", "Xy353868127", "xy353868127")
-      for (input <- invalidInputs) {
-        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
         result.errors must contain(FormError(fieldName, realKey))
-        result.errors must contain(FormError(fieldName, digitsOnly, Seq(oneToNineRegex)))
+        result.errors must not contain FormError(fieldName, digitsOnly, Seq(zeroToNineRegex))
+        result.errors must not contain FormError(fieldName, lengthKey, Seq(lengthRegex))
       }
     }
 
-    "fail to bind 9 digits non-valid VAT number with no GB prefix" in {
+    "fail to bind fewer than 9 digits" in {
+      val result = form.bind(Map(fieldName -> "12345678")).apply(fieldName)
+      result.errors mustEqual Seq(FormError(fieldName, lengthKey, Seq(lengthRegex)),
+                                  FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)),
+                                  FormError(fieldName, realKey)
+                                 )
+    }
+
+    "fail to bind more than 9 digits" in {
+      val result = form.bind(Map(fieldName -> "1234567891")).apply(fieldName)
+      result.errors must contain(FormError(fieldName, lengthKey, Seq(lengthRegex)))
+      result.errors must contain(FormError(fieldName, realKey, Seq()))
+      result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
+
+    }
+
+    "fail to bind 9 digits non-checksum VAT number" in {
       // increment valid VAT number to make invalid: 353868127 + 1
       val result = form.bind(Map(fieldName -> "353868128")).apply(fieldName)
       result.errors mustEqual Seq(FormError(fieldName, realKey))
