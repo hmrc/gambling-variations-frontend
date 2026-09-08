@@ -24,9 +24,9 @@ import models.Mode
 import models.requests.{DataRequest, OptionalDataRequest}
 import navigation.Navigator
 import pages.DateOfRegistrationPage
-import pages.partnerdetails.{PartnerDetailsDateOfIncorporation, PartnerDetailsDateOfJoiningPage}
+import pages.partnerdetails.PartnerDetailsDateOfJoiningPage
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
-import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.*
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.DateTimeFormats.dateTimeFormat
@@ -63,18 +63,17 @@ class PartnerDetailsAddDateOfJoiningPartnershipController @Inject() (
         case None =>
           Redirect(routes.SystemErrorController.onPageLoad())
         case Some(userDateOfRegistration) =>
-          val twoWeeksFromTodayOrRegistrationDay = getRegistrationThreshold(request.userAnswers.get(DateOfRegistrationPage))
+          val twoWeeksFromTodayOrRegistrationDay = getRegistrationThreshold(userDateOfRegistration)
 
           val form = request.userAnswers
-            .get(PartnerDetailsDateOfIncorporation(newIndex))
-            .fold(formProvider(userDateOfRegistration, twoWeeksFromTodayOrRegistrationDay))(
-              formProvider(userDateOfRegistration, twoWeeksFromTodayOrRegistrationDay).fill
+            .get(PartnerDetailsDateOfJoiningPage(newIndex))
+            .fold(formProvider(twoWeeksFromTodayOrRegistrationDay))(
+              formProvider(twoWeeksFromTodayOrRegistrationDay).fill
             )
 
-          val dateOfJoiningFormatted = userDateOfRegistration.format(formatter)
           val twoWeeksLaterFormatted = twoWeeksFromTodayOrRegistrationDay.format(formatter)
 
-          Ok(view(form, mode, dateOfJoiningFormatted, twoWeeksLaterFormatted))
+          Ok(view(form, mode, twoWeeksLaterFormatted))
       }
     }
 
@@ -87,34 +86,32 @@ class PartnerDetailsAddDateOfJoiningPartnershipController @Inject() (
         case None =>
           Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
         case Some(userDateOfRegistration) =>
-          val twoWeeksFromTodayOrRegistrationDay = getRegistrationThreshold(request.userAnswers.get(DateOfRegistrationPage))
+          val twoWeeksFromTodayOrRegistrationDay = getRegistrationThreshold(userDateOfRegistration)
 
           request.userAnswers
-            .get(PartnerDetailsDateOfIncorporation(newIndex))
-            .fold(formProvider(userDateOfRegistration, twoWeeksFromTodayOrRegistrationDay))(
-              formProvider(userDateOfRegistration, twoWeeksFromTodayOrRegistrationDay).fill
+            .get(PartnerDetailsDateOfJoiningPage(newIndex))
+            .fold(formProvider(twoWeeksFromTodayOrRegistrationDay))(
+              formProvider(twoWeeksFromTodayOrRegistrationDay).fill
             )
             .bindFromRequest()
             .fold(
               formWithErrors =>
-                val dateOfJoiningFormatted = userDateOfRegistration.format(formatter)
                 val twoWeeksLaterFormatted = twoWeeksFromTodayOrRegistrationDay.format(formatter)
-                Future.successful(BadRequest(view(formWithErrors, mode, dateOfJoiningFormatted, twoWeeksLaterFormatted)))
+                Future.successful(BadRequest(view(formWithErrors, mode, twoWeeksLaterFormatted)))
               ,
               value =>
                 for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsDateOfIncorporation(newIndex), value))
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsDateOfJoiningPage(newIndex), value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(PartnerDetailsDateOfIncorporation(newIndex), mode, updatedAnswers))
+                } yield Redirect(navigator.nextPage(PartnerDetailsDateOfJoiningPage(newIndex), mode, updatedAnswers))
             )
       }
     }
 
-  // Either today plus 14 days or dateOfRegistration plus 14 days if the date is in the future
-  private def getRegistrationThreshold(userRegistrationDate: Option[LocalDate]): LocalDate = {
+  private def getRegistrationThreshold(userRegistrationDate: LocalDate): LocalDate = {
     val today = LocalDate.now()
 
-    userRegistrationDate.fold(today)(date => if date.isAfter(today) then date else today).plusDays(TWO_WEEKS)
+    (if userRegistrationDate.isAfter(today) then userRegistrationDate else today).plusDays(TWO_WEEKS)
   }
 
   private val transformToOptional: ActionRefiner[DataRequest, OptionalDataRequest] =

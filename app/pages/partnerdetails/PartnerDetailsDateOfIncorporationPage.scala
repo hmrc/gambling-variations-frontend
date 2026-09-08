@@ -21,7 +21,7 @@ import play.api.libs.json.JsPath
 
 import java.time.LocalDate
 
-case class PartnerDetailsDateOfIncorporation(index: Int) extends QuestionPage[LocalDate] {
+case class PartnerDetailsDateOfIncorporationPage(index: Int) extends QuestionPage[LocalDate] {
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
