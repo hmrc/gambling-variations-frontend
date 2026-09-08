@@ -25,8 +25,8 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.{PartnerDateOfIncorporationPage, PartnerDetailsAddPartnerCompletedPage}
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsPage}
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporation, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -99,7 +99,6 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
   "PartnerDateOfIncorporation Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
       val application =
         applicationBuilder(
           userAnswers = Some(partnerDetailsUserAnswers)
@@ -128,7 +127,7 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val userAnswers =
         partnerDetailsUserAnswers
           .set(
-            PartnerDateOfIncorporationPage(index),
+            PartnerDetailsDateOfIncorporation(index),
             validAnswer
           )
           .success
