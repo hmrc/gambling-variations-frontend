@@ -20,7 +20,6 @@ import java.time.LocalDate
 import config.CurrencyFormatter
 import generators.Generators
 import org.scalacheck.Gen
-import org.scalactic.Prettifier.default
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
