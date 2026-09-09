@@ -17,13 +17,15 @@
 package forms.partner
 
 import forms.behaviours.StringFieldBehaviours
+import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider.*
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class PartnerDetailsAddCountryOfIncorporationFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "partnerDetailsAddCountryOfIncorporation.error.required"
   val lengthKey = "partnerDetailsAddCountryOfIncorporation.error.length"
-  val maxLength = 100
+  val invalidKey = "partnerDetailsAddCountryOfIncorporation.error.invalid"
 
   val form = new PartnerDetailsAddCountryOfIncorporationFormProvider()()
 
@@ -31,18 +33,29 @@ class PartnerDetailsAddCountryOfIncorporationFormProviderSpec extends StringFiel
 
     val fieldName = "value"
 
+    // Generator restricted strictly to characters matching countryRegex
+    val validCountryGen: Gen[String] = for {
+      length <- Gen.chooseNum(1, maxStringLength)
+      chars  <- Gen.listOfN(length, Gen.oneOf(('A' to 'Z') ++ ('a' to 'z') ++ ('0' to '9') ++ Seq(' ', '-', '\'')))
+    } yield chars.mkString
+
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
+      validCountryGen
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
+    "must fail to bind a string exceeding 100 characters" in {
+      val invalidLength = "A" * 101
+      val result = form.bind(Map(fieldName -> invalidLength))
+      result.errors must contain(FormError(fieldName, lengthKey, Seq(maxStringLength)))
+    }
+
+    "must fail to bind invalid characters" in {
+      val invalidCharacters = "United States of America!"
+      val result = form.bind(Map(fieldName -> invalidCharacters))
+      result.errors must contain(FormError(fieldName, invalidKey, Seq(countryRegex)))
+    }
 
     behave like mandatoryField(
       form,

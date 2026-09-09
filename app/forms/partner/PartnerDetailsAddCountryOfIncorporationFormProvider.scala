@@ -16,16 +16,22 @@
 
 package forms.partner
 
-import javax.inject.Inject
-
 import forms.mappings.Mappings
+import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider.*
 import play.api.data.Form
 
-class PartnerDetailsAddCountryOfIncorporationFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
+class PartnerDetailsAddCountryOfIncorporationFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "value" -> text("partnerDetailsAddCountryOfIncorporation.error.required")
-        .verifying(maxLength(100, "partnerDetailsAddCountryOfIncorporation.error.length"))
+        .verifying(maxLength(maxStringLength, "partnerDetailsAddCountryOfIncorporation.error.length"))
+        .verifying(regexp(countryRegex, "partnerDetailsAddCountryOfIncorporation.error.invalid"))
     )
+}
+
+object PartnerDetailsAddCountryOfIncorporationFormProvider {
+  private[forms] val countryRegex: String = """^[A-Za-z 0-9-\']{1,100}$"""
+  private[forms] val maxStringLength = 100
 }
