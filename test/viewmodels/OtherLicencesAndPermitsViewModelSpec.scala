@@ -83,7 +83,7 @@ class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
         viewModel.items(4).id mustBe Some("permitsGB-localAuthority")
         viewModel.items(5).id mustBe Some("permitsGB-onPremises")
         viewModel.items(6).id mustBe Some("permitsGB-prizeGaming")
-        viewModel.items(8).id mustBe Some("permitsGB-none")
+        viewModel.items(8).id mustBe Some("permitsGB-noOtherLicencesAndPremisesGBSelected")
       }
     }
   }
