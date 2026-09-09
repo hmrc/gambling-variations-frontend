@@ -16,13 +16,20 @@
 
 package pages.licencespremises
 
-import models.licencespremises.OtherLicencesAndPermitsGB
-import pages.QuestionPage
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case object NoOtherLicencesAndPermitsGBPage extends QuestionPage[String] {
+class NoOtherLicencesAndPermitsGBPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
+  "NoOtherLicencesAndPermitsGBPage" must {
 
-  override def toString: String = "none"
+    "must have the correct toString" in {
+      NoOtherLicencesAndPermitsGBPage.toString mustBe "none"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "none"
+      NoOtherLicencesAndPermitsGBPage.path mustBe expectedPath
+    }
+  }
 }

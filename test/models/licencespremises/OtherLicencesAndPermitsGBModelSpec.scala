@@ -46,7 +46,29 @@ class OtherLicencesAndPermitsGBModelSpec extends SpecBase {
           OtherLicencesAndPermitsGB.familyEntertainment,
           OtherLicencesAndPermitsGB.onPremises
         )
+      }
 
+      "should return noOtherLicencesAndPremises if all are 0" in {
+
+        val ua = UserAnswers(
+          "id",
+          Json.obj(
+            "licencesPremisesSection" -> Json.obj(
+              "mgdRegNum"           -> "XGM000001761",
+              "clubGaming"          -> "0",
+              "clubMachine"         -> "0",
+              "clubPremises"        -> "0",
+              "familyEntertainment" -> "0",
+              "localAuthority"      -> "0",
+              "onPremises"          -> "0",
+              "prizeGaming"         -> "0"
+            )
+          )
+        )
+
+        OtherLicencesAndPermitsGB.getSelectedLicencesAndPermits(ua) mustEqual Set(
+          OtherLicencesAndPermitsGB.noOtherLicencesAndPermits
+        )
       }
     }
   }
