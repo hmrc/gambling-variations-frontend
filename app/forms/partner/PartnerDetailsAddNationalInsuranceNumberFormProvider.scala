@@ -48,5 +48,5 @@ object PartnerDetailsAddNationalInsuranceNumberFormProvider {
 
   private[forms] val ninoCharsRegex = """^[A-Z0-9]+$"""
 
-  private[forms] val ninoValidRegex = """^[A-CE-Za-ce-z][A-Za-z]\d{6}[A-Da-d]?$"""
+  private[forms] val ninoValidRegex = """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]?$"""
 }
