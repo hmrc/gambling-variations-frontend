@@ -313,6 +313,8 @@ GET       /change-registration-details/partner-details/date-of-birth          co
 POST      /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
 
 
-
 GET        /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/business-country-incorporated                        controllers.partner.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/business-country-incorporated                        controllers.partner.PartnerDetailsAddCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)
