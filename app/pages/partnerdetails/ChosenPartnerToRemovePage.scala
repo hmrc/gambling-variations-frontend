@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package utils
+package pages.partnerdetails
 
-import play.api.i18n.Lang
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+case object ChosenPartnerToRemovePage extends QuestionPage[Int] {
 
-object DateTimeFormats {
+  override def path: JsPath =
+    JsPath \ "chosenPartnerToRemove"
 
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-  val dateTimeHintFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("d M yyyy")
-  private val localisedDateTimeFormatters = Map(
-    "en" -> dateTimeFormatter,
-    "cy" -> dateTimeFormatter.withLocale(new Locale("cy"))
-  )
-
-  def dateTimeFormat()(implicit lang: Lang): DateTimeFormatter = {
-    localisedDateTimeFormatters.getOrElse(lang.code, dateTimeFormatter)
-  }
+  override def toString: String =
+    "chosenPartnerToRemove"
 }

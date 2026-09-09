@@ -19,6 +19,7 @@ package controllers
 import base.SpecBase
 import forms.partner.AddAnotherPartnerFormProvider
 import models.UserAnswers
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -31,6 +32,8 @@ import viewmodels.checkAnswers.partner.PartnerDetailsViewModel
 import views.html.partner.PartnerDetailsView
 
 import scala.concurrent.Future
+import org.mockito.ArgumentCaptor
+import org.mockito.Mockito.verify
 
 class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
@@ -331,12 +334,26 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "onRemove" - {
 
-      "must redirect to the partner details page" in {
+      "must save the selected partner and redirect to the partner delete date page" in {
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(
+          mockSessionRepository.set(any[UserAnswers])
+        ).thenReturn(
+          Future.successful(true)
+        )
 
         val application =
           applicationBuilder(
             userAnswers = Some(userAnswersWithPartner)
-          ).build()
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
 
         running(application) {
 
@@ -352,40 +369,52 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partner.routes.PartnerDetailsController.onPageLoad.url
-        }
-      }
-    }
-
-    "onContinue" - {
-
-      "must redirect to Change Registration Details" in {
-
-        val application =
-          applicationBuilder(
-            userAnswers = Some(userAnswersWithPartner)
-          ).build()
-
-        running(application) {
-
-          val request =
-            FakeRequest(
-              GET,
-              onContinueRoute
-            )
-
-          val result =
-            route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual
-            controllers.routes.ChangeRegistrationDetailsController
+            controllers.partner.routes.PartnerDeleteDateController
               .onPageLoad()
               .url
+
+          val capturedAnswers =
+            ArgumentCaptor.forClass(classOf[UserAnswers])
+
+          verify(mockSessionRepository).set(capturedAnswers.capture())
+
+          capturedAnswers.getValue
+            .get(ChosenPartnerToRemovePage) mustEqual Some(0)
         }
       }
+
     }
+  }
+
+  "onContinue" - {
+
+    "must redirect to Change Registration Details" in {
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswersWithPartner)
+        ).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(
+            GET,
+            onContinueRoute
+          )
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.ChangeRegistrationDetailsController
+            .onPageLoad()
+            .url
+      }
+    }
+
   }
 
   private def viewModel(

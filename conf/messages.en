@@ -899,7 +899,7 @@ partnerDetails.status.dueToLeave =  Due to leave
 partnerDetails.status.dueToJoin =  	Due to join
 partnerDetails.cannotRemove =  	Cannot remove
 partnerDetails.maximumReached = You can only have up to 100 partners. If you need to add a new partner, you must change or remove a current one.
-partnerDetails.maxPartners.hint = You can only add up to 100 partners.
+partnerDetails.maxPartners.hint = You can only add up to 100 partners
 partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
 partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner
 partnerDetails.addPartner.error.required = Select yes if you want to add a partner
@@ -973,3 +973,18 @@ partnerSoleProprietorDob.error.required = Date of birth must include a {0}
 partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
 partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
+
+
+partnerDeleteDate.title = Tell us when to remove this partner
+partnerDeleteDate.heading = Tell us when to remove this partner
+partnerDeleteDate.p1 = If this partner is still liable to pay Machine Games Duty, they must register as an individual.
+partnerDeleteDate.h2 = When is Your {0} no longer a partner?
+partnerDeleteDate.hint = The date must be before {0}
+partnerDeleteDate.checkYourAnswersLabel = Tell us when to remove this partner
+partnerDeleteDate.error.required.all = 	Enter the date to remove this partner
+partnerDeleteDate.error.required.two =  Date to remove must include a {0} and a {1}
+partnerDeleteDate.error.required =  Date to remove must include a {0}
+partnerDeleteDate.error.invalid = Date to remove must be a real date
+partnerDeleteDate.change.hidden = Tell us when to remove this partner
+partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
+partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
