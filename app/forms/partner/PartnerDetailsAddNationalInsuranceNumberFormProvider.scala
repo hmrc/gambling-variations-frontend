@@ -33,9 +33,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
           .verifying(
             Seq(
               regexp(ninoCharsRegex, invalidCharsKey),
-              regexp(ninoFormatRegex, invalidFormatKey),
-              regexp(ninoLengthRegex, lengthKey),
-              regexp(ninoValidRegex, invalidKey)
+              regexp(ninoValidRegex, invalidFormatKey)
             )*
           )
     )
@@ -47,15 +45,8 @@ object PartnerDetailsAddNationalInsuranceNumberFormProvider {
   private[forms] val requiredKey = "partnerDetailsAddNino.error.required"
   private[forms] val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
   private[forms] val invalidFormatKey = "partnerDetailsAddNino.error.invalidFormat"
-  private[forms] val lengthKey = "partnerDetailsAddNino.error.length"
-  private[forms] val invalidKey = "partnerDetailsAddNino.error.invalid"
 
   private[forms] val ninoCharsRegex = """^[A-Z0-9]+$"""
 
-  private[forms] val ninoFormatRegex = """^[A-Z]{2}[0-9]+[A-Z]$"""
-
-  private[forms] val ninoLengthRegex = """^[A-Z0-9]{9}$"""
-
-  private[forms] val ninoValidRegex =
-    """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
+  private[forms] val ninoValidRegex = """^[A-CE-Za-ce-z][A-Za-z]\d{6}[A-Da-d]?$"""
 }
