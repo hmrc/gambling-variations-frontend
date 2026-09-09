@@ -24,6 +24,7 @@ import models.licencespremises.*
 import models.licencespremises.OtherLicencesAndPermitsGB.*
 import navigation.Navigator
 import pages.licencespremises.*
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,7 +50,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Set[OtherLicencesAndPermitsGB]] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = form.fill(getSelectedLicencesAndPermits(request.userAnswers))
@@ -66,7 +67,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
         values =>
           for {
             updatedAnswers <- Future.fromTry(updateValuesAndCombine(values, ua))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherLicencesAndPermitsGBPage, NormalMode, ua))
       )
   }
@@ -78,6 +79,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
     def returnIfSelected(value: OtherLicencesAndPermitsGB): String = {
       if (formValues.contains(value)) trueVal else falseVal
     }
+
     for {
       ua <- ua.set(LicenceClubGamingPage, returnIfSelected(clubGaming))
       ua <- ua.set(ClubLicencePage, returnIfSelected(clubMachine))
