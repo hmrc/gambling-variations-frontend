@@ -66,7 +66,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
         values =>
           for {
             updatedAnswers <- Future.fromTry(updateValuesAndCombine(values, ua))
-            _ <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherLicencesAndPermitsGBPage, NormalMode, ua))
       )
   }

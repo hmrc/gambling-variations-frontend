@@ -16,7 +16,6 @@
 
 package pages.licencespremises
 
-import models.licencespremises.OtherLicencesAndPermitsGB
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
