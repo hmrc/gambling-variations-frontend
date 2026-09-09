@@ -293,3 +293,7 @@ partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR
 partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
 partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
+
+removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
+removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
+removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn
