@@ -42,12 +42,6 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
 
   private lazy val removeVrnRoute = routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url
 
-  private val userAnswersWithNoVrn: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedData())
-      .set(PartnerDetailsAddPartnerCompletedPage, false)
-      .success
-      .value
-
   private val userAnswersWithVrn: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData(vrn = Some(testVRN)))
       .set(PartnerDetailsAddPartnerCompletedPage, false)
