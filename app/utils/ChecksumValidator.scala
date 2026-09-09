@@ -18,17 +18,16 @@ package utils
 
 object ChecksumValidator {
 
-  private val vatValidDigitsRegex: String = "^[1-9]+$"
+  private val vatValidDigitsRegex: String = "^[0-9]{9}$"
   private val vatWeights = List(8, 7, 6, 5, 4, 3, 2, 0, 0)
   private val vatModulus = 97
   private val vatFallbackOffset = 55 // for newer VAT numbers.
 
   def isValidVatNumber(number: String): Boolean = {
-    val vatDigits = number.strip().toUpperCase.stripPrefix("GB")
-    val isWellFormed = vatDigits.length == 9 && vatDigits.matches(vatValidDigitsRegex)
+    val vatDigits = number.strip()
 
-    isWellFormed && {
-      val digits = vatDigits.take(9).toList.map(_.asDigit)
+    vatDigits.matches(vatValidDigitsRegex) && {
+      val digits = vatDigits.toList.map(_.asDigit)
       val weightedSum = vatWeights.zip(digits).map((w, d) => w * d).sum
       val checkDigits = digits(7) * 10 + digits(8)
       val checksum = weightedSum + checkDigits
@@ -42,6 +41,10 @@ object ChecksumValidator {
   val mgdrnChecksumWeights: IndexedSeq[Int] = IndexedSeq(0, 0, 9, 10, 11, 12, 13, 8, 7, 6, 5, 4, 3, 2)
   val mgdrnChecksumLookup: String = "ABCDEFGHXJKLMNYPQRSTZVW"
   val mgdrnCheckCharacterIndex: Int = 1
+
+  val utrFormatRegex: String = "^[0-9]{10}$"
+  val utrChecksumWeights: IndexedSeq[Int] = IndexedSeq(6, 7, 8, 9, 10, 5, 4, 3, 2)
+  val utrCheckCharacterIndex: Int = 0
 
   def isValidMgdrn(value: String): Boolean =
     isValidModulo23(
@@ -84,4 +87,31 @@ object ChecksumValidator {
       lookup(total % 23) == value(checkCharacterIndex)
     }
   }
+
+  def isValidUtr(value: String): Boolean = {
+    val cleanedValue = value.replaceAll("\\s", "")
+
+    if (cleanedValue.isBlank) {
+      true
+    } else if (!cleanedValue.matches(utrFormatRegex) || cleanedValue.length != 10) {
+      false
+    } else {
+      val expectedCheckDigit = cleanedValue(utrCheckCharacterIndex) - '0'
+      val payload = cleanedValue.substring(1)
+
+      val total = payload
+        .zip(utrChecksumWeights)
+        .map { case (character, weight) =>
+          (character - '0') * weight
+        }
+        .sum
+
+      val modResult = total % 11
+      val rawChecksum = 11 - modResult
+      val calculatedChecksum = if (rawChecksum > 9) rawChecksum - 9 else rawChecksum
+
+      calculatedChecksum == expectedCheckDigit
+    }
+  }
+
 }

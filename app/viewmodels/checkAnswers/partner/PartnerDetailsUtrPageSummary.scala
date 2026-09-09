@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.partner
 
 import models.UserAnswers
-import pages.partnerdetails.PartnerDetailsDateOfIncorporation
-import play.api.i18n.{Lang, Messages}
+import pages.partnerdetails.PartnerDetailsUtrPage
+import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import utils.DateTimeFormats.dateTimeFormat
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object PartnerDateOfIncorporationSummary {
+object PartnerDetailsUtrPageSummary {
 
-  def row(answers: UserAnswers, index: Int)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsDateOfIncorporation(index)).map { answer =>
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  private val index: Int = utils.PartnerUtils.interimIndex
 
-      implicit val lang: Lang = messages.lang
+  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
+    answers.get(PartnerDetailsUtrPage(index)).map { answer =>
 
       SummaryListRowViewModel(
-        key   = "partnerDateOfIncorporation.checkYourAnswersLabel",
-        value = ValueViewModel(answer.format(dateTimeFormat())),
+        key   = "partnerDetailsAddUTR.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDateOfIncorporationController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("partnerDateOfIncorporation.change.hidden"))
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsAddUTRController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("partnerDetailsAddUTR.change.hidden"))
         )
       )
     }

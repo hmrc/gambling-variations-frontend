@@ -53,18 +53,13 @@ class ChecksumValidatorSpec extends AnyFreeSpec with Matchers {
       ChecksumValidator.isValidVatNumber(validVrn) mustBe true
     }
 
-    "return true for a checksum-valid number when prefixed with valid GB" in {
-      Seq("GB353868127", "gb353868127", "Gb353868127", "gB353868127")
-        .foreach(ChecksumValidator.isValidVatNumber(_) mustBe true)
-    }
-
     "return true for a checksum-valid number that only passes the 9755 fallback" in {
       // weighted 112 + check 27 = 139; 139 % 97 = 42, but (139 + 55) % 97 = 0
       ChecksumValidator.isValidVatNumber("123456727") mustBe true
     }
 
     "return true for a checksum-valid number ignoring leading and trailing spaces" in {
-      val formatted = Seq("   GB353868127", "GB353868127   ", "   GB353868127   ")
+      val formatted = Seq("   353868127", "353868127   ", "   353868127   ")
       for (input <- formatted)
         withClue(s"[$input] ") {
           ChecksumValidator.isValidVatNumber(input) mustBe true
@@ -72,19 +67,34 @@ class ChecksumValidatorSpec extends AnyFreeSpec with Matchers {
     }
 
     "return false for a well-formed number that fails the checksum" in {
-      ChecksumValidator.isValidVatNumber("353868121") mustBe false
+      val checksumInvalid = Seq("000000002", "999999999", "353868121")
+      for (input <- checksumInvalid)
+        withClue(s"[$input] ") {
+          ChecksumValidator.isValidVatNumber(input) mustBe false
+        }
+    }
+
+    "return true for a boundary number" in {
+      val quirkyVrn = "000000000"
+      ChecksumValidator.isValidVatNumber(quirkyVrn) mustBe true
     }
 
     "return false when there are not exactly 9 digits" in {
-      val incorrectLength = Seq("12345678", "GB12345678", "1234567890", "GB1234567890", "GB", "GB0")
+      val incorrectLength = Seq("12345678", "1234567890", "0")
       for (input <- incorrectLength)
         withClue(s"[$input] ") {
           ChecksumValidator.isValidVatNumber(input) mustBe false
         }
     }
 
-    "return false when spaces and hyphens exist" in {
-      val formatted = Seq("GB35 3868127", "35386812 7", "GB353-868127")
+    "return false for a GB-prefixed number - GB is no longer supported" in {
+      Seq("GB353868127", "gb353868127").foreach(
+        ChecksumValidator.isValidVatNumber(_) mustBe false
+      )
+    }
+
+    "return false when interspersed spaces and hyphens exist" in {
+      val formatted = Seq("35 386812", "35868 2 7", "353-868127")
       for (input <- formatted)
         withClue(s"[$input] ") {
           ChecksumValidator.isValidVatNumber(input) mustBe false
@@ -95,17 +105,52 @@ class ChecksumValidatorSpec extends AnyFreeSpec with Matchers {
       ChecksumValidator.isValidVatNumber("3538X8127") mustBe false
     }
 
-    "return false for a non-GB prefix" in {
-      ChecksumValidator.isValidVatNumber("XY353868127") mustBe false
-    }
-
     "return false for empty or blank input" in {
-      Seq("", "   ", "GB").foreach(ChecksumValidator.isValidVatNumber(_) mustBe false)
+      Seq("", "   ").foreach(ChecksumValidator.isValidVatNumber(_) mustBe false)
     }
 
-    "return false for any zeros" in {
-      Seq("000000000", "GB000000000", "123406727").foreach(ChecksumValidator.isValidVatNumber(_) mustBe false)
+    "return true for a checksum-valid number (from Confluence Spec)" in {
+      val checksumValid =
+        Seq("252525279", "127207295", "127207393", "239088635", "552778902", "123478768", "127207589", "127207491", "600002183", "562235945")
+      for (input <- checksumValid)
+        withClue(s"[$input] ") {
+          ChecksumValidator.isValidVatNumber(input) mustBe true
+        }
     }
 
+  }
+
+  "isValidUtr" - {
+
+    "return true for a blank value" in {
+      ChecksumValidator.isValidUtr("") mustBe true
+      ChecksumValidator.isValidUtr("   ") mustBe true
+    }
+
+    "return true when the format and Modulo 11 checksum are valid" in {
+      // Valid documented UTR sample
+      ChecksumValidator.isValidUtr("1121766916") mustBe true
+    }
+
+    "return true when valid UTR contains spaces" in {
+      ChecksumValidator.isValidUtr("112 176 6916") mustBe true
+    }
+
+    "return false when the value contains non-numeric characters" in {
+      ChecksumValidator.isValidUtr("112176691A") mustBe false
+      ChecksumValidator.isValidUtr("ABCDEFGHIJ") mustBe false
+    }
+
+    "return false when the length is less than 10 digits" in {
+      ChecksumValidator.isValidUtr("112176691") mustBe false
+    }
+
+    "return false when the length is greater than 10 digits" in {
+      ChecksumValidator.isValidUtr("11217669160") mustBe false
+    }
+
+    "return false when 10 digits are provided but the checksum calculation fails" in {
+      ChecksumValidator.isValidUtr("1234567890") mustBe false
+    }
   }
 }

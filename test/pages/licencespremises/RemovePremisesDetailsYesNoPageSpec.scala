@@ -14,28 +14,22 @@
  * limitations under the License.
  */
 
-package pages.partner
+package pages.licencespremises
 
-import base.SpecBase
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-class PartnerDateOfIncorporationPageSpec extends SpecBase {
+class RemovePremisesDetailsYesNoPageSpec extends PlaySpec {
 
-  "PartnerDateOfIncorporationPage" - {
+  "RemovePremisesDetailsYesNoPage" must {
 
-    "must have the correct path for the first partner" in {
-      PartnerDateOfIncorporationPage(0).path mustEqual
-        (JsPath \ "partners" \ 0 \ "partnerDateOfIncorporation")
+    "must have the correct toString" in {
+      RemovePremisesDetailsYesNoPage.toString mustBe "removePremisesDetailsYesNo"
     }
 
-    "must have the correct path for the second partner" in {
-      PartnerDateOfIncorporationPage(1).path mustEqual
-        (JsPath \ "partners" \ 1 \ "partnerDateOfIncorporation")
-    }
-
-    "must have the correct string representation" in {
-      PartnerDateOfIncorporationPage(0).toString mustEqual
-        "partnerDateOfIncorporation"
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "removePremisesDetailsYesNo"
+      RemovePremisesDetailsYesNoPage.path mustBe expectedPath
     }
   }
 }

@@ -289,11 +289,15 @@ POST       /change-registration-details/partner-details/business-type           
 GET        /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/licences-and-premises/remove-premises-details                         controllers.licencespremises.RemovePremisesDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/remove-premises-details                         controllers.licencespremises.RemovePremisesDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/partner-details                                             controllers.partner.PartnerDetailsController.onPageLoad
-POST       /change-registration-details/partner-details                                             controllers.partner.PartnerDetailsController.onSubmit
+GET        /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRController.onSubmit(mode: Mode = NormalMode)
+
 
 GET       /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onPageLoad
 POST      /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onSubmit
@@ -305,5 +309,11 @@ GET       /change-registration-details/partner-details/details/:partnerNumber   
 GET       /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onSubmit(mode: Mode = NormalMode)
 
+GET       /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+POST      /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/licences-and-premises/permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)
