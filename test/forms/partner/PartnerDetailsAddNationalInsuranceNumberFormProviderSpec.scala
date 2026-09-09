@@ -69,8 +69,8 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
     }
 
     "must fail to bind when second character is 'D' (or 'd')" in {
-      val ninoStartingWithD = "ad123456A"
-      val result = form.bind(Map(fieldName -> ninoStartingWithD))
+      val ninoSecondCharIsD = "ad123456A"
+      val result = form.bind(Map(fieldName -> ninoSecondCharIsD))
       result.errors must contain(FormError(fieldName, invalidFormatKey))
     }
 
