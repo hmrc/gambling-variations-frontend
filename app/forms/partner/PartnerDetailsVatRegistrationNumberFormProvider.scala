@@ -29,7 +29,7 @@ class PartnerDetailsVatRegistrationNumberFormProvider @Inject() extends Mappings
       text(required)
         .transform[String](_.trim, identity)
         .verifying(
-          regexp(lengthRegex, invalidLength),
+          fixedLength(vrnLength, invalidLength),
           regexp(zeroToNineRegex, invalidChars),
           vatChecksum(invalidRealVat)
         )
@@ -45,6 +45,6 @@ object PartnerDetailsVatRegistrationNumberFormProvider {
   private[forms] val invalidRealVat = "partnerDetailsVatRegistrationNumber.error.invalid"
 
   // Regex
-  private[forms] val lengthRegex = "^.{9}$" // exactly 9 characters
-  private[forms] val zeroToNineRegex = "^[0-9]{9}$" // 9 digits: 0-9
+  private[forms] val vrnLength = 9
+  private[forms] val zeroToNineRegex = "^[0-9]{9}$"
 }
