@@ -61,7 +61,9 @@ object OtherLicencesAndPermitsGB extends Enumerable.Implicits {
   def getSelectedLicencesAndPermits(ua: UserAnswers): Set[OtherLicencesAndPermitsGB] = {
     // iterates the licence/permit pages to check which has a checked "1"
     // then converts to a Set type so the form can populate previous answers
-    mappedValuesWithPages.keys.filter(value => ua.get(mappedValuesWithPages(value)).contains("1")).toSet
+    val setOfLicencesAndPremises =   mappedValuesWithPages.keys.filter(value => ua.get(mappedValuesWithPages(value))
+      .contains("1")).toSet
+    if (setOfLicencesAndPremises.isEmpty) Set(noOtherLicencesAndPermits) else setOfLicencesAndPremises
   }
 
   implicit val enumerable: Enumerable[OtherLicencesAndPermitsGB] =
