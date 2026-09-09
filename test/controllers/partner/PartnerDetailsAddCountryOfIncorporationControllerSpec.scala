@@ -17,138 +17,168 @@
 package controllers.partner
 
 import base.SpecBase
+import controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController
 import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsCountryOfIncorporation
+import pages.partnerdetails.PartnerDetailsCountryOfIncorporationPage
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
+import utils.PartnerUtils.getIndex
 import views.html.partner.PartnerDetailsAddCountryOfIncorporationView
 
 import scala.concurrent.Future
 
 class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  val form: Form[String] = (new PartnerDetailsAddCountryOfIncorporationFormProvider())()
+  private val formProvider = new PartnerDetailsAddCountryOfIncorporationFormProvider()
+  val form: Form[String] = formProvider()
 
-  lazy val partnerDetailsAddCountryOfIncorporationRoute: String =
-    controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad().url
+  lazy val countryOfIncorporationRoute: String =
+    PartnerDetailsAddCountryOfIncorporationController.onPageLoad().url
+
+  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+
+  val validCountry = "France"
 
   "PartnerDetailsAddCountryOfIncorporation Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "onPageLoad" - {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      "must return OK and the correct view for a GET when no previous data exists" in {
 
-      running(application) {
-        val request = FakeRequest(GET, partnerDetailsAddCountryOfIncorporationRoute)
+        val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, countryOfIncorporationRoute)
 
-        val view = application.injector.instanceOf[PartnerDetailsAddCountryOfIncorporationView]
+          val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+          val view = application.injector.instanceOf[PartnerDetailsAddCountryOfIncorporationView]
+
+          status(result) mustBe OK
+          contentAsString(result) mustBe view(form, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered" in {
+
+        val userAnswers = validUserAnswers
+          .set(PartnerDetailsCountryOfIncorporationPage(index), validCountry)
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, countryOfIncorporationRoute)
+
+          val view = application.injector.instanceOf[PartnerDetailsAddCountryOfIncorporationView]
+
+          val result = route(application, request).value
+
+          status(result) mustBe OK
+          contentAsString(result) mustBe view(form.fill(validCountry), NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to System Error Page for a GET if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, countryOfIncorporationRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+        }
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "onSubmit" - {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsCountryOfIncorporation(index), "answer").success.value
+      "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val mockSessionRepository = mock[SessionRepository]
 
-      running(application) {
-        val request = FakeRequest(GET, partnerDetailsAddCountryOfIncorporationRoute)
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-        val view = application.injector.instanceOf[PartnerDetailsAddCountryOfIncorporationView]
+        val application =
+          applicationBuilder(userAnswers = Some(validUserAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsAddCountryOfIncorporationController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", validCountry))
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+          val result = route(application, request).value
+
+          val expectedAnswers = validUserAnswers
+            .set(PartnerDetailsCountryOfIncorporationPage(index), validCountry)
+            .success
+            .value
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe onwardRoute.url
+          verify(mockSessionRepository).set(expectedAnswers)
+        }
       }
-    }
 
-    "must redirect to the next page when valid data is submitted" in {
+      "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+        val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        val application = applicationBuilder(userAnswers = Some(validUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerDetailsAddCountryOfIncorporationRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsAddCountryOfIncorporationController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", ""))
 
-        val result = route(application, request).value
+          val boundForm = form.bind(Map("value" -> ""))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          val view = application.injector.instanceOf[PartnerDetailsAddCountryOfIncorporationView]
+
+          val result = route(application, request).value
+
+          status(result) mustBe BAD_REQUEST
+          contentAsString(result) mustBe view(boundForm, NormalMode)(request, messages(application)).toString
+          verify(mockSessionRepository, never()).set(any())
+        }
       }
-    }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+      "must redirect to System Error Page for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerDetailsAddCountryOfIncorporationRoute)
-            .withFormUrlEncodedBody(("value", ""))
+        running(application) {
+          val request =
+            FakeRequest(POST, PartnerDetailsAddCountryOfIncorporationController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", validCountry))
 
-        val boundForm = form.bind(Map("value" -> ""))
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PartnerDetailsAddCountryOfIncorporationView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
-      }
-    }
-
-    "must redirect to SystemError for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request = FakeRequest(GET, partnerDetailsAddCountryOfIncorporationRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
-      }
-    }
-
-    "must redirect to SystemError for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerDetailsAddCountryOfIncorporationRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+        }
       }
     }
   }

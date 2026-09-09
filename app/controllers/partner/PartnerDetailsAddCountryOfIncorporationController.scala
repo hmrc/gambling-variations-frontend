@@ -21,7 +21,7 @@ import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsCountryOfIncorporation
+import pages.partnerdetails.PartnerDetailsCountryOfIncorporationPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -53,10 +53,12 @@ class PartnerDetailsAddCountryOfIncorporationController @Inject() (
      Lack of it implies data is ONLY in the cache and has not been submitted yet.
    */
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = request.userAnswers.getIndex
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  private val index: Int = utils.PartnerUtils.interimIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsCountryOfIncorporation(index)) match {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+
+    val preparedForm = request.userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -65,7 +67,6 @@ class PartnerDetailsAddCountryOfIncorporationController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = request.userAnswers.getIndex
 
     form
       .bindFromRequest()
@@ -73,9 +74,9 @@ class PartnerDetailsAddCountryOfIncorporationController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCountryOfIncorporation(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCountryOfIncorporationPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsCountryOfIncorporation(index), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(index), mode, updatedAnswers))
       )
   }
 }

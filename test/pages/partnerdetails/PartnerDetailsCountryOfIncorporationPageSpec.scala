@@ -19,19 +19,19 @@ package pages.partnerdetails
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec {
+class PartnerDetailsCountryOfIncorporationPageSpec extends PlaySpec {
 
   val Index = 0
 
   "PartnerDetailsCountryOfIncorporation" must {
 
     "have the correct path" in {
-      PartnerDetailsCountryOfIncorporation(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsCountryOfIncorporation")
+      PartnerDetailsCountryOfIncorporationPage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsCountryOfIncorporation")
     }
 
     "have the correct toString value" in {
 
-      PartnerDetailsCountryOfIncorporation(Index).toString mustEqual "partnerDetailsCountryOfIncorporation"
+      PartnerDetailsCountryOfIncorporationPage(Index).toString mustEqual "partnerDetailsCountryOfIncorporation"
     }
 
     "be able to read and write PartnerDetailsCountryOfIncorporation values with correct index" in {
@@ -42,20 +42,20 @@ class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec {
       val json = Json.obj(
         "partners" -> Json.arr(
           Json.obj(
-            PartnerDetailsCountryOfIncorporation(Index).toString -> Json.toJson(value1)
+            PartnerDetailsCountryOfIncorporationPage(Index).toString -> Json.toJson(value1)
           ),
           Json.obj(
-            PartnerDetailsCountryOfIncorporation(Index + 1).toString -> Json.toJson(value2)
+            PartnerDetailsCountryOfIncorporationPage(Index + 1).toString -> Json.toJson(value2)
           )
         )
       )
 
-      PartnerDetailsCountryOfIncorporation(Index).path
+      PartnerDetailsCountryOfIncorporationPage(Index).path
         .asSingleJson(json)
         .validate[String]
         .get mustEqual value1
 
-      PartnerDetailsCountryOfIncorporation(Index + 1).path
+      PartnerDetailsCountryOfIncorporationPage(Index + 1).path
         .asSingleJson(json)
         .validate[String]
         .get mustEqual value2

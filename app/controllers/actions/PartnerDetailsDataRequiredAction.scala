@@ -147,7 +147,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.set(PartnerDetailsCorrespondenceDetailsSectionPage(index), correspondenceDetails)
 
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfIncorporation(index), partnerDetails.dateOfIncorporation)
-      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCountryOfIncorporation(index), partnerDetails.countryOfIncorporation)
+      updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCountryOfIncorporationPage(index), partnerDetails.countryOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsForeignCorporateRefPage(index), partnerDetails.foreignCorporateRef)
 
       updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfBirthPage(index), partnerDetails.dateOfBirth)
