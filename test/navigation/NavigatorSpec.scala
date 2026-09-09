@@ -1151,6 +1151,22 @@ class NavigatorSpec extends SpecBase {
           controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
       }
 
+      "should route PartnerDetailsCountryOfIncorporationPage to SystemErrorController when answer is false" in {
+        navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsCountryOfIncorporationPage to PartnerDetailsAddCountryOfIncorporationController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsCountryOfIncorporationPage(index), "France")
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad()
+      }
+
     }
   }
 }
