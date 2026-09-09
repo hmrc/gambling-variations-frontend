@@ -66,7 +66,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
         values =>
           for {
             updatedAnswers <- Future.fromTry(updateValuesAndCombine(values, ua))
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherLicencesAndPermitsGBPage, NormalMode, ua))
       )
   }
@@ -79,15 +79,28 @@ class OtherLicencesAndPermitsGBController @Inject() (
       if (formValues.contains(value)) trueVal else falseVal
     }
 
-    for {
-      ua <- ua.set(LicenceClubGamingPage, returnIfSelected(clubGaming))
-      ua <- ua.set(ClubLicencePage, returnIfSelected(clubMachine))
-      ua <- ua.set(LicenceClubPremisesPage, returnIfSelected(clubPremises))
-      ua <- ua.set(LicenceFamilyEntertainmentPage, returnIfSelected(familyEntertainment))
-      ua <- ua.set(LicenceLocalAuthorityPage, returnIfSelected(localAuthority))
-      ua <- ua.set(LicenceOnPremisesPage, returnIfSelected(onPremises))
-      ua <- ua.set(LicencePrizeGamingPage, returnIfSelected(prizeGaming))
-      ua <- ua.set(NoOtherLicencesAndPermitsGBPage, returnIfSelected(noOtherLicencesAndPermits))
-    } yield ua
+    if (formValues.contains(noOtherLicencesAndPermits)) {
+      // sets all values to 0 if the checkbox for noOtherLicencesAndPermits is selected
+      for {
+        ua <- ua.set(LicenceClubGamingPage, falseVal)
+        ua <- ua.set(ClubLicencePage, falseVal)
+        ua <- ua.set(LicenceClubPremisesPage, falseVal)
+        ua <- ua.set(LicenceFamilyEntertainmentPage, falseVal)
+        ua <- ua.set(LicenceLocalAuthorityPage, falseVal)
+        ua <- ua.set(LicenceOnPremisesPage, falseVal)
+        ua <- ua.set(LicencePrizeGamingPage, falseVal)
+      } yield ua
+    } else {
+      for {
+        ua <- ua.set(LicenceClubGamingPage, returnIfSelected(clubGaming))
+        ua <- ua.set(ClubLicencePage, returnIfSelected(clubMachine))
+        ua <- ua.set(LicenceClubPremisesPage, returnIfSelected(clubPremises))
+        ua <- ua.set(LicenceFamilyEntertainmentPage, returnIfSelected(familyEntertainment))
+        ua <- ua.set(LicenceLocalAuthorityPage, returnIfSelected(localAuthority))
+        ua <- ua.set(LicenceOnPremisesPage, returnIfSelected(onPremises))
+        ua <- ua.set(LicencePrizeGamingPage, returnIfSelected(prizeGaming))
+        ua <- ua.set(NoOtherLicencesAndPermitsGBPage, returnIfSelected(noOtherLicencesAndPermits))
+      } yield ua
+    }
   }
 }
