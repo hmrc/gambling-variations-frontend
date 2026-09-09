@@ -74,7 +74,7 @@ class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
 
       "should render correct names and ids" in new Setup {
 
-        viewModel.name mustEqual "permitsGB"
+        viewModel.name mustEqual "permitsGB[]"
 
         viewModel.items.head.id mustBe Some("permitsGB-clubGaming")
         viewModel.items(1).id mustBe Some("permitsGB-clubMachine")
