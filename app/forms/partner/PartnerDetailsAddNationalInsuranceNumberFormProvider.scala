@@ -46,7 +46,7 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
 object PartnerDetailsAddNationalInsuranceNumberFormProvider {
 
   private[forms] val requiredKey = "partnerDetailsAddNino.error.required"
-  
+
   private[forms] val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
   private[forms] val ninoCharsRegex = """^[A-Z0-9]+$"""
 
