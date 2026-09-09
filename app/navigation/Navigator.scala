@@ -173,6 +173,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsBusinessTypePage(index)(userAnswers) // change it
     case PartnerDetailsUtrPage(index) =>
       userAnswers => navigatePartnerDetailsUTRPage(index)(userAnswers)
+    case PartnerDetailsCountryOfIncorporationPage(index) =>
+      userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -488,6 +490,16 @@ class Navigator @Inject() () {
     answers
       .get(PartnerDetailsUtrPage(index))
       .fold(routes.SystemErrorController.onPageLoad())(_ => controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad())
+
+  private def navigatePartnerDetailsCountryOfIncorporationPage(index: Int)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsCountryOfIncorporationPage(index))
+      .fold(routes.SystemErrorController.onPageLoad())(_ =>
+        /** If user is in the add partner flow, go to PT-FOR. Otherwise, if user has directly come from PT-CYA and hasn't changed answer to PT-IN,
+          * then return to PT-CYA.
+          */
+        controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad()
+      )
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: Int)(answers: UserAnswers): Call =
     answers

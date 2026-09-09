@@ -973,3 +973,11 @@ partnerSoleProprietorDob.error.required = Date of birth must include a {0}
 partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
 partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
+
+partnerDetailsAddCountryOfIncorporation.title = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = Which country is the partner’s business incorporated in?

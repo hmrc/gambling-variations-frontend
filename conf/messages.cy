@@ -293,3 +293,12 @@ partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR
 partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
 partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
+
+partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?
+
