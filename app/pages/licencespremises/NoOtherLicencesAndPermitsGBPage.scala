@@ -23,5 +23,5 @@ case object NoOtherLicencesAndPermitsGBPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
 
-  override def toString: String = "none"
+  override def toString: String = "noOtherLicencesAndPremisesGBSelected"
 }

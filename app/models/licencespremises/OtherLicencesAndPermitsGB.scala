@@ -32,28 +32,20 @@ object OtherLicencesAndPermitsGB extends Enumerable.Implicits {
   case object localAuthority            extends WithName("localAuthority") with OtherLicencesAndPermitsGB
   case object onPremises                extends WithName("onPremises") with OtherLicencesAndPermitsGB
   case object prizeGaming               extends WithName("prizeGaming") with OtherLicencesAndPermitsGB
-  case object noOtherLicencesAndPermits extends WithName("none") with OtherLicencesAndPermitsGB
+  case object noOtherLicencesAndPermits extends WithName("noOtherLicencesAndPremisesGBSelected") with OtherLicencesAndPermitsGB
 
   val mappedValuesWithPages: Map[OtherLicencesAndPermitsGB, QuestionPage[String]] = Map(
-    clubGaming          -> LicenceClubGamingPage,
-    clubMachine         -> ClubLicencePage,
-    clubPremises        -> LicenceClubPremisesPage,
-    familyEntertainment -> LicenceFamilyEntertainmentPage,
-    localAuthority      -> LicenceLocalAuthorityPage,
-    onPremises          -> LicenceOnPremisesPage,
-    prizeGaming         -> LicencePrizeGamingPage
+    clubGaming                -> LicenceClubGamingPage,
+    clubMachine               -> ClubLicencePage,
+    clubPremises              -> LicenceClubPremisesPage,
+    familyEntertainment       -> LicenceFamilyEntertainmentPage,
+    localAuthority            -> LicenceLocalAuthorityPage,
+    onPremises                -> LicenceOnPremisesPage,
+    prizeGaming               -> LicencePrizeGamingPage,
+    noOtherLicencesAndPermits -> NoOtherLicencesAndPermitsGBPage
   )
 
-  val values: Seq[OtherLicencesAndPermitsGB] = Seq(
-    clubGaming,
-    clubMachine,
-    clubPremises,
-    familyEntertainment,
-    localAuthority,
-    onPremises,
-    prizeGaming,
-    noOtherLicencesAndPermits
-  )
+  val values: Seq[OtherLicencesAndPermitsGB] = mappedValuesWithPages.keys.toSeq
 
   val positiveValues: Seq[OtherLicencesAndPermitsGB] =
     Seq(clubGaming, clubMachine, clubPremises, familyEntertainment, localAuthority, onPremises, prizeGaming)

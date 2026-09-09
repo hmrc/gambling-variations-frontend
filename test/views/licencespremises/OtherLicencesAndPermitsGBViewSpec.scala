@@ -46,14 +46,15 @@ class OtherLicencesAndPermitsGBViewSpec extends SpecBase {
       userAnswersId,
       Json.obj(
         "licencesPremisesSection" -> Json.obj(
-          "mgdRegNum"           -> "XGM000001761",
-          "clubGaming"          -> "1",
-          "clubMachine"         -> "0",
-          "clubPremises"        -> "1",
-          "familyEntertainment" -> "0",
-          "localAuthority"      -> "1",
-          "onPremises"          -> "0",
-          "prizeGaming"         -> "1"
+          "mgdRegNum"                            -> "XGM000001761",
+          "clubGaming"                           -> "1",
+          "clubMachine"                          -> "0",
+          "clubPremises"                         -> "1",
+          "familyEntertainment"                  -> "0",
+          "localAuthority"                       -> "1",
+          "onPremises"                           -> "0",
+          "prizeGaming"                          -> "1",
+          "noOtherLicencesAndPremisesGBSelected" -> "0"
         )
       )
     )
@@ -80,7 +81,7 @@ class OtherLicencesAndPermitsGBViewSpec extends SpecBase {
       doc.select("label[for=permitsGB-localAuthority]").text mustEqual messages("otherLicencesAndPermitsGB.option.localAuthority")
       doc.select("label[for=permitsGB-onPremises]").text mustEqual messages("otherLicencesAndPermitsGB.option.onPremises")
       doc.select("label[for=permitsGB-prizeGaming]").text mustEqual messages("otherLicencesAndPermitsGB.option.prizeGaming")
-      doc.select("label[for=permitsGB-none]").text mustEqual messages("otherLicencesAndPermitsGB.option.none")
+      doc.select("label[for=permitsGB-noOtherLicencesAndPremisesGBSelected]").text mustEqual messages("otherLicencesAndPermitsGB.option.none")
       doc.select("button.govuk-button").text must include(messages("site.continue"))
     }
 
@@ -92,6 +93,7 @@ class OtherLicencesAndPermitsGBViewSpec extends SpecBase {
       doc.select("input[value=localAuthority]").hasAttr("checked") mustBe true
       doc.select("input[value=onPremises]").hasAttr("checked") mustBe false
       doc.select("input[value=prizeGaming]").hasAttr("checked") mustBe true
+      doc.select("input[value=noOtherLicencesAndPremisesGBSelected]").hasAttr("checked") mustBe false
     }
 
   }

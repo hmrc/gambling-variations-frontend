@@ -24,11 +24,11 @@ class NoOtherLicencesAndPermitsGBPageSpec extends PlaySpec {
   "NoOtherLicencesAndPermitsGBPage" must {
 
     "must have the correct toString" in {
-      NoOtherLicencesAndPermitsGBPage.toString mustBe "none"
+      NoOtherLicencesAndPermitsGBPage.toString mustBe "noOtherLicencesAndPremisesGBSelected"
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "none"
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "noOtherLicencesAndPremisesGBSelected"
       NoOtherLicencesAndPermitsGBPage.path mustBe expectedPath
     }
   }

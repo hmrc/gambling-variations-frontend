@@ -33,7 +33,7 @@ object OtherLicencesAndPermitsViewModel {
           LegendViewModel(Text(messages("otherLicencesAndPermitsGB.heading"))).asPageHeading(LegendSize.Large)
         )
       ),
-      name = "permitsGB",
+      name = "permitsGB[]",
       hint = Some(HintViewModel(Text(messages("otherLicencesAndPermitsGB.hint")))),
       items = positiveValues.zipWithIndex.map { case (checkedBox, index) =>
         CheckboxItem(
@@ -45,9 +45,10 @@ object OtherLicencesAndPermitsViewModel {
       } ++ Seq(CheckboxItem(divider = Some(messages("site.or"))))
         ++ Seq(
           CheckboxItem(
-            id        = Some(s"permitsGB-none"),
+            id        = Some(s"permitsGB-${noOtherLicencesAndPermits.toString}"),
             content   = Text(messages(s"otherLicencesAndPermitsGB.option.none")),
-            value     = "none",
+            value     = noOtherLicencesAndPermits.toString,
+            checked   = form.value.exists(_.contains(noOtherLicencesAndPermits)),
             behaviour = Some(ExclusiveCheckbox)
           )
         )

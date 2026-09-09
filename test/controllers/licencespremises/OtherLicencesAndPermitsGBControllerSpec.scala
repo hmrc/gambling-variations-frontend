@@ -53,14 +53,15 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
     userAnswersId,
     Json.obj(
       "licencesPremisesSection" -> Json.obj(
-        "mgdRegNum"           -> "XGM000001761",
-        "clubGaming"          -> "1",
-        "clubMachine"         -> "0",
-        "clubPremises"        -> "0",
-        "familyEntertainment" -> "1",
-        "localAuthority"      -> "0",
-        "onPremises"          -> "1",
-        "prizeGaming"         -> "0"
+        "mgdRegNum"                            -> "XGM000001761",
+        "clubGaming"                           -> "1",
+        "clubMachine"                          -> "0",
+        "clubPremises"                         -> "0",
+        "familyEntertainment"                  -> "1",
+        "localAuthority"                       -> "0",
+        "onPremises"                           -> "1",
+        "prizeGaming"                          -> "0",
+        "noOtherLicencesAndPremisesGBSelected" -> "0"
       )
     )
   )
@@ -77,10 +78,12 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[OtherLicencesAndPermitsGBView]
-        val viewModel = OtherLicencesAndPermitsViewModel(form)(messages(application))
+        val preparedForm = form.fill(getSelectedLicencesAndPermits(userAnswers))
+        val viewModel = OtherLicencesAndPermitsViewModel(preparedForm)(messages(application))
+
         status(result) mustEqual OK
 
-        contentAsString(result) mustBe view(form, NormalMode, viewModel)(request, messages(application)).toString
+        contentAsString(result) mustBe view(preparedForm, NormalMode, viewModel)(request, messages(application)).toString
       }
     }
 
@@ -159,6 +162,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
         savedAnswersCaptor.getValue.get(LicenceLocalAuthorityPage).value mustEqual "0"
         savedAnswersCaptor.getValue.get(LicenceOnPremisesPage).value mustEqual "1"
         savedAnswersCaptor.getValue.get(LicencePrizeGamingPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(NoOtherLicencesAndPermitsGBPage).value mustEqual "0"
       }
     }
 
@@ -194,6 +198,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
         savedAnswersCaptor.getValue.get(LicenceLocalAuthorityPage).value mustEqual "0"
         savedAnswersCaptor.getValue.get(LicenceOnPremisesPage).value mustEqual "0"
         savedAnswersCaptor.getValue.get(LicencePrizeGamingPage).value mustEqual "0"
+        savedAnswersCaptor.getValue.get(NoOtherLicencesAndPermitsGBPage).value mustEqual "1"
       }
     }
 
