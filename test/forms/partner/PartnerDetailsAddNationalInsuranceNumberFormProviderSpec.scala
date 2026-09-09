@@ -28,50 +28,62 @@ class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFie
 
     val fieldName = "value"
 
-    val validNinoWithSuffix = "AA123456A"
-    val validNinoWithoutSuffix = "AA123456"
+    val validNino9Chars = "AA123456A"
+    val validNino8Chars = "AA123456"
 
-    "must bind a valid NINO with suffix" in {
-      val result = form.bind(Map(fieldName -> validNinoWithSuffix))
+    "must bind a valid 9-character NINO with suffix" in {
+      val result = form.bind(Map(fieldName -> validNino9Chars))
       result.errors mustBe empty
-      result.value.value mustBe validNinoWithSuffix
+      result.value.value mustBe validNino9Chars
     }
 
-    "must bind a valid NINO without suffix" in {
-      val result = form.bind(Map(fieldName -> validNinoWithoutSuffix))
+    "must bind a valid 8-character NINO (missing suffix) by appending space for regex check" in {
+      val result = form.bind(Map(fieldName -> validNino8Chars))
       result.errors mustBe empty
-      result.value.value mustBe validNinoWithoutSuffix
+      result.value.value mustBe validNino8Chars
     }
 
-    "must strip spaces and convert lowercase letters to uppercase upon binding" in {
-      val inputWithSpacesAndLowercase = " aa 12 34 56 a "
-      val result = form.bind(Map(fieldName -> inputWithSpacesAndLowercase))
+    "must strip whitespace and convert to uppercase before running validations" in {
+      val inputWithWhitespace = " a a 1 2 3 4 5 6 "
+      val result = form.bind(Map(fieldName -> inputWithWhitespace))
       result.errors mustBe empty
-      result.value.value mustBe validNinoWithSuffix
+      result.value.value mustBe validNino8Chars
     }
 
-    "must fail to bind invalid characters (e.g. symbols like '@')" in {
-      val invalidCharsInput = "Q@123456C"
+    "must fail to bind invalid characters (e.g. '@')" in {
+      val invalidCharsInput = "AA12345@A"
       val result = form.bind(Map(fieldName -> invalidCharsInput))
       result.errors must contain(FormError(fieldName, invalidCharsKey, Seq(ninoCharsRegex)))
     }
 
-    "must fail to bind invalid format starting with digits instead of letters" in {
-      val invalidFormatInput = "12QQ3456C"
+    "must fail to bind when starting with digits" in {
+      val invalidFormatInput = "12AA3456A"
       val result = form.bind(Map(fieldName -> invalidFormatInput))
-      result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoValidRegex)))
+      result.errors must contain(FormError(fieldName, invalidFormatKey))
     }
 
-    "must fail to bind when the first letter is 'D'" in {
+    "must fail to bind when first character is 'D' (or 'd')" in {
       val ninoStartingWithD = "DA123456A"
       val result = form.bind(Map(fieldName -> ninoStartingWithD))
-      result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoValidRegex)))
+      result.errors must contain(FormError(fieldName, invalidFormatKey))
     }
 
-    "must fail to bind when suffix is not A, B, C, or D" in {
+    "must fail to bind when second character is 'D' (or 'd')" in {
+      val ninoStartingWithD = "ad123456A"
+      val result = form.bind(Map(fieldName -> ninoStartingWithD))
+      result.errors must contain(FormError(fieldName, invalidFormatKey))
+    }
+
+    "must fail to bind when 9-character NINO has invalid suffix (not A, B, C, D, or space)" in {
       val ninoWithInvalidSuffix = "AA123456Z"
       val result = form.bind(Map(fieldName -> ninoWithInvalidSuffix))
-      result.errors must contain(FormError(fieldName, invalidFormatKey, Seq(ninoValidRegex)))
+      result.errors must contain(FormError(fieldName, invalidFormatKey))
+    }
+
+    "must fail to bind when string length is insufficient even with padding (e.g. 7 chars)" in {
+      val shortNino = "AA12345"
+      val result = form.bind(Map(fieldName -> shortNino))
+      result.errors must contain(FormError(fieldName, invalidFormatKey))
     }
 
     behave like mandatoryField(
