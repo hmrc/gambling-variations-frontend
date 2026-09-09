@@ -294,6 +294,10 @@ partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must
 partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
 
+removePreviousRegNumber.title = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn?
+removePreviousRegNumber.heading = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn {0}?
+removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru blaenorol
+
 removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
 removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
 removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn
