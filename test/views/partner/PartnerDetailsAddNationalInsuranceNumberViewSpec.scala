@@ -89,7 +89,6 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
         .size() mustEqual 0
     }
 
-
     "must not render error summary when the last char is missing" in new Setup {
 
       val boundForm: Form[String] = form.bind(Map("value" -> "q Q 1 2   3  4  5 6      "))
