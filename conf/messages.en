@@ -973,3 +973,10 @@ partnerSoleProprietorDob.error.required = Date of birth must include a {0}
 partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
 partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
+
+partnerDetailsForeignCorporateReference.title = partnerDetailsForeignCorporateReference
+partnerDetailsForeignCorporateReference.heading = partnerDetailsForeignCorporateReference
+partnerDetailsForeignCorporateReference.checkYourAnswersLabel = partnerDetailsForeignCorporateReference
+partnerDetailsForeignCorporateReference.error.required = Enter partnerDetailsForeignCorporateReference
+partnerDetailsForeignCorporateReference.error.length = PartnerDetailsForeignCorporateReference must be 100 characters or less
+partnerDetailsForeignCorporateReference.change.hidden = PartnerDetailsForeignCorporateReference
