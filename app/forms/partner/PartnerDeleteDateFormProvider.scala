@@ -61,7 +61,7 @@ class PartnerDeleteDateFormProvider @Inject() (clock: Clock) extends Mappings {
         Invalid(
           ValidationError(
             "partnerDeleteDate.error.afterLatestDate",
-            formatDate(latestDate)
+            formatDate(latestDate.plusDays(1))
           )
         )
       } else {
