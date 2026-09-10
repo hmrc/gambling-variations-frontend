@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.partner
 
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages.PartnerDetailsForeignCorporateReferencePage
+import models.UserAnswers
+import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -34,7 +33,7 @@ object PartnerDetailsForeignCorporateReferenceSummary {
         key   = "partnerDetailsForeignCorporateReference.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url)
+          ActionItemViewModel("site.change", controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url)
             .withVisuallyHiddenText(messages("partnerDetailsForeignCorporateReference.change.hidden"))
         )
       )

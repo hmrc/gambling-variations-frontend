@@ -1,13 +1,14 @@
-package controllers
+package controllers.partner
 
 import base.SpecBase
-import forms.PartnerDetailsForeignCorporateReferenceFormProvider
+import controllers.routes
+import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.PartnerDetailsForeignCorporateReferencePage
+import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest

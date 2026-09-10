@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partner
 
 import controllers.actions.*
-import forms.PartnerDetailsForeignCorporateReferenceFormProvider
-import javax.inject.Inject
+import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.PartnerDetailsForeignCorporateReferencePage
+import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PartnerDetailsForeignCorporateReferenceView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerDetailsForeignCorporateReferenceController @Inject() (
