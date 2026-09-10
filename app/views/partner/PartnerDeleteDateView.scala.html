@@ -52,7 +52,9 @@
         @govukDateInput(
             DateViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("partnerDeleteDate.h2", partnerName)).asPageHeading(Medium)
+                legend = LegendViewModel(
+                messages("partnerDeleteDate.h2", partnerName)
+                ).withCssClass("govuk-fieldset__legend--m")
             )
             .withHint(HintViewModel(messages("partnerDeleteDate.hint",latestDate)))
         )
