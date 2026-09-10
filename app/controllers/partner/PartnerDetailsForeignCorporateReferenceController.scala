@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.Mode
 import navigation.Navigator
@@ -47,8 +48,8 @@ class PartnerDetailsForeignCorporateReferenceController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(PartnerDetailsForeignCorporateReferencePage) match {
+    val index = request.userAnswers.getIndex
+    val preparedForm = request.userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -58,15 +59,16 @@ class PartnerDetailsForeignCorporateReferenceController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
+    val index = request.userAnswers.getIndex
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsForeignCorporateReferencePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsForeignCorporateReferencePage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsForeignCorporateReferencePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(index), mode, updatedAnswers))
       )
   }
 }

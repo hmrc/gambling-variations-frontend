@@ -26,8 +26,11 @@ import viewmodels.implicits.*
 
 object PartnerDetailsForeignCorporateReferenceSummary {
 
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  private val index: Int = utils.PartnerUtils.interimIndex
+
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsForeignCorporateReferencePage).map { answer =>
+    answers.get(PartnerDetailsForeignCorporateReferencePage(index)).map { answer =>
 
       SummaryListRowViewModel(
         key   = "partnerDetailsForeignCorporateReference.checkYourAnswersLabel",
