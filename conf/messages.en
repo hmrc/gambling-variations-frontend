@@ -984,3 +984,14 @@ partnerDeleteDate.error.invalid = Date to remove must be a real date
 partnerDeleteDate.change.hidden = Tell us when to remove this partner
 partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
 partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
+
+otherLicencesAndPermitsNI.title = Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.heading = Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.hint = Select all that apply
+otherLicencesAndPermitsNI.option.amusement = Amusement permit
+otherLicencesAndPermitsNI.option.bingo = Bingo club licence
+otherLicencesAndPermitsNI.option.bookmaking = Bookmaking office licence
+otherLicencesAndPermitsNI.option.serveAlcohol = Licence allowing the serving of alcohol
+otherLicencesAndPermitsNI.option.regCert = Registration certificate including a club registration certificate
+otherLicencesAndPermitsNI.option.none = No, I do not have any other licences and permits in Northern Ireland
+otherLicencesAndPermitsNI.error.required = Select all the licences and permits you have in Northern Ireland
