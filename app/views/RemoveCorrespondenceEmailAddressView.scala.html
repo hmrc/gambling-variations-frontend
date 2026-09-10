@@ -38,7 +38,7 @@
         @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("removeCorrespondenceEmailAddress"),
+                field = form("value"),
                 legend = LegendViewModel(messages("removeCorrespondenceEmailAddress.heading", correspondenceEmail)).asPageHeading(viewmodels.LegendSize.Large)
             )
         )
