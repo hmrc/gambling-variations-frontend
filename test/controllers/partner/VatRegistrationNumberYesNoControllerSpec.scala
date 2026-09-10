@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.VatRegistrationNumberYesNoPage
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, VatRegistrationNumberYesNoPage}
 import pages.partnerdetails.PartnerDetailsPage
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -44,18 +44,27 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
   lazy val vatRegistrationNumberYesNoRoute =
     controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad().url
 
+  private val userAnswersWithoutVatAnswer =
+    emptyUserAnswers
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+      .set(PartnerDetailsPage(0), "123456789")
+      .success
+      .value
+
+  private val userAnswersWithVatAnswer =
+    userAnswersWithoutVatAnswer
+      .set(VatRegistrationNumberYesNoPage(0), true)
+      .success
+      .value
+
   "VatRegistrationNumberYesNoController Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer)).build()
 
       running(application) {
         val request =
@@ -78,17 +87,8 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(VatRegistrationNumberYesNoPage(0), true)
-          .success
-          .value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithVatAnswer)).build()
 
       running(application) {
         val request =
@@ -111,12 +111,6 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
 
     "must redirect to the next page when true is submitted" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-
       val mockSessionRepository =
         mock[SessionRepository]
 
@@ -124,7 +118,7 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -146,12 +140,6 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
 
     "must redirect to the next page when false is submitted" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-
       val mockSessionRepository =
         mock[SessionRepository]
 
@@ -159,7 +147,7 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -181,14 +169,8 @@ class VatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSuga
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer)).build()
 
       running(application) {
         val request =

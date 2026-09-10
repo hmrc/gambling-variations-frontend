@@ -23,6 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import pages.partnerdetails.{PartnerDetailsPage, PartnerDetailsTradingNamePage}
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -45,18 +46,21 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
       .onPageLoad()
       .url
 
+  private val userAnswers =
+    emptyUserAnswers
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+      .set(PartnerDetailsPage(0), "123456789")
+      .success
+      .value
+      .set(PartnerDetailsTradingNamePage(0), "Trading Name")
+      .success
+      .value
+
   "PartnerTradingName Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -82,15 +86,6 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
-
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -114,15 +109,6 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
 
       val mockSessionRepository =
         mock[SessionRepository]
@@ -152,15 +138,6 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsPage(0), "123456789")
-          .success
-          .value
-          .set(PartnerDetailsTradingNamePage(0), "Trading Name")
-          .success
-          .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -232,6 +209,9 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
           .set(PartnerDetailsPage(0), "123456789")
           .success
           .value
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -254,6 +234,9 @@ class PartnerTradingNameControllerSpec extends SpecBase with MockitoSugar {
       val userAnswers =
         emptyUserAnswers
           .set(PartnerDetailsPage(0), "123456789")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
           .success
           .value
 

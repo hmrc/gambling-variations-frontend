@@ -34,11 +34,11 @@ object BusinessType extends Enumerable.Implicits {
   case object LimitedLiabilityPartnership extends WithName("llp") with BusinessType { val code = 5 }
 
   val values: Seq[BusinessType] = Seq(
-    Soleproprietor,
     Corporatebody,
-    Unincorporatedbody,
+    LimitedLiabilityPartnership,
     Partnership,
-    LimitedLiabilityPartnership
+    Soleproprietor,
+    Unincorporatedbody
   )
 
   def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map { case (value, index) =>

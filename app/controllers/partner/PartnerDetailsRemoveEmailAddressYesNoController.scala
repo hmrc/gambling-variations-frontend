@@ -17,6 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
+import controllers.partner.PartnerUtils.getIndex
 import controllers.routes
 import forms.partner.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.Mode
@@ -48,12 +49,10 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
-  private val index: Int = 0
-
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request: DataRequest[AnyContent] =>
+    val index: Int = request.userAnswers.getIndex
 
     val preparedForm = request.userAnswers.get(PartnerDetailsRemoveEmailAddressYesNoPage(index)) match {
       case None        => form
@@ -71,6 +70,7 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val index: Int = request.userAnswers.getIndex
     form
       .bindFromRequest()
       .fold(

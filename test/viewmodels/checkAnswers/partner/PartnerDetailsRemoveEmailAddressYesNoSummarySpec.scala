@@ -26,7 +26,7 @@ import viewmodels.implicits.*
 
 class PartnerDetailsRemoveEmailAddressYesNoSummarySpec extends SpecBase {
 
-  // TODO: This index is hardcoded but it should come from the Partner Details list selection
+  // TODO: Interim solution - will be refactored with the indexing ticket
   private val index: Int = 0
 
   implicit val messages: Messages = this.messages(app)

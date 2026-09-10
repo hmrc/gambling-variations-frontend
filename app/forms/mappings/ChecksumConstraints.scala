@@ -35,4 +35,14 @@ trait ChecksumConstraints {
         Invalid(errorKey)
       }
     }
+
+  protected def vatChecksum(errorKey: String): Constraint[String] =
+    Constraint { input =>
+      if (ChecksumValidator.isValidVatNumber(input)) Valid else Invalid(errorKey)
+    }
+
+  protected def utrChecksum(errorKey: String): Constraint[String] =
+    Constraint { input =>
+      if (ChecksumValidator.isValidUtr(input)) Valid else Invalid(errorKey)
+    }
 }

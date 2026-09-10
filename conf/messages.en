@@ -199,15 +199,11 @@ removeEmailAddress.error.required = Select yes if you want to remove the email a
 
 removePreviousRegNumber.title = Are you sure you want to remove the previous registration number?
 removePreviousRegNumber.heading = Are you sure you want to remove the previous registration number {0}?
-removePreviousRegNumber.checkYourAnswersLabel = removePreviousRegNumber
 removePreviousRegNumber.error.required = Select yes if you want to remove the previous registration number
-removePreviousRegNumber.change.hidden = remove previous registration number
 
 removeAssociatedRegNumber.title = Are you sure you want to remove the associated registration number?
 removeAssociatedRegNumber.heading = Are you sure you want to remove the associated registration number {0}?
-removeAssociatedRegNumber.checkYourAnswersLabel = removeAssociatedRegNumber
 removeAssociatedRegNumber.error.required = Select yes if you want to remove the associated registration number
-removeAssociatedRegNumber.change.hidden = remove associated registration number
 
 removeCorrespondenceFaxNumber.title = Are you sure you want to remove the correspondence fax number?
 removeCorrespondenceFaxNumber.heading = Are you sure you want to remove the correspondence fax number {0}?
@@ -857,6 +853,13 @@ vatRegistrationNumberYesNo.checkYourAnswersLabel = Do you want to add a VAT regi
 vatRegistrationNumberYesNo.error.required = Select yes to add a VAT registration number for the partner
 vatRegistrationNumberYesNo.change.hidden = do you want to add a VAT registration number for the partner
 
+partnerDetailsRemoveVRNYesNo.title = Are you sure you want to remove this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.heading = Are you sure you want to remove {0} as this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.error.required = Select yes if you want to remove this partner’s VAT registration number
+partnerDetailsRemoveVRNYesNo.change.hidden = Are you sure you want to remove this partner’s VAT registration number?
+
+
 # Licences & Premises
 licenceNumber.title = What is the Gambling Commission operating or personal licence number?
 licenceNumber.heading = What is the Gambling Commission operating or personal licence number?
@@ -865,6 +868,14 @@ licenceNumber.hint = It is 23 characters long, including the hyphens, like 003-1
 licenceNumber.error.required = Enter the Gambling Commission operating or personal licence number
 licenceNumber.error.invalidCharacters = The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = The Gambling Commission operating or personal licence number must be in the correct format
+
+removePremisesDetailsYesNo.title = This change will remove your premises details
+removePremisesDetailsYesNo.heading = This change will remove your premises details
+removePremisesDetailsYesNo.p1 = If you submit this change, HMRC will remove the premises details you have provided.
+removePremisesDetailsYesNo.confirmationPrompt = Are you sure you want to make this change?
+removePremisesDetailsYesNo.checkYourAnswersLabel = Are you sure you want to make this change?
+removePremisesDetailsYesNo.error.required = Select yes if you want to make this change
+removePremisesDetailsYesNo.change.hidden = Are you sure you want to make this change?
 
 partnerDetails.title = Partner details
 partnerDetails.heading = Partner details
@@ -894,6 +905,70 @@ partnerDetailsBusinessType.heading = What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = What type of business is the partner?
 partnerDetailsBusinessType.error.required = Select the type of business for the partner
 partnerDetailsBusinessType.change.hidden = What type of business is the partner?
+
+partnerDetailsIsBusinessIncorporatedUk.title = Is the partner’s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.heading = Is the partner’s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = Is the partner’s business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.error.required = Select yes if the partner’s address is incorporated in the UK
+partnerDetailsIsBusinessIncorporatedUk.change.hidden = Is the partner’s business incorporated in the UK?
+
+partnerDetailsAddTradingNameYesNo.title = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.heading = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the partner
+partnerDetailsAddTradingNameYesNo.change.hidden = Do you want to add a trading name for the partner?
+
+partnerDateOfIncorporation.title = When was the partner’s date of incorporation?
+partnerDateOfIncorporation.heading = When was the partner’s date of incorporation?
+partnerDateOfIncorporation.hint = For example, 27 3 2007
+partnerDateOfIncorporation.checkYourAnswersLabel = When was the partner’s date of incorporation?
+partnerDateOfIncorporation.error.required.all = Enter a date of incorporation for the partner
+partnerDateOfIncorporation.error.required.two = Date of incorporation must include a {0} and {1}
+partnerDateOfIncorporation.error.required = Date of incorporation must include {0}
+partnerDateOfIncorporation.error.invalid = 	Date of incorporation must be a real date
+partnerDateOfIncorporation.change.hidden = When was the partner’s date of incorporation?
+
+partnerDetailsVatRegistrationNumber.title = What is the partner’s VAT registration number?
+partnerDetailsVatRegistrationNumber.heading = What is the partner’s VAT registration number?
+partnerDetailsVatRegistrationNumber.paragraph = You can find it on their VAT registration certificate.
+partnerDetailsVatRegistrationNumber.checkYourAnswersLabel = What is the partner’s VAT registration number?
+partnerDetailsVatRegistrationNumber.hint = It must be 9 digits long, for example 123456789
+partnerDetailsVatRegistrationNumber.error.required = Enter the partner’s VAT registration number
+partnerDetailsVatRegistrationNumber.error.length = The VAT registration number must be 9 characters
+partnerDetailsVatRegistrationNumber.error.invalid = Enter a real VAT registration number
+partnerDetailsVatRegistrationNumber.error.invalid.characters = The VAT registration number must only include numbers 0 to 9
+partnerDetailsVatRegistrationNumber.change.hidden = What is the partner’s VAT registration number?
+
+partnerDetailsAddUTR.title = Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.subtitle =  What is the Unique Taxpayer Reference?
+partnerDetailsAddUTR.heading = Tell us the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.hint = It must be 10 digits long, for example 1234567890
+partnerDetailsAddUTR.paragraph = You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+partnerDetailsAddUTR.linkText = Get more help to find your UTR (opens in new tab).
+partnerDetailsAddUTR.checkYourAnswersLabel = Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.error.required = Enter the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.error.invalidChars = The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+partnerDetailsAddUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10 digits long
+partnerDetailsAddUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.change.hidden = Tell us the partner’s Unique Taxpayer Reference
+
+licenceDetailsLandlordLicenceYesNo.title = Are you a pub tenant whose landlord holds the alcohol licence?
+licenceDetailsLandlordLicenceYesNo.heading = Are you a pub tenant whose landlord holds the alcohol licence?
+licenceDetailsLandlordLicenceYesNo.checkYourAnswersLabel = Are you a pub tenant whose landlord holds the alcohol licence?
+licenceDetailsLandlordLicenceYesNo.error.required = Select yes if you are a pub tenant whose landlord holds the alcohol licence
+licenceDetailsLandlordLicenceYesNo.change.hidden = Are you a pub tenant whose landlord holds the alcohol licence?
+
+
+partnerSoleProprietorDob.title = What is the sole proprietor’s date of birth?
+partnerSoleProprietorDob.heading = What is the sole proprietor’s date of birth?
+partnerSoleProprietorDob.hint = For example, 31 3 1980
+partnerSoleProprietorDob.checkYourAnswersLabel = What is the sole proprietor’s date of birth?
+partnerSoleProprietorDob.error.required.all = Enter a date of birth for the sole proprietor
+partnerSoleProprietorDob.error.required.two = Date of birth must include a {0} and a {1}
+partnerSoleProprietorDob.error.required = Date of birth must include a {0}
+partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
+partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
+partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
 
 premisesNotCoveredYesNo.title = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.heading = Do you have any other premises that are not covered by licences or permits?

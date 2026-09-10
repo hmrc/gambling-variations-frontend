@@ -240,6 +240,18 @@ partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a Nati
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
 
+partnerDetailsAddTradingNameYesNo.title = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add a trading name for the partner?
+partnerDetailsAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the partner
+partnerDetailsAddTradingNameYesNo.change.hidden = cy: Do you want to add a trading name for the partner?
+
+partnerDetailsRemoveVRNYesNo.title = cy: Are you sure you want to remove this partner’ VAT registration number?
+partnerDetailsRemoveVRNYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s VAT registration number?
+partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’ VAT registration number?
+partnerDetailsRemoveVRNYesNo.error.required = cy: Select yes if you want to remove this partner’ VAT registration number
+partnerDetailsRemoveVRNYesNo.change.hidden = cy: Are you sure you want to remove this partner’ VAT registration number?
+
 partnerDetailsBusinessType.title = cy: What type of business is the partner?
 partnerDetailsBusinessType.heading = cy: What type of business is the partner?
 partnerDetailsBusinessType.checkYourAnswersLabel = cy: What type of business is the partner?
@@ -254,3 +266,53 @@ licenceNumber.hint = cy: It is 23 characters long, including the hyphens, like 0
 licenceNumber.error.required = cy:  Enter the Gambling Commission operating or personal licence number
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
+
+removePremisesDetailsYesNo.title = cy: This change will remove your premises details
+removePremisesDetailsYesNo.heading = cy: This change will remove your premises details
+removePremisesDetailsYesNo.p1 = cy: If you submit this change, HMRC will remove the premises details you have provided.
+removePremisesDetailsYesNo.confirmationPrompt = cy: Are you sure you want to make this change?
+removePremisesDetailsYesNo.checkYourAnswersLabel = cy: Are you sure you want to make this change?
+removePremisesDetailsYesNo.error.required = cy: Select yes if you want to make this change
+removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make this change?
+
+partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
+partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
+partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
+
+partnerDetailsAddUTR.title = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.subtitle = cy:  What is the Unique Taxpayer Reference?
+partnerDetailsAddUTR.heading = cy: Tell us the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.hint = cy: It must be 10 digits long, for example 1234567890
+partnerDetailsAddUTR.paragraph = cy: You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+partnerDetailsAddUTR.linkText = cy: Get more help to find your UTR (opens in new tab).
+partnerDetailsAddUTR.checkYourAnswersLabel = cy: Tell us the partner’s Unique Taxpayer Reference
+partnerDetailsAddUTR.error.required = cy: Enter the partner’s Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
+partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
+partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
+
+businessTradeClass.title = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.heading = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.adultGamingCentre = Canolfan gemau i oedolion
+businessTradeClass.amusementOrGamingMachineSupplier = Cyflenwr peiriannau diddanu neu beiriannau hapchwarae
+businessTradeClass.bingopromoter = Hyrwyddwr bingo
+businessTradeClass.bookmakerorbettingactivities = Gweithgareddau bwci neu weithgareddau betio
+businessTradeClass.casino = Casino
+businessTradeClass.club = Clwb
+businessTradeClass.familyentertainmentcentre = Canolfan adloniant i deuluoedd
+businessTradeClass.publichouse = Tafarndy
+businessTradeClass.other = Arall
+businessTradeClass.checkYourAnswersLabel = 	Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.error.required = Dewiswch y dosbarth masnachu ar gyfer y busnes hwn
+businessTradeClass.change.hidden = 	Beth yw dosbarth masnachu’r busnes?
+
+removePreviousRegNumber.title = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn?
+removePreviousRegNumber.heading = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn {0}?
+removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru blaenorol
+
+removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
+removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
+removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn

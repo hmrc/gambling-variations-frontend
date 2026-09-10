@@ -44,6 +44,10 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+
+    // TODO: Interim solution - will be refactored with the indexing ticket
+    val page = PartnerDetailsPage(0)
+
     request.userAnswers match {
       case None =>
         logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
@@ -55,7 +59,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(PartnerDetailsPage(0)) map { _ =>
+        userAnswers.get(page) map { _ =>
           logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))

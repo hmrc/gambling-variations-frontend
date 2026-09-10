@@ -17,10 +17,11 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.addNewPartnerIndex
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import pages.partnerdetails.PartnerDetailsBusinessTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -55,7 +56,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     // TODO: this has to be fixed with the indexing ticket
-    val index: Int = addNewPartnerIndex(request.userAnswers)()
+    val index: Int = request.userAnswers.getIndex
 
     val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
       case None               => form
@@ -67,7 +68,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     // TODO: this has to be fixed with the indexing ticket
-    val index: Int = addNewPartnerIndex(request.userAnswers)()
+    val index: Int = request.userAnswers.getIndex
 
     form
       .bindFromRequest()
@@ -76,6 +77,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
         businessType =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(index), businessType))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage, false))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(index), mode, updatedAnswers))
       )

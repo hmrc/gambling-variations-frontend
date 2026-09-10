@@ -17,13 +17,14 @@
 package controllers.partner
 
 import base.SpecBase
+import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerAddFaxNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerAddFaxNumberYesNoPage
+import pages.partner.{PartnerAddFaxNumberYesNoPage, PartnerDetailsAddPartnerCompletedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -41,7 +42,13 @@ class PartnerAddFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar 
   lazy val partnerAddFaxNumberYesNoRoute: String =
     controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  private val validUserAnswers: UserAnswers =
+    UserAnswers(mgdRegNumber, cleanedData())
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
+      .success
+      .value
+
+  private val index: Int = validUserAnswers.getIndex
 
   "PartnerAddFaxNumberYesNo Controller" - {
 

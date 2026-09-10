@@ -28,6 +28,7 @@ import views.html.partner.PartnerDetailsRemoveFaxNumberYesNoView
 class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
   private val form = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()()
+  private val faxNumber = "0207580110"
 
   "PartnerRemoveFaxNumberYesNoView" - {
 
@@ -39,7 +40,7 @@ class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
         val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
-        val html = view(form, NormalMode, "here-goes-nothing!")(FakeRequest(), messages(application))
+        val html = view(form, NormalMode, faxNumber)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
@@ -48,7 +49,7 @@ class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)(s"partnerDetailsRemoveFaxNumberYesNo.heading", "here-goes-nothing!")
+          messages(application)(s"partnerDetailsRemoveFaxNumberYesNo.heading", faxNumber)
 
         document.getElementById("value").attr("value") mustEqual "true"
 
@@ -69,7 +70,7 @@ class PartnerDetailsRemoveFaxNumberYesNoViewSpec extends SpecBase {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(boundForm, NormalMode, "here-goes-nothing!")(FakeRequest(), messages(application))
+        val html = view(boundForm, NormalMode, faxNumber)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
