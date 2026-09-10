@@ -124,12 +124,12 @@ object PartnerDetailsViewModel {
 
               val statusDetails =
                 dateOfLeaving match {
-                  case Some(leavingDate) if leavingDate.isAfter(today) =>
+                  case Some(leavingDate) if !leavingDate.isBefore(today) =>
                     Some(leavingDate.format(dateFormatter))
 
                   case _ =>
                     dateOfJoining match {
-                      case Some(joiningDate) if joiningDate.isAfter(today) =>
+                      case Some(joiningDate) if !joiningDate.isBefore(today) =>
                         Some(joiningDate.format(dateFormatter))
 
                       case _ =>
