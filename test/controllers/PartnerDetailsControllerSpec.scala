@@ -21,7 +21,7 @@ import forms.partner.AddAnotherPartnerFormProvider
 import models.UserAnswers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsAddAnotherPartnerYesNoPage
 import play.api.inject.bind
@@ -32,8 +32,6 @@ import viewmodels.checkAnswers.partner.PartnerDetailsViewModel
 import views.html.partner.PartnerDetailsView
 
 import scala.concurrent.Future
-import org.mockito.ArgumentCaptor
-import org.mockito.Mockito.verify
 
 class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
