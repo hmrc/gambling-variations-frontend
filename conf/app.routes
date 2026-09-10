@@ -312,7 +312,9 @@ POST      /change-registration-details/partner-details/date-of-incorporation    
 GET       /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
 
-
+GET  /change-registration-details/partner-details/date-to-remove-redirect  controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET  /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onPageLoad(mode: Mode = NormalMode)
+POST /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)

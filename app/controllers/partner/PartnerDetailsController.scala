@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partner.AddAnotherPartnerFormProvider
 import pages.partner.PartnerDetailsAddAnotherPartnerYesNoPage
+import pages.partnerdetails.ChosenPartnerToRemovePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -136,10 +137,21 @@ class PartnerDetailsController @Inject() (
     }
 
   def onRemove(partnerNumber: Int): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-      Redirect(
-        routes.PartnerDetailsController.onPageLoad
+      for {
+        updatedAnswers <-
+          Future.fromTry(
+            request.userAnswers.set(
+              ChosenPartnerToRemovePage,
+              partnerNumber
+            )
+          )
+
+        _ <- sessionRepository.set(updatedAnswers)
+
+      } yield Redirect(
+        controllers.partner.routes.PartnerDeleteDateController.onPageLoad()
       )
     }
 
