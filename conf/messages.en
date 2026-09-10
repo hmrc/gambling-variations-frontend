@@ -974,9 +974,10 @@ partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
 partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
 
-partnerDetailsForeignCorporateReference.title = partnerDetailsForeignCorporateReference
-partnerDetailsForeignCorporateReference.heading = partnerDetailsForeignCorporateReference
-partnerDetailsForeignCorporateReference.checkYourAnswersLabel = partnerDetailsForeignCorporateReference
-partnerDetailsForeignCorporateReference.error.required = Enter partnerDetailsForeignCorporateReference
-partnerDetailsForeignCorporateReference.error.length = PartnerDetailsForeignCorporateReference must be 100 characters or less
-partnerDetailsForeignCorporateReference.change.hidden = PartnerDetailsForeignCorporateReference
+partnerDetailsForeignCorporateReference.title = What is the partner’s foreign corporate reference?
+partnerDetailsForeignCorporateReference.heading = What is the partner’s foreign corporate reference?
+partnerDetailsForeignCorporateReference.checkYourAnswersLabel = What is the partner’s foreign corporate reference?
+partnerDetailsForeignCorporateReference.error.required = Enter the partner’s foreign corporate reference
+partnerDetailsForeignCorporateReference.error.invalid = The partner’s foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsForeignCorporateReference.error.length = The partner’s foreign corporate reference must be 100 characters or less
+partnerDetailsForeignCorporateReference.change.hidden = What is the partner’s foreign corporate reference?

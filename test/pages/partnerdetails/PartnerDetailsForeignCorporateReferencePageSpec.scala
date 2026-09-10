@@ -19,22 +19,22 @@ package pages.partnerdetails
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsForeignCorporateRefPageSpec extends PlaySpec {
+class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec {
 
-  val Index = 0
+  private val Index = 0
 
-  "PartnerDetailsForeignCorporateRefPage" must {
+  "PartnerDetailsForeignCorporateReferencePage" must {
 
     "have the correct path" in {
-      PartnerDetailsForeignCorporateRefPage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsForeignCorporateRef")
+      PartnerDetailsForeignCorporateReferencePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsForeignCorporateRef")
     }
 
     "have the correct toString value" in {
 
-      PartnerDetailsForeignCorporateRefPage(Index).toString mustEqual "partnerDetailsForeignCorporateRef"
+      PartnerDetailsForeignCorporateReferencePage(Index).toString mustEqual "partnerDetailsForeignCorporateRef"
     }
 
-    "be able to read and write PartnerDetailsForeignCorporateRefPage values with correct index" in {
+    "be able to read and write PartnerDetailsForeignCorporateReferencePage values with correct index" in {
 
       val value1 = "Value1"
       val value2 = "Value2"
@@ -42,20 +42,20 @@ class PartnerDetailsForeignCorporateRefPageSpec extends PlaySpec {
       val json = Json.obj(
         "partners" -> Json.arr(
           Json.obj(
-            PartnerDetailsForeignCorporateRefPage(Index).toString -> Json.toJson(value1)
+            PartnerDetailsForeignCorporateReferencePage(Index).toString -> Json.toJson(value1)
           ),
           Json.obj(
-            PartnerDetailsForeignCorporateRefPage(Index + 1).toString -> Json.toJson(value2)
+            PartnerDetailsForeignCorporateReferencePage(Index + 1).toString -> Json.toJson(value2)
           )
         )
       )
 
-      PartnerDetailsForeignCorporateRefPage(Index).path
+      PartnerDetailsForeignCorporateReferencePage(Index).path
         .asSingleJson(json)
         .validate[String]
         .get mustEqual value1
 
-      PartnerDetailsForeignCorporateRefPage(Index + 1).path
+      PartnerDetailsForeignCorporateReferencePage(Index + 1).path
         .asSingleJson(json)
         .validate[String]
         .get mustEqual value2

@@ -16,24 +16,28 @@
 
 @import viewmodels.InputWidth._
 @import viewmodels.LabelSize.Large
+@import views.html.components._
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    caption: Caption
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("partnerDetailsForeignCorporateReference.title"))) {
+@layout(pageTitle = title(form, messages("partnerDetailsForeignCorporateReference.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onSubmit()) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
+
+        @caption(messages("changeRegistrationDetails.caption"))
 
         @govukInput(
             InputViewModel(

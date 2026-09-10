@@ -23,9 +23,16 @@ import javax.inject.Inject
 
 class PartnerDetailsForeignCorporateReferenceFormProvider @Inject() extends Mappings {
 
+  val refNumberRegex = "^[A-Za-z0-9 '’-]+$"
   def apply(): Form[String] =
     Form(
       "value" -> text("partnerDetailsForeignCorporateReference.error.required")
         .verifying(maxLength(100, "partnerDetailsForeignCorporateReference.error.length"))
+        .verifying(
+          regexp(
+            refNumberRegex,
+            "partnerDetailsForeignCorporateReference.error.invalid"
+          )
+        )
     )
 }
