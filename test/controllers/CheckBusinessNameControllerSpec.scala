@@ -40,7 +40,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" - {
 
       "with the expected URL" in {
-        routes.CheckBusinessNameController.onPageLoad().url must endWith("/change-registration/business-name/check")
+        routes.CheckBusinessNameController.onPageLoad().url must endWith("/change-registration-details/business-name/check")
       }
 
       "when sole proprietor" in {
