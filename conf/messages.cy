@@ -303,3 +303,26 @@ partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR
 partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
 partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
+
+businessTradeClass.title = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.heading = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.adultGamingCentre = Canolfan gemau i oedolion
+businessTradeClass.amusementOrGamingMachineSupplier = Cyflenwr peiriannau diddanu neu beiriannau hapchwarae
+businessTradeClass.bingopromoter = Hyrwyddwr bingo
+businessTradeClass.bookmakerorbettingactivities = Gweithgareddau bwci neu weithgareddau betio
+businessTradeClass.casino = Casino
+businessTradeClass.club = Clwb
+businessTradeClass.familyentertainmentcentre = Canolfan adloniant i deuluoedd
+businessTradeClass.publichouse = Tafarndy
+businessTradeClass.other = Arall
+businessTradeClass.checkYourAnswersLabel = 	Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.error.required = Dewiswch y dosbarth masnachu ar gyfer y busnes hwn
+businessTradeClass.change.hidden = 	Beth yw dosbarth masnachu’r busnes?
+
+removePreviousRegNumber.title = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn?
+removePreviousRegNumber.heading = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn {0}?
+removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru blaenorol
+
+removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
+removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
+removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn

@@ -17,7 +17,7 @@
 package forms.partner
 
 import forms.behaviours.StringFieldBehaviours
-import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider.{lengthRegex, zeroToNineRegex}
+import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider.{vrnLength, zeroToNineRegex}
 import play.api.data.FormError
 
 class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBehaviours {
@@ -56,7 +56,7 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
       for (input <- validInputs) {
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
         result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
-        result.errors must contain(FormError(fieldName, lengthKey, Seq(lengthRegex)))
+        result.errors must contain(FormError(fieldName, lengthKey, Seq(vrnLength)))
         result.errors must contain(FormError(fieldName, realKey))
       }
     }
@@ -85,13 +85,13 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
         val result = form.bind(Map(fieldName -> input)).apply(fieldName)
         result.errors must contain(FormError(fieldName, realKey))
         result.errors must not contain FormError(fieldName, digitsOnly, Seq(zeroToNineRegex))
-        result.errors must not contain FormError(fieldName, lengthKey, Seq(lengthRegex))
+        result.errors must not contain FormError(fieldName, lengthKey, Seq(vrnLength))
       }
     }
 
     "fail to bind fewer than 9 digits" in {
       val result = form.bind(Map(fieldName -> "12345678")).apply(fieldName)
-      result.errors mustEqual Seq(FormError(fieldName, lengthKey, Seq(lengthRegex)),
+      result.errors mustEqual Seq(FormError(fieldName, lengthKey, Seq(vrnLength)),
                                   FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)),
                                   FormError(fieldName, realKey)
                                  )
@@ -99,7 +99,7 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
 
     "fail to bind more than 9 digits" in {
       val result = form.bind(Map(fieldName -> "1234567891")).apply(fieldName)
-      result.errors must contain(FormError(fieldName, lengthKey, Seq(lengthRegex)))
+      result.errors must contain(FormError(fieldName, lengthKey, Seq(vrnLength)))
       result.errors must contain(FormError(fieldName, realKey, Seq()))
       result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
 

@@ -433,10 +433,12 @@ class PartnerDetailsViewModelSpec extends SpecBase {
       val row = viewModel.partners.head
 
       row.status mustBe messages("partnerDetails.status.dueToJoin")
-      row.statusDetails mustBe None
+      row.statusDetails mustBe Some(
+        joinDate.format(dateFormatter)
+      )
     }
 
-    "show due to leave status when leaving date is today" in {
+    "show due to leave status and date when leaving date is today" in {
 
       val leavingDate = LocalDate.now()
 
@@ -464,7 +466,9 @@ class PartnerDetailsViewModelSpec extends SpecBase {
       val row = viewModel.partners.head
 
       row.status mustBe messages("partnerDetails.status.dueToLeave")
-      row.statusDetails mustBe None
+      row.statusDetails mustBe Some(
+        leavingDate.format(dateFormatter)
+      )
     }
 
     "show minimum partners message when fewer than three active partners exist" in {

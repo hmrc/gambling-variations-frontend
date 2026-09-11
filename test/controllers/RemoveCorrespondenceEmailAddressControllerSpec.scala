@@ -136,7 +136,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
-            .withFormUrlEncodedBody(("removeCorrespondenceEmailAddress", "true"))
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -161,7 +161,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
-            .withFormUrlEncodedBody(("removeCorrespondenceEmailAddress", "true"))
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -186,7 +186,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
-            .withFormUrlEncodedBody(("removeCorrespondenceEmailAddress", "true"))
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -213,7 +213,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
-            .withFormUrlEncodedBody(("removeCorrespondenceEmailAddress", "false"))
+            .withFormUrlEncodedBody(("value", "false"))
 
         val result = route(application, request).value
 
@@ -228,7 +228,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
-            .withFormUrlEncodedBody(("removeCorrespondenceEmailAddress", ""))
+            .withFormUrlEncodedBody(("value", ""))
 
         val result = route(application, request).value
 
@@ -236,7 +236,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(form.bind(Map("removeCorrespondenceEmailAddress" -> "")), NormalMode, correspondenceEmail)(request, messages(application)).toString
+          view(form.bind(Map("value" -> "")), NormalMode, correspondenceEmail)(request, messages(application)).toString
       }
     }
 
@@ -261,7 +261,7 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
       running(application) {
         val request =
           FakeRequest(POST, routes.RemoveCorrespondenceEmailAddressController.onSubmit().url)
-            .withFormUrlEncodedBody(("removeCorrespondenceEmailAddress", "true"))
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
