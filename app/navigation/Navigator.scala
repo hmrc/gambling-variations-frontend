@@ -173,6 +173,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsBusinessTypePage(index)(userAnswers) // change it
     case PartnerDetailsUtrPage(index) =>
       userAnswers => navigatePartnerDetailsUTRPage(index)(userAnswers)
+    case PartnerDetailsForeignCorporateReferencePage(index) =>
+      userAnswers => controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad() // TODO: to be plumbed in
 
     // License and Premises Details
     case LicenceNumberPage =>
