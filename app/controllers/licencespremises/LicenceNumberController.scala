@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.licencespremises.LicenceNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.licencespremises.{LicenceNumberPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage}
+import pages.licencespremises.{HaveGamblingLicenceNoPage, LicenceNumberPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,16 +62,18 @@ class LicenceNumberController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
+        value => {
           val isChanged: Boolean =
             checkIfChanged(value, request.userAnswers, LicenceNumberPage, LicencesPremisesDetailsChangesPage)
 
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(LicenceNumberPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsChangesPage, isChanged))
-            _              <- sessionRepository.set(updatedAnswers)
+            answersWithLicenceNumber <- Future.fromTry(request.userAnswers.set(LicenceNumberPage, value))
+            answersWithLicenceFlag   <- Future.fromTry(answersWithLicenceNumber.set(HaveGamblingLicenceNoPage, "1"))
+            answersWithSubmitted     <- Future.fromTry(answersWithLicenceFlag.set(LicencesPremisesDetailsSubmittedPage, true))
+            updatedAnswers           <- Future.fromTry(answersWithSubmitted.set(LicencesPremisesDetailsChangesPage, isChanged))
+            _                        <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(LicenceNumberPage, mode, updatedAnswers))
+        }
       )
   }
 }

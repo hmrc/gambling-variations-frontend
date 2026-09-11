@@ -21,7 +21,6 @@ import controllers.routes
 import models.*
 import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
-import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
@@ -30,6 +29,8 @@ import pages.licencespremises.LicenceNumberPage
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
+import pages.*
+import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -213,9 +214,14 @@ class NavigatorSpec extends SpecBase {
           routes.PreviousRegistrationNumbersListController.onPageLoad()
       }
 
-      "should route LicencesNumberPage to LicencesNumberController" in {
+      "should route LicencesNumberPage to CheckLicencesAndPremisesController" in {
         navigator.nextPage(LicenceNumberPage, NormalMode, emptyAnswers) mustBe
-          controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route RemoveLicencesNumberPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(RemoveLicenceNumberPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
       }
 
     }
