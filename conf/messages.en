@@ -977,6 +977,15 @@ partnerSoleProprietorDob.error.invalid = Date of birth must be a real date
 partnerSoleProprietorDob.change.hidden = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
 
+licencesPremises.title = How will you provide premises addresses?
+licencesPremises.heading = How will you provide premises addresses?
+licencesPremises.online = Online only
+licencesPremises.online.hint = You can only provide up to 100 premises addresses online
+licencesPremises.byPost = By post
+licencesPremises.byPost.hint = Providing premises addresses by post will delay updates to your records
+licencesPremises.checkYourAnswersLabel = How will you provide premises addresses?
+licencesPremises.error.required = Select how you will provide premises addresses
+licencesPremises.change.hidden = how you will provide premises addresses
 
 partnerDeleteDate.title = Tell us when to remove this partner
 partnerDeleteDate.heading = Tell us when to remove this partner
