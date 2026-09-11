@@ -26,9 +26,9 @@ class RemoveCorrespondenceEmailAddressFormProviderSpec extends BooleanFieldBehav
 
   val form = new RemoveCorrespondenceEmailAddressFormProvider()()
 
-  ".removeCorrespondenceEmailAddress" - {
+  ".value" - {
 
-    val fieldName = "removeCorrespondenceEmailAddress"
+    val fieldName = "value"
 
     behave like booleanField(
       form,
