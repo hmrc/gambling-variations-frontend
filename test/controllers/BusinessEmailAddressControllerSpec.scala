@@ -142,7 +142,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("emailAddress", "validEmail@example.com"))
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 
@@ -168,7 +168,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("emailAddress", "validEmail@example.com"))
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 
@@ -195,7 +195,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("emailAddress", "validEmail@example.com"))
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 
@@ -213,9 +213,9 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("emailAddress", ""))
+            .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form.bind(Map("emailAddress" -> ""))
+        val boundForm = form.bind(Map("value" -> ""))
 
         val view = application.injector.instanceOf[BusinessEmailAddressView]
 
@@ -280,7 +280,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("emailAddress", "validEmail@example.com"))
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 
