@@ -49,6 +49,7 @@
                 label = LabelViewModel(messages("soleProprietorName.title.label"))
             )
             .withCssClass("govuk-input--width-10")
+            .withAttribute("autocomplete" -> "honorific-prefix")
         )
 
         @govukInput(
@@ -57,6 +58,7 @@
                 label = LabelViewModel(messages("soleProprietorName.firstName.label"))
             )
             .withWidth(Full)
+            .withAttribute("autocomplete" -> "given-name")
         )
 
         @govukInput(
@@ -65,6 +67,7 @@
                 label = LabelViewModel(messages("soleProprietorName.middleName.label"))
             )
             .withWidth(Full)
+            .withAttribute("autocomplete" -> "additional-name")
         )
 
         @govukInput(
@@ -73,6 +76,7 @@
                 label = LabelViewModel(messages("soleProprietorName.lastName.label"))
             )
             .withWidth(Full)
+            .withAttribute("autocomplete" -> "family-name")
         )
 
 
