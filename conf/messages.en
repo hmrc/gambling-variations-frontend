@@ -984,3 +984,10 @@ partnerDeleteDate.error.invalid = Date to remove must be a real date
 partnerDeleteDate.change.hidden = Tell us when to remove this partner
 partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
 partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
+
+partnerCheckConfirmRemoveDate.title = Check your date to remove this partner
+partnerCheckConfirmRemoveDate.heading = Check your date to remove this partner
+partnerCheckConfirmRemoveDate.labelPartnerName = Partner name
+partnerCheckConfirmRemoveDate.changeDate.hidden = date to remove partner
+partnerCheckConfirmRemoveDate.labelDateToRemove = Date to remove partner
+partnerCheckConfirmRemoveDate.p1 = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.

@@ -697,7 +697,7 @@ class PartnerDeleteDateControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          controllers.partner.routes.PartnerDetailsController.onPageLoad.url
+          controllers.partner.routes.PartnerCheckConfirmRemoveDateController.onPageLoad().url
 
         verify(mockSessionRepository)
           .set(any[UserAnswers])
@@ -795,7 +795,7 @@ class PartnerDeleteDateControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual
-          controllers.partner.routes.PartnerDetailsController.onPageLoad.url
+          controllers.partner.routes.PartnerCheckConfirmRemoveDateController.onPageLoad().url
 
         val expectedUserAnswers =
           userAnswersWithTradingName
