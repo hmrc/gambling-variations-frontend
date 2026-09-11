@@ -17,13 +17,14 @@
 package forms.partner
 
 import forms.behaviours.StringFieldBehaviours
+import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider.*
+
+import scala.collection.immutable.ArraySeq
+//import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider.{invalidKey, maxLength, maxLengthKey, refNumberRegex, requiredKey}
+import org.scalacheck.Gen
 import play.api.data.FormError
 
 class PartnerDetailsForeignCorporateReferenceFormProviderSpec extends StringFieldBehaviours {
-
-  private val requiredKey = "partnerDetailsForeignCorporateReference.error.required"
-  private val lengthKey = "partnerDetailsForeignCorporateReference.error.length"
-  private val maxLength = 100
 
   private val form = new PartnerDetailsForeignCorporateReferenceFormProvider()()
 
@@ -31,23 +32,63 @@ class PartnerDetailsForeignCorporateReferenceFormProviderSpec extends StringFiel
 
     val fieldName = "value"
 
-    behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      Gen.oneOf(
+        "XYZ123",
+        "John O'Doe Corp",
+        "Foreign-Ref 99",
+        "Company's Reference",
+        "-XYZ123",
+        "'XYZ123",
+        "Z"
+      )
+    )
+
+    "bind strings that have maximum length with no errors" in {
+      val validLongString = "A" * maxLength
+
+      val result = form.bind(
+        Map(fieldName -> validLongString)
+      )
+
+      result.errors mustBe empty
+    }
+
+    "fail to bind valid that are greater than the maximum length" in {
+      val tooLongString = "A" * (maxLength + 1)
+
+      val result = form.bind(
+        Map(fieldName -> tooLongString)
+      )
+
+      result.errors mustBe Seq(
+        FormError(fieldName, maxLengthKey, Seq(maxLength)),
+        FormError(fieldName, invalidKey, Seq(refNumberRegex))
+      )
+    }
+
+    "fail to bind invalid characters" in {
+      val invalidValues = Seq("Test@Ref", "Hello#World", "Ref!123", "Company$123")
+      invalidValues.foreach { value =>
+        val result = form.bind(Map(fieldName -> value))
+        result.errors must contain(FormError(fieldName, invalidKey, Seq("^[A-Za-z 0-9-']{1,100}$")))
+      }
+    }
+
+    "bind valid ref number ignoring leading and trailing spaces" in {
+      Seq("   abcd1234", "abcd1234   ", "   abcd1234   ").foreach { input =>
+        val bound = form.bind(Map(fieldName -> input))
+        bound.value.value mustBe "abcd1234"
+        bound.errors mustBe empty
+      }
+    }
   }
 }

@@ -17,22 +17,33 @@
 package forms.partner
 
 import forms.mappings.Mappings
+import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider.*
 import play.api.data.Form
 
 import javax.inject.Inject
 
 class PartnerDetailsForeignCorporateReferenceFormProvider @Inject() extends Mappings {
 
-  val refNumberRegex = "^[A-Za-z0-9 '’-]+$"
   def apply(): Form[String] =
     Form(
-      "value" -> text("partnerDetailsForeignCorporateReference.error.required")
-        .verifying(maxLength(100, "partnerDetailsForeignCorporateReference.error.length"))
-        .verifying(
-          regexp(
-            refNumberRegex,
-            "partnerDetailsForeignCorporateReference.error.invalid"
+      "value" ->
+        text(requiredKey)
+          .transform[String](_.trim, identity)
+          .verifying(maxLength(100, maxLengthKey))
+          .verifying(
+            regexp(
+              refNumberRegex,
+              invalidKey
+            )
           )
-        )
     )
+}
+
+object PartnerDetailsForeignCorporateReferenceFormProvider {
+
+  private[forms] val maxLength = 100
+  private[forms] val refNumberRegex = "^[A-Za-z 0-9-\']{1,100}$"
+  private[forms] val requiredKey = "partnerDetailsForeignCorporateReference.error.required"
+  private[forms] val maxLengthKey = "partnerDetailsForeignCorporateReference.error.length"
+  private[forms] val invalidKey = "partnerDetailsForeignCorporateReference.error.invalid"
 }
