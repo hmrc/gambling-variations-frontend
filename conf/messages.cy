@@ -281,6 +281,17 @@ partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partne
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
 
+otherLicencesAndPermitsNI.title = cy: Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.heading = cy: Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.hint = cy: Select all that apply
+otherLicencesAndPermitsNI.option.amusement = cy: Amusement permit
+otherLicencesAndPermitsNI.option.bingo = cy: Bingo club licence
+otherLicencesAndPermitsNI.option.bookmaking = cy: Bookmaking office licence
+otherLicencesAndPermitsNI.option.serveAlcohol = cy: Licence allowing the serving of alcohol
+otherLicencesAndPermitsNI.option.regCert = cy: Registration certificate including a club registration certificate
+otherLicencesAndPermitsNI.option.none = cy: No, I do not have any other licences and permits in Northern Ireland
+otherLicencesAndPermitsNI.error.required = cy: Select otherLicencesAndPermitsNI
+
 partnerDetailsAddUTR.title = cy: Tell us the partner’s Unique Taxpayer Reference
 partnerDetailsAddUTR.subtitle = cy:  What is the Unique Taxpayer Reference?
 partnerDetailsAddUTR.heading = cy: Tell us the partner’s Unique Taxpayer Reference (UTR)
