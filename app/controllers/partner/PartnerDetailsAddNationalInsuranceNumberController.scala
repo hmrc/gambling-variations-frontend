@@ -17,7 +17,7 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getIndex
+import utils.PartnerUtils.interimIndex
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import models.Mode
 import navigation.Navigator
@@ -54,26 +54,29 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
    */
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = request.userAnswers.getIndex
+    val index: Int = interimIndex
 
     val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+      case None => form
+      case Some(nino) =>
+        val sanitized = if nino.last != '_' then nino else nino.init.toString
+        form.fill(sanitized)
     }
 
     Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = request.userAnswers.getIndex
+    val index: Int = interimIndex
 
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         nino =>
+          val sanitized = if nino.length == 9 then nino else nino.concat("_")
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), nino))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), sanitized))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsNinoPage(index), mode, updatedAnswers))
       )

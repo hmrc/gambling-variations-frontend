@@ -240,6 +240,17 @@ partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a Nati
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
 
+partnerDetailsAddNino.title = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.paragraph = cy: You can find this on their National Insurance card, benefit letter, payslip or P60.
+partnerDetailsAddNino.heading = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.checkYourAnswersLabel = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.hidden = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.hint = cy: For example, QQ 12 34 56 C
+partnerDetailsAddNino.error.required = cy: Enter the partner’s National Insurance number
+partnerDetailsAddNino.error.invalidChars = cy: The National Insurance number must only include letters a to z, numbers 1 to 9 and spaces
+partnerDetailsAddNino.error.invalidFormat = cy: The National Insurance number must start with 2 letters, but not A, B, C or D, the next 6 characters must be numbers 0 to 9, and the final character must be a space, B, C, or D
+
+
 partnerDetailsAddTradingNameYesNo.title = cy: Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add a trading name for the partner?
