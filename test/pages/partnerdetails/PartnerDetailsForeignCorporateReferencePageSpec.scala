@@ -26,18 +26,18 @@ class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec {
   "PartnerDetailsForeignCorporateReferencePage" must {
 
     "have the correct path" in {
-      PartnerDetailsForeignCorporateReferencePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsForeignCorporateRef")
+      PartnerDetailsForeignCorporateReferencePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsForeignCorporateReference")
     }
 
     "have the correct toString value" in {
 
-      PartnerDetailsForeignCorporateReferencePage(Index).toString mustEqual "partnerDetailsForeignCorporateRef"
+      PartnerDetailsForeignCorporateReferencePage(Index).toString mustEqual "partnerDetailsForeignCorporateReference"
     }
 
     "be able to read and write PartnerDetailsForeignCorporateReferencePage values with correct index" in {
 
-      val value1 = "Value1"
-      val value2 = "Value2"
+      val value1 = "ForeignCorpRef-1"
+      val value2 = "ForeignCorpRef-2"
 
       val json = Json.obj(
         "partners" -> Json.arr(
