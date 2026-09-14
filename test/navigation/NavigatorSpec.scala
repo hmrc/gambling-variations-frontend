@@ -1151,7 +1151,6 @@ class NavigatorSpec extends SpecBase {
           controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
       }
 
-
       "should route PartnerDetailsForeignCorporateReferencePage to PartnerDetailsForeignCorporateReferenceController regardless of the stored answer" in {
         val answers =
           emptyAnswers
