@@ -1156,6 +1156,17 @@ class NavigatorSpec extends SpecBase {
           controllers.partner.routes.VatRegistrationNumberYesNoController.onPageLoad()
       }
 
+      "should route PartnerDetailsForeignCorporateReferencePage to PartnerDetailsForeignCorporateReferenceController regardless of the stored answer" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsForeignCorporateReferencePage(index), "ABC-123 456")
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad()
+      }
+
       "should route PartnerDetailsCountryOfIncorporationPage to SystemErrorController when answer is false" in {
         navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(index), NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()

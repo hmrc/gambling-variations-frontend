@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.partner.PartnerUtils.getIndex
 import controllers.partner.routes.PartnerDetailsBusinessTypeController
 import forms.partner.PartnerDetailsBusinessTypeFormProvider
-import models.BusinessType.Corporatebody
+import models.BusinessType.{Corporatebody, Soleproprietor}
 import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -57,7 +57,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
     "onPageLoad" - {
 
-      "must return OK and the correct view for a GET when no previous data exists" in {
+      "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
@@ -69,14 +69,14 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
           val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form.fill(Soleproprietor), NormalMode)(request, messages(application)).toString
         }
       }
 
-      "must populate the view correctly on a GET when the question has previously been answered" ignore {
+      "must return OK and the correct view for a GET when no previous data exists" in {
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsBusinessTypePage(expectedIndex), Corporatebody)
+          .remove(PartnerDetailsBusinessTypePage(expectedIndex))
           .success
           .value
 
@@ -90,7 +90,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(Corporatebody), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
         }
       }
 

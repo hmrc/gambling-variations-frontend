@@ -292,6 +292,9 @@ POST       /change-registration-details/licences-and-premises/gambling-commissio
 GET        /change-registration-details/licences-and-premises/remove-premises-details                         controllers.licencespremises.RemovePremisesDetailsYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/remove-premises-details                         controllers.licencespremises.RemovePremisesDetailsYesNoController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/licences-and-premises/provide-addresses                    controllers.licencespremises.LicencesPremisesController.onPageLoad()
+POST       /change-registration-details/licences-and-premises/provide-addresses                    controllers.licencespremises.LicencesPremisesController.onSubmit()
+
 GET        /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
 
@@ -319,6 +322,9 @@ GET  /change-registration-details/partner-details/date-to-remove-redirect  contr
 GET  /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onPageLoad(mode: Mode = NormalMode)
 POST /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/licences-and-premises/permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/permits-great-britain                        controllers.licencespremises.OtherLicencesAndPermitsGBController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)
 
@@ -329,6 +335,9 @@ POST       /change-registration-details/licences-and-premises/add-licence-number
 
 GET        /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/business-country-incorporated                        controllers.partner.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/business-country-incorporated                        controllers.partner.PartnerDetailsAddCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)

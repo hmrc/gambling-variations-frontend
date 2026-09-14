@@ -240,6 +240,17 @@ partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a Nati
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
 
+partnerDetailsAddNino.title = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.paragraph = cy: You can find this on their National Insurance card, benefit letter, payslip or P60.
+partnerDetailsAddNino.heading = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.checkYourAnswersLabel = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.hidden = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.hint = cy: For example, QQ 12 34 56 C
+partnerDetailsAddNino.error.required = cy: Enter the partner’s National Insurance number
+partnerDetailsAddNino.error.invalidChars = cy: The National Insurance number must only include letters a to z, numbers 0 to 9 and spaces
+partnerDetailsAddNino.error.invalidFormat = cy: The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character
+
+
 partnerDetailsAddTradingNameYesNo.title = cy: Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add a trading name for the partner?
@@ -279,11 +290,34 @@ removePremisesDetailsYesNo.checkYourAnswersLabel = cy: Are you sure you want to 
 removePremisesDetailsYesNo.error.required = cy: Select yes if you want to make this change
 removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make this change?
 
+licencesPremises.title = cy: How will you provide premises addresses?
+licencesPremises.heading = cy: How will you provide premises addresses?
+licencesPremises.online = cy: Online only
+licencesPremises.online.hint = cy: You can only provide up to 100 premises addresses online
+licencesPremises.byPost = cy: By post
+licencesPremises.byPost.hint = cy: Providing premises addresses by post will delay updates to your records
+licencesPremises.checkYourAnswersLabel = cy: How will you provide premises addresses?
+licencesPremises.error.required = cy: Select how you will provide premises addresses
+licencesPremises.change.hidden = cy: how you will provide premises addresses
+
 partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
+
+otherLicencesAndPermitsGB.title = cy: Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.heading = cy: Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.hint = cy: Select all that apply
+otherLicencesAndPermitsGB.option.clubGaming = cy: Club gaming permit
+otherLicencesAndPermitsGB.option.clubMachine = cy: Club machine permit
+otherLicencesAndPermitsGB.option.clubPremises = cy: Club premises certificate
+otherLicencesAndPermitsGB.option.familyEntertainment = cy: Family entertainment centre gaming machine permit
+otherLicencesAndPermitsGB.option.localAuthority = cy: Local authority premises licence
+otherLicencesAndPermitsGB.option.onPremises = cy: On-premises alcohol licence
+otherLicencesAndPermitsGB.option.prizeGaming = cy: Prize gaming permit
+otherLicencesAndPermitsGB.option.none = cy: No, I do not have any other licences and permits in Great Britain
+otherLicencesAndPermitsGB.error.required = cy: Select otherLicencesAndPermitsGB
 
 partnerDetailsAddUTR.title = cy: Tell us the partner’s Unique Taxpayer Reference
 partnerDetailsAddUTR.subtitle = cy:  What is the Unique Taxpayer Reference?
