@@ -26,12 +26,12 @@ class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec {
   "PartnerDetailsForeignCorporateReferencePage" must {
 
     "have the correct path" in {
-      PartnerDetailsForeignCorporateReferencePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsForeignCorporateReference")
+      PartnerDetailsForeignCorporateReferencePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsForeignCorporateRef")
     }
 
     "have the correct toString value" in {
 
-      PartnerDetailsForeignCorporateReferencePage(Index).toString mustEqual "partnerDetailsForeignCorporateReference"
+      PartnerDetailsForeignCorporateReferencePage(Index).toString mustEqual "partnerDetailsForeignCorporateRef"
     }
 
     "be able to read and write PartnerDetailsForeignCorporateReferencePage values with correct index" in {

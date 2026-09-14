@@ -23,5 +23,5 @@ case class PartnerDetailsForeignCorporateReferencePage(index: Int) extends Quest
 
   override def path: JsPath = JsPath \ "partners" \ index \ toString
 
-  override def toString: String = "partnerDetailsForeignCorporateReference"
+  override def toString: String = "partnerDetailsForeignCorporateRef"
 }
