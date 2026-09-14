@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package pages.partnerdetails
+package forms.licencespremises
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import models.licencespremises.OtherLicencesAndPermitsGB
+import play.api.data.Form
+import play.api.data.Forms.set
 
-case class PartnerDetailsForeignCorporateRefPage(index: Int) extends QuestionPage[String] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ "partners" \ index \ toString
+class OtherLicencesAndPermitsGBFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "partnerDetailsForeignCorporateRef"
+  def apply(): Form[Set[OtherLicencesAndPermitsGB]] =
+    Form(
+      "permitsGB" -> set(enumerable[OtherLicencesAndPermitsGB]("otherLicencesAndPermitsGB.error.required"))
+        .verifying(nonEmptySet("otherLicencesAndPermitsGB.error.required"))
+    )
 }
