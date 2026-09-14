@@ -22,11 +22,11 @@ import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partner.PartnerDetailsAddPartnerCompletedPage
 import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -42,11 +42,18 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
   lazy val partnerDetailsForeignCorporateReferenceRoute =
     controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url
 
+  def validUserAnswers(fcr: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedData(fcr = fcr))
+  val userAnswersWithNoFcr: UserAnswers = validUserAnswers()
+  val userAnswersWithFcr: UserAnswers = validUserAnswers(Some(testForeignCorpRef))
+
   "PartnerDetailsForeignCorporateReference Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswersForGet: UserAnswers =
+        userAnswersWithNoFcr.set(PartnerDetailsAddPartnerCompletedPage, false).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerDetailsForeignCorporateReferenceRoute)
@@ -62,9 +69,13 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsForeignCorporateReferencePage(index), "answer").success.value
+      val userAnswersWithFcr: UserAnswers =
+        validUserAnswers(Some(testForeignCorpRef))
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFcr)).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerDetailsForeignCorporateReferenceRoute)
@@ -74,7 +85,7 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(testForeignCorpRef), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -84,8 +95,11 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
+      val userAnswersForSubmit: UserAnswers =
+        userAnswersWithNoFcr.set(PartnerDetailsAddPartnerCompletedPage, false).success.value
+
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersForSubmit))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -93,27 +107,32 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
           .build()
 
       running(application) {
+
+        val expectedAnswers = userAnswersForSubmit.set(PartnerDetailsForeignCorporateReferencePage(index), testForeignCorpRef).success.value
+
         val request =
           FakeRequest(POST, partnerDetailsForeignCorporateReferenceRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", testForeignCorpRef))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository).set(expectedAnswers)
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val badData = "£$%^"
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithNoFcr)).build()
 
       running(application) {
         val request =
           FakeRequest(POST, partnerDetailsForeignCorporateReferenceRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody(("value", badData))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("value" -> badData))
 
         val view = application.injector.instanceOf[PartnerDetailsForeignCorporateReferenceView]
 
@@ -145,7 +164,7 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
       running(application) {
         val request =
           FakeRequest(POST, partnerDetailsForeignCorporateReferenceRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody(("value", "unknownRef"))
 
         val result = route(application, request).value
 

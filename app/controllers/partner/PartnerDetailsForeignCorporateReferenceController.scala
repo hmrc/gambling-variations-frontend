@@ -37,7 +37,7 @@ class PartnerDetailsForeignCorporateReferenceController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsForeignCorporateReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsForeignCorporateReferenceView
@@ -48,6 +48,7 @@ class PartnerDetailsForeignCorporateReferenceController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+
     val index = request.userAnswers.getIndex
     val preparedForm = request.userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)) match {
       case None        => form

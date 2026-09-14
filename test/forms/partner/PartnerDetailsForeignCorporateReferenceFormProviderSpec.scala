@@ -18,9 +18,6 @@ package forms.partner
 
 import forms.behaviours.StringFieldBehaviours
 import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider.*
-
-import scala.collection.immutable.ArraySeq
-//import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider.{invalidKey, maxLength, maxLengthKey, refNumberRegex, requiredKey}
 import org.scalacheck.Gen
 import play.api.data.FormError
 
@@ -62,7 +59,7 @@ class PartnerDetailsForeignCorporateReferenceFormProviderSpec extends StringFiel
       result.errors mustBe empty
     }
 
-    "fail to bind valid that are greater than the maximum length" in {
+    "fail to bind values that are greater than the maximum length" in {
       val tooLongString = "A" * (maxLength + 1)
 
       val result = form.bind(
