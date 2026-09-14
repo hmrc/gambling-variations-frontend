@@ -58,7 +58,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
     val index: Int = interimIndex
 
     request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
-      case Some(businessType) if businessType == Soleproprietor =>
+      case Some(Soleproprietor) =>
         val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
           case None => form
           case Some(nino) =>
