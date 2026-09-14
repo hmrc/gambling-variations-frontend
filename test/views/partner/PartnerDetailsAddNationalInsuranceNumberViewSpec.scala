@@ -89,6 +89,17 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
         .size() mustEqual 0
     }
 
+    "must not render error summary when the last char is missing" in new Setup {
+
+      val boundForm: Form[String] = form.bind(Map("value" -> "q Q 1 2   3  4  5 6      "))
+
+      val html: HtmlFormat.Appendable = view(boundForm, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc.select(".govuk-error-summary").isEmpty mustBe true
+
+    }
+
     "must render error summary when form has errors" in new Setup {
 
       val boundForm: Form[String] = form.bind(Map("value" -> ""))
@@ -119,7 +130,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNino.error.length")
+        messages("partnerDetailsAddNino.error.invalidFormat")
       )
     }
 
@@ -167,7 +178,7 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-message")
         .text must include(
-        messages("partnerDetailsAddNino.error.invalid")
+        messages("partnerDetailsAddNino.error.invalidFormat")
       )
     }
   }
