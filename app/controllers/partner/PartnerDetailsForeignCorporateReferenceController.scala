@@ -14,66 +14,62 @@
  * limitations under the License.
  */
 
-package controllers.licencespremises
+package controllers.partner
 
 import controllers.actions.*
-import forms.licencespremises.LicenceNumberFormProvider
+import controllers.partner.PartnerUtils.getIndex
+import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.licencespremises.{HaveGamblingLicenceNoPage, LicenceNumberPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage}
-import play.api.data.Form
+import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.FlagsUtil.checkIfChanged
-import views.html.licencespremises.LicenceNumberView
+import views.html.partner.PartnerDetailsForeignCorporateReferenceView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LicenceNumberController @Inject() (
+class PartnerDetailsForeignCorporateReferenceController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: LicencesPremisesDataRequiredAction,
-  formProvider: LicenceNumberFormProvider,
+  requireData: PartnerDetailsDataRequiredAction,
+  formProvider: PartnerDetailsForeignCorporateReferenceFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: LicenceNumberView
+  view: PartnerDetailsForeignCorporateReferenceView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[String] = formProvider()
+  val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(LicenceNumberPage)
-      .fold(form)(form.fill)
+
+    val index = request.userAnswers.getIndex
+    val preparedForm = request.userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
     Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
+    val index = request.userAnswers.getIndex
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value => {
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, LicenceNumberPage, LicencesPremisesDetailsChangesPage)
-
+        value =>
           for {
-            answersWithLicenceNumber <- Future.fromTry(request.userAnswers.set(LicenceNumberPage, value))
-            answersWithLicenceFlag   <- Future.fromTry(answersWithLicenceNumber.set(HaveGamblingLicenceNoPage, "1"))
-            answersWithSubmitted     <- Future.fromTry(answersWithLicenceFlag.set(LicencesPremisesDetailsSubmittedPage, true))
-            updatedAnswers           <- Future.fromTry(answersWithSubmitted.set(LicencesPremisesDetailsChangesPage, isChanged))
-            _                        <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LicenceNumberPage, mode, updatedAnswers))
-        }
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsForeignCorporateReferencePage(index), value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(index), mode, updatedAnswers))
       )
   }
 }

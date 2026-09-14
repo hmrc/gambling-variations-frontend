@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.licencespremises
 
 import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import models.licencespremises.LicencesAndPremisesRadioOptions
 
-class EmailAddressFormProvider @Inject() extends Mappings {
+class LicencesPremisesFormProvider @Inject() extends Mappings {
 
-  private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
-
-  def apply(prefix: String): Form[String] =
+  def apply(): Form[LicencesAndPremisesRadioOptions] =
     Form(
-      "value" -> text(s"$prefix.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(70, s"$prefix.error.length"))
-        .verifying(regexp(emailRegex, s"$prefix.error.invalid"))
+      "value" -> enumerable[LicencesAndPremisesRadioOptions]("licencesPremises.error.required")
     )
 }

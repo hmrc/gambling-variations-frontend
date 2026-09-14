@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package pages.licencespremises
 
-import javax.inject.Inject
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+case object RemoveLicenceNumberPage extends QuestionPage[Boolean] {
 
-class EmailAddressFormProvider @Inject() extends Mappings {
+  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
 
-  private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
-
-  def apply(prefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(70, s"$prefix.error.length"))
-        .verifying(regexp(emailRegex, s"$prefix.error.invalid"))
-    )
+  override def toString: String = "removeGamblingLicenceNo"
 }

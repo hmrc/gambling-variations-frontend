@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages.partnerdetails
+package forms.licencespremises
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case class PartnerDetailsForeignCorporateRefPage(index: Int) extends QuestionPage[String] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ "partners" \ index \ toString
+class RemoveLicenceNumberFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "partnerDetailsForeignCorporateRef"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeLicenceNumber.error.required")
+    )
 }

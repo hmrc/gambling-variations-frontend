@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package forms
+@import views.html.components.*
 
-import javax.inject.Inject
+@this(
+        layout: templates.Layout,
+        h1:H1,
+        caption: Caption
+)
 
-import forms.mappings.Mappings
-import play.api.data.Form
+@()(implicit request: Request[_], messages: Messages)
 
-class EmailAddressFormProvider @Inject() extends Mappings {
+@layout(pageTitle = titleNoForm(messages("checkLicenceAndPremises.title"), Some("changeRegistrationDetails.caption"))) {
 
-  private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
+     @caption(messages("changeRegistrationDetails.caption"))
 
-  def apply(prefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(70, s"$prefix.error.length"))
-        .verifying(regexp(emailRegex, s"$prefix.error.invalid"))
-    )
+     @h1("checkLicenceAndPremises.heading", classes="govuk-heading-l")
+
 }

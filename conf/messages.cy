@@ -267,6 +267,10 @@ licenceNumber.error.required = cy:  Enter the Gambling Commission operating or p
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
 
+removeLicenceNumber.title = cy: Are you sure you want to remove the licence number?
+removeLicenceNumber.heading = cy: Are you sure you want to remove the licence number {0}?
+removeLicenceNumber.error.required = cy: Select yes if you want to remove the licence number
+
 removePremisesDetailsYesNo.title = cy: This change will remove your premises details
 removePremisesDetailsYesNo.heading = cy: This change will remove your premises details
 removePremisesDetailsYesNo.p1 = cy: If you submit this change, HMRC will remove the premises details you have provided.
@@ -274,6 +278,16 @@ removePremisesDetailsYesNo.confirmationPrompt = cy: Are you sure you want to mak
 removePremisesDetailsYesNo.checkYourAnswersLabel = cy: Are you sure you want to make this change?
 removePremisesDetailsYesNo.error.required = cy: Select yes if you want to make this change
 removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make this change?
+
+licencesPremises.title = cy: How will you provide premises addresses?
+licencesPremises.heading = cy: How will you provide premises addresses?
+licencesPremises.online = cy: Online only
+licencesPremises.online.hint = cy: You can only provide up to 100 premises addresses online
+licencesPremises.byPost = cy: By post
+licencesPremises.byPost.hint = cy: Providing premises addresses by post will delay updates to your records
+licencesPremises.checkYourAnswersLabel = cy: How will you provide premises addresses?
+licencesPremises.error.required = cy: Select how you will provide premises addresses
+licencesPremises.change.hidden = cy: how you will provide premises addresses
 
 partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?

@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package forms
+package pages.licencespremises
 
-import javax.inject.Inject
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class RemoveLicenceNumberPageSpec extends PlaySpec {
 
-class EmailAddressFormProvider @Inject() extends Mappings {
+  "RemoveLicenceNumberPage" must {
 
-  private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
+    "must have the correct toString" in {
+      RemoveLicenceNumberPage.toString mustBe "removeGamblingLicenceNo"
+    }
 
-  def apply(prefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(70, s"$prefix.error.length"))
-        .verifying(regexp(emailRegex, s"$prefix.error.invalid"))
-    )
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "removeGamblingLicenceNo"
+      RemoveLicenceNumberPage.path mustBe expectedPath
+    }
+  }
 }

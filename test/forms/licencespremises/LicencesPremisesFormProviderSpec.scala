@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package forms
+package forms.licencespremises
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.OptionFieldBehaviours
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import play.api.data.FormError
 
-class RemoveCorrespondenceEmailAddressFormProviderSpec extends BooleanFieldBehaviours {
+class LicencesPremisesFormProviderSpec extends OptionFieldBehaviours {
 
-  val requiredKey = "removeCorrespondenceEmailAddress.error.required"
-  val invalidKey = "error.boolean"
-
-  val form = new RemoveCorrespondenceEmailAddressFormProvider()()
+  val form = new LicencesPremisesFormProvider()()
 
   ".value" - {
 
     val fieldName = "value"
+    val requiredKey = "licencesPremises.error.required"
 
-    behave like booleanField(
+    behave like optionsField[LicencesAndPremisesRadioOptions](
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      validValues  = LicencesAndPremisesRadioOptions.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(
