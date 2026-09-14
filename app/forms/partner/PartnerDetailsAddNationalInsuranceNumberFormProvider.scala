@@ -34,6 +34,11 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
             Seq(
               regexp(ninoCharsRegex, invalidCharsKey),
               Constraint[String](invalidFormatKey) { nino =>
+                /*
+                * As we MUST use the ninoValidRegex, we want to check if the string without spaces is 9 char long.
+                * If it is we apply the regex.
+                * If it's not we add a space to the stripped string as a whitespace as last char is acceptable.
+                * */
                 val sanitized = if (nino.length == 9) nino else nino.concat(" ")
                 if (sanitized.matches(ninoValidRegex)) Valid else Invalid(invalidFormatKey)
               }
