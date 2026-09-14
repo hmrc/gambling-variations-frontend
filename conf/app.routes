@@ -333,3 +333,5 @@ POST       /change-registration-details/licences-and-premises/add-licence-number
 GET        /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/partner-details/foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onSubmit(mode: Mode = NormalMode)
