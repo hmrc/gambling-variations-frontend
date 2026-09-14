@@ -36,7 +36,7 @@
     @formHelper(action = controllers.licencespremises.routes.OtherLicencesAndPermitsGBController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value_0")))
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("permitsGB" -> "permitsGB[]-error")))
         }
 
        @caption(messages("changeRegistrationDetails.caption"))
