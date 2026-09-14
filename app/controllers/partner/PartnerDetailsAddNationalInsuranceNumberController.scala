@@ -62,13 +62,13 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
         val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
           case Some(nino) =>
             /*
-            * We do accept 8 chars + whitepace ninos too -> this is because the AS-IS supports this functionality.
-            * (if you do not know the last char of your nino you can submit a whitespace)
-            * When submitting a nino to ChRIS it has to be 9 chars long and, if the last char is unknown (whitespace),
-            * it has to be replaced with an underscore _.
-            * As it is not a valid char for the regex we need to use we add the underscore when writing to the db and we
-            * remove it when we read it (also not to confuse the user)
-            * */
+             * We do accept 8 chars + whitepace ninos too -> this is because the AS-IS supports this functionality.
+             * (if you do not know the last char of your nino you can submit a whitespace)
+             * When submitting a nino to ChRIS it has to be 9 chars long and, if the last char is unknown (whitespace),
+             * it has to be replaced with an underscore _.
+             * As it is not a valid char for the regex we need to use we add the underscore when writing to the db and we
+             * remove it when we read it (also not to confuse the user)
+             * */
             val sanitized = if nino.last != '_' then nino else nino.init
             form.fill(sanitized)
           case None => form
