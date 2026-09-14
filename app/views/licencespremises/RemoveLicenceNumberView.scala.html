@@ -15,6 +15,8 @@
  *@
 
 @import views.html.components._
+@import controllers.licencespremises.routes
+
 
 @this(
     layout: templates.Layout,
@@ -22,24 +24,28 @@
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     govukButton: GovukButton,
-    caption: Caption
+    caption: Caption,
+    paragraph: Paragraph
 )
 
-@(form: Form[_], mode: Mode, correspondenceEmail: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, licenceNumber: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("removeCorrespondenceEmailAddress.title"), Some(messages("changeRegistrationDetails.caption")))) {
+@layout(pageTitle = title(form, messages("removeLicenceNumber.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = routes.RemoveCorrespondenceEmailAddressController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = routes.RemoveLicenceNumberController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+
+
         @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("removeCorrespondenceEmailAddress.heading", correspondenceEmail)).asPageHeading(viewmodels.LegendSize.Large)
+                legend = LegendViewModel(messages("removeLicenceNumber.heading",licenceNumber))
+                .asPageHeading(viewmodels.LegendSize.Large)
             )
         )
 

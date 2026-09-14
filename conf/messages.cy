@@ -267,6 +267,10 @@ licenceNumber.error.required = cy:  Enter the Gambling Commission operating or p
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
 
+removeLicenceNumber.title = cy: Are you sure you want to remove the licence number?
+removeLicenceNumber.heading = cy: Are you sure you want to remove the licence number {0}?
+removeLicenceNumber.error.required = cy: Select yes if you want to remove the licence number
+
 removePremisesDetailsYesNo.title = cy: This change will remove your premises details
 removePremisesDetailsYesNo.heading = cy: This change will remove your premises details
 removePremisesDetailsYesNo.p1 = cy: If you submit this change, HMRC will remove the premises details you have provided.
@@ -294,6 +298,29 @@ partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must
 partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
 
+businessTradeClass.title = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.heading = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.adultGamingCentre = Canolfan gemau i oedolion
+businessTradeClass.amusementOrGamingMachineSupplier = Cyflenwr peiriannau diddanu neu beiriannau hapchwarae
+businessTradeClass.bingopromoter = Hyrwyddwr bingo
+businessTradeClass.bookmakerorbettingactivities = Gweithgareddau bwci neu weithgareddau betio
+businessTradeClass.casino = Casino
+businessTradeClass.club = Clwb
+businessTradeClass.familyentertainmentcentre = Canolfan adloniant i deuluoedd
+businessTradeClass.publichouse = Tafarndy
+businessTradeClass.other = Arall
+businessTradeClass.checkYourAnswersLabel = 	Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.error.required = Dewiswch y dosbarth masnachu ar gyfer y busnes hwn
+businessTradeClass.change.hidden = 	Beth yw dosbarth masnachu’r busnes?
+
+removePreviousRegNumber.title = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn?
+removePreviousRegNumber.heading = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn {0}?
+removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru blaenorol
+
+removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
+removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
+removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn
+
 partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?
@@ -301,4 +328,3 @@ partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country t
 partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
 partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?
-

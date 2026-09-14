@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package utils
+@import views.html.components.*
 
-import play.api.i18n.Lang
+@this(
+        layout: templates.Layout,
+        h1:H1,
+        caption: Caption
+)
 
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+@()(implicit request: Request[_], messages: Messages)
 
-object DateTimeFormats {
+@layout(pageTitle = titleNoForm(messages("checkLicenceAndPremises.title"), Some("changeRegistrationDetails.caption"))) {
 
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-  val dateTimeHintFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("d M yyyy")
-  private val localisedDateTimeFormatters = Map(
-    "en" -> dateTimeFormatter,
-    "cy" -> dateTimeFormatter.withLocale(new Locale("cy"))
-  )
+     @caption(messages("changeRegistrationDetails.caption"))
 
-  def dateTimeFormat()(implicit lang: Lang): DateTimeFormatter = {
-    localisedDateTimeFormatters.getOrElse(lang.code, dateTimeFormatter)
-  }
+     @h1("checkLicenceAndPremises.heading", classes="govuk-heading-l")
+
 }
