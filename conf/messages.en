@@ -1001,6 +1001,13 @@ partnerDeleteDate.change.hidden = Tell us when to remove this partner
 partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
 partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
 
+partnerDetailsForeignCorporateReference.title = What is the partner’s foreign corporate reference?
+partnerDetailsForeignCorporateReference.heading = What is the partner’s foreign corporate reference?
+partnerDetailsForeignCorporateReference.checkYourAnswersLabel = What is the partner’s foreign corporate reference?
+partnerDetailsForeignCorporateReference.error.required = Enter the partner’s foreign corporate reference
+partnerDetailsForeignCorporateReference.error.invalid = The partner’s foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsForeignCorporateReference.error.length = The partner’s foreign corporate reference must be 100 characters or less
+partnerDetailsForeignCorporateReference.change.hidden = What is the partner’s foreign corporate reference?
 otherLicencesAndPermitsGB.title = Do you have any other licences and permits in Great Britain?
 otherLicencesAndPermitsGB.heading = Do you have any other licences and permits in Great Britain?
 otherLicencesAndPermitsGB.hint = Select all that apply
