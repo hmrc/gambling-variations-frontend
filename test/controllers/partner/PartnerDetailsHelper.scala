@@ -79,7 +79,7 @@ trait PartnerDetailsHelper {
         "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
         "partnerDetailsIsFutureLeaveDate"      -> 0,
         "partnerDetailsIsFutureJoinDate"       -> 0,
-        "partnerDetailsBusinessType"           -> null
+        "partnerDetailsBusinessType"           -> 1
       )
     )
   )

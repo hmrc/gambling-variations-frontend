@@ -17,16 +17,17 @@
 package controllers.partner
 
 import controllers.actions.*
-import utils.PartnerUtils.interimIndex
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
+import models.BusinessType.Soleproprietor
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsNinoPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsNinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.PartnerUtils.interimIndex
 import views.html.partner.PartnerDetailsAddNationalInsuranceNumberView
 
 import javax.inject.Inject
@@ -56,14 +57,18 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val index: Int = interimIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
-      case None => form
-      case Some(nino) =>
-        val sanitized = if nino.last != '_' then nino else nino.init.toString
-        form.fill(sanitized)
-    }
+    request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
+      case Some(businessType) if businessType == Soleproprietor =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
+          case None => form
+          case Some(nino) =>
+            val sanitized = if nino.last != '_' then nino else nino.init
+            form.fill(sanitized)
+        }
 
-    Ok(view(preparedForm, mode))
+        Ok(view(preparedForm, mode))
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>

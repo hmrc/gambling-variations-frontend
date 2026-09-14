@@ -19,12 +19,13 @@ package controllers.partner
 import base.SpecBase
 import controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
+import models.BusinessType.Corporatebody
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsNinoPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsNinoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -114,6 +115,25 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
       "must redirect to System Error Page for a GET if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, ninoRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+      "must redirect to System Error Page for a GET if businessType is not Soleproprietor" in {
+
+        val userAnswers = validUserAnswers
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
           val request = FakeRequest(GET, ninoRoute)
