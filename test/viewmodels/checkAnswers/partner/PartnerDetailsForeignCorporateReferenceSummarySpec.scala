@@ -50,7 +50,7 @@ class PartnerDetailsForeignCorporateReferenceSummarySpec extends SpecBase {
 
       PartnerDetailsForeignCorporateReferenceSummary.row(answers).value mustBe
         SummaryListRowViewModel(
-          key = "partnerDetailsForeignCorporateReference.checkYourAnswersLabel",
+          key   = "partnerDetailsForeignCorporateReference.checkYourAnswersLabel",
           value = ValueViewModel(HtmlFormat.escape(foreignCorporateRef).toString),
           actions = Seq(
             ActionItemViewModel(
