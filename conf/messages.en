@@ -463,8 +463,6 @@ previousRegistrationNumber.error.invalidReference = Enter a real previous regist
 previousRegistrationNumber.error.duplicate = This registration number has already been submitted, you must enter a different registration number
 previousRegistrationNumber.change.hidden = previous registration number
 
-
-
 associatedRegNumber.title = What is your associated registration number?
 associatedRegNumber.heading = What is your associated registration number?
 associatedRegNumber.hint = It is 14 characters long and starts with an X, like XAM00001234567
