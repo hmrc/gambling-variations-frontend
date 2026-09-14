@@ -16,7 +16,7 @@
 
 @import viewmodels.LegendSize.Large
 @import views.html.components.Caption
-@import models.licencespremises.LicencesPremises
+@import models.licencespremises.LicencesAndPremisesRadioOptions
 
 @this(
     layout: templates.Layout,
@@ -50,7 +50,7 @@
             RadiosViewModel(
                 field  = form("value"),
                 legend = LegendViewModel(messages("licencesPremises.heading")).asPageHeading(Large),
-                items  = LicencesPremises.options
+                items  = LicencesAndPremisesRadioOptions.options
             ).withAttribute("data-testid" -> "licences-premises-options")
         )
 

@@ -19,7 +19,7 @@ package controllers.licencespremises
 import base.SpecBase
 import forms.licencespremises.LicencesPremisesFormProvider
 import models.UserAnswers
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -51,7 +51,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
       Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
 
-  "LicencesPremises Controller" - {
+  "LicencesAndPremisesRadioOptions Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -72,7 +72,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyLicencesPremisesAnswers
-        .set(LicencesPremisesPage, LicencesPremises.values.head)
+        .set(LicencesPremisesPage, LicencesAndPremisesRadioOptions.values.head)
         .success
         .value
 
@@ -86,7 +86,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(LicencesPremises.values.head))(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(LicencesAndPremisesRadioOptions.values.head))(request, messages(application)).toString
       }
     }
 
@@ -107,7 +107,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, licencesPremisesRoute)
-            .withFormUrlEncodedBody(("value", LicencesPremises.values.head.toString))
+            .withFormUrlEncodedBody(("value", LicencesAndPremisesRadioOptions.values.head.toString))
 
         val result = route(application, request).value
 
@@ -134,13 +134,13 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, licencesPremisesRoute)
-            .withFormUrlEncodedBody(("value", LicencesPremises.ByPost.toString))
+            .withFormUrlEncodedBody(("value", LicencesAndPremisesRadioOptions.ByPost.toString))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual LicencesPremises.ByPost
+        savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual LicencesAndPremisesRadioOptions.ByPost
       }
     }
 
@@ -185,7 +185,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, licencesPremisesRoute)
-            .withFormUrlEncodedBody(("value", LicencesPremises.values.head.toString))
+            .withFormUrlEncodedBody(("value", LicencesAndPremisesRadioOptions.values.head.toString))
 
         val result = route(application, request).value
 

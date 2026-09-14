@@ -20,12 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 
 class LicencesPremisesFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[LicencesPremises] =
+  def apply(): Form[LicencesAndPremisesRadioOptions] =
     Form(
-      "value" -> enumerable[LicencesPremises]("licencesPremises.error.required")
+      "value" -> enumerable[LicencesAndPremisesRadioOptions]("licencesPremises.error.required")
     )
 }

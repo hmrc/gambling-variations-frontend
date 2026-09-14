@@ -16,11 +16,11 @@
 
 package pages.licencespremises
 
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object LicencesPremisesPage extends QuestionPage[LicencesPremises] {
+case object LicencesPremisesPage extends QuestionPage[LicencesAndPremisesRadioOptions] {
 
   override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
 

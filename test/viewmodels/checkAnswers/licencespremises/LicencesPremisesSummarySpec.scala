@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.licencespremises
 
 import base.SpecBase
 import controllers.licencespremises.routes
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import pages.licencespremises.LicencesPremisesPage
 import play.api.Application
 import play.api.i18n.Messages
@@ -38,7 +38,7 @@ class LicencesPremisesSummarySpec extends SpecBase {
       LicencesPremisesSummary.row(emptyUserAnswers) mustBe None
     }
 
-    LicencesPremises.values.foreach { answer =>
+    LicencesAndPremisesRadioOptions.values.foreach { answer =>
       s"must render ${answer.toString} with a working Change link" in {
         val answers = emptyUserAnswers.set(LicencesPremisesPage, answer).success.value
 

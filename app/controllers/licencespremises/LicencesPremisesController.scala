@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.licencespremises.LicencesPremisesFormProvider
 import javax.inject.Inject
 import models.NormalMode
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import navigation.Navigator
 import pages.licencespremises.LicencesPremisesPage
 import play.api.data.Form
@@ -46,7 +46,7 @@ class LicencesPremisesController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form: Form[LicencesPremises] = formProvider()
+  private val form: Form[LicencesAndPremisesRadioOptions] = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 

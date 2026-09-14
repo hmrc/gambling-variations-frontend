@@ -17,7 +17,7 @@
 package forms.licencespremises
 
 import forms.behaviours.OptionFieldBehaviours
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import play.api.data.FormError
 
 class LicencesPremisesFormProviderSpec extends OptionFieldBehaviours {
@@ -29,10 +29,10 @@ class LicencesPremisesFormProviderSpec extends OptionFieldBehaviours {
     val fieldName = "value"
     val requiredKey = "licencesPremises.error.required"
 
-    behave like optionsField[LicencesPremises](
+    behave like optionsField[LicencesAndPremisesRadioOptions](
       form,
       fieldName,
-      validValues  = LicencesPremises.values,
+      validValues  = LicencesAndPremisesRadioOptions.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

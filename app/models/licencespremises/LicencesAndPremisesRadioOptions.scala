@@ -22,14 +22,14 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
-sealed trait LicencesPremises
+sealed trait LicencesAndPremisesRadioOptions
 
-object LicencesPremises extends Enumerable.Implicits {
+object LicencesAndPremisesRadioOptions extends Enumerable.Implicits {
 
-  case object Online extends WithName("online") with LicencesPremises
-  case object ByPost extends WithName("byPost") with LicencesPremises
+  case object Online extends WithName("online") with LicencesAndPremisesRadioOptions
+  case object ByPost extends WithName("byPost") with LicencesAndPremisesRadioOptions
 
-  val values: Seq[LicencesPremises] = Seq(
+  val values: Seq[LicencesAndPremisesRadioOptions] = Seq(
     Online,
     ByPost
   )
@@ -44,6 +44,6 @@ object LicencesPremises extends Enumerable.Implicits {
     )
   }
 
-  implicit val enumerable: Enumerable[LicencesPremises] =
+  implicit val enumerable: Enumerable[LicencesAndPremisesRadioOptions] =
     Enumerable(values.map(v => v.toString -> v)*)
 }

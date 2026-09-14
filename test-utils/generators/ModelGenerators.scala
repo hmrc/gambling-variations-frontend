@@ -17,15 +17,15 @@
 package generators
 
 import models.*
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryLicencesPremises: Arbitrary[LicencesPremises] =
+  implicit lazy val arbitraryLicencesPremises: Arbitrary[LicencesAndPremisesRadioOptions] =
     Arbitrary {
-      Gen.oneOf(LicencesPremises.values.toSeq)
+      Gen.oneOf(LicencesAndPremisesRadioOptions.values.toSeq)
     }
 
   implicit lazy val arbitraryPartnerDetailsBusinessType: Arbitrary[BusinessType] =

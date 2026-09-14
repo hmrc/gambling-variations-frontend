@@ -19,7 +19,7 @@ package views.licencespremises
 import base.SpecBase
 import controllers.licencespremises.routes
 import forms.licencespremises.LicencesPremisesFormProvider
-import models.licencespremises.LicencesPremises
+import models.licencespremises.LicencesAndPremisesRadioOptions
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
@@ -49,7 +49,7 @@ class LicencesPremisesViewSpec extends SpecBase {
         document.select("h1.govuk-fieldset__heading").text() mustEqual
           messages(application)("licencesPremises.heading")
 
-        LicencesPremises.values.zipWithIndex.foreach { case (option, index) =>
+        LicencesAndPremisesRadioOptions.values.zipWithIndex.foreach { case (option, index) =>
           val input = document.getElementById(s"value_$index")
 
           input.attr("value") mustEqual option.toString

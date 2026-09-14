@@ -24,33 +24,33 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class LicencesPremisesSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class LicencesAndPremisesRadioOptionsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
-  "LicencesPremises" - {
+  "LicencesAndPremisesRadioOptions" - {
 
     "must deserialise valid values" in {
 
-      val gen = Gen.oneOf(LicencesPremises.values.toSeq)
+      val gen = Gen.oneOf(LicencesAndPremisesRadioOptions.values.toSeq)
 
       forAll(gen) { licencesPremises =>
 
-        JsString(licencesPremises.toString).validate[LicencesPremises].asOpt.value mustEqual licencesPremises
+        JsString(licencesPremises.toString).validate[LicencesAndPremisesRadioOptions].asOpt.value mustEqual licencesPremises
       }
     }
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!LicencesPremises.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!LicencesAndPremisesRadioOptions.values.map(_.toString).contains(_))
 
       forAll(gen) { invalidValue =>
 
-        JsString(invalidValue).validate[LicencesPremises] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[LicencesAndPremisesRadioOptions] mustEqual JsError("error.invalid")
       }
     }
 
     "must serialise" in {
 
-      val gen = Gen.oneOf(LicencesPremises.values.toSeq)
+      val gen = Gen.oneOf(LicencesAndPremisesRadioOptions.values.toSeq)
 
       forAll(gen) { licencesPremises =>
 
