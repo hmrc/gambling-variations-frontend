@@ -90,5 +90,28 @@ class OtherLicencesAndPermitsNIViewSpec extends SpecBase {
       doc.select("input[value=noOtherLicencesAndPremisesNISelected]").hasAttr("checked") mustBe false
     }
 
+    "must display the error message both in the error summary and next to the fieldset heading when no option is selected" in new ErrorSetup {
+      doc.select(".govuk-error-summary").text                 must include(messages("otherLicencesAndPermitsNI.error.required"))
+      doc.select(".govuk-fieldset .govuk-error-message").text must include(messages("otherLicencesAndPermitsNI.error.required"))
+    }
+
+  }
+
+  trait ErrorSetup {
+    private val app = applicationBuilder().build()
+
+    private val view = app.injector.instanceOf[OtherLicencesAndPermitsNIView]
+
+    implicit private val request: play.api.mvc.Request[?] = FakeRequest()
+
+    implicit val messages: Messages =
+      app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
+
+    private val formProvider = new OtherLicencesAndPermitsNIFormProvider()
+
+    private val formWithErrors = formProvider().bind(Map.empty[String, String])
+    private val html = view(formWithErrors, NormalMode, OtherLicencesAndPermitsNIViewModel(formWithErrors))(request, messages)
+
+    val doc: Document = Jsoup.parse(html.body)
   }
 }

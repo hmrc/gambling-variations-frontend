@@ -25,7 +25,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, Excl
 import viewmodels.govuk.all.CheckboxesViewModel.FluentLegend
 import viewmodels.govuk.all.{FieldsetViewModel, HintViewModel, LegendViewModel}
 
-object OtherLicencesAndPermitsNIViewModel {
+object OtherLicencesAndPermitsNIViewModel extends ErrorMessageAwareness {
   def apply(form: Form[Set[OtherLicencesAndPermitsNI]])(implicit messages: Messages): Checkboxes = {
     Checkboxes(
       fieldset = Some(
@@ -33,8 +33,9 @@ object OtherLicencesAndPermitsNIViewModel {
           LegendViewModel(Text(messages("otherLicencesAndPermitsNI.heading"))).asPageHeading(LegendSize.Large)
         )
       ),
-      name = "permitsNI[]",
-      hint = Some(HintViewModel(Text(messages("otherLicencesAndPermitsNI.hint")))),
+      name         = "permitsNI[]",
+      errorMessage = errorMessage(form("permitsNI")),
+      hint         = Some(HintViewModel(Text(messages("otherLicencesAndPermitsNI.hint")))),
       items = positiveValues.zipWithIndex.map { case (checkedBox, index) =>
         CheckboxItem(
           id      = Some(s"permitsNI-${checkedBox.toString}"),
