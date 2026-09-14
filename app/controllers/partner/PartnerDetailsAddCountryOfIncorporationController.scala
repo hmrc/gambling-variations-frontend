@@ -18,9 +18,10 @@ package controllers.partner
 
 import controllers.actions.*
 import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider
-import models.Mode
+import models.BusinessType.Corporatebody
+import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsCountryOfIncorporationPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCountryOfIncorporationPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -57,12 +58,16 @@ class PartnerDetailsAddCountryOfIncorporationController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+    request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
+      case Some(Corporatebody) =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, mode))
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
 
-    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>

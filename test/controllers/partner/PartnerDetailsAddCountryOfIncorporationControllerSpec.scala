@@ -19,12 +19,13 @@ package controllers.partner
 import base.SpecBase
 import controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController
 import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider
+import models.BusinessType.Corporatebody
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsCountryOfIncorporationPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCountryOfIncorporationPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -43,6 +44,9 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
     PartnerDetailsAddCountryOfIncorporationController.onPageLoad().url
 
   val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+    .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+    .success
+    .value
 
   val validCountry = "France"
 
@@ -90,6 +94,20 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to System Error Page for a GET if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, countryOfIncorporationRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+      "must redirect to System Error Page for a GET if businessType is not Corporatebody" in {
+
+        val application = applicationBuilder(userAnswers = Some(UserAnswers(mgdRegNumber, cleanedData()))).build()
 
         running(application) {
           val request = FakeRequest(GET, countryOfIncorporationRoute)
