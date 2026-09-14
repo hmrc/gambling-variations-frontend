@@ -95,6 +95,11 @@ class OtherLicencesAndPermitsNIViewSpec extends SpecBase {
       doc.select(".govuk-fieldset .govuk-error-message").text must include(messages("otherLicencesAndPermitsNI.error.required"))
     }
 
+    "must link the error summary to the first checkbox so it lands on the in-page error message" in new ErrorSetup {
+      doc.select(".govuk-error-summary a").attr("href") mustEqual "#permitsNI-amusement"
+      doc.select("#permitsNI-amusement").isEmpty mustBe false
+    }
+
   }
 
   trait ErrorSetup {
