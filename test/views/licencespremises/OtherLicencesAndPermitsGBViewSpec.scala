@@ -26,7 +26,7 @@ import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import viewmodels.OtherLicencesAndPermitsViewModel
+import viewmodels.OtherLicencesAndPermitsGBViewModel
 import views.html.licencespremises.OtherLicencesAndPermitsGBView
 
 class OtherLicencesAndPermitsGBViewSpec extends SpecBase {
@@ -61,7 +61,7 @@ class OtherLicencesAndPermitsGBViewSpec extends SpecBase {
 
     private val form = formProvider()
     private val preparedForm = form.fill(getSelectedLicencesAndPermits(ua))
-    private val html = view(form, NormalMode, OtherLicencesAndPermitsViewModel(preparedForm))(request, messages)
+    private val html = view(form, NormalMode, OtherLicencesAndPermitsGBViewModel(preparedForm))(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
   }

@@ -19,14 +19,17 @@ package viewmodels
 import base.SpecBase
 import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
 import models.licencespremises.OtherLicencesAndPermitsGB.getSelectedLicencesAndPermits
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases
 import uk.gov.hmrc.govukfrontend.views.Aliases.{Checkboxes, Text}
+import views.html.licencespremises.OtherLicencesAndPermitsGBView
 
-class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
+class OtherLicencesAndPermitsGBViewModelSpec extends SpecBase {
 
   trait Setup {
     val app = applicationBuilder().build()
@@ -53,7 +56,12 @@ class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
     private val formProvider = new OtherLicencesAndPermitsGBFormProvider()
     private val form = formProvider()
     private val preparedForm = form.fill(getSelectedLicencesAndPermits(userAnswers))
-    val viewModel: Checkboxes = OtherLicencesAndPermitsViewModel(preparedForm)
+    private val view = app.injector.instanceOf[OtherLicencesAndPermitsGBView]
+    private val formWithErrors = formProvider().bind(Map.empty[String, String])
+    private val html = view(formWithErrors, NormalMode, OtherLicencesAndPermitsGBViewModel(formWithErrors))(request, messages)
+
+    val viewModel: Checkboxes = OtherLicencesAndPermitsGBViewModel(preparedForm)
+    val doc: Document = Jsoup.parse(html.body)
 
   }
 
@@ -86,5 +94,11 @@ class OtherLicencesAndPermitsViewModelSpec extends SpecBase {
         viewModel.items(8).id mustBe Some("permitsGB-noOtherLicencesAndPremisesGBSelected")
       }
     }
+    "must display the error message both in the error summary and next to the fieldset heading when no option is selected" in new Setup {
+      doc.select(".govuk-error-summary").text                 must include(messages("otherLicencesAndPermitsGB.error.required"))
+      doc.select(".govuk-fieldset .govuk-error-message").text must include(messages("otherLicencesAndPermitsGB.error.required"))
+    }
+
   }
+
 }

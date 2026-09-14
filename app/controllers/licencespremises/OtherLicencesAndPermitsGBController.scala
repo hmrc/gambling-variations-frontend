@@ -29,7 +29,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.OtherLicencesAndPermitsViewModel
+import viewmodels.OtherLicencesAndPermitsGBViewModel
 import views.html.licencespremises.OtherLicencesAndPermitsGBView
 
 import javax.inject.Inject
@@ -54,7 +54,7 @@ class OtherLicencesAndPermitsGBController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = form.fill(getSelectedLicencesAndPermits(request.userAnswers))
-    Ok(view(preparedForm, mode, OtherLicencesAndPermitsViewModel(preparedForm)))
+    Ok(view(preparedForm, mode, OtherLicencesAndPermitsGBViewModel(preparedForm)))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -63,11 +63,11 @@ class OtherLicencesAndPermitsGBController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, OtherLicencesAndPermitsViewModel(formWithErrors)))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, OtherLicencesAndPermitsGBViewModel(formWithErrors)))),
         values =>
           for {
             updatedAnswers <- Future.fromTry(updateValuesAndCombine(values, ua))
-            _ <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(OtherLicencesAndPermitsGBPage, NormalMode, ua))
       )
   }

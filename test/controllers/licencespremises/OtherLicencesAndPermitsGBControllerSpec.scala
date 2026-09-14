@@ -33,7 +33,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import viewmodels.OtherLicencesAndPermitsViewModel
+import viewmodels.OtherLicencesAndPermitsGBViewModel
 import views.html.licencespremises.OtherLicencesAndPermitsGBView
 
 import scala.concurrent.Future
@@ -79,7 +79,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
 
         val view = application.injector.instanceOf[OtherLicencesAndPermitsGBView]
         val preparedForm = form.fill(getSelectedLicencesAndPermits(userAnswers))
-        val viewModel = OtherLicencesAndPermitsViewModel(preparedForm)(messages(application))
+        val viewModel = OtherLicencesAndPermitsGBViewModel(preparedForm)(messages(application))
 
         status(result) mustEqual OK
 
@@ -97,7 +97,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
 
         val result = route(application, request).value
         val preparedForm = form.fill(getSelectedLicencesAndPermits(userAnswers))
-        val checkboxes = OtherLicencesAndPermitsViewModel(preparedForm)(messages(application))
+        val checkboxes = OtherLicencesAndPermitsGBViewModel(preparedForm)(messages(application))
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(preparedForm, NormalMode, checkboxes)(request, messages(application)).toString
       }
@@ -216,7 +216,7 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
         val view = application.injector.instanceOf[OtherLicencesAndPermitsGBView]
 
         val result = route(application, request).value
-        val checkboxes = OtherLicencesAndPermitsViewModel(boundForm)(messages(application))
+        val checkboxes = OtherLicencesAndPermitsGBViewModel(boundForm)(messages(application))
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual view(boundForm, NormalMode, checkboxes)(request, messages(application)).toString
