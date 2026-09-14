@@ -17,7 +17,6 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider
 import models.Mode
 import navigation.Navigator

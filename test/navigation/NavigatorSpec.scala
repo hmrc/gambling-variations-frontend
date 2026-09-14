@@ -21,16 +21,15 @@ import controllers.routes
 import models.*
 import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
+import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.LicenceNumberPage
+import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
