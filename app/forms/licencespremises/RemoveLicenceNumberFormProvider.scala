@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package utils
+package forms.licencespremises
 
-import play.api.i18n.Lang
+import forms.mappings.Mappings
+import play.api.data.Form
 
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import javax.inject.Inject
 
-object DateTimeFormats {
+class RemoveLicenceNumberFormProvider @Inject() extends Mappings {
 
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-  val dateTimeHintFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("d M yyyy")
-  private val localisedDateTimeFormatters = Map(
-    "en" -> dateTimeFormatter,
-    "cy" -> dateTimeFormatter.withLocale(new Locale("cy"))
-  )
-
-  def dateTimeFormat()(implicit lang: Lang): DateTimeFormatter = {
-    localisedDateTimeFormatters.getOrElse(lang.code, dateTimeFormatter)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeLicenceNumber.error.required")
+    )
 }

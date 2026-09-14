@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package utils
+package pages.licencespremises
 
-import play.api.i18n.Lang
+import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.JsPath
 
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+class RemoveLicenceNumberPageSpec extends PlaySpec {
 
-object DateTimeFormats {
+  "RemoveLicenceNumberPage" must {
 
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-  val dateTimeHintFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("d M yyyy")
-  private val localisedDateTimeFormatters = Map(
-    "en" -> dateTimeFormatter,
-    "cy" -> dateTimeFormatter.withLocale(new Locale("cy"))
-  )
+    "must have the correct toString" in {
+      RemoveLicenceNumberPage.toString mustBe "removeGamblingLicenceNo"
+    }
 
-  def dateTimeFormat()(implicit lang: Lang): DateTimeFormatter = {
-    localisedDateTimeFormatters.getOrElse(lang.code, dateTimeFormatter)
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "removeGamblingLicenceNo"
+      RemoveLicenceNumberPage.path mustBe expectedPath
+    }
   }
 }
