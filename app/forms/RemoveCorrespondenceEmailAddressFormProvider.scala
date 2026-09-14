@@ -25,6 +25,6 @@ class RemoveCorrespondenceEmailAddressFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "removeCorrespondenceEmailAddress" -> boolean("removeCorrespondenceEmailAddress.error.required")
+      "value" -> boolean("removeCorrespondenceEmailAddress.error.required")
     )
 }

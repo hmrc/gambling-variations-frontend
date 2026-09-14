@@ -14,23 +14,32 @@
  * limitations under the License.
  */
 
-package forms
+package forms.licencespremises
 
-import javax.inject.Inject
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class RemoveLicenceNumberFormProviderSpec extends BooleanFieldBehaviours {
 
-class EmailAddressFormProvider @Inject() extends Mappings {
+  val requiredKey = "removeLicenceNumber.error.required"
+  val invalidKey = "error.boolean"
 
-  private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
+  val form = new RemoveLicenceNumberFormProvider()()
 
-  def apply(prefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .transform[String](_.trim, identity)
-        .verifying(maxLength(70, s"$prefix.error.length"))
-        .verifying(regexp(emailRegex, s"$prefix.error.invalid"))
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }
