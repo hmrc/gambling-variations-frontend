@@ -71,12 +71,13 @@ class PartnerDetailsForeignCorporateReferenceViewSpec extends SpecBase {
 
     }
 
-    "must render the input with the name the form provider binds, at full width" in new Setup {
+    "must render the input with the name the form provider binds, at fixed width of 20 chars" in new Setup {
 
       val doc: Document = render(form)
 
       doc.select(s"input[name=$fieldName]").size() mustEqual 1
-      doc.select(s"input[name=$fieldName]").hasClass("govuk-!-width-full") mustBe true
+      doc.select(s"input[name=$fieldName]").hasClass("govuk-input--width-20") mustBe true
+
     }
 
     "must post to the controller's onSubmit action" in new Setup {
