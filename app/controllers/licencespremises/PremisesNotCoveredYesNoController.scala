@@ -31,14 +31,14 @@ import views.html.licencespremises.PremisesNotCoveredYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PremisesNotCoveredYesNoController @Inject()(
+class PremisesNotCoveredYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: LicencesPremisesDataRequiredAction,
-  formProvider:PremisesNotCoveredYesNoFormProvider,
+  formProvider: PremisesNotCoveredYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PremisesNotCoveredYesNoView
 )(implicit ec: ExecutionContext)

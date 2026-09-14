@@ -25,7 +25,6 @@ import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 class PremisesNotCoveredYesNoSummarySpec extends SpecBase {
-  
 
   lazy val app: Application = applicationBuilder().build()
 

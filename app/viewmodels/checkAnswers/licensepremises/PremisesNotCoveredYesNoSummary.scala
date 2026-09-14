@@ -24,7 +24,6 @@ import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 object PremisesNotCoveredYesNoSummary {
-  
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(PremisesNotCoveredYesNoPage).map { answer =>

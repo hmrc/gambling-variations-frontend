@@ -42,7 +42,7 @@
             RadiosViewModel.yesNo(
                 field = form("value"),
                 legend = LegendViewModel(messages("premisesNotCoveredYesNo.heading")).asPageHeading(Large)
-            )
+            ).withHint(Hint(content = messages("premisesNotCoveredYesNo.hint")))
         )
 
         @govukButton(
