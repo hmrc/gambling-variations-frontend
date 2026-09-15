@@ -365,3 +365,12 @@ removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu�
 removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
 removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
 removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn
+
+associatedRegNumber.title = Beth yw eich rhif cofrestru cysylltiedig?
+associatedRegNumber.heading = Beth yw eich rhif cofrestru cysylltiedig?
+associatedRegNumber.hint = Mae’n 14 o gymeriadau ac yn dechrau gydag X, er enghraifft XAM00001234567
+associatedRegNumber.error.required = Nodwch eich rhif cofrestru cysylltiedig
+associatedRegNumber.error.invalid.characters = Mae’n rhaid i’ch rhif cofrestru cysylltiedig gynnwys y llythrennau a i z a’r rhifau 0 i 9 yn unig
+associatedRegNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru cysylltiedig fod yn fformat cywir
+associatedRegNumber.error.invalidReference = Mae’n rhaid i’ch rhif cofrestru cysylltiedig fod yn fformat cywir
+associatedRegNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru
