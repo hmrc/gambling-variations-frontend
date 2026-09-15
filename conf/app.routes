@@ -343,3 +343,6 @@ GET        /change-registration-details/partner-details/foreign-corporate-refere
 POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/check-date-to-remove                       controllers.partner.PartnerCheckConfirmRemoveDateController.onPageLoad()
+
+GET        /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onSubmit(mode: Mode = NormalMode)
