@@ -27,10 +27,12 @@ class PartnerDetailsAddCountryOfIncorporationFormProvider @Inject() extends Mapp
     Form(
       "value" -> text("partnerDetailsAddCountryOfIncorporation.error.required")
         .verifying(
-          Seq(
-            maxLength(maxStringLength, "partnerDetailsAddCountryOfIncorporation.error.length"),
-            regexp(countryRegex, "partnerDetailsAddCountryOfIncorporation.error.invalid")
-          )*
+          firstError(
+            Seq(
+              maxLength(maxStringLength, "partnerDetailsAddCountryOfIncorporation.error.length"),
+              regexp(countryRegex, "partnerDetailsAddCountryOfIncorporation.error.invalid")
+            )*
+          )
         )
     )
 }
