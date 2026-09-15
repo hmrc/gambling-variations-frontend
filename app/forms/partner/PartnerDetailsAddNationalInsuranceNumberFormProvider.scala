@@ -19,7 +19,7 @@ package forms.partner
 import forms.mappings.Mappings
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider.*
 import play.api.data.Form
-import play.api.data.validation.Constraint
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
 import javax.inject.Inject
 
@@ -33,9 +33,10 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
           .verifying(
             Seq(
               regexp(ninoCharsRegex, invalidCharsKey),
-              regexp(ninoFormatRegex, invalidFormatKey),
-              regexp(ninoLengthRegex, lengthKey),
-              regexp(ninoValidRegex, invalidKey)
+              Constraint[String](invalidFormatKey) { nino =>
+                val sanitized = if (nino.length == 9) nino else nino.concat(" ")
+                if (sanitized.matches(ninoValidRegex)) Valid else Invalid(invalidFormatKey)
+              }
             )*
           )
     )
@@ -45,17 +46,10 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
 object PartnerDetailsAddNationalInsuranceNumberFormProvider {
 
   private[forms] val requiredKey = "partnerDetailsAddNino.error.required"
-  private[forms] val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
-  private[forms] val invalidFormatKey = "partnerDetailsAddNino.error.invalidFormat"
-  private[forms] val lengthKey = "partnerDetailsAddNino.error.length"
-  private[forms] val invalidKey = "partnerDetailsAddNino.error.invalid"
 
+  private[forms] val invalidCharsKey = "partnerDetailsAddNino.error.invalidChars"
   private[forms] val ninoCharsRegex = """^[A-Z0-9]+$"""
 
-  private[forms] val ninoFormatRegex = """^[A-Z]{2}[0-9]+[A-Z]$"""
-
-  private[forms] val ninoLengthRegex = """^[A-Z0-9]{9}$"""
-
-  private[forms] val ninoValidRegex =
-    """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
+  private[forms] val invalidFormatKey = "partnerDetailsAddNino.error.invalidFormat"
+  private[forms] val ninoValidRegex = """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
 }

@@ -25,7 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceNumberPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{LicenceNumberPage, LicencesPremisesPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
@@ -173,12 +173,18 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsBusinessTypePage(index)(userAnswers) // change it
     case PartnerDetailsUtrPage(index) =>
       userAnswers => navigatePartnerDetailsUTRPage(index)(userAnswers)
+    case PartnerDetailsForeignCorporateReferencePage(index) =>
+      userAnswers => controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad() // TODO: to be plumbed in
 
     // License and Premises Details
     case LicenceNumberPage =>
-      _ => controllers.licencespremises.routes.LicenceNumberController.onPageLoad()
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    case RemoveLicenceNumberPage =>
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
     case RemovePremisesDetailsYesNoPage =>
       _ => controllers.licencespremises.routes.RemovePremisesDetailsYesNoController.onPageLoad() // change it
+    case LicencesPremisesPage =>
+      _ => controllers.licencespremises.routes.LicencesPremisesController.onPageLoad() // change it
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
