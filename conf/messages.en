@@ -997,6 +997,17 @@ partnerDeleteDate.change.hidden = Tell us when to remove this partner
 partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
 partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
 
+otherLicencesAndPermitsNI.title = Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.heading = Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.hint = Select all that apply
+otherLicencesAndPermitsNI.option.amusement = Amusement permit
+otherLicencesAndPermitsNI.option.bingo = Bingo club licence
+otherLicencesAndPermitsNI.option.bookmaking = Bookmaking office licence
+otherLicencesAndPermitsNI.option.serveAlcohol = Licence allowing the serving of alcohol
+otherLicencesAndPermitsNI.option.regCert = Registration certificate including a club registration certificate
+otherLicencesAndPermitsNI.option.none = No, I do not have any other licences and permits in Northern Ireland
+otherLicencesAndPermitsNI.error.required = Select all the licences and permits you have in Northern Ireland
+
 partnerDetailsForeignCorporateReference.title = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.heading = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.checkYourAnswersLabel = What is the partner’s foreign corporate reference?
@@ -1017,6 +1028,13 @@ otherLicencesAndPermitsGB.option.onPremises = On-premises alcohol licence
 otherLicencesAndPermitsGB.option.prizeGaming = Prize gaming permit
 otherLicencesAndPermitsGB.option.none = No, I do not have any other licences and permits in Great Britain
 otherLicencesAndPermitsGB.error.required = Select all the licences and permits you have in Great Britain
+
+partnerCheckConfirmRemoveDate.title = Check your date to remove this partner
+partnerCheckConfirmRemoveDate.heading = Check your date to remove this partner
+partnerCheckConfirmRemoveDate.labelPartnerName = Partner name
+partnerCheckConfirmRemoveDate.changeDate.hidden = date to remove partner
+partnerCheckConfirmRemoveDate.labelDateToRemove = Date to remove partner
+partnerCheckConfirmRemoveDate.p1 = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.
 
 partnerDetailsAddCountryOfIncorporation.title = Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.heading = Which country is the partner’s business incorporated in?

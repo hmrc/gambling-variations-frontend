@@ -19,13 +19,14 @@ package controllers.partner
 import base.SpecBase
 import controllers.routes
 import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
+import models.BusinessType.{Corporatebody, Soleproprietor}
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsAddPartnerCompletedPage
-import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsForeignCorporateReferencePage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -51,7 +52,16 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
     "must return OK and the correct view for a GET" in {
 
       val userAnswersForGet: UserAnswers =
-        userAnswersWithNoFcr.set(PartnerDetailsAddPartnerCompletedPage, false).success.value
+        userAnswersWithNoFcr
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+          .success
+          .value
+          .set(PartnerDetailsIsBusinessIncorporatedUkPage(index), false)
+          .success
+          .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
 
@@ -67,11 +77,17 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+    "must populate the view correctly when the question has previously been answered" in {
 
       val userAnswersWithFcr: UserAnswers =
         validUserAnswers(Some(testForeignCorpRef))
           .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+          .success
+          .value
+          .set(PartnerDetailsIsBusinessIncorporatedUkPage(index), false)
           .success
           .value
 
@@ -86,6 +102,102 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form.fill(testForeignCorpRef), NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to SystemError when business type is not Corporatebody" in {
+
+      val userAnswersForGet: UserAnswers =
+        userAnswersWithNoFcr
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(index), Soleproprietor)
+          .success
+          .value
+          .set(PartnerDetailsIsBusinessIncorporatedUkPage(index), false)
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, partnerDetailsForeignCorporateReferenceRoute)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError when the business is incorporated in the UK" in {
+
+      val userAnswersForGet: UserAnswers =
+        userAnswersWithNoFcr
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+          .success
+          .value
+          .set(PartnerDetailsIsBusinessIncorporatedUkPage(index), true)
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, partnerDetailsForeignCorporateReferenceRoute)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError for a GET when incorporatedInUK has not been answered" in {
+
+      val userAnswersForGet: UserAnswers =
+        userAnswersWithNoFcr
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+          .success
+          .value
+      // PartnerDetailsIsBusinessIncorporatedUkPage intentionally left unset -> None
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, partnerDetailsForeignCorporateReferenceRoute)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError when business type has not been answered" in {
+
+      val userAnswersForGet: UserAnswers =
+        userAnswersWithNoFcr
+          .set(PartnerDetailsAddPartnerCompletedPage, false)
+          .success
+          .value
+          .set(PartnerDetailsIsBusinessIncorporatedUkPage(index), false)
+          .success
+          .value
+      // PartnerDetailsBusinessTypePage intentionally left unset -> None
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, partnerDetailsForeignCorporateReferenceRoute)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
 
