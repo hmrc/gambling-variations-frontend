@@ -358,6 +358,13 @@ businessTradeClass.checkYourAnswersLabel = 	Beth yw dosbarth masnachu’r busnes
 businessTradeClass.error.required = Dewiswch y dosbarth masnachu ar gyfer y busnes hwn
 businessTradeClass.change.hidden = 	Beth yw dosbarth masnachu’r busnes?
 
+seasonalBusiness.title = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.heading = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.paragraph = Mae gan fusnes tymhorol gyfnodau lle nad yw’n masnachu. Os ydych yn rhedeg busnes tymhorol, mae’n rhaid i chi gyflwyno ffurflenni ‘dim’ (‘nil returns’) ar gyfer unrhyw gyfnodau lle nad ydych yn masnachu.
+seasonalBusiness.checkYourAnswersLabel = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.error.required = Dewiswch ‘Iawn’ os yw’r busnes hwn yn fusnes tymhorol
+seasonalBusiness.change.hidden = A yw’r busnes hwn yn fusnes tymhorol?
+
 removePreviousRegNumber.title = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn?
 removePreviousRegNumber.heading = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn {0}?
 removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru blaenorol
