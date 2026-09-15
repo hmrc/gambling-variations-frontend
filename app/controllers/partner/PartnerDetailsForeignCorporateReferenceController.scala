@@ -19,9 +19,10 @@ package controllers.partner
 import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
+import models.BusinessType.Corporatebody
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsForeignCorporateReferencePage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -50,12 +51,21 @@ class PartnerDetailsForeignCorporateReferenceController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val index = request.userAnswers.getIndex
-    val preparedForm = request.userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
 
-    Ok(view(preparedForm, mode))
+    val incorporatedInUK = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
+    val businessType = request.userAnswers.get(PartnerDetailsBusinessTypePage(index))
+
+    (businessType, incorporatedInUK) match {
+      case (Some(Corporatebody), Some(false)) =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, mode))
+
+      case _ =>
+        Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
