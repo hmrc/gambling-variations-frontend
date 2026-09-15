@@ -1028,3 +1028,10 @@ otherLicencesAndPermitsGB.option.onPremises = On-premises alcohol licence
 otherLicencesAndPermitsGB.option.prizeGaming = Prize gaming permit
 otherLicencesAndPermitsGB.option.none = No, I do not have any other licences and permits in Great Britain
 otherLicencesAndPermitsGB.error.required = Select all the licences and permits you have in Great Britain
+
+partnerCheckConfirmRemoveDate.title = Check your date to remove this partner
+partnerCheckConfirmRemoveDate.heading = Check your date to remove this partner
+partnerCheckConfirmRemoveDate.labelPartnerName = Partner name
+partnerCheckConfirmRemoveDate.changeDate.hidden = date to remove partner
+partnerCheckConfirmRemoveDate.labelDateToRemove = Date to remove partner
+partnerCheckConfirmRemoveDate.p1 = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.

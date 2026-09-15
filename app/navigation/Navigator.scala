@@ -25,9 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceNumberPage, LicencesPremisesPage, RemovePremisesDetailsYesNoPage}
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
-import pages.licencespremises.{LicenceNumberPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{LicenceNumberPage, LicencesPremisesPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
