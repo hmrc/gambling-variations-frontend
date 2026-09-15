@@ -76,11 +76,19 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        nino =>
+        nino => {
+          /*
+           * ChRIS requires NINOs to be exactly 9 characters long.
+           * If the user omitted the trailing suffix letter (8-character NINO),
+           * pad it with a single space to maintain downstream schema compliance.
+           */
+          val sanitized = if (nino.length == 9) nino else nino.concat(" ")
+
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), nino))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), sanitized))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsNinoPage(index), mode, updatedAnswers))
+        }
       )
   }
 }
