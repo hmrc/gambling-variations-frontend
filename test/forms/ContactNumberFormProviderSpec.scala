@@ -87,10 +87,57 @@ class ContactNumberFormProviderSpec extends StringFieldBehaviours {
       result.errors mustBe empty
     }
 
-    "bind phone numbers with spaces when digit count is 20" in {
+    "bind phone numbers with leading and trailing spaces, exactly 10 digits with three spaces between each" in {
+
+      val threeSpaces = "   "
+      val phoneNumber = "1234567890".mkString(threeSpaces, threeSpaces, threeSpaces)
+
       val result = form.bind(
         Map(
-          fieldName      -> "12345 67890 12345 67890",
+          fieldName      -> phoneNumber,
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+
+      result.errors mustBe empty
+    }
+
+    "bind phone numbers with a single space when the total character count is exactly 20" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "0123456789 012345678", // 19 digits + 1 space = 20 chars
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+
+      result.errors mustBe empty
+    }
+
+    "not bind phone number when the total digit count is 20 plus a single space" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "0123456789 0123456789", // 20 digits + 1 space = 21 chars
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+
+      result.errors.map(_.message) must contain(lengthKey)
+    }
+
+    "bind phone numbers with multiple consecutive spaces collapsed to a single space" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "123456789012345678   9", // 18 digits + (3 spaces collapsed to 1) + 1 digit = 20 after collapse
+          "mobileNumber" -> "07700 900000"
+        )
+      )
+      result.errors mustBe empty
+    }
+
+    "bind phone numbers with spaces when digit count is less than 20" in {
+      val result = form.bind(
+        Map(
+          fieldName      -> "7890 2345 7890",
           "mobileNumber" -> "07700 900000"
         )
       )
@@ -196,11 +243,58 @@ class ContactNumberFormProviderSpec extends StringFieldBehaviours {
       result.errors mustBe empty
     }
 
-    "bind mobile numbers with spaces when digit count is 20" in {
+    "bind mobile numbers with leading and trailing spaces, exactly 10 digits with three spaces between each" in {
+
+      val threeSpaces = "   "
+      val mobileNumber = "1234567890".mkString(threeSpaces, threeSpaces, threeSpaces)
+
       val result = form.bind(
         Map(
           "phoneNumber" -> "01632960001",
-          fieldName     -> "12345 67890 12345 67890"
+          fieldName     -> mobileNumber
+        )
+      )
+
+      result.errors mustBe empty
+    }
+
+    "bind mobile numbers with a single space when the total character count is exactly 20" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "0123456789 012345678" // 19 digits + 1 space = 20 chars
+        )
+      )
+
+      result.errors mustBe empty
+    }
+
+    "not bind mobile numbers when the total digit count is 20 plus a single space" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "0123456789 0123456789" // 20 digits + 1 space = 21 chars
+        )
+      )
+
+      result.errors.map(_.message) must contain(lengthKey)
+    }
+
+    "bind mobile numbers with multiple consecutive spaces collapsed to a single space" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "123456789012345678   9" // 18 digits + (3 spaces collapsed to 1) + 1 digit = 20 after collapse
+        )
+      )
+      result.errors mustBe empty
+    }
+
+    "bind mobile numbers with spaces when digit count is less than 20" in {
+      val result = form.bind(
+        Map(
+          "phoneNumber" -> "01632960001",
+          fieldName     -> "1234 67890 2345 789"
         )
       )
 
