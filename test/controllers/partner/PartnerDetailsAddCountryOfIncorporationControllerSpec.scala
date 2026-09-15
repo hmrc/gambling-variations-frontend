@@ -25,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCountryOfIncorporationPage}
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCountryOfIncorporationPage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -45,6 +45,9 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
 
   val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
     .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+    .success
+    .value
+    .set(PartnerDetailsIsBusinessIncorporatedUkPage(index), false)
     .success
     .value
 
@@ -93,7 +96,11 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
 
       "must redirect to System Error Page for a GET if no existing data is found" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val ua = validUserAnswers
+          .remove(PartnerDetailsIsBusinessIncorporatedUkPage(index))
+          .success.value
+
+        val application = applicationBuilder(userAnswers = Some(ua)).build()
 
         running(application) {
           val request = FakeRequest(GET, countryOfIncorporationRoute)

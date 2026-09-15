@@ -21,7 +21,7 @@ import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider
 import models.BusinessType.Corporatebody
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCountryOfIncorporationPage}
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCountryOfIncorporationPage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -58,8 +58,10 @@ class PartnerDetailsAddCountryOfIncorporationController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
-      case Some(Corporatebody) =>
+    (request.userAnswers.get(PartnerDetailsBusinessTypePage(index)),
+     request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
+    ) match {
+      case (Some(Corporatebody), Some(false)) =>
         val preparedForm = request.userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)) match {
           case None        => form
           case Some(value) => form.fill(value)
