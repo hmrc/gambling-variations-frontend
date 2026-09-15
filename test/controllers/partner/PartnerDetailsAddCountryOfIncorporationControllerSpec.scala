@@ -98,7 +98,8 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
 
         val ua = validUserAnswers
           .remove(PartnerDetailsIsBusinessIncorporatedUkPage(index))
-          .success.value
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(ua)).build()
 
