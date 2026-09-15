@@ -181,7 +181,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
         }
       }
 
-      "must save valid 8-character NINO to UserAnswers and redirect when submitted" in {
+      "must save valid 8-character plus a space NINO to UserAnswers and redirect when submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]
 
@@ -203,7 +203,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsNinoPage(index), validNino8Chars)
+            .set(PartnerDetailsNinoPage(index), validNino8Chars.concat(" "))
             .success
             .value
 
