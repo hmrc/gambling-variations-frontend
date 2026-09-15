@@ -17,16 +17,17 @@
 package controllers.partner
 
 import controllers.actions.*
-import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
+import models.BusinessType.Soleproprietor
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsNinoPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsNinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.PartnerUtils.interimIndex
 import views.html.partner.PartnerDetailsAddNationalInsuranceNumberView
 
 import javax.inject.Inject
@@ -54,26 +55,33 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
    */
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = request.userAnswers.getIndex
+    val index: Int = interimIndex
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+    request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
+      case Some(Soleproprietor) =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
+          case None => form
+          case Some(nino) =>
+            val sanitized = if nino.last != '_' then nino else nino.init
+            form.fill(sanitized)
+        }
+
+        Ok(view(preparedForm, mode))
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
-
-    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = request.userAnswers.getIndex
+    val index: Int = interimIndex
 
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         nino =>
+          val sanitized = if nino.length == 9 then nino else nino.concat("_")
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), nino))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), sanitized))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsNinoPage(index), mode, updatedAnswers))
       )

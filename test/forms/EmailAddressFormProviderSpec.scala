@@ -33,9 +33,9 @@ class EmailAddressFormProviderSpec extends StringFieldBehaviours {
 
   private val form = new EmailAddressFormProvider()("emailAddress")
 
-  ".emailAddress" - {
+  ".value" - {
 
-    val fieldName = "emailAddress"
+    val fieldName = "value"
 
     behave like fieldThatBindsValidData(
       form,

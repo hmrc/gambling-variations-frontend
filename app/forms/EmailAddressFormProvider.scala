@@ -28,7 +28,7 @@ class EmailAddressFormProvider @Inject() extends Mappings {
 
   def apply(prefix: String): Form[String] =
     Form(
-      "emailAddress" -> text(s"$prefix.error.required")
+      "value" -> text(s"$prefix.error.required")
         .transform[String](_.trim, identity)
         .verifying(maxLength(70, s"$prefix.error.length"))
         .verifying(regexp(emailRegex, s"$prefix.error.invalid"))

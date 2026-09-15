@@ -54,6 +54,7 @@
             )
           )
           .withCssClass("govuk-input--width-10")
+          .withAttribute("autocomplete" -> "honorific-prefix")
         )
 
     @govukInput(
@@ -64,7 +65,8 @@
         )
       )
       .withCssClass("govuk-input--width-100")
-    )
+        .withAttribute("autocomplete" -> "given-name")
+        )
 
     @govukInput(
       InputViewModel(
@@ -74,7 +76,9 @@
         )
       )
        .withCssClass("govuk-input--width-100")
-    )
+        .withAttribute("autocomplete" -> "additional-name")
+
+        )
 
     @govukInput(
       InputViewModel(
@@ -86,7 +90,9 @@
       )
       //.withHint(HintViewModel(Text(messages("soleProprietorName.middleName.hint"))))
       .withCssClass("govuk-input--width-100")
-    )
+        .withAttribute("autocomplete" -> "family-name")
+
+        )
 
     </fieldset>
 
