@@ -998,6 +998,16 @@ partnerDeleteDate.change.hidden = Tell us when to remove this partner
 partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
 partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
 
+otherLicencesAndPermitsNI.title = Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.heading = Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.hint = Select all that apply
+otherLicencesAndPermitsNI.option.amusement = Amusement permit
+otherLicencesAndPermitsNI.option.bingo = Bingo club licence
+otherLicencesAndPermitsNI.option.bookmaking = Bookmaking office licence
+otherLicencesAndPermitsNI.option.serveAlcohol = Licence allowing the serving of alcohol
+otherLicencesAndPermitsNI.option.regCert = Registration certificate including a club registration certificate
+otherLicencesAndPermitsNI.option.none = No, I do not have any other licences and permits in Northern Ireland
+otherLicencesAndPermitsNI.error.required = Select all the licences and permits you have in Northern Ireland
 partnerDetailsForeignCorporateReference.title = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.heading = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.checkYourAnswersLabel = What is the partner’s foreign corporate reference?
@@ -1005,6 +1015,7 @@ partnerDetailsForeignCorporateReference.error.required = Enter the partner’s f
 partnerDetailsForeignCorporateReference.error.invalid = The partner’s foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsForeignCorporateReference.error.length = The partner’s foreign corporate reference must be 100 characters or less
 partnerDetailsForeignCorporateReference.change.hidden = What is the partner’s foreign corporate reference?
+
 otherLicencesAndPermitsGB.title = Do you have any other licences and permits in Great Britain?
 otherLicencesAndPermitsGB.heading = Do you have any other licences and permits in Great Britain?
 otherLicencesAndPermitsGB.hint = Select all that apply
