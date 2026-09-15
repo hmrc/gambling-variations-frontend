@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("partnerDetailsAddCountryOfIncorporation.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController.onSubmit()) {
+    @formHelper(action = controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController.onSubmit(), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -44,7 +44,7 @@
             InputViewModel(
                 field = form("value"),
                 label = LabelViewModel(messages("partnerDetailsAddCountryOfIncorporation.heading")).asPageHeading(Large)
-            ).withCssClass("govuk-input--width-100")
+            ).withCssClass("govuk-input--width-100").withAttribute("autocomplete" -> "country-name")
         )
 
         @govukButton(
