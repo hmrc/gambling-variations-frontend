@@ -19,7 +19,7 @@ package controllers.partner
 import base.SpecBase
 import controllers.partner.routes.PartnerDetailsAddNationalInsuranceNumberController
 import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
-import models.BusinessType.Corporatebody
+import models.BusinessType.{Corporatebody, Soleproprietor}
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -44,6 +44,9 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
     PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url
 
   val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+    .set(PartnerDetailsBusinessTypePage(index), Soleproprietor)
+    .success
+    .value
 
   val validNino9Chars = "AA123456A"
   val validNino8Chars = "AA123456"
@@ -52,7 +55,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
 
     "onPageLoad" - {
 
-      "must return OK and the correct view for a GET when no previous data exists" in {
+      "must return OK and the correct view for a GET when businessType is Soleproprietor and no previous data exists" in {
 
         val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
 
@@ -89,12 +92,10 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
         }
       }
 
-      "must strip the trailing underscore when populating the view for an 8-character NINO" in {
-
-        val storedNinoWithUnderscore = s"${validNino8Chars}_"
+      "must populate the view correctly on a GET when an 8-character NINO has previously been answered" in {
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsNinoPage(index), storedNinoWithUnderscore)
+          .set(PartnerDetailsNinoPage(index), validNino8Chars)
           .success
           .value
 
@@ -148,7 +149,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
 
     "onSubmit" - {
 
-      "must save unmodified 9-character NINO to UserAnswers and redirect when valid 9-char NINO is submitted" in {
+      "must save valid 9-character NINO to UserAnswers and redirect when submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]
 
@@ -180,7 +181,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
         }
       }
 
-      "must append an underscore to an 8-character NINO before saving to UserAnswers and redirect" in {
+      "must save valid 8-character plus a space NINO to UserAnswers and redirect when submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]
 
@@ -202,7 +203,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsNinoPage(index), s"${validNino8Chars}_")
+            .set(PartnerDetailsNinoPage(index), validNino8Chars.concat(" "))
             .success
             .value
 

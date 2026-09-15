@@ -18,8 +18,8 @@ package views.licencespremises
 
 import base.SpecBase
 import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
+import models.licencespremises.OtherLicencesAndPermitsGB.getSelectedLicencesAndPermits
 import models.{NormalMode, UserAnswers}
-import models.licencespremises.OtherLicencesAndPermitsGB.{getSelectedLicencesAndPermits, mappedValuesWithPages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*

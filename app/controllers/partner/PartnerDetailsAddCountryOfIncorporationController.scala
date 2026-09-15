@@ -17,32 +17,31 @@
 package controllers.partner
 
 import controllers.actions.*
-import forms.partner.PartnerDetailsAddNationalInsuranceNumberFormProvider
-import models.BusinessType.Soleproprietor
-import models.Mode
+import forms.partner.PartnerDetailsAddCountryOfIncorporationFormProvider
+import models.BusinessType.Corporatebody
+import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsNinoPage}
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCountryOfIncorporationPage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.PartnerUtils.interimIndex
-import views.html.partner.PartnerDetailsAddNationalInsuranceNumberView
+import views.html.partner.PartnerDetailsAddCountryOfIncorporationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
+class PartnerDetailsAddCountryOfIncorporationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: PartnerDetailsAddNationalInsuranceNumberFormProvider,
+  formProvider: PartnerDetailsAddCountryOfIncorporationFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDetailsAddNationalInsuranceNumberView
+  view: PartnerDetailsAddCountryOfIncorporationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -54,41 +53,36 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
      Lack of it implies data is ONLY in the cache and has not been submitted yet.
    */
 
+  // TODO: Interim solution - will be refactored with the indexing ticket
+  private val index: Int = utils.PartnerUtils.interimIndex
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val index: Int = interimIndex
 
-    request.userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
-      case Some(Soleproprietor) =>
-        val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(index)) match {
-          case Some(nino) => form.fill(nino)
-          case None       => form
+    (request.userAnswers.get(PartnerDetailsBusinessTypePage(index)),
+     request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
+    ) match {
+      case (Some(Corporatebody), Some(false)) =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
         }
-
         Ok(view(preparedForm, mode))
       case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
+
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val index: Int = interimIndex
 
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        nino => {
-          /*
-           * ChRIS requires NINOs to be exactly 9 characters long.
-           * If the user omitted the trailing suffix letter (8-character NINO),
-           * pad it with a single space to maintain downstream schema compliance.
-           */
-          val sanitized = if (nino.length == 9) nino else nino.concat(" ")
-
+        value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(index), sanitized))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCountryOfIncorporationPage(index), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsNinoPage(index), mode, updatedAnswers))
-        }
+          } yield Redirect(navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(index), mode, updatedAnswers))
       )
   }
 }

@@ -305,22 +305,22 @@ POST       /change-registration-details/partner-details/unique-taxpayer-referenc
 GET        /change-registration-details/partner-details                       controllers.partner.PartnerDetailsController.onPageLoad
 POST       /change-registration-details/partner-details                      controllers.partner.PartnerDetailsController.onSubmit
 
-GET       /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onPageLoad
-POST      /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onSubmit
-GET       /change-registration-details/partner-details/continue                    controllers.partner.PartnerDetailsController.onContinue
-GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
-GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partner.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
+GET        /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onPageLoad
+POST       /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onSubmit
+GET        /change-registration-details/partner-details/continue                    controllers.partner.PartnerDetailsController.onContinue
+GET        /change-registration-details/partner-details/remove/:partnerNumber       controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET        /change-registration-details/partner-details/details/:partnerNumber      controllers.partner.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
 
 
-GET       /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
-POST      /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onSubmit(mode: Mode = NormalMode)
 
-GET       /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
-POST      /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
 
-GET  /change-registration-details/partner-details/date-to-remove-redirect  controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
-GET  /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onPageLoad(mode: Mode = NormalMode)
-POST /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/date-to-remove-redirect  controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET        /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/date-to-remove           controllers.partner.PartnerDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/licences-and-premises/permits-northern-ireland                      controllers.licencespremises.OtherLicencesAndPermitsNIController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/permits-northern-ireland                      controllers.licencespremises.OtherLicencesAndPermitsNIController.onSubmit(mode: Mode = NormalMode)
@@ -343,3 +343,6 @@ GET        /change-registration-details/partner-details/foreign-corporate-refere
 POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/check-date-to-remove                       controllers.partner.PartnerCheckConfirmRemoveDateController.onPageLoad()
+
+GET        /change-registration-details/partner-details/business-country-incorporated                        controllers.partner.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/business-country-incorporated                        controllers.partner.PartnerDetailsAddCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)

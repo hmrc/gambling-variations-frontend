@@ -372,3 +372,11 @@ removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu�
 removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
 removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
 removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn
+
+partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?
