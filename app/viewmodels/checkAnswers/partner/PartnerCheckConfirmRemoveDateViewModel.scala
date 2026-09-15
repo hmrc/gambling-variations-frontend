@@ -18,30 +18,18 @@ package viewmodels.checkAnswers.partner
 
 import controllers.partner.routes
 import models.UserAnswers
-import pages.partnerdetails.ChosenPartnerToRemovePage
-import pages.partnerdetails.PartnerDetailsBusinessNamePage
-import pages.partnerdetails.PartnerDetailsDateOfLeavingPage
-import pages.partnerdetails.PartnerDetailsPage
-import pages.partnerdetails.PartnerDetailsTradingNamePage
+import pages.partnerdetails.*
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.Aliases.ActionItem
-import uk.gov.hmrc.govukfrontend.views.Aliases.Actions
-import uk.gov.hmrc.govukfrontend.views.Aliases.Key
-import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryListRow
-import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.Aliases.Value
+import uk.gov.hmrc.govukfrontend.views.Aliases.*
+import utils.DateTimeFormats.shortDateDisplay
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 final case class PartnerCheckConfirmRemoveDateViewModel(
   rows: Seq[SummaryListRow]
 )
 
 object PartnerCheckConfirmRemoveDateViewModel {
-
-  private val dateFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("d MMMM uuuu")
 
   def from(
     userAnswers: UserAnswers
@@ -110,7 +98,7 @@ object PartnerCheckConfirmRemoveDateViewModel {
 
     val displayedDate =
       dateToRemove
-        .map(_.format(dateFormatter))
+        .map(shortDateDisplay)
         .getOrElse(
           messages(
             "partnerCheckConfirmRemoveDate.notProvided"

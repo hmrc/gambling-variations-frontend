@@ -18,24 +18,15 @@ package controllers.partner
 
 import base.SpecBase
 import models.UserAnswers
-import pages.partnerdetails.ChosenPartnerToRemovePage
-import pages.partnerdetails.PartnerDetailsDateOfLeavingPage
-import pages.partnerdetails.PartnerDetailsPage
-import pages.partnerdetails.PartnerDetailsTradingNamePage
+import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsPage, PartnerDetailsTradingNamePage}
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers.GET
-import play.api.test.Helpers.OK
-import play.api.test.Helpers.SEE_OTHER
-import play.api.test.Helpers.contentAsString
-import play.api.test.Helpers.redirectLocation
-import play.api.test.Helpers.running
-import play.api.test.Helpers.status
+import play.api.test.Helpers.*
 import viewmodels.checkAnswers.partner.PartnerCheckConfirmRemoveDateViewModel
 import views.html.partner.PartnerCheckConfirmRemoveDateView
-import play.api.test.Helpers.*
+
 import java.time.LocalDate
 
 class PartnerCheckConfirmRemoveDateControllerSpec extends SpecBase {
