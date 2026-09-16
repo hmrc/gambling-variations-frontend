@@ -26,7 +26,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partner.PartnerDetailsAddPartnerCompletedPage
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporation, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsPage}
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporationPage, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -127,7 +127,7 @@ class PartnerDateOfIncorporationControllerSpec extends SpecBase with MockitoSuga
       val userAnswers =
         partnerDetailsUserAnswers
           .set(
-            PartnerDetailsDateOfIncorporation(index),
+            PartnerDetailsDateOfIncorporationPage(index),
             validAnswer
           )
           .success

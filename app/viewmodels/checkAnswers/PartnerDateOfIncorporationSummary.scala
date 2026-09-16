@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import models.UserAnswers
-import pages.partnerdetails.PartnerDetailsDateOfIncorporation
+import pages.partnerdetails.PartnerDetailsDateOfIncorporationPage
 import play.api.i18n.{Lang, Messages}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormats.dateTimeFormat
@@ -27,7 +27,7 @@ import viewmodels.implicits.*
 object PartnerDateOfIncorporationSummary {
 
   def row(answers: UserAnswers, index: Int)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(PartnerDetailsDateOfIncorporation(index)).map { answer =>
+    answers.get(PartnerDetailsDateOfIncorporationPage(index)).map { answer =>
 
       implicit val lang: Lang = messages.lang
 
