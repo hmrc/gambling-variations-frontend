@@ -1,0 +1,102 @@
+GET        /fax-number-yes-no                        controllers.partner.PartnerAddFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /fax-number-yes-no                        controllers.partner.PartnerAddFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /additional-address-information                     controllers.partner.PartnerDetailsAdditionalAddressInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /additional-address-information                     controllers.partner.PartnerDetailsAdditionalAddressInfoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /additional-address-information-yes-no              controllers.partner.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /additional-address-information-yes-no              controllers.partner.PartnerDetailsAdditionalAddressInfoYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /remove-additional-address-information                   controllers.partner.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /remove-additional-address-information                   controllers.partner.RemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /email-address-yes-no                        controllers.partner.PartnerAddEmailAddressYesNoPageController.onPageLoad(mode: Mode = NormalMode)
+POST       /email-address-yes-no                        controllers.partner.PartnerAddEmailAddressYesNoPageController.onSubmit(mode: Mode = NormalMode)
+
+GET        /email-address                                          controllers.partner.PartnerEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /email-address                                          controllers.partner.PartnerEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET       /contact-numbers                                         controllers.partner.PartnerContactDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST      /contact-numbers                                         controllers.partner.PartnerContactDetailsController.onSubmit(mode: Mode = NormalMode)
+
+GET       /remove-trading-name                        controllers.partner.RemovePartnerTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /remove-trading-name                       controllers.partner.RemovePartnerTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /remove-email-address                                controllers.partner.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /remove-fax-number                           controllers.partner.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /remove-fax-number                           controllers.partner.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /fax-number                              controllers.partner.ChangePartnerFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST      /fax-number                              controllers.partner.ChangePartnerFaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET       /remove-national-insurance-number                        controllers.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /remove-national-insurance-number                        controllers.partner.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /national-insurance-number-yes-no                        controllers.partner.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /national-insurance-number-yes-no                        controllers.partner.PartnerDetailsAddNationalInsuranceNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /trading-name                                controllers.partner.PartnerTradingNameController.onPageLoad(mode: Mode = NormalMode)
+POST      /trading-name                                controllers.partner.PartnerTradingNameController.onSubmit(mode: Mode = NormalMode)
+
+GET       /sole-proprietor                         controllers.partner.ChangePartnerDetailsBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+POST      /sole-proprietor                         controllers.partner.ChangePartnerDetailsBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+
+GET       /partnership                             controllers.partner.ChangePartnerDetailsBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+POST      /partnership                             controllers.partner.ChangePartnerDetailsBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+
+GET       /corporate-body                          controllers.partner.ChangePartnerDetailsBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+POST      /corporate-body                          controllers.partner.ChangePartnerDetailsBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+
+GET       /unincorporated-body                     controllers.partner.ChangePartnerDetailsBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+POST      /unincorporated-body                     controllers.partner.ChangePartnerDetailsBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+
+GET       /limited-liability-partnership           controllers.partner.ChangePartnerDetailsBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+POST      /limited-liability-partnership           controllers.partner.ChangePartnerDetailsBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+
+GET       /national-insurance-number                   controllers.partner.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(mode: Mode = NormalMode)
+POST      /national-insurance-number                   controllers.partner.PartnerDetailsAddNationalInsuranceNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET       /business-incorporated-uk                        controllers.partner.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(mode: Mode = NormalMode)
+POST      /business-incorporated-uk                        controllers.partner.PartnerDetailsIsBusinessIncorporatedUkController.onSubmit(mode: Mode = NormalMode)
+
+GET       /vat-registration-number                  controllers.partner.PartnerDetailsVatRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST      /vat-registration-number                  controllers.partner.PartnerDetailsVatRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET       /vat-registration-number-yes-no          controllers.partner.VatRegistrationNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /vat-registration-number-yes-no           controllers.partner.VatRegistrationNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /remove-vat-registration-number                        controllers.partner.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /remove-vat-registration-number                        controllers.partner.PartnerDetailsRemoveVatRegNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
+POST      /business-type                       controllers.partner.PartnerDetailsBusinessTypeController.onSubmit(mode: Mode = NormalMode)
+
+GET       /trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST      /trading-name-yes-no                         controllers.partner.PartnerDetailsAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET       /unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRController.onPageLoad(mode: Mode = NormalMode)
+POST      /unique-taxpayer-reference                   controllers.partner.PartnerDetailsAddUTRController.onSubmit(mode: Mode = NormalMode)
+
+GET       /partner-details                       controllers.partner.PartnerDetailsController.onPageLoad
+POST      /partner-details                      controllers.partner.PartnerDetailsController.onSubmit
+
+GET       /continue                    controllers.partner.PartnerDetailsController.onContinue
+GET       /remove/:partnerNumber       controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET       /details/:partnerNumber      controllers.partner.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
+
+GET       /date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
+POST      /date-of-incorporation          controllers.partner.PartnerDateOfIncorporationController.onSubmit(mode: Mode = NormalMode)
+
+GET       /date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+POST      /date-of-birth          controllers.partner.PartnerSoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
+
+GET       /date-to-remove-redirect  controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET       /date-to-remove           controllers.partner.PartnerDeleteDateController.onPageLoad(mode: Mode = NormalMode)
+POST      /date-to-remove           controllers.partner.PartnerDeleteDateController.onSubmit(mode: Mode = NormalMode)
+
+GET       /foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onPageLoad(mode: Mode = NormalMode)
+POST      /foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onSubmit(mode: Mode = NormalMode)
+
+GET       /check-date-to-remove                       controllers.partner.PartnerCheckConfirmRemoveDateController.onPageLoad()
