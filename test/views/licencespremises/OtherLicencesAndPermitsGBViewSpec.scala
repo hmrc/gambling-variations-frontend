@@ -96,5 +96,28 @@ class OtherLicencesAndPermitsGBViewSpec extends SpecBase {
       doc.select("input[value=noOtherLicencesAndPremisesGBSelected]").hasAttr("checked") mustBe false
     }
 
+    "must link the error summary to the first checkbox so it lands on the in-page error message" in new ErrorSetup {
+      doc.select(".govuk-error-summary a").attr("href") mustEqual "#permitsGB-clubGaming"
+      doc.select("#permitsGB-clubGaming").isEmpty mustBe false
+    }
+
+  }
+
+  trait ErrorSetup {
+    private val app = applicationBuilder().build()
+
+    private val view = app.injector.instanceOf[OtherLicencesAndPermitsGBView]
+
+    implicit private val request: play.api.mvc.Request[?] = FakeRequest()
+
+    implicit val messages: Messages =
+      app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
+
+    private val formProvider = new OtherLicencesAndPermitsGBFormProvider()
+
+    private val formWithErrors = formProvider().bind(Map.empty[String, String])
+    private val html = view(formWithErrors, NormalMode, OtherLicencesAndPermitsGBViewModel(formWithErrors))(request, messages)
+
+    val doc: Document = Jsoup.parse(html.body)
   }
 }
