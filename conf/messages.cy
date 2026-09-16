@@ -358,6 +358,13 @@ businessTradeClass.checkYourAnswersLabel = 	Beth yw dosbarth masnachu’r busnes
 businessTradeClass.error.required = Dewiswch y dosbarth masnachu ar gyfer y busnes hwn
 businessTradeClass.change.hidden = 	Beth yw dosbarth masnachu’r busnes?
 
+seasonalBusiness.title = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.heading = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.paragraph = Mae gan fusnes tymhorol gyfnodau lle nad yw’n masnachu. Os ydych yn rhedeg busnes tymhorol, mae’n rhaid i chi gyflwyno ffurflenni ‘dim’ (‘nil returns’) ar gyfer unrhyw gyfnodau lle nad ydych yn masnachu.
+seasonalBusiness.checkYourAnswersLabel = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.error.required = Dewiswch ‘Iawn’ os yw’r busnes hwn yn fusnes tymhorol
+seasonalBusiness.change.hidden = A yw’r busnes hwn yn fusnes tymhorol?
+
 removePreviousRegNumber.title = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn?
 removePreviousRegNumber.heading = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn {0}?
 removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru blaenorol
@@ -374,3 +381,12 @@ associatedRegNumber.error.invalid.characters = Mae’n rhaid i’ch rhif cofrest
 associatedRegNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru cysylltiedig fod yn fformat cywir
 associatedRegNumber.error.invalidReference = Nodwch rif cofrestru cysylltiedig go iawn
 associatedRegNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol
+
+previousRegistrationNumber.title = Beth yw’ch rhif cofrestru blaenorol?
+previousRegistrationNumber.heading = Beth yw’ch rhif cofrestru blaenorol?
+previousRegistrationNumber.hint = Mae’n 14 o gymeriadau ac yn dechrau gydag X, er enghraifft XAM00001234567
+previousRegistrationNumber.error.required = Nodwch eich rhif cofrestru blaenorol
+previousRegistrationNumber.error.invalid.characters = Mae’n rhaid i’ch rhif cofrestru blaenorol gynnwys y llythrennau a i z a’r rhifau 0 i 9 yn unig
+previousRegistrationNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru blaenorol fod yn fformat cywir
+previousRegistrationNumber.error.invalidReference = Nodwch rif cofrestru blaenorol go iawn
+previousRegistrationNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol

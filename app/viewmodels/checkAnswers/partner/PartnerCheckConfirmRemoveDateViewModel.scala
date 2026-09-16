@@ -1,0 +1,140 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package viewmodels.checkAnswers.partner
+
+import controllers.partner.routes
+import models.UserAnswers
+import pages.partnerdetails.*
+import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.Aliases.*
+import utils.DateTimeFormats.shortDateDisplay
+
+import java.time.LocalDate
+
+final case class PartnerCheckConfirmRemoveDateViewModel(
+  rows: Seq[SummaryListRow]
+)
+
+object PartnerCheckConfirmRemoveDateViewModel {
+
+  def from(
+    userAnswers: UserAnswers
+  )(implicit messages: Messages): PartnerCheckConfirmRemoveDateViewModel = {
+
+    val partnerIndex =
+      userAnswers
+        .get(ChosenPartnerToRemovePage)
+        .getOrElse(
+          throw new RuntimeException(
+            "No selected partner for removal"
+          )
+        )
+
+    val partnerName =
+      userAnswers
+        .get(PartnerDetailsTradingNamePage(partnerIndex))
+        .orElse(
+          userAnswers.get(
+            PartnerDetailsBusinessNamePage(partnerIndex)
+          )
+        )
+        .orElse(
+          userAnswers.get(
+            PartnerDetailsPage(partnerIndex)
+          )
+        )
+        .getOrElse(
+          messages(
+            "partnerCheckConfirmRemoveDate.notProvided"
+          )
+        )
+
+    val dateToRemove =
+      userAnswers.get(
+        PartnerDetailsDateOfLeavingPage(partnerIndex)
+      )
+
+    PartnerCheckConfirmRemoveDateViewModel(
+      rows = Seq(
+        partnerNameRow(partnerName),
+        dateToRemoveRow(dateToRemove)
+      )
+    )
+  }
+
+  private def partnerNameRow(
+    partnerName: String
+  )(implicit messages: Messages): SummaryListRow =
+    SummaryListRow(
+      key = Key(
+        content = Text(
+          messages(
+            "partnerCheckConfirmRemoveDate.labelPartnerName"
+          )
+        )
+      ),
+      value = Value(
+        content = Text(partnerName)
+      )
+    )
+
+  private def dateToRemoveRow(
+    dateToRemove: Option[LocalDate]
+  )(implicit messages: Messages): SummaryListRow = {
+
+    val displayedDate =
+      dateToRemove
+        .map(shortDateDisplay)
+        .getOrElse(
+          messages(
+            "partnerCheckConfirmRemoveDate.notProvided"
+          )
+        )
+
+    SummaryListRow(
+      key = Key(
+        content = Text(
+          messages(
+            "partnerCheckConfirmRemoveDate.labelDateToRemove"
+          )
+        )
+      ),
+      value = Value(
+        content = Text(displayedDate)
+      ),
+      actions = Some(
+        Actions(
+          items = Seq(
+            ActionItem(
+              href = routes.PartnerDeleteDateController
+                .onPageLoad()
+                .url,
+              content = Text(
+                messages("site.change")
+              ),
+              visuallyHiddenText = Some(
+                messages(
+                  "partnerCheckConfirmRemoveDate.changeDate.hidden"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  }
+}
