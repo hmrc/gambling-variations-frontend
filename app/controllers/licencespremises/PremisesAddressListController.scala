@@ -22,7 +22,8 @@ import pages.licencespremises.PremisesDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.PremisesAddressListView
+import viewmodels.PremisesAddressListViewModel
+import views.html.licencespremises.PremisesAddressListView
 
 import javax.inject.Inject
 
@@ -41,6 +42,6 @@ class PremisesAddressListController @Inject() (
       .get(PremisesDetailsPage)
       .fold(
         Redirect(routes.AccessDeniedController.onPageLoad())
-      )(premisesList => Ok(view(premisesList.premises)))
+      )(premisesList => Ok(view(PremisesAddressListViewModel.from(premisesList.premises))))
   }
 }
