@@ -23,7 +23,6 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Key, 
 import viewmodels.govuk.all.{SummaryListRowViewModel, SummaryListViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
-
 case object PremisesAddressListViewModel {
   def from(premisesList: Seq[PremisesDetails])(implicit messages: Messages): SummaryList = {
     // we map each address line to a summary row, which is then fed into the summary list vm
@@ -37,12 +36,12 @@ case object PremisesAddressListViewModel {
           value = ValueViewModel(address),
           actions = Seq(
             ActionItem(
-              href               = controllers.routes.CorrespondenceNameController.onPageLoad().url,
+              href               = "#",
               content            = "site.change",
               visuallyHiddenText = Some("premisesAddressList.label.hidden")
             ),
             ActionItem(
-              href               = controllers.routes.CorrespondenceNameController.onPageLoad().url,
+              href               = "#",
               content            = "site.remove",
               visuallyHiddenText = Some("premisesAddressList.label.hidden")
             )
