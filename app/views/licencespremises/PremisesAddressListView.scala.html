@@ -20,11 +20,20 @@
 
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        govukSummaryList: GovukSummaryList,
+        govukButton: GovukButton,
+        h1: H1,
+        caption: Caption
 )
 
-@(premises: Seq[PremisesDetails])(implicit request: Request[_], messages: Messages)
+@(addressList: SummaryList)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("premisesAddressList.title"))) {
+    @caption(messages("changeRegistrationDetails.caption"))
+    @h1("premisesAddressList.heading", classes="govuk-heading-l")
+    @govukSummaryList(addressList)
 
+    @govukButton(
+        ButtonViewModel(messages("site.continue"))
+    )
 }
