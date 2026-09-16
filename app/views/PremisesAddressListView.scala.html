@@ -14,14 +14,17 @@
  * limitations under the License.
  *@
 
+@import views.html.components.*
+@import models.licencespremises.PremisesDetails
+
+
 @this(
         layout: templates.Layout,
         govukButton: GovukButton
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(premises: Seq[PremisesDetails])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("premisesAddressList.title"))) {
 
-    <h1 class="govuk-heading-xl">@messages("premisesAddressList.heading")</h1>
 }

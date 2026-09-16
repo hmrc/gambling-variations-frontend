@@ -14,26 +14,33 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.licencespremises
 
 import controllers.actions.*
-import javax.inject.Inject
+import controllers.routes
+import pages.licencespremises.PremisesDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PremisesAddressListView
 
+import javax.inject.Inject
+
 class PremisesAddressListController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: LicencesPremisesDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: PremisesAddressListView
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    Ok(view())
+    request.userAnswers
+      .get(PremisesDetailsPage)
+      .fold(
+        Redirect(routes.AccessDeniedController.onPageLoad())
+      )(premisesList => Ok(view(premisesList.premises)))
   }
 }
