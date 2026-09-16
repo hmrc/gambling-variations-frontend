@@ -16,50 +16,92 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import models.BusinessType
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsBusinessTypePageSpec extends PlaySpec {
+class PartnerDetailsBusinessTypePageSpec extends PlaySpec with PartnerDetailsHelper {
+  "partners" must {
+    "PartnerDetailsBusinessTypePage" must {
 
-  val Index = 0
+      "have the correct path" in {
+        PartnerDetailsBusinessTypePage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsBusinessType")
+      }
 
-  "PartnerDetailsBusinessTypePage" must {
+      "have the correct toString value" in {
+        PartnerDetailsBusinessTypePage(businessNumber1).toString mustEqual "partnerDetailsBusinessType"
+      }
 
-    "have the correct path" in {
-      PartnerDetailsBusinessTypePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsBusinessType")
-    }
+      "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
 
-    "have the correct toString value" in {
-      PartnerDetailsBusinessTypePage(Index).toString mustEqual "partnerDetailsBusinessType"
-    }
+        val value1 = BusinessType.Soleproprietor
+        val value2 = BusinessType.Unincorporatedbody
 
-    "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
-
-      val value1 = BusinessType.Soleproprietor
-      val value2 = BusinessType.Unincorporatedbody
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsBusinessTypePage(Index).toString -> Json.toJson(value1.code)
-          ),
-          Json.obj(
-            PartnerDetailsBusinessTypePage(Index + 1).toString -> Json.toJson(value2.code)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsBusinessTypePage(businessNumber1).toString -> Json.toJson(value1.code)
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsBusinessTypePage(businessNumber2).toString -> Json.toJson(value2.code)
+            )
           )
         )
-      )
 
-      PartnerDetailsBusinessTypePage(Index).path
-        .asSingleJson(json)
-        .validate[BusinessType]
-        .get mustEqual value1
+        PartnerDetailsBusinessTypePage(businessNumber1).path
+          .asSingleJson(json)
+          .validate[BusinessType]
+          .get mustEqual value1
 
-      PartnerDetailsBusinessTypePage(Index + 1).path
-        .asSingleJson(json)
-        .validate[BusinessType]
-        .get mustEqual value2
+        PartnerDetailsBusinessTypePage(businessNumber2).path
+          .asSingleJson(json)
+          .validate[BusinessType]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsBusinessTypePage" must {
+
+      "have the correct path" in {
+        PartnerDetailsBusinessTypePage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsBusinessType")
+      }
+
+      "have the correct toString value" in {
+        PartnerDetailsBusinessTypePage(newPartnersIndex1).toString mustEqual "partnerDetailsBusinessType"
+      }
+
+      "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
+
+        val value1 = BusinessType.Soleproprietor
+        val value2 = BusinessType.Unincorporatedbody
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsBusinessTypePage(newPartnersIndex1).toString -> Json.toJson(value1.code)
+            ),
+            Json.obj(
+              PartnerDetailsBusinessTypePage(newPartnersIndex2).toString -> Json.toJson(value2.code)
+            )
+          )
+        )
+
+        PartnerDetailsBusinessTypePage(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[BusinessType]
+          .get mustEqual value1
+
+        PartnerDetailsBusinessTypePage(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[BusinessType]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }

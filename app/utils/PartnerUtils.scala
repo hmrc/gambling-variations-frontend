@@ -16,31 +16,14 @@
 
 package utils
 
-import models.UserAnswers
+import models.{Mode, NormalMode, UserAnswers}
+import pages.BusinessNumberOrIndex
 import play.api.libs.json.{JsArray, JsObject}
 
-object PartnerUtils:
+object PartnerUtils {
 
-  // TODO: Interim solution - will be refactored with the indexing ticket
-  def interimIndex: Int = 0
+  def parseIndex(index: String, mode: Mode): BusinessNumberOrIndex =
+    if mode == NormalMode then index.toInt
+    else index
 
-  extension (userAnswers: UserAnswers)
-
-    // TODO: Interim solution - will be refactored with the indexing ticket
-    private def partnersArray: Option[JsArray] =
-      (userAnswers.data \ "partners").validate[JsArray].asOpt
-
-    // TODO: Interim solution - will be refactored with the indexing ticket
-    def getPartnersSize: Int =
-      partnersArray
-        .fold(0)(e => if e.value.isEmpty then 0 else e.value.size - 1)
-
-    // TODO: Interim solution - will be refactored with the indexing ticket
-    def getIndex: Int =
-      getPartnersSize
-
-    // TODO: Interim solution - will be refactored with the indexing ticket
-    def partnerAt(index: Int): Option[JsObject] =
-      partnersArray
-        .map(_.value.collect { case obj: JsObject => obj }.toSeq)
-        .flatMap(_.lift(index))
+}

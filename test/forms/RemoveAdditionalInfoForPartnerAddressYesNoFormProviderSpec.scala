@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.partner.RemoveAdditionalInfoForPartnerAddressYesNoFormProvider
+import forms.partnerdetails.RemoveAdditionalInfoForPartnerAddressYesNoFormProvider
 import play.api.data.FormError
 
 class RemoveAdditionalInfoForPartnerAddressYesNoFormProviderSpec extends BooleanFieldBehaviours {

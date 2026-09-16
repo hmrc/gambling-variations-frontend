@@ -16,12 +16,19 @@
 
 package pages.partnerdetails
 
-import pages.QuestionPage
+import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsIsBusinessIncorporatedUkPage(index: Int) extends QuestionPage[Boolean] {
+case class PartnerDetailsIsBusinessIncorporatedUkPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ "partners" \ index \ toString
+  override def path: JsPath = businessNumberOrIndex match {
+    case key: String => JsPath \ "partners" \ key \ toString
+    case index: Int  => JsPath \ "newPartners" \ index \ toString
+  }
 
   override def toString: String = "partnerDetailsIsBusinessIncorporatedUk"
+}
+object PartnerDetailsIsBusinessIncorporatedUkPage {
+  def apply(index: Int) = new PartnerDetailsIsBusinessIncorporatedUkPage(index)
+  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsIsBusinessIncorporatedUkPage(partnerDetailsBusinessNumber)
 }

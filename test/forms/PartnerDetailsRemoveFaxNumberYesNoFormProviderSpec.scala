@@ -17,7 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.partner.PartnerDetailsRemoveFaxNumberYesNoFormProvider
+import forms.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoFormProvider
 import play.api.data.FormError
 
 class PartnerDetailsRemoveFaxNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {

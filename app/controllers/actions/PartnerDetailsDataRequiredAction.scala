@@ -23,7 +23,7 @@ import models.{Address, BusinessType, ContactNumber, CorrespondenceDetails, Part
 import pages.*
 import pages.partnerdetails.*
 import play.api.Logging
-import play.api.libs.json.Writes
+import play.api.libs.json.{JsArray, JsPath, Json, Writes}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -44,10 +44,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
-
-    // TODO: Interim solution - will be refactored with the indexing ticket
-    val page = PartnerDetailsPage(0)
-
     request.userAnswers match {
       case None =>
         logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
@@ -56,14 +52,15 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
         val answers = UserAnswers(request.mgdRegNum)
         saveUserAnswersToSessionAndRedirect(answers, request)
 
-      case Some(userAnswers) =>
+      case Some(userAnswers: UserAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(page) map { _ =>
+        if isPartnerDetailsInCache(request.mgdRegNum, userAnswers) then {
           logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
+        } else {
+          println("or else")
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -71,6 +68,16 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
         }
     }
   }
+
+  // TODO different way of making sure there is data, second part after ||
+  // might be considered an overkill
+  private def isPartnerDetailsInCache(mgdRegNumber: String, userAnswers: UserAnswers): Boolean =
+    (userAnswers.data \ "partners" \ mgdRegNumber \ "mgdRegNum").toOption.isDefined ||
+      (userAnswers.data \ "newPartners").toOption
+        .collect { case JsArray(values) =>
+          values.headOption.exists(value => (value \ "name").toOption.isDefined)
+        }
+        .getOrElse(false)
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
     gamblingConnector.getPartnersDetails(answers.id) flatMap { partnerDetails =>
@@ -95,15 +102,20 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
   private def setPartnerDetails(
     partnersDetails: PartnersDetails,
     answers: UserAnswers
-  ): Try[UserAnswers] =
+  ): Try[UserAnswers] = {
     partnersDetails.partners
-      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
-      .zipWithIndex
-      .foldLeft(Try(answers)) { case (userAnswers, (partnerDetails, index)) =>
-        buildPartnerDetails(partnerDetails, index, userAnswers)
-      }
+      // TODO don't forget to unfilter it
+//      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+      .foldLeft(Try(answers)) { case (userAnswers, partnerDetails) =>
+//        println("WHAT: " + partnerDetails.businessPartnerNumber)
 
-  private def buildPartnerDetails(partnerDetails: PartnerDetails, index: Int, userAnswers: Try[UserAnswers]) = {
+        // TODO forcing to add one right away
+//        val p = userAnswers.flatMap(e => e.setIfDefined(PartnerDetailsSelectedPartnerBusinessNumber, partnerDetails.businessPartnerNumber))
+        buildPartnerDetails(partnerDetails, partnerDetails.businessPartnerNumber.get /*TODO force use of get*/, userAnswers)
+      }
+  }
+
+  private def buildPartnerDetails(partnerDetails: PartnerDetails, index: String /*TODO - changed from Int*/, userAnswers: Try[UserAnswers]) = {
 
     val address = partnerDetails.address1 match {
       case Some(address1) =>
@@ -161,8 +173,11 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     } yield updatedAnswers
   }
 
-  private def setIfDefinedBusinessDetails(partnerDetails: PartnerDetails, answers: UserAnswers, index: Int): Try[UserAnswers] = for {
-    updatedAnswers <- answers.set(PartnerDetailsPage(index), partnerDetails.mgdRegNumber)
+  private def setIfDefinedBusinessDetails(partnerDetails: PartnerDetails,
+                                          answers: UserAnswers,
+                                          index: String /*TODO changed from Int*/
+                                         ): Try[UserAnswers] = for {
+    updatedAnswers <- answers.set(PartnerDetailsMgdRegNumberPage(index), partnerDetails.mgdRegNumber)
     updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(index), partnerDetails.tradingName)
     businessType = partnerDetails.businessType.flatMap(BusinessType.fromCode)
     updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsBusinessTypePage(index), businessType)

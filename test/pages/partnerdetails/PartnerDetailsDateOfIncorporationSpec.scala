@@ -16,52 +16,100 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
 import java.time.LocalDate
 
-class PartnerDetailsDateOfIncorporationSpec extends PlaySpec {
+class PartnerDetailsDateOfIncorporationSpec extends PlaySpec with PartnerDetailsHelper {
 
-  val Index = 0
+  "partners" must {
+    "PartnerDetailsDateOfIncorporation" must {
 
-  "PartnerDetailsDateOfIncorporation" must {
+      "have the correct path" in {
+        PartnerDetailsDateOfIncorporation(
+          businessNumber1
+        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsDateOfIncorporation")
+      }
 
-    "have the correct path" in {
-      PartnerDetailsDateOfIncorporation(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsDateOfIncorporation")
-    }
+      "have the correct toString value" in {
 
-    "have the correct toString value" in {
+        PartnerDetailsDateOfIncorporation(businessNumber1).toString mustEqual "partnerDetailsDateOfIncorporation"
+      }
 
-      PartnerDetailsDateOfIncorporation(Index).toString mustEqual "partnerDetailsDateOfIncorporation"
-    }
+      "be able to read and write PartnerDetailsDateOfIncorporation values with correct index" in {
 
-    "be able to read and write PartnerDetailsDateOfIncorporation values with correct index" in {
+        val value1 = LocalDate.of(2026, 1, 1)
+        val value2 = LocalDate.of(2025, 1, 1)
 
-      val value1 = LocalDate.of(2026, 1, 1)
-      val value2 = LocalDate.of(2025, 1, 1)
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsDateOfIncorporation(Index).toString -> Json.toJson(value1)
-          ),
-          Json.obj(
-            PartnerDetailsDateOfIncorporation(Index + 1).toString -> Json.toJson(value2)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsDateOfIncorporation(businessNumber1).toString -> Json.toJson(value1)
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsDateOfIncorporation(businessNumber2).toString -> Json.toJson(value2)
+            )
           )
         )
-      )
 
-      PartnerDetailsDateOfIncorporation(Index).path
-        .asSingleJson(json)
-        .validate[LocalDate]
-        .get mustEqual value1
+        PartnerDetailsDateOfIncorporation(businessNumber1).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value1
 
-      PartnerDetailsDateOfIncorporation(Index + 1).path
-        .asSingleJson(json)
-        .validate[LocalDate]
-        .get mustEqual value2
+        PartnerDetailsDateOfIncorporation(businessNumber2).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsDateOfIncorporation" must {
+
+      "have the correct path" in {
+        PartnerDetailsDateOfIncorporation(
+          newPartnersIndex1
+        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsDateOfIncorporation")
+      }
+
+      "have the correct toString value" in {
+
+        PartnerDetailsDateOfIncorporation(newPartnersIndex1).toString mustEqual "partnerDetailsDateOfIncorporation"
+      }
+
+      "be able to read and write PartnerDetailsDateOfIncorporation values with correct index" in {
+
+        val value1 = LocalDate.of(2026, 1, 1)
+        val value2 = LocalDate.of(2025, 1, 1)
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsDateOfIncorporation(newPartnersIndex1).toString -> Json.toJson(value1)
+            ),
+            Json.obj(
+              PartnerDetailsDateOfIncorporation(newPartnersIndex2).toString -> Json.toJson(value2)
+            )
+          )
+        )
+
+        PartnerDetailsDateOfIncorporation(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value1
+
+        PartnerDetailsDateOfIncorporation(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }

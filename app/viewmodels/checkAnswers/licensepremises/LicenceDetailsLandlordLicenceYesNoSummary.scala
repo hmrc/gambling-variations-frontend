@@ -24,7 +24,6 @@ import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
 object LicenceDetailsLandlordLicenceYesNoSummary {
-  
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(LicenceDetailsLandlordLicenceYesNoPage).map { answer =>

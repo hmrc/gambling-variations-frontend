@@ -1,0 +1,133 @@
+#yes/no pages
+#TODO these pages only handle "normalMode", I think we need check mode to specify which partner array we modify
+# Initial suggestion; just like with add/change, add new routes with slightly different name
+GET        /change-registration-details/partner-details/fax-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/fax-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddFaxNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/additional-address-information-yes-no/:index              controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/additional-address-information-yes-no/:index              controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/email-address-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/email-address-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddEmailAddressYesNoPageController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/national-insurance-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/national-insurance-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/vat-registration-number-yes-no/:index          controllers.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/vat-registration-number-yes-no/:index           controllers.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/trading-name-yes-no/:index                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/trading-name-yes-no/:index                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+# Add/Change pages
+GET        /change-registration-details/partner-details/additional-address-information/:index                     controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/additional-address-information/:index                     controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-additional-address-information/:index                     controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-additional-address-information/:index                     controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/email-address/:index                                          controllers.partnerdetails.PartnerDetailsEmailAddressController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/email-address/:index                                          controllers.partnerdetails.PartnerDetailsEmailAddressController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-email-address/:index                                          controllers.partnerdetails.PartnerDetailsEmailAddressController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-email-address/:index                                          controllers.partnerdetails.PartnerDetailsEmailAddressController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/fax-number/:index                              controllers.partnerdetails.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/fax-number/:index                              controllers.partnerdetails.PartnerDetailsChangePartnerFaxNumberController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-fax-number/:index                              controllers.partnerdetails.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-fax-number/:index                              controllers.partnerdetails.PartnerDetailsChangePartnerFaxNumberController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET       	/change-registration-details/partner-details/contact-numbers/:index                                         controllers.partnerdetails.PartnerDetailsContactDetailsController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       	/change-registration-details/partner-details/contact-numbers/:index                                         controllers.partnerdetails.PartnerDetailsContactDetailsController.onSubmit(index: String, mode: Mode = NormalMode)
+GET       	/change-registration-details/partner-details/change-contact-numbers/:index                                         controllers.partnerdetails.PartnerDetailsContactDetailsController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       	/change-registration-details/partner-details/change-contact-numbers/:index                                         controllers.partnerdetails.PartnerDetailsContactDetailsController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/trading-name/:index                                controllers.partnerdetails.PartnerDetailsTradingNameController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/trading-name/:index                                controllers.partnerdetails.PartnerDetailsTradingNameController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-trading-name/:index                                controllers.partnerdetails.PartnerDetailsTradingNameController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-trading-name/:index                                controllers.partnerdetails.PartnerDetailsTradingNameController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/sole-proprietor/:index                         controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/sole-proprietor/:index                         controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-sole-proprietor/:index                         controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-sole-proprietor/:index                         controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/partnership/:index                             controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/partnership/:index                             controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-partnership/:index                             controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Partnership, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-partnership/:index                             controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Partnership, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/corporate-body/:index                          controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/corporate-body/:index                          controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-corporate-body/:index                          controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-corporate-body/:index                          controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/unincorporated-body/:index                     controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/unincorporated-body/:index                     controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-unincorporated-body/:index                     controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-unincorporated-body/:index                     controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/limited-liability-partnership/:index           controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/limited-liability-partnership/:index           controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-limited-liability-partnership/:index           controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onPageLoad(index: String, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-limited-liability-partnership/:index           controllers.partnerdetails.PartnerDetailsChangeBusinessNameController.onSubmit(index: String, businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/national-insurance-number/:index                   controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/national-insurance-number/:index                   controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-national-insurance-number/:index                   controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-national-insurance-number/:index                   controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/business-incorporated-uk/:index                        controllers.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/business-incorporated-uk/:index                        controllers.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-business-incorporated-uk/:index                        controllers.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-business-incorporated-uk/:index                        controllers.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/vat-registration-number/:index                  controllers.partnerdetails.PartnerDetailsVatRegistrationNumberController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/vat-registration-number/:index                  controllers.partnerdetails.PartnerDetailsVatRegistrationNumberController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-vat-registration-number/:index                  controllers.partnerdetails.PartnerDetailsVatRegistrationNumberController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-vat-registration-number/:index                  controllers.partnerdetails.PartnerDetailsVatRegistrationNumberController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/business-type/:index                       controllers.partnerdetails.PartnerDetailsBusinessTypeController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/business-type/:index                       controllers.partnerdetails.PartnerDetailsBusinessTypeController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-business-type/:index                       controllers.partnerdetails.PartnerDetailsBusinessTypeController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-business-type/:index                       controllers.partnerdetails.PartnerDetailsBusinessTypeController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET        /change-registration-details/partner-details/unique-taxpayer-reference/:index                   controllers.partnerdetails.PartnerDetailsAddUTRController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/unique-taxpayer-reference/:index                   controllers.partnerdetails.PartnerDetailsAddUTRController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-unique-taxpayer-reference/:index                   controllers.partnerdetails.PartnerDetailsAddUTRController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-unique-taxpayer-reference/:index                   controllers.partnerdetails.PartnerDetailsAddUTRController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET       /change-registration-details/partner-details/date-of-incorporation/:index          controllers.partnerdetails.PartnerDetailsDateOfIncorporationController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST      /change-registration-details/partner-details/date-of-incorporation/:index          controllers.partnerdetails.PartnerDetailsDateOfIncorporationController.onSubmit(index: String, mode: Mode = NormalMode)
+GET       /change-registration-details/partner-details/change-date-of-incorporation/:index          controllers.partnerdetails.PartnerDetailsDateOfIncorporationController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST      /change-registration-details/partner-details/change-date-of-incorporation/:index          controllers.partnerdetails.PartnerDetailsDateOfIncorporationController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET       /change-registration-details/partner-details/date-of-birth/:index          controllers.partnerdetails.PartnerDetailsSoleProprietorDobController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST      /change-registration-details/partner-details/date-of-birth/:index          controllers.partnerdetails.PartnerDetailsSoleProprietorDobController.onSubmit(index: String, mode: Mode = NormalMode)
+GET       /change-registration-details/partner-details/change-date-of-birth/:index          controllers.partnerdetails.PartnerDetailsSoleProprietorDobController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST      /change-registration-details/partner-details/change-date-of-birth/:index          controllers.partnerdetails.PartnerDetailsSoleProprietorDobController.onSubmit(index: String, mode: Mode = CheckMode)
+
+#Remove pages
+#TODO these pages only handle "normalMode", I think we need check mode to specify which partner array we modify
+# Initial suggestion; just like with add/change, add new routes with slightly different name
+GET        /change-registration-details/partner-details/remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/remove-email-address/:index                                controllers.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-email-address/:index                                controllers.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/remove-fax-number/:index                           controllers.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-fax-number/:index                           controllers.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/remove-trading-name/:index                       controllers.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-trading-name/:index                       controllers.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/remove-national-insurance-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-national-insurance-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
+POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
+GET       /change-registration-details/partner-details/continue                    controllers.partnerdetails.PartnerDetailsController.onContinue
+GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)

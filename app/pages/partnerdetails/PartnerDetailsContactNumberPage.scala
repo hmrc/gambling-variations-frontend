@@ -17,13 +17,20 @@
 package pages.partnerdetails
 
 import models.ContactNumber
-import pages.QuestionPage
+import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-//TODO: index will be replaced in the next ticket with `BusinessPartnerNumber`
-case class PartnerDetailsContactNumberPage(index: Int) extends QuestionPage[ContactNumber] {
+case class PartnerDetailsContactNumberPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[ContactNumber] {
 
-  override def path: JsPath = PartnerDetailsCorrespondenceDetailsSectionPage(index).path \ toString
+  override def path: JsPath = businessNumberOrIndex match {
+    case key: String => PartnerDetailsCorrespondenceDetailsSectionPage(key).path \ toString
+    case index: Int  => PartnerDetailsCorrespondenceDetailsSectionPage(index).path \ toString
+  }
 
   override def toString: String = "contactNumber"
+}
+
+object PartnerDetailsContactNumberPage {
+  def apply(index: Int) = new PartnerDetailsContactNumberPage(index)
+  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsContactNumberPage(partnerDetailsBusinessNumber)
 }

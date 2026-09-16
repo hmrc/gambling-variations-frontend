@@ -17,12 +17,20 @@
 package pages.partnerdetails
 
 import models.CorrespondenceDetails
-import pages.QuestionPage
+import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsCorrespondenceDetailsSectionPage(index: Int) extends QuestionPage[CorrespondenceDetails] {
+case class PartnerDetailsCorrespondenceDetailsSectionPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[CorrespondenceDetails] {
 
-  override def path: JsPath = JsPath \ "partners" \ index \ toString
+  override def path: JsPath = businessNumberOrIndex match {
+    case key: String => JsPath \ "partners" \ key \ toString
+    case index: Int  => JsPath \ "newPartners" \ index \ toString
+  }
 
   override def toString: String = "partnerDetailsCorrespondenceDetailsSection"
+}
+
+object PartnerDetailsCorrespondenceDetailsSectionPage {
+  def apply(index: Int) = new PartnerDetailsCorrespondenceDetailsSectionPage(index)
+  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsCorrespondenceDetailsSectionPage(partnerDetailsBusinessNumber)
 }

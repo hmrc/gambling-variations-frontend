@@ -31,14 +31,14 @@ import views.html.licencespremises.LicenceDetailsLandlordLicenceYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LicenceDetailsLandlordLicenceYesNoController @Inject()(
+class LicenceDetailsLandlordLicenceYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: LicencesPremisesDataRequiredAction,
-  formProvider:LicenceDetailsLandlordLicenceYesNoFormProvider,
+  formProvider: LicenceDetailsLandlordLicenceYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: LicenceDetailsLandlordLicenceYesNoView
 )(implicit ec: ExecutionContext)

@@ -16,56 +16,106 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsCorrespondenceFaxNumberPageSpec extends PlaySpec {
+class PartnerDetailsCorrespondenceFaxNumberPageSpec extends PlaySpec with PartnerDetailsHelper {
 
-  val Index = 0
+  "partners" must {
+    "PartnerDetailsCorrespondenceFaxNumberPage" must {
 
-  "PartnerDetailsCorrespondenceFaxNumberPage" must {
+      "have the correct path" in {
+        PartnerDetailsCorrespondenceFaxNumberPage(
+          businessNumber1
+        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection" \ "faxNumber")
+      }
 
-    "have the correct path" in {
-      PartnerDetailsCorrespondenceFaxNumberPage(
-        Index
-      ).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsCorrespondenceDetailsSection" \ "faxNumber")
-    }
+      "have the correct toString value" in {
 
-    "have the correct toString value" in {
+        PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1).toString mustEqual "faxNumber"
+      }
 
-      PartnerDetailsCorrespondenceFaxNumberPage(Index).toString mustEqual "faxNumber"
-    }
+      "be able to read and write PartnerDetailsCorrespondenceFaxNumberPage values with correct index" in {
 
-    "be able to read and write PartnerDetailsCorrespondenceFaxNumberPage values with correct index" in {
+        val value1 = "Value1"
+        val value2 = "Value2"
 
-      val value1 = "Value1"
-      val value2 = "Value2"
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsCorrespondenceDetailsSectionPage(Index).toString -> Json.obj(
-              PartnerDetailsCorrespondenceFaxNumberPage(Index).toString -> Json.toJson(value1)
-            )
-          ),
-          Json.obj(
-            PartnerDetailsCorrespondenceDetailsSectionPage(Index).toString -> Json.obj(
-              PartnerDetailsCorrespondenceFaxNumberPage(Index + 1).toString -> Json.toJson(value2)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsCorrespondenceDetailsSectionPage(businessNumber1).toString -> Json.obj(
+                PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1).toString -> Json.toJson(value1)
+              )
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsCorrespondenceDetailsSectionPage(businessNumber1).toString -> Json.obj(
+                PartnerDetailsCorrespondenceFaxNumberPage(businessNumber2).toString -> Json.toJson(value2)
+              )
             )
           )
         )
-      )
 
-      PartnerDetailsCorrespondenceFaxNumberPage(Index).path
-        .asSingleJson(json)
-        .validate[String]
-        .get mustEqual value1
+        PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value1
 
-      PartnerDetailsCorrespondenceFaxNumberPage(Index + 1).path
-        .asSingleJson(json)
-        .validate[String]
-        .get mustEqual value2
+        PartnerDetailsCorrespondenceFaxNumberPage(businessNumber2).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsCorrespondenceFaxNumberPage" must {
+
+      "have the correct path" in {
+        PartnerDetailsCorrespondenceFaxNumberPage(
+          newPartnersIndex1
+        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection" \ "faxNumber")
+      }
+
+      "have the correct toString value" in {
+
+        PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1).toString mustEqual "faxNumber"
+      }
+
+      "be able to read and write PartnerDetailsCorrespondenceFaxNumberPage values with correct index" in {
+
+        val value1 = "Value1"
+        val value2 = "Value2"
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsCorrespondenceDetailsSectionPage(newPartnersIndex1).toString -> Json.obj(
+                PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1).toString -> Json.toJson(value1)
+              )
+            ),
+            Json.obj(
+              PartnerDetailsCorrespondenceDetailsSectionPage(newPartnersIndex1).toString -> Json.obj(
+                PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex2).toString -> Json.toJson(value2)
+              )
+            )
+          )
+        )
+
+        PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value1
+
+        PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }
