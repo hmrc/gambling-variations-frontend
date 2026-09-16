@@ -996,6 +996,18 @@ partnerDeleteDate.change.hidden = Tell us when to remove this partner
 partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
 partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
 
+partnerDateOfJoining.title = When is the partner’s date of joining?
+partnerDateOfJoining.heading = When is the partner’s date of joining?
+partnerDateOfJoining.hint = The date of joining must be before {0}
+partnerDateOfJoining.checkYourAnswersLabel = When is the partner’s date of joining?
+partnerDateOfJoining.error.required.all = Enter a date of joining for the partner
+partnerDateOfJoining.error.required.two = Date of joining must include a {0} and a {1}
+partnerDateOfJoining.error.required = Date of joining  must include a {0}
+partnerDateOfJoining.error.invalid = Date of joining  must be a real date
+partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
+partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
+partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
+
 otherLicencesAndPermitsNI.title = Do you have any other licences and permits in Northern Ireland?
 otherLicencesAndPermitsNI.heading = Do you have any other licences and permits in Northern Ireland?
 otherLicencesAndPermitsNI.hint = Select all that apply
