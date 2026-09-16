@@ -1041,5 +1041,11 @@ premisesNotCoveredYesNo.error.required = Select yes if you have any other premis
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
 
-premisesAddressList.title = premisesAddressList
-premisesAddressList.heading = premisesAddressList
+premisesAddressList.title = Premises addresses
+premisesAddressList.heading = Premises addresses
+premisesAddressList.message.submit = You must submit any changes you make to your premises addresses. Once HMRC approves the changes, we will update your registration certificate.
+premisesAddressList.question.add = Do you want to add another address?
+premisesAddressList.message.max = You can only have up to 100 premises addresses. If you need to add a new address, you must change or remove a current one.
+premisesAddressList.option.yes = Yes, add another address
+premisesAddressList.option.no = No, return to check your licence and premises details
+premisesAddressList.error.required = Select yes if you want to add another address

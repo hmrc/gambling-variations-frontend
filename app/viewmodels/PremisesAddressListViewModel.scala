@@ -21,6 +21,8 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Key, SummaryList}
 import viewmodels.govuk.all.{SummaryListRowViewModel, SummaryListViewModel, ValueViewModel}
+import viewmodels.implicits.*
+
 
 case object PremisesAddressListViewModel {
   def from(premisesList: Seq[PremisesDetails])(implicit messages: Messages): SummaryList = {
@@ -28,21 +30,21 @@ case object PremisesAddressListViewModel {
     SummaryListViewModel(
       premisesList.map(addr =>
 
-        val address = Seq(addr.address1,addr.address2,addr.address3,addr.address4, addr.postcode).flatten.mkString(", ")
+        val address = Seq(addr.address1, addr.address2, addr.address3, addr.address4, addr.postcode).flatten.mkString(", ")
 
         SummaryListRowViewModel(
-          key   = Key(Text("")),
-          value = ValueViewModel(Text(address)),
+          key   = "",
+          value = ValueViewModel(address),
           actions = Seq(
             ActionItem(
               href               = controllers.routes.CorrespondenceNameController.onPageLoad().url,
-              content            = Text(messages("site.change")),
-              visuallyHiddenText = Some(messages("premisesAddressList.label.hidden"))
+              content            = "site.change",
+              visuallyHiddenText = Some("premisesAddressList.label.hidden")
             ),
             ActionItem(
               href               = controllers.routes.CorrespondenceNameController.onPageLoad().url,
-              content            = Text(messages("site.remove")),
-              visuallyHiddenText = Some(messages("premisesAddressList.label.hidden"))
+              content            = "site.remove",
+              visuallyHiddenText = Some("premisesAddressList.label.hidden")
             )
           )
         )
