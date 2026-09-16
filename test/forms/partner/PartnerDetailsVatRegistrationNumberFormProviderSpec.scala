@@ -91,18 +91,13 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
 
     "fail to bind fewer than 9 digits" in {
       val result = form.bind(Map(fieldName -> "12345678")).apply(fieldName)
-      result.errors mustEqual Seq(FormError(fieldName, lengthKey, Seq(vrnLength)),
-                                  FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)),
-                                  FormError(fieldName, realKey)
-                                 )
+      result.errors mustEqual Seq(FormError(fieldName, lengthKey, Seq(vrnLength)), FormError(fieldName, realKey))
     }
 
     "fail to bind more than 9 digits" in {
       val result = form.bind(Map(fieldName -> "1234567891")).apply(fieldName)
       result.errors must contain(FormError(fieldName, lengthKey, Seq(vrnLength)))
       result.errors must contain(FormError(fieldName, realKey, Seq()))
-      result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
-
     }
 
     "fail to bind 9 digits non-checksum VAT number" in {
