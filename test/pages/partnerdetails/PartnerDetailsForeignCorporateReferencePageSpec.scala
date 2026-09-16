@@ -16,11 +16,54 @@
 
 package pages.partnerdetails
 
-import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsForeignCorporateRefPageSpec extends PlaySpec with PartnerDetailsHelper {
+class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec {
+
+  private val Index = 0
+
+  "PartnerDetailsForeignCorporateReferencePage" must {
+
+    "have the correct path" in {
+      PartnerDetailsForeignCorporateReferencePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsForeignCorporateRef")
+    }
+
+    "have the correct toString value" in {
+
+      PartnerDetailsForeignCorporateReferencePage(Index).toString mustEqual "partnerDetailsForeignCorporateRef"
+    }
+
+    "be able to read and write PartnerDetailsForeignCorporateReferencePage values with correct index" in {
+
+      val value1 = "ForeignCorpRef-1"
+      val value2 = "ForeignCorpRef-2"
+
+      val json = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj(
+            PartnerDetailsForeignCorporateReferencePage(Index).toString -> Json.toJson(value1)
+          ),
+          Json.obj(
+            PartnerDetailsForeignCorporateReferencePage(Index + 1).toString -> Json.toJson(value2)
+          )
+        )
+      )
+
+      PartnerDetailsForeignCorporateReferencePage(Index).path
+        .asSingleJson(json)
+        .validate[String]
+        .get mustEqual value1
+
+      PartnerDetailsForeignCorporateReferencePage(Index + 1).path
+        .asSingleJson(json)
+        .validate[String]
+        .get mustEqual value2
+    }
+
+  }
+
+  // TODO copy pasted from my merge,
 
   "partners" must {
     "PartnerDetailsForeignCorporateRefPage" must {
@@ -109,5 +152,4 @@ class PartnerDetailsForeignCorporateRefPageSpec extends PlaySpec with PartnerDet
 
     }
   }
-
 }

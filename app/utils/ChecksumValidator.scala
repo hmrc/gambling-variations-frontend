@@ -18,17 +18,16 @@ package utils
 
 object ChecksumValidator {
 
-  private val vatValidDigitsRegex: String = "^[1-9]+$"
+  private val vatValidDigitsRegex: String = "^[0-9]{9}$"
   private val vatWeights = List(8, 7, 6, 5, 4, 3, 2, 0, 0)
   private val vatModulus = 97
   private val vatFallbackOffset = 55 // for newer VAT numbers.
 
   def isValidVatNumber(number: String): Boolean = {
-    val vatDigits = number.strip().toUpperCase.stripPrefix("GB")
-    val isWellFormed = vatDigits.length == 9 && vatDigits.matches(vatValidDigitsRegex)
+    val vatDigits = number.strip()
 
-    isWellFormed && {
-      val digits = vatDigits.take(9).toList.map(_.asDigit)
+    vatDigits.matches(vatValidDigitsRegex) && {
+      val digits = vatDigits.toList.map(_.asDigit)
       val weightedSum = vatWeights.zip(digits).map((w, d) => w * d).sum
       val checkDigits = digits(7) * 10 + digits(8)
       val checksum = weightedSum + checkDigits

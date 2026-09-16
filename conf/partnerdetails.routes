@@ -131,3 +131,39 @@ POST      /change-registration-details/partner-details                          
 GET       /change-registration-details/partner-details/continue                    controllers.partnerdetails.PartnerDetailsController.onContinue
 GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: Int)
 GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
+
+###################### TODO From merge
+# TODO copy from merge, should be safe to remove
+# GET        /change-registration-details/partner-details/trading-name-yes-no                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
+# POST       /change-registration-details/partner-details/trading-name-yes-no                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+# TODO copy from merge, should be safe to remove
+# GET        /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partnerdetails.PartnerDetailsAddUTRController.onPageLoad(mode: Mode = NormalMode)
+# POST       /change-registration-details/partner-details/unique-taxpayer-reference                   controllers.partnerdetails.PartnerDetailsAddUTRController.onSubmit(mode: Mode = NormalMode)
+
+
+# GET        /change-registration-details/partner-details                       controllers.partnerdetails.PartnerDetailsController.onPageLoad
+# POST       /change-registration-details/partner-details                      controllers.partnerdetails.PartnerDetailsController.onSubmit
+# GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
+# POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
+
+GET       /change-registration-details/partner-details/continue                    controllers.partnerdetails.PartnerDetailsController.onContinue
+GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
+
+
+# TODO copy from merge, should be safe to remove
+# GET       /change-registration-details/partner-details/date-of-incorporation          controllers.partnerdetails.PartnerDetailsDateOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
+# POST      /change-registration-details/partner-details/date-of-incorporation          controllers.partnerdetails.PartnerDetailsDateOfIncorporationController.onSubmit(mode: Mode = NormalMode)
+
+# GET       /change-registration-details/partner-details/date-of-birth          controllers.partnerdetails.PartnerSoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+# POST      /change-registration-details/partner-details/date-of-birth          controllers.partnerdetails.PartnerSoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
+
+GET  /change-registration-details/partner-details/date-to-remove-redirect  controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: Int)
+GET  /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDeleteDateController.onPageLoad(mode: Mode = NormalMode)
+POST /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDeleteDateController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/foreign-corporate-reference            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = NormalMode)
+
+GET        /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerCheckConfirmRemoveDateController.onPageLoad()

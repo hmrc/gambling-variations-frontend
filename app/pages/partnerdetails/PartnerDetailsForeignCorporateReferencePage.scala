@@ -19,7 +19,7 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsForeignCorporateRefPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[String] {
+case class PartnerDetailsForeignCorporateReferencePage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[String] {
 
   override def path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ toString
@@ -28,7 +28,7 @@ case class PartnerDetailsForeignCorporateRefPage(businessNumberOrIndex: Business
 
   override def toString: String = "partnerDetailsForeignCorporateRef"
 }
-object PartnerDetailsForeignCorporateRefPage {
-  def apply(index: Int) = new PartnerDetailsForeignCorporateRefPage(index)
-  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsForeignCorporateRefPage(partnerDetailsBusinessNumber)
+object PartnerDetailsForeignCorporateReferencePage {
+  def apply(index: Int) = new PartnerDetailsForeignCorporateReferencePage(index)
+  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsForeignCorporateReferencePage(partnerDetailsBusinessNumber)
 }

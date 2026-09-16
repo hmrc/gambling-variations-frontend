@@ -18,9 +18,10 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import forms.partnerdetails.PartnerDetailsAddNationalInsuranceNumberFormProvider
+import models.BusinessType.Soleproprietor
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsNinoPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsNinoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -57,12 +58,18 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(newIndex)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+    request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) match {
+      case Some(Soleproprietor) =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(newIndex)) match {
+          case None => form
+          case Some(nino) =>
+            val sanitized = if nino.last != '_' then nino else nino.init
+            form.fill(sanitized)
+        }
 
-    Ok(view(preparedForm, index, mode))
+        Ok(view(preparedForm, index, mode))
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -73,8 +80,9 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
         nino =>
+          val sanitized = if nino.length == 9 then nino else nino.concat("_")
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(newIndex), nino))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(newIndex), sanitized))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsNinoPage(newIndex), mode, updatedAnswers))
       )

@@ -240,6 +240,17 @@ partnerDetailsAddNinoYesNo.checkYourAnswersLabel = cy: Do you want to add a Nati
 partnerDetailsAddNinoYesNo.error.required = cy: Select yes to add a National Insurance number for the partner
 partnerDetailsAddNinoYesNo.change.hidden = cy: Do you want to add a National Insurance number for the partner?
 
+partnerDetailsAddNino.title = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.paragraph = cy: You can find this on their National Insurance card, benefit letter, payslip or P60.
+partnerDetailsAddNino.heading = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.checkYourAnswersLabel = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.hidden = cy: What is the partner’s National Insurance number?
+partnerDetailsAddNino.hint = cy: For example, QQ 12 34 56 C
+partnerDetailsAddNino.error.required = cy: Enter the partner’s National Insurance number
+partnerDetailsAddNino.error.invalidChars = cy: The National Insurance number must only include letters a to z, numbers 0 to 9 and spaces
+partnerDetailsAddNino.error.invalidFormat = cy: The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character
+
+
 partnerDetailsAddTradingNameYesNo.title = cy: Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the partner?
 partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add a trading name for the partner?
@@ -267,6 +278,10 @@ licenceNumber.error.required = cy:  Enter the Gambling Commission operating or p
 licenceNumber.error.invalidCharacters = cy:  The Gambling Commission operating or personal licence number must only include numbers 0 to 9, letters a to z and hyphens
 licenceNumber.error.invalidFormat = cy:  The Gambling Commission operating or personal licence number must be in the correct format
 
+removeLicenceNumber.title = cy: Are you sure you want to remove the licence number?
+removeLicenceNumber.heading = cy: Are you sure you want to remove the licence number {0}?
+removeLicenceNumber.error.required = cy: Select yes if you want to remove the licence number
+
 removePremisesDetailsYesNo.title = cy: This change will remove your premises details
 removePremisesDetailsYesNo.heading = cy: This change will remove your premises details
 removePremisesDetailsYesNo.p1 = cy: If you submit this change, HMRC will remove the premises details you have provided.
@@ -275,11 +290,45 @@ removePremisesDetailsYesNo.checkYourAnswersLabel = cy: Are you sure you want to 
 removePremisesDetailsYesNo.error.required = cy: Select yes if you want to make this change
 removePremisesDetailsYesNo.change.hidden = cy: Are you sure you want to make this change?
 
+licencesPremises.title = cy: How will you provide premises addresses?
+licencesPremises.heading = cy: How will you provide premises addresses?
+licencesPremises.online = cy: Online only
+licencesPremises.online.hint = cy: You can only provide up to 100 premises addresses online
+licencesPremises.byPost = cy: By post
+licencesPremises.byPost.hint = cy: Providing premises addresses by post will delay updates to your records
+licencesPremises.checkYourAnswersLabel = cy: How will you provide premises addresses?
+licencesPremises.error.required = cy: Select how you will provide premises addresses
+licencesPremises.change.hidden = cy: how you will provide premises addresses
+
 partnerDetailsIsBusinessIncorporatedUk.title = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.heading = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.checkYourAnswersLabel = CY: Is the partner's business incorporated in the UK?
 partnerDetailsIsBusinessIncorporatedUk.error.required = CY: Select yes if the partner's address is incorporated in the UK
 partnerDetailsIsBusinessIncorporatedUk.change.hidden = CY: Is the partner's business incorporated in the UK?
+
+otherLicencesAndPermitsNI.title = cy: Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.heading = cy: Do you have any other licences and permits in Northern Ireland?
+otherLicencesAndPermitsNI.hint = cy: Select all that apply
+otherLicencesAndPermitsNI.option.amusement = cy: Amusement permit
+otherLicencesAndPermitsNI.option.bingo = cy: Bingo club licence
+otherLicencesAndPermitsNI.option.bookmaking = cy: Bookmaking office licence
+otherLicencesAndPermitsNI.option.serveAlcohol = cy: Licence allowing the serving of alcohol
+otherLicencesAndPermitsNI.option.regCert = cy: Registration certificate including a club registration certificate
+otherLicencesAndPermitsNI.option.none = cy: No, I do not have any other licences and permits in Northern Ireland
+otherLicencesAndPermitsNI.error.required = cy: Select otherLicencesAndPermitsNI
+
+otherLicencesAndPermitsGB.title = cy: Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.heading = cy: Do you have any other licences and permits in Great Britain?
+otherLicencesAndPermitsGB.hint = cy: Select all that apply
+otherLicencesAndPermitsGB.option.clubGaming = cy: Club gaming permit
+otherLicencesAndPermitsGB.option.clubMachine = cy: Club machine permit
+otherLicencesAndPermitsGB.option.clubPremises = cy: Club premises certificate
+otherLicencesAndPermitsGB.option.familyEntertainment = cy: Family entertainment centre gaming machine permit
+otherLicencesAndPermitsGB.option.localAuthority = cy: Local authority premises licence
+otherLicencesAndPermitsGB.option.onPremises = cy: On-premises alcohol licence
+otherLicencesAndPermitsGB.option.prizeGaming = cy: Prize gaming permit
+otherLicencesAndPermitsGB.option.none = cy: No, I do not have any other licences and permits in Great Britain
+otherLicencesAndPermitsGB.error.required = cy: Select otherLicencesAndPermitsGB
 
 partnerDetailsAddUTR.title = cy: Tell us the partner’s Unique Taxpayer Reference
 partnerDetailsAddUTR.subtitle = cy:  What is the Unique Taxpayer Reference?
@@ -293,3 +342,51 @@ partnerDetailsAddUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR
 partnerDetailsAddUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
 partnerDetailsAddUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
 partnerDetailsAddUTR.change.hidden = cy: Tell us the partner’s Unique Taxpayer Reference
+
+businessTradeClass.title = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.heading = Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.adultGamingCentre = Canolfan gemau i oedolion
+businessTradeClass.amusementOrGamingMachineSupplier = Cyflenwr peiriannau diddanu neu beiriannau hapchwarae
+businessTradeClass.bingopromoter = Hyrwyddwr bingo
+businessTradeClass.bookmakerorbettingactivities = Gweithgareddau bwci neu weithgareddau betio
+businessTradeClass.casino = Casino
+businessTradeClass.club = Clwb
+businessTradeClass.familyentertainmentcentre = Canolfan adloniant i deuluoedd
+businessTradeClass.publichouse = Tafarndy
+businessTradeClass.other = Arall
+businessTradeClass.checkYourAnswersLabel = 	Beth yw dosbarth masnachu’r busnes?
+businessTradeClass.error.required = Dewiswch y dosbarth masnachu ar gyfer y busnes hwn
+businessTradeClass.change.hidden = 	Beth yw dosbarth masnachu’r busnes?
+
+seasonalBusiness.title = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.heading = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.paragraph = Mae gan fusnes tymhorol gyfnodau lle nad yw’n masnachu. Os ydych yn rhedeg busnes tymhorol, mae’n rhaid i chi gyflwyno ffurflenni ‘dim’ (‘nil returns’) ar gyfer unrhyw gyfnodau lle nad ydych yn masnachu.
+seasonalBusiness.checkYourAnswersLabel = A yw’r busnes hwn yn fusnes tymhorol?
+seasonalBusiness.error.required = Dewiswch ‘Iawn’ os yw’r busnes hwn yn fusnes tymhorol
+seasonalBusiness.change.hidden = A yw’r busnes hwn yn fusnes tymhorol?
+
+removePreviousRegNumber.title = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn?
+removePreviousRegNumber.heading = A ydych yn siŵr eich bod am dileu’r rhif cofrestru blaenorol hwn {0}?
+removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru blaenorol
+
+removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
+removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
+removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn
+
+associatedRegNumber.title = Beth yw eich rhif cofrestru cysylltiedig?
+associatedRegNumber.heading = Beth yw eich rhif cofrestru cysylltiedig?
+associatedRegNumber.hint = Mae’n 14 o gymeriadau ac yn dechrau gydag X, er enghraifft XAM00001234567
+associatedRegNumber.error.required = Nodwch eich rhif cofrestru cysylltiedig
+associatedRegNumber.error.invalid.characters = Mae’n rhaid i’ch rhif cofrestru cysylltiedig gynnwys y llythrennau a i z a’r rhifau 0 i 9 yn unig
+associatedRegNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru cysylltiedig fod yn fformat cywir
+associatedRegNumber.error.invalidReference = Nodwch rif cofrestru cysylltiedig go iawn
+associatedRegNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol
+
+previousRegistrationNumber.title = Beth yw’ch rhif cofrestru blaenorol?
+previousRegistrationNumber.heading = Beth yw’ch rhif cofrestru blaenorol?
+previousRegistrationNumber.hint = Mae’n 14 o gymeriadau ac yn dechrau gydag X, er enghraifft XAM00001234567
+previousRegistrationNumber.error.required = Nodwch eich rhif cofrestru blaenorol
+previousRegistrationNumber.error.invalid.characters = Mae’n rhaid i’ch rhif cofrestru blaenorol gynnwys y llythrennau a i z a’r rhifau 0 i 9 yn unig
+previousRegistrationNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru blaenorol fod yn fformat cywir
+previousRegistrationNumber.error.invalidReference = Nodwch rif cofrestru blaenorol go iawn
+previousRegistrationNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol

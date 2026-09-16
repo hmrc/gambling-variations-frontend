@@ -34,8 +34,9 @@ trait PartnerDetailsHelper {
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
   val testNino: String = "SR123456A"
-  val testVRN: String = "GB353868127"
+  val testVRN: String = "353868127"
   val testUtr: String = "1121766916"
+  val testForeignCorpRef = "FCR-987654"
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
@@ -48,7 +49,8 @@ trait PartnerDetailsHelper {
     additionalInformation: Option[String] = Some("ADI123456"),
     nino: Option[String] = None,
     vrn: Option[String] = None,
-    utr: Option[String] = None
+    utr: Option[String] = None,
+    fcr: Option[String] = None
   ): JsObject = Json.obj(
     "partners" -> Json.obj(
       // TODO using businessNumber1 here, I might benefit by putting it into constructor
@@ -84,10 +86,10 @@ trait PartnerDetailsHelper {
         "partnerDetailsUtr"                    -> utr,
         "partnerDetailsVrn"                    -> vrn,
         "partnerDetailsCrn"                    -> "09876543",
-        "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
+        "partnerDetailsForeignCorporateRef"    -> fcr,
         "partnerDetailsIsFutureLeaveDate"      -> 0,
         "partnerDetailsIsFutureJoinDate"       -> 0,
-        "partnerDetailsBusinessType"           -> null
+        "partnerDetailsBusinessType"           -> 1
       )
     )
   )

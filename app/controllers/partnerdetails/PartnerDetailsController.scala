@@ -19,6 +19,9 @@ package controllers.partnerdetails
 import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partnerdetails.AddAnotherPartnerFormProvider
+import pages.partnerdetails.PartnerDetailsAddAnotherPartnerYesNoPage
+import pages.partnerdetails.ChosenPartnerToRemovePage
+import forms.partnerdetails.AddAnotherPartnerFormProvider
 import pages.partnerdetails.{PartnerDetailsAddAnotherPartnerYesNoPage, PartnerDetailsBusinessPartnerNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -112,7 +115,7 @@ class PartnerDetailsController @Inject() (
               updatedAnswers <-
                 Future.fromTry(
                   request.userAnswers.set(
-                    PartnerDetailsAddAnotherPartnerYesNoPage(newIndex),
+                    PartnerDetailsAddAnotherPartnerYesNoPage(-111111), // TODO ?????
                     value
                   )
                 )
@@ -121,7 +124,7 @@ class PartnerDetailsController @Inject() (
             } yield {
               if (value) {
                 Redirect(
-                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(???, ???) // TODO
+                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(???, ???) // TODO ?????
                 )
               } else {
                 Redirect(
@@ -142,10 +145,21 @@ class PartnerDetailsController @Inject() (
     }
 
   def onRemove(partnerNumber: Int): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-      Redirect(
-        routes.PartnerDetailsController.onPageLoad
+      for {
+        updatedAnswers <-
+          Future.fromTry(
+            request.userAnswers.set(
+              ChosenPartnerToRemovePage,
+              partnerNumber
+            )
+          )
+
+        _ <- sessionRepository.set(updatedAnswers)
+
+      } yield Redirect(
+        controllers.partnerdetails.routes.PartnerDeleteDateController.onPageLoad()
       )
     }
 

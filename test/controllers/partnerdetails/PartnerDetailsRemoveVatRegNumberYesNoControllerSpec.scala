@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.partnerdetails
+package controllers.partner
 
 import base.SpecBase
-import controllers.partnerdetails.PartnerUtils.getIndex
-import forms.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
+import controllers.partner.PartnerUtils.getIndex
+import forms.partner.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveVatRegNumberYesNoPage, PartnerDetailsVrnPage}
+import pages.partner.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveVatRegNumberYesNoPage}
+import pages.partnerdetails.PartnerDetailsVrnPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -43,18 +44,17 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
 
   private val userAnswersWithNoVrn: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData())
-      .set(PartnerDetailsAddPartnerCompletedPage(businessNumber1), false)
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
       .success
       .value
 
   private val userAnswersWithVrn: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData(vrn = Some(testVRN)))
-      .set(PartnerDetailsAddPartnerCompletedPage(businessNumber1), false)
+      .set(PartnerDetailsAddPartnerCompletedPage, false)
       .success
       .value
 
-  // TODO
-  private val index: String = businessNumber1
+  private val index: Int = userAnswersWithVrn.getIndex
   "PartnerDetailsRemoveVatRegNumberYesNo Controller" - {
 
     "onPageLoad" - {
