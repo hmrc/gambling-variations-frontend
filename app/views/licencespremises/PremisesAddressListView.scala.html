@@ -23,6 +23,7 @@
         govukSummaryList: GovukSummaryList,
         govukButton: GovukButton,
         h1: H1,
+        p: Paragraph,
         caption: Caption
 )
 
@@ -31,6 +32,7 @@
 @layout(pageTitle = titleNoForm(messages("premisesAddressList.title"))) {
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("premisesAddressList.heading", classes="govuk-heading-l")
+    @p("premisesAddressList.message.submit")
     @govukSummaryList(addressList)
 
     @govukButton(
