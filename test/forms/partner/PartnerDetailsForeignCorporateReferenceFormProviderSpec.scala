@@ -67,8 +67,20 @@ class PartnerDetailsForeignCorporateReferenceFormProviderSpec extends StringFiel
       )
 
       result.errors mustBe Seq(
-        FormError(fieldName, maxLengthKey, Seq(maxLength)),
-        FormError(fieldName, invalidKey, Seq(refNumberRegex))
+        FormError(fieldName, maxLengthKey, Seq(maxLength))
+      )
+    }
+
+    "fail to bind values greater than max length with an invalid character, errors ordered " in {
+      val tooLongWithInvalidChar = "A" * (maxLength - 1) + "@B"
+
+      val result = form.bind(
+        Map(fieldName -> tooLongWithInvalidChar)
+      )
+
+      result.errors mustBe Seq(
+        FormError(fieldName, invalidKey, Seq(refNumberRegex)),
+        FormError(fieldName, maxLengthKey, Seq(maxLength))
       )
     }
 
@@ -76,7 +88,7 @@ class PartnerDetailsForeignCorporateReferenceFormProviderSpec extends StringFiel
       val invalidValues = Seq("Test@Ref", "Hello#World", "Ref!123", "Company$123")
       invalidValues.foreach { value =>
         val result = form.bind(Map(fieldName -> value))
-        result.errors must contain(FormError(fieldName, invalidKey, Seq("^[A-Za-z 0-9-']{1,100}$")))
+        result.errors must contain(FormError(fieldName, invalidKey, Seq("^[A-Za-z 0-9-']+$")))
       }
     }
 
