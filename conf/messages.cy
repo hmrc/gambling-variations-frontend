@@ -372,3 +372,12 @@ removePreviousRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu�
 removeAssociatedRegNumber.title = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn?
 removeAssociatedRegNumber.heading = A ydych yn siŵr eich bod am ddileu’r rhif cofrestru cysylltiedig hwn {0}?
 removeAssociatedRegNumber.error.required = Dewiswch ‘Iawn’ os ydych am ddileu’r rhif cofrestru cysylltiedig hwn
+
+previousRegistrationNumber.title = Beth yw’ch rhif cofrestru blaenorol?
+previousRegistrationNumber.heading = Beth yw’ch rhif cofrestru blaenorol?
+previousRegistrationNumber.hint = Mae’n 14 o gymeriadau ac yn dechrau gydag X, er enghraifft XAM00001234567
+previousRegistrationNumber.error.required = Nodwch eich rhif cofrestru blaenorol
+previousRegistrationNumber.error.invalid.characters = Mae’n rhaid i’ch rhif cofrestru blaenorol gynnwys y llythrennau a i z a’r rhifau 0 i 9 yn unig
+previousRegistrationNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru blaenorol fod yn fformat cywir
+previousRegistrationNumber.error.invalidReference = Nodwch rif cofrestru blaenorol go iawn
+previousRegistrationNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol
