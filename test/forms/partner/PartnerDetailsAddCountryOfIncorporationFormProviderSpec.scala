@@ -61,6 +61,15 @@ class PartnerDetailsAddCountryOfIncorporationFormProviderSpec extends StringFiel
       result.errors must contain(FormError(fieldName, invalidKey, Seq(countryRegex)))
     }
 
+    "must fail to bind a string exceeding 100 characters with invalid chars" in {
+      val invalidLength = "A" * 101
+      val result = form.bind(Map(fieldName -> invalidLength.concat("$")))
+
+      result.errors.length mustBe 2
+      result.errors must contain(FormError(fieldName, lengthKey, Seq(maxStringLength)))
+      result.errors must contain(FormError(fieldName, invalidKey, Seq(countryRegex)))
+    }
+
     behave like mandatoryField(
       form,
       fieldName,

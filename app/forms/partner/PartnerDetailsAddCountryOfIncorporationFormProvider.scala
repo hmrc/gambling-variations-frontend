@@ -27,17 +27,15 @@ class PartnerDetailsAddCountryOfIncorporationFormProvider @Inject() extends Mapp
     Form(
       "value" -> text("partnerDetailsAddCountryOfIncorporation.error.required")
         .verifying(
-          firstError(
-            Seq(
-              maxLength(maxStringLength, "partnerDetailsAddCountryOfIncorporation.error.length"),
-              regexp(countryRegex, "partnerDetailsAddCountryOfIncorporation.error.invalid")
-            )*
-          )
+          Seq(
+            maxLength(maxStringLength, "partnerDetailsAddCountryOfIncorporation.error.length"),
+            regexp(countryRegex, "partnerDetailsAddCountryOfIncorporation.error.invalid")
+          )*
         )
     )
 }
 
 object PartnerDetailsAddCountryOfIncorporationFormProvider {
-  private[forms] val countryRegex: String = """^[A-Za-z 0-9-\']{1,100}$"""
+  private[forms] val countryRegex: String = """^[A-Za-z 0-9-\']+$"""
   private[forms] val maxStringLength = 100
 }
