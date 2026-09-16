@@ -48,7 +48,26 @@ class FaxNumberFormProviderSpec extends StringFieldBehaviours {
       )
     )
 
-    s"not bind strings longer than $maxLength characters" in {
+    "bind fax numbers with a single space when the total character count is exactly 20" in {
+      val result = form.bind(Map(fieldName -> "0123456789 012345678")).apply(fieldName) // 19 digits + 1 space = 20 chars
+
+      result.errors mustBe empty
+    }
+
+    s"not bind fax numbers with a single space when the total character count exceeds $maxLength" in {
+      val result = form.bind(Map(fieldName -> "0123456789 0123456789")).apply(fieldName) // 20 digits + 1 space = 21 chars
+
+      result.errors must contain(FormError(fieldName, lengthKey, Seq(maxLength)))
+    }
+
+    "bind fax numbers with multiple consecutive spaces collapsed to a single space, when the resulting count is exactly 20" in {
+      val result =
+        form.bind(Map(fieldName -> "123456789012345678   9")).apply(fieldName) // 18 digits + (3 spaces collapsed to 1) + 1 digit = 20 aftercollapse
+
+      result.errors mustBe empty
+    }
+
+    s"not bind strings longer than $maxLength characters with no spaces" in {
       val result = form.bind(Map(fieldName -> ("0" * (maxLength + 1)))).apply(fieldName)
 
       result.errors must contain(FormError(fieldName, lengthKey, Seq(maxLength)))
