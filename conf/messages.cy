@@ -372,5 +372,5 @@ associatedRegNumber.hint = Mae’n 14 o gymeriadau ac yn dechrau gydag X, er eng
 associatedRegNumber.error.required = Nodwch eich rhif cofrestru cysylltiedig
 associatedRegNumber.error.invalid.characters = Mae’n rhaid i’ch rhif cofrestru cysylltiedig gynnwys y llythrennau a i z a’r rhifau 0 i 9 yn unig
 associatedRegNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru cysylltiedig fod yn fformat cywir
-associatedRegNumber.error.invalidReference = Mae’n rhaid i’ch rhif cofrestru cysylltiedig fod yn fformat cywir
-associatedRegNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru
+associatedRegNumber.error.invalidReference = Nodwch rif cofrestru cysylltiedig go iawn
+associatedRegNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol
