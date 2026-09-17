@@ -19,10 +19,9 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-//TODO object to class
 case class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = businessNumberOrIndex match {
+  override val path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ toString
     case index: Int  => JsPath \ "newPartners" \ index \ toString
   }

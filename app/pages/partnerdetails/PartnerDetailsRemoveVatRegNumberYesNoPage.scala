@@ -21,8 +21,7 @@ import play.api.libs.json.JsPath
 
 case class PartnerDetailsRemoveVatRegNumberYesNoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = businessNumberOrIndex match {
-    // TODO IMPORTANT, change middle part, find where tradingName is
+  override val path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ "partnerDetailsSection" \ toString
     case index: Int  => JsPath \ "newPartners" \ index \ "partnerDetailsSection" \ toString
   }

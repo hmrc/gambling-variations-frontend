@@ -19,11 +19,9 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-//TODO maybe this one can stay as is
 case class PartnerDetailsSubmittedPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = businessNumberOrIndex match {
-    // TODO IMPORTANT, change middle part, find where tradingName is
+  override val path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ "partnerDetailsSection" \ toString
     case index: Int  => JsPath \ "newPartners" \ index \ "partnerDetailsSection" \ toString
   }

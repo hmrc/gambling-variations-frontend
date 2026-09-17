@@ -38,7 +38,6 @@ case class PartnerDetailsAdditionalAddressInfoYesNoPage(businessNumberOrIndex: B
     value match {
       case Some(false) =>
         userAnswers.remove(PartnerDetailsAdditionalAddressInfoPage(businessNumberOrIndex))
-
       case _ =>
         Try(userAnswers)
     }

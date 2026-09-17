@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 case class PartnerDetailsDateOfBirthPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[LocalDate] {
 
-  override def path: JsPath = businessNumberOrIndex match {
+  override val path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ toString
     case index: Int  => JsPath \ "newPartners" \ index \ toString
   }

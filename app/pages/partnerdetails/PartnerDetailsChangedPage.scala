@@ -19,8 +19,7 @@ package pages.partnerdetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-//TODO NOT NOT INDEXED
-case class PartnerDetailsChangedPage() extends QuestionPage[Boolean] {
+case object PartnerDetailsChangedPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ "partnerDetailsChanged" \ toString
 

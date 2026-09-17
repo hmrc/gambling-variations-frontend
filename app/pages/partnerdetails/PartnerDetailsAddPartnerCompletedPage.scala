@@ -19,23 +19,10 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-//TODO should be indexed I think? Guessing
-//TODO very important, that'd be the flag to indicate if we finished creating new partner details
-// TODO changed obj to class
+//TODO For now its only taking an index, since its for newPartners only
+case class PartnerDetailsAddPartnerCompletedPage(index: Int) extends QuestionPage[Boolean] {
 
-//TODO prolly doesn't need string key if its for new partners only
+  override val path: JsPath = JsPath \ "newPartners" \ index \ toString
 
-//TODO I think this might not need index?
-case class PartnerDetailsAddPartnerCompletedPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
-
-  override def path: JsPath = businessNumberOrIndex match {
-    case key: String => JsPath \ "partners" \ key \ toString
-    case index: Int  => JsPath \ "newPartners" \ index \ toString
-  }
-
-  override def toString: String = "partnerDetailsAddPartnerCompleted" // TODO
-}
-object PartnerDetailsAddPartnerCompletedPage {
-  def apply(index: Int) = new PartnerDetailsAddPartnerCompletedPage(index)
-  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsAddPartnerCompletedPage(partnerDetailsBusinessNumber)
+  override def toString: String = "partnerDetailsAddPartnerCompleted"
 }

@@ -19,10 +19,9 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.{JsArray, JsPath}
 
-//TODO
 case class PartnerDetailsMgdRegNumberPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[String] {
 
-  override def path: JsPath = businessNumberOrIndex match {
+  override val path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ toString
     case index: Int  => JsPath \ "newPartners" \ index \ toString
   }
@@ -33,10 +32,3 @@ object PartnerDetailsMgdRegNumberPage {
   def apply(index: Int) = new PartnerDetailsMgdRegNumberPage(index)
   def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsMgdRegNumberPage(partnerDetailsBusinessNumber)
 }
-
-//TODO just for testing, we need different method now in action fetching data
-//case object PartnerDetailsTest extends QuestionPage[JsArray] {
-//
-//  override def path: JsPath = JsPath \ "partners"
-//
-//}
