@@ -18,7 +18,9 @@ package controllers.licencespremises
 
 import controllers.actions.*
 import controllers.routes
-import pages.licencespremises.PremisesDetailsPage
+import models.NormalMode
+import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
+import forms.licencespremises.PremisesAddressListFormProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -33,15 +35,28 @@ class PremisesAddressListController @Inject() (
   getData: DataRetrievalAction,
   requireData: LicencesPremisesDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
+  formProvider: PremisesAddressListFormProvider,
   view: PremisesAddressListView
 ) extends FrontendBaseController
     with I18nSupport {
 
+  private val form = formProvider()
+  private val maxPremisesAddresses = 100
+
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+
+    val preparedForm =
+      request.userAnswers
+        .get(AddPremisesAddressPage)
+        .fold(form)(form.fill)
+
     request.userAnswers
       .get(PremisesDetailsPage)
       .fold(
         Redirect(routes.AccessDeniedController.onPageLoad())
-      )(premisesList => Ok(view(PremisesAddressListViewModel.from(premisesList.premises))))
+      )(premisesList =>
+        val addressList = premisesList.premises
+        Ok(view(preparedForm, NormalMode, addressList, maxPremisesAddresses))
+      )
   }
 }

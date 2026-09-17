@@ -16,25 +16,40 @@
 
 @import views.html.components.*
 @import models.licencespremises.PremisesDetails
+@import viewmodels.PremisesAddressListViewModel
 
 
 @this(
         layout: templates.Layout,
         govukSummaryList: GovukSummaryList,
+        govukRadios: GovukRadios,
         govukButton: GovukButton,
         h1: H1,
         p: Paragraph,
         caption: Caption
 )
 
-@(addressList: SummaryList)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, addressList: Seq[PremisesDetails], maxPremisesAddresses: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("premisesAddressList.title"))) {
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("premisesAddressList.heading", classes="govuk-heading-l")
     @p("premisesAddressList.message.submit")
-    @govukSummaryList(addressList)
+    @govukSummaryList(PremisesAddressListViewModel.from(addressList))
 
+ @if(addressList.length < maxPremisesAddresses) {
+        @govukRadios(
+            RadiosViewModel.yesNo(
+                field = form("addPremisesAddress"),
+                legend = LegendViewModel(messages("premisesAddressList.question.add")).withCssClass("govuk-fieldset__legend--m"),
+                yesLabel = messages("premisesAddressList.yesLabel"),
+                noLabel = messages("premisesAddressList.noLabel")
+            ).withHint(HintViewModel(messages("premisesAddressList.hint")))
+            .withCssClass("premises-address-list-radio-buttons")
+        )
+        } else {
+            @p("premisesAddressList.max")
+        }
     @govukButton(
         ButtonViewModel(messages("site.continue"))
     )
