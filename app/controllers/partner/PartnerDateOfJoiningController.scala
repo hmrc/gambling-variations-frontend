@@ -21,7 +21,7 @@ import controllers.actions.*
 import controllers.partner.PartnerUtils.getIndex
 import forms.partner.PartnerDateOfJoiningFormProvider
 import models.{BusinessDetails, Mode}
-import pages.partnerdetails.PartnerDetailsDateOfLeavingPage
+import pages.partnerdetails.PartnerDetailsDateOfJoiningPage
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -64,7 +64,7 @@ class PartnerDateOfJoiningController @Inject() (
 
           val preparedForm =
             request.userAnswers
-              .get(PartnerDetailsDateOfLeavingPage(index))
+              .get(PartnerDetailsDateOfJoiningPage(index))
               .fold(form)(form.fill)
 
           Ok(
@@ -111,7 +111,7 @@ class PartnerDateOfJoiningController @Inject() (
                   updatedAnswers <-
                     Future.fromTry(
                       request.userAnswers.set(
-                        PartnerDetailsDateOfLeavingPage(index),
+                        PartnerDetailsDateOfJoiningPage(index),
                         value
                       )
                     )
