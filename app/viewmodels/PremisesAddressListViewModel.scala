@@ -38,12 +38,12 @@ case object PremisesAddressListViewModel {
             ActionItem(
               href               = "#",
               content            = "site.change",
-              visuallyHiddenText = Some("premisesAddressList.label.hidden")
+              visuallyHiddenText = Some(Seq(addr.address1, addr.postcode).flatten.mkString(", "))
             ),
             ActionItem(
               href               = "#",
               content            = "site.remove",
-              visuallyHiddenText = Some("premisesAddressList.label.hidden")
+              visuallyHiddenText = Some(Seq(addr.address1, addr.postcode).flatten.mkString(", "))
             )
           )
         )

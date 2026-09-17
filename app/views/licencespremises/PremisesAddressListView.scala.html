@@ -34,6 +34,7 @@
 @layout(pageTitle = titleNoForm(messages("premisesAddressList.title"))) {
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("premisesAddressList.heading", classes="govuk-heading-l")
+    @p(message = "premisesAddressList.records", args = Seq(<strong>1</strong>, <strong>{addressList.length}</strong>, <strong>{addressList.length}</strong>))
     @p("premisesAddressList.message.submit")
     @govukSummaryList(PremisesAddressListViewModel.from(addressList))
 
