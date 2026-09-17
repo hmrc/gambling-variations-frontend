@@ -60,17 +60,7 @@ object PartnerDetailsViewModel {
 
     val partnerNumbers: Seq[Int] =
       (0 until maxPartners).filter { partnerNumber =>
-        val hasPartner =
-          userAnswers
-            .get(PartnerDetailsPage(partnerNumber))
-            .isDefined
-
-        val hasPastLeavingDate =
-          userAnswers
-            .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
-            .exists(_.isBefore(today))
-
-        hasPartner && !hasPastLeavingDate
+        userAnswers.get(PartnerDetailsPage(partnerNumber)).isDefined
       }
 
     val rows: Seq[PartnerDetailsRow] =
