@@ -20,7 +20,7 @@ import models.licencespremises.PremisesDetails
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Key, SummaryList}
-import viewmodels.govuk.all.{SummaryListRowViewModel, SummaryListViewModel, ValueViewModel}
+import viewmodels.govuk.all.{FluentKey, FluentValue, KeyViewModel, SummaryListRowViewModel, SummaryListViewModel, ValueViewModel}
 import viewmodels.implicits.*
 
 case object PremisesAddressListViewModel {
@@ -32,8 +32,8 @@ case object PremisesAddressListViewModel {
         val address = Seq(addr.address1, addr.address2, addr.address3, addr.address4, addr.postcode).flatten.mkString(", ")
 
         SummaryListRowViewModel(
-          key   = "",
-          value = ValueViewModel(address),
+          key   = KeyViewModel("").withCssClass("govuk-!-display-none"),
+          value = ValueViewModel(address).withCssClass("govuk-!-width-one-half"),
           actions = Seq(
             ActionItem(
               href               = "#",
