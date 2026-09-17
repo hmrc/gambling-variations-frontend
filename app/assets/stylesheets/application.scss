@@ -14,4 +14,9 @@
   .govuk-summary-list__actions {
     width: auto !important;
   }
+
+  // Widens the key column on the check licences and premises page, to fit its longer questions
+  .check-licences-premises-list .govuk-summary-list__key {
+    width: 42%;
+  }
 }
