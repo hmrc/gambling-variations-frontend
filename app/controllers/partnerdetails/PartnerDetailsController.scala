@@ -38,7 +38,7 @@ class PartnerDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   authorise: AuthorisedAction,
-  getData: DataRetrievalAction, // TODO partner details action
+  getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
   formProvider: AddAnotherPartnerFormProvider,
   val controllerComponents: MessagesControllerComponents,

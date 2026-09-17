@@ -49,8 +49,6 @@ class PartnerDetailsEmailAddressController @Inject() (
 
   val form: Form[String] = formProvider("partnerEmailAddress")
 
-  // TODO I am thinking now, we won't need index alltogether,
-  // None will mean "newPartner" and we will find a new partner in the array that is not completed, it should always be one!
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
 

@@ -38,7 +38,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
-  getData: DataRetrievalAction, // TODO partner details action
+  getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsBusinessTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -46,11 +46,6 @@ class PartnerDetailsBusinessTypeController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
-
-  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
-     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
-     Lack of it implies data is ONLY in the cache and has not been submitted yet.
-   */
 
   val form: Form[BusinessType] = formProvider()
 
@@ -75,7 +70,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
         businessType =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(newIndex), businessType))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newIndex), false))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false)) // TODO added -1
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(newIndex), mode, updatedAnswers))
       )

@@ -38,7 +38,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
-  getData: DataRetrievalAction, // TODO might need different action
+  getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsAdditionalAddressInfoYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,

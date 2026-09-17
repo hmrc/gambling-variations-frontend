@@ -39,7 +39,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
-  getData: DataRetrievalAction, // todo might need partner action
+  getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsAddNationalInsuranceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
@@ -49,11 +49,6 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
     with I18nSupport {
 
   val form: Form[String] = formProvider()
-
-  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
-     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
-     Lack of it implies data is ONLY in the cache and has not been submitted yet.
-   */
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)

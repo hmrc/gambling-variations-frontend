@@ -47,11 +47,6 @@ class PartnerDetailsAddUTRController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  /*TODO: Important! This controller will be adding a new partner, it will have very minimal
-     information at this stage and till the end before submitting this information it won't have businessPartnerNumber.
-     Lack of it implies data is ONLY in the cache and has not been submitted yet.
-   */
-
   val form: Form[String] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>

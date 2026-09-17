@@ -38,7 +38,7 @@ class PartnerDetailsAddTradingNameYesNoController @Inject() (
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
-  getData: DataRetrievalAction, // todo might need partner action
+  getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsAddTradingNameYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
