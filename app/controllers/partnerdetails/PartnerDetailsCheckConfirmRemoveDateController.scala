@@ -25,20 +25,18 @@ import play.api.mvc.Action
 import play.api.mvc.AnyContent
 import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.partnerdetails.PartnerCheckConfirmRemoveDateViewModel
-import views.html.partnerdetails.PartnerCheckConfirmRemoveDateView
+import viewmodels.checkAnswers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateViewModel
+import views.html.partnerdetails.PartnerDetailsCheckConfirmRemoveDateView
 
 import javax.inject.Inject
 
-//TODO rename to PartnerDetails
-class PartnerCheckConfirmRemoveDateController @Inject() (
+class PartnerDetailsCheckConfirmRemoveDateController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  // TODO rename
-  view: PartnerCheckConfirmRemoveDateView
+  view: PartnerDetailsCheckConfirmRemoveDateView
 ) extends FrontendBaseController
     with I18nSupport {
 
@@ -46,7 +44,7 @@ class PartnerCheckConfirmRemoveDateController @Inject() (
     (authorise andThen getData andThen requireData) { implicit request =>
 
       val viewModel =
-        PartnerCheckConfirmRemoveDateViewModel.from(
+        PartnerDetailsCheckConfirmRemoveDateViewModel.from(
           request.userAnswers
         )
 

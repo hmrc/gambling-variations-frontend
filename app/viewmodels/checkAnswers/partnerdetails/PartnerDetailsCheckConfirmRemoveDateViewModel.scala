@@ -25,15 +25,15 @@ import utils.DateTimeFormats.shortDateDisplay
 
 import java.time.LocalDate
 
-final case class PartnerCheckConfirmRemoveDateViewModel(
+final case class PartnerDetailsCheckConfirmRemoveDateViewModel(
   rows: Seq[SummaryListRow]
 )
 
-object PartnerCheckConfirmRemoveDateViewModel {
+object PartnerDetailsCheckConfirmRemoveDateViewModel {
 
   def from(
     userAnswers: UserAnswers
-  )(implicit messages: Messages): PartnerCheckConfirmRemoveDateViewModel = {
+  )(implicit messages: Messages): PartnerDetailsCheckConfirmRemoveDateViewModel = {
 
     val partnerIndex =
       userAnswers
@@ -68,7 +68,7 @@ object PartnerCheckConfirmRemoveDateViewModel {
         PartnerDetailsDateOfLeavingPage(partnerIndex)
       )
 
-    PartnerCheckConfirmRemoveDateViewModel(
+    PartnerDetailsCheckConfirmRemoveDateViewModel(
       rows = Seq(
         partnerNameRow(partnerName),
         dateToRemoveRow(dateToRemove)
@@ -120,7 +120,7 @@ object PartnerCheckConfirmRemoveDateViewModel {
         Actions(
           items = Seq(
             ActionItem(
-              href = routes.PartnerDeleteDateController
+              href = routes.PartnerDetailsDeleteDateController
                 .onPageLoad()
                 .url,
               content = Text(

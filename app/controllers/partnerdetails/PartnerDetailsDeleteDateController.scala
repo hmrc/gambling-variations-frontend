@@ -27,13 +27,13 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.DateTimeFormats.*
-import views.html.partnerdetails.PartnerDeleteDateView
+import views.html.partnerdetails.PartnerDetailsDeleteDateView
 
 import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartnerDeleteDateController @Inject() (
+class PartnerDetailsDeleteDateController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   authorise: AuthorisedAction,
@@ -42,7 +42,7 @@ class PartnerDeleteDateController @Inject() (
   formProvider: PartnerDeleteDateFormProvider,
   gamblingConnector: GamblingConnector,
   val controllerComponents: MessagesControllerComponents,
-  view: PartnerDeleteDateView
+  view: PartnerDetailsDeleteDateView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -123,7 +123,7 @@ class PartnerDeleteDateController @Inject() (
                   _ <- sessionRepository.set(updatedAnswers)
 
                 } yield Redirect(
-                  routes.PartnerCheckConfirmRemoveDateController.onPageLoad()
+                  routes.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()
                 )
             )
         }

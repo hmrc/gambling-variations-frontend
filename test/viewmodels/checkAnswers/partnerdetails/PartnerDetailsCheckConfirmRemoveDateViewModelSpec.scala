@@ -30,7 +30,7 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 
 import java.time.LocalDate
 
-class PartnerCheckConfirmRemoveDateViewModelSpec extends SpecBase {
+class PartnerDetailsCheckConfirmRemoveDateViewModelSpec extends SpecBase {
 
   private val application =
     applicationBuilder().build()

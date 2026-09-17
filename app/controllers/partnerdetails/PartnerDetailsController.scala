@@ -159,7 +159,7 @@ class PartnerDetailsController @Inject() (
         _ <- sessionRepository.set(updatedAnswers)
 
       } yield Redirect(
-        controllers.partnerdetails.routes.PartnerDeleteDateController.onPageLoad()
+        controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
       )
     }
 

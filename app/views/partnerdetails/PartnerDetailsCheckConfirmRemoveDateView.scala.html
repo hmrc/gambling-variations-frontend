@@ -14,10 +14,9 @@
  * limitations under the License.
  *@
 
-@import viewmodels.checkAnswers.partnerdetails.PartnerCheckConfirmRemoveDateViewModel
+@import viewmodels.checkAnswers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateViewModel
 @import views.html.components._
 
-@*TODO rename with prefix PartnerDetails*@
 @this(
  layout: templates.Layout,
  govukSummaryList: GovukSummaryList,
@@ -27,7 +26,7 @@
  p: Paragraph
 )
 
-@(viewModel: PartnerCheckConfirmRemoveDateViewModel)(implicit request: Request[_], messages: Messages)
+@(viewModel: PartnerDetailsCheckConfirmRemoveDateViewModel)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("partnerCheckConfirmRemoveDate.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
@@ -43,12 +42,12 @@
     @p("partnerCheckConfirmRemoveDate.p1")
 
       @govukButton(
-      ButtonViewModel(
-      messages("site.continue")
-      ).asLink(
-      controllers.partnerdetails.routes.PartnerDetailsController
-      .onPageLoad
-      .url
-      )
+        ButtonViewModel(
+            messages("site.continue")
+        ).asLink(
+            controllers.partnerdetails.routes.PartnerDetailsController
+            .onPageLoad
+            .url
+        )
       )
 }

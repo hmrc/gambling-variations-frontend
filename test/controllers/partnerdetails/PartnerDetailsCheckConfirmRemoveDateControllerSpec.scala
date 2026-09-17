@@ -29,7 +29,7 @@ import views.html.partner.PartnerCheckConfirmRemoveDateView
 
 import java.time.LocalDate
 
-class PartnerCheckConfirmRemoveDateControllerSpec extends SpecBase {
+class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase {
 
   private val partnerIndex: Int =
     0

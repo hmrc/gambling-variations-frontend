@@ -189,7 +189,7 @@ object PartnerDetailsViewModel {
       showNoPartnersMessage      = !hasPartners,
       showMinimumPartnersMessage = hasPartners && activePartnerCount < 3,
       showMaximumPartnersMessage = rows.size >= maxPartners,
-      showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage()).contains(true)
+      showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage).contains(true)
     )
   }
 }
