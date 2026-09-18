@@ -25,7 +25,7 @@ import utils.DateTimeFormats.formatDate
 import java.time.{Clock, LocalDate}
 import javax.inject.Inject
 
-class PartnerDeleteDateFormProvider @Inject() (clock: Clock) extends Mappings {
+class PartnerDateOfJoiningFormProvider @Inject() (clock: Clock) extends Mappings {
 
   def apply(
     registrationDate: LocalDate
@@ -42,10 +42,10 @@ class PartnerDeleteDateFormProvider @Inject() (clock: Clock) extends Mappings {
 
     Form(
       "value" -> localDate(
-        invalidKey     = "partnerDeleteDate.error.invalid",
-        allRequiredKey = "partnerDeleteDate.error.required.all",
-        twoRequiredKey = "partnerDeleteDate.error.required.two",
-        requiredKey    = "partnerDeleteDate.error.required"
+        invalidKey     = "partnerDateOfJoining.error.invalid",
+        allRequiredKey = "partnerDateOfJoining.error.required.all",
+        twoRequiredKey = "partnerDateOfJoining.error.required.two",
+        requiredKey    = "partnerDateOfJoining.error.required"
       ).verifying(
         beforeLatestDateConstraint(latestDate)
       )
@@ -55,11 +55,11 @@ class PartnerDeleteDateFormProvider @Inject() (clock: Clock) extends Mappings {
   private def beforeLatestDateConstraint(
     latestDate: LocalDate
   )(implicit messages: Messages): Constraint[LocalDate] =
-    Constraint { removeDate =>
-      if (removeDate.isAfter(latestDate)) {
+    Constraint { joiningDate =>
+      if (joiningDate.isAfter(latestDate)) {
         Invalid(
           ValidationError(
-            "partnerDeleteDate.error.afterLatestDate",
+            "partnerDateOfJoining.error.beforeRegistrationDate",
             formatDate(latestDate.plusDays(1))
           )
         )
@@ -67,4 +67,5 @@ class PartnerDeleteDateFormProvider @Inject() (clock: Clock) extends Mappings {
         Valid
       }
     }
+
 }

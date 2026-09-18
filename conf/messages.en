@@ -882,6 +882,7 @@ removePremisesDetailsYesNo.change.hidden = Are you sure you want to make this ch
 partnerDetails.title = Partner details
 partnerDetails.heading = Partner details
 partnerDetails.status.active = Active
+partnerDetails.status.left = Due to leave
 partnerDetails.noPartners = You have not provided any partners yet.
 partnerDetails.minimumPartners = You must have at least 3 active partners.
 partnerDetails.addAnotherPartner = Do you want to add another partner?
@@ -925,8 +926,8 @@ partnerDateOfIncorporation.heading = When was the partner’s date of incorporat
 partnerDateOfIncorporation.hint = For example, 27 3 2007
 partnerDateOfIncorporation.checkYourAnswersLabel = When was the partner’s date of incorporation?
 partnerDateOfIncorporation.error.required.all = Enter a date of incorporation for the partner
-partnerDateOfIncorporation.error.required.two = Date of incorporation must include a {0} and {1}
-partnerDateOfIncorporation.error.required = Date of incorporation must include {0}
+partnerDateOfIncorporation.error.required.two = Date of incorporation must include a {0} and a {1}
+partnerDateOfIncorporation.error.required = Date of incorporation must include a {0}
 partnerDateOfIncorporation.error.invalid = 	Date of incorporation must be a real date
 partnerDateOfIncorporation.change.hidden = When was the partner’s date of incorporation?
 
@@ -995,6 +996,18 @@ partnerDeleteDate.error.invalid = Date to remove must be a real date
 partnerDeleteDate.change.hidden = Tell us when to remove this partner
 partnerDeleteDate.error.afterLatestDate = Date to remove must be before {0}
 partnerDeleteDate.error.beforeRegistrationDate = The date must be after {0}
+
+partnerDateOfJoining.title = When is the partner’s date of joining?
+partnerDateOfJoining.heading = When is the partner’s date of joining?
+partnerDateOfJoining.hint = The date of joining must be before {0}
+partnerDateOfJoining.checkYourAnswersLabel = When is the partner’s date of joining?
+partnerDateOfJoining.error.required.all = Enter a date of joining for the partner
+partnerDateOfJoining.error.required.two = Date of joining must include a {0} and a {1}
+partnerDateOfJoining.error.required = Date of joining  must include a {0}
+partnerDateOfJoining.error.invalid = Date of joining  must be a real date
+partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
+partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
+partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
 
 otherLicencesAndPermitsNI.title = Do you have any other licences and permits in Northern Ireland?
 otherLicencesAndPermitsNI.heading = Do you have any other licences and permits in Northern Ireland?
