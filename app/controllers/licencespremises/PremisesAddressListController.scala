@@ -24,7 +24,6 @@ import forms.licencespremises.PremisesAddressListFormProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.PremisesAddressListViewModel
 import views.html.licencespremises.PremisesAddressListView
 
 import javax.inject.Inject

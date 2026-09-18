@@ -12,8 +12,7 @@ import views.html.licencespremises.PremisesAddressListView
 
 class PremisesAddressListControllerSpec extends SpecBase {
   private lazy val premisesAddressListRoute =
-    routes.PremisesAddressListController.onPageLoad().url
-
+    controllers.licencespremises.routes.PremisesAddressListController.onPageLoad().url
   val formProvider = new PremisesAddressListFormProvider
   val form: Form[Boolean] = formProvider()
 
@@ -28,9 +27,26 @@ class PremisesAddressListControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[PremisesAddressListView]
+        val maxPremises = 100
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, Seq.empty)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, Seq.empty, maxPremises)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, premisesAddressListRoute)
+
+        val view = application.injector.instanceOf[PremisesAddressListView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill(userAnswers))(request, messages(application)).toString
       }
     }
 
