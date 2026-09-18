@@ -50,30 +50,30 @@ class PremisesAddressListViewModelSpec extends SpecBase {
             "premises" -> Json.arr(
               Json.obj(
                 "mgdRegNumber" -> "XGM000001761",
-                "address1" -> "123 Road",
-                "address2" -> "Avenue",
-                "address3" -> "Hackney",
-                "address4" -> "London",
-                "postcode" -> "E8 1EA",
-                "systemDate" -> LocalDate.now()
+                "address1"     -> "123 Road",
+                "address2"     -> "Avenue",
+                "address3"     -> "Hackney",
+                "address4"     -> "London",
+                "postcode"     -> "E8 1EA",
+                "systemDate"   -> LocalDate.now()
               ),
               Json.obj(
                 "mgdRegNumber" -> "XGM000001761",
-                "address1" -> "456 Road",
-                "address2" -> "Avenue",
-                "address3" -> "Hackney",
-                "address4" -> "London",
-                "postcode" -> "E8 2EA",
-                "systemDate" -> LocalDate.now()
+                "address1"     -> "456 Road",
+                "address2"     -> "Avenue",
+                "address3"     -> "Hackney",
+                "address4"     -> "London",
+                "postcode"     -> "E8 2EA",
+                "systemDate"   -> LocalDate.now()
               ),
               Json.obj(
                 "mgdRegNumber" -> "XGM000001761",
-                "address1" -> "789 Road",
-                "address2" -> "Avenue",
-                "address3" -> "Hackney",
-                "address4" -> "London",
-                "postcode" -> "E8 3EA",
-                "systemDate" -> LocalDate.now()
+                "address1"     -> "789 Road",
+                "address2"     -> "Avenue",
+                "address3"     -> "Hackney",
+                "address4"     -> "London",
+                "postcode"     -> "E8 3EA",
+                "systemDate"   -> LocalDate.now()
               )
             )
           )
@@ -98,18 +98,19 @@ class PremisesAddressListViewModelSpec extends SpecBase {
   "PremisesAddressList" - {
     "from" - {
       "should render correct view content from a SummaryList" in new Setup {
-        viewModel.rows.head.key.classes must include("govuk-!-display-none")
-        viewModel.rows.head.value.classes must include("govuk-!-width-one-half")
-        viewModel.rows.head.value.toString must include("123 Road, Avenue, Hackney, London, E8 1EA")
-        viewModel.rows(1).value.toString must include("456 Road, Avenue, Hackney, London, E8 2EA")
-        viewModel.rows(2).value.toString must include("789 Road, Avenue, Hackney, London, E8 3EA")
+        viewModel.rows.head.key.classes      must include("govuk-!-display-none")
+        viewModel.rows.head.value.classes    must include("govuk-!-width-one-half")
+        viewModel.rows.head.value.toString   must include("123 Road, Avenue, Hackney, London, E8 1EA")
+        viewModel.rows(1).value.toString     must include("456 Road, Avenue, Hackney, London, E8 2EA")
+        viewModel.rows(2).value.toString     must include("789 Road, Avenue, Hackney, London, E8 3EA")
         viewModel.rows.head.actions.toString must include(messages("site.change"))
-        viewModel.rows(1).actions.toString must include(messages("site.change"))
-        viewModel.rows(1).actions.toString must include(messages("site.change"))
+        viewModel.rows(1).actions.toString   must include(messages("site.change"))
+        viewModel.rows(1).actions.toString   must include(messages("site.change"))
         viewModel.rows.head.actions.toString must include(messages("site.remove"))
-        viewModel.rows(1).actions.toString must include(messages("site.remove"))
-        viewModel.rows(2).actions.toString must include(messages("site.remove"))
+        viewModel.rows(1).actions.toString   must include(messages("site.remove"))
+        viewModel.rows(2).actions.toString   must include(messages("site.remove"))
       }
 
     }
-  }}
+  }
+}
