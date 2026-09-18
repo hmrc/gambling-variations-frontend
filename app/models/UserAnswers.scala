@@ -66,6 +66,12 @@ final case class UserAnswers(
       page.cleanup(None, updatedAnswers)
     }
   }
+
+  def partnersCount: Int =
+    (data \ "partners").asOpt[JsObject].map(_.value.size).getOrElse(0)
+
+  def newPartnersCount: Int =
+    (data \ "newPartners").asOpt[JsArray].map(_.value.size).getOrElse(0)
 }
 
 object UserAnswers {
