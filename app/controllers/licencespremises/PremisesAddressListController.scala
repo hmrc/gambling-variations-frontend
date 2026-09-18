@@ -23,20 +23,24 @@ import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
 import forms.licencespremises.PremisesAddressListFormProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.licencespremises.PremisesAddressListView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class PremisesAddressListController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: LicencesPremisesDataRequiredAction,
+  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   formProvider: PremisesAddressListFormProvider,
   view: PremisesAddressListView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
@@ -56,6 +60,27 @@ class PremisesAddressListController @Inject() (
       )(premisesList =>
         val addressList = premisesList.premises
         Ok(view(preparedForm, NormalMode, addressList, maxPremisesAddresses))
+      )
+  }
+
+  def onSubmit: Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+
+    request.userAnswers
+      .get(PremisesDetailsPage)
+      .fold(
+        Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
+      )(premisesList =>
+        val addressList = premisesList.premises
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, NormalMode, addressList, maxPremisesAddresses))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPremisesAddressPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect("#")
+          )
       )
   }
 }
