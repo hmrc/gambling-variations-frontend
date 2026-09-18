@@ -129,14 +129,18 @@ POST       /change-registration-details/partner-details/remove-vat-registration-
 GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
 POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
 GET       /change-registration-details/partner-details/continue                    controllers.partnerdetails.PartnerDetailsController.onContinue
-#GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: Int)
-GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
+#TODO changed from Int
+GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
+#TODO changed from Int
+GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String)
 
 ###################### TODO From merge
 
-GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: Int)
-GET  /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
-POST /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
+#TODO these three stay
+## changed to string
+GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
+GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
+POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/foreign-corporate-reference            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = NormalMode)

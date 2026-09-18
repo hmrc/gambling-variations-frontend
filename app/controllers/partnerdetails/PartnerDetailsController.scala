@@ -22,13 +22,13 @@ import forms.partnerdetails.AddAnotherPartnerFormProvider
 import pages.partnerdetails.PartnerDetailsAddAnotherPartnerYesNoPage
 import pages.partnerdetails.ChosenPartnerToRemovePage
 import forms.partnerdetails.AddAnotherPartnerFormProvider
-import models.CheckMode
+import models.NormalMode
 import pages.partnerdetails.{PartnerDetailsAddAnotherPartnerYesNoPage, PartnerDetailsBusinessPartnerNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.{JsArray, JsObject}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerDetailsViewModel
 import views.html.partnerdetails.PartnerDetailsView
 
@@ -52,10 +52,6 @@ class PartnerDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-
-      // TODO I think this has to work differently?
-//      val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
-
       val viewModel =
         PartnerDetailsViewModel.from(
           request.userAnswers,
@@ -72,7 +68,7 @@ class PartnerDetailsController @Inject() (
 
       val preparedForm =
         request.userAnswers
-          .get(PartnerDetailsAddAnotherPartnerYesNoPage(request.userAnswers.partnersCount))
+          .get(PartnerDetailsAddAnotherPartnerYesNoPage)
           .fold(form)(form.fill)
 
       Ok(
@@ -85,10 +81,6 @@ class PartnerDetailsController @Inject() (
 
   def onSubmit: Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-
-      // TODO I think this has to work differently?
-      // val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
-      val newPartnersCount: Int = request.userAnswers.newPartnersCount
 
       val viewModel =
         PartnerDetailsViewModel.from(
@@ -119,7 +111,7 @@ class PartnerDetailsController @Inject() (
               updatedAnswers <-
                 Future.fromTry(
                   request.userAnswers.set(
-                    PartnerDetailsAddAnotherPartnerYesNoPage(newPartnersCount), // TODO ?????
+                    PartnerDetailsAddAnotherPartnerYesNoPage,
                     value
                   )
                 )
@@ -128,8 +120,11 @@ class PartnerDetailsController @Inject() (
             } yield {
               if (value) {
                 Redirect(
-                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController
-                    .onPageLoad(newPartnersCount.toString, CheckMode) // TODO ?????
+                  // TODO, make sure if this logic works as expected
+                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(
+                    PartnerUtils.findIndexForNewPartner(updatedAnswers).toString,
+                    NormalMode
+                  )
                 )
               } else {
                 Redirect(
@@ -141,7 +136,7 @@ class PartnerDetailsController @Inject() (
         )
     }
 
-  def onPartnerDetails(partnerNumber: Int): Action[AnyContent] =
+  def onPartnerDetails(partnerNumber: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
       Redirect(
@@ -149,7 +144,7 @@ class PartnerDetailsController @Inject() (
       )
     }
 
-  def onRemove(partnerNumber: Int): Action[AnyContent] =
+  def onRemove(partnerNumber: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
       for {

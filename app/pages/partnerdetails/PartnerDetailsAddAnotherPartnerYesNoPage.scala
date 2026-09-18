@@ -19,16 +19,9 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsAddAnotherPartnerYesNoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
+case object PartnerDetailsAddAnotherPartnerYesNoPage extends QuestionPage[Boolean] {
 
-  override val path: JsPath = businessNumberOrIndex match {
-    case key: String => JsPath \ "partners" \ key \ toString
-    case index: Int  => JsPath \ "newPartners" \ index \ toString
-  }
+  override def path: JsPath = JsPath \ toString
 
   override def toString: String = "partnerDetailsAddAnotherPartnerYesNo"
-}
-object PartnerDetailsAddAnotherPartnerYesNoPage {
-  def apply(index: Int) = new PartnerDetailsAddAnotherPartnerYesNoPage(index)
-  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsAddAnotherPartnerYesNoPage(partnerDetailsBusinessNumber)
 }

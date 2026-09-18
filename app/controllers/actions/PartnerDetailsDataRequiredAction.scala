@@ -23,7 +23,7 @@ import models.{Address, BusinessType, ContactNumber, CorrespondenceDetails, Part
 import pages.*
 import pages.partnerdetails.*
 import play.api.Logging
-import play.api.libs.json.{JsArray, JsPath, Json, Writes}
+import play.api.libs.json.{JsArray, JsObject, JsPath, Json, Writes}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -55,7 +55,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers: UserAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        if isPartnerDetailsInCache(request.mgdRegNum, userAnswers) then {
+        if isPartnerDetailsInCache(userAnswers) then {
           logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
@@ -69,15 +69,13 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  // TODO different way of making sure there is data, second part after ||
-  // might be considered an overkill
-  private def isPartnerDetailsInCache(mgdRegNumber: String, userAnswers: UserAnswers): Boolean =
-    (userAnswers.data \ "partners" \ mgdRegNumber \ "mgdRegNum").toOption.isDefined ||
-      (userAnswers.data \ "newPartners").toOption
-        .collect { case JsArray(values) =>
-          values.headOption.exists(value => (value \ "name").toOption.isDefined)
-        }
-        .getOrElse(false)
+  // TODO sigltly different way of making sure there is data
+  private def isPartnerDetailsInCache(userAnswers: UserAnswers): Boolean = (userAnswers.data \ "partners")
+    .asOpt[JsObject]
+    .flatMap(_.values.headOption)
+    .flatMap(_.asOpt[JsObject])
+    .flatMap(_("partnerDetailsMgdRegNumber").asOpt[String])
+    .isDefined
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
     gamblingConnector.getPartnersDetails(answers.id) flatMap { partnerDetails =>

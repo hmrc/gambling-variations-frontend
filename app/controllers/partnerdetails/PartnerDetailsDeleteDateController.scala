@@ -58,7 +58,7 @@ class PartnerDetailsDeleteDateController @Inject() (
 
           val registrationDate = getRegistrationDate(businessDetails)
           val latestDate = calculateLatestDate(registrationDate)
-          val index = getPartnerIndex
+          val index = "" // getPartnerIndex//TODO
           val partnerName = getPartnerName(index)
 
           val form = formProvider(registrationDate)
@@ -150,7 +150,7 @@ class PartnerDetailsDeleteDateController @Inject() (
 
   private def getPartnerIndex(implicit
     request: DataRequest[AnyContent]
-  ): Int =
+  ): String /*Int*/ =
     request.userAnswers
       .get(ChosenPartnerToRemovePage)
       .getOrElse(
@@ -158,7 +158,7 @@ class PartnerDetailsDeleteDateController @Inject() (
       )
 
   private def getPartnerName(
-    index: Int
+    index: String // Int TODO
   )(implicit request: DataRequest[AnyContent]): String =
     request.userAnswers
       .get(PartnerDetailsTradingNamePage(index))
