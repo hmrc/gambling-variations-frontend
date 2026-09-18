@@ -20,7 +20,7 @@ class PremisesAddressListControllerSpec extends SpecBase {
     controllers.licencespremises.routes.PremisesAddressListController.onPageLoad().url
   private val formProvider = new PremisesAddressListFormProvider
   private val form = formProvider()
-  private val fullAnswers = UserAnswers(
+  private val userAnswers = UserAnswers(
     id = userAnswersId,
     data = Json.obj(
       "licencesPremisesSection" -> Json.obj(
@@ -59,17 +59,17 @@ class PremisesAddressListControllerSpec extends SpecBase {
   )
 
   private val preparedFormWithAnswers =
-    fullAnswers
+    userAnswers
       .get(AddPremisesAddressPage)
       .fold(form)(form.fill)
-  private val addressList = fullAnswers.get(PremisesDetailsPage).fold(Seq.empty)(list => list.premises)
+  private val addressList = userAnswers.get(PremisesDetailsPage).fold(Seq.empty)(list => list.premises)
   private val maxPremises = 100
 
   "PremisesAddressList Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, premisesAddressListRoute)
@@ -85,7 +85,7 @@ class PremisesAddressListControllerSpec extends SpecBase {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, premisesAddressListRoute)
