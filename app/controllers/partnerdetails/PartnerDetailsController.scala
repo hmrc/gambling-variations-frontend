@@ -54,10 +54,6 @@ class PartnerDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-
-      // TODO I think this has to work differently?
-//      val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
-
       val viewModel =
         PartnerDetailsViewModel.from(
           request.userAnswers,
@@ -74,8 +70,8 @@ class PartnerDetailsController @Inject() (
 
       val preparedForm =
         request.userAnswers
-          .get(PartnerDetailsAddAnotherPartnerYesNoPage(request.userAnswers.partnersCount))
-//          .get(PartnerDetailsAddAnotherPartnerYesNoPage)
+//          .get(PartnerDetailsAddAnotherPartnerYesNoPage(request.userAnswers.partnersCount))
+          .get(PartnerDetailsAddAnotherPartnerYesNoPage)
           .fold(form)(form.fill)
 
       Ok(
@@ -89,7 +85,6 @@ class PartnerDetailsController @Inject() (
   def onSubmit: Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      // TODO I think this has to work differently?
       // val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
       val newPartnersCount: Int = request.userAnswers.newPartnersCount
 
@@ -122,8 +117,9 @@ class PartnerDetailsController @Inject() (
               updatedAnswers <-
                 Future.fromTry(
                   request.userAnswers.set(
-                    PartnerDetailsAddAnotherPartnerYesNoPage(newPartnersCount), // TODO ?????
-//                    PartnerDetailsAddAnotherPartnerYesNoPage,
+//                    PartnerDetailsAddAnotherPartnerYesNoPage(newPartnersCount), // TODO ?????
+                    // TODO assuming this doesn't not need to be inside of partner array
+                    PartnerDetailsAddAnotherPartnerYesNoPage,
                     value
                   )
                 )
@@ -131,17 +127,18 @@ class PartnerDetailsController @Inject() (
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
               if (value) {
-                Redirect(
-                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController
-                    .onPageLoad(newPartnersCount.toString, CheckMode) // TODO ?????
-                )
+                // TODO I believe this has to be NormalMode, not check, this is part of the dialog "do you want add new partner"
 //                Redirect(
-//                  // TODO, make sure if this logic works as expected
-//                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(
-//                    PartnerUtils.findIndexForNewPartner(updatedAnswers).toString,
-//                    NormalMode
-//                  )
+//                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController
+//                    .onPageLoad(newPartnersCount.toString, CheckMode)
 //                )
+                Redirect(
+                  // TODO, make sure if this logic works as expected
+                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(
+                    PartnerUtils.findIndexForNewPartner(updatedAnswers).toString,
+                    NormalMode
+                  )
+                )
               } else {
                 Redirect(
                   controllers.routes.ChangeRegistrationDetailsController
