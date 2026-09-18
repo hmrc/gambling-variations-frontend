@@ -29,7 +29,7 @@ import play.api.test.Helpers.stubMessages
 
 import java.time.LocalDate
 
-class PremisesAddressListFormProviderSpec extends SpecBase with BooleanFieldBehaviours{
+class PremisesAddressListFormProviderSpec extends SpecBase with BooleanFieldBehaviours {
 
   val requiredKey = "premisesAddressList.error.required"
   val invalidKey = "error.boolean"
