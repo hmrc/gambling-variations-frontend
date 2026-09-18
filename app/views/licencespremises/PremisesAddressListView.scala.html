@@ -31,7 +31,7 @@
 
 @(form: Form[_], mode: Mode, addressList: Seq[PremisesDetails], maxPremisesAddresses: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("premisesAddressList.title"))) {
+@layout(pageTitle = titleNoForm(messages("premisesAddressList.title"), Some(messages("changeRegistrationDetails.caption")))) {
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("premisesAddressList.heading", classes="govuk-heading-l")
     @p("premisesAddressList.message.submit")

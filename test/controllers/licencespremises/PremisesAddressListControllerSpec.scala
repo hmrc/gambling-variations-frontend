@@ -5,9 +5,7 @@ import controllers.routes
 import forms.licencespremises.PremisesAddressListFormProvider
 import models.{NormalMode, UserAnswers}
 import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
-import play.api.Application
 import play.api.libs.json.Json
-import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.licencespremises.PremisesAddressListView
