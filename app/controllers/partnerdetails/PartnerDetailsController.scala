@@ -22,8 +22,10 @@ import forms.partnerdetails.AddAnotherPartnerFormProvider
 import pages.partnerdetails.PartnerDetailsAddAnotherPartnerYesNoPage
 import pages.partnerdetails.ChosenPartnerToRemovePage
 import forms.partnerdetails.AddAnotherPartnerFormProvider
+import models.CheckMode
 import pages.partnerdetails.{PartnerDetailsAddAnotherPartnerYesNoPage, PartnerDetailsBusinessPartnerNumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{JsArray, JsObject}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -52,7 +54,7 @@ class PartnerDetailsController @Inject() (
     (authorise andThen getData andThen requireData) { implicit request =>
 
       // TODO I think this has to work differently?
-      val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
+//      val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
 
       val viewModel =
         PartnerDetailsViewModel.from(
@@ -70,7 +72,7 @@ class PartnerDetailsController @Inject() (
 
       val preparedForm =
         request.userAnswers
-          .get(PartnerDetailsAddAnotherPartnerYesNoPage(newIndex))
+          .get(PartnerDetailsAddAnotherPartnerYesNoPage(request.userAnswers.partnersCount))
           .fold(form)(form.fill)
 
       Ok(
@@ -85,7 +87,9 @@ class PartnerDetailsController @Inject() (
     (authorise andThen getData andThen requireData).async { implicit request =>
 
       // TODO I think this has to work differently?
-      val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
+      // val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
+      val newPartnersCount: Int = request.userAnswers.newPartnersCount
+
       val viewModel =
         PartnerDetailsViewModel.from(
           request.userAnswers,
@@ -115,7 +119,7 @@ class PartnerDetailsController @Inject() (
               updatedAnswers <-
                 Future.fromTry(
                   request.userAnswers.set(
-                    PartnerDetailsAddAnotherPartnerYesNoPage(-111111), // TODO ?????
+                    PartnerDetailsAddAnotherPartnerYesNoPage(newPartnersCount), // TODO ?????
                     value
                   )
                 )
@@ -124,7 +128,8 @@ class PartnerDetailsController @Inject() (
             } yield {
               if (value) {
                 Redirect(
-                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(???, ???) // TODO ?????
+                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController
+                    .onPageLoad(newPartnersCount.toString, CheckMode) // TODO ?????
                 )
               } else {
                 Redirect(
