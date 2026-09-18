@@ -24,7 +24,7 @@ class PremisesAddressListControllerSpec extends SpecBase {
     id = userAnswersId,
     data = Json.obj(
       "licencesPremisesSection" -> Json.obj(
-        "mgdRegNum"       -> "XGM000001761",
+        "mgdRegNum" -> "XGM000001761",
         "premisesDetails" -> Json.obj(
           "totalRows" -> 1000,
           "premises" -> Json.arr(
