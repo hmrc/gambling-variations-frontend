@@ -18,8 +18,8 @@ package utils
 
 import models.{Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
-import play.api.libs.json.{JsArray, JsObject, JsPath}
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessPartnerNumberPage}
+import play.api.libs.json.JsArray
 
 object PartnerUtils {
 
@@ -27,8 +27,17 @@ object PartnerUtils {
     if mode == NormalMode then index.toInt
     else index
 
-  // TODO error checking version to validate user is not fucking around with the index,
-  // in fact, we wouldn't even need to pass it
+  // Like the top one, but actually validate some things
+  def parseIndexOpt(index: String, mode: Mode, userAnswers: UserAnswers): Option[BusinessNumberOrIndex] = {
+    if mode == NormalMode then {
+      val newPartnersSize = getNewPartnersSize(userAnswers)
+      if (newPartnersSize > index.toInt) || (newPartnersSize == 0 && index.toInt == 0) then Some(index.toInt)
+      else None
+    } else {
+      userAnswers.get(PartnerDetailsBusinessPartnerNumberPage(index)).fold(None)(_ => Some(index))
+    }
+  }
+
   def parseIndex(index: String, mode: Mode, userAnswers: UserAnswers): BusinessNumberOrIndex =
     if mode == NormalMode then {
       val isCorrect = userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index.toInt)).contains(false)
@@ -42,18 +51,15 @@ object PartnerUtils {
 
   // TODO find index where its not complete
   def findIndexForNewPartner(userAnswers: UserAnswers): Int = {
-
-    val newPartnersSize = (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
-
-    val p = (0 to newPartnersSize).collectFirst {
+    val newPartnersSize = getNewPartnersSize(userAnswers)
+    val newPartnerExistingIndex = (0 to newPartnersSize).collectFirst {
       case index: Int if userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)).contains(false) =>
         index
     }
-
-    p getOrElse newPartnersSize // TODO look into it, changed to size so it will "append" if it doesnt find anything
+    newPartnerExistingIndex getOrElse newPartnersSize // TODO look into it, changed to size so it will "append" if it doesnt find anything
   }
 
-  def getNewPartnersSize(userAnswers: UserAnswers): Int =
+  private def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
 
 }

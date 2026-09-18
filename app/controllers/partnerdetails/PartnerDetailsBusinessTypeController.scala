@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.partnerdetails.PartnerDetailsBusinessTypeFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator
@@ -50,14 +51,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
   val form: Form[BusinessType] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    // TODO this is an example of making sure index for newPartner is correct
-    // It could act as a fail-safe is user is screwing around the index number to make a mess,
-    // but with it, we can also just remove index from being passed around (for new Partners, still needed for existing)
-//    if !PartnerUtils.isIndexCorrect(index, mode, request.userAnswers) then {
-//      Redirect(routes.PartnerDetailsBusinessTypeController.onPageLoad(PartnerUtils.findIndexForNewPartner(request.userAnswers).toString, mode))
-//    } else {
-
-    val newIndex = PartnerUtils.parseIndex(index, mode, request.userAnswers)
+    val newIndex = PartnerUtils.parseIndex(index, mode)
 
     val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) match {
       case None               => form
@@ -65,7 +59,6 @@ class PartnerDetailsBusinessTypeController @Inject() (
     }
 
     Ok(view(preparedForm, index, mode))
-//    }
   }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>

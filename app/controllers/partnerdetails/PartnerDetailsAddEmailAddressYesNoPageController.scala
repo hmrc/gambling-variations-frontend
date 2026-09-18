@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.partnerdetails.PartnerAddEmailAddressYesNoPageFormProvider
 import models.Mode
 import navigation.Navigator
@@ -50,13 +51,14 @@ class PartnerDetailsAddEmailAddressYesNoPageController @Inject() (
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val newIndex = PartnerUtils.parseIndex(index, mode)
-    val preparedForm = request.userAnswers.get(PartnerDetailsAddEmailAddressYesNoPage(newIndex)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+    PartnerUtils.parseIndexOpt(index, mode, request.userAnswers).fold(Redirect(routes.SystemErrorController.onPageLoad())) { newIndex =>
+      val preparedForm = request.userAnswers.get(PartnerDetailsAddEmailAddressYesNoPage(newIndex)) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
 
-    Ok(view(preparedForm, index, mode))
+      Ok(view(preparedForm, index, mode))
+    }
   }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
