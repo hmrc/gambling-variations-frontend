@@ -169,7 +169,7 @@ class Navigator @Inject() () {
     case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
       _ => controllers.partnerdetails.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(???) // TODO ???
     case PartnerDetailsBusinessTypePage(index) =>
-      userAnswers => navigatePartnerDetailsBusinessTypePage(???)(userAnswers) // TODO ????
+      userAnswers => navigatePartnerDetailsBusinessTypePage(index.asInstanceOf[Int])(userAnswers) // TODO ????
     case PartnerDetailsUtrPage(index) =>
       userAnswers => navigatePartnerDetailsUTRPage(???)(userAnswers) // TODO ???
     case PartnerDetailsForeignCorporateReferencePage(index) =>
@@ -488,7 +488,7 @@ class Navigator @Inject() () {
     answers
       .get(PartnerDetailsBusinessTypePage(index))
       .fold(routes.SystemErrorController.onPageLoad())(toBeUsed => // TODO
-        controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(???, ???, ???)
+        controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(index.toString, toBeUsed, NormalMode)
       ) // TODO ???
 
   private def navigatePartnerDetailsUTRPage(index: Int)(answers: UserAnswers): Call =

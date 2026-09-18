@@ -21,6 +21,7 @@ import controllers.partnerdetails.routes
 import models.UserAnswers
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChangedPage, PartnerDetailsDateOfJoiningPage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.i18n.Messages
+import play.api.libs.json.{JsArray, JsObject}
 
 import java.time.{LocalDate, ZoneOffset}
 import java.time.format.DateTimeFormatter
@@ -36,7 +37,7 @@ final case class PartnerDetailsViewModel(
 )
 
 final case class PartnerDetailsRow(
-  partnerNumber: Int,
+  partnerNumber: String,
   name: String,
   status: String,
   statusDetails: Option[String],
@@ -55,10 +56,13 @@ object PartnerDetailsViewModel {
   )(implicit messages: Messages): PartnerDetailsViewModel = {
     val maxPartners = frontendAppConfig.maxPartners
 
+    // TODO improve, maybe move to partnerUtils
+    val existingPartners = (userAnswers.data \ "partners").validate[JsObject].get.keys.slice(0, maxPartners).toSeq
+
     val today = LocalDate.now(ZoneOffset.UTC)
 
-    val partnerNumbers: Seq[Int] =
-      (0 until maxPartners).filter { partnerNumber =>
+    val partnerNumbers: Seq[String] =
+      /*(0 until maxPartners)*/ existingPartners.filter { partnerNumber =>
         val hasPartner =
           userAnswers
             .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
@@ -69,7 +73,9 @@ object PartnerDetailsViewModel {
             .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
             .exists(_.isBefore(today))
 
+        // TODO commented out for testing
         hasPartner && !hasPastLeavingDate
+        true
       }
 
     val rows: Seq[PartnerDetailsRow] =

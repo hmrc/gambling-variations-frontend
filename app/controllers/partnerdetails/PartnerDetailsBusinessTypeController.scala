@@ -50,7 +50,14 @@ class PartnerDetailsBusinessTypeController @Inject() (
   val form: Form[BusinessType] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val newIndex = PartnerUtils.parseIndex(index, mode)
+    // TODO this is an example of making sure index for newPartner is correct
+    // It could act as a fail-safe is user is screwing around the index number to make a mess,
+    // but with it, we can also just remove index from being passed around (for new Partners, still needed for existing)
+//    if !PartnerUtils.isIndexCorrect(index, mode, request.userAnswers) then {
+//      Redirect(routes.PartnerDetailsBusinessTypeController.onPageLoad(PartnerUtils.findIndexForNewPartner(request.userAnswers).toString, mode))
+//    } else {
+
+    val newIndex = PartnerUtils.parseIndex(index, mode, request.userAnswers)
 
     val preparedForm = request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) match {
       case None               => form
@@ -58,6 +65,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
     }
 
     Ok(view(preparedForm, index, mode))
+//    }
   }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -70,8 +78,14 @@ class PartnerDetailsBusinessTypeController @Inject() (
         businessType =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(newIndex), businessType))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false)) // TODO added -1
-            _              <- sessionRepository.set(updatedAnswers)
+            // TODO uncomment it and decide if existing partner should modify it too
+            // updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false))
+            updatedAnswers <-
+              newIndex match {
+                case _: String            => Future.successful(updatedAnswers)
+                case newPartnerIndex: Int => Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
+              }
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(newIndex), mode, updatedAnswers))
       )
   }
