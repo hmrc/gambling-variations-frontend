@@ -4,22 +4,72 @@ import base.SpecBase
 import controllers.routes
 import forms.licencespremises.PremisesAddressListFormProvider
 import models.{NormalMode, UserAnswers}
+import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
 import play.api.Application
+import play.api.libs.json.Json
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.licencespremises.PremisesAddressListView
 
+import java.time.LocalDate
+
 class PremisesAddressListControllerSpec extends SpecBase {
+
   private lazy val premisesAddressListRoute =
     controllers.licencespremises.routes.PremisesAddressListController.onPageLoad().url
-  val formProvider = new PremisesAddressListFormProvider
-  val form: Form[Boolean] = formProvider()
+  private val formProvider = new PremisesAddressListFormProvider
+  private val form = formProvider()
+  private val fullAnswers = UserAnswers(
+    id = userAnswersId,
+    data = Json.obj(
+      "licencesPremisesSection" -> Json.obj(
+        "mgdRegNum"       -> "XGM000001761",
+        "premisesDetails" -> Json.obj(
+          "totalRows" -> 1000,
+          "premises" -> Json.arr(
+            Json.obj(
+              "mgdRegNumber" -> "XGM000001761",
+              "address1"     -> "123 Road",
+              "address2"     -> "Avenue",
+              "address3"     -> "London",
+              "postcode"     -> "E8 1EA",
+              "systemDate"   -> LocalDate.now()
+            ),
+            Json.obj(
+              "mgdRegNumber" -> "XGM000001761",
+              "address1"     -> "456 Road",
+              "address2"     -> "Avenue",
+              "address3"     -> "London",
+              "postcode"     -> "E8 2EA",
+              "systemDate"   -> LocalDate.now()
+            ),
+            Json.obj(
+              "mgdRegNumber" -> "XGM000001761",
+              "address1"     -> "789 Road",
+              "address2"     -> "Avenue",
+              "address3"     -> "London",
+              "postcode"     -> "E8 3EA",
+              "systemDate"   -> LocalDate.now()
+            )
+          )
+        )
+      )
+    )
+  )
+
+  private val preparedFormWithAnswers =
+    fullAnswers
+      .get(AddPremisesAddressPage)
+      .fold(form)(form.fill)
+  private val addressList = fullAnswers.get(PremisesDetailsPage).fold(Seq.empty)(list => list.premises)
+  private val maxPremises = 100
 
   "PremisesAddressList Controller" - {
 
-    "must return OK and the correct view for a GET" in new Setup {
-      val application: Application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+    "must return OK and the correct view for a GET" in {
+
+      val application = applicationBuilder(userAnswers = Some(fullAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, premisesAddressListRoute)
@@ -27,16 +77,15 @@ class PremisesAddressListControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[PremisesAddressListView]
-        val maxPremises = 100
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, Seq.empty, maxPremises)(request, messages(application)).toString
+        contentAsString(result) mustBe view(preparedFormWithAnswers, NormalMode, addressList, maxPremises)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(fullAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, premisesAddressListRoute)
@@ -44,9 +93,9 @@ class PremisesAddressListControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[PremisesAddressListView]
 
         val result = route(application, request).value
-
+        println(premisesAddressListRoute)
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(userAnswers))(request, messages(application)).toString
+        contentAsString(result) mustEqual view(preparedFormWithAnswers, NormalMode, addressList, maxPremises)(request, messages(application)).toString
       }
     }
 
