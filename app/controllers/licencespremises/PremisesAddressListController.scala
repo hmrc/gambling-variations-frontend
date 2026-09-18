@@ -18,7 +18,7 @@ package controllers.licencespremises
 
 import controllers.actions.*
 import controllers.routes
-import models.NormalMode
+import models.{Mode, NormalMode}
 import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
 import forms.licencespremises.PremisesAddressListFormProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -46,7 +46,7 @@ class PremisesAddressListController @Inject() (
   private val form = formProvider()
   private val maxPremisesAddresses = 100
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val preparedForm =
       request.userAnswers
@@ -63,8 +63,7 @@ class PremisesAddressListController @Inject() (
       )
   }
 
-  def onSubmit: Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     request.userAnswers
       .get(PremisesDetailsPage)
       .fold(
@@ -79,7 +78,7 @@ class PremisesAddressListController @Inject() (
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPremisesAddressPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect("#")
+              } yield Redirect(routes.SystemErrorController.onPageLoad().url)
           )
       )
   }
