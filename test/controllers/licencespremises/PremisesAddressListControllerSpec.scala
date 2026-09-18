@@ -4,15 +4,21 @@ import base.SpecBase
 import controllers.routes
 import forms.licencespremises.PremisesAddressListFormProvider
 import models.{NormalMode, UserAnswers}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
 import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
+import play.api.inject.bind
 import play.api.libs.json.Json
+import repositories.SessionRepository
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.licencespremises.PremisesAddressListView
 
 import java.time.LocalDate
+import scala.concurrent.Future
 
-class PremisesAddressListControllerSpec extends SpecBase {
+class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
 
   private lazy val premisesAddressListRoute =
     controllers.licencespremises.routes.PremisesAddressListController.onPageLoad().url
@@ -97,7 +103,64 @@ class PremisesAddressListControllerSpec extends SpecBase {
       }
     }
 
-    "must redirect to System Error if no data" in {
+    "must redirect to the next page when valid data is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any[UserAnswers]))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            POST,
+            controllers.licencespremises.routes.PremisesAddressListController.onSubmit().url
+          )
+            .withFormUrlEncodedBody("addPremisesAddress" -> "true")
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            POST,
+            controllers.licencespremises.routes.PremisesAddressListController.onSubmit().url
+          ).withFormUrlEncodedBody("value" -> "")
+
+        val boundForm = form.bind(Map("value" -> ""))
+
+        val result = route(application, request).value
+
+        val view =
+          application.injector.instanceOf[PremisesAddressListView]
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual
+          view(boundForm, NormalMode, addressList, maxPremises)(
+            request,
+            messages(application)
+          ).toString
+      }
+    }
+
+    "must redirect to System Error for a GET if no data" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -112,5 +175,28 @@ class PremisesAddressListControllerSpec extends SpecBase {
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
+
+    "must redirect to System Error for a POST if no data is found" in {
+
+      val application =
+        applicationBuilder(userAnswers = None)
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            POST,
+            controllers.licencespremises.routes.PremisesAddressListController.onSubmit().url
+          )
+            .withFormUrlEncodedBody("addPremisesAddress" -> "true")
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
   }
 }

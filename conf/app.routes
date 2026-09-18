@@ -347,4 +347,5 @@ GET        /change-registration-details/partner-details/check-date-to-remove    
 GET        /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onPageLoad()
+GET        /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onSubmit(mode: Mode = NormalMode)

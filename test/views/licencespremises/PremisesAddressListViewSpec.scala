@@ -52,27 +52,27 @@ class PremisesAddressListViewSpec extends SpecBase {
             "premises" -> Json.arr(
               Json.obj(
                 "mgdRegNumber" -> "XGM000001761",
-                "address1" -> "123 Road",
-                "address2" -> "Avenue",
-                "address3" -> "London",
-                "postcode" -> "E8 1EA",
-                "systemDate" -> LocalDate.now()
+                "address1"     -> "123 Road",
+                "address2"     -> "Avenue",
+                "address3"     -> "London",
+                "postcode"     -> "E8 1EA",
+                "systemDate"   -> LocalDate.now()
               ),
               Json.obj(
                 "mgdRegNumber" -> "XGM000001761",
-                "address1" -> "456 Road",
-                "address2" -> "Avenue",
-                "address3" -> "London",
-                "postcode" -> "E8 2EA",
-                "systemDate" -> LocalDate.now()
+                "address1"     -> "456 Road",
+                "address2"     -> "Avenue",
+                "address3"     -> "London",
+                "postcode"     -> "E8 2EA",
+                "systemDate"   -> LocalDate.now()
               ),
               Json.obj(
                 "mgdRegNumber" -> "XGM000001761",
-                "address1" -> "789 Road",
-                "address2" -> "Avenue",
-                "address3" -> "London",
-                "postcode" -> "E8 3EA",
-                "systemDate" -> LocalDate.now()
+                "address1"     -> "789 Road",
+                "address2"     -> "Avenue",
+                "address3"     -> "London",
+                "postcode"     -> "E8 3EA",
+                "systemDate"   -> LocalDate.now()
               )
             )
           )
@@ -86,15 +86,20 @@ class PremisesAddressListViewSpec extends SpecBase {
           "mgdRegNum" -> "XGM000001761",
           "premisesDetails" -> Json.obj(
             "totalRows" -> 1000,
-            "premises" -> Json.toJson(Seq.fill(100)(
-              Json.obj(
-                "mgdRegNumber" -> "XGM000001761",
-                "address1" -> "123 Road",
-                "address2" -> "Avenue",
-                "address3" -> "London",
-                "postcode" -> "E8 1EA",
-                "systemDate" -> LocalDate.now()
-              ))).as[JsArray]
+            "premises" -> Json
+              .toJson(
+                Seq.fill(100)(
+                  Json.obj(
+                    "mgdRegNumber" -> "XGM000001761",
+                    "address1"     -> "123 Road",
+                    "address2"     -> "Avenue",
+                    "address3"     -> "London",
+                    "postcode"     -> "E8 1EA",
+                    "systemDate"   -> LocalDate.now()
+                  )
+                )
+              )
+              .as[JsArray]
           )
         )
       )
@@ -137,10 +142,10 @@ class PremisesAddressListViewSpec extends SpecBase {
     "must render page correctly for 100 records" in new Setup {
       doc100.text must include("Showing 1 to 100 of 100 records")
       doc100.text must include(messages("premisesAddressList.max"))
-      doc100.text must not include(messages("premisesAddressList.question.add"))
-      doc100.text must not include(messages("premisesAddressList.hint"))
-      doc100.text must not include(messages("premisesAddressList.yesLabel"))
-      doc100.text must not include(messages("premisesAddressList.noLabel"))
+      doc100.text must not include (messages("premisesAddressList.question.add"))
+      doc100.text must not include (messages("premisesAddressList.hint"))
+      doc100.text must not include (messages("premisesAddressList.yesLabel"))
+      doc100.text must not include (messages("premisesAddressList.noLabel"))
 
     }
 
