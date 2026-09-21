@@ -51,9 +51,9 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
             "partnerDetailsMgdRegNumber" -> businessNumber1
           )
         ),
-        "partnerDetailsSection" -> Json.obj(
-          "partnerDetailsMgdRegNumber" -> userAnswersId
-        )
+//        "partnerDetailsSection" -> Json.obj(
+//          "partnerDetailsMgdRegNumber" -> userAnswersId
+//        )
       )
     )
 
@@ -173,7 +173,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = None)
+        applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
