@@ -94,7 +94,6 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      println(Json.prettyPrint(userAnswers.data))
 
       running(application) {
         val request = FakeRequest(GET, partnerContactDetailsRoute)

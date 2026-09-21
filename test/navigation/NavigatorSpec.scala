@@ -1167,7 +1167,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(index), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index)
+          controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode)
       }
 
     }
