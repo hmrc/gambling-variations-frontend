@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.partner
+package controllers.partnerdetails
 
 //import base.SpecBase
 //import models.UserAnswers
-//import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsPage, PartnerDetailsTradingNamePage}
+//import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 //import play.api.Application
 //import play.api.i18n.Messages
 //import play.api.mvc.AnyContentAsEmpty
 //import play.api.test.FakeRequest
 //import play.api.test.Helpers.*
-//import viewmodels.checkAnswers.partner.PartnerCheckConfirmRemoveDateViewModel
-//import views.html.partner.PartnerCheckConfirmRemoveDateView
+//import viewmodels.checkAnswers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateViewModel
+//import views.html.partnerdetails.PartnerDetailsCheckConfirmRemoveDateView
 //
 //import java.time.LocalDate
 //
@@ -41,7 +41,7 @@ package controllers.partner
 //    LocalDate.of(2026, 9, 19)
 //
 //  private val getRoute: String =
-//    controllers.partner.routes.PartnerCheckConfirmRemoveDateController
+//    controllers.partnerdetails.routes.PartnerDetailsCheckConfirmRemoveDateController
 //      .onPageLoad()
 //      .url
 //
@@ -51,7 +51,7 @@ package controllers.partner
 //  private val userAnswers: UserAnswers =
 //    emptyUserAnswers
 //      .set(
-//        PartnerDetailsPage(partnerIndex),
+//        PartnerDetailsMgdRegNumberPage(partnerIndex),
 //        userAnswersId
 //      )
 //      .success
@@ -115,7 +115,7 @@ package controllers.partner
 //            .apply(request)
 //
 //        val viewModel =
-//          PartnerCheckConfirmRemoveDateViewModel.from(
+//          PartnerDetailsCheckConfirmRemoveDateViewModel.from(
 //            userAnswers
 //          )
 //
