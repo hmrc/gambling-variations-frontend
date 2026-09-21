@@ -16,407 +16,405 @@
 
 package controllers.partnerdetails
 
-//import base.SpecBase
-//import controllers.partnerdetails.PartnerUtils.getIndex
-//import controllers.routes
-//import forms.partnerdetails.PartnerDateOfIncorporationFormProvider
-//import models.{BusinessType, NormalMode, UserAnswers}
-//import navigation.{FakeNavigator, Navigator}
-//import org.mockito.ArgumentMatchers.any
-//import org.mockito.Mockito.when
-//import org.scalatestplus.mockito.MockitoSugar
-//import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporation, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsMgdRegNumberPage}
-//import play.api.i18n.Messages
-//import play.api.inject.bind
-//import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.*
-//import repositories.SessionRepository
-//import views.html.partner.PartnerDateOfIncorporationView
-//
-//import java.time.{LocalDate, ZoneOffset}
-//import scala.concurrent.Future
-//
-//class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
-//
-//  private implicit val messages: Messages = stubMessages()
-//
-//  private val formProvider = new PartnerDateOfIncorporationFormProvider()
-//  private val form = formProvider()
-//
-//  private val onwardRoute = Call("GET", "/foo")
-//
-//  private val validAnswer = LocalDate.now(ZoneOffset.UTC)
-//
-//  private val getRoute =
-//    controllers.partnerdetails.routes.PartnerDateOfIncorporationController
-//      .onPageLoad()
-//      .url
-//
-//  private val postRoute =
-//    controllers.partnerdetails.routes.PartnerDateOfIncorporationController
-//      .onSubmit()
-//      .url
-//
-//  override val emptyUserAnswers = UserAnswers(userAnswersId)
-//
-//  private val partnerDetailsUserAnswers =
-//    emptyUserAnswers
-//      .set(PartnerDetailsMgdRegNumberPage(businessNumber1), userAnswersId)
-//      .success
-//      .value
-//      .set(PartnerDetailsAddPartnerCompletedPage(businessNumber1), false)
-//      .success
-//      .value
-//      .set(
-//        PartnerDetailsBusinessTypePage(businessNumber1),
-//        BusinessType.Corporatebody
-//      )
-//      .success
-//      .value
-//      .set(
-//        PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1),
-//        true
-//      )
-//      .success
-//      .value
-//
-//  private val index: Int =
-//    partnerDetailsUserAnswers.getIndex
-//
-//  private def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
-//    FakeRequest(GET, getRoute)
-//
-//  private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
-//    FakeRequest(POST, postRoute)
-//      .withFormUrlEncodedBody(
-//        "value.day"   -> validAnswer.getDayOfMonth.toString,
-//        "value.month" -> validAnswer.getMonthValue.toString,
-//        "value.year"  -> validAnswer.getYear.toString
-//      )
-//
-//  "PartnerDateOfIncorporation Controller" - {
-//
-//    "must return OK and the correct view for a GET" in {
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(partnerDetailsUserAnswers)
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, getRequest()).value
-//
-//        val view =
-//          application.injector.instanceOf[PartnerDateOfIncorporationView]
-//
-//        status(result) mustEqual OK
-//
-//        contentAsString(result) mustEqual
-//          view(
-//            form,
-//            NormalMode
-//          )(getRequest(), messages(application)).toString
-//      }
-//    }
-//
-//    "must populate the view correctly on a GET when the question has previously been answered" in {
-//
-//      val userAnswers =
-//        partnerDetailsUserAnswers
-//          .set(
-//            PartnerDetailsDateOfIncorporation(index),
-//            validAnswer
-//          )
-//          .success
-//          .value
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(userAnswers)
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, getRequest()).value
-//
-//        val view =
-//          application.injector.instanceOf[PartnerDateOfIncorporationView]
-//
-//        status(result) mustEqual OK
-//
-//        contentAsString(result) mustEqual
-//          view(
-//            form.fill(validAnswer),
-//            NormalMode
-//          )(getRequest(), messages(application)).toString
-//      }
-//    }
-//
-//    "must redirect to the next page when valid data is submitted" in {
-//
-//      val mockSessionRepository =
-//        mock[SessionRepository]
-//
-//      when(mockSessionRepository.set(any()))
-//        .thenReturn(Future.successful(true))
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(partnerDetailsUserAnswers)
-//        )
-//          .overrides(
-//            bind[Navigator].toInstance(
-//              new FakeNavigator(onwardRoute)
-//            ),
-//            bind[SessionRepository].toInstance(
-//              mockSessionRepository
-//            )
-//          )
-//          .build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, postRequest()).value
-//
-//        status(result) mustEqual SEE_OTHER
-//
-//        redirectLocation(result).value mustEqual onwardRoute.url
-//      }
-//    }
-//
-//    "must return a Bad Request and errors when invalid data is submitted" in {
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(partnerDetailsUserAnswers)
-//        ).build()
-//
-//      val request =
-//        FakeRequest(POST, postRoute)
-//          .withFormUrlEncodedBody(
-//            "value" -> "invalid value"
-//          )
-//
-//      running(application) {
-//
-//        val boundForm =
-//          form.bind(
-//            Map("value" -> "invalid value")
-//          )
-//
-//        val view =
-//          application.injector.instanceOf[PartnerDateOfIncorporationView]
-//
-//        val result =
-//          route(application, request).value
-//
-//        status(result) mustEqual BAD_REQUEST
-//
-//        contentAsString(result) mustEqual
-//          view(
-//            boundForm,
-//            NormalMode
-//          )(request, messages(application)).toString
-//      }
-//    }
-//
-//    "must return OK for an LLP" in {
-//
-//      val userAnswers =
-//        emptyUserAnswers
-//          .set(
-//            PartnerDetailsMgdRegNumberPage(businessNumber1),
-//            userAnswersId
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsAddPartnerCompletedPage(businessNumber1),
-//            false
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsBusinessTypePage(businessNumber1),
-//            BusinessType.LimitedLiabilityPartnership
-//          )
-//          .success
-//          .value
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(userAnswers)
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, getRequest()).value
-//
-//        status(result) mustEqual OK
-//      }
-//    }
-//
-//    "must redirect to SystemError when a corporate body is not incorporated in the UK" in {
-//
-//      val userAnswers =
-//        emptyUserAnswers
-//          .set(
-//            PartnerDetailsMgdRegNumberPage(businessNumber1),
-//            userAnswersId
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsAddPartnerCompletedPage(businessNumber1),
-//            false
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsBusinessTypePage(businessNumber1),
-//            BusinessType.Corporatebody
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1),
-//            false
-//          )
-//          .success
-//          .value
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(userAnswers)
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, getRequest()).value
-//
-//        status(result) mustEqual SEE_OTHER
-//
-//        redirectLocation(result).value mustEqual
-//          routes.SystemErrorController.onPageLoad().url
-//      }
-//    }
-//
-//    "must redirect to SystemError when the business type is missing" in {
-//
-//      val userAnswers =
-//        emptyUserAnswers
-//          .set(
-//            PartnerDetailsMgdRegNumberPage(businessNumber1),
-//            userAnswersId
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsAddPartnerCompletedPage(businessNumber1),
-//            false
-//          )
-//          .success
-//          .value
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(userAnswers)
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, getRequest()).value
-//
-//        status(result) mustEqual SEE_OTHER
-//
-//        redirectLocation(result).value mustEqual
-//          routes.SystemErrorController.onPageLoad().url
-//      }
-//    }
-//
-//    "must redirect to SystemError when a corporate body has no incorporated in UK answer" in {
-//
-//      val userAnswers =
-//        emptyUserAnswers
-//          .set(
-//            PartnerDetailsMgdRegNumberPage(businessNumber1),
-//            userAnswersId
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsAddPartnerCompletedPage(businessNumber1),
-//            false
-//          )
-//          .success
-//          .value
-//          .set(
-//            PartnerDetailsBusinessTypePage(businessNumber1),
-//            BusinessType.Corporatebody
-//          )
-//          .success
-//          .value
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = Some(userAnswers)
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, getRequest()).value
-//
-//        status(result) mustEqual SEE_OTHER
-//
-//        redirectLocation(result).value mustEqual
-//          routes.SystemErrorController.onPageLoad().url
-//      }
-//    }
-//
-//    "must redirect to SystemError for a GET if no existing data is found" in {
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = None
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, getRequest()).value
-//
-//        status(result) mustEqual SEE_OTHER
-//
-//        redirectLocation(result).value mustEqual
-//          routes.SystemErrorController.onPageLoad().url
-//      }
-//    }
-//
-//    "must redirect to SystemError for a POST if no existing data is found" in {
-//
-//      val application =
-//        applicationBuilder(
-//          userAnswers = None
-//        ).build()
-//
-//      running(application) {
-//
-//        val result =
-//          route(application, postRequest()).value
-//
-//        status(result) mustEqual SEE_OTHER
-//
-//        redirectLocation(result).value mustEqual
-//          routes.SystemErrorController.onPageLoad().url
-//      }
-//    }
-//  }
-//}
+import base.SpecBase
+import controllers.routes
+import forms.partnerdetails.PartnerDateOfIncorporationFormProvider
+import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporation, PartnerDetailsIsBusinessIncorporatedUkPage, PartnerDetailsMgdRegNumberPage}
+import play.api.i18n.Messages
+import play.api.inject.bind
+import play.api.libs.json.Json
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.*
+import repositories.SessionRepository
+import views.html.partnerdetails.PartnerDetailsDateOfIncorporationView
+
+import java.time.{LocalDate, ZoneOffset}
+import scala.concurrent.Future
+
+class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
+
+  private implicit val messages: Messages = stubMessages()
+
+  private val formProvider = new PartnerDateOfIncorporationFormProvider()
+  private val form = formProvider()
+
+  private val validAnswer = LocalDate.now(ZoneOffset.UTC)
+
+  private def getRoute =
+    controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController
+      .onPageLoad(businessNumber1, CheckMode)
+      .url
+
+  private def postRoute =
+    controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController
+      .onSubmit(businessNumber1, CheckMode)
+      .url
+
+  override val emptyUserAnswers = UserAnswers(mgdRegNum)
+
+  private val partnerDetailsUserAnswers =
+    emptyUserAnswers
+      .set(PartnerDetailsMgdRegNumberPage(businessNumber1), mgdRegNum)
+      .success
+      .value
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
+      .success
+      .value
+      .set(
+        PartnerDetailsBusinessTypePage(businessNumber1),
+        BusinessType.Corporatebody
+      )
+      .success
+      .value
+      .set(
+        PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1),
+        true
+      )
+      .success
+      .value
+
+  private def getRequest() =
+    FakeRequest(GET, getRoute)
+
+  private def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
+    FakeRequest(POST, postRoute)
+      .withFormUrlEncodedBody(
+        "value.day"   -> validAnswer.getDayOfMonth.toString,
+        "value.month" -> validAnswer.getMonthValue.toString,
+        "value.year"  -> validAnswer.getYear.toString
+      )
+
+  "PartnerDateOfIncorporation Controller" - {
+
+    "must return OK and the correct view for a GET" in {
+      val application =
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsDateOfIncorporationView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(
+            form,
+            businessNumber1,
+            CheckMode
+          )(getRequest(), messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers =
+        partnerDetailsUserAnswers
+          .set(
+            PartnerDetailsDateOfIncorporation(index),
+            validAnswer
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsDateOfIncorporationView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(
+            form.fill(validAnswer),
+            businessNumber1,
+            CheckMode
+          )(getRequest(), messages(application)).toString
+      }
+    }
+
+    "must redirect to the next page when valid data is submitted" in {
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      when(mockSessionRepository.set(any()))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        )
+          .overrides(
+            bind[Navigator].toInstance(
+              new FakeNavigator(onwardRoute)
+            ),
+            bind[SessionRepository].toInstance(
+              mockSessionRepository
+            )
+          )
+          .build()
+
+      running(application) {
+
+        val result =
+          route(application, postRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(partnerDetailsUserAnswers)
+        ).build()
+
+      val request =
+        FakeRequest(POST, postRoute)
+          .withFormUrlEncodedBody(
+            "value" -> "invalid value"
+          )
+
+      running(application) {
+
+        val boundForm =
+          form.bind(
+            Map("value" -> "invalid value")
+          )
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsDateOfIncorporationView]
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(
+            boundForm,
+            businessNumber1,
+            CheckMode
+          )(request, messages(application)).toString
+      }
+    }
+
+    "must return OK for an LLP" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsMgdRegNumberPage(businessNumber1),
+            mgdRegNum
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+            false
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.LimitedLiabilityPartnership
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual OK
+      }
+    }
+
+    "must redirect to SystemError when a corporate body is not incorporated in the UK" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsMgdRegNumberPage(businessNumber1),
+            mgdRegNum
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+            false
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.Corporatebody
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1),
+            false
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError when the business type is missing" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsMgdRegNumberPage(businessNumber1),
+            mgdRegNum
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+            false
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError when a corporate body has no incorporated in UK answer" in {
+
+      val userAnswers =
+        emptyUserAnswers
+          .set(
+            PartnerDetailsMgdRegNumberPage(businessNumber1),
+            mgdRegNum
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+            false
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.Corporatebody
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError for a GET if no existing data is found" in {
+
+      val application =
+        applicationBuilder(
+          userAnswers = None
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, getRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError for a POST if no existing data is found" in {
+
+      val application =
+        applicationBuilder(
+          userAnswers = None
+        ).build()
+
+      running(application) {
+
+        val result =
+          route(application, postRequest()).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          routes.SystemErrorController.onPageLoad().url
+      }
+    }
+  }
+}

@@ -29,7 +29,7 @@ trait PartnerDetailsHelper {
   // TODO delete
   val index: String = businessNumber1
 
-  val mgdRegNumber: String = "XGM00000001761"
+  val mgdRegNumber: String = "XGM00000001761" //TODO we have two mgdRegNumber, this really has to be sorted, other one is in SpecBase I think
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"

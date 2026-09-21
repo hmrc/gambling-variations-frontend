@@ -42,13 +42,13 @@ class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with M
 
   val userAnswersWithNoFax: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData())
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) //TODO passingNewPartnerIndex1 instead (no string)
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
       .success
       .value
 
   val userAnswersWithFax: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData(faxNumber = Some(testFaxNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) //TODO passingNewPartnerIndex1 instead (no string)
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
       .success
       .value
 

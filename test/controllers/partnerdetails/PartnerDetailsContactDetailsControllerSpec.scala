@@ -41,7 +41,8 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
 
   val form: Form[ContactNumber] = formProvider("partnerContactDetails")
 
-  lazy val partnerContactDetailsRoute: String = controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(businessNumber1, CheckMode).url
+  lazy val partnerContactDetailsRoute: String =
+    controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(businessNumber1, CheckMode).url
 
   val userAnswers: UserAnswers =
     UserAnswers(
@@ -59,7 +60,7 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
           )
         )
       )
-    ).set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value//TODO passingNewPartnerIndex1 instead (no string)
+    ).set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value // TODO passingNewPartnerIndex1 instead (no string)
 
   override val emptyUserAnswers = UserAnswers(
     userAnswersId,
@@ -70,7 +71,7 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
         )
       )
     )
-  ).set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value//TODO passingNewPartnerIndex1 instead (no string)
+  ).set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value // TODO passingNewPartnerIndex1 instead (no string)
 
   "PartnerContactDetails Controller" - {
 
@@ -93,6 +94,7 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      println(Json.prettyPrint(userAnswers.data))
 
       running(application) {
         val request = FakeRequest(GET, partnerContactDetailsRoute)
@@ -102,9 +104,10 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ContactNumber(Some("123456789"), Some("123456789"))), businessNumber1, CheckMode)(request,
-                                                                                                                           messages(application)
-                                                                                                                          ).toString
+        contentAsString(result) mustEqual view(form.fill(ContactNumber(Some("123456789"), Some("123456789"))), businessNumber1, CheckMode)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 

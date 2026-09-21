@@ -86,7 +86,6 @@ class PartnerDetailsDateOfIncorporationController @Inject() (
         userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)).contains(true)
       case Some(BusinessType.LimitedLiabilityPartnership) =>
         true
-
       case _ =>
         false
     }
