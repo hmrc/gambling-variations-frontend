@@ -91,7 +91,6 @@ class PartnerDetailsContactNumberPageSpec extends PlaySpec with PartnerDetailsHe
 
         val value1 = ContactNumber(phoneNumber = Some("111"), mobilePhoneNumber = Some("111"))
         val value2 = ContactNumber(phoneNumber = Some("222"), mobilePhoneNumber = Some("222"))
-        val businessNumber2 = "123456"
 
         val json = Json.obj(
           "newPartners" -> Json.arr(
