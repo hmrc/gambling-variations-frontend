@@ -55,11 +55,18 @@
                 noLabel = messages("premisesAddressList.noLabel")
             ).withHint(HintViewModel(messages("premisesAddressList.hint")))
             .withCssClass("premises-address-list-radio-buttons"))
+
+        @govukButton(
+                ButtonViewModel(messages("site.continue")))
         } else {
             @p("premisesAddressList.max")
+            <p class="govuk-body">
+                @govukButton(
+                ButtonViewModel(messages("site.continue"))
+                .withCssClass("button.govuk-button")
+                .asLink(controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url)
+                )
+            </p>
         }
-    @govukButton(
-        ButtonViewModel(messages("site.continue"))
-    )
 }
 }

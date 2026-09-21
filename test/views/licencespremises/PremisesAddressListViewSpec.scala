@@ -147,6 +147,8 @@ class PremisesAddressListViewSpec extends SpecBase {
       doc100.text must not include (messages("premisesAddressList.yesLabel"))
       doc100.text must not include (messages("premisesAddressList.noLabel"))
 
+      doc100.select(".govuk-button").attr("href") mustEqual
+        controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url
     }
 
     "must show error message when form has errors" in new Setup {
