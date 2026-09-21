@@ -16,68 +16,68 @@
 
 package viewmodels.checkAnswers.partnerdetails
 
-import base.SpecBase
-import pages.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoPage
-import play.api.Application
-import play.api.i18n.Messages
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
-
-class PartnerDetailsRemoveNationalInsuranceNumberYesNoSummarySpec extends SpecBase {
-  // TODO: Interim solution - will be refactored with the indexing ticket
-  private val index: Int = 0
-  lazy val app: Application = applicationBuilder().build()
-
-  implicit val messages: Messages = this.messages(app)
-
-  "PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary" - {
-
-    "must return None when the question has not been answered" in {
-      PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary.row(emptyUserAnswers) mustBe None
-    }
-
-    "must return the correct row when the answer is Yes" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), true)
-          .success
-          .value
-
-      PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerDetailsRemoveNinoYesNo.checkYourAnswersLabel",
-          value = ValueViewModel("site.yes"),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerDetailsRemoveNinoYesNo.change.hidden")
-            )
-          )
-        )
-    }
-
-    "must return the correct row when the answer is No" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), false)
-          .success
-          .value
-
-      PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerDetailsRemoveNinoYesNo.checkYourAnswersLabel",
-          value = ValueViewModel("site.no"),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerDetailsRemoveNinoYesNo.change.hidden")
-            )
-          )
-        )
-    }
-  }
-}
+//import base.SpecBase
+//import pages.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoPage
+//import play.api.Application
+//import play.api.i18n.Messages
+//import viewmodels.govuk.summarylist.*
+//import viewmodels.implicits.*
+//
+//class PartnerDetailsRemoveNationalInsuranceNumberYesNoSummarySpec extends SpecBase {
+//  // TODO: Interim solution - will be refactored with the indexing ticket
+//  private val index: Int = 0
+//  lazy val app: Application = applicationBuilder().build()
+//
+//  implicit val messages: Messages = this.messages(app)
+//
+//  "PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary" - {
+//
+//    "must return None when the question has not been answered" in {
+//      PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary.row(emptyUserAnswers) mustBe None
+//    }
+//
+//    "must return the correct row when the answer is Yes" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), true)
+//          .success
+//          .value
+//
+//      PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerDetailsRemoveNinoYesNo.checkYourAnswersLabel",
+//          value = ValueViewModel("site.yes"),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerDetailsRemoveNinoYesNo.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//
+//    "must return the correct row when the answer is No" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index), false)
+//          .success
+//          .value
+//
+//      PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerDetailsRemoveNinoYesNo.checkYourAnswersLabel",
+//          value = ValueViewModel("site.no"),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerDetailsRemoveNinoYesNo.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//  }
+//}

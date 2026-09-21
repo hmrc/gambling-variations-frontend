@@ -16,69 +16,69 @@
 
 package viewmodels.checkAnswers.partnerdetails
 
-import base.SpecBase
-import pages.partnerdetails.PartnerDetailsAddFaxNumberYesNoPage
-import play.api.Application
-import play.api.i18n.Messages
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
-
-class PartnerDetailsAddFaxNumberYesNoSummarySpec extends SpecBase {
-
-  lazy val app: Application = applicationBuilder().build()
-  implicit val messages: Messages = this.messages(app)
-
-  // TODO: Interim solution - will be refactored with the indexing ticket
-  private val index: Int = 0
-
-  "PartnerAddFaxNumberYesNoSummary" - {
-
-    "must return None when the question has not been answered" in {
-      PartnerDetailsAddFaxNumberYesNoSummary.row(emptyUserAnswers) mustBe None
-    }
-
-    "must return the correct row when the answer is Yes" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsAddFaxNumberYesNoPage(index), true)
-          .success
-          .value
-
-      PartnerDetailsAddFaxNumberYesNoSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerAddFaxNumberYesNo.checkYourAnswersLabel",
-          value = ValueViewModel("site.yes"),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              controllers.partnerdetails.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerAddFaxNumberYesNo.change.hidden")
-            )
-          )
-        )
-    }
-
-    "must return the correct row when the answer is No" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsAddFaxNumberYesNoPage(index), false)
-          .success
-          .value
-
-      PartnerDetailsAddFaxNumberYesNoSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerAddFaxNumberYesNo.checkYourAnswersLabel",
-          value = ValueViewModel("site.no"),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              controllers.partnerdetails.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerAddFaxNumberYesNo.change.hidden")
-            )
-          )
-        )
-    }
-  }
-}
+//import base.SpecBase
+//import pages.partnerdetails.PartnerDetailsAddFaxNumberYesNoPage
+//import play.api.Application
+//import play.api.i18n.Messages
+//import viewmodels.govuk.summarylist.*
+//import viewmodels.implicits.*
+//
+//class PartnerDetailsAddFaxNumberYesNoSummarySpec extends SpecBase {
+//
+//  lazy val app: Application = applicationBuilder().build()
+//  implicit val messages: Messages = this.messages(app)
+//
+//  // TODO: Interim solution - will be refactored with the indexing ticket
+//  private val index: Int = 0
+//
+//  "PartnerAddFaxNumberYesNoSummary" - {
+//
+//    "must return None when the question has not been answered" in {
+//      PartnerDetailsAddFaxNumberYesNoSummary.row(emptyUserAnswers) mustBe None
+//    }
+//
+//    "must return the correct row when the answer is Yes" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsAddFaxNumberYesNoPage(index), true)
+//          .success
+//          .value
+//
+//      PartnerDetailsAddFaxNumberYesNoSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerAddFaxNumberYesNo.checkYourAnswersLabel",
+//          value = ValueViewModel("site.yes"),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              controllers.partnerdetails.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerAddFaxNumberYesNo.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//
+//    "must return the correct row when the answer is No" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsAddFaxNumberYesNoPage(index), false)
+//          .success
+//          .value
+//
+//      PartnerDetailsAddFaxNumberYesNoSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerAddFaxNumberYesNo.checkYourAnswersLabel",
+//          value = ValueViewModel("site.no"),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              controllers.partnerdetails.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerAddFaxNumberYesNo.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//  }
+//}

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.partnerdetails
 
 import base.SpecBase
-import forms.partner.AddAnotherPartnerFormProvider
+import forms.partnerdetails.AddAnotherPartnerFormProvider
 import models.UserAnswers
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partner.PartnerDetailsAddAnotherPartnerYesNoPage
+import pages.partnerdetails.PartnerDetailsAddAnotherPartnerYesNoPage
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import viewmodels.checkAnswers.partner.PartnerDetailsViewModel
-import views.html.partner.PartnerDetailsView
+import viewmodels.checkAnswers.partnerdetails.PartnerDetailsViewModel
+import views.html.partnerdetails.PartnerDetailsView
 
 import scala.concurrent.Future
 
@@ -45,26 +45,26 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
     formProvider("partnerDetails.addAnotherPartner.error.required")
 
   private lazy val partnerDetailsRoute =
-    controllers.partner.routes.PartnerDetailsController.onPageLoad.url
+    controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad.url
 
   private lazy val onSubmitRoute =
-    controllers.partner.routes.PartnerDetailsController.onSubmit.url
+    controllers.partnerdetails.routes.PartnerDetailsController.onSubmit.url
 
   private lazy val onPartnerDetailsRoute =
-    controllers.partner.routes.PartnerDetailsController
-      .onPartnerDetails(0)
+    controllers.partnerdetails.routes.PartnerDetailsController
+      .onPartnerDetails(""/*0*/)
       .url
 
   private lazy val onRemoveRoute =
-    controllers.partner.routes.PartnerDetailsController
-      .onRemove(0)
+    controllers.partnerdetails.routes.PartnerDetailsController
+      .onRemove(""/*0*/)
       .url
 
   import pages.partnerdetails.*
 
   private val userAnswersWithPartner =
     emptyUserAnswers
-      .set(PartnerDetailsPage(0), "XWM00000001762")
+      .set(PartnerDetailsMgdRegNumberPage(0), "XWM00000001762")
       .success
       .value
       .set(PartnerDetailsTradingNamePage(0), "XYZ Consulting")
@@ -75,7 +75,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
       .value
 
   private lazy val onContinueRoute =
-    controllers.partner.routes.PartnerDetailsController.onContinue.url
+    controllers.partnerdetails.routes.PartnerDetailsController.onContinue.url
 
   "PartnerDetails Controller" - {
 
@@ -206,7 +206,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
+            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(???, ???).url
         }
       }
 
@@ -325,7 +325,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partner.routes.PartnerDetailsController.onPageLoad.url
+            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad.url
         }
       }
     }
@@ -367,7 +367,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partner.routes.PartnerDeleteDateController
+            controllers.partnerdetails.routes.PartnerDetailsDeleteDateController
               .onPageLoad()
               .url
 

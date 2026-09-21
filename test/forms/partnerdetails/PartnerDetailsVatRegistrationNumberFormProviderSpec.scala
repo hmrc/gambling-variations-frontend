@@ -17,8 +17,7 @@
 package forms.partnerdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.partnerdetails.PartnerDetailsVatRegistrationNumberFormProvider.{lengthRegex, oneToNineRegex}
-import forms.partner.PartnerDetailsVatRegistrationNumberFormProvider.{vrnLength, zeroToNineRegex}
+import forms.partnerdetails.PartnerDetailsVatRegistrationNumberFormProvider.{vrnLength, zeroToNineRegex}
 import play.api.data.FormError
 
 class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBehaviours {

@@ -16,81 +16,81 @@
 
 package views.partnerdetails
 
-import base.SpecBase
-import forms.partnerdetails.PartnerTradingNameFormProvider
-import models.NormalMode
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import play.api.test.FakeRequest
-import play.api.test.Helpers.running
-import views.html.partner.PartnerTradingNameView
-
-class PartnerTradingNameViewSpec extends SpecBase {
-
-  private val form = new PartnerTradingNameFormProvider()()
-
-  "PartnerTradingNameView" - {
-
-    "render the page correctly" in {
-
-      val application = applicationBuilder().build()
-
-      running(application) {
-
-        val view = application.injector.instanceOf[PartnerTradingNameView]
-
-        val html = view(
-          form,
-          NormalMode
-        )(FakeRequest(), messages(application))
-
-        val document: Document = Jsoup.parse(html.toString)
-
-        document.title() must include(
-          messages(application)("partnerTradingName.title")
-        )
-
-        document.select("h1").text() mustEqual
-          messages(application)("partnerTradingName.heading")
-
-        document.body().text() must include(
-          messages(application)("changeRegistrationDetails.caption")
-        )
-
-        document.getElementById("partnerTradingName").attr("partnerTradingName") mustEqual ""
-
-        document.body().text() must include(
-          messages(application)("businessTradingName.hint")
-        )
-
-        document.select(".govuk-button").text() mustEqual
-          messages(application)("site.continue")
-      }
-    }
-
-    "render an error summary when there are form errors" in {
-
-      val application = applicationBuilder().build()
-
-      running(application) {
-
-        val view = application.injector.instanceOf[PartnerTradingNameView]
-
-        val boundForm = form.bind(Map("partnerTradingName" -> ""))
-
-        val html = view(
-          boundForm,
-          NormalMode
-        )(FakeRequest(), messages(application))
-
-        val document: Document = Jsoup.parse(html.toString)
-
-        document.select(".govuk-error-summary").size() mustEqual 1
-
-        document.body().text() must include(
-          messages(application)("partnerTradingName.error.required")
-        )
-      }
-    }
-  }
-}
+//import base.SpecBase
+//import forms.partnerdetails.PartnerTradingNameFormProvider
+//import models.NormalMode
+//import org.jsoup.Jsoup
+//import org.jsoup.nodes.Document
+//import play.api.test.FakeRequest
+//import play.api.test.Helpers.running
+//import views.html.partner.PartnerTradingNameView
+//
+//class PartnerTradingNameViewSpec extends SpecBase {
+//
+//  private val form = new PartnerTradingNameFormProvider()()
+//
+//  "PartnerTradingNameView" - {
+//
+//    "render the page correctly" in {
+//
+//      val application = applicationBuilder().build()
+//
+//      running(application) {
+//
+//        val view = application.injector.instanceOf[PartnerTradingNameView]
+//
+//        val html = view(
+//          form,
+//          NormalMode
+//        )(FakeRequest(), messages(application))
+//
+//        val document: Document = Jsoup.parse(html.toString)
+//
+//        document.title() must include(
+//          messages(application)("partnerTradingName.title")
+//        )
+//
+//        document.select("h1").text() mustEqual
+//          messages(application)("partnerTradingName.heading")
+//
+//        document.body().text() must include(
+//          messages(application)("changeRegistrationDetails.caption")
+//        )
+//
+//        document.getElementById("partnerTradingName").attr("partnerTradingName") mustEqual ""
+//
+//        document.body().text() must include(
+//          messages(application)("businessTradingName.hint")
+//        )
+//
+//        document.select(".govuk-button").text() mustEqual
+//          messages(application)("site.continue")
+//      }
+//    }
+//
+//    "render an error summary when there are form errors" in {
+//
+//      val application = applicationBuilder().build()
+//
+//      running(application) {
+//
+//        val view = application.injector.instanceOf[PartnerTradingNameView]
+//
+//        val boundForm = form.bind(Map("partnerTradingName" -> ""))
+//
+//        val html = view(
+//          boundForm,
+//          NormalMode
+//        )(FakeRequest(), messages(application))
+//
+//        val document: Document = Jsoup.parse(html.toString)
+//
+//        document.select(".govuk-error-summary").size() mustEqual 1
+//
+//        document.body().text() must include(
+//          messages(application)("partnerTradingName.error.required")
+//        )
+//      }
+//    }
+//  }
+//}

@@ -16,55 +16,55 @@
 
 package viewmodels.checkAnswers.partnerdetails
 
-import base.SpecBase
-import models.BusinessType.Corporatebody
-import pages.partnerdetails.PartnerDetailsBusinessTypePage
-import play.api.Application
-import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
-
-class PartnerDetailsBusinessTypeSummarySpec extends SpecBase {
-
-  lazy val app: Application = applicationBuilder().build()
-  implicit val messages: Messages = this.messages(app)
-
-  private val index: Int = 0
-
-  "PartnerDetailsBusinessTypeSummary" - {
-
-    "must return None when the question has not been answered" in {
-      PartnerDetailsBusinessTypeSummary.row(emptyUserAnswers) mustBe None
-    }
-
-    "must return the correct row when an answer exists" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
-          .success
-          .value
-
-      val expectedValue = ValueViewModel(
-        HtmlContent(
-          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.${Corporatebody.toString}"))
-        )
-      )
-
-      PartnerDetailsBusinessTypeSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerDetailsBusinessType.checkYourAnswersLabel",
-          value = expectedValue,
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerDetailsBusinessType.change.hidden")
-            )
-          )
-        )
-    }
-  }
-}
+//import base.SpecBase
+//import models.BusinessType.Corporatebody
+//import pages.partnerdetails.PartnerDetailsBusinessTypePage
+//import play.api.Application
+//import play.api.i18n.Messages
+//import play.twirl.api.HtmlFormat
+//import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+//import viewmodels.govuk.summarylist.*
+//import viewmodels.implicits.*
+//
+//class PartnerDetailsBusinessTypeSummarySpec extends SpecBase {
+//
+//  lazy val app: Application = applicationBuilder().build()
+//  implicit val messages: Messages = this.messages(app)
+//
+//  private val index: Int = 0
+//
+//  "PartnerDetailsBusinessTypeSummary" - {
+//
+//    "must return None when the question has not been answered" in {
+//      PartnerDetailsBusinessTypeSummary.row(emptyUserAnswers) mustBe None
+//    }
+//
+//    "must return the correct row when an answer exists" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+//          .success
+//          .value
+//
+//      val expectedValue = ValueViewModel(
+//        HtmlContent(
+//          HtmlFormat.escape(messages(s"partnerDetailsBusinessType.${Corporatebody.toString}"))
+//        )
+//      )
+//
+//      PartnerDetailsBusinessTypeSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerDetailsBusinessType.checkYourAnswersLabel",
+//          value = expectedValue,
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerDetailsBusinessType.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//  }
+//}

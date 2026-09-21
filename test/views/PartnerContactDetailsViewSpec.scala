@@ -18,19 +18,20 @@ package views
 
 import base.SpecBase
 import forms.BusinessTradingNameFormProvider
-import models.NormalMode
+import models.{CheckMode, Mode, NormalMode}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
+import pages.BusinessNumberOrIndex
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.partner.PartnerContactDetailsView
+import views.html.partnerdetails.PartnerDetailsContactDetailsView
 
 class PartnerContactDetailsViewSpec extends SpecBase {
 
-  trait Setup {
+  trait Setup(index: BusinessNumberOrIndex, mode: Mode) {
     val app = applicationBuilder().build()
 
-    val view = app.injector.instanceOf[PartnerContactDetailsView]
+    val view = app.injector.instanceOf[PartnerDetailsContactDetailsView]
 
     implicit val request: play.api.mvc.Request[?] = FakeRequest()
 
@@ -40,14 +41,15 @@ class PartnerContactDetailsViewSpec extends SpecBase {
     val formProvider = new BusinessTradingNameFormProvider()
     val form = formProvider()
 
-    val html = view(form, NormalMode)(request, messages)
+    val html = view(form, index.toString, mode)(request, messages)
 
     val doc = Jsoup.parse(html.body)
   }
 
   "PartnerContactDetailsView" - {
 
-    "must render page correctly" in new Setup {
+    //TODO for checkMode and input, I dont even know if there is a point to have two tests, shit is the same between two screens
+    "must render page correctly" in new Setup("12345", CheckMode) {
       doc.title must include(messages("partnerContactDetails.title"))
 
       doc.select("h1").text must include(messages("partnerContactDetails.heading"))
