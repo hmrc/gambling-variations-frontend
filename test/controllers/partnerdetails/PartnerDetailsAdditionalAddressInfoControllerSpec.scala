@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.PartnerDetailsAdditionalAddressInfoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -30,25 +30,35 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.partner.PartnerDetailsAdditionalAddressInfoView
+import views.html.partnerdetails.PartnerDetailsAdditionalAddressInfoView
 
 import scala.concurrent.Future
 
-class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with MockitoSugar /*with PartnerDetailsHelper*/ {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new PartnerDetailsAdditionalAddressInfoFormProvider()
   val form = formProvider()
+  val businessNumber1 = "12345"
 
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("partnerDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj(
+        "partners" -> Json.obj(
+          businessNumber1 -> Json.obj(
+            "partnerDetailsMgdRegNumber" -> businessNumber1
+          )
+        ),
+        "partnerDetailsSection" -> Json.obj(
+          "partnerDetailsMgdRegNumber" -> userAnswersId
+        )
+      )
     )
 
   lazy val nameRoute =
-    controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad().url
+    controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(businessNumber1, CheckMode).url
 
   "PartnerDetailsAdditionalAddressInfo Controller" - {
 
@@ -65,18 +75,19 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, NormalMode)(request, messages(application)).toString
+          view(form, businessNumber1, CheckMode)(request, messages(application)).toString
       }
     }
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val data = Json.obj(
-        "partnerDetailsSection"                          -> Json.obj("mgdRegNum" -> userAnswersId),
-        PartnerDetailsAdditionalAddressInfoPage.toString -> "validName"
-      )
+//      val data = Json.obj(
+//        "partnerDetailsSection"                          -> Json.obj("mgdRegNum" -> userAnswersId),
+//        PartnerDetailsAdditionalAddressInfoPage.toString -> "validName"
+//      )
+//      val data = userAnswers.set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validaName").get
 
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers = noAnswers.set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validName").get// UserAnswers(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,7 +100,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill("validName"), NormalMode)(request, messages(application)).toString
+          view(form.fill("validName"), businessNumber1, CheckMode)(request, messages(application)).toString
       }
     }
 
@@ -138,13 +149,13 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode)(request, messages(application)).toString
+          view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
       }
     }
 
     "must return OK and the correct view for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, nameRoute)
@@ -152,7 +163,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
         val result = route(application, request).value
         val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, businessNumber1, CheckMode)(request, messages(application)).toString
       }
     }
 

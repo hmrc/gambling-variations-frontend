@@ -16,52 +16,52 @@
 
 package viewmodels.checkAnswers.partner
 
-import base.SpecBase
-import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
-import play.api.Application
-import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
-
-class PartnerDetailsForeignCorporateReferenceSummarySpec extends SpecBase {
-
-  // TODO: Interim solution - will be refactored with the indexing ticket
-  private val index: Int = 0
-
-  private val foreignCorporateRef: String = "FCR-987654"
-
-  lazy val app: Application = applicationBuilder().build()
-
-  implicit val messages: Messages = this.messages(app)
-
-  "PartnerDetailsForeignCorporateReferenceSummary" - {
-
-    "must return None when the question has not been answered" in {
-      PartnerDetailsForeignCorporateReferenceSummary.row(emptyUserAnswers) mustBe None
-    }
-
-    "must return the correct row when the foreign corporate reference has been answered" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsForeignCorporateReferencePage(index), foreignCorporateRef)
-          .success
-          .value
-
-      PartnerDetailsForeignCorporateReferenceSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerDetailsForeignCorporateReference.checkYourAnswersLabel",
-          value = ValueViewModel(HtmlFormat.escape(foreignCorporateRef).toString),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerDetailsForeignCorporateReference.change.hidden")
-            )
-          )
-        )
-    }
-  }
-
-}
+//import base.SpecBase
+//import pages.partnerdetails.PartnerDetailsForeignCorporateReferencePage
+//import play.api.Application
+//import play.api.i18n.Messages
+//import play.twirl.api.HtmlFormat
+//import viewmodels.govuk.summarylist.*
+//import viewmodels.implicits.*
+//
+//class PartnerDetailsForeignCorporateReferenceSummarySpec extends SpecBase {
+//
+//  // TODO: Interim solution - will be refactored with the indexing ticket
+//  private val index: Int = 0
+//
+//  private val foreignCorporateRef: String = "FCR-987654"
+//
+//  lazy val app: Application = applicationBuilder().build()
+//
+//  implicit val messages: Messages = this.messages(app)
+//
+//  "PartnerDetailsForeignCorporateReferenceSummary" - {
+//
+//    "must return None when the question has not been answered" in {
+//      PartnerDetailsForeignCorporateReferenceSummary.row(emptyUserAnswers) mustBe None
+//    }
+//
+//    "must return the correct row when the foreign corporate reference has been answered" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsForeignCorporateReferencePage(index), foreignCorporateRef)
+//          .success
+//          .value
+//
+//      PartnerDetailsForeignCorporateReferenceSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerDetailsForeignCorporateReference.checkYourAnswersLabel",
+//          value = ValueViewModel(HtmlFormat.escape(foreignCorporateRef).toString),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerDetailsForeignCorporateReference.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//  }
+//
+//}

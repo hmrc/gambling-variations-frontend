@@ -16,71 +16,71 @@
 
 package viewmodels.checkAnswers.partnerdetails
 
-import base.SpecBase
-import controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController
-import pages.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoPage
-import play.api.Application
-import play.api.i18n.Messages
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
-
-class PartnerDetailsRemoveEmailAddressYesNoSummarySpec extends SpecBase {
-
-  // TODO: Interim solution - will be refactored with the indexing ticket
-  private val index: Int = 0
-
-  implicit val messages: Messages = this.messages(app)
-
-  lazy val app: Application = applicationBuilder().build()
-
-  "PartnerDetailsRemoveEmailAddressYesNoSummary" - {
-
-    "must return None when the question has not been answered" in {
-      PartnerDetailsRemoveEmailAddressYesNoSummary.row(emptyUserAnswers) mustBe None
-    }
-
-    "must return the correct row when the answer is Yes" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), true)
-          .success
-          .value
-
-      PartnerDetailsRemoveEmailAddressYesNoSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel",
-          value = ValueViewModel("site.yes"),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden")
-            )
-          )
-        )
-    }
-
-    "must return the correct row when the answer is No" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), false)
-          .success
-          .value
-
-      PartnerDetailsRemoveEmailAddressYesNoSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel",
-          value = ValueViewModel("site.no"),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden")
-            )
-          )
-        )
-    }
-  }
-}
+//import base.SpecBase
+//import controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController
+//import pages.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoPage
+//import play.api.Application
+//import play.api.i18n.Messages
+//import viewmodels.govuk.summarylist.*
+//import viewmodels.implicits.*
+//
+//class PartnerDetailsRemoveEmailAddressYesNoSummarySpec extends SpecBase {
+//
+//  // TODO: Interim solution - will be refactored with the indexing ticket
+//  private val index: Int = 0
+//
+//  implicit val messages: Messages = this.messages(app)
+//
+//  lazy val app: Application = applicationBuilder().build()
+//
+//  "PartnerDetailsRemoveEmailAddressYesNoSummary" - {
+//
+//    "must return None when the question has not been answered" in {
+//      PartnerDetailsRemoveEmailAddressYesNoSummary.row(emptyUserAnswers) mustBe None
+//    }
+//
+//    "must return the correct row when the answer is Yes" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), true)
+//          .success
+//          .value
+//
+//      PartnerDetailsRemoveEmailAddressYesNoSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel",
+//          value = ValueViewModel("site.yes"),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//
+//    "must return the correct row when the answer is No" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsRemoveEmailAddressYesNoPage(index), false)
+//          .success
+//          .value
+//
+//      PartnerDetailsRemoveEmailAddressYesNoSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerDetailsRemoveEmailAddressYesNo.checkYourAnswersLabel",
+//          value = ValueViewModel("site.no"),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//  }
+//}

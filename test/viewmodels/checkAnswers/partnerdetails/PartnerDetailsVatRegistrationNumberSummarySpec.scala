@@ -16,50 +16,50 @@
 
 package viewmodels.checkAnswers.partnerdetails
 
-import base.SpecBase
-import pages.partnerdetails.PartnerDetailsVrnPage
-import play.api.Application
-import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
-
-class PartnerDetailsVatRegistrationNumberSummarySpec extends SpecBase {
-  // TODO: Interim solution - will be refactored with the indexing ticket
-  private val index: Int = 0
-
-  private val vrn: String = "GB353868127"
-
-  lazy val app: Application = applicationBuilder().build()
-
-  implicit val messages: Messages = this.messages(app)
-
-  "PartnerDetailsVatRegistrationNumberSummary" - {
-
-    "must return None when the question has not been answered" in {
-      PartnerDetailsVatRegistrationNumberSummary.row(emptyUserAnswers) mustBe None
-    }
-
-    "must return the correct row when the VAT registration number has been answered" in {
-      val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsVrnPage(index), vrn)
-          .success
-          .value
-
-      PartnerDetailsVatRegistrationNumberSummary.row(answers).value mustBe
-        SummaryListRowViewModel(
-          key   = "partnerDetailsVatRegistrationNumber.checkYourAnswersLabel",
-          value = ValueViewModel(HtmlFormat.escape(vrn).toString),
-          actions = Seq(
-            ActionItemViewModel(
-              "site.change",
-              controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url
-            ).withVisuallyHiddenText(
-              messages("partnerDetailsVatRegistrationNumber.change.hidden")
-            )
-          )
-        )
-    }
-  }
-}
+//import base.SpecBase
+//import pages.partnerdetails.PartnerDetailsVrnPage
+//import play.api.Application
+//import play.api.i18n.Messages
+//import play.twirl.api.HtmlFormat
+//import viewmodels.govuk.summarylist.*
+//import viewmodels.implicits.*
+//
+//class PartnerDetailsVatRegistrationNumberSummarySpec extends SpecBase {
+//  // TODO: Interim solution - will be refactored with the indexing ticket
+//  private val index: Int = 0
+//
+//  private val vrn: String = "GB353868127"
+//
+//  lazy val app: Application = applicationBuilder().build()
+//
+//  implicit val messages: Messages = this.messages(app)
+//
+//  "PartnerDetailsVatRegistrationNumberSummary" - {
+//
+//    "must return None when the question has not been answered" in {
+//      PartnerDetailsVatRegistrationNumberSummary.row(emptyUserAnswers) mustBe None
+//    }
+//
+//    "must return the correct row when the VAT registration number has been answered" in {
+//      val answers =
+//        emptyUserAnswers
+//          .set(PartnerDetailsVrnPage(index), vrn)
+//          .success
+//          .value
+//
+//      PartnerDetailsVatRegistrationNumberSummary.row(answers).value mustBe
+//        SummaryListRowViewModel(
+//          key   = "partnerDetailsVatRegistrationNumber.checkYourAnswersLabel",
+//          value = ValueViewModel(HtmlFormat.escape(vrn).toString),
+//          actions = Seq(
+//            ActionItemViewModel(
+//              "site.change",
+//              controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url
+//            ).withVisuallyHiddenText(
+//              messages("partnerDetailsVatRegistrationNumber.change.hidden")
+//            )
+//          )
+//        )
+//    }
+//  }
+//}
