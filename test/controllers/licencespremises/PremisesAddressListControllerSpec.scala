@@ -97,7 +97,7 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[PremisesAddressListView]
 
         val result = route(application, request).value
-        println(premisesAddressListRoute)
+
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(preparedFormWithAnswers, NormalMode, addressList, maxPremises)(request, messages(application)).toString
       }
