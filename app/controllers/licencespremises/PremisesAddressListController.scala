@@ -28,7 +28,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.licencespremises.PremisesAddressListView
 
 import javax.inject.Inject
-import scala.Console.println
 import scala.concurrent.{ExecutionContext, Future}
 
 class PremisesAddressListController @Inject() (
