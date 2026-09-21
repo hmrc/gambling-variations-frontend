@@ -60,7 +60,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
         } else {
-          println("or else")
+          println("NO PARTNER DETAILS IN CACHE") //TODO kept to check with specs if it works right, delete later
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -75,7 +75,14 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     .flatMap(_.values.headOption)
     .flatMap(_.asOpt[JsObject])
     .flatMap(_("partnerDetailsMgdRegNumber").asOpt[String])
-    .isDefined
+    .isDefined ||
+  //TODO additional check if somehow there are not existing partners in the "partners" array
+    (userAnswers.data \ "newPartners")
+      .asOpt[JsArray]
+      .flatMap(_.value.headOption)
+      .flatMap(_.asOpt[JsObject])
+      .flatMap(_("partnerDetailsMgdRegNumber").asOpt[String])
+      .isDefined
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
     gamblingConnector.getPartnersDetails(answers.id) flatMap { partnerDetails =>

@@ -67,7 +67,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
     )
 
   val emptyUserAnswers2: UserAnswers = UserAnswers(
-    userAnswersId,
+    userAnswersId
 //    Json.obj(
 //      "partners" -> Json.obj(
 //        businessNumber1 -> Json.obj(
@@ -214,7 +214,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    //TODO doesn't work, all PartnerDetails routes need to fetch minimal data for it to be valid
+    // TODO doesn't work, all PartnerDetails routes need to fetch minimal data for it to be valid
     "must return OK and the correct view for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -232,7 +232,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    //TODO doesn't work, all PartnerDetails routes need to fetch minimal data for it to be valid
+    // TODO doesn't work, all PartnerDetails routes need to fetch minimal data for it to be valid
     "must redirect to the next page for a POST if no existing data is found" in {
 
       val mockSessionRepository = mock[SessionRepository]

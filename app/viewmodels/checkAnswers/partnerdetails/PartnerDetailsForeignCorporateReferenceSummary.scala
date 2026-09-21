@@ -37,7 +37,7 @@ object PartnerDetailsForeignCorporateReferenceSummary {
         value = ValueViewModel(HtmlFormat.escape(answer).toString),
         actions = Seq(
           ActionItemViewModel("site.change",
-                              controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index).url
+                              controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, ???).url
                              )
             .withVisuallyHiddenText(messages("partnerDetailsForeignCorporateReference.change.hidden"))
         )

@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import controllers.actions.*
 import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.BusinessType.Corporatebody
-import models.Mode
+import models.{BusinessType, Mode}
 import navigation.Navigator
 import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsForeignCorporateReferencePage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.i18n.{I18nSupport, MessagesApi}

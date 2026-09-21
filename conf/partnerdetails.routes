@@ -142,7 +142,10 @@ GET       /change-registration-details/partner-details/date-to-remove-redirect  
 GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/partner-details/foreign-corporate-reference            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = NormalMode)
-POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = NormalMode)
+#TODo will go to add/change section
+GET        /change-registration-details/partner-details/foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = CheckMode)
 
 GET        /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()

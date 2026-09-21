@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("partnerDetailsForeignCorporateReference.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onSubmit(index)) {
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onSubmit(index, mode)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
