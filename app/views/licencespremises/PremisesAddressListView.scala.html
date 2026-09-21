@@ -56,8 +56,7 @@
             ).withHint(HintViewModel(messages("premisesAddressList.hint")))
             .withCssClass("premises-address-list-radio-buttons"))
 
-        @govukButton(
-                ButtonViewModel(messages("site.continue")))
+        @govukButton(ButtonViewModel(messages("site.continue")))
         } else {
             @p("premisesAddressList.max")
             <p class="govuk-body">

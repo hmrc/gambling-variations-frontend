@@ -78,7 +78,13 @@ class PremisesAddressListController @Inject() (
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPremisesAddressPage, value))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(routes.SystemErrorController.onPageLoad().url)
+              } yield {
+                if (value) {
+                  Redirect(routes.PageNotFoundController.onPageLoad().url)
+                } else {
+                  Redirect(controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url)
+                }
+              }
           )
       )
   }
