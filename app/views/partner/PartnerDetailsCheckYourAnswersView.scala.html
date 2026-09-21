@@ -14,14 +14,15 @@
  * limitations under the License.
  *@
 
-@this(
-        layout: templates.Layout,
-        govukButton: GovukButton
-)
+@import views.html.components.*
+
+@this(layout: templates.Layout, h1:H1, caption: Caption)
 
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("partnerDetailsCheckYourAnswers.title"))) {
+@layout(pageTitle = titleNoForm(messages("partnerDetailsCheckYourAnswers.title"), Some("changeRegistrationDetails.caption"))) {
 
-    <h1 class="govuk-heading-xl">@messages("partnerDetailsCheckYourAnswers.heading")</h1>
+    @caption(messages("changeRegistrationDetails.caption"))
+    @h1("changeRegistrationDetails.caption", classes="govuk-heading-l")
+
 }
