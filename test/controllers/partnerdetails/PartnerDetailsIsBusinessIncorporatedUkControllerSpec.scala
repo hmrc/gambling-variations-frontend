@@ -16,29 +16,30 @@
 
 package controllers.partnerdetails
 
-//import base.SpecBase
-//import controllers.routes
-//import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
-//import models.{BusinessType, NormalMode, UserAnswers}
-//import navigation.{FakeNavigator, Navigator}
-//import org.mockito.ArgumentMatchers.any
-//import org.mockito.Mockito.when
-//import org.scalatestplus.mockito.MockitoSugar
-//import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
-//import play.api.inject.bind
-//import play.api.libs.json.Json
-//import play.api.mvc.Call
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.*
-//import repositories.SessionRepository
-//import views.html.partner.PartnerDetailsIsBusinessIncorporatedUkView
+import base.SpecBase
+import controllers.routes
+import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
+import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
+import play.api.inject.bind
+import play.api.libs.json.Json
+import play.api.mvc.Call
+import play.api.test.FakeRequest
+import play.api.test.Helpers.*
+import repositories.SessionRepository
+import views.html.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkView
+
+import scala.concurrent.Future
+
+//TODO looks like it should be for adding only (pages asking `is x` for
+//class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 //
-//import scala.concurrent.Future
-//
-//class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with MockitoSugar {
-//
-//  val businessNumber: String = "12345"
-//  def onwardRoute = Call("GET", "/foo")
+////  val businessNumber: String = "12345"
+////  def onwardRoute = Call("GET", "/foo")
 //
 //  val formProvider = new PartnerDetailsIsBusinessIncorporatedUkFormProvider()
 //  val form = formProvider()
@@ -48,28 +49,28 @@ package controllers.partnerdetails
 //    Json.obj(
 //      "partners" -> Json.obj(
 //        // TODO use of businessNumber
-//        businessNumber -> Json.obj(
+//        businessNumber1 -> Json.obj(
 //          "partnerDetailsMgdRegNumber"             -> "XWM00000001762",
 //          "partnerDetailsBusinessType"             -> BusinessType.Corporatebody.code,
 //          "partnerDetailsIsBusinessIncorporatedUk" -> true
 //        )
 //      )
 //    )
-//  ).set(PartnerDetailsAddPartnerCompletedPage(businessNumber), false).success.value
+//  ).set(PartnerDetailsAddPartnerCompletedPage(businessNumber1), false).success.value
 //
 //  override val emptyUserAnswers = UserAnswers(
 //    userAnswersId,
 //    Json.obj(
 //      "partners" -> Json.obj(
-//        businessNumber -> Json.obj(
+//        businessNumber1 -> Json.obj(
 //          "partnerDetailsMgdRegNumber" -> "XWM00000001762"
 //        )
 //      )
 //    )
-//  ).set(PartnerDetailsAddPartnerCompletedPage(businessNumber), false).success.value
+//  ).set(PartnerDetailsAddPartnerCompletedPage(businessNumber1), false).success.value
 //
 //  lazy val partnerDetailsIsBusinessIncorporatedUkRoute =
-//    controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad().url
+//    controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(businessNumber1, CheckMode).url
 //
 //  "PartnerDetailsIsBusinessIncorporatedUk Controller" - {
 //

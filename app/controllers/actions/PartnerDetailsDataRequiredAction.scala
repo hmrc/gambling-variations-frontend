@@ -71,17 +71,19 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
   // TODO sigltly different way of making sure there is data
   private def isPartnerDetailsInCache(userAnswers: UserAnswers): Boolean = (userAnswers.data \ "partners")
-    .asOpt[JsObject]
-    .flatMap(_.values.headOption)
-    .flatMap(_.asOpt[JsObject])
-    .flatMap(_("partnerDetailsMgdRegNumber").asOpt[String])
-    .isDefined ||
+      .asOpt[JsObject]
+      .flatMap(_.values.headOption)
+      .flatMap(_.asOpt[JsObject])
+      .flatMap(_.value.get("partnerDetailsMgdRegNumber"))
+      .flatMap(_.asOpt[String])
+      .isDefined ||
   //TODO additional check if somehow there are not existing partners in the "partners" array
     (userAnswers.data \ "newPartners")
       .asOpt[JsArray]
       .flatMap(_.value.headOption)
       .flatMap(_.asOpt[JsObject])
-      .flatMap(_("partnerDetailsMgdRegNumber").asOpt[String])
+      .flatMap(_.value.get("partnerDetailsMgdRegNumber"))
+      .flatMap(_.asOpt[String])
       .isDefined
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
