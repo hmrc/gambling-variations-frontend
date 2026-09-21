@@ -390,3 +390,11 @@ previousRegistrationNumber.error.invalid.characters = Mae’n rhaid i’ch rhif 
 previousRegistrationNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru blaenorol fod yn fformat cywir
 previousRegistrationNumber.error.invalidReference = Nodwch rif cofrestru blaenorol go iawn
 previousRegistrationNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol
+
+partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?

@@ -23,7 +23,7 @@ import models.{BusinessDetails, BusinessType, NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsBusinessNamePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.*
 import play.api.Application
 import play.api.i18n.{Lang, Messages}
 import play.api.inject.bind
@@ -575,9 +575,6 @@ class PartnerDeleteDateControllerSpec extends SpecBase with MockitoSugar {
         )
 
       running(application) {
-
-        implicit val lang: Lang =
-          messages(application).lang
 
         val request =
           getRequest()

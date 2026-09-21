@@ -21,16 +21,15 @@ import controllers.routes
 import models.*
 import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
+import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.LicenceNumberPage
+import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -1166,6 +1165,22 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(index), NormalMode, answers) mustBe
           controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad()
+      }
+
+      "should route PartnerDetailsCountryOfIncorporationPage to SystemErrorController when answer is false" in {
+        navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(index), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route PartnerDetailsCountryOfIncorporationPage to PartnerDetailsAddCountryOfIncorporationController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsCountryOfIncorporationPage(index), "France")
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(index), NormalMode, answers) mustBe
+          controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad()
       }
 
     }

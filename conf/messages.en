@@ -960,7 +960,6 @@ licenceDetailsLandlordLicenceYesNo.checkYourAnswersLabel = Are you a pub tenant 
 licenceDetailsLandlordLicenceYesNo.error.required = Select yes if you are a pub tenant whose landlord holds the alcohol licence
 licenceDetailsLandlordLicenceYesNo.change.hidden = Are you a pub tenant whose landlord holds the alcohol licence?
 
-
 partnerSoleProprietorDob.title = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.heading = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.hint = For example, 31 3 1980
@@ -1006,6 +1005,7 @@ otherLicencesAndPermitsNI.option.serveAlcohol = Licence allowing the serving of 
 otherLicencesAndPermitsNI.option.regCert = Registration certificate including a club registration certificate
 otherLicencesAndPermitsNI.option.none = No, I do not have any other licences and permits in Northern Ireland
 otherLicencesAndPermitsNI.error.required = Select all the licences and permits you have in Northern Ireland
+
 partnerDetailsForeignCorporateReference.title = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.heading = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.checkYourAnswersLabel = What is the partner’s foreign corporate reference?
@@ -1040,3 +1040,11 @@ premisesNotCoveredYesNo.checkYourAnswersLabel = Do you have any other premises t
 premisesNotCoveredYesNo.error.required = Select yes if you have any other premises that are not covered by licences or permits
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
+
+partnerDetailsAddCountryOfIncorporation.title = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = Which country is the partner’s business incorporated in?
