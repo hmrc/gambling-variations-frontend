@@ -18,7 +18,6 @@ package pages.partnerdetails
 
 import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
-import pages.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoPage
 import play.api.libs.json.JsPath
 
 class PartnerDetailsRemoveEmailAddressYesNoPageSpec extends SpecBase with PartnerDetailsHelper {
