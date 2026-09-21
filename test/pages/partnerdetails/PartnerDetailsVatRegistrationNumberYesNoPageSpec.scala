@@ -19,7 +19,6 @@ package pages.partnerdetails
 import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import pages.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoPage
 import play.api.libs.json.JsPath
 
 class PartnerDetailsVatRegistrationNumberYesNoPageSpec extends AnyFreeSpec with Matchers with PartnerDetailsHelper {
