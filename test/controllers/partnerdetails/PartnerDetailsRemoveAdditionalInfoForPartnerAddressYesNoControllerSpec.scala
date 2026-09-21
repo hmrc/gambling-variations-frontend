@@ -16,191 +16,204 @@
 
 package controllers.partnerdetails
 
-//import base.SpecBase
-//import controllers.partnerdetails.PartnerDetailsHelper
-//import forms.partnerdetails.RemoveAdditionalInfoForPartnerAddressYesNoFormProvider
-//import models.{NormalMode, UserAnswers}
-//import navigation.{FakeNavigator, Navigator}
-//import org.mockito.ArgumentMatchers.any
-//import org.mockito.Mockito.when
-//import org.scalatestplus.mockito.MockitoSugar
-//import pages.partnerdetails.{PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage}
-//import play.api.inject.bind
-//import play.api.mvc.Call
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.*
-//import repositories.SessionRepository
-//import views.html.partner.RemoveAdditionalInfoForPartnerAddressYesNoView
-//
-//import scala.concurrent.Future
-//
-//class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec extends SpecBase with MockitoSugar {
-//
-//  val businessNumber: String = "12345"
-//  def onwardRoute = Call("GET", "/foo")
-//
-//  val formProvider = new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()
-//  val form = formProvider()
-//
-//  lazy val removeAdditionalInfoForPartnerYesNoRoute =
-//    controllers.partnerdetails.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url
-//
-//  "RemoveAdditionalInfoForPartnerYesNo Controller" - {
-//
-//    "must return OK and the correct view for a GET" in {
-//
-//      val userAnswers =
-//        UserAnswers(userAnswersId)
-//          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber), "Additional Information")
-//          .success
-//          .value
-//
-//      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-//
-//      running(application) {
-//        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
-//
-//        val result = route(application, request).value
-//
-//        val view =
-//          application.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
-//
-//        status(result) mustEqual OK
-//        contentAsString(result) mustEqual
-//          view(form, NormalMode, "Additional Information")(request, messages(application)).toString
-//      }
-//    }
-//
-//    "must redirect to the System Error page on a GET when additional information is missing" in {
-//
-//      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-//
-//      running(application) {
-//        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual SEE_OTHER
-//        redirectLocation(result).value mustEqual
-//          controllers.routes.SystemErrorController.onPageLoad().url
-//      }
-//    }
-//
-//    "must populate the view correctly on a GET when the question has previously been answered" in {
-//
-//      val userAnswers =
-//        UserAnswers(userAnswersId)
-//          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber), "Additional Information")
-//          .success
-//          .value
-//          .set(PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(businessNumber), true)
-//          .success
-//          .value
-//
-//      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-//
-//      running(application) {
-//        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
-//
-//        val view =
-//          application.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual OK
-//        contentAsString(result) mustEqual
-//          view(form.fill(true), NormalMode, "Additional Information")(
-//            request,
-//            messages(application)
-//          ).toString
-//      }
-//    }
-//
-//    "must redirect to the next page when valid data is submitted" in {
-//
-//      val userAnswers =
-//        UserAnswers(userAnswersId)
-//          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber), "Additional Information")
-//          .success
-//          .value
-//
-//      val mockSessionRepository = mock[SessionRepository]
-//
-//      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-//
-//      val application =
-//        applicationBuilder(userAnswers = Some(userAnswers))
-//          .overrides(
-//            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-//            bind[SessionRepository].toInstance(mockSessionRepository)
-//          )
-//          .build()
-//
-//      running(application) {
-//        val request =
-//          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
-//            .withFormUrlEncodedBody(("value", "true"))
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual SEE_OTHER
-//        redirectLocation(result).value mustEqual onwardRoute.url
-//      }
-//    }
-//
-//    "must redirect to the System Error page when valid data is submitted and additional information is missing" in {
-//
-//      val mockSessionRepository = mock[SessionRepository]
-//
-//      val application =
-//        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-//          .overrides(
-//            bind[SessionRepository].toInstance(mockSessionRepository)
-//          )
-//          .build()
-//
-//      running(application) {
-//        val request =
-//          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
-//            .withFormUrlEncodedBody(("value", "true"))
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual SEE_OTHER
-//        redirectLocation(result).value mustEqual
-//          controllers.routes.SystemErrorController.onPageLoad().url
-//      }
-//    }
-//
-//    "must return a Bad Request and errors when invalid data is submitted" in {
-//
-//      val userAnswers =
-//        UserAnswers(userAnswersId)
-//          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber), "Additional Information")
-//          .success
-//          .value
-//
-//      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-//
-//      running(application) {
-//        val request =
-//          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
-//            .withFormUrlEncodedBody(("value", ""))
-//
-//        val boundForm = form.bind(Map("value" -> ""))
-//
-//        val view =
-//          application.injector.instanceOf[RemoveAdditionalInfoForPartnerAddressYesNoView]
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual BAD_REQUEST
-//        contentAsString(result) mustEqual
-//          view(boundForm, NormalMode, "Additional Information")(
-//            request,
-//            messages(application)
-//          ).toString
-//      }
-//    }
-//  }
-//}
+import base.SpecBase
+import forms.partnerdetails.RemoveAdditionalInfoForPartnerAddressYesNoFormProvider
+import models.{NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import pages.partnerdetails.{PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage}
+import play.api.inject.bind
+import play.api.mvc.Call
+import play.api.test.FakeRequest
+import play.api.test.Helpers.*
+import repositories.SessionRepository
+import views.html.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoView
+
+import scala.concurrent.Future
+
+class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec extends SpecBase with MockitoSugar {
+
+  private val newPartnersIndex: Int = 0
+  val businessNumber: String = newPartnersIndex.toString
+
+  def onwardRoute = Call("GET", "/foo")
+
+  val formProvider = new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()
+  val form = formProvider()
+
+  lazy val removeAdditionalInfoForPartnerYesNoRoute =
+    controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(businessNumber).url
+
+  "PartnerDetailsRemoveAdditionalInfoForPartnerYesNo Controller" - {
+
+    "must return OK and the correct view for a GET" in {
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
+
+        val result = route(application, request).value
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(form, businessNumber, NormalMode, "Additional Information")(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to the System Error page on a GET when additional information is missing" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .success
+          .value
+          .set(PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(newPartnersIndex), true)
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(form.fill(true), businessNumber, NormalMode, "Additional Information")(
+            request,
+            messages(application)
+          ).toString
+      }
+    }
+
+    "must redirect to the next page when valid data is submitted" in {
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .success
+          .value
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to the System Error page when valid data is submitted and additional information is missing" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
+            .withFormUrlEncodedBody(("value", ""))
+
+        val boundForm = form.bind(Map("value" -> ""))
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual
+          view(boundForm, businessNumber, NormalMode, "Additional Information")(
+            request,
+            messages(application)
+          ).toString
+      }
+    }
+  }
+}
