@@ -19,6 +19,7 @@ package pages.partnerdetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
+//TODO most likely String for existing partners only
 case object ChosenPartnerToRemovePage extends QuestionPage[ /*Int*/ String] {
 
   override def path: JsPath =

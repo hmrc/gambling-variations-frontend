@@ -60,7 +60,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
 
     val userAnswers: UserAnswers =
       UserAnswers("id", businessData)
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) //TODO passingNewPartnerIndex1 instead (no string)
+        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
         .success
         .value
 
@@ -84,7 +84,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
 
     val soleProprietorUserAnswers: UserAnswers =
       UserAnswers("id", soleProprietorData)
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)//TODO passingNewPartnerIndex1 instead (no string)
+        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
         .success
         .value
 

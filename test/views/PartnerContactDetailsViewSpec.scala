@@ -48,7 +48,7 @@ class PartnerContactDetailsViewSpec extends SpecBase {
 
   "PartnerContactDetailsView" - {
 
-    //TODO for checkMode and input, I dont even know if there is a point to have two tests, shit is the same between two screens
+    // TODO for checkMode and input, I dont even know if there is a point to have two tests, shit is the same between two screens
     "must render page correctly" in new Setup("12345", CheckMode) {
       doc.title must include(messages("partnerContactDetails.title"))
 

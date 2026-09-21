@@ -50,7 +50,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
           businessNumber1 -> Json.obj(
             "partnerDetailsMgdRegNumber" -> businessNumber1
           )
-        ),
+        )
 //        "partnerDetailsSection" -> Json.obj(
 //          "partnerDetailsMgdRegNumber" -> userAnswersId
 //        )
@@ -87,7 +87,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
 //      )
 //      val data = userAnswers.set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validaName").get
 
-      val userAnswers = noAnswers.set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validName").get// UserAnswers(userAnswersId, data)
+      val userAnswers = noAnswers.set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validName").get // UserAnswers(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -45,7 +45,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
   val validUserAnswers: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData())
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) //TODO for businessNumber, this should not be relevant I think
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO for businessNumber, this should not be relevant I think
       .success
       .value
 
@@ -110,7 +110,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
     }
 
     "onSubmit" - {
-      //TODO this test seems more relevant for newPartners, I think
+      // TODO this test seems more relevant for newPartners, I think
       "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]
