@@ -21,7 +21,9 @@
 
 @this(
         layout: templates.Layout,
+        formHelper: FormWithCSRF,
         govukSummaryList: GovukSummaryList,
+        govukErrorSummary: GovukErrorSummary,
         govukRadios: GovukRadios,
         govukButton: GovukButton,
         h1: H1,
@@ -32,13 +34,18 @@
 @(form: Form[_], mode: Mode, addressList: Seq[PremisesDetails], maxPremisesAddresses: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("premisesAddressList.title"), Some(messages("changeRegistrationDetails.caption")))) {
+
+    @formHelper(action = controllers.licencespremises.routes.PremisesAddressListController.onSubmit(), Symbol("autoComplete") -> "off") {
+
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("premisesAddressList.heading", classes="govuk-heading-l")
     @p("premisesAddressList.message.submit")
 <!--the bold values below will need to be updated when creating pagination-->
     @p(message = "premisesAddressList.records", args = Seq(<strong>1</strong>, <strong>{addressList.length}</strong>, <strong>{addressList.length}</strong>))
     @govukSummaryList(PremisesAddressListViewModel.from(addressList))
-
+    @if(form.errors.nonEmpty){
+        @govukErrorSummary(ErrorSummaryViewModel(form))
+    }
     @if(addressList.length < maxPremisesAddresses) {
         @govukRadios(
             RadiosViewModel.yesNo(
@@ -54,4 +61,5 @@
     @govukButton(
         ButtonViewModel(messages("site.continue"))
     )
+}
 }
