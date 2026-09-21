@@ -29,20 +29,20 @@ class PartnerDetailsForeignCorporateReferenceFormProvider @Inject() extends Mapp
       "value" ->
         text(requiredKey)
           .transform[String](_.trim, identity)
-          .verifying(maxLength(100, maxLengthKey))
           .verifying(
             regexp(
               refNumberRegex,
               invalidKey
             )
           )
+          .verifying(maxLength(100, maxLengthKey))
     )
 }
 
 object PartnerDetailsForeignCorporateReferenceFormProvider {
 
   private[forms] val maxLength = 100
-  private[forms] val refNumberRegex = "^[A-Za-z 0-9-\']{1,100}$"
+  private[forms] val refNumberRegex = "^[A-Za-z 0-9-\']+$"
   private[forms] val requiredKey = "partnerDetailsForeignCorporateReference.error.required"
   private[forms] val maxLengthKey = "partnerDetailsForeignCorporateReference.error.length"
   private[forms] val invalidKey = "partnerDetailsForeignCorporateReference.error.invalid"
