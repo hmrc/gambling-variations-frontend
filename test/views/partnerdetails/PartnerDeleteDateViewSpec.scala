@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.partner
+package views.partnerdetails
 
 import base.SpecBase
 import forms.partner.PartnerDeleteDateFormProvider

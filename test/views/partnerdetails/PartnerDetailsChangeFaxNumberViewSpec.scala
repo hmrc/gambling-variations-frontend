@@ -25,10 +25,10 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.running
 import views.html.partnerdetails.PartnerDetailsChangeFaxNumberView
 
-class ChangePartnerFaxNumberViewSpec extends SpecBase {
+class PartnerDetailsChangeFaxNumberViewSpec extends SpecBase {
 
   private val form = new FaxNumberFormProvider()("partnerDetailsFaxNumber")
-  private val index = 0.toString
+  private val newPartnersIndex = 0.toString
 
   "ChangePartnerFaxNumberView" - {
 
@@ -42,7 +42,7 @@ class ChangePartnerFaxNumberViewSpec extends SpecBase {
 
         val html = view(
           form,
-          index,
+          newPartnersIndex,
           NormalMode
         )(FakeRequest(), messages(application))
 
@@ -78,7 +78,7 @@ class ChangePartnerFaxNumberViewSpec extends SpecBase {
 
         val html = view(
           boundForm,
-          index,
+          newPartnersIndex,
           NormalMode
         )(FakeRequest(), messages(application))
 

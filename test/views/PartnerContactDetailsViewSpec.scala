@@ -18,7 +18,7 @@ package views
 
 import base.SpecBase
 import forms.BusinessTradingNameFormProvider
-import models.{CheckMode, Mode, NormalMode}
+import models.{CheckMode, Mode}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import pages.BusinessNumberOrIndex

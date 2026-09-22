@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.partner
+package views.partnerdetails
 
 import base.SpecBase
 import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
@@ -32,10 +32,10 @@ class PartnerDetailsForeignCorporateReferenceViewSpec extends SpecBase {
   private val fieldName = "value"
   private val prefix = "partnerDetailsForeignCorporateReference"
   private val validValue = "ABC-123 456"
+  private val newPartnersIndex = 0.toString
 
   trait Setup {
     private val app = applicationBuilder().build()
-    val index = 0
 
     val view: PartnerDetailsForeignCorporateReferenceView =
       app.injector.instanceOf[PartnerDetailsForeignCorporateReferenceView]
@@ -48,7 +48,7 @@ class PartnerDetailsForeignCorporateReferenceViewSpec extends SpecBase {
       app.injector.instanceOf[MessagesApi].preferred(request)
 
     def render(f: Form[String]): Document =
-      Jsoup.parse(view(f, index.toString, NormalMode)(request, messages).body)
+      Jsoup.parse(view(f, newPartnersIndex, NormalMode)(request, messages).body)
   }
 
   "PartnerDetailsForeignCorporateReferenceView" - {
@@ -86,7 +86,7 @@ class PartnerDetailsForeignCorporateReferenceViewSpec extends SpecBase {
       val doc: Document = render(form)
 
       doc.select("form").attr("action") mustEqual
-        controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onSubmit(index.toString, NormalMode).url
+        controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onSubmit(newPartnersIndex, NormalMode).url
     }
 
     "must pre-populate the input from the form, keeping the value verbatim" in new Setup {
