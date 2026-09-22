@@ -20,6 +20,7 @@ import controllers.actions.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.checkAnswers.partner.CheckPartnerDetailsViewModel
 import views.html.partner.PartnerDetailsCheckYourAnswersView
 
 import javax.inject.Inject
@@ -28,13 +29,19 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsCheckYourAnswersView
 ) extends FrontendBaseController
     with I18nSupport {
 
+  private val index: Int = utils.PartnerUtils.interimIndex
+
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    Ok(view())
+
+    val model = CheckPartnerDetailsViewModel
+      .from(request.userAnswers, index)
+
+    Ok(view(model))
   }
 }
