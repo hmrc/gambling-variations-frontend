@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.PartnerEmailAddressFormProvider
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{CheckMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -28,7 +28,6 @@ import pages.partnerdetails.PartnerDetailsEmailAddressPage
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -38,8 +37,7 @@ import scala.concurrent.Future
 
 class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-//  val businessNumber: String = "12345"
-//  def onwardRoute = Call("GET", "/foo")
+  // TODO: NormalMode paths
 
   val formProvider = new PartnerEmailAddressFormProvider()
   val form: Form[String] = formProvider("partnerEmailAddress")
@@ -47,41 +45,24 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
   lazy val partnerEmailAddressRoute: String =
     controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(businessNumber1, CheckMode).url
 
-  // todo rename to "minimal user answers" or sum shit
-  override val emptyUserAnswers: UserAnswers =
+  // Due to the Action intercept, it is not possible to test None at the controller level.
+  val minimalUserAnswers: UserAnswers =
     UserAnswers(
       userAnswersId,
       Json.obj(
         "partners" -> Json.obj(
           businessNumber1 -> Json.obj(
             "partnerDetailsMgdRegNumber" -> mgdRegNumber
-//            "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-//              "contactNumber" -> Json.obj(
-//                "phoneNumber" -> "123456789",
-//                "mobilePhoneNumber" -> "123456789"
-//              )
-//            )
           )
         )
       )
     )
 
-  val emptyUserAnswers2: UserAnswers = UserAnswers(
-    userAnswersId
-//    Json.obj(
-//      "partners" -> Json.obj(
-//        businessNumber1 -> Json.obj(
-//          "partnerDetailsMgdRegNumber" -> mgdRegNumber
-//        )
-//      )
-//    )
-  )
-
   "PartnerEmailAddress Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(minimalUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerEmailAddressRoute)
@@ -98,13 +79,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-//      val userAnswers =
-//        UserAnswers(userAnswersId)
-//          .set(PartnerDetailsEmailAddressPage(businessNumber1), "validEmail@example.com")
-//          .success
-//          .value
-
-      val userAnswers = emptyUserAnswers
+      val userAnswers = minimalUserAnswers
         .set(PartnerDetailsEmailAddressPage(businessNumber1), "validEmail@example.com")
         .success
         .value
@@ -135,7 +110,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(minimalUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -158,7 +133,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(minimalUserAnswers)).build()
 
       running(application) {
         val request =
@@ -188,7 +163,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(minimalUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -214,10 +189,9 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    // TODO doesn't work, all PartnerDetails routes need to fetch minimal data for it to be valid
     "must return OK and the correct view for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = Some(minimalUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, partnerEmailAddressRoute)
@@ -232,7 +206,6 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    // TODO doesn't work, all PartnerDetails routes need to fetch minimal data for it to be valid
     "must redirect to the next page for a POST if no existing data is found" in {
 
       val mockSessionRepository = mock[SessionRepository]
@@ -240,7 +213,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = None)
+        applicationBuilder(userAnswers = Some(minimalUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
