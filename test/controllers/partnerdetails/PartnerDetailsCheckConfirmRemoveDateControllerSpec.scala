@@ -32,9 +32,6 @@ import java.time.LocalDate
 //TODO works but double check
 class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with PartnerDetailsHelper {
 
-  private val partnerIndex: Int =
-    0
-
   private val partnerName: String =
     "Test Trading Name"
 
@@ -52,7 +49,7 @@ class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with P
   private val userAnswers: UserAnswers =
     emptyUserAnswers
       .set(
-        PartnerDetailsMgdRegNumberPage(partnerIndex),
+        PartnerDetailsMgdRegNumberPage(newPartnersIndex1),
         userAnswersId
       )
       .success
@@ -60,18 +57,18 @@ class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with P
       .set(
         PartnerDetailsChosenPartnerToRemovePage,
         businessNumber1
-//        partnerIndex
+//        newPartnerIndex1
       )
       .success
       .value
       .set(
-        PartnerDetailsTradingNamePage(partnerIndex),
+        PartnerDetailsTradingNamePage(newPartnersIndex1),
         partnerName
       )
       .success
       .value
       .set(
-        PartnerDetailsDateOfLeavingPage(partnerIndex),
+        PartnerDetailsDateOfLeavingPage(newPartnersIndex1),
         dateToRemove
       )
       .success
