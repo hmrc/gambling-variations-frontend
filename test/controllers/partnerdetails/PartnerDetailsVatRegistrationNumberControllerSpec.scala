@@ -42,11 +42,11 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
   val userAnswersNoVrn: UserAnswers = validUserAnswers()
   val userAnswersWithVrn: UserAnswers = userAnswersNoVrn.set(PartnerDetailsVrnPage(0), testVRN).success.value
 
-  override val index: String = "0"
+//  override val index: String = "0"
   val fieldName = "partnerDetailsVatRegistrationNumber"
 
   lazy val partnerVatRegistrationNumberRoute =
-    controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, NormalMode).url
+    controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(businessNumber1, NormalMode).url
 
   "PartnerDetailsVatRegistrationNumber Controller" - {
 
@@ -62,7 +62,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
         val view = application.injector.instanceOf[PartnerDetailsVatRegistrationNumberView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, index, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, businessNumber1, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -78,7 +78,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(testVRN), index, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(testVRN), businessNumber1, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -126,7 +126,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, index, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, businessNumber1, NormalMode)(request, messages(application)).toString
       }
     }
 

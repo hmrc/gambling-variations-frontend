@@ -35,13 +35,11 @@ import scala.concurrent.Future
 
 class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  override val index: String = newPartnersIndex1.toString
-
   val formProvider = new PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
   lazy val removeNinoRoute: String =
-    controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index).url
+    controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   val validUserAnswers: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData(nino = Some(testNino)))
@@ -68,7 +66,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val view = application.injector.instanceOf[PartnerDetailsRemoveNationalInsuranceNumberYesNoView]
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form, index, NormalMode, testNino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form, newPartnersIndex1.toString, NormalMode, testNino)(request, messages(application)).toString
         }
       }
 
@@ -89,7 +87,9 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(true), index, NormalMode, testNino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form.fill(true), newPartnersIndex1.toString, NormalMode, testNino)(request,
+                                                                                                                 messages(application)
+                                                                                                                ).toString
         }
       }
 
@@ -215,7 +215,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe BAD_REQUEST
-          contentAsString(result) mustBe view(boundForm, index, NormalMode, testNino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(boundForm, newPartnersIndex1.toString, NormalMode, testNino)(request, messages(application)).toString
           verify(mockSessionRepository, never()).set(any())
         }
       }
@@ -242,7 +242,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
           val result = route(application, request).value
 
           status(result) mustBe BAD_REQUEST
-          contentAsString(result) mustBe view(boundForm, index, NormalMode, testNino)(request, messages(application)).toString
+          contentAsString(result) mustBe view(boundForm, newPartnersIndex1.toString, NormalMode, testNino)(request, messages(application)).toString
           verify(mockSessionRepository, never()).set(any())
         }
       }

@@ -39,9 +39,8 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
   private val formProvider = new PartnerDetailsRemoveVatRegNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
-  override val index: String = newPartnersIndex1.toString
-
-  private lazy val removeVrnRoute = controllers.partnerdetails.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index).url
+  private lazy val removeVrnRoute =
+    controllers.partnerdetails.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   private val userAnswersWithVrn: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData(vrn = Some(testVRN)))
@@ -66,7 +65,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           val view = application.injector.instanceOf[PartnerDetailsRemoveVatRegNumberYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, index, NormalMode, testVRN)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, newPartnersIndex1.toString, NormalMode, testVRN)(request, messages(application)).toString
         }
       }
 
@@ -85,7 +84,9 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(true), index, NormalMode, testVRN)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form.fill(true), newPartnersIndex1.toString, NormalMode, testVRN)(request,
+                                                                                                                   messages(application)
+                                                                                                                  ).toString
         }
       }
 
@@ -194,7 +195,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, index, NormalMode, testVRN)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, newPartnersIndex1.toString, NormalMode, testVRN)(request, messages(application)).toString
         }
       }
 

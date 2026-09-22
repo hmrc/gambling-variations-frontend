@@ -37,13 +37,11 @@ import scala.concurrent.Future
 
 class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  override val index: String = newPartnersIndex1.toString
-
   private val formProvider = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
   lazy val partnerDetailsRemoveFaxNumberYesNoRoute: String =
-    PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index).url
+    PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   private val validUserAnswers: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedData(Some(testFaxNumber)))
@@ -67,7 +65,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
           val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, index, NormalMode, testFaxNumber)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, newPartnersIndex1.toString, NormalMode, testFaxNumber)(request, messages(application)).toString
         }
       }
 
@@ -86,7 +84,9 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
           val view = application.injector.instanceOf[PartnerDetailsRemoveFaxNumberYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(true), index, NormalMode, testFaxNumber)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form.fill(true), newPartnersIndex1.toString, NormalMode, testFaxNumber)(request,
+                                                                                                                         messages(application)
+                                                                                                                        ).toString
         }
       }
 
@@ -185,7 +185,9 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, index, NormalMode, testFaxNumber)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, newPartnersIndex1.toString, NormalMode, testFaxNumber)(request,
+                                                                                                                   messages(application)
+                                                                                                                  ).toString
         }
       }
 

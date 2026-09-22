@@ -82,7 +82,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
       "must populate the view correctly on a GET when a 9-character NINO has previously been answered" in {
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsNinoPage(index), validNino9Chars)
+          .set(PartnerDetailsNinoPage(businessNumber1), validNino9Chars)
           .success
           .value
 
@@ -105,7 +105,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
         val storedNinoWithUnderscore = s"${validNino8Chars}_"
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsNinoPage(index), storedNinoWithUnderscore)
+          .set(PartnerDetailsNinoPage(businessNumber1), storedNinoWithUnderscore)
           .success
           .value
 
@@ -140,7 +140,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
       "must redirect to System Error Page for a GET if businessType is not Soleproprietor" in {
 
         val userAnswers = validUserAnswers
-          .set(PartnerDetailsBusinessTypePage(index), Corporatebody)
+          .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
           .success
           .value
 
@@ -181,7 +181,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsNinoPage(index), validNino9Chars)
+            .set(PartnerDetailsNinoPage(businessNumber1), validNino9Chars)
             .success
             .value
 
@@ -213,7 +213,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsNinoPage(index), s"${validNino8Chars}_")
+            .set(PartnerDetailsNinoPage(businessNumber1), s"${validNino8Chars}_")
             .success
             .value
 

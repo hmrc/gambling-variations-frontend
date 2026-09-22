@@ -36,12 +36,10 @@ import scala.concurrent.Future
 
 class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  override val index: String = newPartnersIndex1.toString
-
   private val form: Form[Boolean] = (new PartnerDetailsRemoveEmailAddressYesNoFormProvider())()
 
   private lazy val partnerDetailsRemoveEmailAddressYesNoRoute: String =
-    controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index).url
+    controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   private val baseUserAnswers: UserAnswers =
     UserAnswers(
@@ -69,7 +67,9 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, index, NormalMode, testEmailAddress)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
+                                                                                                                 messages(application)
+                                                                                                                ).toString
         }
       }
 
@@ -88,7 +88,9 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(true), index, NormalMode, testEmailAddress)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form.fill(true), newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
+                                                                                                                            messages(application)
+                                                                                                                           ).toString
         }
       }
 
@@ -137,7 +139,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
 
         running(application) {
           val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(index).url)
+            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
               .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
@@ -161,7 +163,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
 
         running(application) {
           val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(index).url)
+            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
               .withFormUrlEncodedBody(("value", "false"))
 
           val result = route(application, request).value
@@ -177,7 +179,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
 
         running(application) {
           val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(index).url)
+            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
               .withFormUrlEncodedBody(("value", ""))
 
           val boundForm = form.bind(Map("value" -> ""))
@@ -185,7 +187,9 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, index, NormalMode, testEmailAddress)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
+                                                                                                                      messages(application)
+                                                                                                                     ).toString
         }
       }
 
@@ -196,7 +200,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
 
         running(application) {
           val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(index).url)
+            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
               .withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value

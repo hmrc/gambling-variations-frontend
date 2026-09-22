@@ -26,7 +26,7 @@ trait PartnerDetailsHelper {
   val newPartnersIndex1: Int = 0
   val newPartnersIndex2: Int = 1
   // TODO delete, and whaeber uses it, should use businessNumber1
-  val index: String = businessNumber1
+//  val index: String = businessNumber1
 
   val mgdRegNumber: String = "XGM00000001761" // TODO we have two mgdRegNumber, this really has to be sorted, other one is in SpecBase I think
   val testFaxNumber: String = "0123456789"
