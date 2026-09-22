@@ -17,20 +17,21 @@
 package views.partnerdetails
 
 import base.SpecBase
-import forms.partnerdetails.VatRegistrationNumberYesNoFormProvider
+import forms.partnerdetails.RemovePartnerTradingNameYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoView
+import views.html.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoView
 
-class VatRegistrationNumberYesNoViewSpec extends SpecBase {
+class PartnerDetailsRemovePartnerTradingNameYesNoViewSpec extends SpecBase {
 
-  private val newPartnersIndex: Int = 0
-  private val form = new VatRegistrationNumberYesNoFormProvider()()
+  private val form = new RemovePartnerTradingNameYesNoFormProvider()()
+  private val partnerTradingName = "ABC Trading"
+  private val newPartnersIndex = 0.toString
 
-  "VatRegistrationNumberYesNoView" - {
+  "RemovePartnerTradingNameYesNoView" - {
 
     "render the page correctly" in {
 
@@ -38,31 +39,26 @@ class VatRegistrationNumberYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerDetailsVatRegistrationNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemovePartnerTradingNameYesNoView]
 
         val html = view(
           form,
-          newPartnersIndex.toString,
-          NormalMode
+          newPartnersIndex,
+          NormalMode,
+          partnerTradingName
         )(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("vatRegistrationNumberYesNo.title")
+          messages(application)("removePartnerTradingNameYesNo.title")
         )
 
         document.select("h1").text() mustEqual
-          messages(application)("vatRegistrationNumberYesNo.heading")
+          messages(application)("removePartnerTradingNameYesNo.heading", partnerTradingName)
 
         document.body().text() must include(
           messages(application)("site.continue")
-        )
-
-        document
-          .select(".govuk-caption-l")
-          .text() must include(
-          messages(application)("changeRegistrationDetails.caption")
         )
 
         document.getElementById("value").attr("value") mustEqual "true"
@@ -77,7 +73,7 @@ class VatRegistrationNumberYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[PartnerDetailsVatRegistrationNumberYesNoView]
+        val view = application.injector.instanceOf[PartnerDetailsRemovePartnerTradingNameYesNoView]
 
         val boundForm = form.bind(
           Map("value" -> "")
@@ -85,8 +81,9 @@ class VatRegistrationNumberYesNoViewSpec extends SpecBase {
 
         val html = view(
           boundForm,
-          newPartnersIndex.toString,
-          NormalMode
+          newPartnersIndex,
+          NormalMode,
+          partnerTradingName
         )(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
@@ -94,7 +91,7 @@ class VatRegistrationNumberYesNoViewSpec extends SpecBase {
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("vatRegistrationNumberYesNo.error.required")
+          messages(application)("removePartnerTradingNameYesNo.error.required")
         )
       }
     }

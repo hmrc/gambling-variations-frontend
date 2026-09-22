@@ -24,7 +24,7 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import views.html.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoView
 
-class RemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends SpecBase {
+class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
