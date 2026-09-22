@@ -17,7 +17,7 @@
 package views.partnerdetails
 
 import base.SpecBase
-import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
+import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

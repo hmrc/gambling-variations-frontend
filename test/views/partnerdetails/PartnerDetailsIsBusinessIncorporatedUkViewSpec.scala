@@ -17,7 +17,7 @@
 package views.partnerdetails
 
 import base.SpecBase
-import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
+import forms.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

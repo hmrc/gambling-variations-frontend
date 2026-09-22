@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms.partner
+package forms.partnerdetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider.*
+import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider.*
 import org.scalacheck.Gen
 import play.api.data.FormError
 

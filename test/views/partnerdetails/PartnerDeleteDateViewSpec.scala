@@ -17,7 +17,7 @@
 package views.partnerdetails
 
 import base.SpecBase
-import forms.partner.PartnerDeleteDateFormProvider
+import forms.partnerdetails.PartnerDeleteDateFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

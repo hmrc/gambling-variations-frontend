@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms.partner
+package forms.partnerdetails
 
 import forms.mappings.Mappings
-import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider.*
+import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider.*
 import play.api.data.Form
 
 import javax.inject.Inject
