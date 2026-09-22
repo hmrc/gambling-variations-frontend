@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.VatRegistrationNumberYesNoFormProvider
-import models.NormalMode
+import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -33,33 +33,31 @@ import views.html.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoView
 
 import scala.concurrent.Future
 
-class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSugar {
+//TODO normalModeOnly - Done - Maybe fix consistency with userAnswers
+class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  val index = 0
-  val businessNumber: String = "12345"
-  def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new VatRegistrationNumberYesNoFormProvider()
   val form = formProvider()
 
-  lazy val vatRegistrationNumberYesNoRoute =
-    controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString).url
+  lazy val vatRegistrationNumberYesNoRouteNewPartners =
+    controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
-  private val userAnswersWithoutVatAnswer =
-    emptyUserAnswers
-      .set(PartnerDetailsAddPartnerCompletedPage(index), false)
+  private val userAnswersWithoutVatAnswerNewPartners =
+    UserAnswers(userAnswersId, minimalValidData)
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
-      .set(PartnerDetailsMgdRegNumberPage(index), "123456789")
+      .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
       .success
       .value
-      .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+      .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
       .success
       .value
 
-  private val userAnswersWithVatAnswer =
-    userAnswersWithoutVatAnswer
-      .set(PartnerDetailsVatRegistrationNumberYesNoPage(index), true)
+  private val userAnswersWithVatAnswerNewPartners =
+    userAnswersWithoutVatAnswerNewPartners
+      .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), true)
       .success
       .value
 
@@ -68,11 +66,11 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners)).build()
 
       running(application) {
         val request =
-          FakeRequest(GET, vatRegistrationNumberYesNoRoute)
+          FakeRequest(GET, vatRegistrationNumberYesNoRouteNewPartners)
 
         val result =
           route(application, request).value
@@ -84,7 +82,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         contentAsString(result) mustEqual
           view(
             form,
-            index.toString,
+            newPartnersIndex1.toString,
             NormalMode
           )(request, messages(application)).toString
       }
@@ -93,11 +91,11 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithVatAnswer)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithVatAnswerNewPartners)).build()
 
       running(application) {
         val request =
-          FakeRequest(GET, vatRegistrationNumberYesNoRoute)
+          FakeRequest(GET, vatRegistrationNumberYesNoRouteNewPartners)
 
         val view =
           application.injector.instanceOf[PartnerDetailsVatRegistrationNumberYesNoView]
@@ -109,7 +107,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         contentAsString(result) mustEqual
           view(
             form.fill(true),
-            index.toString,
+            newPartnersIndex1.toString,
             NormalMode
           )(request, messages(application)).toString
       }
@@ -124,7 +122,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer))
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -133,7 +131,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, vatRegistrationNumberYesNoRoute)
+          FakeRequest(POST, vatRegistrationNumberYesNoRouteNewPartners)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result =
@@ -143,8 +141,8 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         redirectLocation(result).value mustEqual onwardRoute.url
 
         val expectedAnswers =
-          userAnswersWithoutVatAnswer
-            .set(PartnerDetailsVatRegistrationNumberYesNoPage(index), true)
+          userAnswersWithoutVatAnswerNewPartners
+            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), true)
             .success
             .value
         verify(mockSessionRepository).set(expectedAnswers)
@@ -160,7 +158,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer))
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -169,7 +167,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, vatRegistrationNumberYesNoRoute)
+          FakeRequest(POST, vatRegistrationNumberYesNoRouteNewPartners)
             .withFormUrlEncodedBody(("value", "false"))
 
         val result =
@@ -179,8 +177,8 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         redirectLocation(result).value mustEqual onwardRoute.url
 
         val expectedAnswers =
-          userAnswersWithoutVatAnswer
-            .set(PartnerDetailsVatRegistrationNumberYesNoPage(index), false)
+          userAnswersWithoutVatAnswerNewPartners
+            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), false)
             .success
             .value
         verify(mockSessionRepository).set(expectedAnswers)
@@ -190,11 +188,11 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswer)).build()
+        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, vatRegistrationNumberYesNoRoute)
+          FakeRequest(POST, vatRegistrationNumberYesNoRouteNewPartners)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm =
@@ -210,7 +208,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         contentAsString(result) mustEqual
           view(
             boundForm,
-            index.toString,
+            newPartnersIndex1.toString,
             NormalMode
           )(request, messages(application)).toString
       }

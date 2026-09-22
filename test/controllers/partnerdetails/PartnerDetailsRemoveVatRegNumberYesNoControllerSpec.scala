@@ -43,7 +43,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
     controllers.partnerdetails.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   private val userAnswersWithVrn: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedData(vrn = Some(testVRN)))
+    UserAnswers(mgdRegNumber, cleanedDataExistingPartners(vrn = Some(testVRN)))
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value

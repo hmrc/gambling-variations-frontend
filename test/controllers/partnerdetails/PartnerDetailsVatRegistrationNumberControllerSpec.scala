@@ -38,7 +38,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
   val formProvider = new PartnerDetailsVatRegistrationNumberFormProvider()
   val form = formProvider()
 
-  def validUserAnswers(vrn: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedData(vrn = vrn))
+  def validUserAnswers(vrn: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(vrn = vrn))
   val userAnswersNoVrn: UserAnswers = validUserAnswers()
   val userAnswersWithVrn: UserAnswers = userAnswersNoVrn.set(PartnerDetailsVrnPage(0), testVRN).success.value
 

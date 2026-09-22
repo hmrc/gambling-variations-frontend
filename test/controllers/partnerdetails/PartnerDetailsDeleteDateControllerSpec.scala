@@ -23,7 +23,7 @@ import models.{BusinessDetails, BusinessType, NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsBusinessNamePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.Application
 import play.api.i18n.{Lang, Messages}
 import play.api.inject.bind
@@ -105,7 +105,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       .success
       .value
       .set(
-        ChosenPartnerToRemovePage,
+        PartnerDetailsChosenPartnerToRemovePage,
         ???
 //        partnerIndex
       )
@@ -440,7 +440,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           .success
           .value
           .set(
-            ChosenPartnerToRemovePage,
+            PartnerDetailsChosenPartnerToRemovePage,
             ???
 //            partnerIndex
           )
@@ -513,7 +513,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           .success
           .value
           .set(
-            ChosenPartnerToRemovePage,
+            PartnerDetailsChosenPartnerToRemovePage,
             ???
 //            partnerIndex
           )

@@ -1,21 +1,28 @@
 #yes/no pages
 #TODO these pages only handle "normalMode", I think we need check mode to specify which partner array we modify
+#TODO the below routes can have index as int as they only deal with newPartners, check later
 # Initial suggestion; just like with add/change, add new routes with slightly different name
+# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/fax-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/fax-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddFaxNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
+# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/additional-address-information-yes-no/:index              controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/additional-address-information-yes-no/:index              controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
+# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/email-address-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/email-address-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddEmailAddressYesNoPageController.onSubmit(index: String, mode: Mode = NormalMode)
 
+# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/national-insurance-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/national-insurance-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
+# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/vat-registration-number-yes-no/:index          controllers.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/vat-registration-number-yes-no/:index           controllers.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
+# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/trading-name-yes-no/:index                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/trading-name-yes-no/:index                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 

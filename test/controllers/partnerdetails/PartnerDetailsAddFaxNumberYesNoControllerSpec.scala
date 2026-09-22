@@ -33,150 +33,153 @@ import views.html.partnerdetails.PartnerDetailsAddFaxNumberYesNoView
 
 import scala.concurrent.Future
 
-//TODO only for newPartners, should be complete now
+//TODO normalModeOnly - Done
 class PartnerDetailsAddFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerAddFaxNumberYesNoFormProvider()
   val form: Form[Boolean] = formProvider()
 
-  lazy val partnerAddFaxNumberYesNoRoute: String =
+  lazy val partnerDetailsAddFaxNumberYesNoRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
-
-  private val validUserAnswers: UserAnswers =
+  private val validUserAnswersNewPartners: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedDataNewPartners())
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
 
-  "PartnerAddFaxNumberYesNo Controller" - {
+  "newPartners" - {
 
-    "onPageLoad" - {
+    "PartnerAddFaxNumberYesNo Controller" - {
 
-      "must return OK and the correct view for a GET when no previous data exists" in {
+      "onPageLoad" - {
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
+        "must return OK and the correct view for a GET when no previous data exists" in {
 
-        running(application) {
-          val request = FakeRequest(GET, partnerAddFaxNumberYesNoRoute)
+          val application = applicationBuilder(userAnswers = Some(validUserAnswersNewPartners)).build()
 
-          val result = route(application, request).value
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsAddFaxNumberYesNoRouteNewPartners)
 
-          val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
+            val result = route(application, request).value
 
-          status(result) mustBe OK
-          contentAsString(result) mustBe view(form, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
+
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+          }
+        }
+
+        "must populate the view correctly on a GET when the question has previously been answered" in {
+
+          val userAnswers = validUserAnswersNewPartners.set(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), true).success.value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsAddFaxNumberYesNoRouteNewPartners)
+
+            val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
+
+            val result = route(application, request).value
+
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form.fill(true), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect to System Error Page for a GET if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsAddFaxNumberYesNoRouteNewPartners)
+
+            val result = route(application, request).value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
         }
       }
 
-      "must populate the view correctly on a GET when the question has previously been answered" in {
+      "onSubmit" - {
 
-        val userAnswers = validUserAnswers.set(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), true).success.value
+        "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val mockSessionRepository = mock[SessionRepository]
 
-        running(application) {
-          val request = FakeRequest(GET, partnerAddFaxNumberYesNoRoute)
+          when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-          val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
+          val application =
+            applicationBuilder(userAnswers = Some(validUserAnswersNewPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
 
-          val result = route(application, request).value
+          running(application) {
+            val request =
+              FakeRequest(POST, partnerDetailsAddFaxNumberYesNoRouteNewPartners)
+                .withFormUrlEncodedBody(("value", "true"))
 
-          status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(true), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            val result = route(application, request).value
+
+            val expectedAnswers = validUserAnswersNewPartners
+              .set(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), true)
+              .success
+              .value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe onwardRoute.url
+            verify(mockSessionRepository).set(expectedAnswers)
+          }
         }
-      }
 
-      "must redirect to System Error Page for a GET if no existing data is found" in {
+        "must return a Bad Request and errors when invalid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+          val mockSessionRepository = mock[SessionRepository]
 
-        running(application) {
-          val request = FakeRequest(GET, partnerAddFaxNumberYesNoRoute)
-
-          val result = route(application, request).value
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
-        }
-      }
-    }
-
-    "onSubmit" - {
-
-      "must update UserAnswers and redirect to the next page when valid data is submitted" in {
-
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
-
-        val application =
-          applicationBuilder(userAnswers = Some(validUserAnswers))
+          val application = applicationBuilder(userAnswers = Some(validUserAnswersNewPartners))
             .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
             .build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, partnerAddFaxNumberYesNoRoute)
-              .withFormUrlEncodedBody(("value", "true"))
+          running(application) {
+            val request =
+              FakeRequest(POST, partnerDetailsAddFaxNumberYesNoRouteNewPartners)
+                .withFormUrlEncodedBody(("value", ""))
 
-          val result = route(application, request).value
+            val boundForm = form.bind(Map("value" -> ""))
 
-          val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
+            val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe onwardRoute.url
-          verify(mockSessionRepository).set(expectedAnswers)
+            val result = route(application, request).value
+
+            status(result) mustBe BAD_REQUEST
+            contentAsString(result) mustBe view(boundForm, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            verify(mockSessionRepository, never()).set(any())
+          }
         }
-      }
 
-      "must return a Bad Request and errors when invalid data is submitted" in {
+        "must redirect to System Error Page for a POST if no existing data is found" in {
 
-        val mockSessionRepository = mock[SessionRepository]
+          val application = applicationBuilder(userAnswers = None).build()
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers))
-          .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+          running(application) {
+            val request =
+              FakeRequest(POST, partnerDetailsAddFaxNumberYesNoRouteNewPartners)
+                .withFormUrlEncodedBody(("value", "true"))
 
-        running(application) {
-          val request =
-            FakeRequest(POST, partnerAddFaxNumberYesNoRoute)
-              .withFormUrlEncodedBody(("value", ""))
+            val result = route(application, request).value
 
-          val boundForm = form.bind(Map("value" -> ""))
-
-          val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
-
-          val result = route(application, request).value
-
-          status(result) mustBe BAD_REQUEST
-          contentAsString(result) mustBe view(boundForm, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
-          verify(mockSessionRepository, never()).set(any())
-        }
-      }
-
-      "must redirect to System Error Page for a POST if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request =
-            FakeRequest(POST, partnerAddFaxNumberYesNoRoute)
-              .withFormUrlEncodedBody(("value", "true"))
-
-          val result = route(application, request).value
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
         }
       }
     }
+
   }
 }

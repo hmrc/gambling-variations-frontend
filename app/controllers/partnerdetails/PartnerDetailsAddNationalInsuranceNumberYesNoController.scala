@@ -39,7 +39,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,//DataRequiredAction,
   formProvider: PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAddNationalInsuranceNumberYesNoView

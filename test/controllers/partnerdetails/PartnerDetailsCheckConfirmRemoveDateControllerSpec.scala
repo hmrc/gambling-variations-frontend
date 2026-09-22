@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import models.UserAnswers
-import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.{PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
@@ -58,7 +58,7 @@ class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with P
       .success
       .value
       .set(
-        ChosenPartnerToRemovePage,
+        PartnerDetailsChosenPartnerToRemovePage,
         businessNumber1
 //        partnerIndex
       )

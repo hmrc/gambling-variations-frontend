@@ -17,14 +17,10 @@
 package pages.partnerdetails
 
 import pages.QuestionPage
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsObject, JsPath}
 
-//TODO most likely String for existing partners only
-case object ChosenPartnerToRemovePage extends QuestionPage[ /*Int*/ String] {
+case object PartnerDetailsPage extends QuestionPage[JsObject] {
+  override def path: JsPath = JsPath \ toString
 
-  override def path: JsPath =
-    JsPath \ "chosenPartnerToRemove"
-
-  override def toString: String =
-    "chosenPartnerToRemove"
+  override def toString: String = "partners"
 }

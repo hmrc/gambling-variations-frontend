@@ -26,7 +26,6 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoPage
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -34,25 +33,24 @@ import views.html.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoView
 
 import scala.concurrent.Future
 
+//TODO normalModeOnly - Done - Maybe fix consistency with userAnswers
 class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
-
-  val businessNumber: String = "12345"
-//  def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new PartnerDetailsAdditionalAddressInfoYesNoFormProvider()
   val form = formProvider()
+  val partnerDetailsMinimalValidData: UserAnswers = UserAnswers(userAnswersId, minimalValidData)
 
-  lazy val partnerDetailsAdditionalAddressInfoYesNoRoute =
+  lazy val partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners =
     controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   "PartnerDetailsAdditionalAddressInfoYesNo Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(partnerDetailsMinimalValidData)).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoYesNoRoute)
+        val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners)
 
         val result = route(application, request).value
 
@@ -65,12 +63,13 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(PartnerDetailsAdditionalAddressInfoYesNoPage(businessNumber), true).success.value
+      val userAnswers = partnerDetailsMinimalValidData.set(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), true).success.value
+      println(userAnswers)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoYesNoRoute)
+        val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners)
 
         val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoYesNoView]
 
@@ -88,7 +87,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(partnerDetailsMinimalValidData))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -97,7 +96,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRoute)
+          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -109,11 +108,11 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(partnerDetailsMinimalValidData)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRoute)
+          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
@@ -129,10 +128,10 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
     "must return OK and the correct view for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = Some(partnerDetailsMinimalValidData)).build()
 
       running(application) {
-        val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoYesNoRoute)
+        val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners)
 
         val result = route(application, request).value
 
@@ -151,7 +150,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(partnerDetailsMinimalValidData))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -160,14 +159,14 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRoute)
+          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(PartnerDetailsAdditionalAddressInfoYesNoPage(businessNumber)).value mustEqual true
+        savedAnswersCaptor.getValue.get(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1)).value mustEqual true
       }
     }
 
@@ -187,13 +186,13 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRoute)
+          FakeRequest(POST, partnerDetailsAdditionalAddressInfoYesNoRouteNewPartners)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
   }

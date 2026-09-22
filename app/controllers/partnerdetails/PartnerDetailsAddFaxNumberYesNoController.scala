@@ -39,7 +39,7 @@ class PartnerDetailsAddFaxNumberYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,//DataRequiredAction
   formProvider: PartnerAddFaxNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAddFaxNumberYesNoView
