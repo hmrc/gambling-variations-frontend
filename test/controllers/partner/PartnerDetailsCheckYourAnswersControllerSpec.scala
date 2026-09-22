@@ -17,8 +17,11 @@
 package controllers.partner
 
 import base.SpecBase
+import models.UserAnswers
+import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import viewmodels.checkAnswers.partner.CheckPartnerDetailsViewModel
 import views.html.partner.PartnerDetailsCheckYourAnswersView
 
 class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with PartnerDetailsHelper {
@@ -29,6 +32,12 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Partner
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
+      val validUserAnswers: UserAnswers =
+        UserAnswers(mgdRegNumber, cleanedData())
+
+      implicit val msg: Messages = messages(application)
+      val model = CheckPartnerDetailsViewModel.from(validUserAnswers, index)
+
       running(application) {
         val request = FakeRequest(GET, routes.PartnerDetailsCheckYourAnswersController.onPageLoad().url)
 
@@ -37,7 +46,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Partner
         val view = application.injector.instanceOf[PartnerDetailsCheckYourAnswersView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(model)(request, messages(application)).toString
       }
     }
   }

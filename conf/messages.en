@@ -1041,8 +1041,9 @@ premisesNotCoveredYesNo.error.required = Select yes if you have any other premis
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
 
-partnerDetailsCheckYourAnswers.title = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.
-partnerDetailsCheckYourAnswers.heading = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.
+partnerDetailsCheckYourAnswers.title = Check your partner details
+partnerDetailsCheckYourAnswers.heading = Check your partner details
+partnerDetailsCheckYourAnswers.error.missingChanges = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.
 partnerDetailsCheckYourAnswers.error.missingDetails = You must add missing details before you submit this partner for approval.
 partnerDetailsCheckYourAnswers.error.contactUs = To update details you cannot change online, you need to contact us (opens in new tab).
 partnerDetailsCheckYourAnswers.error.cannotChangeLeaving = You cannot change this partner's details online because they are due to leave. If you want to make changes before {0}, you need to contact us (opens in new tab).
@@ -1067,9 +1068,11 @@ partnerDetailsCheckYourAnswers.utr = Unique Taxpayer Reference
 partnerDetailsCheckYourAnswers.addVatRegistrationNumber = Add VAT registration number?
 partnerDetailsCheckYourAnswers.vatRegistrationNumber = VAT registration number
 partnerDetailsCheckYourAnswers.dateOfJoining = Date of joining
+
 partnerDetailsCheckYourAnswers.address = Address
 partnerDetailsCheckYourAnswers.addAdditionalInformation = Add additional information for address?
 partnerDetailsCheckYourAnswers.additionalInformation = Additional information
+
 partnerDetailsCheckYourAnswers.contactDetails = Contact details
 partnerDetailsCheckYourAnswers.contactNumbers = Contact numbers
 partnerDetailsCheckYourAnswers.addFaxNumber = Add fax number?
