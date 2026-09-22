@@ -16,77 +16,80 @@
 
 package views.partnerdetails
 
-//import base.SpecBase
-//import forms.FaxNumberFormProvider
-//import models.NormalMode
-//import org.jsoup.Jsoup
-//import org.jsoup.nodes.Document
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.running
-//import views.html.partner.ChangePartnerFaxNumberView
-//
-//class ChangePartnerFaxNumberViewSpec extends SpecBase {
-//
-//  private val form = new FaxNumberFormProvider()("partnerDetailsFaxNumber")
-//
-//  "ChangePartnerFaxNumberView" - {
-//
-//    "render the page correctly" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[ChangePartnerFaxNumberView]
-//
-//        val html = view(
-//          form,
-//          NormalMode
-//        )(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.title() must include(
-//          messages(application)("partnerDetailsFaxNumber.title")
-//        )
-//
-//        document.title() must include(
-//          messages(application)("changeRegistrationDetails.caption")
-//        )
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsFaxNumber.heading")
-//        )
-//
-//        document.body().text() must include(
-//          messages(application)("site.continue")
-//        )
-//      }
-//    }
-//
-//    "render an error summary when there are form errors" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[ChangePartnerFaxNumberView]
-//
-//        val boundForm = form.bind(Map("faxNumber" -> ""))
-//
-//        val html = view(
-//          boundForm,
-//          NormalMode
-//        )(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.select(".govuk-error-summary").size() mustEqual 1
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsFaxNumber.error.required")
-//        )
-//      }
-//    }
-//  }
-//}
+import base.SpecBase
+import forms.FaxNumberFormProvider
+import models.NormalMode
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.test.FakeRequest
+import play.api.test.Helpers.running
+import views.html.partnerdetails.PartnerDetailsChangeFaxNumberView
+
+class ChangePartnerFaxNumberViewSpec extends SpecBase {
+
+  private val form = new FaxNumberFormProvider()("partnerDetailsFaxNumber")
+  private val index = 0.toString
+
+  "ChangePartnerFaxNumberView" - {
+
+    "render the page correctly" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsChangeFaxNumberView]
+
+        val html = view(
+          form,
+          index,
+          NormalMode
+        )(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.title() must include(
+          messages(application)("partnerDetailsFaxNumber.title")
+        )
+
+        document.title() must include(
+          messages(application)("changeRegistrationDetails.caption")
+        )
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsFaxNumber.heading")
+        )
+
+        document.body().text() must include(
+          messages(application)("site.continue")
+        )
+      }
+    }
+
+    "render an error summary when there are form errors" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsChangeFaxNumberView]
+
+        val boundForm = form.bind(Map("faxNumber" -> ""))
+
+        val html = view(
+          boundForm,
+          index,
+          NormalMode
+        )(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.select(".govuk-error-summary").size() mustEqual 1
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsFaxNumber.error.required")
+        )
+      }
+    }
+  }
+}

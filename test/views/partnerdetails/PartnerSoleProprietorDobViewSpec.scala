@@ -16,101 +16,105 @@
 
 package views.partnerdetails
 
-//import base.SpecBase
-//import forms.partnerdetails.PartnerSoleProprietorDobFormProvider
-//import models.NormalMode
-//import org.jsoup.Jsoup
-//import org.jsoup.nodes.Document
-//import play.api.i18n.Messages
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.running
-//import views.html.partner.PartnerSoleProprietorDobView
-//
-//class PartnerSoleProprietorDobViewSpec extends SpecBase {
-//
-//  "PartnerSoleProprietorDobView" - {
-//
-//    "render the page correctly" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        implicit val msgs: Messages = messages(application)
-//
-//        val view =
-//          application.injector.instanceOf[PartnerSoleProprietorDobView]
-//
-//        val formProvider =
-//          application.injector.instanceOf[PartnerSoleProprietorDobFormProvider]
-//
-//        val form = formProvider()
-//
-//        val html = view(
-//          form,
-//          NormalMode
-//        )(FakeRequest(), msgs)
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.title() must include(
-//          msgs("partnerSoleProprietorDob.title")
-//        )
-//
-//        document.select("h1").text() mustEqual
-//          msgs("partnerSoleProprietorDob.heading")
-//
-//        document.body().text() must include(
-//          msgs("changeRegistrationDetails.caption")
-//        )
-//
-//        document.body().text() must include(
-//          msgs("partnerSoleProprietorDob.hint")
-//        )
-//
-//        document.body().text() must include(
-//          msgs("site.continue")
-//        )
-//      }
-//    }
-//
-//    "render an error summary when there are form errors" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        implicit val msgs: Messages = messages(application)
-//
-//        val view =
-//          application.injector.instanceOf[PartnerSoleProprietorDobView]
-//
-//        val formProvider =
-//          application.injector.instanceOf[PartnerSoleProprietorDobFormProvider]
-//
-//        val form = formProvider()
-//
-//        val boundForm = form.bind(
-//          Map(
-//            "value.day"   -> "",
-//            "value.month" -> "",
-//            "value.year"  -> ""
-//          )
-//        )
-//
-//        val html = view(
-//          boundForm,
-//          NormalMode
-//        )(FakeRequest(), msgs)
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.select(".govuk-error-summary").size() mustEqual 1
-//
-//        document.body().text() must include(
-//          msgs("partnerSoleProprietorDob.error.required.all")
-//        )
-//      }
-//    }
-//  }
-//}
+import base.SpecBase
+import forms.partnerdetails.PartnerSoleProprietorDobFormProvider
+import models.NormalMode
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.i18n.Messages
+import play.api.test.FakeRequest
+import play.api.test.Helpers.running
+import views.html.partnerdetails.PartnerDetailsSoleProprietorDobView
+
+class PartnerSoleProprietorDobViewSpec extends SpecBase {
+
+  "PartnerSoleProprietorDobView" - {
+
+    val newPartnersIndex = 0.toString
+
+    "render the page correctly" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        implicit val msgs: Messages = messages(application)
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsSoleProprietorDobView]
+
+        val formProvider =
+          application.injector.instanceOf[PartnerSoleProprietorDobFormProvider]
+
+        val form = formProvider()
+
+        val html = view(
+          form,
+          newPartnersIndex,
+          NormalMode
+        )(FakeRequest(), msgs)
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.title() must include(
+          msgs("partnerSoleProprietorDob.title")
+        )
+
+        document.select("h1").text() mustEqual
+          msgs("partnerSoleProprietorDob.heading")
+
+        document.body().text() must include(
+          msgs("changeRegistrationDetails.caption")
+        )
+
+        document.body().text() must include(
+          msgs("partnerSoleProprietorDob.hint")
+        )
+
+        document.body().text() must include(
+          msgs("site.continue")
+        )
+      }
+    }
+
+    "render an error summary when there are form errors" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        implicit val msgs: Messages = messages(application)
+
+        val view =
+          application.injector.instanceOf[PartnerDetailsSoleProprietorDobView]
+
+        val formProvider =
+          application.injector.instanceOf[PartnerSoleProprietorDobFormProvider]
+
+        val form = formProvider()
+
+        val boundForm = form.bind(
+          Map(
+            "value.day"   -> "",
+            "value.month" -> "",
+            "value.year"  -> ""
+          )
+        )
+
+        val html = view(
+          boundForm,
+          newPartnersIndex,
+          NormalMode
+        )(FakeRequest(), msgs)
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.select(".govuk-error-summary").size() mustEqual 1
+
+        document.body().text() must include(
+          msgs("partnerSoleProprietorDob.error.required.all")
+        )
+      }
+    }
+  }
+}

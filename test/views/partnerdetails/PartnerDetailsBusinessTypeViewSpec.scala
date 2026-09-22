@@ -16,79 +16,81 @@
 
 package views.partnerdetails
 
-//import base.SpecBase
-//import forms.partnerdetails.PartnerDetailsBusinessTypeFormProvider
-//import models.{BusinessType, NormalMode}
-//import org.jsoup.Jsoup
-//import org.jsoup.nodes.Document
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.running
-//import views.html.partner.PartnerDetailsBusinessTypeView
-//
-//class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
-//
-//  private val form = new PartnerDetailsBusinessTypeFormProvider()()
-//
-//  "PartnerDetailsBusinessTypeView" - {
-//
-//    "render the page correctly" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
-//
-//        val html = view(form, NormalMode)(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.title() must include(
-//          messages(application)("partnerDetailsBusinessType.title")
-//        )
-//
-//        document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-//          messages(application)("partnerDetailsBusinessType.heading")
-//
-//        document.select("span").select(".govuk-caption-l").text() mustEqual
-//          messages(application)("changeRegistrationDetails.caption")
-//
-//        BusinessType.values.zipWithIndex.foreach { case (option, index) =>
-//          val radioInput = document.getElementById(s"value_$index")
-//          val label = document.select(s"label[for=${radioInput.id()}]")
-//
-//          radioInput.attr("value") mustEqual option.toString
-//          label.text() mustEqual messages(application)(s"businessType.${option.toString}")
-//        }
-//
-//        document.select(".govuk-button").text() mustEqual
-//          messages(application)("site.continue")
-//      }
-//    }
-//
-//    "render an error summary when there are form errors" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
-//
-//        val boundForm = form.bind(Map("value" -> ""))
-//
-//        val html = view(
-//          boundForm,
-//          NormalMode
-//        )(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.select(".govuk-error-summary").size() mustEqual 1
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsBusinessType.error.required")
-//        )
-//      }
-//    }
-//  }
-//}
+import base.SpecBase
+import forms.partnerdetails.PartnerDetailsBusinessTypeFormProvider
+import models.{BusinessType, NormalMode}
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.test.FakeRequest
+import play.api.test.Helpers.running
+import views.html.partnerdetails.PartnerDetailsBusinessTypeView
+
+class PartnerDetailsBusinessTypeViewSpec extends SpecBase {
+
+  private val newPartnersIndex = 0.toString
+  private val form = new PartnerDetailsBusinessTypeFormProvider()()
+
+  "PartnerDetailsBusinessTypeView" - {
+
+    "render the page correctly" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
+
+        val html = view(form, newPartnersIndex, NormalMode)(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.title() must include(
+          messages(application)("partnerDetailsBusinessType.title")
+        )
+
+        document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
+          messages(application)("partnerDetailsBusinessType.heading")
+
+        document.select("span").select(".govuk-caption-l").text() mustEqual
+          messages(application)("changeRegistrationDetails.caption")
+
+        BusinessType.values.zipWithIndex.foreach { case (option, index) =>
+          val radioInput = document.getElementById(s"value_$index")
+          val label = document.select(s"label[for=${radioInput.id()}]")
+
+          radioInput.attr("value") mustEqual option.toString
+          label.text() mustEqual messages(application)(s"businessType.${option.toString}")
+        }
+
+        document.select(".govuk-button").text() mustEqual
+          messages(application)("site.continue")
+      }
+    }
+
+    "render an error summary when there are form errors" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
+
+        val boundForm = form.bind(Map("value" -> ""))
+
+        val html = view(
+          boundForm,
+          newPartnersIndex,
+          NormalMode
+        )(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.select(".govuk-error-summary").size() mustEqual 1
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsBusinessType.error.required")
+        )
+      }
+    }
+  }
+}
