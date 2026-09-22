@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
+import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.BusinessType.Corporatebody
 import models.{BusinessType, Mode}
 import navigation.Navigator

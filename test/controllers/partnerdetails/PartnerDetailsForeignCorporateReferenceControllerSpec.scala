@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import controllers.routes
-import forms.partner.PartnerDetailsForeignCorporateReferenceFormProvider
+import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.BusinessType.{Corporatebody, Soleproprietor}
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}

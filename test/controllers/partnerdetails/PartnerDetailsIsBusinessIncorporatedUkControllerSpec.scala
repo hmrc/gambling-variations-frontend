@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import controllers.routes
-import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
+import forms.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkFormProvider
 import models.{BusinessType, CheckMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

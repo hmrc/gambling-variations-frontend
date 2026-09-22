@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import connectors.GamblingConnector
-import forms.partner.PartnerDeleteDateFormProvider
+import forms.partnerdetails.PartnerDeleteDateFormProvider
 import models.{BusinessDetails, BusinessType, NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}

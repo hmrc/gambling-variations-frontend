@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.partnerdetails
 
 import forms.behaviours.StringFieldBehaviours
 import forms.partnerdetails.PartnerTradingNameFormProvider

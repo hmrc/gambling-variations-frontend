@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.partner
+package forms.partnerdetails
 
 import forms.mappings.Mappings
 import play.api.data.Form

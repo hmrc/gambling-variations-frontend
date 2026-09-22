@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import forms.PartnerDetailsIsBusinessIncorporatedUkFormProvider
+import forms.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage

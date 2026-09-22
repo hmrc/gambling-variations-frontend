@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import connectors.GamblingConnector
 import controllers.actions.*
-import forms.partner.PartnerDeleteDateFormProvider
+import forms.partnerdetails.PartnerDeleteDateFormProvider
 import models.requests.DataRequest
 import models.{BusinessDetails, Mode}
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsTradingNamePage}
