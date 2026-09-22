@@ -35,201 +35,365 @@ import views.html.partnerdetails.PartnerDetailsContactDetailsView
 
 import scala.concurrent.Future
 
+//TODO maybe done
 class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new ContactNumberFormProvider()
 
   val form: Form[ContactNumber] = formProvider("partnerContactDetails")
+  private val phoneAndMobileNumber = "123456789"
 
-  lazy val partnerContactDetailsRoute: String =
+  lazy val partnerDetailsContactDetailsRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(businessNumber1, CheckMode).url
 
-  val userAnswers: UserAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "partners" -> Json.obj(
-          businessNumber1 -> Json.obj(
-            "partnerDetailsMgdRegNumber" -> "XWM00000001762",
-            "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-              "contactNumber" -> Json.obj(
-                "phoneNumber"       -> "123456789",
-                "mobilePhoneNumber" -> "123456789"
-              )
+  lazy val partnerDetailsContactDetailsRouteNewPartners: String =
+    controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
+
+  val userAnswersExistingPartners: UserAnswers =
+    UserAnswers("id", cleanedDataExistingPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)))
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+      .success
+      .value // TODO passingNewPartnerIndex1 instead (no string)
+
+   val emptyUserAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value // TODO passingNewPartnerIndex1 instead (no string)
+
+  val userAnswersNewPartners: UserAnswers =
+    UserAnswers("id", cleanedDataNewPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)))
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+      .success
+      .value // TODO passingNewPartnerIndex1 instead (no string)
+
+   val emptyUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value // TODO passingNewPartnerIndex1 instead (no string)
+
+  "newPartners" - {
+
+    "PartnerContactDetails Controller" - {
+
+      "must return OK and the correct view for a GET" in {
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersNewPartners)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsContactDetailsRouteNewPartners)
+
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered" in {
+
+        val application = applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsContactDetailsRouteNewPartners)
+
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form.fill(ContactNumber(Some("123456789"), Some("123456789"))), newPartnersIndex1.toString, NormalMode)(
+            request,
+            messages(application)
+          ).toString
+        }
+      }
+
+      "must redirect to the next page when one number is submitted" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswersNewPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
             )
-          )
-        )
-      )
-    ).set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value // TODO passingNewPartnerIndex1 instead (no string)
+            .build()
 
-  override val emptyUserAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      "partners" -> Json.obj(
-        businessNumber1 -> Json.obj(
-          "partnerDetailsMgdRegNumber" -> "XWM00000001762"
-        )
-      )
-    )
-  ).set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value // TODO passingNewPartnerIndex1 instead (no string)
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteNewPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "123456789"))
 
-  "PartnerContactDetails Controller" - {
+          val result = route(application, request).value
 
-    "must return OK and the correct view for a GET" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, partnerContactDetailsRoute)
-
-        val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+      "must redirect to the next page when both numbers are submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val mockSessionRepository = mock[SessionRepository]
 
-      running(application) {
-        val request = FakeRequest(GET, partnerContactDetailsRoute)
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswersNewPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteNewPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "123456789"), ("mobileNumber", "123456789"))
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ContactNumber(Some("123456789"), Some("123456789"))), businessNumber1, CheckMode)(
-          request,
-          messages(application)
-        ).toString
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must redirect to the next page when one number is submitted" in {
+      "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersNewPartners)).build()
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteNewPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "invalid value"))
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+          val boundForm = form.bind(Map("phoneNumber" -> "invalid value"))
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerContactDetailsRoute)
-            .withFormUrlEncodedBody(("phoneNumber", "123456789"))
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+        }
       }
-    }
 
-    "must redirect to the next page when both numbers are submitted" in {
+      "must return a Bad Request and errors when valid and invalid data are submitted" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersNewPartners)).build()
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteNewPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "invalid value"), ("mobileNumber", "123456789"))
 
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+          val boundForm = form.bind(Map("phoneNumber" -> "invalid value", "mobileNumber" -> "123456789"))
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerContactDetailsRoute)
-            .withFormUrlEncodedBody(("phoneNumber", "123456789"), ("mobileNumber", "123456789"))
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+        }
       }
-    }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+      "must return a Bad Request and errors when no data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersNewPartners)).build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerContactDetailsRoute)
-            .withFormUrlEncodedBody(("phoneNumber", "invalid value"))
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteNewPartners)
+              .withFormUrlEncodedBody(("phoneNumber", ""), ("mobileNumber", ""))
 
-        val boundForm = form.bind(Map("phoneNumber" -> "invalid value"))
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) must include(messages(application)("partnerContactDetails.error.phoneNumber.missing"))
+        }
       }
-    }
 
-    "must return a Bad Request and errors when valid and invalid data are submitted" in {
+      "must return See Other when no data is present" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerContactDetailsRoute)
-            .withFormUrlEncodedBody(("phoneNumber", "invalid value"), ("mobileNumber", "123456789"))
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsContactDetailsRouteNewPartners)
 
-        val boundForm = form.bind(Map("phoneNumber" -> "invalid value", "mobileNumber" -> "123456789"))
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+          status(result) mustEqual SEE_OTHER
+        }
       }
+
     }
+  }
 
-    "must return a Bad Request and errors when no data is submitted" in {
+  "partners" - {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+    "PartnerContactDetails Controller" - {
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerContactDetailsRoute)
-            .withFormUrlEncodedBody(("phoneNumber", ""), ("mobileNumber", ""))
+      "must return OK and the correct view for a GET" in {
 
-        val result = route(application, request).value
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersExistingPartners)).build()
 
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) must include(messages(application)("partnerContactDetails.error.phoneNumber.missing"))
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsContactDetailsRouteExistingPartners)
+
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+        }
       }
-    }
 
-    "must return See Other when no data is present" in {
+      "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
 
-      running(application) {
-        val request = FakeRequest(GET, partnerContactDetailsRoute)
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsContactDetailsRouteExistingPartners)
 
-        val result = route(application, request).value
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form.fill(ContactNumber(Some("123456789"), Some("123456789"))), businessNumber1, CheckMode)(
+            request,
+            messages(application)
+          ).toString
+        }
       }
-    }
 
+      "must redirect to the next page when one number is submitted" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswersExistingPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteExistingPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "123456789"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
+      }
+
+      "must redirect to the next page when both numbers are submitted" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(emptyUserAnswersExistingPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteExistingPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "123456789"), ("mobileNumber", "123456789"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
+      }
+
+      "must return a Bad Request and errors when invalid data is submitted" in {
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersExistingPartners)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteExistingPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "invalid value"))
+
+          val boundForm = form.bind(Map("phoneNumber" -> "invalid value"))
+
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+        }
+      }
+
+      "must return a Bad Request and errors when valid and invalid data are submitted" in {
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersExistingPartners)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteExistingPartners)
+              .withFormUrlEncodedBody(("phoneNumber", "invalid value"), ("mobileNumber", "123456789"))
+
+          val boundForm = form.bind(Map("phoneNumber" -> "invalid value", "mobileNumber" -> "123456789"))
+
+          val view = application.injector.instanceOf[PartnerDetailsContactDetailsView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+        }
+      }
+
+      "must return a Bad Request and errors when no data is submitted" in {
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswersExistingPartners)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsContactDetailsRouteExistingPartners)
+              .withFormUrlEncodedBody(("phoneNumber", ""), ("mobileNumber", ""))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) must include(messages(application)("partnerContactDetails.error.phoneNumber.missing"))
+        }
+      }
+
+      "must return See Other when no data is present" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsContactDetailsRouteExistingPartners)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+        }
+      }
+
+    }
   }
 }
