@@ -16,88 +16,90 @@
 
 package views.partnerdetails
 
-//import base.SpecBase
-//import forms.partnerdetails.PartnerDetailsAdditionalAddressInfoFormProvider
-//import models.NormalMode
-//import org.jsoup.Jsoup
-//import org.jsoup.nodes.Document
-//import play.api.i18n.Messages
-//import play.api.test.FakeRequest
-//import views.html.partner.PartnerDetailsAdditionalAddressInfoView
-//
-//class PartnerDetailsAdditionalAddressInfoViewSpec extends SpecBase {
-//
-//  trait Setup:
-//    private val app = applicationBuilder().build()
-//
-//    val view = app.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
-//
-//    val formProvider = new PartnerDetailsAdditionalAddressInfoFormProvider()
-//
-//    val form = formProvider()
-//
-//    val request: play.api.mvc.Request[?] = FakeRequest()
-//
-//    val messages: Messages =
-//      app.injector
-//        .instanceOf[play.api.i18n.MessagesApi]
-//        .preferred(request)
-//
-//  "PartnerDetailsAdditionalAddressInfoView" - {
-//    "must render page correctly" in new Setup {
-//
-//      val html = view(form, NormalMode)(request, messages)
-//      val doc: Document = Jsoup.parse(html.body)
-//
-//      doc.title must include(messages("partnerDetailsAdditionalAddressInfo.title"))
-//
-//      doc
-//        .select(".govuk-caption-l")
-//        .text() must include(messages("changeRegistrationDetails.caption"))
-//
-//      doc
-//        .select(".govuk-label-wrapper")
-//        .select(".govuk-label--l")
-//        .text mustBe messages("partnerDetailsAdditionalAddressInfo.heading")
-//
-//      doc.select(".govuk-hint").text must include(
-//        messages("partnerDetailsAdditionalAddressInfo.hint")
-//      )
-//
-//      doc.select("input[name=partnerDetailsAdditionalAddressInfo]").size() mustEqual 1
-//
-//      doc.select("button.govuk-button").text must include(messages("site.continue"))
-//
-//      doc.select(".govuk-error-summary").size() mustEqual 0
-//    }
-//
-//    "must render error summary when form has errors" in new Setup {
-//
-//      val boundForm = form.bind(Map("partnerDetailsAdditionalAddressInfo" -> ""))
-//
-//      val html = view(boundForm, NormalMode)(request, messages)
-//      val doc: Document = Jsoup.parse(html.body)
-//
-//      doc.select(".govuk-error-summary").size() mustEqual 1
-//
-//      doc.select(".govuk-error-summary").text must include(
-//        messages("partnerDetailsAdditionalAddressInfo.error.required")
-//      )
-//    }
-//
-//    "must render error message when input is too long" in new Setup {
-//
-//      val maxFieldLength = 100;
-//      val boundForm =
-//        form.bind(Map("partnerDetailsAdditionalAddressInfo" -> "a" * (maxFieldLength + 1)))
-//
-//      val html = view(boundForm, NormalMode)(request, messages)
-//      val doc: Document = Jsoup.parse(html.body)
-//
-//      doc.select(".govuk-error-message").text must include(
-//        messages("partnerDetailsAdditionalAddressInfo.error.length")
-//      )
-//    }
-//
-//  }
-//}
+import base.SpecBase
+import forms.partnerdetails.PartnerDetailsAdditionalAddressInfoFormProvider
+import models.NormalMode
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.i18n.Messages
+import play.api.test.FakeRequest
+import views.html.partnerdetails.PartnerDetailsAdditionalAddressInfoView
+
+class PartnerDetailsAdditionalAddressInfoViewSpec extends SpecBase {
+
+  private val newPartnersIndex = 0.toString
+
+  trait Setup:
+    private val app = applicationBuilder().build()
+
+    val view = app.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+
+    val formProvider = new PartnerDetailsAdditionalAddressInfoFormProvider()
+
+    val form = formProvider()
+
+    val request: play.api.mvc.Request[?] = FakeRequest()
+
+    val messages: Messages =
+      app.injector
+        .instanceOf[play.api.i18n.MessagesApi]
+        .preferred(request)
+
+  "PartnerDetailsAdditionalAddressInfoView" - {
+    "must render page correctly" in new Setup {
+
+      val html = view(form, newPartnersIndex, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc.title must include(messages("partnerDetailsAdditionalAddressInfo.title"))
+
+      doc
+        .select(".govuk-caption-l")
+        .text() must include(messages("changeRegistrationDetails.caption"))
+
+      doc
+        .select(".govuk-label-wrapper")
+        .select(".govuk-label--l")
+        .text mustBe messages("partnerDetailsAdditionalAddressInfo.heading")
+
+      doc.select(".govuk-hint").text must include(
+        messages("partnerDetailsAdditionalAddressInfo.hint")
+      )
+
+      doc.select("input[name=partnerDetailsAdditionalAddressInfo]").size() mustEqual 1
+
+      doc.select("button.govuk-button").text must include(messages("site.continue"))
+
+      doc.select(".govuk-error-summary").size() mustEqual 0
+    }
+
+    "must render error summary when form has errors" in new Setup {
+
+      val boundForm = form.bind(Map("partnerDetailsAdditionalAddressInfo" -> ""))
+
+      val html = view(boundForm, newPartnersIndex, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc.select(".govuk-error-summary").size() mustEqual 1
+
+      doc.select(".govuk-error-summary").text must include(
+        messages("partnerDetailsAdditionalAddressInfo.error.required")
+      )
+    }
+
+    "must render error message when input is too long" in new Setup {
+
+      val maxFieldLength = 100;
+      val boundForm =
+        form.bind(Map("partnerDetailsAdditionalAddressInfo" -> "a" * (maxFieldLength + 1)))
+
+      val html = view(boundForm, newPartnersIndex, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc.select(".govuk-error-message").text must include(
+        messages("partnerDetailsAdditionalAddressInfo.error.length")
+      )
+    }
+
+  }
+}

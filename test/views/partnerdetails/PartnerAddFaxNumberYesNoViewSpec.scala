@@ -16,79 +16,82 @@
 
 package views.partnerdetails
 
-//import base.SpecBase
-//import forms.partnerdetails.PartnerAddFaxNumberYesNoFormProvider
-//import models.NormalMode
-//import org.jsoup.Jsoup
-//import org.jsoup.nodes.Document
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.running
-//import views.html.partner.PartnerAddFaxNumberYesNoView
-//
-//class PartnerAddFaxNumberYesNoViewSpec extends SpecBase {
-//
-//  private val form = new PartnerAddFaxNumberYesNoFormProvider()()
-//
-//  "PartnerAddFaxNumberYesNoView" - {
-//
-//    "render the page correctly" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[PartnerAddFaxNumberYesNoView]
-//
-//        val html = view(
-//          form,
-//          NormalMode
-//        )(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.title() must include(
-//          messages(application)("partnerAddFaxNumberYesNo.title")
-//        )
-//
-//        document.select("h1").text() mustEqual
-//          messages(application)("partnerAddFaxNumberYesNo.heading")
-//
-//        document.body().text() must include(
-//          messages(application)("changeRegistrationDetails.caption")
-//        )
-//
-//        document.getElementById("value").attr("value") mustEqual "true"
-//
-//        document.getElementById("value-no").attr("value") mustEqual "false"
-//
-//        document.select(".govuk-button").text() mustEqual
-//          messages(application)("site.continue")
-//      }
-//    }
-//
-//    "render an error summary when there are form errors" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[PartnerAddFaxNumberYesNoView]
-//
-//        val boundForm = form.bind(Map("value" -> ""))
-//
-//        val html = view(
-//          boundForm,
-//          NormalMode
-//        )(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.select(".govuk-error-summary").size() mustEqual 1
-//
-//        document.body().text() must include(
-//          messages(application)("partnerAddFaxNumberYesNo.error.required")
-//        )
-//      }
-//    }
-//  }
-//}
+import base.SpecBase
+import forms.partnerdetails.PartnerAddFaxNumberYesNoFormProvider
+import models.NormalMode
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.test.FakeRequest
+import play.api.test.Helpers.running
+import views.html.partnerdetails.PartnerDetailsAddFaxNumberYesNoView
+
+class PartnerAddFaxNumberYesNoViewSpec extends SpecBase {
+
+  private val newPartnersIndex = 0.toString
+  private val form = new PartnerAddFaxNumberYesNoFormProvider()()
+
+  "PartnerAddFaxNumberYesNoView" - {
+
+    "render the page correctly" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
+
+        val html = view(
+          form,
+          newPartnersIndex,
+          NormalMode
+        )(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.title() must include(
+          messages(application)("partnerAddFaxNumberYesNo.title")
+        )
+
+        document.select("h1").text() mustEqual
+          messages(application)("partnerAddFaxNumberYesNo.heading")
+
+        document.body().text() must include(
+          messages(application)("changeRegistrationDetails.caption")
+        )
+
+        document.getElementById("value").attr("value") mustEqual "true"
+
+        document.getElementById("value-no").attr("value") mustEqual "false"
+
+        document.select(".govuk-button").text() mustEqual
+          messages(application)("site.continue")
+      }
+    }
+
+    "render an error summary when there are form errors" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsAddFaxNumberYesNoView]
+
+        val boundForm = form.bind(Map("value" -> ""))
+
+        val html = view(
+          boundForm,
+          newPartnersIndex,
+          NormalMode
+        )(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.select(".govuk-error-summary").size() mustEqual 1
+
+        document.body().text() must include(
+          messages(application)("partnerAddFaxNumberYesNo.error.required")
+        )
+      }
+    }
+  }
+}

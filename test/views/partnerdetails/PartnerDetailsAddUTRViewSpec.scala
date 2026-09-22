@@ -16,93 +16,96 @@
 
 package views.partnerdetails
 
-//import base.SpecBase
-//import forms.partnerdetails.PartnerDetailsAddUTRFormProvider
-//import models.NormalMode
-//import org.jsoup.Jsoup
-//import org.jsoup.nodes.Document
-//import play.api.test.FakeRequest
-//import play.api.test.Helpers.*
-//import views.html.partner.PartnerDetailsAddUTRView
-//
-//class PartnerDetailsAddUTRViewSpec extends SpecBase {
-//
-//  private val form = new PartnerDetailsAddUTRFormProvider()()
-//
-//  "PartnerDetailsAddUTRView" - {
-//
-//    "render the page correctly" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[PartnerDetailsAddUTRView]
-//
-//        val html = view(
-//          form,
-//          NormalMode
-//        )(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.title() must include(
-//          messages(application)("partnerDetailsAddUTR.title")
-//        )
-//
-//        document.title() must include(
-//          messages(application)("changeRegistrationDetails.caption")
-//        )
-//
-//        document
-//          .select(".govuk-fieldset__legend--l")
-//          .text() must include(messages(application)("partnerDetailsAddUTR.heading"))
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsAddUTR.paragraph")
-//        )
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsAddUTR.linkText")
-//        )
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsAddUTR.subtitle")
-//        )
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsAddUTR.hint")
-//        )
-//
-//        document.body().text() must include(
-//          messages(application)("site.continue")
-//        )
-//      }
-//    }
-//
-//    "render an error summary when there are form errors" in {
-//
-//      val application = applicationBuilder().build()
-//
-//      running(application) {
-//
-//        val view = application.injector.instanceOf[PartnerDetailsAddUTRView]
-//
-//        val boundForm = form.bind(Map("value" -> ""))
-//
-//        val html = view(
-//          boundForm,
-//          NormalMode
-//        )(FakeRequest(), messages(application))
-//
-//        val document: Document = Jsoup.parse(html.toString)
-//
-//        document.select(".govuk-error-summary").size() mustEqual 1
-//
-//        document.body().text() must include(
-//          messages(application)("partnerDetailsAddUTR.error.required")
-//        )
-//      }
-//    }
-//  }
-//}
+import base.SpecBase
+import forms.partnerdetails.PartnerDetailsAddUTRFormProvider
+import models.NormalMode
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.test.FakeRequest
+import play.api.test.Helpers.*
+import views.html.partnerdetails.PartnerDetailsAddUTRView
+
+class PartnerDetailsAddUTRViewSpec extends SpecBase {
+
+  private val newPartnersIndex = 0.toString
+  private val form = new PartnerDetailsAddUTRFormProvider()()
+
+  "PartnerDetailsAddUTRView" - {
+
+    "render the page correctly" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsAddUTRView]
+
+        val html = view(
+          form,
+          newPartnersIndex,
+          NormalMode
+        )(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.title() must include(
+          messages(application)("partnerDetailsAddUTR.title")
+        )
+
+        document.title() must include(
+          messages(application)("changeRegistrationDetails.caption")
+        )
+
+        document
+          .select(".govuk-fieldset__legend--l")
+          .text() must include(messages(application)("partnerDetailsAddUTR.heading"))
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsAddUTR.paragraph")
+        )
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsAddUTR.linkText")
+        )
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsAddUTR.subtitle")
+        )
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsAddUTR.hint")
+        )
+
+        document.body().text() must include(
+          messages(application)("site.continue")
+        )
+      }
+    }
+
+    "render an error summary when there are form errors" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view = application.injector.instanceOf[PartnerDetailsAddUTRView]
+
+        val boundForm = form.bind(Map("value" -> ""))
+
+        val html = view(
+          boundForm,
+          newPartnersIndex,
+          NormalMode
+        )(FakeRequest(), messages(application))
+
+        val document: Document = Jsoup.parse(html.toString)
+
+        document.select(".govuk-error-summary").size() mustEqual 1
+
+        document.body().text() must include(
+          messages(application)("partnerDetailsAddUTR.error.required")
+        )
+      }
+    }
+  }
+}
