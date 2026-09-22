@@ -23,7 +23,6 @@ import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.licencespremises.*
 import play.api.data.Form
-import play.api.i18n.Lang.logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,7 +45,8 @@ class RemovePremisesAddressController @Inject() (
   view: RemovePremisesAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    {
 
   val form: Form[Boolean] = formProvider()
 
@@ -79,7 +79,6 @@ class RemovePremisesAddressController @Inject() (
                 } yield Redirect(navigator.nextPage(RemovePremisesAddressPage, mode, finalAnswer))
             )
             .recover { case ex =>
-              logger.error("Failed to update premises details", ex)
               Redirect(routes.SystemErrorController.onPageLoad())
             }
         }
