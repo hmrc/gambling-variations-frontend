@@ -36,7 +36,7 @@ import views.html.partnerdetails.PartnerDetailsBusinessTypeView
 
 import scala.concurrent.Future
 
-//TODO almost done
+//TODO almost done - I think navigator problem
 class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val form: Form[BusinessType] = (new PartnerDetailsBusinessTypeFormProvider())()
@@ -48,13 +48,13 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
     PartnerDetailsBusinessTypeController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
   val validUserAnswersExistingPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
+    userAnswersPartnerDetailsExistingPartners
 //      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO for businessNumber, this should not be relevant I think
 //      .success
 //      .value
 
   val validUserAnswersNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners())
+    userAnswersPartnerDetailsNewPartners
 //      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO for businessNumber, this should not be relevant I think
 //      .success
 //      .value

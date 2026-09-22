@@ -41,11 +41,11 @@ class PartnerDetailsAddFaxNumberYesNoControllerSpec extends SpecBase with Mockit
 
   lazy val partnerDetailsAddFaxNumberYesNoRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
-  private val validUserAnswersNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
+
+  private val validUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
 
   "newPartners" - {
 

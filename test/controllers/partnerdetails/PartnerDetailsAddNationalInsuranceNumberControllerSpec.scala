@@ -38,231 +38,441 @@ import views.html.partnerdetails.PartnerDetailsAddNationalInsuranceNumberView
 
 import scala.concurrent.Future
 
-//TODO this just worked out of the box? What the hell?
+//TODO I think DONE
 class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private val formProvider = new PartnerDetailsAddNationalInsuranceNumberFormProvider()
   val form: Form[String] = formProvider()
 
-  lazy val ninoRoute: String =
+  lazy val PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners: String =
     PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(businessNumber1, CheckMode).url
-//  lazy val partnerDetailsAddNationalInsuranceNumberRoute: String =
-//    controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-//  def validUserAnswers(nino: Option[String] = None): UserAnswers =
-//    UserAnswers(mgdRegNumber, cleanedData(nino = nino))
-//      .set(PartnerDetailsAddPartnerCompletedPage(businessNumber1), false)
-//      .success
-//      .value
+  lazy val PartnerDetailsAddNationalInsuranceNumberRouteNewPartners: String =
+    PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
+
+  val userAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
+  val userAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
 
   val validNino9Chars = "AA123456A"
   val validNino8Chars = "AA123456"
 
-  "PartnerDetailsAddNationalInsuranceNumber Controller" - {
+  "newPartners" - {
+    "PartnerDetailsAddNationalInsuranceNumber Controller" - {
 
-    "onPageLoad" - {
+      "onPageLoad" - {
 
-      "must return OK and the correct view for a GET when no previous data exists" in {
+        "must return OK and the correct view for a GET when no previous data exists" in {
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
 
-        running(application) {
-          val request = FakeRequest(GET, ninoRoute)
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteNewPartners)
 
-          val result = route(application, request).value
+            val result = route(application, request).value
 
-          val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
 
-          status(result) mustBe OK
-          contentAsString(result) mustBe view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+          }
+        }
+
+        "must populate the view correctly on a GET when a 9-character NINO has previously been answered" in {
+
+          val userAnswers = userAnswersNewPartners
+            .set(PartnerDetailsNinoPage(newPartnersIndex1), validNino9Chars)
+            .success
+            .value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteNewPartners)
+
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+            val result = route(application, request).value
+
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form.fill(validNino9Chars), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+          }
+        }
+
+        "must strip the trailing underscore when populating the view for an 8-character NINO" in {
+
+          val storedNinoWithUnderscore = s"${validNino8Chars}_"
+
+          val userAnswers = userAnswersNewPartners
+            .set(PartnerDetailsNinoPage(newPartnersIndex1), storedNinoWithUnderscore)
+            .success
+            .value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteNewPartners)
+
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+            val result = route(application, request).value
+
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form.fill(validNino8Chars), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect to System Error Page for a GET if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteNewPartners)
+
+            val result = route(application, request).value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
+        "must redirect to System Error Page for a GET if businessType is not Soleproprietor" in {
+
+          val userAnswers = userAnswersNewPartners
+            .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Corporatebody)
+            .success
+            .value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteNewPartners)
+
+            val result = route(application, request).value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
         }
       }
 
-      "must populate the view correctly on a GET when a 9-character NINO has previously been answered" in {
+      "onSubmit" - {
 
-        val userAnswers = validUserAnswers
-          .set(PartnerDetailsNinoPage(businessNumber1), validNino9Chars)
-          .success
-          .value
+        "must save unmodified 9-character NINO to UserAnswers and redirect when valid 9-char NINO is submitted" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val mockSessionRepository = mock[SessionRepository]
 
-        running(application) {
-          val request = FakeRequest(GET, ninoRoute)
+          when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-          val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswersNewPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
 
-          val result = route(application, request).value
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", validNino9Chars))
 
-          status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(validNino9Chars), businessNumber1, CheckMode)(request, messages(application)).toString
+            val result = route(application, request).value
+
+            val expectedAnswers = userAnswersNewPartners
+              .set(PartnerDetailsNinoPage(newPartnersIndex1), validNino9Chars)
+              .success
+              .value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe onwardRoute.url
+            verify(mockSessionRepository).set(expectedAnswers)
+          }
         }
-      }
 
-      "must strip the trailing underscore when populating the view for an 8-character NINO" in {
+        "must append an underscore to an 8-character NINO before saving to UserAnswers and redirect" in {
 
-        val storedNinoWithUnderscore = s"${validNino8Chars}_"
+          val mockSessionRepository = mock[SessionRepository]
 
-        val userAnswers = validUserAnswers
-          .set(PartnerDetailsNinoPage(businessNumber1), storedNinoWithUnderscore)
-          .success
-          .value
+          when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswersNewPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
 
-        running(application) {
-          val request = FakeRequest(GET, ninoRoute)
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", validNino8Chars))
 
-          val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+            val result = route(application, request).value
 
-          val result = route(application, request).value
+            val expectedAnswers = userAnswersNewPartners
+              .set(PartnerDetailsNinoPage(newPartnersIndex1), s"${validNino8Chars}_")
+              .success
+              .value
 
-          status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(validNino8Chars), businessNumber1, CheckMode)(request, messages(application)).toString
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe onwardRoute.url
+            verify(mockSessionRepository).set(expectedAnswers)
+          }
         }
-      }
 
-      "must redirect to System Error Page for a GET if no existing data is found" in {
+        "must return a Bad Request and errors when invalid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+          val mockSessionRepository = mock[SessionRepository]
 
-        running(application) {
-          val request = FakeRequest(GET, ninoRoute)
-
-          val result = route(application, request).value
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
-        }
-      }
-
-      "must redirect to System Error Page for a GET if businessType is not Soleproprietor" in {
-
-        val userAnswers = validUserAnswers
-          .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
-          .success
-          .value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        running(application) {
-          val request = FakeRequest(GET, ninoRoute)
-
-          val result = route(application, request).value
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
-        }
-      }
-    }
-
-    "onSubmit" - {
-
-      "must save unmodified 9-character NINO to UserAnswers and redirect when valid 9-char NINO is submitted" in {
-
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
-
-        val application =
-          applicationBuilder(userAnswers = Some(validUserAnswers))
+          val application = applicationBuilder(userAnswers = Some(userAnswersNewPartners))
             .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
             .build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
-              .withFormUrlEncodedBody(("value", validNino9Chars))
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", "12QQ3456C"))
 
-          val result = route(application, request).value
+            val boundForm = form.bind(Map("value" -> "12QQ3456C"))
 
-          val expectedAnswers = validUserAnswers
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+            val result = route(application, request).value
+
+            status(result) mustBe BAD_REQUEST
+            contentAsString(result) mustBe view(boundForm, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            verify(mockSessionRepository, never()).set(any())
+          }
+        }
+
+        "must redirect to System Error Page for a POST if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", validNino9Chars))
+
+            val result = route(application, request).value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+      }
+    }
+  }
+
+  "partners" - {
+    "PartnerDetailsAddNationalInsuranceNumber Controller" - {
+
+      "onPageLoad" - {
+
+        "must return OK and the correct view for a GET when no previous data exists" in {
+
+          val application = applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+          }
+        }
+
+        "must populate the view correctly on a GET when a 9-character NINO has previously been answered" in {
+
+          val userAnswers = userAnswersExistingPartners
             .set(PartnerDetailsNinoPage(businessNumber1), validNino9Chars)
             .success
             .value
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe onwardRoute.url
-          verify(mockSessionRepository).set(expectedAnswers)
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners)
+
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+            val result = route(application, request).value
+
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form.fill(validNino9Chars), businessNumber1, CheckMode)(request, messages(application)).toString
+          }
+        }
+
+        "must strip the trailing underscore when populating the view for an 8-character NINO" in {
+
+          val storedNinoWithUnderscore = s"${validNino8Chars}_"
+
+          val userAnswers = userAnswersExistingPartners
+            .set(PartnerDetailsNinoPage(businessNumber1), storedNinoWithUnderscore)
+            .success
+            .value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners)
+
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+
+            val result = route(application, request).value
+
+            status(result) mustBe OK
+            contentAsString(result) mustBe view(form.fill(validNino8Chars), businessNumber1, CheckMode)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect to System Error Page for a GET if no existing data is found" in {
+
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners)
+
+            val result = route(application, request).value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
+        }
+
+        "must redirect to System Error Page for a GET if businessType is not Soleproprietor" in {
+
+          val userAnswers = userAnswersExistingPartners
+            .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
+            .success
+            .value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners)
+
+            val result = route(application, request).value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
         }
       }
 
-      "must append an underscore to an 8-character NINO before saving to UserAnswers and redirect" in {
+      "onSubmit" - {
 
-        val mockSessionRepository = mock[SessionRepository]
+        "must save unmodified 9-character NINO to UserAnswers and redirect when valid 9-char NINO is submitted" in {
 
-        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+          val mockSessionRepository = mock[SessionRepository]
 
-        val application =
-          applicationBuilder(userAnswers = Some(validUserAnswers))
+          when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswersExistingPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", validNino9Chars))
+
+            val result = route(application, request).value
+
+            val expectedAnswers = userAnswersExistingPartners
+              .set(PartnerDetailsNinoPage(businessNumber1), validNino9Chars)
+              .success
+              .value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe onwardRoute.url
+            verify(mockSessionRepository).set(expectedAnswers)
+          }
+        }
+
+        "must append an underscore to an 8-character NINO before saving to UserAnswers and redirect" in {
+
+          val mockSessionRepository = mock[SessionRepository]
+
+          when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswersExistingPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", validNino8Chars))
+
+            val result = route(application, request).value
+
+            val expectedAnswers = userAnswersExistingPartners
+              .set(PartnerDetailsNinoPage(businessNumber1), s"${validNino8Chars}_")
+              .success
+              .value
+
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe onwardRoute.url
+            verify(mockSessionRepository).set(expectedAnswers)
+          }
+        }
+
+        "must return a Bad Request and errors when invalid data is submitted" in {
+
+          val mockSessionRepository = mock[SessionRepository]
+
+          val application = applicationBuilder(userAnswers = Some(userAnswersExistingPartners))
             .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
             .build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
-              .withFormUrlEncodedBody(("value", validNino8Chars))
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", "12QQ3456C"))
 
-          val result = route(application, request).value
+            val boundForm = form.bind(Map("value" -> "12QQ3456C"))
 
-          val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsNinoPage(businessNumber1), s"${validNino8Chars}_")
-            .success
-            .value
+            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe onwardRoute.url
-          verify(mockSessionRepository).set(expectedAnswers)
+            val result = route(application, request).value
+
+            status(result) mustBe BAD_REQUEST
+            contentAsString(result) mustBe view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+            verify(mockSessionRepository, never()).set(any())
+          }
         }
-      }
 
-      "must return a Bad Request and errors when invalid data is submitted" in {
+        "must redirect to System Error Page for a POST if no existing data is found" in {
 
-        val mockSessionRepository = mock[SessionRepository]
+          val application = applicationBuilder(userAnswers = None).build()
 
-        val application = applicationBuilder(userAnswers = Some(validUserAnswers))
-          .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+          running(application) {
+            val request =
+              FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", validNino9Chars))
 
-        running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
-              .withFormUrlEncodedBody(("value", "12QQ3456C"))
+            val result = route(application, request).value
 
-          val boundForm = form.bind(Map("value" -> "12QQ3456C"))
-
-          val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
-
-          val result = route(application, request).value
-
-          status(result) mustBe BAD_REQUEST
-          contentAsString(result) mustBe view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
-          verify(mockSessionRepository, never()).set(any())
-        }
-      }
-
-      "must redirect to System Error Page for a POST if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request =
-            FakeRequest(POST, PartnerDetailsAddNationalInsuranceNumberController.onSubmit(businessNumber1, CheckMode).url)
-              .withFormUrlEncodedBody(("value", validNino9Chars))
-
-          val result = route(application, request).value
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+            status(result) mustBe SEE_OTHER
+            redirectLocation(result).value mustBe controllers.routes.SystemErrorController.onPageLoad().url
+          }
         }
       }
     }

@@ -38,6 +38,7 @@ import views.html.partnerdetails.{PartnerDetailsChangeBusinessNameView, PartnerD
 
 import scala.concurrent.Future
 
+//TODO later - more complicated
 class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   trait Setup(val businessType: BusinessType) {

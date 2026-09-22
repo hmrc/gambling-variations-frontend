@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.PartnerDetailsAdditionalAddressInfoFormProvider
-import models.{CheckMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -34,161 +34,279 @@ import views.html.partnerdetails.PartnerDetailsAdditionalAddressInfoView
 
 import scala.concurrent.Future
 
-class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with MockitoSugar /*with PartnerDetailsHelper*/ {
-
-  def onwardRoute = Call("GET", "/foo")
+//TODO I think its DONE
+class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsAdditionalAddressInfoFormProvider()
   val form = formProvider()
-  val businessNumber1 = "12345"
 
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "partners" -> Json.obj(
-          businessNumber1 -> Json.obj(
-            "partnerDetailsMgdRegNumber" -> businessNumber1
-          )
-        )
-//        "partnerDetailsSection" -> Json.obj(
-//          "partnerDetailsMgdRegNumber" -> userAnswersId
-//        )
-      )
-    )
-
-  lazy val nameRoute =
+  lazy val partnerDetailsAdditionalAddressInfoRouteExistingPartners =
     controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(businessNumber1, CheckMode).url
 
-  "PartnerDetailsAdditionalAddressInfo Controller" - {
+  lazy val partnerDetailsAdditionalAddressInfoRouteNewPartners =
+    controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
-    "must return OK and the correct view for a GET" in {
+  "newPartners" - {
+    "PartnerDetailsAdditionalAddressInfo Controller" - {
 
-      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
+      "must return OK and the correct view for a GET" in {
 
-      running(application) {
-        val request = FakeRequest(GET, nameRoute)
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoRouteNewPartners)
 
-        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+          val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(form, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view on a GET when the question has previously been answered" in {
+
+        val userAnswers =
+          userAnswersPartnerDetailsMinimalValidData
+            .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex1), "validName")
+            .get
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoRouteNewPartners)
+
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(form.fill("validName"), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to the next page when valid data is submitted" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(POST, partnerDetailsAdditionalAddressInfoRouteNewPartners)
+              .withFormUrlEncodedBody("partnerDetailsAdditionalAddressInfo" -> "valid name")
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
+      }
+
+      "must return a Bad Request and errors when invalid data is submitted" in {
+
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAdditionalAddressInfoRouteNewPartners)
+              .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", ""))
+
+          val boundForm = form.bind(Map("partnerDetailsAdditionalAddressInfo" -> ""))
+
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual
+            view(boundForm, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must return OK and the correct view for a GET if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoRouteNewPartners)
+
+          val result = route(application, request).value
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to the next page for a POST if no existing data is found" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAdditionalAddressInfoRouteNewPartners)
+              .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", "validName"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
     }
+  }
 
-    "must populate the view on a GET when the question has previously been answered" in {
+  "partners" - {
 
-//      val data = Json.obj(
-//        "partnerDetailsSection"                          -> Json.obj("mgdRegNum" -> userAnswersId),
-//        PartnerDetailsAdditionalAddressInfoPage.toString -> "validName"
-//      )
-//      val data = userAnswers.set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validaName").get
+    "PartnerDetailsAdditionalAddressInfo Controller" - {
 
-      val userAnswers = noAnswers.set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validName").get // UserAnswers(userAnswersId, data)
+      "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
 
-      running(application) {
-        val request = FakeRequest(GET, nameRoute)
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoRouteExistingPartners)
 
-        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+          val result = route(application, request).value
 
-        val result = route(application, request).value
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(form.fill("validName"), businessNumber1, CheckMode)(request, messages(application)).toString
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+        }
       }
-    }
 
-    "must redirect to the next page when valid data is submitted" in {
+      "must populate the view on a GET when the question has previously been answered" in {
 
-      val mockSessionRepository = mock[SessionRepository]
+        val userAnswers =
+          userAnswersPartnerDetailsMinimalValidData
+            .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validName")
+            .get // UserAnswers(userAnswersId, data)
 
-      when(mockSessionRepository.set(any()))
-        .thenReturn(Future.successful(true))
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoRouteExistingPartners)
 
-      running(application) {
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
 
-        val request =
-          FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody("partnerDetailsAdditionalAddressInfo" -> "valid name")
+          val result = route(application, request).value
 
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(form.fill("validName"), businessNumber1, CheckMode)(request, messages(application)).toString
+        }
       }
-    }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+      "must redirect to the next page when valid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
+        val mockSessionRepository = mock[SessionRepository]
 
-      running(application) {
-        val request =
-          FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", ""))
+        when(mockSessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
 
-        val boundForm = form.bind(Map("partnerDetailsAdditionalAddressInfo" -> ""))
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+        running(application) {
 
-        val result = route(application, request).value
+          val request =
+            FakeRequest(POST, partnerDetailsAdditionalAddressInfoRouteExistingPartners)
+              .withFormUrlEncodedBody("partnerDetailsAdditionalAddressInfo" -> "valid name")
 
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual
-          view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must return OK and the correct view for a GET if no existing data is found" in {
+      "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
 
-      running(application) {
-        val request = FakeRequest(GET, nameRoute)
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAdditionalAddressInfoRouteExistingPartners)
+              .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", ""))
 
-        val result = route(application, request).value
-        val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+          val boundForm = form.bind(Map("partnerDetailsAdditionalAddressInfo" -> ""))
+
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual
+            view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+        }
       }
-    }
 
-    "must redirect to the next page for a POST if no existing data is found" in {
+      "must return OK and the correct view for a GET if no existing data is found" in {
 
-      val mockSessionRepository = mock[SessionRepository]
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
 
-      val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+        running(application) {
+          val request = FakeRequest(GET, partnerDetailsAdditionalAddressInfoRouteExistingPartners)
 
-      running(application) {
-        val request =
-          FakeRequest(POST, nameRoute)
-            .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", "validName"))
+          val result = route(application, request).value
+          val view = application.injector.instanceOf[PartnerDetailsAdditionalAddressInfoView]
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, businessNumber1, CheckMode)(request, messages(application)).toString
+        }
+      }
 
-        val result = route(application, request).value
+      "must redirect to the next page for a POST if no existing data is found" in {
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        val mockSessionRepository = mock[SessionRepository]
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAdditionalAddressInfoRouteExistingPartners)
+              .withFormUrlEncodedBody(("partnerDetailsAdditionalAddressInfo", "validName"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
     }
   }

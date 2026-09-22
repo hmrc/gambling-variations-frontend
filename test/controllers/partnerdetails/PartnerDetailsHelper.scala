@@ -45,8 +45,12 @@ trait PartnerDetailsHelper {
     "partners" -> Json.obj()
   )
 
-//  def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
-//  def partnerDetailsMinimalValidData: UserAnswers = UserAnswers(userAnswersId, minimalValidData)
+//  val userAnswersPartnerNewPartners
+  //TODO can we pass userAnswersID from other trait here?
+  def userAnswersPartnerDetailsEmpty: UserAnswers = UserAnswers("id")
+  def userAnswersPartnerDetailsMinimalValidData: UserAnswers = UserAnswers("id", minimalValidData)
+  def userAnswersPartnerDetailsExistingPartners: UserAnswers = UserAnswers("id", cleanedDataExistingPartners())
+  def userAnswersPartnerDetailsNewPartners: UserAnswers = UserAnswers("id", cleanedDataNewPartners())
 
   def cleanedDataExistingPartners(
 //    businessNumber: String = businessNumber1, //TODO remove later
