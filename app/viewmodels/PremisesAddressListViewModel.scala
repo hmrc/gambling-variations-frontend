@@ -16,6 +16,7 @@
 
 package viewmodels
 
+import controllers.routes
 import models.licencespremises.PremisesDetails
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, SummaryList}
@@ -35,12 +36,12 @@ case object PremisesAddressListViewModel {
           value = ValueViewModel(address).withCssClass("govuk-!-width-one-half"),
           actions = Seq(
             ActionItem(
-              href               = "#",
+              href               = routes.IndexController.onPageLoad().url,
               content            = "site.change",
               visuallyHiddenText = Some(Seq(addr.address1, addr.postcode).flatten.mkString(", "))
             ),
             ActionItem(
-              href               = "#",
+              href               = routes.IndexController.onPageLoad().url,
               content            = "site.remove",
               visuallyHiddenText = Some(Seq(addr.address1, addr.postcode).flatten.mkString(", "))
             )
