@@ -70,7 +70,7 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
-        val userAnswers = validUserAnswers.set(PartnerDetailsAddTradingNameYesNoPage(index), true).success.value
+        val userAnswers = validUserAnswers.set(PartnerDetailsAddTradingNameYesNoPage(businessNumber1), true).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -127,7 +127,7 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsAddTradingNameYesNoPage(index), true)
+            .set(PartnerDetailsAddTradingNameYesNoPage(businessNumber1), true)
             .success
             .value
 

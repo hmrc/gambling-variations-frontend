@@ -127,10 +127,10 @@ class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with M
           val result = route(application, request).value
 
           val expectedAnswers = userAnswersWithNoFax
-            .set(PartnerDetailsCorrespondenceFaxNumberPage(index), testFaxNumber)
+            .set(PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1), testFaxNumber)
             .success
             .value
-            .set(PartnerDetailsChangePartnerFaxNumberPage(index), value = true)
+            .set(PartnerDetailsChangePartnerFaxNumberPage(businessNumber1), value = true)
             .success
             .value
 

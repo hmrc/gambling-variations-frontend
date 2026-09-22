@@ -122,7 +122,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
       val userAnswers =
         partnerDetailsUserAnswers
           .set(
-            PartnerDetailsDateOfIncorporation(index),
+            PartnerDetailsDateOfIncorporation(businessNumber1),
             validAnswer
           )
           .success
