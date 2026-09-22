@@ -377,7 +377,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           verify(mockSessionRepository).set(capturedAnswers.capture())
 
           capturedAnswers.getValue
-            .get(ChosenPartnerToRemovePage) mustEqual Some(0)
+            .get(PartnerDetailsChosenPartnerToRemovePage) mustEqual Some(0)
         }
       }
 

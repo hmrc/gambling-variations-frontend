@@ -39,7 +39,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,//DataRequiredAction,
   formProvider: PartnerDetailsAdditionalAddressInfoYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAdditionalAddressInfoYesNoView
@@ -62,6 +62,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
+    println("onsubmit1")
 
     form
       .bindFromRequest()
@@ -70,6 +71,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAdditionalAddressInfoYesNoPage(newIndex), value))
+            _ = println("onsubmit2")
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage(newIndex), mode, updatedAnswers))
       )

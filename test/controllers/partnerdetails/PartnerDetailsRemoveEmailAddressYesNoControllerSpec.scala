@@ -44,7 +44,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
   private val baseUserAnswers: UserAnswers =
     UserAnswers(
       mgdRegNumber,
-      cleanedData(emailAddress = Some(testEmailAddress))
+      cleanedDataExistingPartners(emailAddress = Some(testEmailAddress))
     )
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
@@ -95,7 +95,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
       }
 
       "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedData(None))
+        val userAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(None))
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

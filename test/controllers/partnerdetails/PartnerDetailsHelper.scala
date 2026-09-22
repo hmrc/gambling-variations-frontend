@@ -16,17 +16,17 @@
 
 package controllers.partnerdetails
 
+import models.UserAnswers
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 
 trait PartnerDetailsHelper {
 
+//  val userAnswersId = "id"
   val businessNumber1: String = "12345"
   val businessNumber2: String = "123456"
   val newPartnersIndex1: Int = 0
   val newPartnersIndex2: Int = 1
-  // TODO delete, and whaeber uses it, should use businessNumber1
-//  val index: String = businessNumber1
 
   val mgdRegNumber: String = "XGM00000001761" // TODO we have two mgdRegNumber, this really has to be sorted, other one is in SpecBase I think
   val testFaxNumber: String = "0123456789"
@@ -39,8 +39,17 @@ trait PartnerDetailsHelper {
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
-  // TODO might need for newPartners
-  def cleanedData(
+  def emptyData = Json.obj()
+
+  def minimalValidData = Json.obj(
+    "partners" -> Json.obj()
+  )
+
+//  def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
+//  def partnerDetailsMinimalValidData: UserAnswers = UserAnswers(userAnswersId, minimalValidData)
+
+  def cleanedDataExistingPartners(
+//    businessNumber: String = businessNumber1, //TODO remove later
     faxNumber: Option[String] = None,
     phoneNumber: Option[String] = None,
     mobilePhoneNumber: Option[String] = None,
@@ -104,6 +113,7 @@ trait PartnerDetailsHelper {
     utr: Option[String] = None,
     fcr: Option[String] = None
   ): JsObject = Json.obj(
+    "partners" -> Json.obj(),
     "newPartners" -> Json.arr(
       Json.obj(
         "partnerDetailsMgdRegNumber"  -> mgdRegNumber,

@@ -42,7 +42,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
     controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   val validUserAnswers: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedData(nino = Some(testNino)))
+    UserAnswers(mgdRegNumber, cleanedDataExistingPartners(nino = Some(testNino)))
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value

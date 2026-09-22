@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partnerdetails.AddAnotherPartnerFormProvider
 import models.NormalMode
-import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsAddAnotherPartnerYesNoPage}
+import pages.partnerdetails.{PartnerDetailsAddAnotherPartnerYesNoPage, PartnerDetailsChosenPartnerToRemovePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -148,7 +148,7 @@ class PartnerDetailsController @Inject() (
         updatedAnswers <-
           Future.fromTry(
             request.userAnswers.set(
-              ChosenPartnerToRemovePage,
+              PartnerDetailsChosenPartnerToRemovePage,
               partnerNumber
             )
           )

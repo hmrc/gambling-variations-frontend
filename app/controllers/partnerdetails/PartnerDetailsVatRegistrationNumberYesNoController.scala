@@ -39,7 +39,7 @@ class PartnerDetailsVatRegistrationNumberYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,//DataRequiredAction,
   formProvider: VatRegistrationNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsVatRegistrationNumberYesNoView

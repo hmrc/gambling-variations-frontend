@@ -18,11 +18,14 @@ package controllers.actions
 
 import connectors.GamblingConnector
 import controllers.routes
+import models.BusinessChangeAddrOption.reads
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, BusinessType, ContactNumber, CorrespondenceDetails, PartnerDetails, PartnersDetails, SoleProprietorName, UserAnswers}
 import pages.*
 import pages.partnerdetails.*
 import play.api.Logging
+import play.api.libs.json.Format.GenericFormat
+import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
 import play.api.libs.json.{JsArray, JsObject, JsPath, Json, Writes}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -44,6 +47,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
+    println("MILOSZ-1")
     request.userAnswers match {
       case None =>
         logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
@@ -54,18 +58,31 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
       case Some(userAnswers: UserAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
+        println("MILOSZ-2")
 
-        if isPartnerDetailsInCache(userAnswers) then {
+        userAnswers.get(PartnerDetailsPage) map { _ =>
+          println("MILOSZ1")
           logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } else {
-          println("NO PARTNER DETAILS IN CACHE") // TODO kept to check with specs if it works right, delete later
+        } getOrElse {
+          println("MILOSZ2")
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           saveUserAnswersToSessionAndRedirect(userAnswers, request)
         }
+//        if isPartnerDetailsInCache(userAnswers) then {
+//          logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
+//
+//          Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
+//        } else {
+//          println("NO PARTNER DETAILS IN CACHE") // TODO kept to check with specs if it works right, delete later
+//          logger.info(s"User Answers found with id ${userAnswers.id}")
+//
+//          given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+//          saveUserAnswersToSessionAndRedirect(userAnswers, request)
+//        }
     }
   }
 

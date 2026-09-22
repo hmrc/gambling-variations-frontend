@@ -49,7 +49,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
 //  lazy val partnerDetailsAddNationalInsuranceNumberRoute: String =
 //    controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad().url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
 //  def validUserAnswers(nino: Option[String] = None): UserAnswers =
 //    UserAnswers(mgdRegNumber, cleanedData(nino = nino))
 //      .set(PartnerDetailsAddPartnerCompletedPage(businessNumber1), false)

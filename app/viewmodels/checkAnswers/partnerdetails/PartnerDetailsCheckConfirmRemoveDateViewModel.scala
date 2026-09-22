@@ -37,7 +37,7 @@ object PartnerDetailsCheckConfirmRemoveDateViewModel {
 
     val partnerIndex =
       userAnswers
-        .get(ChosenPartnerToRemovePage)
+        .get(PartnerDetailsChosenPartnerToRemovePage)
         .getOrElse(
           throw new RuntimeException(
             "No selected partner for removal"

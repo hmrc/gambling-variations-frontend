@@ -43,7 +43,7 @@ class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with
   lazy val partnerDetailsAddUTRRoute: String =
     PartnerDetailsAddUTRController.onPageLoad(businessNumber1, CheckMode).url
 
-  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedData())
+  val validUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
 
   // TODO
   private val expectedIndex: String = businessNumber1

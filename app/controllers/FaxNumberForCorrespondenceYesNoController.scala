@@ -57,6 +57,7 @@ class FaxNumberForCorrespondenceYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    println("onsubmit1")
 
     form
       .bindFromRequest()
@@ -65,6 +66,7 @@ class FaxNumberForCorrespondenceYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddCorrespondenceFaxNumberPage, value))
+            _ = println("onsubmit2")
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(AddCorrespondenceFaxNumberPage, mode, updatedAnswers))
       )

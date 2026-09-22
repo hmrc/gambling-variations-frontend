@@ -27,6 +27,10 @@ object PartnerUtils {
     if mode == NormalMode then index.toInt
     else index
 
+  def validateNormalMode(index: String, mode: Mode): Either[Exception, Int] =
+    if mode == NormalMode then Right(index.toInt)
+    else Left(RuntimeException("TODO, this route only allows NormalMode"))
+
   // Like the top one, but actually validate some things
   def parseIndexOpt(index: String, mode: Mode, userAnswers: UserAnswers): Option[BusinessNumberOrIndex] = {
     if mode == NormalMode then {

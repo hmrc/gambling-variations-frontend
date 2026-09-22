@@ -21,7 +21,7 @@ import controllers.actions.*
 import forms.partner.PartnerDeleteDateFormProvider
 import models.requests.DataRequest
 import models.{BusinessDetails, Mode}
-import pages.partnerdetails.{ChosenPartnerToRemovePage, PartnerDetailsBusinessNamePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsTradingNamePage}
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -152,7 +152,7 @@ class PartnerDetailsDeleteDateController @Inject() (
     request: DataRequest[AnyContent]
   ): String /*Int*/ =
     request.userAnswers
-      .get(ChosenPartnerToRemovePage)
+      .get(PartnerDetailsChosenPartnerToRemovePage)
       .getOrElse(
         throw new RuntimeException("No selected partner for removal")
       )

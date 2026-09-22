@@ -34,6 +34,7 @@ import views.html.partnerdetails.PartnerDetailsAddTradingNameYesNoView
 
 import scala.concurrent.Future
 
+//TODO normalModeOnly - Done
 class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsAddTradingNameYesNoFormProvider()
@@ -43,7 +44,7 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
     controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   val validUserAnswers: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedData())
+    UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
@@ -70,7 +71,7 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
-        val userAnswers = validUserAnswers.set(PartnerDetailsAddTradingNameYesNoPage(businessNumber1), true).success.value
+        val userAnswers = validUserAnswers.set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -127,7 +128,7 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
           val result = route(application, request).value
 
           val expectedAnswers = validUserAnswers
-            .set(PartnerDetailsAddTradingNameYesNoPage(businessNumber1), true)
+            .set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true)
             .success
             .value
 
