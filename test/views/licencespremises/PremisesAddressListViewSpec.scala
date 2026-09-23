@@ -136,7 +136,7 @@ class PremisesAddressListViewSpec extends SpecBase {
       doc.text must include(messages("premisesAddressList.yesLabel"))
       doc.text must include(messages("premisesAddressList.noLabel"))
       doc.select(".govuk-hint").text mustEqual messages("premisesAddressList.hint")
-      doc.select("button.govuk-button").text must include(messages("site.continue"))
+      doc.select("govuk-button").text must include(messages("site.continue"))
     }
 
     "must render page correctly for 100 records" in new Setup {
