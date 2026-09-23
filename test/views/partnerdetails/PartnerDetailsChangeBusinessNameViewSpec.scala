@@ -27,7 +27,7 @@ import play.api.test.FakeRequest
 import utils.BusinessTypeKeyBuilder
 import views.html.partnerdetails.PartnerDetailsChangeBusinessNameView
 
-class ChangePartnerDetailsBusinessNameViewSpec extends SpecBase {
+class PartnerDetailsChangeBusinessNameViewSpec extends SpecBase {
 
   trait Setup(businessType: BusinessType) {
     private val app = applicationBuilder().build()

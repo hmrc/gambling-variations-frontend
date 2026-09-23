@@ -33,239 +33,460 @@ import views.html.partnerdetails.PartnerDetailsTradingNameView
 
 import scala.concurrent.Future
 
-class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar {
-
-  val businessNumber: String = "0"
-  def onwardRoute = Call("GET", "/foo")
+//TODO done?
+class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerTradingNameFormProvider()
   val form = formProvider()
 
-  lazy val partnerTradingNameRoute =
+  lazy val partnerTradingNameRouteNewPartners =
     controllers.partnerdetails.routes.PartnerDetailsTradingNameController
-      .onPageLoad(businessNumber, NormalMode)
+      .onPageLoad(newPartnersIndex1.toString, NormalMode)
       .url
 
-  private val userAnswers =
-    emptyUserAnswers
-      .set(PartnerDetailsAddPartnerCompletedPage(businessNumber.toInt), false)
+  lazy val partnerTradingNameRouteExistingPartners =
+    controllers.partnerdetails.routes.PartnerDetailsTradingNameController
+      .onPageLoad(businessNumber1, CheckMode)
+      .url
+
+  private val userAnswersExistingPartners =
+    userAnswersPartnerDetailsMinimalValidData
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
       .success
       .value
-      .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789") // partners
-      .success
-      .value
-      .set(PartnerDetailsTradingNamePage(businessNumber.toInt), "Trading Name")
-      .success
-      .value
-      .set(PartnerDetailsMgdRegNumberPage(businessNumber.toInt), "123456789") // new partners
+      .set(PartnerDetailsTradingNamePage(businessNumber1), "Trading Name")
       .success
       .value
 
-  "PartnerTradingName Controller" - {
+  private val userAnswersNewPartners =
+    userAnswersPartnerDetailsMinimalValidData
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
+      .success
+      .value
+      .set(PartnerDetailsTradingNamePage(newPartnersIndex1), "Trading Name")
+      .success
+      .value
 
-    "must return OK and the correct view for a GET" in {
+  "partners" - {
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+    "PartnerTradingName Controller" - {
 
-      running(application) {
-        val request =
-          FakeRequest(GET, partnerTradingNameRoute)
+      "must return OK and the correct view for a GET" in {
 
-        val result =
-          route(application, request).value
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
 
-        val view =
-          application.injector.instanceOf[PartnerDetailsTradingNameView]
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteExistingPartners)
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(
-            form.fill("Trading Name"),
-            businessNumber,
-            NormalMode
-          )(request, messages(application)).toString
+          val result =
+            route(application, request).value
+
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(
+              form.fill("Trading Name"),
+              businessNumber1,
+              CheckMode
+            )(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered" in {
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteExistingPartners)
+
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(
+              form.fill("Trading Name"),
+              businessNumber1,
+              CheckMode
+            )(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to the next page when valid data is submitted" in {
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(mockSessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersExistingPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteExistingPartners)
+              .withFormUrlEncodedBody(("partnerTradingName", "New Trading Name"))
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
+      }
+
+      "must return a Bad Request and errors when invalid data is submitted" in {
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteExistingPartners)
+              .withFormUrlEncodedBody(("partnerTradingName", ""))
+
+          val boundForm =
+            form.bind(Map("partnerTradingName" -> ""))
+
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual
+            view(
+              boundForm,
+              businessNumber1,
+              CheckMode
+            )(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to SystemError for a GET if no existing data is found" in {
+
+        val application =
+          applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteExistingPartners)
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+      "must redirect to SystemError for a POST if no existing data is found" in {
+
+        val application =
+          applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteExistingPartners)
+              .withFormUrlEncodedBody(("value", "Trading Name"))
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+      "must redirect to SystemError for a GET when trading name is missing" in {
+
+        val userAnswers =
+          emptyUserAnswers
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // partners
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // new partners
+            .success
+            .value
+            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
+            .success
+            .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteExistingPartners)
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+      "must redirect to SystemError for a POST when trading name is missing" in {
+
+        val userAnswers =
+          emptyUserAnswers
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // partner
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // new partner
+            .success
+            .value
+            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
+            .success
+            .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteExistingPartners)
+              .withFormUrlEncodedBody(("value", "Trading Name"))
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
       }
     }
+  }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+  "newPartners" - {
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+    "PartnerTradingName Controller" - {
 
-      running(application) {
-        val request =
-          FakeRequest(GET, partnerTradingNameRoute)
+      "must return OK and the correct view for a GET" in {
 
-        val view =
-          application.injector.instanceOf[PartnerDetailsTradingNameView]
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
 
-        val result =
-          route(application, request).value
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteNewPartners)
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(
-            form.fill("Trading Name"),
-            businessNumber,
-            NormalMode
-          )(request, messages(application)).toString
+          val result =
+            route(application, request).value
+
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(
+              form.fill("Trading Name"),
+              newPartnersIndex1.toString,
+              NormalMode
+            )(request, messages(application)).toString
+        }
       }
-    }
 
-    "must redirect to the next page when valid data is submitted" in {
+      "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val mockSessionRepository =
-        mock[SessionRepository]
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
 
-      when(mockSessionRepository.set(any()))
-        .thenReturn(Future.successful(true))
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteNewPartners)
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
-          .build()
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerTradingNameRoute)
-            .withFormUrlEncodedBody(("partnerTradingName", "New Trading Name"))
+          val result =
+            route(application, request).value
 
-        val result =
-          route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(
+              form.fill("Trading Name"),
+              newPartnersIndex1.toString,
+              NormalMode
+            )(request, messages(application)).toString
+        }
       }
-    }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+      "must redirect to the next page when valid data is submitted" in {
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val mockSessionRepository =
+          mock[SessionRepository]
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerTradingNameRoute)
-            .withFormUrlEncodedBody(("partnerTradingName", ""))
+        when(mockSessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
 
-        val boundForm =
-          form.bind(Map("partnerTradingName" -> ""))
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersNewPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
-        val view =
-          application.injector.instanceOf[PartnerDetailsTradingNameView]
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteNewPartners)
+              .withFormUrlEncodedBody(("partnerTradingName", "New Trading Name"))
 
-        val result =
-          route(application, request).value
+          val result =
+            route(application, request).value
 
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual
-          view(
-            boundForm,
-            businessNumber,
-            NormalMode
-          )(request, messages(application)).toString
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must redirect to SystemError for a GET if no existing data is found" in {
+      "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application =
-        applicationBuilder(userAnswers = None).build()
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
 
-      running(application) {
-        val request =
-          FakeRequest(GET, partnerTradingNameRoute)
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteNewPartners)
+              .withFormUrlEncodedBody(("partnerTradingName", ""))
 
-        val result =
-          route(application, request).value
+          val boundForm =
+            form.bind(Map("partnerTradingName" -> ""))
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual
+            view(
+              boundForm,
+              newPartnersIndex1.toString,
+              NormalMode
+            )(request, messages(application)).toString
+        }
       }
-    }
 
-    "must redirect to SystemError for a POST if no existing data is found" in {
+      "must redirect to SystemError for a GET if no existing data is found" in {
 
-      val application =
-        applicationBuilder(userAnswers = None).build()
+        val application =
+          applicationBuilder(userAnswers = None).build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerTradingNameRoute)
-            .withFormUrlEncodedBody(("value", "Trading Name"))
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteNewPartners)
 
-        val result =
-          route(application, request).value
+          val result =
+            route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
       }
-    }
 
-    "must redirect to SystemError for a GET when trading name is missing" in {
+      "must redirect to SystemError for a POST if no existing data is found" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789") // partners
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber.toInt), "123456789") // new partners
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(businessNumber.toInt), false)
-          .success
-          .value
+        val application =
+          applicationBuilder(userAnswers = None).build()
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteNewPartners)
+              .withFormUrlEncodedBody(("value", "Trading Name"))
 
-      running(application) {
-        val request =
-          FakeRequest(GET, partnerTradingNameRoute)
+          val result =
+            route(application, request).value
 
-        val result =
-          route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
       }
-    }
 
-    "must redirect to SystemError for a POST when trading name is missing" in {
+      "must redirect to SystemError for a GET when trading name is missing" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789") // partner
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber.toInt), "123456789") // new partner
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(businessNumber.toInt), false)
-          .success
-          .value
+        val userAnswers =
+          emptyUserAnswers
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // partners
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // new partners
+            .success
+            .value
+            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+            .success
+            .value
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, partnerTradingNameRoute)
-            .withFormUrlEncodedBody(("value", "Trading Name"))
+        running(application) {
+          val request =
+            FakeRequest(GET, partnerTradingNameRouteNewPartners)
 
-        val result =
-          route(application, request).value
+          val result =
+            route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
+      }
+
+      "must redirect to SystemError for a POST when trading name is missing" in {
+
+        val userAnswers =
+          emptyUserAnswers
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // partner
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // new partner
+            .success
+            .value
+            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerTradingNameRouteNewPartners)
+              .withFormUrlEncodedBody(("value", "Trading Name"))
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual
+            routes.SystemErrorController.onPageLoad().url
+        }
       }
     }
   }
