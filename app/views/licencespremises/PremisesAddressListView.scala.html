@@ -54,7 +54,6 @@
                 yesLabel = messages("premisesAddressList.yesLabel"),
                 noLabel = messages("premisesAddressList.noLabel")
             ).withHint(HintViewModel(messages("premisesAddressList.hint")))
-            .withCssClass("premises-address-list-radio-buttons"))
 
         @govukButton(ButtonViewModel(messages("site.continue")))
         } else {
@@ -62,7 +61,7 @@
             <p class="govuk-body">
                 @govukButton(
                 ButtonViewModel(messages("site.continue"))
-                .withCssClass("button.govuk-button")
+                .withCssClass("govuk-button")
                 .asLink(controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url)
                 )
             </p>

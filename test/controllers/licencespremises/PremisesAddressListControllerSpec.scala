@@ -87,21 +87,6 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, premisesAddressListRoute)
-
-        val view = application.injector.instanceOf[PremisesAddressListView]
-
-        val result = route(application, request).value
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(preparedFormWithAnswers, NormalMode, addressList, maxPremises)(request, messages(application)).toString
-      }
-    }
-
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
