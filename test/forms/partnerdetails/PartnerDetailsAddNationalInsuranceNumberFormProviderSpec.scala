@@ -18,9 +18,6 @@ package forms.partnerdetails
 
 import forms.behaviours.StringFieldBehaviours
 import forms.partnerdetails.PartnerDetailsAddNationalInsuranceNumberFormProvider.*
-import org.scalacheck.Gen
-import play.api.data.FormError
-import forms.partnerdetails.PartnerDetailsAddNationalInsuranceNumberFormProvider.*
 import play.api.data.{Form, FormError}
 
 class PartnerDetailsAddNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
