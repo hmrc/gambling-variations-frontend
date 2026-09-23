@@ -20,7 +20,7 @@ import forms.behaviours.StringFieldBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class PartnerDetailsAdditionalInfoFormProviderSpec extends StringFieldBehaviours {
+class PartnerDetailsAdditionalAddressInfoFormProviderSpec extends StringFieldBehaviours {
 
   private val requiredKey = "partnerDetailsAdditionalAddressInfo.error.required"
   private val lengthKey = "partnerDetailsAdditionalAddressInfo.error.length"
