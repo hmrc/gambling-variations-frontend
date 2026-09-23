@@ -154,13 +154,4 @@ class PartnerDetailsController @Inject() (
         controllers.partner.routes.PartnerDeleteDateController.onPageLoad()
       )
     }
-
-  def onContinue: Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
-
-      Redirect(
-        controllers.routes.ChangeRegistrationDetailsController
-          .onPageLoad()
-      )
-    }
 }
