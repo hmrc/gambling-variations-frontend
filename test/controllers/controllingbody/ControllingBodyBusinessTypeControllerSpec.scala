@@ -41,7 +41,6 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
 
   val form: Form[BusinessType] = (new ControllingBodyBusinessTypeFormProvider())()
 
-
   lazy val controllingBodyBusinessTypeRoute: String =
     ControllingBodyBusinessTypeController.onPageLoad().url
 
