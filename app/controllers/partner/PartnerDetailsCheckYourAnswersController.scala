@@ -35,12 +35,17 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
+  // TODO: Interim solutions
+
+  // index -> will be refactored with the indexing ticket
   private val index: Int = utils.PartnerUtils.interimIndex
+  // is new partner -> to use flag!
+  private val isNewPartner: Option[Boolean] = None
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val model = CheckPartnerDetailsViewModel
-      .from(request.userAnswers, index)
+      .from(request.userAnswers, index, isNewPartner)
 
     Ok(view(model))
   }
