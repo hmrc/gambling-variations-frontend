@@ -20,27 +20,18 @@ import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
 import play.api.libs.json.JsPath
 
-class PartnerDetailsEmailAddressPageSpec extends SpecBase with PartnerDetailsHelper {
+class PartnerDetailsAddPartnerCompletedPageSpec extends SpecBase with PartnerDetailsHelper {
 
-  "PartnerDetailsEmailAddressPage" - {
-
-    "partners" - {
-      "must have the correct path" in {
-        PartnerDetailsEmailAddressPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerEmailAddress")
-      }
-
-      "must have the correct string representation" in {
-        PartnerDetailsEmailAddressPage(businessNumber1).toString mustEqual "partnerEmailAddress"
-      }
-    }
+  "PartnerDetailsAddPartnerCompletedPage" - {
 
     "newPartners" - {
       "must have the correct path" in {
-        PartnerDetailsEmailAddressPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerEmailAddress")
+        PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1).path mustEqual
+          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAddPartnerCompleted")
       }
 
       "must have the correct string representation" in {
-        PartnerDetailsEmailAddressPage(newPartnersIndex1).toString mustEqual "partnerEmailAddress"
+        PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1).toString mustEqual "partnerDetailsAddPartnerCompleted"
       }
     }
   }
