@@ -56,7 +56,8 @@ class AssociatedRegNumberController @Inject() (
 
       val preparedForm =
         request.userAnswers
-          .get(ChosenAssociatedRegNumberPage) match {
+          .get(ChosenAssociatedRegNumberPage)
+          .orElse(request.userAnswers.get(AssociatedRegNumberPage)) match {
           case Some(value) => form.fill(value)
           case None        => form
         }
