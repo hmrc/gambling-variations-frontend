@@ -1,29 +1,29 @@
-package controllers
+package controllers.controllingbody
 
 import base.SpecBase
-import forms.controllingBodyBusinessTypeFormProvider
-import models.{NormalMode, controllingBodyBusinessType, UserAnswers}
+import controllers.routes
+import forms.controllingbody.ControllingBodyBusinessTypeFormProvider
+import models.{NormalMode, UserAnswers, controllingBodyBusinessType}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingBodyBusinessTypePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.controllingBodyBusinessTypeView
 
 import scala.concurrent.Future
 
-class controllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSugar {
+class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val controllingBodyBusinessTypeRoute = routes.controllingBodyBusinessTypeController.onPageLoad(NormalMode).url
 
-  val formProvider = new controllingBodyBusinessTypeFormProvider()
+  val formProvider = new ControllingBodyBusinessTypeFormProvider()
   val form = formProvider()
 
   "controllingBodyBusinessType Controller" - {
@@ -58,7 +58,9 @@ class controllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(controllingBodyBusinessType.values.head), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(controllingBodyBusinessType.values.head), NormalMode)(request,
+                                                                                                               messages(application)
+                                                                                                              ).toString
       }
     }
 

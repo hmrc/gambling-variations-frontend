@@ -14,37 +14,35 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels
 
-import controllers.routes
-import models.{CheckMode, UserAnswers}
-import pages.controllingBodyBusinessTypePage
+import models.UserAnswers
+import pages.controllingbody.ControllingBodyBusinessTypePage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object controllingBodyBusinessTypeSummary  {
+object ControllingBodyBusinessTypeSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(controllingBodyBusinessTypePage).map {
-      answer =>
+    answers.get(ControllingBodyBusinessTypePage).map { answer =>
 
-        val value = ValueViewModel(
-          HtmlContent(
-            HtmlFormat.escape(messages(s"controllingBodyBusinessType.$answer"))
-          )
+      val value = ValueViewModel(
+        HtmlContent(
+          HtmlFormat.escape(messages(s"controllingBodyBusinessType.$answer"))
         )
+      )
 
-        SummaryListRowViewModel(
-          key     = "controllingBodyBusinessType.checkYourAnswersLabel",
-          value   = value,
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.controllingBodyBusinessTypeController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("controllingBodyBusinessType.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "controllingBodyBusinessType.checkYourAnswersLabel",
+        value = value,
+        actions = Seq(
+          ActionItemViewModel("site.change", controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad().url)
+            .withVisuallyHiddenText(messages("controllingBodyBusinessType.change.hidden"))
         )
+      )
     }
 }

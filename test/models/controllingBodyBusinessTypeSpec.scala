@@ -16,10 +16,9 @@ class controllingBodyBusinessTypeSpec extends AnyFreeSpec with Matchers with Sca
 
       val gen = Gen.oneOf(controllingBodyBusinessType.values.toSeq)
 
-      forAll(gen) {
-        controllingBodyBusinessType =>
+      forAll(gen) { controllingBodyBusinessType =>
 
-          JsString(controllingBodyBusinessType.toString).validate[controllingBodyBusinessType].asOpt.value mustEqual controllingBodyBusinessType
+        JsString(controllingBodyBusinessType.toString).validate[controllingBodyBusinessType].asOpt.value mustEqual controllingBodyBusinessType
       }
     }
 
@@ -27,10 +26,9 @@ class controllingBodyBusinessTypeSpec extends AnyFreeSpec with Matchers with Sca
 
       val gen = arbitrary[String] suchThat (!controllingBodyBusinessType.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
+      forAll(gen) { invalidValue =>
 
-          JsString(invalidValue).validate[controllingBodyBusinessType] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[controllingBodyBusinessType] mustEqual JsError("error.invalid")
       }
     }
 
@@ -38,10 +36,9 @@ class controllingBodyBusinessTypeSpec extends AnyFreeSpec with Matchers with Sca
 
       val gen = Gen.oneOf(controllingBodyBusinessType.values.toSeq)
 
-      forAll(gen) {
-        controllingBodyBusinessType =>
+      forAll(gen) { controllingBodyBusinessType =>
 
-          Json.toJson(controllingBodyBusinessType) mustEqual JsString(controllingBodyBusinessType.toString)
+        Json.toJson(controllingBodyBusinessType) mustEqual JsString(controllingBodyBusinessType.toString)
       }
     }
   }

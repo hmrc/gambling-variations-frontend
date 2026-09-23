@@ -1,12 +1,13 @@
 package forms
 
 import forms.behaviours.OptionFieldBehaviours
+import forms.controllingbody.ControllingBodyBusinessTypeFormProvider
 import models.controllingBodyBusinessType
 import play.api.data.FormError
 
 class controllingBodyBusinessTypeFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new controllingBodyBusinessTypeFormProvider()()
+  val form = new ControllingBodyBusinessTypeFormProvider()()
 
   ".value" - {
 

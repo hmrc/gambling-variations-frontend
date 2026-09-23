@@ -28,7 +28,7 @@
 
 @layout(pageTitle = title(form, messages("controllingBodyBusinessType.title"))) {
 
-    @formHelper(action = routes.controllingBodyBusinessTypeController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
@@ -38,7 +38,7 @@
             RadiosViewModel(
                 field  = form("value"),
                 legend = LegendViewModel(messages("controllingBodyBusinessType.heading")).asPageHeading(Large),
-                items  = controllingBodyBusinessType.options
+                items  = BusinessType.options
             )
         )
 
