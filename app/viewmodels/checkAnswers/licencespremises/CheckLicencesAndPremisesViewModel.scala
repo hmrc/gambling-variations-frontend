@@ -41,11 +41,11 @@ case class CheckLicencesAndPremisesViewModel(
   isSubmitted: Boolean
 ) {
 
-  // The LI-AD and LI-ADLK-F screens are not built yet
+  // The premises addresses and find premises address screens are not built yet
   private val premisesAddressesUrl = "#"
   private val findPremisesAddressUrl = "#"
 
-  // LI-NT is only asked when the user has provided some kind of licence or permit
+  // The premises not covered question is only asked when the user has provided some kind of licence or permit
   private val hasLicencesOrPermits: Boolean =
     licenceNumber.isDefined || isPubTenant || licencesAndPermitsGB.nonEmpty || licencesAndPermitsNI.nonEmpty
 
@@ -53,7 +53,7 @@ case class CheckLicencesAndPremisesViewModel(
   private val isPremisesDetailsRequired: Boolean =
     !hasLicencesOrPermits || hasPremisesNotCovered
 
-  // There is no stored value for the method, so it is derived from the premises when LI-ME has not been answered
+  // There is no stored value for the method, so it is derived from the premises when the provide premises addresses question has not been answered
   private val provideAddresses: Option[LicencesAndPremisesRadioOptions] =
     provideAddressesAnswer orElse Option.when(premisesCount > 0)(Online)
 

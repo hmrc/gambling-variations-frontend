@@ -100,14 +100,14 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("site.notProvided")
       }
 
-      "must show the no licences message and continue to LI-ME when the method is not provided" in {
+      "must show the no licences message and continue to provide premises addresses when the method is not provided" in {
         val vm = viewModel()
 
         vm.premisesDetailsRequiredMessage mustBe Some("checkLicenceAndPremises.noLicences.p1")
         vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
       }
 
-      "must show the no licences message and continue to LI-ADLK-F when online is selected without any premises" in {
+      "must show the no licences message and continue to find premises address when online is selected without any premises" in {
         val vm = viewModel(provideAddressesAnswer = Some(Online))
 
         vm.premisesDetailsRequiredMessage mustBe Some("checkLicenceAndPremises.noLicences.p1")
@@ -166,7 +166,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
-      "must show the not covered message and continue to LI-ME when premises are not covered and the method is not provided" in {
+      "must show the not covered message and continue to provide premises addresses when premises are not covered and the method is not provided" in {
         val vm = viewModel(isPubTenant = true, hasPremisesNotCovered = true)
 
         keys(vm) must contain allOf (msgs("checkLicenceAndPremises.premisesNotCovered"), msgs("checkLicenceAndPremises.provideAddresses"))
@@ -175,7 +175,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
       }
 
-      "must show the not covered message and continue to LI-ADLK-F when online is selected without any premises" in {
+      "must show the not covered message and continue to find premises address when online is selected without any premises" in {
         val vm = viewModel(licencesAndPermitsNI = Seq(regCert), hasPremisesNotCovered = true, provideAddressesAnswer = Some(Online))
 
         vm.premisesDetailsRequiredMessage mustBe Some("checkLicenceAndPremises.premisesNotCovered.p1")
@@ -190,7 +190,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         valueText(rowFor(vm, "checkLicenceAndPremises.addressesOnline")) mustEqual "10 premises"
       }
 
-      "must prefer the answer given on LI-ME over the premises provided" in {
+      "must prefer the answer given on provide premises addresses over the premises provided" in {
         val vm =
           viewModel(licenceNumber = Some(licenceNumber), hasPremisesNotCovered = true, provideAddressesAnswer = Some(ByPost), premisesCount = 10)
 
