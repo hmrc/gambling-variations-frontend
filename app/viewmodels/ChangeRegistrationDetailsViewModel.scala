@@ -117,7 +117,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.licencesAndPremises"),
-            routes.PageNotFoundController.onPageLoad().url,
+            controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url,
             NoDetailsChanged
           )
         ),
