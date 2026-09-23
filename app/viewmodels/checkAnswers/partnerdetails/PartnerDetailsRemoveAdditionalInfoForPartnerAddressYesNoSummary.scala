@@ -35,9 +35,10 @@ object PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoSummary {
         key   = "removeAdditionalInfoForPartnerAddressYesNo.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change",
-                              controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(???).url
-                             ) // TODO
+          ActionItemViewModel(
+            "site.change",
+            controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(???, ???).url
+          ) // TODO
             .withVisuallyHiddenText(messages("removeAdditionalInfoForPartnerAddressYesNo.change.hidden"))
         )
       )

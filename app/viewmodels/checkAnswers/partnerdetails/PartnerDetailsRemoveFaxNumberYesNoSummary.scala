@@ -37,7 +37,7 @@ object PartnerDetailsRemoveFaxNumberYesNoSummary {
         value = ValueViewModel(value),
         actions = Seq(
           ActionItemViewModel("site.change",
-                              controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(???).url
+                              controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(???, ???).url
                              ) // TODO
             .withVisuallyHiddenText(messages("partnerDetailsRemoveFaxNumberYesNo.change.hidden"))
         )

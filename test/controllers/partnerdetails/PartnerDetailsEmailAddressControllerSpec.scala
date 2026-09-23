@@ -43,12 +43,12 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
 
   lazy val partnerEmailAddressRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(businessNumber1, CheckMode).url
-    
+
   lazy val partnerEmailAddressRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
-    
+
   val minimalUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
-  
+
   val minimalUserAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
 
   "newPartners" - {
@@ -230,7 +230,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       }
     }
   }
-    
+
   "partners" - {
 
     "PartnerEmailAddress Controller" - {
@@ -408,7 +408,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
           redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
-    }   
+    }
   }
 
 }

@@ -55,7 +55,6 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
   lazy val partnerVatRegistrationNumberRouteExistingPartners =
     controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(businessNumber1, CheckMode).url
 
-
   "partners" - {
 
     "PartnerDetailsVatRegistrationNumber Controller" - {
@@ -172,7 +171,6 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
     }
 
   }
-
 
   "newPartners" - {
 

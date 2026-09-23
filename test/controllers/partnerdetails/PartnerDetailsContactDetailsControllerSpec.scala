@@ -55,7 +55,7 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
       .success
       .value // TODO passingNewPartnerIndex1 instead (no string)
 
-   val emptyUserAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
+  val emptyUserAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
     .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
     .success
     .value // TODO passingNewPartnerIndex1 instead (no string)
@@ -66,7 +66,7 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
       .success
       .value // TODO passingNewPartnerIndex1 instead (no string)
 
-   val emptyUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
+  val emptyUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
     .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
     .success
     .value // TODO passingNewPartnerIndex1 instead (no string)
@@ -103,7 +103,10 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(ContactNumber(Some("123456789"), Some("123456789"))), newPartnersIndex1.toString, NormalMode)(
+          contentAsString(result) mustEqual view(form.fill(ContactNumber(Some("123456789"), Some("123456789"))),
+                                                 newPartnersIndex1.toString,
+                                                 NormalMode
+                                                )(
             request,
             messages(application)
           ).toString

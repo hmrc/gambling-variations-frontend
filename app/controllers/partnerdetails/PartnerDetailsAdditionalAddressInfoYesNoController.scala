@@ -39,7 +39,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: PartnerDetailsDataRequiredAction,//DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction, // DataRequiredAction,
   formProvider: PartnerDetailsAdditionalAddressInfoYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsAdditionalAddressInfoYesNoView
@@ -72,7 +72,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAdditionalAddressInfoYesNoPage(newIndex), value))
             _ = println("onsubmit2")
-            _              <- sessionRepository.set(updatedAnswers)
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage(newIndex), mode, updatedAnswers))
       )
   }

@@ -117,21 +117,34 @@ POST      /change-registration-details/partner-details/change-date-of-birth/:ind
 # Initial suggestion; just like with add/change, add new routes with slightly different name
 GET        /change-registration-details/partner-details/remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+#TODO this -change prefix is kinda not making sense here
+GET        /change-registration-details/partner-details/change-remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
 GET        /change-registration-details/partner-details/remove-email-address/:index                                controllers.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-email-address/:index                                controllers.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-remove-email-address/:index                                controllers.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-remove-email-address/:index                                controllers.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
 GET        /change-registration-details/partner-details/remove-fax-number/:index                           controllers.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-fax-number/:index                           controllers.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-remove-fax-number/:index                           controllers.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-remove-fax-number/:index                           controllers.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
 GET        /change-registration-details/partner-details/remove-trading-name/:index                       controllers.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-trading-name/:index                       controllers.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-remove-trading-name/:index                       controllers.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-remove-trading-name/:index                       controllers.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
 GET        /change-registration-details/partner-details/remove-national-insurance-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-national-insurance-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-remove-national-insurance-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-remove-national-insurance-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
 GET        /change-registration-details/partner-details/remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
 GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
 POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit

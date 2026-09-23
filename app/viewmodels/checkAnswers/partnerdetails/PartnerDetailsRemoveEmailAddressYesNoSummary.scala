@@ -37,7 +37,7 @@ object PartnerDetailsRemoveEmailAddressYesNoSummary {
         value = ValueViewModel(value),
         actions = Seq(
           ActionItemViewModel("site.change",
-                              controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(???).url
+                              controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(???, ???).url
                              ) // TODO
             .withVisuallyHiddenText(messages("partnerDetailsRemoveEmailAddressYesNo.change.hidden"))
         )
