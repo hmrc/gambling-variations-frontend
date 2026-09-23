@@ -33,7 +33,7 @@ class PartnerDetailsBusinessTypePageSpec extends PlaySpec with PartnerDetailsHel
         PartnerDetailsBusinessTypePage(businessNumber1).toString mustEqual "partnerDetailsBusinessType"
       }
 
-      "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
+      "be able to read and write PartnerDetailsBusinessTypePage values with correct index" in {
 
         val value1 = BusinessType.Soleproprietor
         val value2 = BusinessType.Unincorporatedbody
@@ -74,7 +74,7 @@ class PartnerDetailsBusinessTypePageSpec extends PlaySpec with PartnerDetailsHel
         PartnerDetailsBusinessTypePage(newPartnersIndex1).toString mustEqual "partnerDetailsBusinessType"
       }
 
-      "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
+      "be able to read and write PartnerDetailsBusinessTypePage values with correct index" in {
 
         val value1 = BusinessType.Soleproprietor
         val value2 = BusinessType.Unincorporatedbody

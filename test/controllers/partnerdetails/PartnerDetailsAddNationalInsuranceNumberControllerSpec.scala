@@ -94,7 +94,9 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
             val result = route(application, request).value
 
             status(result) mustBe OK
-            contentAsString(result) mustBe view(form.fill(validNino9Chars), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            contentAsString(result) mustBe view(form.fill(validNino9Chars), newPartnersIndex1.toString, NormalMode)(request,
+                                                                                                                    messages(application)
+                                                                                                                   ).toString
           }
         }
 
@@ -117,7 +119,9 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
             val result = route(application, request).value
 
             status(result) mustBe OK
-            contentAsString(result) mustBe view(form.fill(validNino8Chars), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            contentAsString(result) mustBe view(form.fill(validNino8Chars), newPartnersIndex1.toString, NormalMode)(request,
+                                                                                                                    messages(application)
+                                                                                                                   ).toString
           }
         }
 

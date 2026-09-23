@@ -23,7 +23,7 @@ import play.api.libs.json.{JsPath, Json}
 class PartnerDetailsMgdRegNumberPageSpec extends PlaySpec with PartnerDetailsHelper {
 
   "partners" must {
-    "PartnerDetailsPage" must {
+    "PartnerDetailsMgdRegNumberPage" must {
 
       "have the correct path" in {
         PartnerDetailsMgdRegNumberPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsMgdRegNumber")
@@ -34,7 +34,7 @@ class PartnerDetailsMgdRegNumberPageSpec extends PlaySpec with PartnerDetailsHel
         PartnerDetailsMgdRegNumberPage(businessNumber1).toString mustEqual "partnerDetailsMgdRegNumber"
       }
 
-      "be able to read and write PartnerDetailsPage values with correct index" in {
+      "be able to read and write PartnerDetailsMgdRegNumberPage values with correct index" in {
 
         val value1 = "Value1"
         val value2 = "Value2"
@@ -65,7 +65,7 @@ class PartnerDetailsMgdRegNumberPageSpec extends PlaySpec with PartnerDetailsHel
   }
 
   "newPartners" must {
-    "PartnerDetailsPage" must {
+    "PartnerDetailsMgdRegNumberPage" must {
 
       "have the correct path" in {
         PartnerDetailsMgdRegNumberPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsMgdRegNumber")
@@ -76,7 +76,7 @@ class PartnerDetailsMgdRegNumberPageSpec extends PlaySpec with PartnerDetailsHel
         PartnerDetailsMgdRegNumberPage(newPartnersIndex1).toString mustEqual "partnerDetailsMgdRegNumber"
       }
 
-      "be able to read and write PartnerDetailsPage values with correct index" in {
+      "be able to read and write PartnerDetailsMgdRegNumberPage values with correct index" in {
 
         val value1 = "Value1"
         val value2 = "Value2"
