@@ -1040,3 +1040,6 @@ premisesNotCoveredYesNo.checkYourAnswersLabel = Do you have any other premises t
 premisesNotCoveredYesNo.error.required = Select yes if you have any other premises that are not covered by licences or permits
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
+
+controllingBodyBusinessType.title = What type of business is the controlling body?
+controllingBodyBusinessType.heading = What type of business is the controlling body?

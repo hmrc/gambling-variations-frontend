@@ -23,6 +23,11 @@ import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
+  implicit lazy val arbitrarycontrollingBodyBusinessType: Arbitrary[controllingBodyBusinessType] =
+    Arbitrary {
+      Gen.oneOf(controllingBodyBusinessType.values.toSeq)
+    }
+
   implicit lazy val arbitraryLicencesPremises: Arbitrary[LicencesAndPremisesRadioOptions] =
     Arbitrary {
       Gen.oneOf(LicencesAndPremisesRadioOptions.values.toSeq)
