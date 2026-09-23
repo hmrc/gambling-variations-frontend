@@ -1,11 +1,11 @@
-package forms
+package forms.controllingbody
 
 import forms.behaviours.OptionFieldBehaviours
 import forms.controllingbody.ControllingBodyBusinessTypeFormProvider
-import models.controllingBodyBusinessType
+import models.BusinessType
 import play.api.data.FormError
 
-class controllingBodyBusinessTypeFormProviderSpec extends OptionFieldBehaviours {
+class ControllingBodyBusinessTypeFormProviderSpec extends OptionFieldBehaviours {
 
   val form = new ControllingBodyBusinessTypeFormProvider()()
 
@@ -14,10 +14,10 @@ class controllingBodyBusinessTypeFormProviderSpec extends OptionFieldBehaviours 
     val fieldName = "value"
     val requiredKey = "controllingBodyBusinessType.error.required"
 
-    behave like optionsField[controllingBodyBusinessType](
+    behave like optionsField[BusinessType](
       form,
       fieldName,
-      validValues  = controllingBodyBusinessType.values,
+      validValues  = BusinessType.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

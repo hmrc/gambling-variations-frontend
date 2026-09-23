@@ -34,6 +34,8 @@
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
+        @caption(messages("changeRegistrationDetails.caption"))
+
         @govukRadios(
             RadiosViewModel(
                 field  = form("value"),
