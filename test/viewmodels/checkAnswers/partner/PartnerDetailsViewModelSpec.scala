@@ -273,10 +273,16 @@ class PartnerDetailsViewModelSpec extends SpecBase {
 
       val answers =
         emptyUserAnswers
-          .set(
-            PartnerDetailsPage(0),
-            "XWM00000001762"
-          )
+          .set(PartnerDetailsPage(0), "XWM00000001761")
+          .success
+          .value
+          .set(PartnerDetailsPage(1), "XWM00000001762")
+          .success
+          .value
+          .set(PartnerDetailsPage(2), "XWM00000001763")
+          .success
+          .value
+          .set(PartnerDetailsPage(3), "XWM00000001764")
           .success
           .value
 
