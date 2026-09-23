@@ -62,7 +62,8 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = userAnswersPartnerDetailsMinimalValidData.set(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), true).success.value
+      val userAnswers =
+        userAnswersPartnerDetailsMinimalValidData.set(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), true).success.value
       println(userAnswers)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()

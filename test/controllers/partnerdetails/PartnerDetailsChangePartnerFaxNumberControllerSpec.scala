@@ -101,7 +101,9 @@ class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with M
             val result = route(application, request).value
 
             status(result) mustBe OK
-            contentAsString(result) mustBe view(form.fill(testFaxNumber), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            contentAsString(result) mustBe view(form.fill(testFaxNumber), newPartnersIndex1.toString, NormalMode)(request,
+                                                                                                                  messages(application)
+                                                                                                                 ).toString
           }
         }
 

@@ -84,18 +84,18 @@ class PartnerDetailsSoleProprietorDobControllerSpec extends SpecBase with Mockit
       .value
 
   private val partnerDetailsUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsMinimalValidData
-      .set(
-        PartnerDetailsMgdRegNumberPage(newPartnersIndex1),
-        userAnswersId
-      )
-      .success
-      .value
-      .set(
-        PartnerDetailsBusinessTypePage(newPartnersIndex1),
-        BusinessType.Soleproprietor
-      )
-      .success
-      .value
+    .set(
+      PartnerDetailsMgdRegNumberPage(newPartnersIndex1),
+      userAnswersId
+    )
+    .success
+    .value
+    .set(
+      PartnerDetailsBusinessTypePage(newPartnersIndex1),
+      BusinessType.Soleproprietor
+    )
+    .success
+    .value
 
   private def controller(
     application: Application

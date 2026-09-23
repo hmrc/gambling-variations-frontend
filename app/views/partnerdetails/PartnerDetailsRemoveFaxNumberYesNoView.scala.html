@@ -30,7 +30,7 @@
 
 @layout(pageTitle = title(form, messages("partnerDetailsRemoveFaxNumberYesNo.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(index), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController.onSubmit(index, mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

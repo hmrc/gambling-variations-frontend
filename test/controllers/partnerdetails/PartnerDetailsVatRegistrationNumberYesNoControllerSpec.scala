@@ -36,7 +36,6 @@ import scala.concurrent.Future
 //TODO normalModeOnly - Done - Maybe fix consistency with userAnswers
 class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-
   val formProvider = new VatRegistrationNumberYesNoFormProvider()
   val form = formProvider()
 

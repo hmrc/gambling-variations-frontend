@@ -76,7 +76,9 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
             val view = application.injector.instanceOf[PartnerDetailsBusinessTypeView]
 
             status(result) mustEqual OK
-            contentAsString(result) mustEqual view(form.fill(Soleproprietor), newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
+            contentAsString(result) mustEqual view(form.fill(Soleproprietor), newPartnersIndex1.toString, NormalMode)(request,
+                                                                                                                      messages(application)
+                                                                                                                     ).toString
           }
         }
 

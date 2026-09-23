@@ -28,7 +28,7 @@
 
 @layout(pageTitle = title(form, messages("removePartnerTradingNameYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onSubmit(index), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onSubmit(index, mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

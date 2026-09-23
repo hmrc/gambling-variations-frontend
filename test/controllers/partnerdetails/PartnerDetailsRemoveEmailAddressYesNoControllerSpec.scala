@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import base.SpecBase
 import controllers.routes.JourneyRecoveryController
 import forms.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
@@ -34,17 +34,21 @@ import views.html.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoView
 
 import scala.concurrent.Future
 
+//TODO done?
 class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private val form: Form[Boolean] = (new PartnerDetailsRemoveEmailAddressYesNoFormProvider())()
 
-  private lazy val partnerDetailsRemoveEmailAddressYesNoRoute: String =
-    controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(newPartnersIndex1.toString).url
+  private lazy val partnerDetailsRemoveEmailAddressYesNoRouteNewPartners: String =
+    controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
-  private val baseUserAnswers: UserAnswers =
+  private lazy val partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners: String =
+    controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(businessNumber1, CheckMode).url
+
+  private val baseUserAnswersNewPartners: UserAnswers =
     UserAnswers(
       mgdRegNumber,
-      cleanedDataExistingPartners(emailAddress = Some(testEmailAddress))
+      cleanedDataNewPartners(emailAddress = Some(testEmailAddress))
     )
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
@@ -53,160 +57,333 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
       .success
       .value
 
-  "PartnerDetailsRemoveEmailAddressYesNo Controller" - {
+  private val baseUserAnswersExistingPartners: UserAnswers =
+    UserAnswers(
+      mgdRegNumber,
+      cleanedDataExistingPartners(emailAddress = Some(testEmailAddress))
+    )
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
+      .success
+      .value
+      .set(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1), testEmailAddress)
+      .success
+      .value
 
-    "onPageLoad" - {
+  "partners" - {
 
-      "must return OK and the correct view for a GET when email address exists in UserAnswers" in {
+    "PartnerDetailsRemoveEmailAddressYesNo Controller" - {
 
-        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+      "onPageLoad" - {
 
-        running(application) {
-          val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRoute)
-          val result = route(application, request).value
-          val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+        "must return OK and the correct view for a GET when email address exists in UserAnswers" in {
 
-          status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
-                                                                                                                 messages(application)
-                                                                                                                ).toString
+          val application = applicationBuilder(userAnswers = Some(baseUserAnswersExistingPartners)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners)
+            val result = route(application, request).value
+            val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual view(form, businessNumber1, CheckMode, testEmailAddress)(request, messages(application)).toString
+          }
+        }
+
+        "must populate the view correctly on a GET when the question has previously been answered" in {
+
+          val userAnswers = baseUserAnswersExistingPartners
+            .set(PartnerDetailsRemoveEmailAddressYesNoPage(businessNumber1), true) // TODo
+            .success
+            .value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners)
+            val result = route(application, request).value
+            val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual view(form.fill(true), businessNumber1, CheckMode, testEmailAddress)(request,
+                                                                                                                  messages(application)
+                                                                                                                 ).toString
+          }
+        }
+
+        "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
+          val userAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(None))
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners)
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual JourneyRecoveryController.onPageLoad().url
+
+          }
+        }
+
+        "must redirect to SystemErrorController when no user answers are found" in {
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners)
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+
+          }
         }
       }
 
-      "must populate the view correctly on a GET when the question has previously been answered" in {
+      "onSubmit" - {
 
-        val userAnswers = baseUserAnswers
-          .set(PartnerDetailsRemoveEmailAddressYesNoPage(newPartnersIndex1), true)
-          .success
-          .value
+        "must remove the email address and redirect to next page when 'Yes' (true) is submitted" in {
+          val mockSessionRepository = mock[SessionRepository]
+          when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val application =
+            applicationBuilder(userAnswers = Some(baseUserAnswersExistingPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
 
-        running(application) {
-          val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRoute)
-          val result = route(application, request).value
-          val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", "true"))
 
-          status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(true), newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
-                                                                                                                            messages(application)
-                                                                                                                           ).toString
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual onwardRoute.url
+          }
         }
-      }
 
-      "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
-        val userAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(None))
+        "must retain the email address and redirect when 'No' (false) is submitted" in {
+          val mockSessionRepository = mock[SessionRepository]
+          when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val application =
+            applicationBuilder(userAnswers = Some(baseUserAnswersExistingPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
 
-        running(application) {
-          val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRoute)
-          val result = route(application, request).value
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", "false"))
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual JourneyRecoveryController.onPageLoad().url
+            val result = route(application, request).value
 
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual onwardRoute.url
+          }
         }
-      }
 
-      "must redirect to SystemErrorController when no user answers are found" in {
-        val application = applicationBuilder(userAnswers = None).build()
+        "must return BAD_REQUEST and errors when invalid data is submitted" in {
 
-        running(application) {
-          val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRoute)
-          val result = route(application, request).value
+          val application = applicationBuilder(userAnswers = Some(baseUserAnswersExistingPartners)).build()
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", ""))
 
+            val boundForm = form.bind(Map("value" -> ""))
+            val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+            val result = route(application, request).value
+
+            status(result) mustEqual BAD_REQUEST
+            contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode, testEmailAddress)(request, messages(application)).toString
+          }
+        }
+
+        "must redirect to 'there is a problem' error page when submitting 'Yes' (true) but correspondence details section is missing" in {
+          val userAnswers = emptyUserAnswers
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(businessNumber1, CheckMode).url)
+                .withFormUrlEncodedBody(("value", "true"))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+          }
         }
       }
     }
+  }
 
-    "onSubmit" - {
+  "newPartners" - {
 
-      "must remove the email address and redirect to next page when 'Yes' (true) is submitted" in {
-        val mockSessionRepository = mock[SessionRepository]
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+    "PartnerDetailsRemoveEmailAddressYesNo Controller" - {
 
-        val application =
-          applicationBuilder(userAnswers = Some(baseUserAnswers))
-            .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-              bind[SessionRepository].toInstance(mockSessionRepository)
-            )
-            .build()
+      "onPageLoad" - {
 
-        running(application) {
-          val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
-              .withFormUrlEncodedBody(("value", "true"))
+        "must return OK and the correct view for a GET when email address exists in UserAnswers" in {
 
-          val result = route(application, request).value
+          val application = applicationBuilder(userAnswers = Some(baseUserAnswersNewPartners)).build()
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual onwardRoute.url
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteNewPartners)
+            val result = route(application, request).value
+            val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual view(form, newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
+                                                                                                                   messages(application)
+                                                                                                                  ).toString
+          }
+        }
+
+        "must populate the view correctly on a GET when the question has previously been answered" in {
+
+          val userAnswers = baseUserAnswersNewPartners
+            .set(PartnerDetailsRemoveEmailAddressYesNoPage(newPartnersIndex1), true)
+            .success
+            .value
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteNewPartners)
+            val result = route(application, request).value
+            val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+
+            status(result) mustEqual OK
+            contentAsString(result) mustEqual view(form.fill(true), newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
+                                                                                                                              messages(application)
+                                                                                                                             ).toString
+          }
+        }
+
+        "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
+          val userAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners(None))
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteNewPartners)
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual JourneyRecoveryController.onPageLoad().url
+
+          }
+        }
+
+        "must redirect to SystemErrorController when no user answers are found" in {
+          val application = applicationBuilder(userAnswers = None).build()
+
+          running(application) {
+            val request = FakeRequest(GET, partnerDetailsRemoveEmailAddressYesNoRouteNewPartners)
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+
+          }
         }
       }
 
-      "must retain the email address and redirect when 'No' (false) is submitted" in {
-        val mockSessionRepository = mock[SessionRepository]
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      "onSubmit" - {
 
-        val application =
-          applicationBuilder(userAnswers = Some(baseUserAnswers))
-            .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-              bind[SessionRepository].toInstance(mockSessionRepository)
-            )
-            .build()
+        "must remove the email address and redirect to next page when 'Yes' (true) is submitted" in {
+          val mockSessionRepository = mock[SessionRepository]
+          when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        running(application) {
-          val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
-              .withFormUrlEncodedBody(("value", "false"))
+          val application =
+            applicationBuilder(userAnswers = Some(baseUserAnswersNewPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
 
-          val result = route(application, request).value
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", "true"))
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual onwardRoute.url
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual onwardRoute.url
+          }
         }
-      }
 
-      "must return BAD_REQUEST and errors when invalid data is submitted" in {
+        "must retain the email address and redirect when 'No' (false) is submitted" in {
+          val mockSessionRepository = mock[SessionRepository]
+          when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val application = applicationBuilder(userAnswers = Some(baseUserAnswers)).build()
+          val application =
+            applicationBuilder(userAnswers = Some(baseUserAnswersNewPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
-              .withFormUrlEncodedBody(("value", ""))
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", "false"))
 
-          val boundForm = form.bind(Map("value" -> ""))
-          val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
-          val result = route(application, request).value
+            val result = route(application, request).value
 
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
-                                                                                                                      messages(application)
-                                                                                                                     ).toString
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual onwardRoute.url
+          }
         }
-      }
 
-      "must redirect to 'there is a problem' error page when submitting 'Yes' (true) but correspondence details section is missing" in {
-        val userAnswers = emptyUserAnswers
+        "must return BAD_REQUEST and errors when invalid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val application = applicationBuilder(userAnswers = Some(baseUserAnswersNewPartners)).build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString).url)
-              .withFormUrlEncodedBody(("value", "true"))
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", ""))
 
-          val result = route(application, request).value
+            val boundForm = form.bind(Map("value" -> ""))
+            val view = application.injector.instanceOf[PartnerDetailsRemoveEmailAddressYesNoView]
+            val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+            status(result) mustEqual BAD_REQUEST
+            contentAsString(result) mustEqual view(boundForm, newPartnersIndex1.toString, NormalMode, testEmailAddress)(request,
+                                                                                                                        messages(application)
+                                                                                                                       ).toString
+          }
+        }
+
+        "must redirect to 'there is a problem' error page when submitting 'Yes' (true) but correspondence details section is missing" in {
+          val userAnswers = emptyUserAnswers
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+          running(application) {
+            val request =
+              FakeRequest(POST, routes.PartnerDetailsRemoveEmailAddressYesNoController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+                .withFormUrlEncodedBody(("value", "true"))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual "/gambling-variations/there-is-a-problem-with-the-service"
+          }
         }
       }
     }

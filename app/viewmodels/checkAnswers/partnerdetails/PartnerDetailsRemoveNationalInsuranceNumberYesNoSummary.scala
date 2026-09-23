@@ -37,7 +37,7 @@ object PartnerDetailsRemoveNationalInsuranceNumberYesNoSummary {
         value = ValueViewModel(value),
         actions = Seq(
           ActionItemViewModel("site.change",
-                              controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(???).url
+                              controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(???, ???).url
                              ) // TODO
             .withVisuallyHiddenText(messages("partnerDetailsRemoveNinoYesNo.change.hidden"))
         )

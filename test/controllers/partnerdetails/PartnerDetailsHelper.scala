@@ -46,7 +46,7 @@ trait PartnerDetailsHelper {
   )
 
 //  val userAnswersPartnerNewPartners
-  //TODO can we pass userAnswersID from other trait here?
+  // TODO can we pass userAnswersID from other trait here?
   def userAnswersPartnerDetailsEmpty: UserAnswers = UserAnswers("id")
   def userAnswersPartnerDetailsMinimalValidData: UserAnswers = UserAnswers("id", minimalValidData)
   def userAnswersPartnerDetailsExistingPartners: UserAnswers = UserAnswers("id", cleanedDataExistingPartners())
