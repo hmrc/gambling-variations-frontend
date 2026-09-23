@@ -17,7 +17,6 @@
 package forms.partnerdetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkFormProvider
 import play.api.data.FormError
 
 class PartnerDetailsIsBusinessIncorporatedUkFormProviderSpec extends BooleanFieldBehaviours {
