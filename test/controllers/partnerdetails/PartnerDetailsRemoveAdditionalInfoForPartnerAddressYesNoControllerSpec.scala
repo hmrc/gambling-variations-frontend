@@ -33,18 +33,18 @@ import views.html.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAdd
 
 import scala.concurrent.Future
 
-class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec extends SpecBase with MockitoSugar {
+class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  private val newPartnersIndex: Int = 0
-  val businessNumber: String = newPartnersIndex.toString
+//  private val newPartnersIndex: Int = 0
+//  val businessNumber: String = newPartnersIndex.toString
 
-  def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()
   val form = formProvider()
 
-  lazy val removeAdditionalInfoForPartnerYesNoRoute =
-    controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(businessNumber).url
+  //TODO it has normal mode only
+  lazy val removeAdditionalInfoForPartnerYesNoRouteNewPartner =
+    controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(businessNumber1).url
 
   "PartnerDetailsRemoveAdditionalInfoForPartnerYesNo Controller" - {
 
@@ -52,17 +52,17 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
       val userAnswers =
         UserAnswers(userAnswersId)
-          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "Additional Information")
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
           .success
           .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
+        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRouteNewPartner)
 
         val result = route(application, request).value
 
@@ -71,7 +71,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form, businessNumber, NormalMode, "Additional Information")(request, messages(application)).toString
+          view(form, businessNumber1, NormalMode, "Additional Information")(request, messages(application)).toString
       }
     }
 
@@ -80,7 +80,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
+        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRouteNewPartner)
 
         val result = route(application, request).value
 
@@ -94,20 +94,20 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
       val userAnswers =
         UserAnswers(userAnswersId)
-          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "Additional Information")
           .success
           .value
-          .set(PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(newPartnersIndex), true)
+          .set(PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(businessNumber1), true)
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
           .success
           .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRoute)
+        val request = FakeRequest(GET, removeAdditionalInfoForPartnerYesNoRouteNewPartner)
 
         val view =
           application.injector.instanceOf[PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoView]
@@ -116,7 +116,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill(true), businessNumber, NormalMode, "Additional Information")(
+          view(form.fill(true), businessNumber1, NormalMode, "Additional Information")(
             request,
             messages(application)
           ).toString
@@ -127,10 +127,10 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
       val userAnswers =
         UserAnswers(userAnswersId)
-          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "Additional Information")
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
           .success
           .value
 
@@ -148,7 +148,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
       running(application) {
         val request =
-          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
+          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRouteNewPartner)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -171,7 +171,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
       running(application) {
         val request =
-          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
+          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRouteNewPartner)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -186,10 +186,10 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
       val userAnswers =
         UserAnswers(userAnswersId)
-          .set(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex), "Additional Information")
+          .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "Additional Information")
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber), "123456789")
+          .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
           .success
           .value
 
@@ -197,7 +197,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
       running(application) {
         val request =
-          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRoute)
+          FakeRequest(POST, removeAdditionalInfoForPartnerYesNoRouteNewPartner)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
@@ -209,7 +209,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, businessNumber, NormalMode, "Additional Information")(
+          view(boundForm, businessNumber1, NormalMode, "Additional Information")(
             request,
             messages(application)
           ).toString
