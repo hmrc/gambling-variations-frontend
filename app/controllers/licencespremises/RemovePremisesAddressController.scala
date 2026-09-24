@@ -24,9 +24,13 @@ import navigation.Navigator
 import pages.licencespremises.*
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.twirl.api.HtmlFormat
 import repositories.SessionRepository
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.AddressFormatter
 import views.html.licencespremises.RemovePremisesAddressView
 
 import javax.inject.Inject
@@ -45,13 +49,11 @@ class RemovePremisesAddressController @Inject() (
   view: RemovePremisesAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    {
+    with I18nSupport {
 
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
     request.userAnswers.get(ChosenPremisesAddressPage) match {
       case Some(address) =>
         Ok(view(form, mode, address))

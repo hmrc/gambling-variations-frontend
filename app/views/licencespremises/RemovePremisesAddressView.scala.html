@@ -26,6 +26,7 @@
     govukRadios: GovukRadios,
     govukButton: GovukButton,
     caption: Caption,
+    h1: H1,
     paragraph: Paragraph
 )
 
@@ -41,20 +42,16 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
 
-        <h1 class="govuk-heading-l">
-            @messages("removePremisesAddress.heading")
-        </h1>
-
-        <div class="govuk-body">
-            @for(addressLine <- AddressFormatter.format(premisesAddress)) {
-                @addressLine<br />
-            }
-        </div>
+        @h1(messages("removePremisesAddress.heading"), classes = "govuk-heading-l govuk-!-margin-bottom-4")
 
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("removePremisesAddress.heading")).withCssClass("govuk-visually-hidden")
+                legend = LegendViewModel(HtmlContent(
+                    HtmlFormat.raw(
+                        AddressFormatter.format(premisesAddress).mkString("<br/>")
+                        )
+                )).withCssClass("govuk-body govuk-heading-l govuk-!-margin-bottom-4")
             )
         )
 
