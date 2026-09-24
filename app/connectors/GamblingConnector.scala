@@ -17,7 +17,7 @@
 package connectors
 
 import models.licencespremises.LicencesAndPremises
-import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails, PartnersDetails}
+import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -251,4 +251,29 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
       }
   }
 
+  def getGamblingReturnPeriods(
+    mgdRegNumber: String
+  )(implicit hc: HeaderCarrier): Future[GamblingReturnPeriods] = {
+    http
+      .get(url"$baseUrl/return-periods/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[GamblingReturnPeriods]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON Gambling Return Periods: $errors"),
+                returnPeriods => returnPeriods
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Gambling Return Periods: $status",
+              status
+            )
+        }
+      }
+  }
 }
