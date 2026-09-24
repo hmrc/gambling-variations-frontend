@@ -189,48 +189,6 @@ case class CheckPartnerDetailsViewModel(
     } else None
   }
 
-  private def soleProprietorDobSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
-    val isSoleProprietor = typeOfBusiness.contains(messages("businessType.soleproprietor"))
-
-    if (isSoleProprietor) {
-      val label = messages("partnerDetailsCheckYourAnswers.soleProprietorDob")
-      val href = controllers.partner.routes.PartnerSoleProprietorDobController.onPageLoad().url
-
-      soleProprietorDob match {
-        case Some(value) =>
-          val changeAction = if (isNewPartner.contains(true)) {
-            Some(
-              ActionItem(
-                href               = href,
-                content            = Text(messages("site.change")),
-                visuallyHiddenText = Some(label)
-              )
-            )
-          } else None
-
-          Some(
-            SummaryListRow(
-              key     = Key(content = Text(label)),
-              value   = Value(content = Text(value)),
-              actions = Some(Actions(items = changeAction.toSeq))
-            )
-          )
-
-        case None =>
-          val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorDob.add")
-          val addLinkHtml = s"""<a href="$href">$addText</a>"""
-
-          Some(
-            SummaryListRow(
-              key     = Key(content = Text(label)),
-              value   = Value(content = HtmlContent(addLinkHtml)),
-              actions = None
-            )
-          )
-      }
-    } else None
-  }
-
   private def unincorporatedBodyNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
     val isUnicorporated = typeOfBusiness.contains(messages("businessType.unincorporatedbody"))
 
@@ -399,72 +357,47 @@ case class CheckPartnerDetailsViewModel(
     } else None
   }
 
-  private def addTradingNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addTradingName.map { value =>
-      SummaryListRow(
-        key   = Key(content = messages("partnerDetailsCheckYourAnswers.addTradingName")),
-        value = Value(content = value),
-        actions = Some(
-          Actions(
-            items = Seq(
+  private def soleProprietorDobSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val isSoleProprietor = typeOfBusiness.contains(messages("businessType.soleproprietor"))
+
+    if (isSoleProprietor) {
+      val label = messages("partnerDetailsCheckYourAnswers.soleProprietorDob")
+      val href = controllers.partner.routes.PartnerSoleProprietorDobController.onPageLoad().url
+
+      soleProprietorDob match {
+        case Some(value) =>
+          val changeAction = if (isNewPartner.contains(true)) {
+            Some(
               ActionItem(
-                href               = controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addTradingName"))
+                href               = href,
+                content            = Text(messages("site.change")),
+                visuallyHiddenText = Some(label)
               )
             )
+          } else None
+
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = Text(value)),
+              actions = Some(Actions(items = changeAction.toSeq))
+            )
           )
-        )
-      )
-    }
 
-  private def tradingNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    tradingName.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.tradingName")
+        case None =>
+          val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorDob.add")
+          val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
-      val changeAction = ActionItem(
-        href               = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url,
-        content            = Text(messages("site.change")),
-        visuallyHiddenText = Some(label)
-      )
-
-      val removeAction = if (!isNewPartner.contains(true)) {
-        Some(
-          ActionItem(
-            href               = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url,
-            content            = Text(messages("site.remove")),
-            visuallyHiddenText = Some(label)
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = HtmlContent(addLinkHtml)),
+              actions = None
+            )
           )
-        )
-      } else None
-
-      SummaryListRow(
-        key     = Key(content = Text(label)),
-        value   = Value(content = Text(value)),
-        actions = Some(Actions(items = Seq(Some(changeAction), removeAction).flatten))
-      )
-    }
-
-  private def dateOfJoiningSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    dateOfJoining.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.dateOfJoining")
-
-      val changeAction = if (isNewPartner.contains(true)) {
-        Some(
-          ActionItem(
-            href               = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url,
-            content            = Text(messages("site.change")),
-            visuallyHiddenText = Some(label)
-          )
-        )
-      } else None
-
-      SummaryListRow(
-        key     = Key(content = Text(label)),
-        value   = Value(content = Text(value)),
-        actions = Some(Actions(items = changeAction.toSeq))
-      )
-    }
+      }
+    } else None
+  }
 
   private def addNinoSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     addNino.map { value =>
@@ -516,6 +449,149 @@ case class CheckPartnerDetailsViewModel(
             classes = "govuk-summary-list__actions govuk-!-width-one-third"
           )
         )
+      )
+    }
+
+  private def addTradingNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    addTradingName.map { value =>
+      SummaryListRow(
+        key   = Key(content = messages("partnerDetailsCheckYourAnswers.addTradingName")),
+        value = Value(content = value),
+        actions = Some(
+          Actions(
+            items = Seq(
+              ActionItem(
+                href               = controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad().url,
+                content            = "site.change",
+                visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addTradingName"))
+              )
+            )
+          )
+        )
+      )
+    }
+
+  private def tradingNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    tradingName.map { value =>
+      val label = messages("partnerDetailsCheckYourAnswers.tradingName")
+
+      val changeAction = ActionItem(
+        href               = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url,
+        content            = Text(messages("site.change")),
+        visuallyHiddenText = Some(label)
+      )
+
+      val removeAction = if (!isNewPartner.contains(true)) {
+        Some(
+          ActionItem(
+            href               = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url,
+            content            = Text(messages("site.remove")),
+            visuallyHiddenText = Some(label)
+          )
+        )
+      } else None
+
+      SummaryListRow(
+        key     = Key(content = Text(label)),
+        value   = Value(content = Text(value)),
+        actions = Some(Actions(items = Seq(Some(changeAction), removeAction).flatten))
+      )
+    }
+
+  private def isIncorporatedInUkSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    isIncorporatedInUk.map { value =>
+      val label = messages("partnerDetailsCheckYourAnswers.isIncorporatedInUk")
+
+      val changeAction = ActionItem(
+        href               = controllers.partner.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad().url,
+        content            = Text(messages("site.change")),
+        visuallyHiddenText = Some(label)
+      )
+
+      SummaryListRow(
+        key     = Key(content = Text(label)),
+        value   = Value(content = Text(value)),
+        actions = Some(Actions(items = Seq(changeAction)))
+      )
+    }
+
+  private def countryOfIncorporationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    countryOfIncorporation.map { value =>
+      val label = messages("partnerDetailsCheckYourAnswers.countryOfIncorporation")
+
+      val changeAction = ActionItem(
+        href               = controllers.partner.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad().url,
+        content            = Text(messages("site.change")),
+        visuallyHiddenText = Some(label)
+      )
+
+      SummaryListRow(
+        key     = Key(content = Text(label)),
+        value   = Value(content = Text(value)),
+        actions = Some(Actions(items = Seq(changeAction)))
+      )
+    }
+
+  private def foreignCorporateReferenceSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    foreignCorporateReference.map { value =>
+      val label = messages("partnerDetailsCheckYourAnswers.foreignCorporateReference")
+
+      val changeAction = if (isNewPartner.contains(true)) {
+        Some(
+          ActionItem(
+            href               = controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url,
+            content            = Text(messages("site.change")),
+            visuallyHiddenText = Some(label)
+          )
+        )
+      } else None
+
+      SummaryListRow(
+        key     = Key(content = Text(label)),
+        value   = Value(content = Text(value)),
+        actions = Some(Actions(items = changeAction.toSeq))
+      )
+    }
+
+  private def dateOfIncorporationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    dateOfIncorporation.map { value =>
+      val label = messages("partnerDetailsCheckYourAnswers.dateOfIncorporation")
+
+      val changeAction = if (isNewPartner.contains(true)) {
+        Some(
+          ActionItem(
+            href               = controllers.partner.routes.PartnerDateOfIncorporationController.onPageLoad().url,
+            content            = Text(messages("site.change")),
+            visuallyHiddenText = Some(label)
+          )
+        )
+      } else None
+
+      SummaryListRow(
+        key     = Key(content = Text(label)),
+        value   = Value(content = Text(value)),
+        actions = Some(Actions(items = changeAction.toSeq))
+      )
+    }
+
+  private def companyRegistrationNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    companyRegistrationNumber.map { value =>
+      val label = messages("partnerDetailsCheckYourAnswers.companyRegistrationNumber")
+
+      val changeAction = if (isNewPartner.contains(true)) {
+        Some(
+          ActionItem(
+            href               = controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url,
+            content            = Text(messages("site.change")),
+            visuallyHiddenText = Some(label)
+          )
+        )
+      } else None
+
+      SummaryListRow(
+        key     = Key(content = Text(label)),
+        value   = Value(content = Text(value)),
+        actions = Some(Actions(items = changeAction.toSeq))
       )
     }
 
@@ -582,90 +658,14 @@ case class CheckPartnerDetailsViewModel(
       )
     }
 
-  private def isIncorporatedInUkSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    isIncorporatedInUk.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.isIncorporatedInUk")
-
-      val changeAction = ActionItem(
-        href               = controllers.partner.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad().url,
-        content            = Text(messages("site.change")),
-        visuallyHiddenText = Some(label)
-      )
-
-      SummaryListRow(
-        key     = Key(content = Text(label)),
-        value   = Value(content = Text(value)),
-        actions = Some(Actions(items = Seq(changeAction)))
-      )
-    }
-
-  private def countryOfIncorporationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    countryOfIncorporation.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.countryOfIncorporation")
-
-      val changeAction = ActionItem(
-        href               = controllers.partner.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad().url,
-        content            = Text(messages("site.change")),
-        visuallyHiddenText = Some(label)
-      )
-
-      SummaryListRow(
-        key     = Key(content = Text(label)),
-        value   = Value(content = Text(value)),
-        actions = Some(Actions(items = Seq(changeAction)))
-      )
-    }
-
-  private def dateOfIncorporationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    dateOfIncorporation.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.dateOfIncorporation")
+  private def dateOfJoiningSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+    dateOfJoining.map { value =>
+      val label = messages("partnerDetailsCheckYourAnswers.dateOfJoining")
 
       val changeAction = if (isNewPartner.contains(true)) {
         Some(
           ActionItem(
-            href               = controllers.partner.routes.PartnerDateOfIncorporationController.onPageLoad().url,
-            content            = Text(messages("site.change")),
-            visuallyHiddenText = Some(label)
-          )
-        )
-      } else None
-
-      SummaryListRow(
-        key     = Key(content = Text(label)),
-        value   = Value(content = Text(value)),
-        actions = Some(Actions(items = changeAction.toSeq))
-      )
-    }
-
-  private def foreignCorporateReferenceSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    foreignCorporateReference.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.foreignCorporateReference")
-
-      val changeAction = if (isNewPartner.contains(true)) {
-        Some(
-          ActionItem(
-            href               = controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url,
-            content            = Text(messages("site.change")),
-            visuallyHiddenText = Some(label)
-          )
-        )
-      } else None
-
-      SummaryListRow(
-        key     = Key(content = Text(label)),
-        value   = Value(content = Text(value)),
-        actions = Some(Actions(items = changeAction.toSeq))
-      )
-    }
-
-  private def companyRegistrationNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    companyRegistrationNumber.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.companyRegistrationNumber")
-
-      val changeAction = if (isNewPartner.contains(true)) {
-        Some(
-          ActionItem(
-            href               = controllers.partner.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad().url,
+            href               = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url,
             content            = Text(messages("site.change")),
             visuallyHiddenText = Some(label)
           )
