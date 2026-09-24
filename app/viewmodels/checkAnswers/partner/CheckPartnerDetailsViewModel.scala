@@ -124,19 +124,16 @@ case class CheckPartnerDetailsViewModel(
     )
 
     typeOfBusiness match {
-      case Some(value) =>
-        if (isNewPartner.contains(true)) {
-          Some(
-            SummaryListRow(
-              key     = Key(content = Text(label)),
-              value   = Value(content = Text(value)),
-              actions = Some(Actions(items = Seq(change)))
-            )
+      case Some(value) if isNewPartner.contains(true) =>
+        Some(
+          SummaryListRow(
+            key     = Key(content = Text(label)),
+            value   = Value(content = Text(value)),
+            actions = Some(Actions(items = Seq(change)))
           )
+        )
 
-        } else None
-
-      case None =>
+      case _ =>
         Some(
           SummaryListRow(
             key     = Key(content = Text(label)),
@@ -155,7 +152,7 @@ case class CheckPartnerDetailsViewModel(
       val href = controllers.partner.routes.PartnerSoleProprietorDobController.onPageLoad().url
 
       soleProprietorName match {
-        case Some(value) =>
+        case Some(value) if isNewPartner.contains(true) =>
           val changeAction = if (isNewPartner.contains(true)) {
             Some(
               ActionItem(
@@ -174,7 +171,7 @@ case class CheckPartnerDetailsViewModel(
             )
           )
 
-        case None =>
+        case _ =>
           val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -197,7 +194,7 @@ case class CheckPartnerDetailsViewModel(
       val href = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
 
       unincorporatedBodyName match {
-        case Some(value) =>
+        case Some(value) if isNewPartner.contains(true) =>
           val changeAction = if (isNewPartner.contains(true)) {
             Some(
               ActionItem(
@@ -216,7 +213,7 @@ case class CheckPartnerDetailsViewModel(
             )
           )
 
-        case None =>
+        case _ =>
           val addText = messages("partnerDetailsCheckYourAnswers.unincorporatedBodyName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -239,7 +236,7 @@ case class CheckPartnerDetailsViewModel(
       val href = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
 
       corporateBodyName match {
-        case Some(value) =>
+        case Some(value) if isNewPartner.contains(true) =>
           val changeAction = if (isNewPartner.contains(true)) {
             Some(
               ActionItem(
@@ -258,7 +255,7 @@ case class CheckPartnerDetailsViewModel(
             )
           )
 
-        case None =>
+        case _ =>
           val addText = messages("partnerDetailsCheckYourAnswers.corporateBodyName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -281,7 +278,7 @@ case class CheckPartnerDetailsViewModel(
       val href = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
 
       partnershipName match {
-        case Some(value) =>
+        case Some(value) if isNewPartner.contains(true) =>
           val changeAction = if (isNewPartner.contains(true)) {
             Some(
               ActionItem(
@@ -300,7 +297,7 @@ case class CheckPartnerDetailsViewModel(
             )
           )
 
-        case None =>
+        case _ =>
           val addText = messages("partnerDetailsCheckYourAnswers.partnershipName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -323,7 +320,7 @@ case class CheckPartnerDetailsViewModel(
       val href = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
 
       soleProprietorName match {
-        case Some(value) =>
+        case Some(value) if isNewPartner.contains(true) =>
           val changeAction = if (isNewPartner.contains(true)) {
             Some(
               ActionItem(
@@ -342,7 +339,7 @@ case class CheckPartnerDetailsViewModel(
             )
           )
 
-        case None =>
+        case _ =>
           val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -365,7 +362,7 @@ case class CheckPartnerDetailsViewModel(
       val href = controllers.partner.routes.PartnerSoleProprietorDobController.onPageLoad().url
 
       soleProprietorDob match {
-        case Some(value) =>
+        case Some(value) if isNewPartner.contains(true) =>
           val changeAction = if (isNewPartner.contains(true)) {
             Some(
               ActionItem(
@@ -384,7 +381,7 @@ case class CheckPartnerDetailsViewModel(
             )
           )
 
-        case None =>
+        case _ =>
           val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorDob.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
