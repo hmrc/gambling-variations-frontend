@@ -48,10 +48,6 @@
     @messages("otherTradeClass.caption")
 </div>
 
-
-
-
-
         @govukCharacterCount(
             CharacterCount(
             id        = "otherTradeClass",
@@ -63,10 +59,7 @@
             value        = form("otherTradeClass").value,
             errorMessage = form("otherTradeClass").error.map { e =>
             ErrorMessage(content = Text(messages(e.message, e.args:_*)))
-            },
-                attributes = Map(
-                "aria-describedby" -> "with-hint-hint otherTradeClass-error"
-                )
+            }
             )
         )
 
