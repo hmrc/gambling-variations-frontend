@@ -65,10 +65,10 @@ class RemovePremisesAddressViewSpec extends SpecBase {
       doc.title must include(messages("removePremisesAddress.title"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
+      doc.text must include(messages("removePremisesAddress.heading"))
 
       val legend: Elements = doc.select("legend.govuk-fieldset__legend")
-      legend.text must include(messages("removePremisesAddress.heading"))
-      legend.hasClass("govuk-visually-hidden") mustBe true
+      legend.text must include("Flat 1 10 Market Calle")
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
