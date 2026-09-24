@@ -53,28 +53,23 @@ case class CheckLicencesAndPremisesViewModel(
   private val isPremisesDetailsRequired: Boolean =
     !hasLicencesOrPermits || hasPremisesNotCovered
 
-  // There is no stored value for the method, so it is derived from the premises when the provide premises addresses question has not been answered
-  private val provideAddresses: Option[LicencesAndPremisesRadioOptions] =
-    provideAddressesAnswer orElse Option.when(premisesCount > 0)(Online)
-
-  private val isMissingProvideAddresses: Boolean =
-    isPremisesDetailsRequired && provideAddresses.isEmpty
+  // There is no stored value for the method, so when the provide premises addresses question has not been answered it is derived from the premises
+  private val provideAddresses: LicencesAndPremisesRadioOptions =
+    provideAddressesAnswer.getOrElse(if (premisesCount > 0) Online else ByPost)
 
   private val isMissingOnlinePremises: Boolean =
-    isPremisesDetailsRequired && provideAddresses.contains(Online) && premisesCount == 0
+    isPremisesDetailsRequired && provideAddresses == Online && premisesCount == 0
 
   val premisesDetailsRequiredMessage: Option[String] =
-    Option.when(isMissingProvideAddresses || isMissingOnlinePremises) {
+    Option.when(isMissingOnlinePremises) {
       if (hasLicencesOrPermits) "checkLicenceAndPremises.premisesNotCovered.p1" else "checkLicenceAndPremises.noLicences.p1"
     }
 
   val showSendByPost: Boolean =
-    isPremisesDetailsRequired && provideAddresses.contains(ByPost)
+    isPremisesDetailsRequired && provideAddresses == ByPost
 
   val continueUrl: String =
-    if (isMissingProvideAddresses) {
-      routes.LicencesPremisesController.onPageLoad().url
-    } else if (isMissingOnlinePremises) {
+    if (isMissingOnlinePremises) {
       findPremisesAddressUrl
     } else {
       controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
@@ -89,7 +84,7 @@ case class CheckLicencesAndPremisesViewModel(
         Some(licencesAndPermitsNIRow),
         Option.when(hasLicencesOrPermits)(premisesNotCoveredRow),
         Option.when(isPremisesDetailsRequired)(provideAddressesRow),
-        Option.when(isPremisesDetailsRequired && provideAddresses.contains(Online))(addressesOnlineRow)
+        Option.when(isPremisesDetailsRequired && provideAddresses == Online)(addressesOnlineRow)
       ).flatten
     ).withCssClass("check-licences-premises-list")
 
@@ -153,10 +148,8 @@ case class CheckLicencesAndPremisesViewModel(
 
   private def provideAddressesRow(implicit messages: Messages): SummaryListRow =
     SummaryListRowViewModel(
-      key = "checkLicenceAndPremises.provideAddresses",
-      value = ValueViewModel(
-        Text(provideAddresses.map(answer => messages(s"checkLicenceAndPremises.provideAddresses.$answer")).getOrElse(messages("site.notProvided")))
-      ),
+      key     = "checkLicenceAndPremises.provideAddresses",
+      value   = ValueViewModel(Text(messages(s"checkLicenceAndPremises.provideAddresses.$provideAddresses"))),
       actions = Seq(changeAction(routes.LicencesPremisesController.onPageLoad().url, "checkLicenceAndPremises.provideAddresses.hidden"))
     )
 

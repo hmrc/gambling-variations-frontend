@@ -70,13 +70,13 @@ class CheckLicenceAndPremisesViewSpec extends SpecBase {
     }
 
     "must render the message that premises details are required, and not the by post section or the button link" in {
-      val document = render(emptyViewModel)
+      val document = render(emptyViewModel.copy(provideAddressesAnswer = Some(Online)))
 
       document.select("main").text() must include(msgs("checkLicenceAndPremises.noLicences.p1"))
       document.select("main h2").isEmpty mustBe true
       document.select("main").text() must not include msgs("checkLicenceAndPremises.byPost.heading")
       document.select("main").text() must not include msgs("changeRegistrationDetails.readyToSubmit")
-      document.select(".govuk-button").attr("href") mustEqual routes.LicencesPremisesController.onPageLoad().url
+      document.select(".govuk-button").attr("href") mustEqual "#"
     }
 
     "must not render the message that premises details are required when premises have been provided" in {
@@ -90,6 +90,13 @@ class CheckLicenceAndPremisesViewSpec extends SpecBase {
       val document = render(emptyViewModel.copy(isPubTenant = true, hasPremisesNotCovered = true, provideAddressesAnswer = Some(Online)))
 
       document.select("main").text() must include(msgs("checkLicenceAndPremises.premisesNotCovered.p1"))
+    }
+
+    "must render the by post section when the method is not provided and there are no premises" in {
+      val document = render(emptyViewModel)
+
+      document.select("main h2").text() mustEqual msgs("checkLicenceAndPremises.byPost.heading")
+      document.select("main").text() must not include msgs("checkLicenceAndPremises.noLicences.p1")
     }
 
     "must render the by post section with the download link and address, and the ready to submit message" in {

@@ -97,14 +97,16 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         valueText(rowFor(vm, "checkLicenceAndPremises.pubTenant")) mustEqual msgs("site.no")
         valueText(rowFor(vm, "checkLicenceAndPremises.licencesAndPermitsGB")) mustEqual msgs("otherLicencesAndPermitsGB.option.none")
         valueText(rowFor(vm, "checkLicenceAndPremises.licencesAndPermitsNI")) mustEqual msgs("otherLicencesAndPermitsNI.option.none")
-        valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("site.notProvided")
+        valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("checkLicenceAndPremises.provideAddresses.byPost")
       }
 
-      "must show the no licences message and continue to provide premises addresses when the method is not provided" in {
+      "must use by post and show the post details when the method is not provided and there are no premises" in {
         val vm = viewModel()
 
-        vm.premisesDetailsRequiredMessage mustBe Some("checkLicenceAndPremises.noLicences.p1")
-        vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
+        vm.premisesDetailsRequiredMessage mustBe None
+        vm.showSendByPost mustBe true
+        vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+        keys(vm) must not contain msgs("checkLicenceAndPremises.addressesOnline")
       }
 
       "must show the no licences message and continue to find premises address when online is selected without any premises" in {
@@ -166,13 +168,15 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
-      "must show the not covered message and continue to provide premises addresses when premises are not covered and the method is not provided" in {
+      "must use by post when premises are not covered, the method is not provided and there are no premises" in {
         val vm = viewModel(isPubTenant = true, hasPremisesNotCovered = true)
 
         keys(vm) must contain allOf (msgs("checkLicenceAndPremises.premisesNotCovered"), msgs("checkLicenceAndPremises.provideAddresses"))
         valueText(rowFor(vm, "checkLicenceAndPremises.premisesNotCovered")) mustEqual msgs("site.yes")
-        vm.premisesDetailsRequiredMessage mustBe Some("checkLicenceAndPremises.premisesNotCovered.p1")
-        vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
+        valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("checkLicenceAndPremises.provideAddresses.byPost")
+        vm.premisesDetailsRequiredMessage mustBe None
+        vm.showSendByPost mustBe true
+        vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
       "must show the not covered message and continue to find premises address when online is selected without any premises" in {
