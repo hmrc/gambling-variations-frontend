@@ -29,7 +29,7 @@ import views.html.partnerdetails.PartnerDetailsCheckConfirmRemoveDateView
 
 import java.time.LocalDate
 
-//TODO
+//TODO done
 class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with PartnerDetailsHelper {
 
   private val partnerName: String =
@@ -49,7 +49,7 @@ class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with P
   private val userAnswers: UserAnswers =
     emptyUserAnswers
       .set(
-        PartnerDetailsMgdRegNumberPage(newPartnersIndex1),
+        PartnerDetailsMgdRegNumberPage(businessNumber1),
         userAnswersId
       )
       .success
@@ -57,18 +57,17 @@ class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with P
       .set(
         PartnerDetailsChosenPartnerToRemovePage,
         businessNumber1
-//        newPartnerIndex1
       )
       .success
       .value
       .set(
-        PartnerDetailsTradingNamePage(newPartnersIndex1),
+        PartnerDetailsTradingNamePage(businessNumber1),
         partnerName
       )
       .success
       .value
       .set(
-        PartnerDetailsDateOfLeavingPage(newPartnersIndex1),
+        PartnerDetailsDateOfLeavingPage(businessNumber1),
         dateToRemove
       )
       .success

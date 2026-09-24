@@ -80,7 +80,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
       .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), mgdRegNum)
       .success
       .value
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) 
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
       .set(
@@ -249,7 +249,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), 
+              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1),
               false
             )
             .success
@@ -334,7 +334,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), 
+              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1),
               false
             )
             .success
@@ -369,7 +369,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), 
+              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1),
               false
             )
             .success

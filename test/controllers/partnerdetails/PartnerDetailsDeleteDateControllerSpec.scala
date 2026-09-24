@@ -38,8 +38,8 @@ import views.html.partnerdetails.PartnerDetailsDeleteDateView
 import java.time.{Clock, LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-//TODO Note: This is most likely only for exisiting partners, double check ChosenPartnerToRemovePage (which has been changed to string in the meantime)
-class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar {
+//TODO done
+class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private implicit val msgs: Messages =
     stubMessages()
@@ -54,9 +54,6 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         .toInstant,
       ZoneOffset.UTC
     )
-
-  private val partnerIndex: Int =
-    0
 
   private val tradingName: String =
     "Test Trading Name"
@@ -99,20 +96,19 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
   private val userAnswersWithTradingName: UserAnswers =
     emptyUserAnswers
       .set(
-        PartnerDetailsMgdRegNumberPage(partnerIndex),
+        PartnerDetailsMgdRegNumberPage(businessNumber1),
         userAnswersId
       )
       .success
       .value
       .set(
         PartnerDetailsChosenPartnerToRemovePage,
-//        ???
-        partnerIndex.toString // TODO just so compiler doesnt complain
+        businessNumber1
       )
       .success
       .value
       .set(
-        PartnerDetailsTradingNamePage(partnerIndex),
+        PartnerDetailsTradingNamePage(businessNumber1),
         tradingName
       )
       .success
@@ -316,7 +312,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         userAnswersWithTradingName
           .set(
             PartnerDetailsDateOfLeavingPage(
-              partnerIndex
+              businessNumber1
             ),
             existingAnswer
           )
@@ -375,7 +371,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         userAnswersWithTradingName
           .set(
             PartnerDetailsBusinessNamePage(
-              partnerIndex
+              businessNumber1
             ),
             businessName
           )
@@ -433,7 +429,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         emptyUserAnswers
           .set(
             PartnerDetailsMgdRegNumberPage(
-              partnerIndex
+              businessNumber1
             ),
             userAnswersId
           )
@@ -441,14 +437,13 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           .value
           .set(
             PartnerDetailsChosenPartnerToRemovePage,
-            ???
-//            partnerIndex
+            businessNumber1
           )
           .success
           .value
           .set(
             PartnerDetailsBusinessNamePage(
-              partnerIndex
+              businessNumber1
             ),
             businessName
           )
@@ -506,7 +501,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         emptyUserAnswers
           .set(
             PartnerDetailsMgdRegNumberPage(
-              partnerIndex
+              businessNumber1
             ),
             userAnswersId
           )
@@ -514,8 +509,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           .value
           .set(
             PartnerDetailsChosenPartnerToRemovePage,
-            ???
-//            partnerIndex
+            businessNumber1
           )
           .success
           .value
@@ -739,7 +733,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           userAnswersWithTradingName
             .set(
               PartnerDetailsDateOfLeavingPage(
-                partnerIndex
+                businessNumber1
               ),
               validAnswer
             )
@@ -805,7 +799,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           userAnswersWithTradingName
             .set(
               PartnerDetailsDateOfLeavingPage(
-                partnerIndex
+                businessNumber1
               ),
               latestFormDate
             )
@@ -1079,7 +1073,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         emptyUserAnswers
           .set(
             PartnerDetailsMgdRegNumberPage(
-              partnerIndex
+              businessNumber1
             ),
             userAnswersId
           )
@@ -1120,7 +1114,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         emptyUserAnswers
           .set(
             PartnerDetailsMgdRegNumberPage(
-              partnerIndex
+              businessNumber1
             ),
             userAnswersId
           )
