@@ -44,15 +44,15 @@
 
         @h1(messages("removePremisesAddress.heading"), classes = "govuk-heading-l govuk-!-margin-bottom-4")
 
-        @govukRadios(
-            RadiosViewModel.yesNo(
-                field = form("value"),
-                legend = LegendViewModel(HtmlContent(
-                    HtmlFormat.raw(
-                        AddressFormatter.format(premisesAddress).mkString("<br/>")
-                        )
-                )).withCssClass("govuk-body govuk-heading-l govuk-!-margin-bottom-4")
-            )
+        @@govukRadios(
+        RadiosViewModel.yesNo(
+            field = form("value"),
+            legend = LegendViewModel(messages("removePremisesAddress.heading")).asPageHeading(viewmodels.LegendSize.Large)
+            ).withHint(HintViewModel(HtmlContent(
+                 HtmlFormat.raw(
+                    AddressFormatter.format(premisesAddress).mkString("<br/>")
+                 )
+            )))
         )
 
         @govukButton(
