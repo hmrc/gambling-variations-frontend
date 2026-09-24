@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.licensepremises
+package viewmodels.checkAnswers.licencespremises
 
 import models.UserAnswers
 import pages.licencespremises.PremisesNotCoveredYesNoPage
