@@ -40,7 +40,7 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   // index -> will be refactored with the indexing ticket
   private val index: Int = utils.PartnerUtils.interimIndex
   // is new partner -> to use flag!
-  private val isNewPartner: Option[Boolean] = Some(true)
+  private val isNewPartner: Option[Boolean] = Some(false)
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 

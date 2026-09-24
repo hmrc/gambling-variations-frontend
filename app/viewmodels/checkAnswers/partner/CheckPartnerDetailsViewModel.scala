@@ -153,25 +153,32 @@ case class CheckPartnerDetailsViewModel(
 
       soleProprietorName match {
         case Some(value) if isNewPartnerFlow.contains(true) =>
-          val changeAction = if (isNewPartnerFlow.contains(true)) {
-            Some(
-              ActionItem(
-                href               = href,
-                content            = Text(messages("site.change")),
-                visuallyHiddenText = Some(label)
-              )
+          val changeAction = Seq(
+            ActionItem(
+              href               = href,
+              content            = Text(messages("site.change")),
+              visuallyHiddenText = Some(label)
             )
-          } else None
+          )
 
           Some(
             SummaryListRow(
               key     = Key(content = Text(label)),
               value   = Value(content = Text(value)),
-              actions = Some(Actions(items = changeAction.toSeq))
+              actions = Some(Actions(items = changeAction))
             )
           )
 
-        case _ =>
+        case Some(value) =>
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = Text(value)),
+              actions = Some(Actions(items = Nil))
+            )
+          )
+
+        case None =>
           val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -195,25 +202,32 @@ case class CheckPartnerDetailsViewModel(
 
       unincorporatedBodyName match {
         case Some(value) if isNewPartnerFlow.contains(true) =>
-          val changeAction = if (isNewPartnerFlow.contains(true)) {
-            Some(
-              ActionItem(
-                href               = href,
-                content            = Text(messages("site.change")),
-                visuallyHiddenText = Some(label)
-              )
+          val changeAction = Seq(
+            ActionItem(
+              href               = href,
+              content            = Text(messages("site.change")),
+              visuallyHiddenText = Some(label)
             )
-          } else None
+          )
 
           Some(
             SummaryListRow(
               key     = Key(content = Text(label)),
               value   = Value(content = Text(value)),
-              actions = Some(Actions(items = changeAction.toSeq))
+              actions = Some(Actions(items = changeAction))
             )
           )
 
-        case _ =>
+        case Some(value) =>
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = Text(value)),
+              actions = Some(Actions(items = Nil))
+            )
+          )
+
+        case None =>
           val addText = messages("partnerDetailsCheckYourAnswers.unincorporatedBodyName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -237,25 +251,32 @@ case class CheckPartnerDetailsViewModel(
 
       corporateBodyName match {
         case Some(value) if isNewPartnerFlow.contains(true) =>
-          val changeAction = if (isNewPartnerFlow.contains(true)) {
-            Some(
-              ActionItem(
-                href               = href,
-                content            = Text(messages("site.change")),
-                visuallyHiddenText = Some(label)
-              )
+          val changeAction = Seq(
+            ActionItem(
+              href               = href,
+              content            = Text(messages("site.change")),
+              visuallyHiddenText = Some(label)
             )
-          } else None
+          )
 
           Some(
             SummaryListRow(
               key     = Key(content = Text(label)),
               value   = Value(content = Text(value)),
-              actions = Some(Actions(items = changeAction.toSeq))
+              actions = Some(Actions(items = changeAction))
             )
           )
 
-        case _ =>
+        case Some(value) =>
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = Text(value)),
+              actions = Some(Actions(items = Nil))
+            )
+          )
+
+        case None =>
           val addText = messages("partnerDetailsCheckYourAnswers.corporateBodyName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -279,25 +300,32 @@ case class CheckPartnerDetailsViewModel(
 
       partnershipName match {
         case Some(value) if isNewPartnerFlow.contains(true) =>
-          val changeAction = if (isNewPartnerFlow.contains(true)) {
-            Some(
-              ActionItem(
-                href               = href,
-                content            = Text(messages("site.change")),
-                visuallyHiddenText = Some(label)
-              )
+          val changeAction = Seq(
+            ActionItem(
+              href               = href,
+              content            = Text(messages("site.change")),
+              visuallyHiddenText = Some(label)
             )
-          } else None
+          )
 
           Some(
             SummaryListRow(
               key     = Key(content = Text(label)),
               value   = Value(content = Text(value)),
-              actions = Some(Actions(items = changeAction.toSeq))
+              actions = Some(Actions(items = changeAction))
             )
           )
 
-        case _ =>
+        case Some(value) =>
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = Text(value)),
+              actions = Some(Actions(items = Nil))
+            )
+          )
+
+        case None =>
           val addText = messages("partnerDetailsCheckYourAnswers.partnershipName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -321,26 +349,33 @@ case class CheckPartnerDetailsViewModel(
 
       soleProprietorName match {
         case Some(value) if isNewPartnerFlow.contains(true) =>
-          val changeAction = if (isNewPartnerFlow.contains(true)) {
-            Some(
-              ActionItem(
-                href               = href,
-                content            = Text(messages("site.change")),
-                visuallyHiddenText = Some(label)
-              )
+          val changeAction = Seq(
+            ActionItem(
+              href               = href,
+              content            = Text(messages("site.change")),
+              visuallyHiddenText = Some(label)
             )
-          } else None
+          )
 
           Some(
             SummaryListRow(
               key     = Key(content = Text(label)),
               value   = Value(content = Text(value)),
-              actions = Some(Actions(items = changeAction.toSeq))
+              actions = Some(Actions(items = changeAction))
             )
           )
 
-        case _ =>
-          val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorName.add")
+        case Some(value) =>
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = Text(value)),
+              actions = Some(Actions(items = Nil))
+            )
+          )
+
+        case None =>
+          val addText = messages("partnerDetailsCheckYourAnswers.llpName.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
           Some(
@@ -363,25 +398,32 @@ case class CheckPartnerDetailsViewModel(
 
       soleProprietorDob match {
         case Some(value) if isNewPartnerFlow.contains(true) =>
-          val changeAction = if (isNewPartnerFlow.contains(true)) {
-            Some(
-              ActionItem(
-                href               = href,
-                content            = Text(messages("site.change")),
-                visuallyHiddenText = Some(label)
-              )
+          val changeAction = Seq(
+            ActionItem(
+              href               = href,
+              content            = Text(messages("site.change")),
+              visuallyHiddenText = Some(label)
             )
-          } else None
+          )
 
           Some(
             SummaryListRow(
               key     = Key(content = Text(label)),
               value   = Value(content = Text(value)),
-              actions = Some(Actions(items = changeAction.toSeq))
+              actions = Some(Actions(items = changeAction))
             )
           )
 
-        case _ =>
+        case Some(value) =>
+          Some(
+            SummaryListRow(
+              key     = Key(content = Text(label)),
+              value   = Value(content = Text(value)),
+              actions = Some(Actions(items = Nil))
+            )
+          )
+
+        case None =>
           val addText = messages("partnerDetailsCheckYourAnswers.soleProprietorDob.add")
           val addLinkHtml = s"""<a href="$href">$addText</a>"""
 
@@ -397,7 +439,7 @@ case class CheckPartnerDetailsViewModel(
   }
 
   private def addNinoSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    if (typeOfBusiness.contains(messages("businessType.soleproprietor"))) {
+    if (typeOfBusiness.contains(messages("businessType.soleproprietor")) && isNewPartnerFlow.exists(identity)) {
       addNino.map { value =>
         SummaryListRow(
           key   = Key(content = messages("partnerDetailsCheckYourAnswers.addNino")),
@@ -422,7 +464,7 @@ case class CheckPartnerDetailsViewModel(
       nino.map { value =>
         val label = messages("partnerDetailsCheckYourAnswers.nino")
 
-        //TODO - update display logic
+        // TODO - update display logic
         val changeAction = if (isNewPartnerFlow.contains(true)) {
           Some(
             ActionItem(
@@ -463,23 +505,25 @@ case class CheckPartnerDetailsViewModel(
     } else None
 
   private def addTradingNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addTradingName.map { value =>
-      SummaryListRow(
-        key   = Key(content = messages("partnerDetailsCheckYourAnswers.addTradingName")),
-        value = Value(content = value),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addTradingName"))
+    if (isNewPartnerFlow.exists(identity)) {
+      addTradingName.map { value =>
+        SummaryListRow(
+          key   = Key(content = messages("partnerDetailsCheckYourAnswers.addTradingName")),
+          value = Value(content = value),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.partner.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addTradingName"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else None
 
   private def tradingNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     tradingName.map { value =>
@@ -622,27 +666,55 @@ case class CheckPartnerDetailsViewModel(
     } else None
 
   private def utrSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = if (
-    typeOfBusiness.contains(messages("businessType.corporatebody"))
+    typeOfBusiness.contains(messages("businessType.corporatebody")) // TODO -> this should not be an if
   ) {
-    utr.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.TODO")
+    val label = messages("partnerDetailsCheckYourAnswers.utr")
+    val href = controllers.partner.routes.PartnerDetailsAddUTRController.onPageLoad().url
 
-      val changeAction = ActionItem(
-        href               = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url,
-        content            = Text(messages("site.change")),
-        visuallyHiddenText = Some(label)
-      )
+    utr match {
+      case Some(value) if isNewPartnerFlow.contains(true) =>
+        val changeAction = Seq(
+          ActionItem(
+            href               = href,
+            content            = Text(messages("site.change")),
+            visuallyHiddenText = Some(label)
+          )
+        )
 
-      SummaryListRow(
-        key     = Key(content = Text(label)),
-        value   = Value(content = Text(value)),
-        actions = Some(Actions(items = Seq(changeAction)))
-      )
+        Some(
+          SummaryListRow(
+            key     = Key(content = Text(label)),
+            value   = Value(content = Text(value)),
+            actions = Some(Actions(items = changeAction))
+          )
+        )
+
+      case Some(value) =>
+        Some(
+          SummaryListRow(
+            key     = Key(content = Text(label)),
+            value   = Value(content = Text(value)),
+            actions = Some(Actions(items = Nil))
+          )
+        )
+
+      case None =>
+        val addText = messages("partnerDetailsCheckYourAnswers.utr.add")
+        val addLinkHtml = s"""<a href="$href">$addText</a>"""
+
+        Some(
+          SummaryListRow(
+            key     = Key(content = Text(label)),
+            value   = Value(content = HtmlContent(addLinkHtml)),
+            actions = None
+          )
+        )
     }
+
   } else None
 
   private def addVatRegistrationNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = if (
-    typeOfBusiness.contains(messages("businessType.corporatebody"))
+    typeOfBusiness.contains(messages("businessType.corporatebody")) && isNewPartnerFlow.exists(identity)
   ) {
     addVatRegistrationNumber.map { value =>
       SummaryListRow(
@@ -739,23 +811,25 @@ case class CheckPartnerDetailsViewModel(
     )
 
   private def addAdditionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addAdditionalInformation.map { value =>
-      SummaryListRow(
-        key   = Key(content = messages("partnerDetailsCheckYourAnswers.addAdditionalInformation")),
-        value = Value(content = value),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addAdditionalInformation"))
+    if (isNewPartnerFlow.exists(identity)) {
+      addAdditionalInformation.map { value =>
+        SummaryListRow(
+          key   = Key(content = messages("partnerDetailsCheckYourAnswers.addAdditionalInformation")),
+          value = Value(content = value),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addAdditionalInformation"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else None
 
   private def additionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     additionalInformation.map { value =>
@@ -808,23 +882,25 @@ case class CheckPartnerDetailsViewModel(
     }
 
   private def addFaxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addFaxNumber.map { add =>
-      SummaryListRow(
-        key   = Key(content = messages("partnerDetailsCheckYourAnswers.addFaxNumber")),
-        value = Value(content = if (add) messages("site.yes") else messages("site.no")),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addFaxNumber"))
+    if (isNewPartnerFlow.exists(identity)) {
+      addFaxNumber.map { add =>
+        SummaryListRow(
+          key   = Key(content = messages("partnerDetailsCheckYourAnswers.addFaxNumber")),
+          value = Value(content = if (add) messages("site.yes") else messages("site.no")),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.partner.routes.PartnerAddFaxNumberYesNoController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addFaxNumber"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else None
 
   private def faxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     faxNumber.map { value =>
@@ -856,23 +932,25 @@ case class CheckPartnerDetailsViewModel(
     }
 
   private def addEmailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addEmailAddress.map { add =>
-      SummaryListRow(
-        key   = Key(content = messages("partnerDetailsCheckYourAnswers.addEmailAddress")),
-        value = Value(content = if (add) messages("site.yes") else messages("site.no")),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addEmailAddress"))
+    if (isNewPartnerFlow.exists(identity)) {
+      addEmailAddress.map { add =>
+        SummaryListRow(
+          key   = Key(content = messages("partnerDetailsCheckYourAnswers.addEmailAddress")),
+          value = Value(content = if (add) messages("site.yes") else messages("site.no")),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.partner.routes.PartnerAddEmailAddressYesNoPageController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("partnerDetailsCheckYourAnswers.addEmailAddress"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else None
 
   private def emailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     emailAddress.map { value =>
@@ -1024,8 +1102,8 @@ object CheckPartnerDetailsViewModel {
       addFaxNumber             = userAnswers.get(PartnerAddFaxNumberYesNoPage(index)),
       faxNumber                = userAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(index)),
       addEmailAddress          = userAnswers.get(PartnerAddEmailAddressYesNoPage(index)),
-      emailAddress             = userAnswers.get(PartnerEmailAddressPage).orElse(userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(index))),
-      isNewPartnerFlow         = isNewPartnerFlow
+      emailAddress     = userAnswers.get(PartnerEmailAddressPage).orElse(userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(index))),
+      isNewPartnerFlow = isNewPartnerFlow
     )
   }
 }
