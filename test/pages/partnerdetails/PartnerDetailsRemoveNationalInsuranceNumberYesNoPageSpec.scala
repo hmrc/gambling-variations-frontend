@@ -21,7 +21,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
 class PartnerDetailsRemoveNationalInsuranceNumberYesNoPageSpec extends PlaySpec with PartnerDetailsHelper {
-  
+
   "PartnerDetailsRemoveNationalInsuranceNumberYesNoPage" must {
 
     "partners" must {

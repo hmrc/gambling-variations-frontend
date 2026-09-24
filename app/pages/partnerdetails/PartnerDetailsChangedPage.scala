@@ -21,7 +21,6 @@ import play.api.libs.json.JsPath
 
 case object PartnerDetailsChangedPage extends QuestionPage[Boolean] {
 
-  // TODO: check path
   override def path: JsPath = JsPath \ "partnerDetailsChanged" \ toString
 
   override def toString: String = "partnerDetailsChangedPage"

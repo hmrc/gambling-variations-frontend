@@ -65,9 +65,6 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
       "must return OK and the correct view for a GET" in {
         val userAnswersForGet: UserAnswers =
           userAnswersWithNoFcrExistingPartners
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-            .success
-            .value
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -93,9 +90,6 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
         val userAnswersWithFcr: UserAnswers =
           validUserAnswersExistingPartners(Some(testForeignCorpRef))
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-            .success
-            .value
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -121,9 +115,6 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
         val userAnswersForGet: UserAnswers =
           userAnswersWithNoFcrExistingPartners
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-            .success
-            .value
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Soleproprietor)
             .success
             .value
@@ -146,9 +137,6 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
         val userAnswersForGet: UserAnswers =
           userAnswersWithNoFcrExistingPartners
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-            .success
-            .value
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -171,9 +159,6 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
         val userAnswersForGet: UserAnswers =
           userAnswersWithNoFcrExistingPartners
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-            .success
-            .value
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -194,9 +179,6 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
         val userAnswersForGet: UserAnswers =
           userAnswersWithNoFcrExistingPartners
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODo
-            .success
-            .value
             .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), false)
             .success
             .value
@@ -219,11 +201,8 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswersForSubmit: UserAnswers =
-          userAnswersWithNoFcrExistingPartners.set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value // TODO
-
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersForSubmit))
+          applicationBuilder(userAnswers = Some(userAnswersWithNoFcrExistingPartners))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -233,7 +212,7 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
         running(application) {
 
           val expectedAnswers =
-            userAnswersForSubmit.set(PartnerDetailsForeignCorporateReferencePage(businessNumber1), testForeignCorpRef).success.value
+            userAnswersWithNoFcrExistingPartners.set(PartnerDetailsForeignCorporateReferencePage(businessNumber1), testForeignCorpRef).success.value
 
           val request =
             FakeRequest(POST, partnerDetailsForeignCorporateReferenceRouteExistingPartners)

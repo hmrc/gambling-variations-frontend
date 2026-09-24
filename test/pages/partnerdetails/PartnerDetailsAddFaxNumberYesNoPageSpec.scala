@@ -34,7 +34,7 @@ class PartnerDetailsAddFaxNumberYesNoPageSpec extends PlaySpec with PartnerDetai
         PartnerDetailsAddFaxNumberYesNoPage(businessNumber1).toString mustEqual "partnerDetailsAddFaxNumberYesNo"
       }
     }
-    
+
     "newPartners" must {
       "have the correct path" in {
         PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1).path mustEqual

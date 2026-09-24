@@ -58,9 +58,6 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
 
   private val validUserAnswersExistingPartners: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedDataNewPartners(Some(testFaxNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-      .success
-      .value
       .set(PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1), testFaxNumber)
       .success
       .value

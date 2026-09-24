@@ -61,9 +61,6 @@ class PartnerDetailsRemovePartnerTradingNameYesNoControllerSpec extends SpecBase
 
   private val userAnswersWithoutRemoveAnswerExistingPartners =
     userAnswersPartnerDetailsMinimalValidData
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-      .success
-      .value
       .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
       .success
       .value

@@ -21,7 +21,7 @@ import controllers.partnerdetails.PartnerDetailsHelper
 import play.api.libs.json.{JsPath, Json}
 
 class PartnerDetailsAddAnotherPartnerYesNoPageSpec extends PlaySpec with PartnerDetailsHelper {
-  
+
   "PartnerDetailsAddAnotherPartnerYesNoPage" must {
     "must have the correct path" in {
       PartnerDetailsAddAnotherPartnerYesNoPage.path mustEqual
@@ -35,6 +35,6 @@ class PartnerDetailsAddAnotherPartnerYesNoPageSpec extends PlaySpec with Partner
       val json = Json.obj(PartnerDetailsAddAnotherPartnerYesNoPage.toString -> Json.toJson(true))
       PartnerDetailsAddAnotherPartnerYesNoPage.path.asSingleJson(json).validate[Boolean].get mustEqual true
     }
-    
+
   }
 }

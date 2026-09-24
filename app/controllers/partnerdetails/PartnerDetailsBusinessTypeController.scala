@@ -71,8 +71,10 @@ class PartnerDetailsBusinessTypeController @Inject() (
         businessType =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(newIndex), businessType))
-            // TODO uncomment it and decide if existing partner should modify it too
-            // updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false))
+//            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(index.toInt), false))
+//            _              <- sessionRepository.set(updatedAnswers)
+//             updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false))// TODO added -1
+            // TODO I think we need to not modify "completed" for existing partners
             updatedAnswers <-
               newIndex match {
                 case _: String            => Future.successful(updatedAnswers)

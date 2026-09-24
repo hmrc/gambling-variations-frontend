@@ -102,9 +102,6 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
           )
         )
       )
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
-        .success
-        .value
 
     val soleProprietorUserAnswersNewPartners: UserAnswers =
       UserAnswers(

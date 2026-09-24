@@ -58,15 +58,11 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
 
   val validUserAnswersExistingUsers: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedDataExistingPartners(nino = Some(testNino)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
       .set(PartnerDetailsNinoPage(businessNumber1), testNino)
       .success
       .value
 
   "partners" - {
-
 
     "PartnerDetailsRemoveNationalInsuranceNumberYesNo Controller" - {
 
@@ -105,9 +101,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
             val result = route(application, request).value
 
             status(result) mustBe OK
-            contentAsString(result) mustBe view(form.fill(true), businessNumber1, CheckMode, testNino)(request,
-              messages(application)
-            ).toString
+            contentAsString(result) mustBe view(form.fill(true), businessNumber1, CheckMode, testNino)(request, messages(application)).toString
           }
         }
 

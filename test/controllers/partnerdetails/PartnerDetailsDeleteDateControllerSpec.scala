@@ -106,8 +106,8 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       .value
       .set(
         PartnerDetailsChosenPartnerToRemovePage,
-        ???
-//        partnerIndex
+//        ???
+        partnerIndex.toString // TODO just so compiler doesnt complain
       )
       .success
       .value
