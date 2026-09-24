@@ -57,14 +57,9 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
 
   private val userAnswersWithVrnExistingUsers: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedDataExistingPartners(vrn = Some(testVRN)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-      .success
-      .value
       .set(PartnerDetailsVrnPage(businessNumber1), testVRN)
       .success
       .value
-
-
 
   "partners" - {
 
@@ -101,9 +96,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
             val result = route(application, request).value
 
             status(result) mustEqual OK
-            contentAsString(result) mustEqual view(form.fill(true), businessNumber1, CheckMode, testVRN)(request,
-              messages(application)
-            ).toString
+            contentAsString(result) mustEqual view(form.fill(true), businessNumber1, CheckMode, testVRN)(request, messages(application)).toString
           }
         }
 
@@ -212,9 +205,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
             val result = route(application, request).value
 
             status(result) mustEqual BAD_REQUEST
-            contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode, testVRN)(request,
-              messages(application)
-            ).toString
+            contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode, testVRN)(request, messages(application)).toString
           }
         }
 

@@ -51,16 +51,13 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
 
   private val userAnswersExistingPartners =
     userAnswersPartnerDetailsMinimalValidData
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-      .success
-      .value
       .set(PartnerDetailsTradingNamePage(businessNumber1), "Trading Name")
       .success
       .value
 
   private val userAnswersNewPartners =
     userAnswersPartnerDetailsMinimalValidData
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
       .set(PartnerDetailsTradingNamePage(newPartnersIndex1), "Trading Name")

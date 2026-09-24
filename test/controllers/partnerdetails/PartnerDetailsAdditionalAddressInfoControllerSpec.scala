@@ -204,7 +204,7 @@ class PartnerDetailsAdditionalAddressInfoControllerSpec extends SpecBase with Mo
         val userAnswers =
           userAnswersPartnerDetailsMinimalValidData
             .set(PartnerDetailsAdditionalAddressInfoPage(businessNumber1), "validName")
-            .get // UserAnswers(userAnswersId, data)
+            .get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

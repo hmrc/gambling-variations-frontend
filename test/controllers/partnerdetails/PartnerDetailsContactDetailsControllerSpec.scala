@@ -51,14 +51,8 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
 
   val userAnswersExistingPartners: UserAnswers =
     UserAnswers("id", cleanedDataExistingPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value // TODO passingNewPartnerIndex1 instead (no string)
 
   val emptyUserAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
-    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-    .success
-    .value // TODO passingNewPartnerIndex1 instead (no string)
 
   val userAnswersNewPartners: UserAnswers =
     UserAnswers("id", cleanedDataNewPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)))

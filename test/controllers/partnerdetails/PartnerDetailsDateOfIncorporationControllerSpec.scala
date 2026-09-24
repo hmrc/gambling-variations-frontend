@@ -62,9 +62,6 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
       .set(PartnerDetailsMgdRegNumberPage(businessNumber1), mgdRegNum)
       .success
       .value
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
-      .success
-      .value
       .set(
         PartnerDetailsBusinessTypePage(businessNumber1),
         BusinessType.Corporatebody
@@ -83,7 +80,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
       .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), mgdRegNum)
       .success
       .value
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) 
       .success
       .value
       .set(
@@ -252,7 +249,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), 
               false
             )
             .success
@@ -290,7 +287,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1),
               false
             )
             .success
@@ -337,7 +334,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), 
               false
             )
             .success
@@ -372,7 +369,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
+              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), 
               false
             )
             .success
@@ -602,12 +599,6 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .success
             .value
             .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
-              false
-            )
-            .success
-            .value
-            .set(
               PartnerDetailsBusinessTypePage(businessNumber1),
               BusinessType.LimitedLiabilityPartnership
             )
@@ -636,12 +627,6 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .set(
               PartnerDetailsMgdRegNumberPage(businessNumber1),
               mgdRegNum
-            )
-            .success
-            .value
-            .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
-              false
             )
             .success
             .value
@@ -686,12 +671,6 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             )
             .success
             .value
-            .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
-              false
-            )
-            .success
-            .value
 
         val application =
           applicationBuilder(
@@ -718,12 +697,6 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
             .set(
               PartnerDetailsMgdRegNumberPage(businessNumber1),
               mgdRegNum
-            )
-            .success
-            .value
-            .set(
-              PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), // TODO passingNewPartnerIndex1 instead (no string)
-              false
             )
             .success
             .value

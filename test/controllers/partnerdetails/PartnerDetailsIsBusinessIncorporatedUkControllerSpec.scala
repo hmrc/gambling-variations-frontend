@@ -48,15 +48,9 @@ class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with
       .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), true)
       .success
       .value
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value // TODO
 
   private val emptyUserAnswersExistingPartners =
     userAnswersPartnerDetailsMinimalValidData
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value // TODO
 
   private val userAnswersNewPartners =
     userAnswersPartnerDetailsNewPartners
@@ -68,13 +62,13 @@ class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with
       .value
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
-      .value // TODO
+      .value
 
   private val emptyUserAnswersNewPartners =
     userAnswersPartnerDetailsMinimalValidData
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
-      .value // TODO
+      .value
 
   lazy val partnerDetailsIsBusinessIncorporatedUkRouteExistingPartners =
     controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(businessNumber1, CheckMode).url

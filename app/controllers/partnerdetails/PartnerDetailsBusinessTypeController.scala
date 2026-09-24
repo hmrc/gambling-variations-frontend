@@ -71,16 +71,16 @@ class PartnerDetailsBusinessTypeController @Inject() (
         businessType =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(newIndex), businessType))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(index.toInt), false)) // TODO added -1
-            _              <- sessionRepository.set(updatedAnswers)
-            // TODO uncomment it and decide if existing partner should modify it too
-            // updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false))
-//            updatedAnswers <-
-//              newIndex match {
-//                case _: String            => Future.successful(updatedAnswers)
-//                case newPartnerIndex: Int => Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
-//              }
-//            _ <- sessionRepository.set(updatedAnswers)
+//            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(index.toInt), false))
+//            _              <- sessionRepository.set(updatedAnswers)
+//             updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false))// TODO added -1
+            // TODO I think we need to not modify "completed" for existing partners
+            updatedAnswers <-
+              newIndex match {
+                case _: String            => Future.successful(updatedAnswers)
+                case newPartnerIndex: Int => Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
+              }
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(newIndex), mode, updatedAnswers))
       )
   }

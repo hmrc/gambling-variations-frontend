@@ -62,9 +62,6 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
       mgdRegNumber,
       cleanedDataExistingPartners(emailAddress = Some(testEmailAddress))
     )
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
-      .success
-      .value
       .set(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1), testEmailAddress)
       .success
       .value
