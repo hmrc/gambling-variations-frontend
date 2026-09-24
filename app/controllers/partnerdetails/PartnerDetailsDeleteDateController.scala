@@ -58,7 +58,7 @@ class PartnerDetailsDeleteDateController @Inject() (
 
           val registrationDate = getRegistrationDate(businessDetails)
           val latestDate = calculateLatestDate(registrationDate)
-          val index = "" // getPartnerIndex//TODO
+          val index = getPartnerIndex // TODO
           val partnerName = getPartnerName(index)
 
           val form = formProvider(registrationDate)

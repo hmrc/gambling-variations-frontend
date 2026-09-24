@@ -18,12 +18,12 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.AddAnotherPartnerFormProvider
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsAddAnotherPartnerYesNoPage
+import pages.partnerdetails.*
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -33,8 +33,8 @@ import views.html.partnerdetails.PartnerDetailsView
 
 import scala.concurrent.Future
 
-//TODO
-class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
+//TODO done
+class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private val formProvider =
     new AddAnotherPartnerFormProvider()
@@ -53,25 +53,23 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   private lazy val onPartnerDetailsRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onPartnerDetails("" /*0*/ )
+      .onPartnerDetails(businessNumber1 /*0*/ )
       .url
 
   private lazy val onRemoveRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onRemove("" /*0*/ )
+      .onRemove(businessNumber1 /*0*/ )
       .url
-
-  import pages.partnerdetails.*
 
   private val userAnswersWithPartner =
     emptyUserAnswers
-      .set(PartnerDetailsMgdRegNumberPage(0), "XWM00000001762")
+      .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "XWM00000001762")
       .success
       .value
-      .set(PartnerDetailsTradingNamePage(0), "XYZ Consulting")
+      .set(PartnerDetailsTradingNamePage(businessNumber1), "XYZ Consulting")
       .success
       .value
-      .set(PartnerDetailsBusinessNamePage(0), "XYZ Consulting Ltd")
+      .set(PartnerDetailsBusinessNamePage(businessNumber1), "XYZ Consulting Ltd")
       .success
       .value
 
@@ -207,7 +205,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(???, ???).url
+            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(0.toString, NormalMode).url
         }
       }
 
@@ -378,7 +376,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
           verify(mockSessionRepository).set(capturedAnswers.capture())
 
           capturedAnswers.getValue
-            .get(PartnerDetailsChosenPartnerToRemovePage) mustEqual Some(0)
+            .get(PartnerDetailsChosenPartnerToRemovePage) mustEqual Some(businessNumber1)
         }
       }
 
