@@ -15,19 +15,57 @@
  *@
 
 @import views.html.components.*
+@import viewmodels.checkAnswers.licencespremises.CheckLicencesAndPremisesViewModel
 
 @this(
         layout: templates.Layout,
-        h1:H1,
-        caption: Caption
+        h1: H1,
+        caption: Caption,
+        paragraph: Paragraph,
+        h2: H2,
+        paragraphWithLink: ParagraphMessageWithLink,
+        govukSummaryList: GovukSummaryList,
+        govukButton: GovukButton
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(viewModel: CheckLicencesAndPremisesViewModel)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkLicenceAndPremises.title"), Some("changeRegistrationDetails.caption"))) {
 
-     @caption(messages("changeRegistrationDetails.caption"))
+    @caption(messages("changeRegistrationDetails.caption"))
 
-     @h1("checkLicenceAndPremises.heading", classes="govuk-heading-l")
+    @h1("checkLicenceAndPremises.heading", classes = "govuk-heading-l")
 
+    @viewModel.premisesDetailsRequiredMessage.map { message =>
+        @paragraph(message)
+    }
+
+    @govukSummaryList(viewModel.summaryList)
+
+    @if(viewModel.showSendByPost) {
+        @h2("checkLicenceAndPremises.byPost.heading")
+
+        @paragraphWithLink(
+            linkMessage = messages("checkLicenceAndPremises.byPost.link"),
+            message2    = Some(messages("checkLicenceAndPremises.byPost.p1")),
+            linkUrl     = "https://www.tax.service.gov.uk/print-and-post/form/Customs/1.0/MGD5/mgd5.xdp",
+            linkRel     = "noreferrer noopener",
+            target      = "_blank"
+        )
+
+        <p class="govuk-body">
+            @for(line <- 1 to 6) {
+                @messages(s"checkLicenceAndPremises.byPost.address.line$line")@if(line < 6) {<br>}
+            }
+        </p>
+    }
+
+    @if(viewModel.isSubmitted) {
+        @paragraph("changeRegistrationDetails.readyToSubmit")
+    }
+
+    @govukButton(
+        ButtonViewModel(messages("site.continue"))
+            .asLink(viewModel.continueUrl)
+    )
 }
