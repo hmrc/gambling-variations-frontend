@@ -74,9 +74,6 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
       .success
       .value
 
-  private lazy val onContinueRoute =
-    controllers.partner.routes.PartnerDetailsController.onContinue.url
-
   "PartnerDetails Controller" - {
 
     "onPageLoad" - {
@@ -382,37 +379,6 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar {
       }
 
     }
-  }
-
-  "onContinue" - {
-
-    "must redirect to Change Registration Details" in {
-
-      val application =
-        applicationBuilder(
-          userAnswers = Some(userAnswersWithPartner)
-        ).build()
-
-      running(application) {
-
-        val request =
-          FakeRequest(
-            GET,
-            onContinueRoute
-          )
-
-        val result =
-          route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          controllers.routes.ChangeRegistrationDetailsController
-            .onPageLoad()
-            .url
-      }
-    }
-
   }
 
   private def viewModel(

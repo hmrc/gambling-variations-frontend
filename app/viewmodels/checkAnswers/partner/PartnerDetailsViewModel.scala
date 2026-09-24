@@ -28,7 +28,6 @@ import java.time.format.DateTimeFormatter
 
 final case class PartnerDetailsViewModel(
   partners: Seq[PartnerDetailsRow],
-  continueUrl: String,
   addAnotherPartner: Boolean,
   showNoPartnersMessage: Boolean,
   showMinimumPartnersMessage: Boolean,
@@ -197,7 +196,6 @@ object PartnerDetailsViewModel {
 
     PartnerDetailsViewModel(
       partners                   = rows,
-      continueUrl                = routes.PartnerDetailsController.onContinue.url,
       addAnotherPartner          = canAddAnotherPartner,
       showNoPartnersMessage      = !hasPartners,
       showMinimumPartnersMessage = hasPartners && activePartnerCount < 3,
