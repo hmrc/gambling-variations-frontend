@@ -16,11 +16,11 @@
 
 package pages.licencespremises
 
-import models.Address
+import models.licencespremises.PremisesDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object PremisesPage extends QuestionPage[Seq[Address]] {
+case object PremisesPage extends QuestionPage[Seq[PremisesDetails]] {
 
   override def path: JsPath = JsPath \ "licencesPremisesSection" \ "premisesDetails" \ toString
 
