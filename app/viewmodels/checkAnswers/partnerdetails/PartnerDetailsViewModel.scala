@@ -28,7 +28,6 @@ import java.time.format.DateTimeFormatter
 
 final case class PartnerDetailsViewModel(
   partners: Seq[PartnerDetailsRow],
-  continueUrl: String,
   addAnotherPartner: Boolean,
   showNoPartnersMessage: Boolean,
   showMinimumPartnersMessage: Boolean,
@@ -57,12 +56,18 @@ object PartnerDetailsViewModel {
     val maxPartners = frontendAppConfig.maxPartners
 
     // TODO improve, maybe move to partnerUtils
-    val existingPartners = (userAnswers.data \ "partners").validate[JsObject].get.keys.slice(0, maxPartners).toSeq
+
+    val existingPartners =
+      (userAnswers.data \ "partners")
+        .asOpt[JsObject]
+        .fold(Seq.empty[String])(_.fields.map(_._1))
+        .take(maxPartners)
+        .toSeq
 
     val today = LocalDate.now(ZoneOffset.UTC)
 
     val partnerNumbers: Seq[String] =
-      /*(0 until maxPartners)*/ existingPartners.filter { partnerNumber =>
+      existingPartners.filter { partnerNumber =>
         val hasPartner =
           userAnswers
             .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
@@ -73,9 +78,7 @@ object PartnerDetailsViewModel {
             .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
             .exists(_.isBefore(today))
 
-        // TODO commented out for testing
         hasPartner && !hasPastLeavingDate
-        true
       }
 
     val rows: Seq[PartnerDetailsRow] =
@@ -190,12 +193,12 @@ object PartnerDetailsViewModel {
 
     PartnerDetailsViewModel(
       partners                   = rows,
-      continueUrl                = routes.PartnerDetailsController.onContinue.url,
       addAnotherPartner          = canAddAnotherPartner,
       showNoPartnersMessage      = !hasPartners,
       showMinimumPartnersMessage = hasPartners && activePartnerCount < 3,
       showMaximumPartnersMessage = rows.size >= maxPartners,
       showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage).contains(true)
     )
+
   }
 }
