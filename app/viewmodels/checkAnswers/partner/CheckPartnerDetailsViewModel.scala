@@ -338,12 +338,14 @@ case class CheckPartnerDetailsViewModel(
     } else None
 
   private def utrSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    mandatoryFieldRow(
-      utr,
-      "partnerDetailsCheckYourAnswers.utr",
-      "partnerDetailsCheckYourAnswers.utr.add",
-      controllers.partner.routes.PartnerDetailsAddUTRController.onPageLoad().url
-    )
+    if (!typeOfBusiness.contains(messages("businessType.partnership"))) {
+      mandatoryFieldRow(
+        utr,
+        "partnerDetailsCheckYourAnswers.utr",
+        "partnerDetailsCheckYourAnswers.utr.add",
+        controllers.partner.routes.PartnerDetailsAddUTRController.onPageLoad().url
+      )
+    } else None
 
   private def addVatRegistrationNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (typeOfBusiness.contains(messages("businessType.corporatebody")) && isNewPartnerFlow.contains(true)) {
