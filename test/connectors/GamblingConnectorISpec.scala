@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
-import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails}
+import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -394,6 +394,62 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
   }
 
+  "GamblingConnector.getGamblingReturnPeriods" should {
+
+    "return gambling return periods when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "$mgdRegNumber",
+           |  "returnPeriodsId": 123,
+           |  "nstpEndDate1": "31-MAR-26",
+           |  "nstpEndDate2": "30-JUN-26",
+           |  "nstpEndDate3": "30-SEP-26",
+           |  "nstpEndDate4": "31-DEC-26",
+           |  "nstpEndDate5": "31-MAR-27",
+           |  "nstpEndDate6": "30-JUN-27",
+           |  "nstpEndDate7": "30-SEP-27",
+           |  "nstpEndDate8": "31-DEC-27",
+           |  "isInLastNstp": "false",
+           |  "finalPeriodWarning": "false",
+           |  "hasExistingNstpValues": "true",
+           |  "systemDate": "25-SEP-26"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/return-periods/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getGamblingReturnPeriods(mgdRegNumber).futureValue mustBe gamblingReturnPeriods
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/return-periods/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGamblingReturnPeriods(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/return-periods/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGamblingReturnPeriods(mgdRegNumber)
+      }
+    }
+
+  }
+
   "GamblingConnector.getCorrespondenceDetails" should {
 
     "return correspondenceDetails when backend returns 200" in {
@@ -697,6 +753,24 @@ object GamblingConnectorISpec {
     ),
     iomOrCiFlag = Some("FALSE")
   )
+
+  val gamblingReturnPeriods: GamblingReturnPeriods =
+    GamblingReturnPeriods(
+      mgdRegNumber          = mgdRegNumber,
+      returnPeriodsId       = Some(123),
+      nstpEndDate1          = Some(LocalDate.of(2026, 3, 31)),
+      nstpEndDate2          = Some(LocalDate.of(2026, 6, 30)),
+      nstpEndDate3          = Some(LocalDate.of(2026, 9, 30)),
+      nstpEndDate4          = Some(LocalDate.of(2026, 12, 31)),
+      nstpEndDate5          = Some(LocalDate.of(2027, 3, 31)),
+      nstpEndDate6          = Some(LocalDate.of(2027, 6, 30)),
+      nstpEndDate7          = Some(LocalDate.of(2027, 9, 30)),
+      nstpEndDate8          = Some(LocalDate.of(2027, 12, 31)),
+      isInLastNstp          = Some("false"),
+      finalPeriodWarning    = Some("false"),
+      hasExistingNstpValues = Some("true"),
+      systemDate            = Some(LocalDate.of(2026, 9, 25))
+    )
 
   val partnersDetailsBusinessName = PartnersDetails(
     partners = Seq(
