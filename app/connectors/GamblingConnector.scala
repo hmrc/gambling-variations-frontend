@@ -16,6 +16,7 @@
 
 package connectors
 
+import models.controllingbody.ControlBodyDetails
 import models.licencespremises.LicencesAndPremises
 import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
@@ -245,6 +246,30 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
           case status =>
             throw UpstreamErrorResponse(
               s"Unexpected status while fetching Licences and Premises Details: $status",
+              status
+            )
+        }
+      }
+  }
+
+  def getControlBodyDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[ControlBodyDetails] = {
+    http
+      .get(url"$baseUrl/controlling-body-details/mgd/$mgdRegNumber")
+      .execute[HttpResponse]
+      .map { response =>
+        response.status match {
+
+          case OK =>
+            response.json
+              .validate[ControlBodyDetails]
+              .fold(
+                errors => throw new RuntimeException(s"Invalid JSON Details: $errors"),
+                details => details
+              )
+
+          case status =>
+            throw UpstreamErrorResponse(
+              s"Unexpected status while fetching Controlling Body Details: $status",
               status
             )
         }
