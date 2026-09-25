@@ -29,7 +29,7 @@ class ContactNumberFormProvider @Inject() extends Mappings {
   private val AllowedCharsRegex = "^[0-9 ]+$"
 
   private def digitCount(number: String): Int =
-    number.replaceAll(" ", "").length
+    number.replaceAll("\\s{2,}", " ").length // compress white space down to a single space
 
   private def phoneConstraint(prefix: String): Constraint[String] =
     Constraint { value =>
