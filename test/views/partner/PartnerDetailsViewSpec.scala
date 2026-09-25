@@ -76,7 +76,6 @@ class PartnerDetailsViewSpec extends SpecBase {
     ): PartnerDetailsViewModel =
       PartnerDetailsViewModel(
         partners                   = partners,
-        continueUrl                = controllers.partner.routes.PartnerDetailsController.onContinue.url,
         addAnotherPartner          = addAnotherPartner,
         showNoPartnersMessage      = showNoPartnersMessage,
         showMinimumPartnersMessage = showMinimumPartnersMessage,

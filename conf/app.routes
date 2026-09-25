@@ -305,9 +305,7 @@ POST       /change-registration-details/partner-details/unique-taxpayer-referenc
 GET        /change-registration-details/partner-details                       controllers.partner.PartnerDetailsController.onPageLoad
 POST       /change-registration-details/partner-details                      controllers.partner.PartnerDetailsController.onSubmit
 
-GET       /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onPageLoad
-POST      /change-registration-details/partner-details                             controllers.partner.PartnerDetailsController.onSubmit
-GET       /change-registration-details/partner-details/continue                    controllers.partner.PartnerDetailsController.onContinue
+
 GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partner.PartnerDetailsController.onRemove(partnerNumber: Int)
 GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partner.PartnerDetailsController.onPartnerDetails(partnerNumber: Int)
 
