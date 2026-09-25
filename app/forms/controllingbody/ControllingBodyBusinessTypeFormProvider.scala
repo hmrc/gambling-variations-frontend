@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package forms.licencespremises
+package forms.controllingbody
+
+import forms.mappings.Mappings
+import models.BusinessType
+import play.api.data.Form
 
 import javax.inject.Inject
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class ControllingBodyBusinessTypeFormProvider @Inject() extends Mappings {
 
-class PremisesAddressListFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Boolean] =
+  def apply(): Form[BusinessType] =
     Form(
-      "addPremisesAddress" -> boolean("premisesAddressList.error.required")
+      "value" -> enumerable[BusinessType]("controllingBodyBusinessType.error.required")
     )
 }
