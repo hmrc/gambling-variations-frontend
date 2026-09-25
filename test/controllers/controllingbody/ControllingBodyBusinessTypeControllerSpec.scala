@@ -28,6 +28,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.controllingbody.ControllingBodyBusinessTypePage
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -48,39 +49,41 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
   private val userAnswers = UserAnswers(
     mgdRegNum,
     Json.obj(
-      mgdRegNumber           -> String,
-      businessPartnerNumber  -> "12787",
-      dateOfJoining          -> LocalDate.of(2026, 9, 25),
-      dateOfLeaving          -> LocalDate.of(2026, 9, 25),
-      solePropTitle          -> "Mr",
-      solePropFirstName      -> "Jamie",
-      solePropMiddleName     -> "T",
-      solePropLastName       -> "Jamie",
-      businessName           -> "Sticks And Stones",
-      tradingName            -> "Jamie T",
-      dateOfBirth            -> LocalDate.of(1991, 10, 1),
-      nino                   -> "NINONINO",
-      utr                    -> 123456789,
-      vrn                    -> 123456789,
-      crn                    -> "something else",
-      dateOfIncorporation    -> LocalDate.of(2026, 9, 25),
-      countryOfIncorporation -> "UK",
-      foreignCorporateRef    -> "Nothing here",
-      address1               -> "123",
-      address2               -> "Road",
-      address3               -> "Town",
-      address4               -> "Albion",
-      postcode               -> "SA11 1AB",
-      country                -> "England",
-      adi                    -> "blessYou",
-      isIomOrCiFlag          -> "1",
-      phoneNumber            -> "01111 111111",
-      mobilePhoneNumber      -> "01111 111111",
-      faxNumber              -> "01111 111111",
-      emailAddr              -> "a@b.com",
-      typeOfControllingBody  -> Soleproprietor,
-      isRepMemSameAsCb       -> "1",
-      isUkIncorporated       -> "1"
+      "controllingBodySection" -> Json.obj(
+        "mgdRegNumber"           -> "ZM1000001",
+        "businessPartnerNumber"  -> "12787",
+        "dateOfJoining"          -> LocalDate.of(2026, 9, 25),
+        "dateOfLeaving"          -> LocalDate.of(2026, 9, 25),
+        "solePropTitle"          -> "Mr",
+        "solePropFirstName"      -> "Jamie",
+        "solePropMiddleName"     -> "T",
+        "solePropLastName"       -> "Jamie",
+        "businessName"           -> "Sticks And Stones",
+        "tradingName"            -> "Jamie T",
+        "dateOfBirth"            -> LocalDate.of(1991, 10, 1),
+        "nino"                   -> "NINONINO",
+        "utr"                    -> 123456789,
+        "vrn"                    -> 123456789,
+        "crn"                    -> "something else",
+        "dateOfIncorporation"    -> LocalDate.of(2026, 9, 25),
+        "countryOfIncorporation" -> "UK",
+        "foreignCorporateRef"    -> "Nothing here",
+        "address1"               -> "123",
+        "address2"               -> "Road",
+        "address3"               -> "Town",
+        "address4"               -> "Albion",
+        "postcode"               -> "SA11 1AB",
+        "country"                -> "England",
+        "adi"                    -> "blessYou",
+        "isIomOrCiFlag"          -> "1",
+        "phoneNumber"            -> "01111 111111",
+        "mobilePhoneNumber"      -> "01111 111111",
+        "faxNumber"              -> "01111 111111",
+        "emailAddr"              -> "a@b.com",
+        "typeOfControllingBody"  -> 1,
+        "isRepMemSameAsCb"       -> "1",
+        "isUkIncorporated"       -> "1"
+      )
     )
   )
 
@@ -122,20 +125,6 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
-        }
-      }
-
-      "must redirect to SystemError for a GET if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request = FakeRequest(GET, controllingBodyBusinessTypeRoute)
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
     }

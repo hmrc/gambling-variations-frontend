@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package forms.licencespremises
 
-import models.BusinessType
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object ControllingBodyBusinessTypePage extends QuestionPage[BusinessType] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ "controllingBodySection" \ toString
+class PremisesAddressListFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "typeOfControllingBody"
+  def apply(): Form[Boolean] =
+    Form(
+      "addPremisesAddress" -> boolean("premisesAddressList.error.required")
+    )
 }

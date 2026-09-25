@@ -50,8 +50,8 @@ class ControllingBodyBusinessTypeController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers.get(ControllingBodyBusinessTypePage) match {
-      case None               => form
       case Some(businessType) => form.fill(businessType)
+      case None               => form
     }
 
     Ok(view(preparedForm, mode))
