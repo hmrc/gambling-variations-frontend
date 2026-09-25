@@ -65,10 +65,10 @@ class RemovePremisesAddressViewSpec extends SpecBase {
       doc.title must include(messages("removePremisesAddress.title"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
-      doc.text                                             must include(messages("removePremisesAddress.heading"))
+      doc.select(".govuk-hint").text()                     must include("Flat 1 10 Market Calle")
 
       val legend: Elements = doc.select("legend.govuk-fieldset__legend")
-      legend.text must include("Flat 1 10 Market Calle")
+      legend.text must include(messages("removePremisesAddress.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
@@ -79,7 +79,7 @@ class RemovePremisesAddressViewSpec extends SpecBase {
       val addressLines: Seq[String] = AddressFormatter.format(chosenAddress)
 
       val renderedAddress: String = doc
-        .select(".govuk-body")
+        .select(".govuk-hint")
         .text()
 
       addressLines.foreach { line =>
