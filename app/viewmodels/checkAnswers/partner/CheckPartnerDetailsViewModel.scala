@@ -28,6 +28,8 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
 import utils.DateTimeFormats.shortDateDisplay
 import viewmodels.govuk.all.FluentValue
 
+import java.time.LocalDate
+
 case class CheckPartnerDetailsViewModel(
   index: Int,
   // Business Details
@@ -69,12 +71,15 @@ case class CheckPartnerDetailsViewModel(
   faxNumber: Option[String],
   addEmailAddress: Option[Boolean],
   emailAddress: Option[String],
+
+  // conditions
   isNewPartnerFlow: Option[Boolean],
-  isSubmitted: Boolean
+  isSubmitted: Boolean,
+  isDueToLeave: Boolean,
+  isDueToJoin: Boolean
 ) {
 
-  // --- Update these ---
-
+  // --- Update this ---
   def continueCall: Call = controllers.partner.routes.PartnerDetailsCheckYourAnswersController.onPageLoad()
 
   // --- Summary Lists for View ---
@@ -126,6 +131,8 @@ case class CheckPartnerDetailsViewModel(
     typeOfBusiness match {
       case Some(value) if isNewPartnerFlow.contains(true) =>
         Some(createSummaryListRow(label, Text(value), Seq(changeAction)))
+      case Some(value) if isDueToJoin || isDueToLeave =>
+        Some(createSummaryListRow(label, Text(value), Seq()))
       case _ =>
         Some(createSummaryListRow(label, Text("Add type of business"), Seq(changeAction)))
     }
@@ -200,15 +207,21 @@ case class CheckPartnerDetailsViewModel(
       }
     } else None
 
-  private def ninoSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
+  private def ninoSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val label = messages("partnerDetailsCheckYourAnswers.nino")
+    val url = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
+    val changeAction = buildAction(url, "site.change", label)
+    val removeAction = buildAction(url, "site.remove", label)
+
     if (typeOfBusiness.contains(messages("businessType.soleproprietor"))) {
       nino.map { value =>
-        val label = messages("partnerDetailsCheckYourAnswers.nino")
-        val url = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
 
-        val actions = if (isNewPartnerFlow.contains(true)) {
-          Seq(buildAction(url, "site.change", label), buildAction(url, "site.remove", label))
-        } else Nil
+        val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
+          case (_, _, b1, b2) if b1 || b2 => Nil
+          case (true, false, _, _)        => Seq(changeAction, removeAction)
+          case (true, true, _, _)         => Seq(changeAction)
+          case (false, _, _, _)           => Nil
+        }
 
         createSummaryListRow(
           label,
@@ -216,8 +229,16 @@ case class CheckPartnerDetailsViewModel(
           actions,
           "govuk-summary-list__actions govuk-!-width-one-third"
         )
-      }
+      } orElse (Some(
+        createSummaryListRow(
+          label,
+          Text(messages("partnerDetailsCheckYourAnswers.noData")),
+          Seq(changeAction),
+          "govuk-summary-list__actions govuk-!-width-one-third"
+        )
+      ))
     } else None
+  }
 
   private def addTradingNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (isNewPartnerFlow.contains(true)) {
@@ -560,7 +581,21 @@ object CheckPartnerDetailsViewModel {
   def from(userAnswers: UserAnswers, index: Int, isNewPartnerFlow: Option[Boolean], isSubmitted: Boolean)(implicit
     messages: Messages
   ): CheckPartnerDetailsViewModel = {
+
     val businessInfo = businessTypeInfo(userAnswers, index)
+    val today = LocalDate.now()
+    val dueToLeaveDate = userAnswers.get(PartnerDetailsDateOfJoiningPage(index))
+    val dueToJoinDate = userAnswers.get(PartnerDetailsDateOfLeavingPage(index))
+
+    val dueToLeave = dueToLeaveDate match {
+      case Some(date) if today.isBefore(date) => true
+      case _                                  => false
+    }
+    val dueToJoin = dueToJoinDate match {
+      case Some(date) if today.isBefore(date) => true
+      case _                                  => false
+    }
+
     CheckPartnerDetailsViewModel(
       index                     = index,
       typeOfBusiness            = businessInfo.flatMap(_.typeOfBusiness),
@@ -572,8 +607,8 @@ object CheckPartnerDetailsViewModel {
       llpName                   = businessInfo.flatMap(_.llpName),
       addTradingName            = userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)).map(_.toString),
       tradingName               = userAnswers.get(PartnerTradingNamePage).orElse(userAnswers.get(PartnerDetailsTradingNamePage(index))),
-      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(shortDateDisplay),
-      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(shortDateDisplay),
+      dateOfJoining             = dueToLeaveDate.map(shortDateDisplay),
+      dateOfLeaving             = dueToJoinDate.map(shortDateDisplay),
       addNino                   = userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)).map(_.toString),
       nino                      = userAnswers.get(PartnerDetailsNinoPage(index)),
       utr                       = userAnswers.get(PartnerDetailsUtrPage(index)),
@@ -594,7 +629,9 @@ object CheckPartnerDetailsViewModel {
       addEmailAddress          = userAnswers.get(PartnerAddEmailAddressYesNoPage(index)),
       emailAddress     = userAnswers.get(PartnerEmailAddressPage).orElse(userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(index))),
       isNewPartnerFlow = isNewPartnerFlow,
-      isSubmitted      = isSubmitted
+      isSubmitted      = isSubmitted,
+      isDueToLeave     = dueToLeave,
+      isDueToJoin      = dueToJoin
     )
   }
 }
