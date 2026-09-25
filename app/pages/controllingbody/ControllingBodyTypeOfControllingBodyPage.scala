@@ -16,21 +16,13 @@
 
 package pages.controllingbody
 
-import models.BusinessType
-import org.scalatestplus.play.PlaySpec
-import pages.controllingbody.ControllingBodyBusinessTypePage
-import play.api.libs.json.{JsPath, Json}
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class ControllingBodyBusinessTypePageSpec extends PlaySpec {
+case object ControllingBodyTypeOfControllingBodyPage extends QuestionPage[String] {
 
-  "ControllingBodyBusinessTypePage" must {
+  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
-    "have the correct path" in {
-      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodySection" \ "controllingBodyBusinessType")
-    }
-
-    "have the correct toString value" in {
-      ControllingBodyBusinessTypePage.toString mustEqual "controllingBodyBusinessType"
-    }
-  }
+  override def toString: String =
+    "typeOfControllingBody"
 }
