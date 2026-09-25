@@ -1069,6 +1069,10 @@ premisesNotCoveredYesNo.error.required = Select yes if you have any other premis
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
 
+removePremisesAddress.title = Are you sure you want to remove this premises address?
+removePremisesAddress.heading = Are you sure you want to remove this premises address?
+removePremisesAddress.error.required = Select yes if you want to remove this premises address
+
 premisesAddressList.title = Premises addresses
 premisesAddressList.heading = Premises addresses
 premisesAddressList.message.submit = You must submit any changes you make to your premises addresses. Once HMRC approves the changes, we will update your registration certificate.
