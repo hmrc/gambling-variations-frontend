@@ -22,13 +22,12 @@ import play.api.mvc.Call
 
 trait PartnerDetailsHelper {
 
-//  val userAnswersId = "id"
   val businessNumber1: String = "12345"
   val businessNumber2: String = "123456"
   val newPartnersIndex1: Int = 0
   val newPartnersIndex2: Int = 1
 
-  val mgdRegNumber: String = "XGM00000001761" // TODO we have two mgdRegNumber, this really has to be sorted, other one is in SpecBase I think
+  val mgdRegNumber: String = "XGM00000001761"
   val testFaxNumber: String = "0123456789"
   val testPhoneNumber: String = "0123456789"
   val testEmailAddress: String = "test@test.com"
@@ -45,15 +44,12 @@ trait PartnerDetailsHelper {
     "partners" -> Json.obj()
   )
 
-//  val userAnswersPartnerNewPartners
-  // TODO can we pass userAnswersID from other trait here?
   def userAnswersPartnerDetailsEmpty: UserAnswers = UserAnswers("id")
   def userAnswersPartnerDetailsMinimalValidData: UserAnswers = UserAnswers("id", minimalValidData)
   def userAnswersPartnerDetailsExistingPartners: UserAnswers = UserAnswers("id", cleanedDataExistingPartners())
   def userAnswersPartnerDetailsNewPartners: UserAnswers = UserAnswers("id", cleanedDataNewPartners())
 
   def cleanedDataExistingPartners(
-//    businessNumber: String = businessNumber1, //TODO remove later
     faxNumber: Option[String] = None,
     phoneNumber: Option[String] = None,
     mobilePhoneNumber: Option[String] = None,
@@ -65,7 +61,6 @@ trait PartnerDetailsHelper {
     fcr: Option[String] = None
   ): JsObject = Json.obj(
     "partners" -> Json.obj(
-      // TODO using businessNumber1 here, I might benefit by putting it into constructor
       businessNumber1 -> Json.obj(
         "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
         "partnerDetailsDateOfJoining" -> "2022-01-15",

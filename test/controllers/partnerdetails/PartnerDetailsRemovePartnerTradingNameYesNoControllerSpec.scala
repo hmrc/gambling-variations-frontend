@@ -35,7 +35,6 @@ import views.html.partnerdetails.PartnerDetailsRemovePartnerTradingNameYesNoView
 import javax.cache.annotation.CacheKey
 import scala.concurrent.Future
 
-//TODO done
 class PartnerDetailsRemovePartnerTradingNameYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new RemovePartnerTradingNameYesNoFormProvider()

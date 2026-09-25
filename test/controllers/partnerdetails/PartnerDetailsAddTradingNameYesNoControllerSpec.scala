@@ -34,7 +34,6 @@ import views.html.partnerdetails.PartnerDetailsAddTradingNameYesNoView
 
 import scala.concurrent.Future
 
-//TODO normalModeOnly - Done
 class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsAddTradingNameYesNoFormProvider()

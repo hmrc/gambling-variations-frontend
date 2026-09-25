@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsAdditionalAddressInfoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsAdditionalAddressInfoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -50,8 +49,6 @@ class PartnerDetailsAdditionalAddressInfoController @Inject() (
 
   val form: Form[String] = formProvider()
 
-  // TODO note, IMPORTANT.
-  // WE have newIndex but we pass old index down the line, I think I am forced to leave it like that
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
 

@@ -1,28 +1,19 @@
-#yes/no pages
-#TODO these pages only handle "normalMode", I think we need check mode to specify which partner array we modify
-#TODO the below routes can have index as int as they only deal with newPartners, check later
-# Initial suggestion; just like with add/change, add new routes with slightly different name
-# ONLY NEW PARTNER
+#Yes/No pages
 GET        /change-registration-details/partner-details/fax-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/fax-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddFaxNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
-# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/additional-address-information-yes-no/:index              controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/additional-address-information-yes-no/:index              controllers.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
-# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/email-address-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/email-address-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddEmailAddressYesNoPageController.onSubmit(index: String, mode: Mode = NormalMode)
 
-# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/national-insurance-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/national-insurance-number-yes-no/:index                        controllers.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
-# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/vat-registration-number-yes-no/:index          controllers.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/vat-registration-number-yes-no/:index           controllers.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
-# ONLY NEW PARTNER
 GET        /change-registration-details/partner-details/trading-name-yes-no/:index                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/trading-name-yes-no/:index                         controllers.partnerdetails.PartnerDetailsAddTradingNameYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
@@ -113,11 +104,8 @@ GET       /change-registration-details/partner-details/change-date-of-birth/:ind
 POST      /change-registration-details/partner-details/change-date-of-birth/:index          controllers.partnerdetails.PartnerDetailsSoleProprietorDobController.onSubmit(index: String, mode: Mode = CheckMode)
 
 #Remove pages
-#TODO these pages only handle "normalMode", I think we need check mode to specify which partner array we modify
-# Initial suggestion; just like with add/change, add new routes with slightly different name
 GET        /change-registration-details/partner-details/remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
-#TODO this -change prefix is kinda not making sense here
 GET        /change-registration-details/partner-details/change-remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
 POST       /change-registration-details/partner-details/change-remove-additional-address-information/:index                   controllers.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
@@ -146,26 +134,19 @@ POST       /change-registration-details/partner-details/remove-vat-registration-
 GET        /change-registration-details/partner-details/change-remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index: String, mode: Mode = CheckMode)
 POST       /change-registration-details/partner-details/change-remove-vat-registration-number/:index                        controllers.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoController.onSubmit(index: String, mode: Mode = CheckMode)
 
-GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
-POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
-GET       /change-registration-details/partner-details/continue                    controllers.partnerdetails.PartnerDetailsController.onContinue
-#TODO changed from Int
-GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
-#TODO changed from Int
-GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String)
-
-###################### TODO From merge
-
-#TODO these three stay
-## changed to string
-GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
-GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
-POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
-
-#TODo will go to add/change section
 GET        /change-registration-details/partner-details/foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = NormalMode)
 GET        /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = CheckMode)
 POST       /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = CheckMode)
+
+GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
+POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
+GET       /change-registration-details/partner-details/continue                    controllers.partnerdetails.PartnerDetailsController.onContinue
+GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
+GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String)
+
+GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
+GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
+POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()

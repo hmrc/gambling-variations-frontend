@@ -31,7 +31,6 @@ import views.html.partnerdetails.PartnerDetailsVatRegistrationNumberView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsVatRegistrationNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,

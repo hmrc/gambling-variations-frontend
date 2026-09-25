@@ -31,7 +31,6 @@ import views.html.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAdd
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,

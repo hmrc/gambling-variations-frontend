@@ -37,7 +37,6 @@ import views.html.partnerdetails.PartnerDetailsDateOfIncorporationView
 import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-//TODO i think its done
 class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private implicit val messages: Messages = stubMessages()

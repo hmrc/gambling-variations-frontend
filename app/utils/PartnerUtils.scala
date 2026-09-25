@@ -19,17 +19,13 @@ package utils
 import models.{Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessPartnerNumberPage}
-import play.api.libs.json.JsArray
+import play.api.libs.json.{JsArray, JsObject}
 
 object PartnerUtils {
 
   def parseIndex(index: String, mode: Mode): BusinessNumberOrIndex =
     if mode == NormalMode then index.toInt
     else index
-
-  def validateNormalMode(index: String, mode: Mode): Either[Exception, Int] =
-    if mode == NormalMode then Right(index.toInt)
-    else Left(RuntimeException("TODO, this route only allows NormalMode"))
 
   // Like the top one, but actually validate some things
   def parseIndexOpt(index: String, mode: Mode, userAnswers: UserAnswers): Option[BusinessNumberOrIndex] = {
@@ -66,4 +62,10 @@ object PartnerUtils {
   private def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
 
+  // TODO
+  def test(userAnswers: UserAnswers, maxPartners: Int) = (userAnswers.data \ "partners")
+    .asOpt[JsObject]
+    .fold(Seq.empty[String])(_.fields.map(_._1).sorted) // TODO, added sorted to ensure ordering for hash-map, to be discussed
+    .take(maxPartners)
+    .toSeq
 }

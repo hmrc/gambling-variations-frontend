@@ -19,7 +19,6 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-//TODO For now its only taking an index, since its for newPartners only
 case class PartnerDetailsAddPartnerCompletedPage(index: Int) extends QuestionPage[Boolean] {
 
   override val path: JsPath = JsPath \ "newPartners" \ index \ toString

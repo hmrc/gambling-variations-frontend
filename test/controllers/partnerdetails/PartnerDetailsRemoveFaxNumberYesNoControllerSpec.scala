@@ -35,7 +35,6 @@ import views.html.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoView
 
 import scala.concurrent.Future
 
-//TODO done
 class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private val formProvider = new PartnerDetailsRemoveFaxNumberYesNoFormProvider()

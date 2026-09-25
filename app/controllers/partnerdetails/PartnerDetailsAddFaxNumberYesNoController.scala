@@ -32,7 +32,6 @@ import views.html.partnerdetails.PartnerDetailsAddFaxNumberYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsAddFaxNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,

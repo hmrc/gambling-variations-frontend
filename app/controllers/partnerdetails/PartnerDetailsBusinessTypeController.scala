@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsBusinessTypeView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsBusinessTypeController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -71,10 +70,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
         businessType =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(newIndex), businessType))
-//            updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(index.toInt), false))
-//            _              <- sessionRepository.set(updatedAnswers)
-//             updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(-1), false))// TODO added -1
-            // TODO I think we need to not modify "completed" for existing partners
+            // Do not mark "completed" existing user
             updatedAnswers <-
               newIndex match {
                 case _: String            => Future.successful(updatedAnswers)

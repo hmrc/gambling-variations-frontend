@@ -36,7 +36,6 @@ import views.html.partnerdetails.PartnerDetailsForeignCorporateReferenceView
 
 import scala.concurrent.Future
 
-//TODO Done I think
 class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsForeignCorporateReferenceFormProvider()

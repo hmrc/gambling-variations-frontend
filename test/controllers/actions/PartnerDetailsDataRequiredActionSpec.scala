@@ -59,8 +59,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "partners" -> Json.arr(
-              Json.obj(
+            "partners" -> Json.obj(
+              "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
                 "partnerDetailsBusinessPartnerNumber" -> "0100049899",
                 "partnerDetailsDateOfJoining"         -> "2022-01-15",
@@ -164,8 +164,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val minimalData = Json.obj(
-            "partners" -> Json.arr(
-              Json.obj(
+            "partners" -> Json.obj(
+              "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber" -> "XWM00000001762"
               )
             ),
@@ -197,13 +197,13 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val sentSessionData = Json.obj(
-            "partners"   -> Json.arr(),
+            // No partners = has to call backend
             "systemDate" -> "2026-07-30"
           )
 
           val expectedResponse = Json.obj(
-            "partners" -> Json.arr(
-              Json.obj(
+            "partners" -> Json.obj(
+              "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
                 "partnerDetailsBusinessPartnerNumber" -> "0100049899",
                 "partnerDetailsDateOfJoining"         -> "2022-01-15",
@@ -275,8 +275,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.arr(
-            Json.obj(
+          "partners" -> Json.obj(
+            "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
               "partnerDetailsDateOfJoining"         -> "2022-01-15",
@@ -349,8 +349,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.arr(
-            Json.obj(
+          "partners" -> Json.obj(
+            "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
               "partnerDetailsDateOfJoining"         -> "2022-01-15",
@@ -418,8 +418,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.arr(
-            Json.obj(
+          "partners" -> Json.obj(
+            "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
               "partnerDetailsDateOfJoining"         -> "2022-01-15",
@@ -484,8 +484,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "partners" -> Json.arr(
-              Json.obj(
+            "partners" -> Json.obj(
+              "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
                 "partnerDetailsBusinessPartnerNumber" -> "0100049899",
                 "partnerDetailsDateOfJoining"         -> "2022-01-15",
@@ -551,8 +551,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.arr(
-            Json.obj(
+          "partners" -> Json.obj(
+            "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
               "partnerDetailsDateOfJoining"         -> "2022-01-15",
@@ -616,8 +616,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.arr(
-            Json.obj(
+          "partners" -> Json.obj(
+            "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
               "partnerDetailsDateOfJoining"         -> "2022-01-15",

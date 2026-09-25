@@ -35,7 +35,6 @@ import views.html.partnerdetails.PartnerDetailsEmailAddressView
 
 import scala.concurrent.Future
 
-//TODO done
 class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerEmailAddressFormProvider()

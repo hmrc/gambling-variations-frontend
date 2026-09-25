@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoVi
 
 import scala.concurrent.Future
 
-//TODO normalModeOnly - Done - Maybe fix consistency with userAnswers
 class PartnerDetailsAddNationalInsuranceNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider()

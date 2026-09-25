@@ -34,7 +34,6 @@ import views.html.partnerdetails.PartnerDetailsAddUTRView
 
 import scala.concurrent.Future
 
-//TODO I think DONE
 class PartnerDetailsAddUTRControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private val formProvider = new PartnerDetailsAddUTRFormProvider()

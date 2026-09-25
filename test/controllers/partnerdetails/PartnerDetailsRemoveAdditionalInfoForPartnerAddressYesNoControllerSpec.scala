@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsRemoveAdditionalInfoForPartnerAdd
 
 import scala.concurrent.Future
 
-//TODO
 class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()

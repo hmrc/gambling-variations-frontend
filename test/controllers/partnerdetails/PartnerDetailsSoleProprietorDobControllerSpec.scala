@@ -37,7 +37,6 @@ import views.html.partnerdetails.PartnerDetailsSoleProprietorDobView
 import java.time.{Clock, LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-//TODO done?
 class PartnerDetailsSoleProprietorDobControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private implicit val msgs: Messages =

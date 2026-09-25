@@ -32,7 +32,6 @@ import views.html.partnerdetails.PartnerDetailsAddUTRView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsAddUTRController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,

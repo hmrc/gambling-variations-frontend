@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoView
 
 import scala.concurrent.Future
 
-//TODO normalModeOnly - Done - Maybe fix consistency with userAnswers
 class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsAdditionalAddressInfoYesNoFormProvider()
@@ -64,7 +63,6 @@ class PartnerDetailsAdditionalAddressInfoYesNoControllerSpec extends SpecBase wi
 
       val userAnswers =
         userAnswersPartnerDetailsMinimalValidData.set(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), true).success.value
-      println(userAnswers)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

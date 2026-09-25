@@ -47,7 +47,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
-    println("MILOSZ-1")
     request.userAnswers match {
       case None =>
         logger.info(s"User Answers not found. Populating User Answers to id ${request.mgdRegNum}")
@@ -58,15 +57,12 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
       case Some(userAnswers: UserAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
-        println("MILOSZ-2")
 
         userAnswers.get(PartnerDetailsPage) map { _ =>
-          println("MILOSZ1")
           logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
         } getOrElse {
-          println("MILOSZ2")
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -74,23 +70,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
         }
     }
   }
-
-  // TODO sigltly different way of making sure there is data
-  private def isPartnerDetailsInCache(userAnswers: UserAnswers): Boolean = (userAnswers.data \ "partners")
-    .asOpt[JsObject]
-    .flatMap(_.values.headOption)
-    .flatMap(_.asOpt[JsObject])
-    .flatMap(_.value.get("partnerDetailsMgdRegNumber"))
-    .flatMap(_.asOpt[String])
-    .isDefined ||
-    // TODO additional check if somehow there are not existing partners in the "partners" array
-    (userAnswers.data \ "newPartners")
-      .asOpt[JsArray]
-      .flatMap(_.value.headOption)
-      .flatMap(_.asOpt[JsObject])
-      .flatMap(_.value.get("partnerDetailsMgdRegNumber"))
-      .flatMap(_.asOpt[String])
-      .isDefined
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
     gamblingConnector.getPartnersDetails(answers.id) flatMap { partnerDetails =>

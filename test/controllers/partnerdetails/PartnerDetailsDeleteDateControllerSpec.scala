@@ -38,7 +38,6 @@ import views.html.partnerdetails.PartnerDetailsDeleteDateView
 import java.time.{Clock, LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-//TODO done
 class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private implicit val msgs: Messages =

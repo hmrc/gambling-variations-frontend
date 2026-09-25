@@ -29,7 +29,6 @@ import views.html.partnerdetails.PartnerDetailsCheckConfirmRemoveDateView
 
 import java.time.LocalDate
 
-//TODO done
 class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with PartnerDetailsHelper {
 
   private val partnerName: String =

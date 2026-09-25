@@ -36,7 +36,6 @@ import views.html.partnerdetails.PartnerDetailsBusinessTypeView
 
 import scala.concurrent.Future
 
-//TODO done
 class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val form: Form[BusinessType] = (new PartnerDetailsBusinessTypeFormProvider())()
@@ -49,7 +48,6 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
   val validUserAnswersExistingPartners: UserAnswers =
     userAnswersPartnerDetailsExistingPartners
-
 
   val validUserAnswersNewPartners: UserAnswers =
     userAnswersPartnerDetailsNewPartners

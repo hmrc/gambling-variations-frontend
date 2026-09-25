@@ -60,7 +60,7 @@ object PartnerDetailsViewModel {
     val existingPartners =
       (userAnswers.data \ "partners")
         .asOpt[JsObject]
-        .fold(Seq.empty[String])(_.fields.map(_._1))
+        .fold(Seq.empty[String])(_.fields.map(_._1).sorted) // TODO, added sorted to ensure ordering for hash-map, to be discussed
         .take(maxPartners)
         .toSeq
 

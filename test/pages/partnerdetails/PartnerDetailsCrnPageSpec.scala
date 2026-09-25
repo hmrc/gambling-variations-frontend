@@ -55,7 +55,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
           .validate[String]
           .get mustEqual value1
 
-        PartnerDetailsCrnPage(businessNumber2).path // TODO investigate
+        PartnerDetailsCrnPage(businessNumber2).path
           .asSingleJson(json)
           .validate[String]
           .get mustEqual value2
@@ -97,7 +97,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
           .validate[String]
           .get mustEqual value1
 
-        PartnerDetailsCrnPage(newPartnersIndex2).path // TODO investigate
+        PartnerDetailsCrnPage(newPartnersIndex2).path
           .asSingleJson(json)
           .validate[String]
           .get mustEqual value2

@@ -34,7 +34,6 @@ import views.html.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoView
 
 import scala.concurrent.Future
 
-//TODO done?
 class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private val form: Form[Boolean] = (new PartnerDetailsRemoveEmailAddressYesNoFormProvider())()

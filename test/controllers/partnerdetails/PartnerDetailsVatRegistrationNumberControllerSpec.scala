@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsVatRegistrationNumberView
 
 import scala.concurrent.Future
 
-//TODO done
 class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsVatRegistrationNumberFormProvider()

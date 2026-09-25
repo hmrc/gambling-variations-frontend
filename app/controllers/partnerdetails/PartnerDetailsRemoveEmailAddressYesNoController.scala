@@ -34,7 +34,6 @@ import views.html.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,

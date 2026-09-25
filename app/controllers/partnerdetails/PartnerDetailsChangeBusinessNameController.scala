@@ -35,7 +35,6 @@ import views.html.partnerdetails.{PartnerDetailsChangeBusinessNameView, PartnerD
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsChangeBusinessNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,

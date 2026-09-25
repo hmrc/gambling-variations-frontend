@@ -25,7 +25,6 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -33,7 +32,6 @@ import views.html.partnerdetails.PartnerDetailsTradingNameView
 
 import scala.concurrent.Future
 
-//TODO done?
 class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerTradingNameFormProvider()
@@ -217,13 +215,10 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
 
         val userAnswers =
           emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // partners
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
             .success
             .value
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // new partners
-            .success
-            .value
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
             .success
             .value
 
@@ -247,13 +242,10 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
 
         val userAnswers =
           emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // partner
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
             .success
             .value
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789") // new partner
-            .success
-            .value
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO
+            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
             .success
             .value
 
@@ -429,10 +421,10 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
 
         val userAnswers =
           emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // partners
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
             .success
             .value
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // new partners
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
             .success
             .value
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
@@ -459,10 +451,10 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
 
         val userAnswers =
           emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // partner
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
             .success
             .value
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789") // new partner
+            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
             .success
             .value
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)

@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsChangeFaxNumberView
 
 import scala.concurrent.Future
 
-//TODO I think its done
 class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val form: Form[String] = (new FaxNumberFormProvider())("partnerDetailsFaxNumber")
@@ -52,13 +51,13 @@ class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with M
 
   val userAnswersWithNoFaxNewPartners: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
 
   val userAnswersWithFaxNewPartners: UserAnswers =
     UserAnswers(mgdRegNumber, cleanedDataNewPartners(faxNumber = Some(testFaxNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
 

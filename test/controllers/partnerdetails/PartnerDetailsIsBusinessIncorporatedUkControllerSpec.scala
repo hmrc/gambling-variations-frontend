@@ -34,7 +34,6 @@ import views.html.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkView
 
 import scala.concurrent.Future
 
-//TODO kinda done
 class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsIsBusinessIncorporatedUkFormProvider()

@@ -33,7 +33,6 @@ import views.html.partnerdetails.PartnerDetailsAddEmailAddressYesNoPageView
 
 import scala.concurrent.Future
 
-//TODO normalModeOnly - Done
 class PartnerDetailsAddEmailAddressYesNoPageControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerAddEmailAddressYesNoPageFormProvider()

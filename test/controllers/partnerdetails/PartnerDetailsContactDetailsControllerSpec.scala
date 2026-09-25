@@ -35,7 +35,6 @@ import views.html.partnerdetails.PartnerDetailsContactDetailsView
 
 import scala.concurrent.Future
 
-//TODO maybe done
 class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new ContactNumberFormProvider()
@@ -58,12 +57,12 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
     UserAnswers("id", cleanedDataNewPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)))
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
-      .value // TODO passingNewPartnerIndex1 instead (no string)
+      .value
 
   val emptyUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
     .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
     .success
-    .value // TODO passingNewPartnerIndex1 instead (no string)
+    .value
 
   "newPartners" - {
 

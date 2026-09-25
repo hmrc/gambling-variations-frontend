@@ -95,7 +95,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoViewSpec extends S
         .select("form")
         .attr("action") mustBe
         controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController
-          .onSubmit(newPartnersIndex, NormalMode) // TODO added NormalMode
+          .onSubmit(newPartnersIndex, NormalMode)
           .url
 
       doc

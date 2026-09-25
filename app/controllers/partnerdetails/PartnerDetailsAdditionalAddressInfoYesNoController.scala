@@ -32,7 +32,6 @@ import views.html.partnerdetails.PartnerDetailsAdditionalAddressInfoYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-//TODO this controller has changed, note the route for QA
 class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -62,7 +61,6 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
-    println("onsubmit1")
 
     form
       .bindFromRequest()
@@ -71,8 +69,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAdditionalAddressInfoYesNoPage(newIndex), value))
-            _ = println("onsubmit2")
-            _ <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage(newIndex), mode, updatedAnswers))
       )
   }
