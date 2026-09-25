@@ -56,7 +56,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         val gamblingConnector = mock[GamblingConnector]
 
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
+        when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
         val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -120,7 +120,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         }
 
         verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+        verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
       }
 
       "redirect to SystemError" - {
@@ -132,7 +132,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
+          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
           val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -142,16 +142,16 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
 
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
         }
 
-        "when getControlBodyDetails throws an exception" in {
+        "when getControllingBodyDetails throws an exception" in {
 
           val request = FakeRequest()
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
 
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future.failed(
+          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(
             UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR)
           )
 
@@ -163,7 +163,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
 
           verify(sessionRepository, never()).set(any())
-          verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
         }
       }
     }
@@ -200,7 +200,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           }
 
           verify(sessionRepository, never()).set(any())
-          verify(gamblingConnector, never()).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, never()).getControllingBodyDetails(any())(any())
         }
 
         "with call to backend" in {
@@ -210,7 +210,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
+          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
           val existingUserAnswers =
             UserAnswers(mgdRegNum,
@@ -239,7 +239,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           }
 
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
         }
       }
     }
