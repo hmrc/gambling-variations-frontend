@@ -67,8 +67,8 @@ class LicencesPremisesController @Inject() (
         value =>
           for {
             answersWithValue <- Future.fromTry(request.userAnswers.set(LicencesPremisesPage, value))
-            updatedAnswers <- Future.fromTry(answersWithValue.withLicencesPremisesFlags(isChanged = false))
-            _              <- sessionRepository.set(updatedAnswers)
+            updatedAnswers   <- Future.fromTry(answersWithValue.withLicencesPremisesFlags(isChanged = false))
+            _                <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(LicencesPremisesPage, NormalMode, updatedAnswers))
       )
   }
