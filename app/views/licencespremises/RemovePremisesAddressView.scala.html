@@ -42,9 +42,7 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
 
-        @h1(messages("removePremisesAddress.heading"), classes = "govuk-heading-l govuk-!-margin-bottom-4")
-
-        @@govukRadios(
+        @govukRadios(
         RadiosViewModel.yesNo(
             field = form("value"),
             legend = LegendViewModel(messages("removePremisesAddress.heading")).asPageHeading(viewmodels.LegendSize.Large)
