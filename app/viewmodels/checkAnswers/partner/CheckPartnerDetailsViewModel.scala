@@ -84,6 +84,26 @@ case class CheckPartnerDetailsViewModel(
 
   // --- Summary Lists for View ---
 
+  private lazy val dueToJoinOrLeave: Boolean = isDueToLeave || isDueToJoin
+
+  println()
+  println()
+  println()
+  println("dueToJoinOrLeave")
+  println(dueToJoinOrLeave)
+  println()
+  println("isDueToLeave")
+  println(isDueToLeave)
+  println()
+  println("isDueToJoin")
+  println(isDueToJoin)
+  println()
+  println()
+  println()
+  println()
+  println()
+  println()
+
   def businessDetailsSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     typeOfBusinessSummaryListRow,
     soleProprietorNameSummaryListRow,
@@ -216,11 +236,11 @@ case class CheckPartnerDetailsViewModel(
     if (typeOfBusiness.contains(messages("businessType.soleproprietor"))) {
       nino.map { value =>
 
-        val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
-          case (_, _, b1, b2) if b1 || b2 => Nil
-          case (true, false, _, _)        => Seq(changeAction, removeAction)
-          case (true, true, _, _)         => Seq(changeAction)
-          case (false, _, _, _)           => Nil
+        val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
+          case (_, _, true)     => Nil
+          case (true, false, _) => Seq(changeAction, removeAction)
+          case (true, true, _)  => Seq(changeAction)
+          case (false, _, _)    => Nil
         }
 
         createSummaryListRow(
@@ -352,13 +372,12 @@ case class CheckPartnerDetailsViewModel(
     } else None
 
   private def dateOfJoiningSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    dateOfJoining.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.dateOfJoining")
-      val url = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url // TODO: change this
-
-      val actions = if (isNewPartnerFlow.contains(true)) Seq(buildAction(url, "site.change", label)) else Nil
-      createSummaryListRow(label, Text(value), actions)
-    }
+    mandatoryFieldRow(
+      dateOfJoining,
+      "partnerDetailsCheckYourAnswers.dateOfJoining",
+      "partnerDetailsCheckYourAnswers.dateOfJoining.add",
+      controllers.partner.routes.PartnerSoleProprietorDobController.onPageLoad().url
+    )
 
   // --- Address Rows ---
 
@@ -384,10 +403,10 @@ case class CheckPartnerDetailsViewModel(
     val removeAction =
       buildAction(controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url, "site.remove", label)
 
-    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
-      case (_, _, b1, b2) if b1 || b2 => Nil
-      case (true, _, _, _)            => Seq(changeAction)
-      case (false, _, _, _)           => Seq(removeAction)
+    val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
+      case (_, _, true)  => Nil
+      case (true, _, _)  => Seq(changeAction)
+      case (false, _, _) => Seq(removeAction)
     }
 
     additionalInformation.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
@@ -427,10 +446,10 @@ case class CheckPartnerDetailsViewModel(
     val changeAction = buildAction(controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url, "site.change", label)
     val removeAction = buildAction(controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url, "site.remove", label)
 
-    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
-      case (_, _, b1, b2) if b1 || b2 => Nil
-      case (true, _, _, _)            => Seq(changeAction)
-      case (false, _, _, _)           => Seq(removeAction)
+    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToLeave) match {
+      case (_, _, true)  => Nil
+      case (true, _, _)  => Seq(changeAction)
+      case (false, _, _) => Seq(removeAction)
     }
 
     faxNumber.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
@@ -459,10 +478,10 @@ case class CheckPartnerDetailsViewModel(
     val changeAction = buildAction(controllers.partner.routes.PartnerEmailAddressController.onPageLoad().url, "site.change", label)
     val removeAction = buildAction(controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url, "site.remove", label)
 
-    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
-      case (_, _, b1, b2) if b1 || b2 => Nil
-      case (true, _, _, _)            => Seq(changeAction)
-      case (false, _, _, _)           => Seq(removeAction)
+    val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
+      case (_, _, true)  => Nil
+      case (true, _, _)  => Seq(changeAction)
+      case (false, _, _) => Seq(removeAction)
     }
 
     emailAddress.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
@@ -507,7 +526,12 @@ case class CheckPartnerDetailsViewModel(
 
     fieldValue match {
       case Some(value) =>
-        val actions = if (isNewPartnerFlow.contains(true)) Seq(buildAction(url, "site.change", label)) else Nil
+        val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
+          case (true, _, _)  => Seq(buildAction(url, "site.change", label))
+          case (_, _, true)  => Nil
+          case (false, _, _) => Nil
+        }
+
         Some(createSummaryListRow(label, Text(value), actions))
 
       case None =>
