@@ -229,14 +229,14 @@ case class CheckPartnerDetailsViewModel(
           actions,
           "govuk-summary-list__actions govuk-!-width-one-third"
         )
-      } orElse (Some(
+      } orElse Some(
         createSummaryListRow(
           label,
           Text(messages("partnerDetailsCheckYourAnswers.noData")),
           Seq(changeAction),
           "govuk-summary-list__actions govuk-!-width-one-third"
         )
-      ))
+      )
     } else None
   }
 
@@ -412,17 +412,26 @@ case class CheckPartnerDetailsViewModel(
       }
     } else None
 
-  private def faxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    faxNumber.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.faxNumber")
+  private def faxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val label = messages("partnerDetailsCheckYourAnswers.faxNumber")
+    val changeAction = buildAction(controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url, "site.change", label)
+    val removeAction = buildAction(controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url, "site.remove", label)
 
-      val changeAction = buildAction(controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url, "site.change", label)
-      val removeAction = if (!isNewPartnerFlow.contains(true)) {
-        Some(buildAction(controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url, "site.remove", label))
-      } else None
-
-      createSummaryListRow(label, Text(value), changeAction +: removeAction.toList)
+    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
+      case (_, _, b1, b2) if b1 || b2 => Nil
+      case (true, _, _, _)            => Seq(changeAction)
+      case (false, _, _, _)           => Seq(removeAction)
     }
+
+    faxNumber.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
+      createSummaryListRow(
+        label,
+        Text(messages("partnerDetailsCheckYourAnswers.noData")),
+        Seq(changeAction),
+        "govuk-summary-list__actions govuk-!-width-one-third"
+      )
+    )
+  }
 
   private def addEmailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (isNewPartnerFlow.contains(true)) {
@@ -435,17 +444,29 @@ case class CheckPartnerDetailsViewModel(
       }
     } else None
 
-  private def emailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    emailAddress.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.emailAddress")
+  private def emailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val label = messages("partnerDetailsCheckYourAnswers.emailAddress")
+    val changeAction = buildAction(controllers.partner.routes.PartnerEmailAddressController.onPageLoad().url, "site.change", label)
+    val removeAction = buildAction(controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url, "site.remove", label)
 
-      val changeAction = buildAction(controllers.partner.routes.PartnerEmailAddressController.onPageLoad().url, "site.change", label)
-      val removeAction = if (!isNewPartnerFlow.contains(true)) {
-        Some(buildAction(controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url, "site.remove", label))
-      } else None
-
-      createSummaryListRow(label, Text(value), changeAction +: removeAction.toList)
+    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
+      case (_, _, b1, b2) if b1 || b2 => Nil
+      case (true, _, _, _)            => Seq(changeAction)
+      case (false, _, _, _)           => Seq(removeAction)
     }
+
+    emailAddress.map { value =>
+
+      createSummaryListRow(label, Text(value), actions)
+    } orElse Some(
+      createSummaryListRow(
+        label,
+        Text(messages("partnerDetailsCheckYourAnswers.noData")),
+        Seq(changeAction),
+        "govuk-summary-list__actions govuk-!-width-one-third"
+      )
+    )
+  }
 
   // --- Row Construction Helpers ---
 
