@@ -72,17 +72,6 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           saveUserAnswersToSessionAndRedirect(userAnswers, request)
         }
-//        if isPartnerDetailsInCache(userAnswers) then {
-//          logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
-//
-//          Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-//        } else {
-//          println("NO PARTNER DETAILS IN CACHE") // TODO kept to check with specs if it works right, delete later
-//          logger.info(s"User Answers found with id ${userAnswers.id}")
-//
-//          given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-//          saveUserAnswersToSessionAndRedirect(userAnswers, request)
-//        }
     }
   }
 
