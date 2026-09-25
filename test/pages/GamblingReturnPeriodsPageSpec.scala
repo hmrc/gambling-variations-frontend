@@ -15,13 +15,23 @@
  */
 
 package pages
-
-import models.GamblingReturnPeriods
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-case object GamblingReturnPeriodsPage extends QuestionPage[GamblingReturnPeriods] {
+class GamblingReturnPeriodsPageSpec extends AnyFreeSpec with Matchers {
 
-  override def path: JsPath = JsPath \ toString
+  "GamblingReturnPeriodsPage" - {
 
-  override def toString: String = "gamblingReturnPeriods"
+    "must have the correct toString" in {
+      GamblingReturnPeriodsPage.toString mustBe "gamblingReturnPeriods"
+    }
+
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath =
+        JsPath \ "gamblingReturnPeriods"
+
+      GamblingReturnPeriodsPage.path mustBe expectedPath
+    }
+  }
 }
