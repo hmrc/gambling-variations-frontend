@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
 import pages.*
 import pages.controllingbody.*
@@ -68,7 +68,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
   }
 
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
-    gamblingConnector.getControlBodyDetails(answers.id) flatMap { controlBodyDetails =>
+    gamblingConnector.getControllingBody(answers.id) flatMap { controlBodyDetails =>
 
       setControllingBodyDetails(controlBodyDetails, answers) map { updatedAnswers =>
         logger.info("User Answers updated with Controlling Body Details. Saving User Answers")
@@ -88,7 +88,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setControllingBodyDetails(details: ControlBodyDetails, answers: UserAnswers): Try[UserAnswers] = {
+  private def setControllingBodyDetails(details: ControllingBodyDetails, answers: UserAnswers): Try[UserAnswers] = {
 
     val address = details.address1.map { address1 =>
       Address(
@@ -125,7 +125,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyBusinessPartnerNumberPage, details.businessPartnerNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfJoiningPage, details.dateOfJoining)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfLeavingPage, details.dateOfLeaving)
-      updatedAnswers <- updatedAnswers.set(ControllingBodyDetailsCorrespondanceSectionPage, correspondenceDetails)
+      updatedAnswers <- updatedAnswers.set(ControllingBodyDetailsCorrespondenceSectionPage, correspondenceDetails)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfIncorporationPage, details.dateOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyCountryOfIncorporationPage, details.countryOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyForeignCorporateReferencePage, details.foreignCorporateRef)
@@ -143,7 +143,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
     } yield updatedAnswers
   }
 
-  private def buildSoleProprietorName(details: ControlBodyDetails): Option[SoleProprietorName] = {
+  private def buildSoleProprietorName(details: ControllingBodyDetails): Option[SoleProprietorName] = {
     (
       details.solePropTitle,
       details.solePropFirstName,

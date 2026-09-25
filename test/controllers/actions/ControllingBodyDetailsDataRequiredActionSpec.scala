@@ -18,7 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
 import org.mockito.ArgumentMatchers.*
@@ -56,7 +56,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         val gamblingConnector = mock[GamblingConnector]
 
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controlBodyDetails)
+        when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
         val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -132,7 +132,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controlBodyDetails)
+          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
           val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -210,7 +210,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controlBodyDetails)
+          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
           val existingUserAnswers =
             UserAnswers(mgdRegNum,
@@ -248,8 +248,8 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
 
 object ControllingBodyDetailsDataRequiredActionSpec {
 
-  val controlBodyDetails: ControlBodyDetails =
-    ControlBodyDetails(
+  val controllingBodyDetails: ControllingBodyDetails =
+    ControllingBodyDetails(
       mgdRegNumber           = "XGM00000001761",
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(java.time.LocalDate.parse("2013-02-01")),

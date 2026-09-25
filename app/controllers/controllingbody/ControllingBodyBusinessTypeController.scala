@@ -20,13 +20,14 @@ import controllers.actions.*
 import forms.controllingbody.ControllingBodyBusinessTypeFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.controllingbody.ControllingBodyBusinessTypePage
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodySubmittedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.controllingbody.ControllingBodyBusinessTypeView
+import utils.FlagsUtil.checkIfChanged
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -62,9 +63,13 @@ class ControllingBodyBusinessTypeController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         businessType =>
+          val ua = request.userAnswers
+          val isChanged = checkIfChanged(businessType, ua, ControllingBodyBusinessTypePage, ControllingBodyChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyBusinessTypePage, businessType))
-            _              <- sessionRepository.set(updatedAnswers)
+            updatedAnswers              <- Future.fromTry(ua.set(ControllingBodyBusinessTypePage, businessType))
+            updatedAnswersWithSubmitted <- Future.fromTry(ua.set(ControllingBodySubmittedPage, true))
+            finalAnswers                <- Future.fromTry(ua.set(ControllingBodyChangesPage, isChanged))
+            _                           <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(ControllingBodyBusinessTypePage, mode, updatedAnswers))
       )
   }

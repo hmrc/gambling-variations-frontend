@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import models.licencespremises.LicencesAndPremises
 import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
@@ -252,7 +252,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
       }
   }
 
-  def getControlBodyDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[ControlBodyDetails] = {
+  def getControllingBody(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[ControllingBodyDetails] = {
     http
       .get(url"$baseUrl/controlling-body-details/mgd/$mgdRegNumber")
       .execute[HttpResponse]
@@ -261,7 +261,7 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
 
           case OK =>
             response.json
-              .validate[ControlBodyDetails]
+              .validate[ControllingBodyDetails]
               .fold(
                 errors => throw new RuntimeException(s"Invalid JSON Details: $errors"),
                 details => details

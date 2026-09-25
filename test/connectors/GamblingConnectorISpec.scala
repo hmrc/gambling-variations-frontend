@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
 import models.*
 import org.scalatest.BeforeAndAfterAll
@@ -621,7 +621,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           .willReturn(okJson(jsonAsString))
       )
 
-      connector.getControlBodyDetails(mgdRegNumber).futureValue mustBe controlBodyResponse
+      connector.getControllingBody(mgdRegNumber).futureValue mustBe controllingBodyResponse
     }
 
     "return UpstreamErrorResponse when backend returns 404" in {
@@ -632,7 +632,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       )
 
       recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getControlBodyDetails(mgdRegNumber)
+        connector.getControllingBody(mgdRegNumber)
       }
     }
 
@@ -644,7 +644,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       )
 
       recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getControlBodyDetails(mgdRegNumber)
+        connector.getControllingBody(mgdRegNumber)
       }
     }
 
@@ -862,8 +862,8 @@ object GamblingConnectorISpec {
     premisesDetails       = Some(premisesDetailsResponse)
   )
 
-  val controlBodyResponse: ControlBodyDetails =
-    ControlBodyDetails(
+  val controllingBodyResponse: ControllingBodyDetails =
+    ControllingBodyDetails(
       mgdRegNumber           = mgdRegNumber,
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(LocalDate.of(2013, 2, 1)),

@@ -6,20 +6,20 @@
 package models.cotrollingbody
 
 import models.BusinessType
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
 import java.time.LocalDate
 
-class ControlBodyDetailsSpec extends AnyWordSpec with Matchers {
+class ControllingBodyDetailsSpec extends AnyWordSpec with Matchers {
 
   "Control Body Details JSON format" should {
 
     "serialize to JSON when defined" in {
 
-      val json = Json.toJson(controlBodyDetailsResponse)
+      val json = Json.toJson(controllingBodyDetailsResponse)
 
       json shouldBe Json.obj(
         "mgdRegNumber"           -> "XGM00000001761",
@@ -96,9 +96,9 @@ class ControlBodyDetailsSpec extends AnyWordSpec with Matchers {
         "isUkIncorporated"       -> "0"
       )
 
-      val result = json.as[ControlBodyDetails]
+      val result = json.as[ControllingBodyDetails]
 
-      result shouldBe controlBodyDetailsResponse
+      result shouldBe controllingBodyDetailsResponse
     }
 
     "deserialize missing optional fields as None" in {
@@ -107,9 +107,9 @@ class ControlBodyDetailsSpec extends AnyWordSpec with Matchers {
         "mgdRegNumber" -> "XRM00000000574"
       )
 
-      val result = json.as[ControlBodyDetails]
+      val result = json.as[ControllingBodyDetails]
 
-      result shouldBe ControlBodyDetails(
+      result shouldBe ControllingBodyDetails(
         mgdRegNumber           = "XRM00000000574",
         businessPartnerNumber  = None,
         dateOfJoining          = None,
@@ -146,8 +146,8 @@ class ControlBodyDetailsSpec extends AnyWordSpec with Matchers {
       )
     }
   }
-  val controlBodyDetailsResponse: ControlBodyDetails =
-    ControlBodyDetails(
+  val controllingBodyDetailsResponse: ControllingBodyDetails =
+    ControllingBodyDetails(
       mgdRegNumber           = "XGM00000001761",
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(LocalDate.of(2013, 2, 1)),
