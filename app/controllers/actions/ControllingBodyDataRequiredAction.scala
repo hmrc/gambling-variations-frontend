@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
 
-class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
+class ControllingBodyDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
   val gamblingConnector: GamblingConnector
 )(implicit val executionContext: ExecutionContext)
@@ -125,7 +125,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyBusinessPartnerNumberPage, details.businessPartnerNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfJoiningPage, details.dateOfJoining)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfLeavingPage, details.dateOfLeaving)
-      updatedAnswers <- updatedAnswers.set(ControllingBodyDetailsCorrespondenceSectionPage, correspondenceDetails)
+      updatedAnswers <- updatedAnswers.set(ControllingBodyCorrespondenceSectionPage, correspondenceDetails)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfIncorporationPage, details.dateOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyCountryOfIncorporationPage, details.countryOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyForeignCorporateReferencePage, details.foreignCorporateRef)

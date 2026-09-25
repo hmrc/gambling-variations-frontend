@@ -60,7 +60,7 @@ object ChangeRegistrationDetailsViewModel {
       Seq(
         optional(isGroupMember)(
           RegistrationSectionRow(
-            messages("changeRegistrationDetails.controllingBodyDetails"),
+            messages("changeRegistrationDetails.controllingBody"),
             routes.PageNotFoundController.onPageLoad().url,
             NoDetailsChanged
           )

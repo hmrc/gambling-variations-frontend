@@ -21,7 +21,7 @@ import play.api.libs.json.JsPath
 
 case object ControllingBodyVrnPage extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
+  override def path: JsPath = JsPath \ "controllingBodySection" \ toString
 
   override def toString: String = "vrn"
 }

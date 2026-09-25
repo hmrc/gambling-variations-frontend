@@ -41,11 +41,11 @@ class ControllingBodyDataRequiredActionSpec extends SpecBase with MockitoSugar {
   import ControllingBodyDataRequiredActionSpec.*
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
-      extends ControllingBodyDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
+      extends ControllingBodyDataRequiredActionImpl(sessionRepository, gamblingConnector) {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
-  "ControllingBodyDetails DataRequiredAction" - {
+  "ControllingBody DataRequiredAction" - {
 
     "when there is no User Answers in the cache" - {
 
@@ -61,12 +61,12 @@ class ControllingBodyDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "controllingBodyDetailsSection" -> Json.obj(
+          "controllingBodySection" -> Json.obj(
             "mgdRegNum"             -> "XGM00000001761",
             "businessPartnerNumber" -> "0100053091",
             "dateOfJoining"         -> "2013-02-01",
             "dateOfLeaving"         -> "2023-03-01",
-            "correspondanceSection" -> Json.obj(
+            "correspondenceSection" -> Json.obj(
               "mgdRegNumber" -> "XGM00000001761",
               "correspondenceAddress" -> Json.obj(
                 "address1" -> "Address 1",
@@ -179,7 +179,7 @@ class ControllingBodyDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val gamblingConnector = mock[GamblingConnector]
 
           val data = Json.obj(
-            "controllingBodyDetailsSection" -> Json.obj(
+            "controllingBodySection" -> Json.obj(
               "mgdRegNum" -> "XGM00000001761"
             )
           )
