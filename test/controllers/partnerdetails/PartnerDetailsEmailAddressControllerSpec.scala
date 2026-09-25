@@ -24,10 +24,9 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsEmailAddressPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceEmailAddressPage
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -74,7 +73,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = minimalUserAnswersNewPartners
-          .set(PartnerDetailsEmailAddressPage(newPartnersIndex1), "validEmail@example.com")
+          .set(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), "validEmail@example.com")
           .success
           .value
 
@@ -178,7 +177,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
           verify(mockSessionRepository).set(savedAnswersCaptor.capture())
 
           savedAnswersCaptor.getValue
-            .get(PartnerDetailsEmailAddressPage(newPartnersIndex1))
+            .get(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1))
             .value mustEqual "validEmail@example.com"
         }
       }
@@ -254,7 +253,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = minimalUserAnswersExistingPartners
-          .set(PartnerDetailsEmailAddressPage(businessNumber1), "validEmail@example.com")
+          .set(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1), "validEmail@example.com")
           .success
           .value
 
@@ -358,7 +357,7 @@ class PartnerDetailsEmailAddressControllerSpec extends SpecBase with MockitoSuga
           verify(mockSessionRepository).set(savedAnswersCaptor.capture())
 
           savedAnswersCaptor.getValue
-            .get(PartnerDetailsEmailAddressPage(businessNumber1))
+            .get(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1))
             .value mustEqual "validEmail@example.com"
         }
       }

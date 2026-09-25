@@ -1038,7 +1038,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "should route PartnerEmailAddressPage to PartnerEmailAddressController" in {
-        navigator.nextPage(PartnerDetailsEmailAddressPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+        navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
           controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
 

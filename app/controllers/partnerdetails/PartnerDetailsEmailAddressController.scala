@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.partnerdetails.PartnerEmailAddressFormProvider
 import models.{Mode, PartnerDetails}
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsEmailAddressPage
+import pages.partnerdetails.PartnerDetailsCorrespondenceEmailAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -52,7 +52,7 @@ class PartnerDetailsEmailAddressController @Inject() (
     val newIndex = PartnerUtils.parseIndex(index, mode)
 
     val preparedForm = request.userAnswers
-      .get(PartnerDetailsEmailAddressPage(newIndex))
+      .get(PartnerDetailsCorrespondenceEmailAddressPage(newIndex))
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, index, mode))
@@ -67,9 +67,9 @@ class PartnerDetailsEmailAddressController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsEmailAddressPage(newIndex), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCorrespondenceEmailAddressPage(newIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsEmailAddressPage(newIndex), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(newIndex), mode, updatedAnswers))
       )
   }
 }
