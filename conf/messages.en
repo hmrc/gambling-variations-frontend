@@ -1048,6 +1048,8 @@ partnerDetailsCheckYourAnswers.error.missingDetails = You must add missing detai
 partnerDetailsCheckYourAnswers.error.contactUs = To update details you cannot change online, you need to contact us (opens in new tab).
 partnerDetailsCheckYourAnswers.error.cannotChangeLeaving = You cannot change this partner's details online because they are due to leave. If you want to make changes before {0}, you need to contact us (opens in new tab).
 partnerDetailsCheckYourAnswers.error.cannotChangeJoining = You cannot change this partner's details online because they are due to join. If you want to make changes before they join on {0}, you need to contact us (opens in new tab).
+partnerDetailsCheckYourAnswers.noData = Data not provided
+
 partnerDetailsCheckYourAnswers.businessDetails = Business details
 partnerDetailsCheckYourAnswers.typeOfBusiness = Type of business
 partnerDetailsCheckYourAnswers.typeOfBusiness.add = Add type of business
