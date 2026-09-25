@@ -14,31 +14,15 @@
  * limitations under the License.
  */
 
-package models
+package pages.partnerdetails
 
-import play.api.libs.json.{Format, Json, OWrites, Reads}
+import models.NewCorrespondenceDetails
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class Address(
-  address1: String,
-  address2: Option[String],
-  address3: Option[String],
-  address4: Option[String],
-  postcode: Option[String],
-  country: Option[String]
-) {
-  def fullAddress: String = Seq(
-    Some(address1),
-    address2,
-    address3,
-    address4,
-    postcode,
-    country
-  ).flatten.mkString(" ")
-}
+case class NewPartnerDetailsCorrespondenceDetailsSectionPage(index: Int) extends QuestionPage[NewCorrespondenceDetails] {
 
-object Address {
-  val reads: Reads[Address] = Json.reads[Address]
-  val writes: OWrites[Address] = Json.writes[Address]
-  implicit val format: Format[Address] =
-    Format(reads, writes)
+  override def path: JsPath = JsPath \ "partners" \ index \ toString
+
+  override def toString: String = "partnerDetailsCorrespondenceDetailsSection"
 }

@@ -1,0 +1,68 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.components.*
+@import viewmodels.checkAnswers.partner.CheckPartnerDetailsViewModel
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
+@import models.NormalMode
+
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton,
+        caption: Caption,
+        h1:H1,
+        h2:H2,
+        link: Link,
+        paragraph: Paragraph,
+        govukSummaryList : GovukSummaryList
+)
+
+
+@(checkPartnerDetailsViewModel: CheckPartnerDetailsViewModel)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = titleNoForm(messages("partnerDetailsCheckYourAnswers.title"), Some(messages("changeRegistrationDetails.caption")))) {
+
+    @caption(messages("changeRegistrationDetails.caption"))
+    @h1("partnerDetailsCheckYourAnswers.heading", classes = "govuk-heading-l")
+
+    @h2("partnerDetailsCheckYourAnswers.businessDetails", classes = "govuk-heading-m")
+    @govukSummaryList(SummaryList(
+        rows = checkPartnerDetailsViewModel.businessDetailsSummaryList
+    ))
+
+    @h2("partnerDetailsCheckYourAnswers.address", classes = "govuk-heading-m")
+    @govukSummaryList(SummaryList(
+        rows = checkPartnerDetailsViewModel.addressSummaryList
+    ))
+
+    @h2("partnerDetailsCheckYourAnswers.contactDetails", classes = "govuk-heading-m")
+    @govukSummaryList(SummaryList(
+        rows = checkPartnerDetailsViewModel.contactDetailsSummaryList
+    ))
+
+    @if(checkPartnerDetailsViewModel.isSubmitted) {
+        @paragraph(messages("changeRegistrationDetails.readyToSubmit"))
+    }
+
+    <p class="govuk-body">
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+                .withCssClass("button.govuk-button")
+                .asLink(checkPartnerDetailsViewModel.continueCall.url)
+        )
+    </p>
+
+}

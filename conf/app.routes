@@ -276,9 +276,9 @@ GET        /change-registration-details/partner-details/vat-registration-number 
 POST       /change-registration-details/partner-details/vat-registration-number                  controllers.partner.PartnerDetailsVatRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/vat-registration-number-yes-no          controllers.partner.VatRegistrationNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/partner-details/vat-registration-number-yes-no           controllers.partner.VatRegistrationNumberYesNoController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/partner-details/vat-registration-number-yes-no               controllers.partner.VatRegistrationNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/partner-details/vat-registration-number-yes-no               controllers.partner.VatRegistrationNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/vat-registration-number-yes-no          controllers.partner.VatRegistrationNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/vat-registration-number-yes-no          controllers.partner.VatRegistrationNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/vat-registration-number-yes-no          controllers.partner.VatRegistrationNumberYesNoController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/remove-vat-registration-number                        controllers.partner.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/remove-vat-registration-number                        controllers.partner.PartnerDetailsRemoveVatRegNumberYesNoController.onSubmit(mode: Mode = NormalMode)
@@ -341,6 +341,7 @@ GET        /change-registration-details/partner-details/foreign-corporate-refere
 POST       /change-registration-details/partner-details/foreign-corporate-reference            controllers.partner.PartnerDetailsForeignCorporateReferenceController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/partner-details/check-date-to-remove                       controllers.partner.PartnerCheckConfirmRemoveDateController.onPageLoad()
+GET        /change-registration-details/partner-details/check                                      controllers.partner.PartnerDetailsCheckYourAnswersController.onPageLoad()
 
 GET        /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onSubmit(mode: Mode = NormalMode)

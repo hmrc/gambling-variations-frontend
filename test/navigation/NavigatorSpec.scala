@@ -25,7 +25,6 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.LicenceNumberPage
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
