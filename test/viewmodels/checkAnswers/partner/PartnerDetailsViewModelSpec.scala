@@ -273,10 +273,16 @@ class PartnerDetailsViewModelSpec extends SpecBase {
 
       val answers =
         emptyUserAnswers
-          .set(
-            PartnerDetailsPage(0),
-            "XWM00000001762"
-          )
+          .set(PartnerDetailsPage(0), "XWM00000001761")
+          .success
+          .value
+          .set(PartnerDetailsPage(1), "XWM00000001762")
+          .success
+          .value
+          .set(PartnerDetailsPage(2), "XWM00000001763")
+          .success
+          .value
+          .set(PartnerDetailsPage(3), "XWM00000001764")
           .success
           .value
 
@@ -496,10 +502,10 @@ class PartnerDetailsViewModelSpec extends SpecBase {
       viewModel.showSubmitMessage mustBe true
     }
 
-    "not show minimum partners message when there are three active partners" in {
+    "not show minimum partners message when there are more than three active partners" in {
 
       val answers =
-        (0 until 3).foldLeft(emptyUserAnswers) { (userAnswers, index) =>
+        (0 until 4).foldLeft(emptyUserAnswers) { (userAnswers, index) =>
           userAnswers
             .set(
               PartnerDetailsPage(index),
@@ -518,7 +524,6 @@ class PartnerDetailsViewModelSpec extends SpecBase {
           frontendAppConfig
         )
 
-      viewModel.partners must have size 3
       viewModel.showMinimumPartnersMessage mustBe false
       viewModel.showSubmitMessage mustBe true
     }
