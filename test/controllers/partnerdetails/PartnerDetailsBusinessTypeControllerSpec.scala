@@ -36,7 +36,7 @@ import views.html.partnerdetails.PartnerDetailsBusinessTypeView
 
 import scala.concurrent.Future
 
-//TODO almost done - I think navigator problem
+//TODO done
 class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val form: Form[BusinessType] = (new PartnerDetailsBusinessTypeFormProvider())()
@@ -49,15 +49,13 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
   val validUserAnswersExistingPartners: UserAnswers =
     userAnswersPartnerDetailsExistingPartners
-//      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO for businessNumber, this should not be relevant I think
-//      .success
-//      .value
+
 
   val validUserAnswersNewPartners: UserAnswers =
     userAnswersPartnerDetailsNewPartners
-//      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO for businessNumber, this should not be relevant I think
-//      .success
-//      .value
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+      .success
+      .value
 
   "newPartners" - {
     "PartnerDetailsBusinessType Controller" - {
@@ -119,7 +117,6 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       }
 
       "onSubmit" - {
-        // TODO this test seems more relevant for newPartners, I think
         "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
           val mockSessionRepository = mock[SessionRepository]
@@ -142,7 +139,7 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
             val result = route(application, request).value
 
             val expectedAnswers = validUserAnswersNewPartners
-              .set(PartnerDetailsBusinessTypePage(newPartnersIndex1.toString), Corporatebody)
+              .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Corporatebody)
               .success
               .value
 
