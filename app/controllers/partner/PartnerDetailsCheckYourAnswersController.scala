@@ -41,11 +41,13 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   private val index: Int = utils.PartnerUtils.interimIndex
   // is new partner -> to use flag!
   private val isNewPartner: Option[Boolean] = Some(true)
+  // is submitted -> to use flag!
+  private val isSubmitted: Boolean = true
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
     val model = CheckPartnerDetailsViewModel
-      .from(request.userAnswers, index, isNewPartner)
+      .from(request.userAnswers, index, isNewPartner, isSubmitted)
 
     Ok(view(model))
   }

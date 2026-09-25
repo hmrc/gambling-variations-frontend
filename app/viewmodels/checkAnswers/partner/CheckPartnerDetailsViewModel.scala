@@ -42,6 +42,7 @@ case class CheckPartnerDetailsViewModel(
   addTradingName: Option[String], // all business type
   tradingName: Option[String], // all business type
   dateOfJoining: Option[String], // all business type
+  dateOfLeaving: Option[String], // all business type
 
   addNino: Option[String], // soleProprietor
   nino: Option[String], // soleProprietor
@@ -68,12 +69,12 @@ case class CheckPartnerDetailsViewModel(
   faxNumber: Option[String],
   addEmailAddress: Option[Boolean],
   emailAddress: Option[String],
-  isNewPartnerFlow: Option[Boolean]
+  isNewPartnerFlow: Option[Boolean],
+  isSubmitted: Boolean
 ) {
 
   // --- Update these ---
 
-  def isSubmitted: Boolean = true
   def continueCall: Call = controllers.partner.routes.PartnerDetailsCheckYourAnswersController.onPageLoad()
 
   // --- Summary Lists for View ---
@@ -556,7 +557,9 @@ object CheckPartnerDetailsViewModel {
   }
 
   // TODO -> Update to use flag!
-  def from(userAnswers: UserAnswers, index: Int, isNewPartnerFlow: Option[Boolean])(implicit messages: Messages): CheckPartnerDetailsViewModel = {
+  def from(userAnswers: UserAnswers, index: Int, isNewPartnerFlow: Option[Boolean], isSubmitted: Boolean)(implicit
+    messages: Messages
+  ): CheckPartnerDetailsViewModel = {
     val businessInfo = businessTypeInfo(userAnswers, index)
     CheckPartnerDetailsViewModel(
       index                     = index,
@@ -570,6 +573,7 @@ object CheckPartnerDetailsViewModel {
       addTradingName            = userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)).map(_.toString),
       tradingName               = userAnswers.get(PartnerTradingNamePage).orElse(userAnswers.get(PartnerDetailsTradingNamePage(index))),
       dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(shortDateDisplay),
+      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(shortDateDisplay),
       addNino                   = userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)).map(_.toString),
       nino                      = userAnswers.get(PartnerDetailsNinoPage(index)),
       utr                       = userAnswers.get(PartnerDetailsUtrPage(index)),
@@ -589,7 +593,8 @@ object CheckPartnerDetailsViewModel {
       faxNumber                = userAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(index)),
       addEmailAddress          = userAnswers.get(PartnerAddEmailAddressYesNoPage(index)),
       emailAddress     = userAnswers.get(PartnerEmailAddressPage).orElse(userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(index))),
-      isNewPartnerFlow = isNewPartnerFlow
+      isNewPartnerFlow = isNewPartnerFlow,
+      isSubmitted      = isSubmitted
     )
   }
 }

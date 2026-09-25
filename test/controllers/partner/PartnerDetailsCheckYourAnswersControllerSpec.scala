@@ -28,6 +28,14 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Partner
 
   "PartnerDetailsCheckYourAnswers Controller" - {
 
+    // TODO: Interim solutions
+
+    // index -> will be refactored with the indexing ticket
+    // is new partner -> to use flag!
+    val isNewPartner: Option[Boolean] = Some(true)
+    // is submitted -> to use flag!
+    val isSubmitted: Boolean = true
+
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -36,7 +44,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Partner
         UserAnswers(mgdRegNumber, cleanedData())
 
       implicit val msg: Messages = messages(application)
-      val model = CheckPartnerDetailsViewModel.from(validUserAnswers, index)
+      val model = CheckPartnerDetailsViewModel.from(validUserAnswers, index, isNewPartner, isSubmitted)
 
       running(application) {
         val request = FakeRequest(GET, routes.PartnerDetailsCheckYourAnswersController.onPageLoad().url)
