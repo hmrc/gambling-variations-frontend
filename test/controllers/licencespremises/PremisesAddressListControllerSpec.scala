@@ -62,6 +62,16 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
     )
   )
 
+  private val uaNoPremises = UserAnswers(
+    id = userAnswersId,
+    data = Json.obj(
+      "licencesPremisesSection" -> Json.obj(
+        "mgdRegNum"       -> "XGM000001761",
+        "premisesDetails" -> Json.obj("totalRows" -> 1000, "premises" -> None)
+      )
+    )
+  )
+
   private val preparedFormWithAnswers =
     userAnswers
       .get(AddPremisesAddressPage)
@@ -112,6 +122,30 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+      }
+    }
+    "must redirect to AccessDenied when premises empty" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any[UserAnswers]))
+        .thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(uaNoPremises))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request = FakeRequest(GET, premisesAddressListRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
+
       }
     }
 

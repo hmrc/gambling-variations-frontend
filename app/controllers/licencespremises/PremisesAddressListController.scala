@@ -59,7 +59,11 @@ class PremisesAddressListController @Inject() (
         Redirect(routes.AccessDeniedController.onPageLoad())
       )(premisesList =>
         val addressList = premisesList.premises
-        Ok(view(preparedForm, NormalMode, addressList, maxPremisesAddresses))
+        if (addressList.isEmpty) {
+          Redirect(routes.AccessDeniedController.onPageLoad())
+        } else {
+          Ok(view(preparedForm, NormalMode, addressList, maxPremisesAddresses))
+        }
       )
   }
 
