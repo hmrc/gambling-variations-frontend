@@ -356,18 +356,29 @@ case class CheckPartnerDetailsViewModel(
 
   private def vatRegistrationNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (typeOfBusiness.contains(messages("businessType.corporatebody"))) {
-      vatRegistrationNumber.map { value =>
-        val label = messages("partnerDetailsCheckYourAnswers.vatRegistrationNumber")
+      val label = messages("partnerDetailsCheckYourAnswers.vatRegistrationNumber")
+      val changeAction = buildAction(controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url, "site.change", label)
+      val removeAction =
+        buildAction(controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url, "site.remove", label)
 
-        val changeAction = if (isNewPartnerFlow.contains(true)) {
-          Some(buildAction(controllers.partner.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad().url, "site.change", label))
-        } else None
+      val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
+        case (_, _, true)     => Nil
+        case (true, false, _) => Seq(changeAction, removeAction)
+        case (true, true, _)  => Nil
+        case (false, _, _)    => Nil
+      }
 
-        val removeAction = if (!isNewPartnerFlow.contains(true)) {
-          Some(buildAction(controllers.partner.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad().url, "site.remove", label))
-        } else None
+      vatRegistrationNumber.map(value => createSummaryListRow(label, Text(value), actions)).orElse {
+        val fallbackActions = if (actions.contains(changeAction)) Seq(changeAction) else Nil
 
-        createSummaryListRow(label, Text(value), Seq(changeAction, removeAction).flatten)
+        Some(
+          createSummaryListRow(
+            label,
+            Text(messages("partnerDetailsCheckYourAnswers.noData")),
+            fallbackActions,
+            "govuk-summary-list__actions govuk-!-width-one-third"
+          )
+        )
       }
     } else None
 
@@ -398,25 +409,36 @@ case class CheckPartnerDetailsViewModel(
 
   private def additionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
     val label = messages("partnerDetailsCheckYourAnswers.additionalInformation")
-    val changeAction =
-      buildAction(controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad().url, "site.change", label)
-    val removeAction =
-      buildAction(controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url, "site.remove", label)
 
-    val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
+    val changeAction = buildAction(
+      controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad().url,
+      "site.change",
+      label
+    )
+    val removeAction = buildAction(
+      controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url,
+      "site.remove",
+      label
+    )
+
+    val computedActions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
       case (_, _, true)  => Nil
       case (true, _, _)  => Seq(changeAction)
       case (false, _, _) => Seq(removeAction)
     }
 
-    additionalInformation.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
-      createSummaryListRow(
-        label,
-        Text(messages("partnerDetailsCheckYourAnswers.noData")),
-        Seq(changeAction),
-        "govuk-summary-list__actions govuk-!-width-one-third"
+    additionalInformation.map(value => createSummaryListRow(label, Text(value), computedActions)).orElse {
+      val fallbackActions = if (computedActions.contains(changeAction)) Seq(changeAction) else Nil
+
+      Some(
+        createSummaryListRow(
+          label,
+          Text(messages("partnerDetailsCheckYourAnswers.noData")),
+          fallbackActions,
+          "govuk-summary-list__actions govuk-!-width-one-third"
+        )
       )
-    )
+    }
   }
 
   // --- Contact Details Rows ---
@@ -443,8 +465,16 @@ case class CheckPartnerDetailsViewModel(
 
   private def faxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
     val label = messages("partnerDetailsCheckYourAnswers.faxNumber")
-    val changeAction = buildAction(controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url, "site.change", label)
-    val removeAction = buildAction(controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url, "site.remove", label)
+    val changeAction = buildAction(
+      controllers.partner.routes.ChangePartnerFaxNumberController.onPageLoad().url,
+      "site.change",
+      label
+    )
+    val removeAction = buildAction(
+      controllers.partner.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad().url,
+      "site.remove",
+      label
+    )
 
     val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToLeave) match {
       case (_, _, true)  => Nil
@@ -452,14 +482,20 @@ case class CheckPartnerDetailsViewModel(
       case (false, _, _) => Seq(removeAction)
     }
 
-    faxNumber.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
-      createSummaryListRow(
-        label,
-        Text(messages("partnerDetailsCheckYourAnswers.noData")),
-        Seq(changeAction),
-        "govuk-summary-list__actions govuk-!-width-one-third"
-      )
-    )
+    faxNumber
+      .map(value => createSummaryListRow(label, Text(value), actions))
+      .orElse {
+        val fallbackActions = if (actions.contains(changeAction)) Seq(changeAction) else Nil
+
+        Some(
+          createSummaryListRow(
+            label,
+            Text(messages("partnerDetailsCheckYourAnswers.noData")),
+            fallbackActions,
+            "govuk-summary-list__actions govuk-!-width-one-third"
+          )
+        )
+      }
   }
 
   private def addEmailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -475,8 +511,16 @@ case class CheckPartnerDetailsViewModel(
 
   private def emailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
     val label = messages("partnerDetailsCheckYourAnswers.emailAddress")
-    val changeAction = buildAction(controllers.partner.routes.PartnerEmailAddressController.onPageLoad().url, "site.change", label)
-    val removeAction = buildAction(controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url, "site.remove", label)
+    val changeAction = buildAction(
+      controllers.partner.routes.PartnerEmailAddressController.onPageLoad().url,
+      "site.change",
+      label
+    )
+    val removeAction = buildAction(
+      controllers.partner.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad().url,
+      "site.remove",
+      label
+    )
 
     val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
       case (_, _, true)  => Nil
@@ -484,14 +528,20 @@ case class CheckPartnerDetailsViewModel(
       case (false, _, _) => Seq(removeAction)
     }
 
-    emailAddress.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
-      createSummaryListRow(
-        label,
-        Text(messages("partnerDetailsCheckYourAnswers.noData")),
-        Seq(changeAction),
-        "govuk-summary-list__actions govuk-!-width-one-third"
-      )
-    )
+    emailAddress
+      .map(value => createSummaryListRow(label, Text(value), actions))
+      .orElse {
+        val fallbackActions = if (actions.contains(changeAction)) Seq(changeAction) else Nil
+
+        Some(
+          createSummaryListRow(
+            label,
+            Text(messages("partnerDetailsCheckYourAnswers.noData")),
+            fallbackActions,
+            "govuk-summary-list__actions govuk-!-width-one-third"
+          )
+        )
+      }
   }
 
   // --- Row Construction Helpers ---
