@@ -377,18 +377,28 @@ case class CheckPartnerDetailsViewModel(
       }
     } else None
 
-  private def additionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    additionalInformation.map { value =>
-      val label = messages("partnerDetailsCheckYourAnswers.additionalInformation")
+  private def additionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val label = messages("partnerDetailsCheckYourAnswers.additionalInformation")
+    val changeAction =
+      buildAction(controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad().url, "site.change", label)
+    val removeAction =
+      buildAction(controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url, "site.remove", label)
 
-      val changeAction =
-        buildAction(controllers.partner.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad().url, "site.change", label)
-      val removeAction = if (!isNewPartnerFlow.contains(true)) {
-        Some(buildAction(controllers.partner.routes.RemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad().url, "site.remove", label))
-      } else None
-
-      createSummaryListRow(label, Text(value), changeAction +: removeAction.toList)
+    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToJoin, isDueToLeave) match {
+      case (_, _, b1, b2) if b1 || b2 => Nil
+      case (true, _, _, _)            => Seq(changeAction)
+      case (false, _, _, _)           => Seq(removeAction)
     }
+
+    additionalInformation.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
+      createSummaryListRow(
+        label,
+        Text(messages("partnerDetailsCheckYourAnswers.noData")),
+        Seq(changeAction),
+        "govuk-summary-list__actions govuk-!-width-one-third"
+      )
+    )
+  }
 
   // --- Contact Details Rows ---
 
@@ -455,10 +465,7 @@ case class CheckPartnerDetailsViewModel(
       case (false, _, _, _)           => Seq(removeAction)
     }
 
-    emailAddress.map { value =>
-
-      createSummaryListRow(label, Text(value), actions)
-    } orElse Some(
+    emailAddress.map(value => createSummaryListRow(label, Text(value), actions)) orElse Some(
       createSummaryListRow(
         label,
         Text(messages("partnerDetailsCheckYourAnswers.noData")),
