@@ -347,3 +347,6 @@ POST       /change-registration-details/licences-and-premises/premises-not-cover
 
 GET        /change-registration-details/licences-and-premises/remove-address                        controllers.licencespremises.RemovePremisesAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/remove-address                        controllers.licencespremises.RemovePremisesAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onSubmit(mode: Mode = NormalMode)
