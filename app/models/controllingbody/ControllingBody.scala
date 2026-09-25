@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, OWrites, Reads}
 
 import java.time.LocalDate
 
-final case class ControllingBodyDetails(
+final case class ControllingBody(
   mgdRegNumber: String,
   businessPartnerNumber: Option[String],
   dateOfJoining: Option[LocalDate],
@@ -57,7 +57,7 @@ final case class ControllingBodyDetails(
   isUkIncorporated: Option[String]
 )
 
-object ControllingBodyDetails {
-  implicit val reads: Reads[ControllingBodyDetails] = Json.reads[ControllingBodyDetails]
-  implicit val writes: OWrites[ControllingBodyDetails] = Json.writes[ControllingBodyDetails]
+object ControllingBody {
+  implicit val reads: Reads[ControllingBody] = Json.reads[ControllingBody]
+  implicit val writes: OWrites[ControllingBody] = Json.writes[ControllingBody]
 }

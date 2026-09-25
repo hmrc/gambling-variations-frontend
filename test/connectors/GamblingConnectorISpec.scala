@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.controllingbody.ControllingBodyDetails
+import models.controllingbody.ControllingBody
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
 import models.*
 import org.scalatest.BeforeAndAfterAll
@@ -862,8 +862,8 @@ object GamblingConnectorISpec {
     premisesDetails       = Some(premisesDetailsResponse)
   )
 
-  val controllingBodyResponse: ControllingBodyDetails =
-    ControllingBodyDetails(
+  val controllingBodyResponse: ControllingBody =
+    ControllingBody(
       mgdRegNumber           = mgdRegNumber,
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(LocalDate.of(2013, 2, 1)),

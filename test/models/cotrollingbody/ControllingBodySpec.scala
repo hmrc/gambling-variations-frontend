@@ -6,20 +6,20 @@
 package models.cotrollingbody
 
 import models.BusinessType
-import models.controllingbody.ControllingBodyDetails
+import models.controllingbody.ControllingBody
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 
 import java.time.LocalDate
 
-class ControllingBodyDetailsSpec extends AnyWordSpec with Matchers {
+class ControllingBodySpec extends AnyWordSpec with Matchers {
 
   "Control Body Details JSON format" should {
 
     "serialize to JSON when defined" in {
 
-      val json = Json.toJson(controllingBodyDetailsResponse)
+      val json = Json.toJson(controllingBodyResponse)
 
       json shouldBe Json.obj(
         "mgdRegNumber"           -> "XGM00000001761",
@@ -96,9 +96,9 @@ class ControllingBodyDetailsSpec extends AnyWordSpec with Matchers {
         "isUkIncorporated"       -> "0"
       )
 
-      val result = json.as[ControllingBodyDetails]
+      val result = json.as[ControllingBody]
 
-      result shouldBe controllingBodyDetailsResponse
+      result shouldBe controllingBodyResponse
     }
 
     "deserialize missing optional fields as None" in {
@@ -107,9 +107,9 @@ class ControllingBodyDetailsSpec extends AnyWordSpec with Matchers {
         "mgdRegNumber" -> "XRM00000000574"
       )
 
-      val result = json.as[ControllingBodyDetails]
+      val result = json.as[ControllingBody]
 
-      result shouldBe ControllingBodyDetails(
+      result shouldBe ControllingBody(
         mgdRegNumber           = "XRM00000000574",
         businessPartnerNumber  = None,
         dateOfJoining          = None,
@@ -146,8 +146,8 @@ class ControllingBodyDetailsSpec extends AnyWordSpec with Matchers {
       )
     }
   }
-  val controllingBodyDetailsResponse: ControllingBodyDetails =
-    ControllingBodyDetails(
+  val controllingBodyResponse: ControllingBody =
+    ControllingBody(
       mgdRegNumber           = "XGM00000001761",
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(LocalDate.of(2013, 2, 1)),

@@ -18,7 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.controllingbody.ControllingBodyDetails
+import models.controllingbody.ControllingBody
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
 import org.mockito.ArgumentMatchers.*
@@ -36,9 +36,9 @@ import uk.gov.hmrc.http.UpstreamErrorResponse
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
+class ControllingBodyDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
-  import ControllingBodyDetailsDataRequiredActionSpec.*
+  import ControllingBodyDataRequiredActionSpec.*
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
       extends ControllingBodyDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
@@ -56,7 +56,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         val gamblingConnector = mock[GamblingConnector]
 
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
+        when(gamblingConnector.getControllingBody(any())(any())) thenReturn Future(controllingBody)
 
         val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -120,7 +120,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         }
 
         verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
+        verify(gamblingConnector, times(1)).getControllingBody(any())(any())
       }
 
       "redirect to SystemError" - {
@@ -132,7 +132,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
+          when(gamblingConnector.getControllingBody(any())(any())) thenReturn Future(controllingBody)
 
           val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -142,16 +142,16 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
 
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBody(any())(any())
         }
 
-        "when getControllingBodyDetails throws an exception" in {
+        "when getControllingBody throws an exception" in {
 
           val request = FakeRequest()
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
 
-          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(
+          when(gamblingConnector.getControllingBody(any())(any())) thenReturn Future.failed(
             UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR)
           )
 
@@ -163,7 +163,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
 
           verify(sessionRepository, never()).set(any())
-          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBody(any())(any())
         }
       }
     }
@@ -200,7 +200,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           }
 
           verify(sessionRepository, never()).set(any())
-          verify(gamblingConnector, never()).getControllingBodyDetails(any())(any())
+          verify(gamblingConnector, never()).getControllingBody(any())(any())
         }
 
         "with call to backend" in {
@@ -210,7 +210,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
+          when(gamblingConnector.getControllingBody(any())(any())) thenReturn Future(controllingBody)
 
           val existingUserAnswers =
             UserAnswers(mgdRegNum,
@@ -239,17 +239,17 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           }
 
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBody(any())(any())
         }
       }
     }
   }
 }
 
-object ControllingBodyDetailsDataRequiredActionSpec {
+object ControllingBodyDataRequiredActionSpec {
 
-  val controllingBodyDetails: ControllingBodyDetails =
-    ControllingBodyDetails(
+  val controllingBody: ControllingBody =
+    ControllingBody(
       mgdRegNumber           = "XGM00000001761",
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(java.time.LocalDate.parse("2013-02-01")),

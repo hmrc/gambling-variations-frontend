@@ -19,7 +19,7 @@ package controllers.actions
 import connectors.GamblingConnector
 import controllers.routes
 import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
-import models.controllingbody.ControllingBodyDetails
+import models.controllingbody.ControllingBody
 import models.requests.{DataRequest, OptionalDataRequest}
 import pages.*
 import pages.controllingbody.*
@@ -39,7 +39,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
   val gamblingConnector: GamblingConnector
 )(implicit val executionContext: ExecutionContext)
-    extends ControllingBodyDetailsDataRequiredAction
+    extends ControllingBodyDataRequiredAction
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
@@ -70,7 +70,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
   private def saveUserAnswersToSessionAndRedirect[A](answers: UserAnswers, request: OptionalDataRequest[A])(using HeaderCarrier) = {
     gamblingConnector.getControllingBody(answers.id) flatMap { controlBodyDetails =>
 
-      setControllingBodyDetails(controlBodyDetails, answers) map { updatedAnswers =>
+      setControllingBody(controlBodyDetails, answers) map { updatedAnswers =>
         logger.info("User Answers updated with Controlling Body Details. Saving User Answers")
         sessionRepository.set(updatedAnswers) map {
           case true =>
@@ -88,7 +88,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
     }
   }
 
-  private def setControllingBodyDetails(details: ControllingBodyDetails, answers: UserAnswers): Try[UserAnswers] = {
+  private def setControllingBody(details: ControllingBody, answers: UserAnswers): Try[UserAnswers] = {
 
     val address = details.address1.map { address1 =>
       Address(
@@ -143,7 +143,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
     } yield updatedAnswers
   }
 
-  private def buildSoleProprietorName(details: ControllingBodyDetails): Option[SoleProprietorName] = {
+  private def buildSoleProprietorName(details: ControllingBody): Option[SoleProprietorName] = {
     (
       details.solePropTitle,
       details.solePropFirstName,
@@ -172,4 +172,4 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
   }
 }
 
-trait ControllingBodyDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+trait ControllingBodyDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
