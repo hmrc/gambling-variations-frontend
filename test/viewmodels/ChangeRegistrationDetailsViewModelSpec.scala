@@ -24,6 +24,7 @@ import pages.businessaddress.*
 import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
 import pages.contactdetails.{BusinessContactDetailsSubmittedPage, ContactDetailsChangesPage}
 import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
+import pages.licencespremises.LicencesPremisesDetailsChangesPage
 import pages.tradingdetails.{TradingDetailsChangesPage, TradingDetailsSubmittedPage}
 import play.api.Application
 import play.api.i18n.Messages
@@ -194,7 +195,8 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       (BusinessAddressChangesPage, "Business address"),
       (ContactDetailsChangesPage, "Business contact details"),
       (CorrespondenceDetailsChangesPage, "Correspondence details"),
-      (TradingDetailsChangesPage, "Trading details")
+      (TradingDetailsChangesPage, "Trading details"),
+      (LicencesPremisesDetailsChangesPage, "Licences and premises")
     )
 
     changeFlags.foreach { case (page, sectionName) =>

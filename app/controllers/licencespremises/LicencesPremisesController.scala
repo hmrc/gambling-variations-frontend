@@ -21,6 +21,7 @@ import forms.licencespremises.LicencesPremisesFormProvider
 import javax.inject.Inject
 import models.NormalMode
 import models.licencespremises.LicencesAndPremisesRadioOptions
+import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
 import pages.licencespremises.LicencesPremisesPage
 import play.api.data.Form
@@ -65,7 +66,8 @@ class LicencesPremisesController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(LicencesPremisesPage, value))
+            answersWithValue <- Future.fromTry(request.userAnswers.set(LicencesPremisesPage, value))
+            updatedAnswers <- Future.fromTry(answersWithValue.withLicencesPremisesFlags(isChanged = false))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(LicencesPremisesPage, NormalMode, updatedAnswers))
       )

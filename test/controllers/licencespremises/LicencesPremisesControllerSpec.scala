@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.LicencesPremisesPage
+import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage, LicencesPremisesPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -141,6 +141,34 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual LicencesAndPremisesRadioOptions.ByPost
+      }
+    }
+
+    "must flag the section as submitted but not changed when the method is saved" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyLicencesPremisesAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, licencesPremisesRoute)
+            .withFormUrlEncodedBody(("value", LicencesAndPremisesRadioOptions.Online.toString))
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsSubmittedPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual false
       }
     }
 

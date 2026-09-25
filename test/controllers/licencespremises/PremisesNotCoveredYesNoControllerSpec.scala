@@ -20,10 +20,11 @@ import base.SpecBase
 import forms.licencespremises.PremisesNotCoveredYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.PremisesNotCoveredYesNoPage
+import pages.licencespremises.{LicencePremisesNotCoveredPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage, PremisesNotCoveredYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -55,7 +56,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "onPageLoad" - {
 
-      "must return OK and the correct view for a GET when no previous data exists" in {
+      "must return OK and preselect No for a GET when no previous data exists" in {
 
         val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
@@ -67,7 +68,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val view = application.injector.instanceOf[PremisesNotCoveredYesNoView]
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form, NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form.fill(false), NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -75,6 +76,27 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
 
         val userAnswers = noAnswers
           .set(PremisesNotCoveredYesNoPage, true)
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, addRoute)
+
+          val view = application.injector.instanceOf[PremisesNotCoveredYesNoView]
+
+          val result = route(application, request).value
+
+          status(result) mustBe OK
+          contentAsString(result) mustBe view(form.fill(true), NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view from the backend flag on a GET when the question has not been answered in this session" in {
+
+        val userAnswers = noAnswers
+          .set(LicencePremisesNotCoveredPage, "1")
           .success
           .value
 
@@ -134,10 +156,120 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
             .set(PremisesNotCoveredYesNoPage, true)
             .success
             .value
+            .set(LicencesPremisesDetailsSubmittedPage, true)
+            .success
+            .value
+            .set(LicencesPremisesDetailsChangesPage, true)
+            .success
+            .value
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe onwardRoute.url
           verify(mockSessionRepository).set(expectedAnswers)
+        }
+      }
+
+      "must flag the section as submitted but not changed when the answer is the same as the backend value" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val userAnswers = noAnswers
+          .set(LicencePremisesNotCoveredPage, "1")
+          .success
+          .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, addRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          val expectedAnswers = userAnswers
+            .set(PremisesNotCoveredYesNoPage, true)
+            .success
+            .value
+            .set(LicencesPremisesDetailsSubmittedPage, true)
+            .success
+            .value
+            .set(LicencesPremisesDetailsChangesPage, false)
+            .success
+            .value
+
+          status(result) mustBe SEE_OTHER
+          verify(mockSessionRepository).set(expectedAnswers)
+        }
+      }
+
+      "must keep the section flagged as changed when an unchanged answer is submitted after an earlier change" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val userAnswers = noAnswers
+          .set(LicencePremisesNotCoveredPage, "1")
+          .success
+          .value
+          .set(LicencesPremisesDetailsChangesPage, true)
+          .success
+          .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, addRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          status(route(application, request).value) mustBe SEE_OTHER
+
+          val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(mockSessionRepository).set(captor.capture())
+          captor.getValue.get(LicencesPremisesDetailsChangesPage) mustBe Some(true)
+        }
+      }
+
+      "must not flag the section as changed when No is submitted and there is no previous answer" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val application =
+          applicationBuilder(userAnswers = Some(noAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, addRoute)
+              .withFormUrlEncodedBody(("value", "false"))
+
+          status(route(application, request).value) mustBe SEE_OTHER
+
+          val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(mockSessionRepository).set(captor.capture())
+          captor.getValue.get(LicencesPremisesDetailsChangesPage) mustBe Some(false)
         }
       }
 

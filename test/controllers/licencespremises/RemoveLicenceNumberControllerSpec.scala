@@ -279,5 +279,40 @@ class RemoveLicenceNumberControllerSpec extends SpecBase with MockitoSugar {
         savedAnswers.get(LicenceNumberPage).value mustEqual licence
       }
     }
+
+    "must keep an earlier change to the section when false is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor =
+        ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any[UserAnswers]))
+        .thenReturn(Future.successful(true))
+
+      val answersWithEarlierChange = userAnswersWithLicenceNumber.set(LicencesPremisesDetailsChangesPage, true).success.value
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithEarlierChange))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            POST,
+            routes.RemoveLicenceNumberController.onSubmit().url
+          )
+            .withFormUrlEncodedBody("value" -> "false")
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsSubmittedPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
+      }
+    }
   }
 }

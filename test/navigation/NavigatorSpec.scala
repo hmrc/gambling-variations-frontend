@@ -30,7 +30,7 @@ import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
 import pages.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
+import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -221,6 +221,36 @@ class NavigatorSpec extends SpecBase {
 
       "should route RemoveLicencesNumberPage to CheckLicencesAndPremisesController" in {
         navigator.nextPage(RemoveLicenceNumberPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route LicenceDetailsLandlordLicenceYesNoPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(LicenceDetailsLandlordLicenceYesNoPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route OtherLicencesAndPermitsGBPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(OtherLicencesAndPermitsGBPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route OtherLicencesAndPermitsNIPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(OtherLicencesAndPermitsNIPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route PremisesNotCoveredYesNoPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(PremisesNotCoveredYesNoPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route LicencesPremisesPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(LicencesPremisesPage, NormalMode, emptyAnswers) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route RemovePremisesDetailsYesNoPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(RemovePremisesDetailsYesNoPage, NormalMode, emptyAnswers) mustBe
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
       }
 

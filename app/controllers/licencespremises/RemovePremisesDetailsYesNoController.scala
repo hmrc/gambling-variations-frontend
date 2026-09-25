@@ -19,8 +19,9 @@ package controllers.licencespremises
 import controllers.actions.*
 import forms.licencespremises.RemovePremisesDetailsYesNoFormProvider
 import models.Mode
+import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
-import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage, PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -70,8 +71,7 @@ class RemovePremisesDetailsYesNoController @Inject() (
                                 Future.successful(request.userAnswers)
                               }
             updatedAnswers <- Future.fromTry(updatedAnswers.set(RemovePremisesDetailsYesNoPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsChangesPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.withLicencesPremisesFlags(isChanged = value))
             _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RemovePremisesDetailsYesNoPage, mode, updatedAnswers))
       )

@@ -25,7 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceNumberPage, LicencesPremisesPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
@@ -181,10 +181,18 @@ class Navigator @Inject() () {
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
     case RemoveLicenceNumberPage =>
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
-    case RemovePremisesDetailsYesNoPage =>
-      _ => controllers.licencespremises.routes.RemovePremisesDetailsYesNoController.onPageLoad() // change it
+    case LicenceDetailsLandlordLicenceYesNoPage =>
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    case OtherLicencesAndPermitsGBPage =>
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    case OtherLicencesAndPermitsNIPage =>
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    case PremisesNotCoveredYesNoPage =>
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
     case LicencesPremisesPage =>
-      _ => controllers.licencespremises.routes.LicencesPremisesController.onPageLoad() // change it
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    case RemovePremisesDetailsYesNoPage =>
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()

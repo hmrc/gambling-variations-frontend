@@ -19,6 +19,7 @@ package controllers.licencespremises
 import controllers.actions.*
 import forms.licencespremises.LicenceDetailsLandlordLicenceYesNoFormProvider
 import models.Mode
+import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
 import pages.licencespremises.LicenceDetailsLandlordLicenceYesNoPage
 import play.api.data.Form
@@ -49,10 +50,7 @@ class LicenceDetailsLandlordLicenceYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(LicenceDetailsLandlordLicenceYesNoPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+    val preparedForm = form.fill(request.userAnswers.pubTenantAnswer)
 
     Ok(view(preparedForm, mode))
   }
@@ -65,8 +63,10 @@ class LicenceDetailsLandlordLicenceYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(LicenceDetailsLandlordLicenceYesNoPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
+            answersWithValue <- Future.fromTry(request.userAnswers.set(LicenceDetailsLandlordLicenceYesNoPage, value))
+            updatedAnswers <-
+              Future.fromTry(answersWithValue.withLicencesPremisesFlags(isChanged = request.userAnswers.pubTenantAnswer != value))
+            _ <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(LicenceDetailsLandlordLicenceYesNoPage, mode, updatedAnswers))
       )
   }
