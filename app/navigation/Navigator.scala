@@ -24,6 +24,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodySoleProprietorPage}
 import pages.correspondencedetails.*
 import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
 import pages.partnerdetails.*
@@ -38,6 +39,13 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
+    case ControllingBodyBusinessNamePage =>
+      _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
+    case ControllingBodyAddTradingNameYesNoPage =>
+      // TODO: Connect CB-TN and the business-type-specific identity screens when that journey is built.
+      _ => routes.IndexController.onPageLoad()
+    case ControllingBodySoleProprietorPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case RemoveTradeNamePage =>
       _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
