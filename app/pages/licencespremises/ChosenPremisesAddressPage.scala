@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package pages.partnerdetails
+package pages.licencespremises
 
+import models.Address
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object PartnerDetailsAddAnotherPartnerYesNoPage extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "partnerDetailsAddAnotherPartnerYesNo"
+case object ChosenPremisesAddressPage extends QuestionPage[Address] {
+  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
+  override def toString: String = "chosenPremisesAddress"
 }

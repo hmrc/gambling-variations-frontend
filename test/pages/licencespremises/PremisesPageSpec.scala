@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package pages.partnerdetails
-
-import pages.QuestionPage
+package pages.licencespremises
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.JsPath
 
-case object PartnerDetailsAddAnotherPartnerYesNoPage extends QuestionPage[Boolean] {
+class PremisesPageSpec extends AnyFreeSpec with Matchers {
+  "PremisesPage" - {
 
-  override def path: JsPath = JsPath \ toString
+    "must have the correct toString" in {
+      PremisesPage.toString mustBe "premises"
+    }
 
-  override def toString: String = "partnerDetailsAddAnotherPartnerYesNo"
+    "must have a path corresponding to its name" in {
+      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "premisesDetails" \ "premises"
+      PremisesPage.path mustBe expectedPath
+    }
+  }
 }

@@ -141,7 +141,6 @@ POST       /change-registration-details/partner-details/change-foreign-corporate
 
 GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
 POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
-GET       /change-registration-details/partner-details/continue                    controllers.partnerdetails.PartnerDetailsController.onContinue
 GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
 GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String)
 
@@ -149,4 +148,4 @@ GET       /change-registration-details/partner-details/date-to-remove-redirect  
 GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()
+GET       /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()

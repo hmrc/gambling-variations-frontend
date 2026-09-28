@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages.partnerdetails
+package forms.licencespremises
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object PartnerDetailsAddAnotherPartnerYesNoPage extends QuestionPage[Boolean] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ toString
+class PremisesAddressListFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "partnerDetailsAddAnotherPartnerYesNo"
+  def apply(): Form[Boolean] =
+    Form(
+      "addPremisesAddress" -> boolean("premisesAddressList.error.required")
+    )
 }

@@ -390,3 +390,7 @@ previousRegistrationNumber.error.invalid.characters = Mae’n rhaid i’ch rhif 
 previousRegistrationNumber.error.invalid.format = Mae’n rhaid i’ch rhif cofrestru blaenorol fod yn fformat cywir
 previousRegistrationNumber.error.invalidReference = Nodwch rif cofrestru blaenorol go iawn
 previousRegistrationNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes wedi’i gyflwyno, mae’n rhaid i chi nodi rif cofrestru gwahanol
+
+removePremisesAddress.title = cy: Are you sure you want to remove this premises address?
+removePremisesAddress.heading = cy: Are you sure you want to remove this premises address?
+removePremisesAddress.error.required = cy: Select yes if you want to remove this premises address

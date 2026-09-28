@@ -16,7 +16,7 @@
 
 package pages.partnerdetails
 
-import pages.{BusinessNumberOrIndex, QuestionPage}
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 case class PartnerDetailsAddPartnerCompletedPage(index: Int) extends QuestionPage[Boolean] {

@@ -17,7 +17,7 @@
 package pages.partnerdetails
 
 import pages.{BusinessNumberOrIndex, QuestionPage}
-import play.api.libs.json.{JsArray, JsPath}
+import play.api.libs.json.JsPath
 
 case class PartnerDetailsMgdRegNumberPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[String] {
 

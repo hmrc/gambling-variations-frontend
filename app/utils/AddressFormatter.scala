@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package pages.partnerdetails
+package utils
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.Address
 
-case object PartnerDetailsAddAnotherPartnerYesNoPage extends QuestionPage[Boolean] {
+object AddressFormatter {
 
-  override def path: JsPath = JsPath \ toString
+  def format(address: Address): Seq[String] =
+    Seq(
+      Some(address.address1),
+      address.address2,
+      address.address3,
+      address.address4,
+      address.postcode,
+      address.country
+    ).flatten
 
-  override def toString: String = "partnerDetailsAddAnotherPartnerYesNo"
 }

@@ -207,6 +207,8 @@ POST       /change-registration-details/licences-and-premises/remove-premises-de
 GET        /change-registration-details/licences-and-premises/provide-addresses                    controllers.licencespremises.LicencesPremisesController.onPageLoad()
 POST       /change-registration-details/licences-and-premises/provide-addresses                    controllers.licencespremises.LicencesPremisesController.onSubmit()
 
+
+
 GET        /change-registration-details/licences-and-premises/permits-northern-ireland                      controllers.licencespremises.OtherLicencesAndPermitsNIController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/permits-northern-ireland                      controllers.licencespremises.OtherLicencesAndPermitsNIController.onSubmit(mode: Mode = NormalMode)
 
@@ -233,3 +235,10 @@ POST       /change-registration-details/licences-and-premises/remove-licence-num
 
 GET        /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onSubmit(mode: Mode = NormalMode)
+
+#TODO
+GET        /change-registration-details/licences-and-premises/remove-address                        controllers.licencespremises.RemovePremisesAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/remove-address                        controllers.licencespremises.RemovePremisesAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onSubmit(mode: Mode = NormalMode)

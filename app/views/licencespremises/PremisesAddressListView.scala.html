@@ -1,0 +1,71 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.components.*
+@import models.licencespremises.PremisesDetails
+@import viewmodels.PremisesAddressListViewModel
+
+
+@this(
+        layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        govukSummaryList: GovukSummaryList,
+        govukErrorSummary: GovukErrorSummary,
+        govukRadios: GovukRadios,
+        govukButton: GovukButton,
+        h1: H1,
+        p: Paragraph,
+        caption: Caption
+)
+
+@(form: Form[_], mode: Mode, addressList: Seq[PremisesDetails], maxPremisesAddresses: Int)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = titleNoForm(messages("premisesAddressList.title"), Some(messages("changeRegistrationDetails.caption")))) {
+
+    @formHelper(action = controllers.licencespremises.routes.PremisesAddressListController.onSubmit(), Symbol("autoComplete") -> "off") {
+
+    @caption(messages("changeRegistrationDetails.caption"))
+    @h1("premisesAddressList.heading", classes="govuk-heading-l")
+    @p(message = "premisesAddressList.records", args = Seq(<strong>1</strong>, <strong>{addressList.length}</strong>, <strong>{addressList.length}</strong>))
+    @p("premisesAddressList.message.submit")
+<!--the bold values below will need to be updated when creating pagination-->
+    @p(message = "premisesAddressList.records", args = Seq(<strong>1</strong>, <strong>{addressList.length}</strong>, <strong>{addressList.length}</strong>))
+    @govukSummaryList(PremisesAddressListViewModel.from(addressList))
+    @if(form.errors.nonEmpty){
+        @govukErrorSummary(ErrorSummaryViewModel(form))
+    }
+    @if(addressList.length < maxPremisesAddresses) {
+        @govukRadios(
+            RadiosViewModel.yesNo(
+                field = form("addPremisesAddress"),
+                legend = LegendViewModel(messages("premisesAddressList.question.add")).withCssClass("govuk-fieldset__legend--m"),
+                yesLabel = messages("premisesAddressList.yesLabel"),
+                noLabel = messages("premisesAddressList.noLabel")
+            ).withHint(HintViewModel(messages("premisesAddressList.hint"))))
+
+        @govukButton(ButtonViewModel(messages("site.continue")))
+        } else {
+            @p("premisesAddressList.max")
+            <p class="govuk-body">
+                @govukButton(
+                ButtonViewModel(messages("site.continue"))
+                .withCssClass("govuk-button")
+                .asLink(controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url)
+                )
+            </p>
+        }
+}
+}

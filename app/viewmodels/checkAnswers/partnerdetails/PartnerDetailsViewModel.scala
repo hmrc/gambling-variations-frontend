@@ -19,13 +19,12 @@ package viewmodels.checkAnswers.partnerdetails
 import config.FrontendAppConfig
 import controllers.partnerdetails.routes
 import models.UserAnswers
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChangedPage, PartnerDetailsDateOfJoiningPage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.*
 import play.api.i18n.Messages
-import play.api.libs.json.{JsArray, JsObject}
 import utils.PartnerUtils
 
-import java.time.{LocalDate, ZoneOffset}
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, ZoneOffset}
 
 final case class PartnerDetailsViewModel(
   partners: Seq[PartnerDetailsRow],
