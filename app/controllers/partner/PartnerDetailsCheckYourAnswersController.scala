@@ -42,7 +42,7 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   // is new partner -> to use flag!
   private val isNewPartner: Option[Boolean] = Some(false)
   // is submitted -> to use flag!
-  private val isSubmitted: Boolean = false
+  private val isSubmitted: Boolean = true
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 

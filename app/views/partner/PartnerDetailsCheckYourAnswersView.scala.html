@@ -40,13 +40,13 @@
 
     @if(!checkPartnerDetailsViewModel.isNewPartnerFlow.contains(true) && checkPartnerDetailsViewModel.isDueToLeave) {
         @paragraph(
-            messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", checkPartnerDetailsViewModel.dateOfLeaving.getOrElse(""))
+            messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", checkPartnerDetailsViewModel.dateOfLeaving.getOrElse("---FIX ME---"))
         )
     }
 
     @if(!checkPartnerDetailsViewModel.isNewPartnerFlow.contains(true) && checkPartnerDetailsViewModel.isDueToJoin) {
         @paragraph(
-            messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", checkPartnerDetailsViewModel.dateOfJoining.getOrElse(""))
+            messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", checkPartnerDetailsViewModel.dateOfJoining.getOrElse("---FIX ME---"))
         )
     }
 

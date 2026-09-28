@@ -543,7 +543,7 @@ case class CheckPartnerDetailsViewModel(
 
   private def dateOfJoiningSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
     val label = messages("partnerDetailsCheckYourAnswers.dateOfJoining")
-    val url = controllers.partner.routes.PartnerSoleProprietorDobController.onPageLoad().url
+    val url = controllers.partner.routes.PartnerSoleProprietorDobController.onPageLoad().url // todo - change this
 
     dateOfJoining match {
       case Some(value) =>
@@ -567,7 +567,15 @@ case class CheckPartnerDetailsViewModel(
   private def addressSummaryListRow(implicit messages: Messages): SummaryListRow = {
     val label = messages("partnerDetailsCheckYourAnswers.address")
     val url = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url // TODO: change this
-    createSummaryListRow(label, addressContent, Seq(buildAction(url, "site.change", label)))
+    val changeAction = buildAction(url, "site.change", label)
+
+    val actions = (isNewPartnerFlow.contains(true), dueToJoinOrLeave) match {
+      case (false, true) => Nil
+      case _             => Seq(changeAction)
+    }
+
+    createSummaryListRow(label, addressContent, actions)
+
   }
 
   private def addAdditionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -597,7 +605,7 @@ case class CheckPartnerDetailsViewModel(
       case (true, true)  => Seq(changeAction)
       case (false, true) => Nil
       case (true, _)     => Seq(changeAction)
-      case (false, _)    => Seq(removeAction)
+      case (false, _)    => Seq(changeAction, removeAction)
     }
 
     additionalInformation.map(value => createSummaryListRow(label, Text(value), actions)).orElse {
@@ -616,14 +624,34 @@ case class CheckPartnerDetailsViewModel(
 
   // --- Contact Details Rows ---
 
-  private def contactNumbersSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    contactNumbers.map { numbers =>
-      val label = messages("partnerDetailsCheckYourAnswers.contactNumbers")
-      val url = controllers.partner.routes.PartnerContactDetailsController.onPageLoad().url
+  private def contactNumbersSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
+    val label = messages("partnerDetailsCheckYourAnswers.contactNumbers")
+    val url = controllers.partner.routes.PartnerContactDetailsController.onPageLoad().url
+    val changeAction = buildAction(url, "site.change", label)
 
-      val row = createSummaryListRow(label, contactNumbersContent(numbers), Seq(buildAction(url, "site.change", label)))
-      row.copy(value = row.value.withCssClass("contact-numbers"))
+    val actions = (isNewPartnerFlow.contains(true), dueToJoinOrLeave) match {
+      case (false, true) => Nil
+      case _             => Seq(changeAction)
     }
+
+    contactNumbers
+      .map { numbers =>
+        val row = createSummaryListRow(label, contactNumbersContent(numbers), actions)
+        row.copy(value = row.value.withCssClass("contact-numbers"))
+      }
+      .orElse {
+        val fallbackActions = if (actions.contains(changeAction)) Seq(changeAction) else Nil
+
+        Some(
+          createSummaryListRow(
+            label,
+            Text(messages("partnerDetailsCheckYourAnswers.noData")),
+            fallbackActions,
+            "govuk-summary-list__actions govuk-!-width-one-third"
+          )
+        )
+      }
+  }
 
   private def addFaxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (isNewPartnerFlow.contains(true)) {
@@ -653,7 +681,7 @@ case class CheckPartnerDetailsViewModel(
       case (true, true)  => Seq(changeAction)
       case (false, true) => Nil
       case (true, _)     => Seq(changeAction)
-      case (false, _)    => Seq(removeAction)
+      case (false, _)    => Seq(changeAction, removeAction)
     }
 
     faxNumber
@@ -700,7 +728,7 @@ case class CheckPartnerDetailsViewModel(
       case (true, true)  => Seq(changeAction)
       case (false, true) => Nil
       case (true, _)     => Seq(changeAction)
-      case (false, _)    => Seq(removeAction)
+      case (false, _)    => Seq(changeAction, removeAction)
     }
 
     emailAddress
