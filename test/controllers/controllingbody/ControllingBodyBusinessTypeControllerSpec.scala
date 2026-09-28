@@ -25,6 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.ArgumentCaptor
 import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodySubmittedPage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -49,8 +50,8 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
   private val userAnswers = UserAnswers(
     mgdRegNum,
     Json.obj(
-      "controllingBodySection" -> Json.obj(
-        "mgdRegNumber"           -> "ZM1000001",
+      "controllingBodyDetailsSection" -> Json.obj(
+        "mgdRegNum"              -> "ZM1000001",
         "businessPartnerNumber"  -> "12787",
         "dateOfJoining"          -> LocalDate.of(2026, 9, 25),
         "dateOfLeaving"          -> LocalDate.of(2026, 9, 25),
@@ -101,7 +102,6 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
           val result = route(application, request).value
 
           val view = application.injector.instanceOf[ControllingBodyBusinessTypeView]
-
           status(result) mustEqual OK
           contentAsString(result) mustEqual view(form.fill(Soleproprietor), NormalMode)(request, messages(application)).toString
         }
@@ -136,9 +136,10 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
         val mockSessionRepository = mock[SessionRepository]
 
         when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+        val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
         val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          applicationBuilder(userAnswers = Some(userAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -151,23 +152,12 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
             FakeRequest(POST, ControllingBodyBusinessTypeController.onSubmit().url)
               .withFormUrlEncodedBody(("value", Corporatebody.toString))
           val result = route(application, request).value
-
-          val expectedAnswers = emptyUserAnswers
-            .set(ControllingBodyBusinessTypePage, Corporatebody)
-            .success
-            .value
-            .set(ControllingBodySubmittedPage, true)
-            .success
-            .value
-            .set(ControllingBodyChangesPage, true)
-            .success
-            .value
-
-          println(expectedAnswers)
-          println(result)
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
-          verify(mockSessionRepository).set(expectedAnswers)
+          verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+          savedAnswersCaptor.getValue.get(ControllingBodyBusinessTypePage).value mustEqual BusinessType.Corporatebody
+          savedAnswersCaptor.getValue.get(ControllingBodySubmittedPage).value mustEqual true
+          savedAnswersCaptor.getValue.get(ControllingBodyChangesPage).value mustEqual true
         }
       }
 

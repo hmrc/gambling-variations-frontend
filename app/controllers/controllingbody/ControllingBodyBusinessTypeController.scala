@@ -67,9 +67,9 @@ class ControllingBodyBusinessTypeController @Inject() (
           val isChanged = checkIfChanged(businessType, ua, ControllingBodyBusinessTypePage, ControllingBodyChangesPage)
           for {
             updatedAnswers              <- Future.fromTry(ua.set(ControllingBodyBusinessTypePage, businessType))
-            updatedAnswersWithSubmitted <- Future.fromTry(ua.set(ControllingBodySubmittedPage, true))
-            finalAnswers                <- Future.fromTry(ua.set(ControllingBodyChangesPage, isChanged))
-            _                           <- sessionRepository.set(updatedAnswers)
+            updatedAnswersWithSubmitted <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
+            finalAnswers                <- Future.fromTry(updatedAnswersWithSubmitted.set(ControllingBodyChangesPage, isChanged))
+            _                           <- sessionRepository.set(finalAnswers)
           } yield Redirect(navigator.nextPage(ControllingBodyBusinessTypePage, mode, updatedAnswers))
       )
   }

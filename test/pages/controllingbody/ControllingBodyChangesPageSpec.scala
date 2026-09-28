@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package pages
+package pages.controllingbody
 
-import play.api.libs.json.JsPath
 import org.scalatestplus.play.PlaySpec
-import pages.controllingbody.ControllingBodyBusinessTypePage
+import pages.controllingbody.ControllingBodyChangesPage
+import play.api.libs.json.JsPath
 
-class ControllingBodyBusinessTypePageSpec extends PlaySpec {
+class ControllingBodyChangesPageSpec extends PlaySpec {
 
-  "ControllingBodyBusinessTypePage" must {
+  "ControllingBodyChangesPage" must {
 
     "have the correct path" in {
 
-      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "typeOfControllingBody")
+      ControllingBodyChangesPage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "controllingBodyChangesPage")
     }
 
     "have the correct toString value" in {
 
-      ControllingBodyBusinessTypePage.toString mustEqual "typeOfControllingBody"
+      ControllingBodyChangesPage.toString mustEqual "controllingBodyChangesPage"
     }
   }
 }
