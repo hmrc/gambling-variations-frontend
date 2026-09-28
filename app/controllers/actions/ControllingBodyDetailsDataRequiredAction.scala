@@ -125,7 +125,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyBusinessPartnerNumberPage, details.businessPartnerNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfJoiningPage, details.dateOfJoining)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfLeavingPage, details.dateOfLeaving)
-      updatedAnswers <- updatedAnswers.set(ControllingBodyCorrespondanceSectionPage, correspondenceDetails)
+      updatedAnswers <- updatedAnswers.set(ControllingBodyCorrespondenceSectionPage, correspondenceDetails)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfIncorporationPage, details.dateOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyCountryOfIncorporationPage, details.countryOfIncorporation)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyForeignCorporateReferencePage, details.foreignCorporateRef)

@@ -20,7 +20,7 @@ import models.{Address, CorrespondenceDetails}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyCorrespondanceSectionPage extends QuestionPage[CorrespondenceDetails] {
+case object ControllingBodyCorrespondenceSectionPage extends QuestionPage[CorrespondenceDetails] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
