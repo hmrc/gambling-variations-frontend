@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package pages
 
-import pages.QuestionPage
 import play.api.libs.json.JsPath
+import org.scalatestplus.play.PlaySpec
+import pages.controllingbody.ControllingBodySubmittedPage
 
-case object ControllingBodyChangesPage extends QuestionPage[Boolean] {
+class ControllingBodySubmittedPageSpec extends PlaySpec {
 
-  override def path: JsPath =
-    JsPath \ "controllingBodyDetailsSection" \ toString
+  "ControllingBodySubmittedPage" must {
 
-  override def toString: String =
-    "controllingBodyChangesPage"
+    "have the correct path" in {
+
+      ControllingBodySubmittedPage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "submitted")
+    }
+
+    "have the correct toString value" in {
+
+      ControllingBodySubmittedPage.toString mustEqual "submitted"
+    }
+  }
 }

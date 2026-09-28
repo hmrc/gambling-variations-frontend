@@ -25,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.ControllingBodyBusinessTypePage
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodySubmittedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -146,17 +146,25 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
             .build()
 
         running(application) {
+
           val request =
             FakeRequest(POST, ControllingBodyBusinessTypeController.onSubmit().url)
               .withFormUrlEncodedBody(("value", Corporatebody.toString))
-
           val result = route(application, request).value
 
           val expectedAnswers = emptyUserAnswers
             .set(ControllingBodyBusinessTypePage, Corporatebody)
             .success
             .value
+            .set(ControllingBodySubmittedPage, true)
+            .success
+            .value
+            .set(ControllingBodyChangesPage, true)
+            .success
+            .value
 
+          println(expectedAnswers)
+          println(result)
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
           verify(mockSessionRepository).set(expectedAnswers)
