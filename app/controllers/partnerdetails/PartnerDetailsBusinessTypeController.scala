@@ -70,13 +70,7 @@ class PartnerDetailsBusinessTypeController @Inject() (
         businessType =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(newIndex), businessType))
-            // Do not mark "completed" existing user
-            updatedAnswers <-
-              newIndex match {
-                case _: String            => Future.successful(updatedAnswers)
-                case newPartnerIndex: Int => Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
-              }
-            _ <- sessionRepository.set(updatedAnswers)
+            _              <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(newIndex), mode, updatedAnswers))
       )
   }

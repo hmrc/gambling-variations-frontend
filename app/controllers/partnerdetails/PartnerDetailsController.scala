@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partnerdetails.AddAnotherPartnerFormProvider
 import models.NormalMode
-import pages.partnerdetails.{PartnerDetailsAddAnotherPartnerYesNoPage, PartnerDetailsChosenPartnerToRemovePage}
+import pages.partnerdetails.{PartnerDetailsAddAnotherPartnerYesNoPage, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsChosenPartnerToRemovePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -119,10 +119,15 @@ class PartnerDetailsController @Inject() (
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
               if (value) {
+                val newPartnerIndex = PartnerUtils.findIndexForNewPartner(updatedAnswers)
+                for {
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield ()
+
                 Redirect(
-                  // TODO, make sure if this logic works as expected
                   controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(
-                    PartnerUtils.findIndexForNewPartner(updatedAnswers).toString,
+                    newPartnerIndex.toString,
                     NormalMode
                   )
                 )

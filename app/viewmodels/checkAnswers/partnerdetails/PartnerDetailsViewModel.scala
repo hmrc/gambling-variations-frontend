@@ -22,6 +22,7 @@ import models.UserAnswers
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChangedPage, PartnerDetailsDateOfJoiningPage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.i18n.Messages
 import play.api.libs.json.{JsArray, JsObject}
+import utils.PartnerUtils
 
 import java.time.{LocalDate, ZoneOffset}
 import java.time.format.DateTimeFormatter
@@ -55,14 +56,7 @@ object PartnerDetailsViewModel {
   )(implicit messages: Messages): PartnerDetailsViewModel = {
     val maxPartners = frontendAppConfig.maxPartners
 
-    // TODO improve, maybe move to partnerUtils
-
-    val existingPartners =
-      (userAnswers.data \ "partners")
-        .asOpt[JsObject]
-        .fold(Seq.empty[String])(_.fields.map(_._1).sorted) // TODO, added sorted to ensure ordering for hash-map, to be discussed
-        .take(maxPartners)
-        .toSeq
+    val existingPartners = PartnerUtils.getExistingPartnersBusinessNumbers(userAnswers, maxPartners)
 
     val today = LocalDate.now(ZoneOffset.UTC)
 

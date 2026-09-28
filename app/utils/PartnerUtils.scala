@@ -56,16 +56,16 @@ object PartnerUtils {
       case index: Int if userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)).contains(false) =>
         index
     }
-    newPartnerExistingIndex getOrElse newPartnersSize // TODO look into it, changed to size so it will "append" if it doesnt find anything
+    newPartnerExistingIndex getOrElse 0
   }
 
   private def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
 
   // TODO
-  def test(userAnswers: UserAnswers, maxPartners: Int) = (userAnswers.data \ "partners")
+  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers, maxPartners: Int): Seq[String] = (userAnswers.data \ "partners")
     .asOpt[JsObject]
-    .fold(Seq.empty[String])(_.fields.map(_._1).sorted) // TODO, added sorted to ensure ordering for hash-map, to be discussed
+    .fold(Seq.empty[String])(_.fields.map(_._1).sorted)
     .take(maxPartners)
     .toSeq
 }
