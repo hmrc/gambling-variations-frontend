@@ -242,7 +242,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
       hrefs(rowFor(vm, "checkLicenceAndPremises.licencesAndPermitsNI")) mustEqual Seq(routes.OtherLicencesAndPermitsNIController.onPageLoad().url)
       hrefs(rowFor(vm, "checkLicenceAndPremises.premisesNotCovered")) mustEqual Seq(routes.PremisesNotCoveredYesNoController.onPageLoad().url)
       hrefs(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual Seq(routes.LicencesPremisesController.onPageLoad().url)
-      hrefs(rowFor(vm, "checkLicenceAndPremises.addressesOnline")) mustEqual Seq("#")
+      hrefs(rowFor(vm, "checkLicenceAndPremises.addressesOnline")) mustEqual Seq(routes.PremisesAddressListController.onPageLoad().url)
     }
 
     "must escape values" in {

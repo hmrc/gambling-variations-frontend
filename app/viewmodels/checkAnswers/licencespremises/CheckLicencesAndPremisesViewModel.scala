@@ -41,8 +41,7 @@ case class CheckLicencesAndPremisesViewModel(
   isSubmitted: Boolean
 ) {
 
-  // The premises addresses and find premises address screens are not built yet
-  private val premisesAddressesUrl = "#"
+  // The find premises address screen is not built yet
   private val findPremisesAddressUrl = "#"
 
   // The premises not covered question is only asked when the user has provided some kind of licence or permit
@@ -159,7 +158,7 @@ case class CheckLicencesAndPremisesViewModel(
       value = ValueViewModel(Text(messages("checkLicenceAndPremises.addressesOnline.value", premisesCount))),
       actions = Seq(
         changeAction(
-          if (premisesCount > 0) premisesAddressesUrl else findPremisesAddressUrl,
+          if (premisesCount > 0) routes.PremisesAddressListController.onPageLoad().url else findPremisesAddressUrl,
           "checkLicenceAndPremises.addressesOnline.hidden"
         )
       )
