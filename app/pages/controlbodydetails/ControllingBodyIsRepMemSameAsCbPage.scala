@@ -19,9 +19,10 @@ package pages.controlbodydetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyDetailsUtrPage extends QuestionPage[String] {
+case object ControllingBodyIsRepMemSameAsCbPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
-  override def toString: String = "utr"
+  override def toString: String =
+    "isRepMemSameAsCb"
 }

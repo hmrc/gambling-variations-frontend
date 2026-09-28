@@ -19,11 +19,11 @@ package pages.controlbodydetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyDetailsChangedPage extends QuestionPage[Boolean] {
+import java.time.LocalDate
 
-  override def path: JsPath =
-    JsPath \ "controllingBodyDetailsSection" \ toString
+case object ControllingBodyDateOfLeavingPage extends QuestionPage[LocalDate] {
 
-  override def toString: String =
-    "partnerDetailsChangedPage"
+  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
+
+  override def toString: String = "dateOfLeaving"
 }

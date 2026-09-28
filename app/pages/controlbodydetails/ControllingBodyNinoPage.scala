@@ -16,13 +16,12 @@
 
 package pages.controlbodydetails
 
-import models.SoleProprietorName
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyDetailsSoleProprietorPage extends QuestionPage[SoleProprietorName] {
+case object ControllingBodyNinoPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
-  override def toString: String = "soleProprietor"
+  override def toString: String = "nino"
 }

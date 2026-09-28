@@ -19,9 +19,10 @@ package pages.controlbodydetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyDetailsSectionPage extends QuestionPage[String] {
+case object ControllingBodyIsUkIncorporatedPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
-  override def toString: String = "mgdRegNum"
+  override def toString: String =
+    "isUkIncorporated"
 }

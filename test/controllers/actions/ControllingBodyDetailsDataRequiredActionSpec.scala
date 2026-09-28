@@ -24,7 +24,7 @@ import models.{Address,ContactNumber, CorrespondenceDetails, SoleProprietorName,
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controlbodydetails.ControllingBodyDetailsSectionPage
+import pages.controlbodydetails.ControllingBodySectionPage
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
 import play.api.mvc.Results.*
@@ -66,7 +66,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
             "businessPartnerNumber" -> "0100053091",
             "dateOfJoining" -> "2013-02-01",
             "dateOfLeaving" -> "2023-03-01",
-            "correspondanceSection" -> Json.obj(
+            "correspondenceSection" -> Json.obj(
               "mgdRegNumber" -> "XGM00000001761",
               "correspondenceAddress" -> Json.obj(
                 "address1" -> "Address 1",
@@ -231,7 +231,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
               req.request mustBe request
               req.userAnswers.id mustBe mgdRegNum
 
-              req.userAnswers.get(ControllingBodyDetailsSectionPage) mustBe
+              req.userAnswers.get(ControllingBodySectionPage) mustBe
                 Some("XGM00000001761")
 
             case Left(result) =>

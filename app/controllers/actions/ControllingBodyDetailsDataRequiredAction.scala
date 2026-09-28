@@ -54,7 +54,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(ControllingBodyDetailsSectionPage) map { _ =>
+        userAnswers.get(ControllingBodySectionPage) map { _ =>
           logger.info(s"MgdRegNum found for Controlling Body Details with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
@@ -121,25 +121,25 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
     )
 
     for {
-      updatedAnswers <- answers.set(ControllingBodyDetailsSectionPage, details.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsBusinessPartnerNumberPage, details.businessPartnerNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsDateOfJoiningPage, details.dateOfJoining)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsDateOfLeavingPage, details.dateOfLeaving)
-      updatedAnswers <- updatedAnswers.set(ControllingBodyDetailsCorrespondanceSectionPage, correspondenceDetails)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsDateOfIncorporationPage, details.dateOfIncorporation)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsCountryOfIncorporationPage, details.countryOfIncorporation)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsForeignCorporateReferencePage, details.foreignCorporateRef)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsDateOfBirthPage, details.dateOfBirth)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsNinoPage, details.nino)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsUtrPage, details.utr.map(_.toString))
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsVrnPage, details.vrn.map(_.toString))
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsCrnPage, details.crn)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsBusinessNamePage, details.businessName)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsTradingNamePage, details.tradingName)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsTypeOfControllingBodyPage, details.typeOfControllingBody.map(_.toString))
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsIsRepMemSameAsCbPage, details.isRepMemSameAsCb)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsIsUkIncorporatedPage, details.isUkIncorporated)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDetailsSoleProprietorPage, buildSoleProprietorName(details))
+      updatedAnswers <- answers.set(ControllingBodySectionPage, details.mgdRegNumber)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyBusinessPartnerNumberPage, details.businessPartnerNumber)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfJoiningPage, details.dateOfJoining)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfLeavingPage, details.dateOfLeaving)
+      updatedAnswers <- updatedAnswers.set(ControllingBodyCorrespondanceSectionPage, correspondenceDetails)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfIncorporationPage, details.dateOfIncorporation)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyCountryOfIncorporationPage, details.countryOfIncorporation)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyForeignCorporateReferencePage, details.foreignCorporateRef)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyDateOfBirthPage, details.dateOfBirth)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyNinoPage, details.nino)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyUtrPage, details.utr.map(_.toString))
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyVrnPage, details.vrn.map(_.toString))
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyCrnPage, details.crn)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyBusinessNamePage, details.businessName)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyTradingNamePage, details.tradingName)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyTypeOfControllingBodyPage, details.typeOfControllingBody.map(_.toString))
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyIsRepMemSameAsCbPage, details.isRepMemSameAsCb)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyIsUkIncorporatedPage, details.isUkIncorporated)
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodySoleProprietorPage, buildSoleProprietorName(details))
     } yield updatedAnswers
   }
 
