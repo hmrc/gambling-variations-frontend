@@ -33,10 +33,9 @@ case class GamblingReturnPeriods(
   nstpEndDate6: Option[LocalDate],
   nstpEndDate7: Option[LocalDate],
   nstpEndDate8: Option[LocalDate],
-  isInLastNstp: Option[String],
-  finalPeriodWarning: Option[String],
-  hasExistingNstpValues: Option[String],
-  systemDate: Option[LocalDate]
+  isInLastNstp: Option[Boolean],
+  finalPeriodWarning: Option[Boolean],
+  hasExistingNstpValues: Option[Boolean]
 )
 
 object GamblingReturnPeriods {
@@ -57,6 +56,18 @@ object GamblingReturnPeriods {
 
   implicit val optionNstpDateWrites: Writes[Option[LocalDate]] =
     Writes.OptionWrites[LocalDate](nstpDateWrites)
+
+  implicit val stringToBoolean: Format[Boolean] = Format(
+    Reads {
+      case JsString("1") => JsSuccess(true)
+      case JsString("0") => JsSuccess(false)
+      case value         => JsError(s"Cannot parse string to boolean with value of $value")
+    },
+    Writes {
+      case true  => JsString("1")
+      case false => JsString("0")
+    }
+  )
 
   implicit val format: OFormat[GamblingReturnPeriods] =
     Json.format[GamblingReturnPeriods]

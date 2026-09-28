@@ -18,6 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
+import controllers.actions.GamblingReturnPeriodsDataRequiredActionSpec.gamblingReturnPeriods
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{GamblingReturnPeriods, UserAnswers}
 import org.mockito.ArgumentMatchers.*
@@ -25,7 +26,6 @@ import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.GamblingReturnPeriodsPage
 import play.api.http.Status.INTERNAL_SERVER_ERROR
-import play.api.libs.json.Json
 import play.api.mvc.Results.*
 import play.api.mvc.{AnyContent, Result}
 import play.api.test.FakeRequest
@@ -37,8 +37,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoSugar {
-
-  import GamblingReturnPeriodsDataRequiredActionSpec.*
 
   class Harness(
     sessionRepository: SessionRepository,
@@ -65,6 +63,7 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
         val gamblingConnector = mock[GamblingConnector]
 
         when(sessionRepository.set(any())) thenReturn Future(true)
+
         when(
           gamblingConnector.getGamblingReturnPeriods(any())(any())
         ) thenReturn Future(gamblingReturnPeriods)
@@ -91,6 +90,7 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
         }
 
         verify(sessionRepository, times(1)).set(any())
+
         verify(gamblingConnector, times(1))
           .getGamblingReturnPeriods(any())(any())
       }
@@ -102,6 +102,7 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
         val gamblingConnector = mock[GamblingConnector]
 
         when(sessionRepository.set(any())) thenReturn Future(false)
+
         when(
           gamblingConnector.getGamblingReturnPeriods(any())(any())
         ) thenReturn Future(gamblingReturnPeriods)
@@ -127,6 +128,7 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
         )
 
         verify(sessionRepository, times(1)).set(any())
+
         verify(gamblingConnector, times(1))
           .getGamblingReturnPeriods(any())(any())
       }
@@ -184,27 +186,12 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
           val gamblingConnector = mock[GamblingConnector]
 
           val existingUserAnswers =
-            UserAnswers(
-              mgdRegNum,
-              Json.obj(
-                "gamblingReturnPeriods" -> Json.obj(
-                  "mgdRegNumber"          -> mgdRegNum,
-                  "returnPeriodsId"       -> 123,
-                  "nstpEndDate1"          -> "31-MAR-26",
-                  "nstpEndDate2"          -> "30-JUN-26",
-                  "nstpEndDate3"          -> "30-SEP-26",
-                  "nstpEndDate4"          -> "31-DEC-26",
-                  "nstpEndDate5"          -> "31-MAR-27",
-                  "nstpEndDate6"          -> "30-JUN-27",
-                  "nstpEndDate7"          -> "30-SEP-27",
-                  "nstpEndDate8"          -> "31-DEC-27",
-                  "isInLastNstp"          -> "false",
-                  "finalPeriodWarning"    -> "false",
-                  "hasExistingNstpValues" -> "true",
-                  "systemDate"            -> "25-SEP-26"
-                )
+            UserAnswers(mgdRegNum)
+              .set(
+                GamblingReturnPeriodsPage,
+                gamblingReturnPeriods
               )
-            )
+              .get
 
           val action =
             new Harness(sessionRepository, gamblingConnector)
@@ -220,11 +207,13 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
               )
               .futureValue
 
-          result.map { req =>
-            req.request mustBe request
-            req.userAnswers.id mustBe existingUserAnswers.id
-            req.userAnswers.data mustBe existingUserAnswers.data
-          }
+          result mustBe Right(
+            DataRequest(
+              request,
+              mgdRegNum,
+              existingUserAnswers
+            )
+          )
 
           verify(sessionRepository, never()).set(any())
 
@@ -250,8 +239,8 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
           val existingUserAnswers =
             UserAnswers(
               mgdRegNum,
-              Json.obj(
-                "businessNameSection" -> Json.obj(
+              play.api.libs.json.Json.obj(
+                "businessNameSection" -> play.api.libs.json.Json.obj(
                   "mgdRegNum" -> "ABC12345678901"
                 )
               )
@@ -274,6 +263,7 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
           result.map { req =>
             req.request mustBe request
             req.userAnswers.id mustBe mgdRegNum
+
             req.userAnswers.get(GamblingReturnPeriodsPage) mustBe
               Some(gamblingReturnPeriods)
 
@@ -308,8 +298,8 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
           val existingUserAnswers =
             UserAnswers(
               mgdRegNum,
-              Json.obj(
-                "businessNameSection" -> Json.obj(
+              play.api.libs.json.Json.obj(
+                "businessNameSection" -> play.api.libs.json.Json.obj(
                   "mgdRegNum" -> "ABC12345678901"
                 )
               )
@@ -359,8 +349,8 @@ class GamblingReturnPeriodsDataRequiredActionSpec extends SpecBase with MockitoS
           val existingUserAnswers =
             UserAnswers(
               mgdRegNum,
-              Json.obj(
-                "businessNameSection" -> Json.obj(
+              play.api.libs.json.Json.obj(
+                "businessNameSection" -> play.api.libs.json.Json.obj(
                   "mgdRegNum" -> "ABC12345678901"
                 )
               )
@@ -403,37 +393,18 @@ object GamblingReturnPeriodsDataRequiredActionSpec {
 
   val gamblingReturnPeriods: GamblingReturnPeriods =
     GamblingReturnPeriods(
-      mgdRegNumber    = mgdRegNum,
-      returnPeriodsId = Some(123),
-      nstpEndDate1 = Some(
-        LocalDate.of(2026, 3, 31)
-      ),
-      nstpEndDate2 = Some(
-        LocalDate.of(2026, 6, 30)
-      ),
-      nstpEndDate3 = Some(
-        LocalDate.of(2026, 9, 30)
-      ),
-      nstpEndDate4 = Some(
-        LocalDate.of(2026, 12, 31)
-      ),
-      nstpEndDate5 = Some(
-        LocalDate.of(2027, 3, 31)
-      ),
-      nstpEndDate6 = Some(
-        LocalDate.of(2027, 6, 30)
-      ),
-      nstpEndDate7 = Some(
-        LocalDate.of(2027, 9, 30)
-      ),
-      nstpEndDate8 = Some(
-        LocalDate.of(2027, 12, 31)
-      ),
-      isInLastNstp          = Some("false"),
-      finalPeriodWarning    = Some("false"),
-      hasExistingNstpValues = Some("true"),
-      systemDate = Some(
-        LocalDate.of(2026, 9, 25)
-      )
+      mgdRegNumber          = mgdRegNum,
+      returnPeriodsId       = Some(123),
+      nstpEndDate1          = Some(LocalDate.of(2026, 3, 31)),
+      nstpEndDate2          = Some(LocalDate.of(2026, 6, 30)),
+      nstpEndDate3          = Some(LocalDate.of(2026, 9, 30)),
+      nstpEndDate4          = Some(LocalDate.of(2026, 12, 31)),
+      nstpEndDate5          = Some(LocalDate.of(2027, 3, 31)),
+      nstpEndDate6          = Some(LocalDate.of(2027, 6, 30)),
+      nstpEndDate7          = Some(LocalDate.of(2027, 9, 30)),
+      nstpEndDate8          = Some(LocalDate.of(2027, 12, 31)),
+      isInLastNstp          = Some(false),
+      finalPeriodWarning    = Some(false),
+      hasExistingNstpValues = Some(true)
     )
 }

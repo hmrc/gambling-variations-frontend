@@ -410,10 +410,9 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
            |  "nstpEndDate6": "30-JUN-27",
            |  "nstpEndDate7": "30-SEP-27",
            |  "nstpEndDate8": "31-DEC-27",
-           |  "isInLastNstp": "false",
-           |  "finalPeriodWarning": "false",
-           |  "hasExistingNstpValues": "true",
-           |  "systemDate": "25-SEP-26"
+           |  "isInLastNstp": "0",
+           |  "finalPeriodWarning": "0",
+           |  "hasExistingNstpValues": "1"
            |}""".stripMargin
 
       wireMockServer.stubFor(
@@ -447,7 +446,6 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         connector.getGamblingReturnPeriods(mgdRegNumber)
       }
     }
-
   }
 
   "GamblingConnector.getCorrespondenceDetails" should {
@@ -766,10 +764,9 @@ object GamblingConnectorISpec {
       nstpEndDate6          = Some(LocalDate.of(2027, 6, 30)),
       nstpEndDate7          = Some(LocalDate.of(2027, 9, 30)),
       nstpEndDate8          = Some(LocalDate.of(2027, 12, 31)),
-      isInLastNstp          = Some("false"),
-      finalPeriodWarning    = Some("false"),
-      hasExistingNstpValues = Some("true"),
-      systemDate            = Some(LocalDate.of(2026, 9, 25))
+      isInLastNstp          = Some(false),
+      finalPeriodWarning    = Some(false),
+      hasExistingNstpValues = Some(true)
     )
 
   val partnersDetailsBusinessName = PartnersDetails(
