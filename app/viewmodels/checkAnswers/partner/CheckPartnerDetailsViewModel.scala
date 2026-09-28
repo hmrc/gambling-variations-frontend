@@ -21,8 +21,10 @@ import models.{Address, BusinessType, ContactNumber, UserAnswers}
 import pages.partner.*
 import pages.partnerdetails.*
 import play.api.i18n.Messages
+import play.api.libs.json.Reads
 import play.api.mvc.Call
 import play.twirl.api.Html
+import queries.Gettable
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
@@ -62,6 +64,7 @@ case class CheckPartnerDetailsViewModel(
   companyRegistrationNumber: Option[String], // llp & unincorporatedBody uk
 
   // Address
+
   address: Option[Address],
   addAdditionalInformation: Option[String],
   additionalInformation: Option[String],
@@ -77,7 +80,8 @@ case class CheckPartnerDetailsViewModel(
   isNewPartnerFlow: Option[Boolean],
   isSubmitted: Boolean,
   isDueToLeave: Boolean,
-  isDueToJoin: Boolean
+  isDueToJoin: Boolean,
+  isMissingMandatoryFields: Boolean
 ) {
 
   // --- Update this ---
@@ -858,6 +862,34 @@ object CheckPartnerDetailsViewModel {
     clean.replaceFirst("^([A-Z]{2})([0-9]{6})([A-Z])$", "$1-$2-$3")
   }
 
+  private def missingMandatoryFields(userAnswers: UserAnswers, index: Int): Boolean = {
+
+    def missing[A: Reads](page: Gettable[A]): Boolean = userAnswers.get(page).isEmpty
+
+    def businessInfoMissing: Boolean =
+      userAnswers.get(PartnerDetailsBusinessTypePage(index)).forall {
+        case BusinessType.Soleproprietor =>
+          missing(PartnerDetailsSoleProprietorPage(index)) &&
+            missing(PartnerDetailsUtrPage(index)) &&
+            missing(PartnerDetailsDateOfBirthPage(index))
+
+        case BusinessType.Corporatebody | BusinessType.Unincorporatedbody |
+             BusinessType.Partnership | BusinessType.LimitedLiabilityPartnership =>
+          missing(PartnerDetailsBusinessNamePage(index))
+      }
+
+    (missing(PartnerTradingNamePage) && missing(PartnerDetailsTradingNamePage(index))) ||
+      missing(PartnerDetailsDateOfLeavingPage(index)) ||
+      missing(PartnerDetailsIsBusinessIncorporatedUkPage(index)) ||
+      missing(PartnerDetailsCountryOfIncorporation(index)) ||
+      missing(PartnerDetailsDateOfIncorporation(index)) ||
+      missing(PartnerDetailsForeignCorporateReferencePage(index)) ||
+      missing(PartnerDetailsCrnPage(index)) ||
+      missing(PartnerDetailsContactNumberPage(index)) ||
+      userAnswers.get(NewPartnerDetailsCorrespondenceDetailsSectionPage(index)).flatMap(_.correspondenceAddress).isEmpty ||
+      businessInfoMissing
+  }
+
   // TODO -> Update to use flag!
   def from(userAnswers: UserAnswers, index: Int, isNewPartnerFlow: Option[Boolean], isSubmitted: Boolean)(implicit
     messages: Messages
@@ -912,7 +944,8 @@ object CheckPartnerDetailsViewModel {
       isNewPartnerFlow = isNewPartnerFlow,
       isSubmitted      = isSubmitted,
       isDueToLeave     = dueToLeave,
-      isDueToJoin      = dueToJoin
+      isDueToJoin      = dueToJoin,
+      isMissingMandatoryFields = missingMandatoryFields(userAnswers, index)
     )
   }
 }
