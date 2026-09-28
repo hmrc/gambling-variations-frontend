@@ -25,6 +25,6 @@ class SeasonalBusinessFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "isBusinessSeasonal" -> boolean("seasonalBusiness.error.required")
+      "value" -> boolean("seasonalBusiness.error.required")
     )
 }

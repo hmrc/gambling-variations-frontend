@@ -41,12 +41,12 @@ class SeasonalBusinessViewSpec extends SpecBase {
       doc.select("form").attr("action") mustEqual controllers.routes.SeasonalBusinessController.onSubmit().url
 
       doc.select("input[type=radio]").size mustEqual 2
-      doc.select("input#isBusinessSeasonal").attr("name") mustEqual "isBusinessSeasonal"
+      doc.select("input#value").attr("name") mustEqual "value"
       doc.select("input#isBusinessSeasonal").hasAttr("checked") mustBe false
-      doc.select("label[for=isBusinessSeasonal]").text mustEqual messages("site.yes")
-      doc.select("input#isBusinessSeasonal-no").attr("name") mustEqual "isBusinessSeasonal"
-      doc.select("input#isBusinessSeasonal-no").hasAttr("checked") mustBe false
-      doc.select("label[for=isBusinessSeasonal-no]").text mustEqual messages("site.no")
+      doc.select("label[for=value]").text mustEqual messages("site.yes")
+      doc.select("input#value-no").attr("name") mustEqual "value"
+      doc.select("input#value-no").hasAttr("checked") mustBe false
+      doc.select("label[for=value-no]").text mustEqual messages("site.no")
 
       doc.select("button").text must include(messages("site.continue"))
     }
