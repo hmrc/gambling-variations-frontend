@@ -186,7 +186,8 @@ object CheckLicencesAndPremisesViewModel {
         OtherLicencesAndPermitsNI.positiveValues.filter(value => answers.backendFlag(OtherLicencesAndPermitsNI.mappedValuesWithPages(value))),
       hasPremisesNotCovered  = answers.premisesNotCoveredAnswer,
       provideAddressesAnswer = answers.get(LicencesPremisesPage),
-      premisesCount          = answers.get(PremisesDetailsPage).map(details => details.totalRows.getOrElse(details.premises.size)).getOrElse(0),
-      isSubmitted            = checkFlag(answers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
+      // The premises are counted rather than using totalRows, so that the count agrees with the premises addresses list, also after removals
+      premisesCount = answers.get(PremisesDetailsPage).map(_.premises.size).getOrElse(0),
+      isSubmitted   = checkFlag(answers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
     )
 }

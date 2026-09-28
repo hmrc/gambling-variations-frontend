@@ -38,6 +38,8 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
 
   private val licenceNumber = "123-456789-A-123456-789"
 
+  private val premises = PremisesDetails(mgdRegNum, Some("1 Street"), None, None, None, Some("AA1 1AA"), None)
+
   private def viewModel(
     licenceNumber: Option[String] = None,
     isPubTenant: Boolean = false,
@@ -267,7 +269,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
               "prizeGaming"           -> "0",
               "bingo"                 -> "1",
               "premisesNotCovered"    -> "1",
-              "premisesDetails"       -> Json.toJson(PremisesDetailsResponse(Some(12), Nil))
+              "premisesDetails"       -> Json.toJson(PremisesDetailsResponse(Some(2), Seq(premises, premises)))
             )
           )
         )
@@ -279,7 +281,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
           licencesAndPermitsNI   = Seq(bingo),
           hasPremisesNotCovered  = true,
           provideAddressesAnswer = None,
-          premisesCount          = 12,
+          premisesCount          = 2,
           isSubmitted            = false
         )
       }
@@ -313,10 +315,9 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.isSubmitted mustBe true
       }
 
-      "must count the premises when the total is missing and treat a blank licence number as not provided" in {
-        val premises = PremisesDetails(mgdRegNum, Some("1 Street"), None, None, None, Some("AA1 1AA"), None)
+      "must count the premises regardless of the total and treat a blank licence number as not provided" in {
         val answers = emptyUserAnswers
-          .set(PremisesDetailsPage, PremisesDetailsResponse(None, Seq(premises, premises)))
+          .set(PremisesDetailsPage, PremisesDetailsResponse(Some(1000), Seq(premises, premises)))
           .success
           .value
           .set(LicenceNumberPage, " ")
