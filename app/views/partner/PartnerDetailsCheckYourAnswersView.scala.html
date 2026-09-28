@@ -38,6 +38,18 @@
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("partnerDetailsCheckYourAnswers.heading", classes = "govuk-heading-l")
 
+    @if(!checkPartnerDetailsViewModel.isNewPartnerFlow.contains(true) && checkPartnerDetailsViewModel.isDueToLeave) {
+        @paragraph(
+            messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", checkPartnerDetailsViewModel.dateOfLeaving.getOrElse(""))
+        )
+    }
+
+    @if(!checkPartnerDetailsViewModel.isNewPartnerFlow.contains(true) && checkPartnerDetailsViewModel.isDueToJoin) {
+        @paragraph(
+            messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", checkPartnerDetailsViewModel.dateOfJoining.getOrElse(""))
+        )
+    }
+
     @h2("partnerDetailsCheckYourAnswers.businessDetails", classes = "govuk-heading-m")
     @govukSummaryList(SummaryList(
         rows = checkPartnerDetailsViewModel.businessDetailsSummaryList
