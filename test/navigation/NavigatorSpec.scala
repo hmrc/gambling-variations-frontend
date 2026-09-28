@@ -22,15 +22,14 @@ import controllers.routes
 import models.*
 import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
+import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.LicenceNumberPage
+import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -960,7 +959,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       "should route PartnerDetailsRemoveNationalInsuranceNumberYesNoPage to PartnerDetailsRemoveNationalInsuranceNumberYesNoController when answered" in {
         val answers =
           emptyAnswers
-            .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(newPartnersIndex1.toString), true)
+            .set(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(newPartnersIndex1), true)
             .success
             .value
 
@@ -1037,7 +1036,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route PartnerEmailAddressPage to PartnerEmailAddressController" in {
+      "should route PartnerDetailsEmailAddressPage to PartnerDetailsEmailAddressController" in {
         navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
           controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
@@ -1098,7 +1097,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route PartnerDetailsBusinessTypePage to the correct Partner Details controller when answered" in {
         val businessData = Json.obj(
-          "partners" -> Json.arr(
+          "newPartners" -> Json.arr(
             Json.obj("partnerDetailsBusinessType" -> 2)
           )
         )

@@ -52,12 +52,12 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
 
   private lazy val onPartnerDetailsRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onPartnerDetails(businessNumber1 /*0*/ )
+      .onPartnerDetails(businessNumber1)
       .url
 
   private lazy val onRemoveRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onRemove(businessNumber1 /*0*/ )
+      .onRemove(businessNumber1)
       .url
 
   private val userAnswersWithPartner =

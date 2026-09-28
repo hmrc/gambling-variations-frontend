@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import forms.partnerdetails.PartnerEmailAddressFormProvider
-import models.{Mode, PartnerDetails}
+import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsCorrespondenceEmailAddressPage
 import play.api.data.Form

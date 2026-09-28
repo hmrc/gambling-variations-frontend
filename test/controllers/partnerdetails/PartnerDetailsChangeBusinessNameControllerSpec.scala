@@ -17,7 +17,6 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.partnerdetails.PartnerDetailsHelper
 import controllers.routes
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
@@ -61,9 +60,6 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
           )
         )
       )
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
-        .success
-        .value
 
     val userAnswersNewPartners: UserAnswers =
       UserAnswers(
@@ -79,7 +75,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
           )
         )
       )
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
+        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
         .success
         .value
 
@@ -121,7 +117,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
           )
         )
       )
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false) // TODO passingNewPartnerIndex1 instead (no string)
+        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
         .success
         .value
 

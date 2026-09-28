@@ -17,8 +17,6 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.routes
-import forms.partnerdetails.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController
 import forms.partnerdetails.PartnerDetailsAddNationalInsuranceNumberFormProvider
 import models.BusinessType.Corporatebody
@@ -27,7 +25,6 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsNinoPage}
 import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsNinoPage}
 import play.api.data.Form
 import play.api.inject.bind

@@ -38,7 +38,6 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoControllerSpec ext
   val formProvider = new RemoveAdditionalInfoForPartnerAddressYesNoFormProvider()
   val form = formProvider()
 
-  // TODO it has normal mode only
   lazy val removeAdditionalInfoForPartnerYesNoRouteNewPartners =
     controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController
       .onPageLoad(newPartnersIndex1.toString, NormalMode)

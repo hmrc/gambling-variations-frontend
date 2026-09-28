@@ -150,7 +150,7 @@ class PartnerDetailsDeleteDateController @Inject() (
 
   private def getPartnerIndex(implicit
     request: DataRequest[AnyContent]
-  ): String /*Int*/ =
+  ): String =
     request.userAnswers
       .get(PartnerDetailsChosenPartnerToRemovePage)
       .getOrElse(

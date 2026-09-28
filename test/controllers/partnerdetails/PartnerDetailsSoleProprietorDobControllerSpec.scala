@@ -28,7 +28,7 @@ import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateO
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository

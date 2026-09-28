@@ -49,9 +49,6 @@ class PartnerDetailsController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-      // TODO I think this has to work differently?
-//      val newIndex: String = ??? // request.userAnswers.getBusinessNumberOrNewPartnerIndex
-
       val viewModel =
         PartnerDetailsViewModel.from(
           request.userAnswers,

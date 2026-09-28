@@ -18,7 +18,7 @@ package utils
 
 import models.{Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessPartnerNumberPage}
+import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.libs.json.{JsArray, JsObject}
 
 object PartnerUtils {
@@ -27,29 +27,12 @@ object PartnerUtils {
     if mode == NormalMode then index.toInt
     else index
 
-  // Like the top one, but actually validate some things
-  def parseIndexOpt(index: String, mode: Mode, userAnswers: UserAnswers): Option[BusinessNumberOrIndex] = {
-    if mode == NormalMode then {
-      val newPartnersSize = getNewPartnersSize(userAnswers)
-      if (newPartnersSize > index.toInt) || (newPartnersSize == 0 && index.toInt == 0) then Some(index.toInt)
-      else None
-    } else {
-      userAnswers.get(PartnerDetailsBusinessPartnerNumberPage(index)).fold(None)(_ => Some(index))
-    }
-  }
+  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers, maxPartners: Int): Seq[String] = (userAnswers.data \ "partners")
+    .asOpt[JsObject]
+    .fold(Seq.empty[String])(_.fields.map(_._1).sorted)
+    .take(maxPartners)
+    .toSeq
 
-  def parseIndex(index: String, mode: Mode, userAnswers: UserAnswers): BusinessNumberOrIndex =
-    if mode == NormalMode then {
-      val isCorrect = userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index.toInt)).contains(false)
-      if isCorrect then index.toInt
-      else findIndexForNewPartner(userAnswers)
-    } else index
-
-  def isIndexCorrect(index: String, mode: Mode, userAnswers: UserAnswers): Boolean =
-    if mode != NormalMode then false
-    else userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index.toInt)).contains(false)
-
-  // TODO find index where its not complete
   def findIndexForNewPartner(userAnswers: UserAnswers): Int = {
     val newPartnersSize = getNewPartnersSize(userAnswers)
     val newPartnerExistingIndex = (0 to newPartnersSize).collectFirst {
@@ -62,10 +45,4 @@ object PartnerUtils {
   private def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
 
-  // TODO
-  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers, maxPartners: Int): Seq[String] = (userAnswers.data \ "partners")
-    .asOpt[JsObject]
-    .fold(Seq.empty[String])(_.fields.map(_._1).sorted)
-    .take(maxPartners)
-    .toSeq
 }

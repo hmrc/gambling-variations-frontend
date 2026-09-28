@@ -26,7 +26,7 @@ import pages.partnerdetails.*
 import play.api.Logging
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
-import play.api.libs.json.{JsArray, JsObject, JsPath, Json, Writes}
+import play.api.libs.json.{JsObject, Writes}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
@@ -96,8 +96,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     answers: UserAnswers
   ): Try[UserAnswers] = {
     partnersDetails.partners
-      // TODO don't forget to unfilter it
-//      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
       .foldLeft(Try(answers)) { case (userAnswers, partnerDetails) =>
         partnerDetails.businessPartnerNumber.fold(userAnswers)(businessNumber => buildPartnerDetails(partnerDetails, businessNumber, userAnswers))
       }

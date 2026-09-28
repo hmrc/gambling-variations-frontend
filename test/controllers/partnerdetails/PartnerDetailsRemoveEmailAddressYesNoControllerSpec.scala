@@ -88,7 +88,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         "must populate the view correctly on a GET when the question has previously been answered" in {
 
           val userAnswers = baseUserAnswersExistingPartners
-            .set(PartnerDetailsRemoveEmailAddressYesNoPage(businessNumber1), true) // TODo
+            .set(PartnerDetailsRemoveEmailAddressYesNoPage(businessNumber1), true)
             .success
             .value
 

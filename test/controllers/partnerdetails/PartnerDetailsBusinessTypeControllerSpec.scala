@@ -252,7 +252,6 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       }
 
       "onSubmit" - {
-        // TODO this test seems more relevant for newPartners, I think
         "must update UserAnswers and redirect to the next page when valid data is submitted" in {
 
           val mockSessionRepository = mock[SessionRepository]

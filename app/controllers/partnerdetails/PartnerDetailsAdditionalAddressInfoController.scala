@@ -18,9 +18,8 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import forms.partnerdetails.PartnerDetailsAdditionalAddressInfoFormProvider
-import models.{CheckMode, Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
-import pages.BusinessNumberOrIndex
 import pages.partnerdetails.{PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsSubmittedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}

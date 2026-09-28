@@ -18,15 +18,13 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.PartnerDetailsAdditionalAddressInfoFormProvider
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.PartnerDetailsAdditionalAddressInfoPage
 import play.api.inject.bind
-import play.api.libs.json.Json
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository

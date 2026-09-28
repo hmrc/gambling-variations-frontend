@@ -17,11 +17,10 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import controllers.routes
 import forms.partnerdetails.PartnerDetailsBusinessTypeFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage}
+import pages.partnerdetails.PartnerDetailsBusinessTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
