@@ -131,14 +131,15 @@ case class CheckPartnerDetailsViewModel(
     val url = controllers.partner.routes.PartnerDetailsBusinessTypeController.onPageLoad().url
     val changeAction = buildAction(url, "site.change", label)
 
-    typeOfBusiness match {
-      case Some(value) if isNewPartnerFlow.contains(true) =>
-        Some(createSummaryListRow(label, Text(value), Seq(changeAction)))
-      case Some(value) if isDueToJoin || isDueToLeave =>
-        Some(createSummaryListRow(label, Text(value), Seq()))
-      case _ =>
-        Some(createSummaryListRow(label, Text("Add type of business"), Seq(changeAction)))
+    val actions = (isNewPartnerFlow.contains(true), isSubmitted) match {
+      case (true, _)     => Seq(changeAction)
+      case (false, true) => Nil
+      case _             => Nil
     }
+
+    typeOfBusiness
+      .map(bt => createSummaryListRow(label, Text(bt), actions))
+      .orElse(Some(createSummaryListRow(label, Text("Add type of business"), Seq(changeAction))))
   }
 
   private def soleProprietorNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -526,19 +527,20 @@ case class CheckPartnerDetailsViewModel(
         case _ => Nil
       }
 
-      vatRegistrationNumber.map(value => createSummaryListRow(label, Text(value), actions)).orElse {
-        val fallbackActions = if (actions.contains(changeAction)) Seq(changeAction) else Nil
+      vatRegistrationNumber
+        .map(value => createSummaryListRow(label, Text(value), actions))
+        .orElse {
+          val fallbackActions = if (actions.contains(changeAction)) Seq(changeAction) else Nil
 
-        Some(
-          createSummaryListRow(
-            label,
-            Text(messages("partnerDetailsCheckYourAnswers.noData")),
-            fallbackActions,
-            "govuk-summary-list__actions govuk-!-width-one-third"
+          Some(
+            createSummaryListRow(
+              label,
+              Text(messages("partnerDetailsCheckYourAnswers.noData")),
+              fallbackActions,
+              "govuk-summary-list__actions govuk-!-width-one-third"
+            )
           )
-        )
-
-      }
+        }
     } else None
 
   private def dateOfJoiningSummaryListRow(implicit messages: Messages): Option[SummaryListRow] = {
