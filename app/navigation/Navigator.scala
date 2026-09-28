@@ -25,7 +25,7 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
 import pages.partner.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
@@ -193,6 +193,8 @@ class Navigator @Inject() () {
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
     case RemovePremisesDetailsYesNoPage =>
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    case RemovePremisesAddressPage =>
+      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad() // Change it
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
