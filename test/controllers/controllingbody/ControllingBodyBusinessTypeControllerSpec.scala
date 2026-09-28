@@ -188,7 +188,7 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
         }
       }
 
-      //TO ADD ONCE WE HAVE DATA REQUIRED MERGED
+      // TO ADD ONCE WE HAVE DATA REQUIRED MERGED
 
 //      "must redirect to SystemError for a POST if no existing data is found" in {
 //
