@@ -478,10 +478,11 @@ case class CheckPartnerDetailsViewModel(
       label
     )
 
-    val actions = (isNewPartnerFlow.contains(true), isSubmitted, isDueToLeave) match {
-      case (_, _, true)  => Nil
-      case (true, _, _)  => Seq(changeAction)
-      case (false, _, _) => Seq(removeAction)
+    val actions = (isNewPartnerFlow.contains(true), dueToJoinOrLeave) match {
+      case (true, true)  => Seq(changeAction)
+      case (false, true) => Nil
+      case (true, _)     => Seq(changeAction)
+      case (false, _)    => Seq(removeAction)
     }
 
     faxNumber
@@ -524,10 +525,11 @@ case class CheckPartnerDetailsViewModel(
       label
     )
 
-    val actions = (isNewPartnerFlow.contains(true), isSubmitted, dueToJoinOrLeave) match {
-      case (_, _, true)  => Nil
-      case (true, _, _)  => Seq(changeAction)
-      case (false, _, _) => Seq(removeAction)
+    val actions = (isNewPartnerFlow.contains(true), dueToJoinOrLeave) match {
+      case (true, true)  => Seq(changeAction)
+      case (false, true) => Nil
+      case (true, _)     => Seq(changeAction)
+      case (false, _)    => Seq(removeAction)
     }
 
     emailAddress
