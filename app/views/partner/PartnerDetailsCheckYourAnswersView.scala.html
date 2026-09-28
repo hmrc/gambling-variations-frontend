@@ -17,7 +17,6 @@
 @import views.html.components.*
 @import viewmodels.checkAnswers.partner.CheckPartnerDetailsViewModel
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
-@import models.NormalMode
 
 @this(
         layout: templates.Layout,
@@ -30,51 +29,31 @@
         govukSummaryList : GovukSummaryList
 )
 
-
-@(checkPartnerDetailsViewModel: CheckPartnerDetailsViewModel)(implicit request: Request[_], messages: Messages)
+@(vm: CheckPartnerDetailsViewModel)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("partnerDetailsCheckYourAnswers.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("partnerDetailsCheckYourAnswers.heading", classes = "govuk-heading-l")
 
-    @if(!checkPartnerDetailsViewModel.isNewPartnerFlow.contains(true) && checkPartnerDetailsViewModel.isDueToLeave) {
-        @paragraph(
-            messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", checkPartnerDetailsViewModel.dateOfLeaving.getOrElse("---FIX ME---"))
-        )
-    }
-
-    @if(!checkPartnerDetailsViewModel.isNewPartnerFlow.contains(true) && checkPartnerDetailsViewModel.isDueToJoin) {
-        @paragraph(
-            messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", checkPartnerDetailsViewModel.dateOfJoining.getOrElse("---FIX ME---"))
-        )
+    @for(notice <- vm.joinLeaveNotices) {
+        @paragraph(notice)
     }
 
     @h2("partnerDetailsCheckYourAnswers.businessDetails", classes = "govuk-heading-m")
-    @govukSummaryList(SummaryList(
-        rows = checkPartnerDetailsViewModel.businessDetailsSummaryList
-    ))
+    @govukSummaryList(SummaryList(rows = vm.businessDetailsSummaryList))
 
     @h2("partnerDetailsCheckYourAnswers.address", classes = "govuk-heading-m")
-    @govukSummaryList(SummaryList(
-        rows = checkPartnerDetailsViewModel.addressSummaryList
-    ))
+    @govukSummaryList(SummaryList(rows = vm.addressSummaryList))
 
     @h2("partnerDetailsCheckYourAnswers.contactDetails", classes = "govuk-heading-m")
-    @govukSummaryList(SummaryList(
-        rows = checkPartnerDetailsViewModel.contactDetailsSummaryList
-    ))
+    @govukSummaryList(SummaryList(rows = vm.contactDetailsSummaryList))
 
-    @if(checkPartnerDetailsViewModel.isSubmitted) {
+    @if(vm.isSubmitted) {
         @paragraph(messages("changeRegistrationDetails.readyToSubmit"))
     }
 
-    <p class="govuk-body">
-        @govukButton(
-            ButtonViewModel(messages("site.continue"))
-                .withCssClass("button.govuk-button")
-                .asLink(checkPartnerDetailsViewModel.continueCall.url)
-        )
-    </p>
-
+    @govukButton(
+        ButtonViewModel(messages("site.continue")).asLink(vm.continueCall.url)
+    )
 }
