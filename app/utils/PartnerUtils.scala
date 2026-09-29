@@ -20,6 +20,7 @@ import models.{Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.libs.json.{JsArray, JsObject}
+import scala.collection.Seq
 
 object PartnerUtils {
 
@@ -31,7 +32,6 @@ object PartnerUtils {
     .asOpt[JsObject]
     .fold(Seq.empty[String])(_.fields.map(_._1).sorted)
     .take(maxPartners)
-    .toSeq
 
   def findIndexForNewPartner(userAnswers: UserAnswers): Int = {
     val newPartnersSize = getNewPartnersSize(userAnswers)
