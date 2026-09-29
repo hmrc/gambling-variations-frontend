@@ -20,6 +20,7 @@ import controllers.actions.{AuthorisedAction, DataRetrievalAction, LicencesPremi
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.checkAnswers.licencespremises.CheckLicencesAndPremisesViewModel
 import views.html.licencespremises.CheckLicenceAndPremisesView
 
 import javax.inject.Inject
@@ -36,6 +37,6 @@ class CheckLicencesAndPremisesController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    Ok(view())
+    Ok(view(CheckLicencesAndPremisesViewModel.from(request.userAnswers)))
   }
 }
