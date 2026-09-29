@@ -1084,3 +1084,26 @@ premisesAddressList.yesLabel = Yes, add another address
 premisesAddressList.records = Showing {0} to {1} of {2} records
 premisesAddressList.noLabel = No, return to check your licence and premises details
 premisesAddressList.error.required = Select yes if you want to add another address
+
+# Non-standard return periods
+
+chooseReturnPeriods.title= What are your non - standard return periods?
+chooseReturnPeriods.heading = What are your non-standard return periods?
+
+chooseReturnPeriods.jan = January, April, July and October
+chooseReturnPeriods.feb = February, May, August and November
+chooseReturnPeriods.mar = March, June, September and December
+
+chooseReturnPeriods.standard.error.required = Select your standard return periods
+chooseReturnPeriods.nonStandard.error.required = Select your non-standard return periods
+
+
+# Standard return periods
+
+chooseStandardReturnPeriods.title = What are your standard return periods?
+chooseStandardReturnPeriods.heading = What are your standard return periods?
+chooseStandardReturnPeriods.caption = Change registration details
+
+chooseStandardReturnPeriods.jan = Last day of January, April, July and October
+chooseStandardReturnPeriods.feb = Last day of February, May, August and November
+chooseStandardReturnPeriods.mar = Last day of March, June, September and December

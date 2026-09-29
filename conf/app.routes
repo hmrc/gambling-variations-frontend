@@ -350,3 +350,8 @@ POST       /change-registration-details/licences-and-premises/remove-address    
 
 GET        /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/return-periods/select   controllers.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods/select    controllers.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/return-periods/change-select  controllers.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/return-periods/change-select  controllers.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
