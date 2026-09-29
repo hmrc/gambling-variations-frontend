@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
 import models.controllingbody.ControlBodyDetails
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
-import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, BusinessType, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails,GamblingReturnPeriods}
+import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, BusinessType, ContactNumber, CorrespondenceDetails, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
