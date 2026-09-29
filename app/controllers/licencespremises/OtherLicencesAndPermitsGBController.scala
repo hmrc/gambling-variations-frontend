@@ -19,9 +19,10 @@ package controllers.licencespremises
 import controllers.actions.*
 import controllers.*
 import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
-import models.{Mode, NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import models.licencespremises.*
 import models.licencespremises.OtherLicencesAndPermitsGB.*
+import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
 import pages.licencespremises.*
 import play.api.data.Form
@@ -66,9 +67,10 @@ class OtherLicencesAndPermitsGBController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, OtherLicencesAndPermitsGBViewModel(formWithErrors)))),
         values =>
           for {
-            updatedAnswers <- Future.fromTry(updateValuesAndCombine(values, ua))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(OtherLicencesAndPermitsGBPage, NormalMode, ua))
+            answersWithValues <- Future.fromTry(updateValuesAndCombine(values, ua))
+            updatedAnswers    <- Future.fromTry(answersWithValues.withLicencesPremisesFlags(isChanged = values != getSelectedLicencesAndPermits(ua)))
+            _                 <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(OtherLicencesAndPermitsGBPage, mode, updatedAnswers))
       )
   }
 
