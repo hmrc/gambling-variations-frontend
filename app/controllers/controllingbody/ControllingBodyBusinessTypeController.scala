@@ -38,7 +38,7 @@ class ControllingBodyBusinessTypeController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodyBusinessTypeFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyBusinessTypeView

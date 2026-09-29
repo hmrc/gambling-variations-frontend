@@ -109,12 +109,12 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
 
       "must return OK and the correct view for a GET when no previous data exists" in {
 
-        val userAnswers = emptyUserAnswers
+        val ua = userAnswers
           .remove(ControllingBodyBusinessTypePage)
           .success
           .value
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(ua)).build()
 
         running(application) {
           val request = FakeRequest(GET, controllingBodyBusinessTypeRoute)
@@ -165,7 +165,7 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
 
         val mockSessionRepository = mock[SessionRepository]
 
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
@@ -181,30 +181,28 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
           val view = application.injector.instanceOf[ControllingBodyBusinessTypeView]
 
           val result = route(application, request).value
-
           status(result) mustEqual BAD_REQUEST
           contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
           verify(mockSessionRepository, never()).set(any())
         }
       }
 
-      // TO ADD ONCE WE HAVE DATA REQUIRED MERGED
 
-//      "must redirect to SystemError for a POST if no existing data is found" in {
-//
-//        val application = applicationBuilder(userAnswers = None).build()
-//
-//        running(application) {
-//          val request =
-//            FakeRequest(POST, ControllingBodyBusinessTypeController.onSubmit().url)
-//              .withFormUrlEncodedBody(("value", Corporatebody.toString))
-//
-//          val result = route(application, request).value
-//
-//          status(result) mustEqual SEE_OTHER
-//          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
-//        }
-//      }
+      "must redirect to SystemError for a POST if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, ControllingBodyBusinessTypeController.onSubmit().url)
+              .withFormUrlEncodedBody(("value", Corporatebody.toString))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+        }
+      }
     }
   }
 }

@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import models.controllingbody.ControlBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{Address,ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
+import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -62,10 +62,10 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
 
         val data = Json.obj(
           "controllingBodyDetailsSection" -> Json.obj(
-            "mgdRegNum" -> "XGM00000001761",
+            "mgdRegNum"             -> "XGM00000001761",
             "businessPartnerNumber" -> "0100053091",
-            "dateOfJoining" -> "2013-02-01",
-            "dateOfLeaving" -> "2023-03-01",
+            "dateOfJoining"         -> "2013-02-01",
+            "dateOfLeaving"         -> "2023-03-01",
             "correspondenceSection" -> Json.obj(
               "mgdRegNumber" -> "XGM00000001761",
               "correspondenceAddress" -> Json.obj(
@@ -74,35 +74,35 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
                 "address3" -> "Address 3",
                 "address4" -> "Address 4",
                 "postcode" -> "postcode",
-                "country" -> "Spain"
+                "country"  -> "Spain"
               ),
               "additionalInformation" -> "adi",
-              "iomOrCiFlag" -> "0",
+              "iomOrCiFlag"           -> "0",
               "contactNumber" -> Json.obj(
-                "phoneNumber" -> "phoneNumber",
+                "phoneNumber"       -> "phoneNumber",
                 "mobilePhoneNumber" -> "mobilePhoneNumber"
               ),
               "faxNumber" -> "faxNumber",
               "emailAddr" -> "emailAddr"
             ),
-            "dateOfIncorporation" -> "2020-02-15",
+            "dateOfIncorporation"    -> "2020-02-15",
             "countryOfIncorporation" -> "Spain",
-            "foreignCorporateRef" -> "foreignCorporateRef",
-            "dateOfBirth" -> "1998-06-24",
-            "nino" -> "AB123456C",
-            "utr" -> "5202020208",
-            "vrn" -> "127207785",
-            "crn" -> "12345678",
-            "businessName" -> "BRUCE HOPKINS LIMITED",
-            "tradingName" -> "Trading name 1",
-            "typeOfControllingBody" -> "corporatebody",
-            "isRepMemSameAsCb" -> "0",
-            "isUkIncorporated" -> "0",
+            "foreignCorporateRef"    -> "foreignCorporateRef",
+            "dateOfBirth"            -> "1998-06-24",
+            "nino"                   -> "AB123456C",
+            "utr"                    -> "5202020208",
+            "vrn"                    -> "127207785",
+            "crn"                    -> "12345678",
+            "businessName"           -> "BRUCE HOPKINS LIMITED",
+            "tradingName"            -> "Trading name 1",
+            "typeOfControllingBody"  -> "corporatebody",
+            "isRepMemSameAsCb"       -> "0",
+            "isUkIncorporated"       -> "0",
             "soleProprietor" -> Json.obj(
-              "title" -> "Mx",
-              "firstName" -> "solePropFirstName",
+              "title"      -> "Mx",
+              "firstName"  -> "solePropFirstName",
               "middleName" -> "solePropMiddleName",
-              "lastName" -> "solePropLastName"
+              "lastName"   -> "solePropLastName"
             )
           )
         )
@@ -214,16 +214,16 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
 
           val existingUserAnswers =
             UserAnswers(mgdRegNum,
-              Json.obj(
-                "businessNameSection" -> Json.obj(
-                  "mgdRegNum" -> "ABC12345678901"
-                )
-              )
-            )
+                        Json.obj(
+                          "businessNameSection" -> Json.obj(
+                            "mgdRegNum" -> "ABC12345678901"
+                          )
+                        )
+                       )
 
           val action = new Harness(sessionRepository, gamblingConnector)
 
-          val result: Either[Result, DataRequest[AnyContent]] = 
+          val result: Either[Result, DataRequest[AnyContent]] =
             action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(existingUserAnswers))).futureValue
 
           result match {
@@ -250,46 +250,46 @@ object ControllingBodyDetailsDataRequiredActionSpec {
 
   val controlBodyDetails: ControlBodyDetails =
     ControlBodyDetails(
-      mgdRegNumber = "XGM00000001761",
-      businessPartnerNumber = Some("0100053091"),
-      dateOfJoining = Some(java.time.LocalDate.parse("2013-02-01")),
-      dateOfLeaving = Some(java.time.LocalDate.parse("2023-03-01")),
-      solePropTitle = Some("Mx"),
-      solePropFirstName = Some("solePropFirstName"),
-      solePropMiddleName = Some("solePropMiddleName"),
-      solePropLastName = Some("solePropLastName"),
-      businessName = Some("BRUCE HOPKINS LIMITED"),
-      tradingName = Some("Trading name 1"),
-      dateOfBirth = Some(java.time.LocalDate.parse("1998-06-24")),
-      nino = Some("AB123456C"),
-      utr = Some(5202020208L),
-      vrn = Some(127207785L),
-      crn = Some("12345678"),
-      dateOfIncorporation = Some(java.time.LocalDate.parse("2020-02-15")),
+      mgdRegNumber           = "XGM00000001761",
+      businessPartnerNumber  = Some("0100053091"),
+      dateOfJoining          = Some(java.time.LocalDate.parse("2013-02-01")),
+      dateOfLeaving          = Some(java.time.LocalDate.parse("2023-03-01")),
+      solePropTitle          = Some("Mx"),
+      solePropFirstName      = Some("solePropFirstName"),
+      solePropMiddleName     = Some("solePropMiddleName"),
+      solePropLastName       = Some("solePropLastName"),
+      businessName           = Some("BRUCE HOPKINS LIMITED"),
+      tradingName            = Some("Trading name 1"),
+      dateOfBirth            = Some(java.time.LocalDate.parse("1998-06-24")),
+      nino                   = Some("AB123456C"),
+      utr                    = Some(5202020208L),
+      vrn                    = Some(127207785L),
+      crn                    = Some("12345678"),
+      dateOfIncorporation    = Some(java.time.LocalDate.parse("2020-02-15")),
       countryOfIncorporation = Some("Spain"),
-      foreignCorporateRef = Some("foreignCorporateRef"),
-      address1 = Some("Address 1"),
-      address2 = Some("Address 2"),
-      address3 = Some("Address 3"),
-      address4 = Some("Address 4"),
-      postcode = Some("postcode"),
-      country = Some("Spain"),
-      adi = Some("adi"),
-      isIomOrCiFlag = Some("0"),
-      phoneNumber = Some("phoneNumber"),
-      mobilePhoneNumber = Some("mobilePhoneNumber"),
-      faxNumber = Some("faxNumber"),
-      emailAddr = Some("emailAddr"),
-      typeOfControllingBody = Some(models.BusinessType.Corporatebody),
-      isRepMemSameAsCb = Some("0"),
-      isUkIncorporated = Some("0")
+      foreignCorporateRef    = Some("foreignCorporateRef"),
+      address1               = Some("Address 1"),
+      address2               = Some("Address 2"),
+      address3               = Some("Address 3"),
+      address4               = Some("Address 4"),
+      postcode               = Some("postcode"),
+      country                = Some("Spain"),
+      adi                    = Some("adi"),
+      isIomOrCiFlag          = Some("0"),
+      phoneNumber            = Some("phoneNumber"),
+      mobilePhoneNumber      = Some("mobilePhoneNumber"),
+      faxNumber              = Some("faxNumber"),
+      emailAddr              = Some("emailAddr"),
+      typeOfControllingBody  = Some(models.BusinessType.Corporatebody),
+      isRepMemSameAsCb       = Some("0"),
+      isUkIncorporated       = Some("0")
     )
 
   val correspondenceDetails: CorrespondenceDetails =
     CorrespondenceDetails(
       mgdRegNumber = "XGM00000001761",
-      nameLine1 = None,
-      nameLine2 = None,
+      nameLine1    = None,
+      nameLine2    = None,
       correspondenceAddress = Some(
         Address(
           address1 = "Address 1",
@@ -297,14 +297,14 @@ object ControllingBodyDetailsDataRequiredActionSpec {
           address3 = Some("Address 3"),
           address4 = Some("Address 4"),
           postcode = Some("postcode"),
-          country = Some("Spain")
+          country  = Some("Spain")
         )
       ),
       additionalInformation = Some("adi"),
-      iomOrCiFlag = Some("0"),
+      iomOrCiFlag           = Some("0"),
       contactNumber = Some(
         ContactNumber(
-          phoneNumber = Some("phoneNumber"),
+          phoneNumber       = Some("phoneNumber"),
           mobilePhoneNumber = Some("mobilePhoneNumber")
         )
       ),
@@ -314,9 +314,9 @@ object ControllingBodyDetailsDataRequiredActionSpec {
 
   val soleProprietorName: SoleProprietorName =
     SoleProprietorName(
-      title = "Mx",
-      firstName = "solePropFirstName",
+      title      = "Mx",
+      firstName  = "solePropFirstName",
       middleName = Some("solePropMiddleName"),
-      lastName = "solePropLastName"
+      lastName   = "solePropLastName"
     )
 }
