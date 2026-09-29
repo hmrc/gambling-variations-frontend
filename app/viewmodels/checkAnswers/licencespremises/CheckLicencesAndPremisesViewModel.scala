@@ -19,8 +19,8 @@ package viewmodels.checkAnswers.licencespremises
 import controllers.licencespremises.routes
 import models.UserAnswers
 import models.licencespremises.LicencesAndPremisesRadioOptions.{ByPost, Online}
+import models.licencespremises.LicencesPremisesAnswers.*
 import models.licencespremises.{LicencesAndPremisesRadioOptions, OtherLicencesAndPermitsGB, OtherLicencesAndPermitsNI}
-import pages.QuestionPage
 import pages.licencespremises.*
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -41,8 +41,7 @@ case class CheckLicencesAndPremisesViewModel(
   isSubmitted: Boolean
 ) {
 
-  // The premises addresses and find premises address screens are not built yet
-  private val premisesAddressesUrl = "#"
+  // The find premises address screen is not built yet
   private val findPremisesAddressUrl = "#"
 
   // The premises not covered question is only asked when the user has provided some kind of licence or permit
@@ -159,7 +158,7 @@ case class CheckLicencesAndPremisesViewModel(
       value = ValueViewModel(Text(messages("checkLicenceAndPremises.addressesOnline.value", premisesCount))),
       actions = Seq(
         changeAction(
-          if (premisesCount > 0) premisesAddressesUrl else findPremisesAddressUrl,
+          if (premisesCount > 0) routes.PremisesAddressListController.onPageLoad().url else findPremisesAddressUrl,
           "checkLicenceAndPremises.addressesOnline.hidden"
         )
       )
@@ -180,24 +179,15 @@ object CheckLicencesAndPremisesViewModel {
   def from(answers: UserAnswers): CheckLicencesAndPremisesViewModel =
     CheckLicencesAndPremisesViewModel(
       licenceNumber = answers.get(LicenceNumberPage).map(_.trim).filter(_.nonEmpty),
-      // The yes/no pages hold the answers given in this session, otherwise the flags from the backend apply
-      isPubTenant = answers.get(LicenceDetailsLandlordLicenceYesNoPage).getOrElse(flag(answers, LicenceHeldByLandlordPage)),
+      isPubTenant   = answers.pubTenantAnswer,
       licencesAndPermitsGB =
-        OtherLicencesAndPermitsGB.positiveValues.filter(value => flag(answers, OtherLicencesAndPermitsGB.mappedValuesWithPages(value))),
+        OtherLicencesAndPermitsGB.positiveValues.filter(value => answers.backendFlag(OtherLicencesAndPermitsGB.mappedValuesWithPages(value))),
       licencesAndPermitsNI =
-        OtherLicencesAndPermitsNI.positiveValues.filter(value => flag(answers, OtherLicencesAndPermitsNI.mappedValuesWithPages(value))),
-      hasPremisesNotCovered  = answers.get(PremisesNotCoveredYesNoPage).getOrElse(flag(answers, LicencePremisesNotCoveredPage)),
+        OtherLicencesAndPermitsNI.positiveValues.filter(value => answers.backendFlag(OtherLicencesAndPermitsNI.mappedValuesWithPages(value))),
+      hasPremisesNotCovered  = answers.premisesNotCoveredAnswer,
       provideAddressesAnswer = answers.get(LicencesPremisesPage),
-      premisesCount          = answers.get(PremisesDetailsPage).map(details => details.totalRows.getOrElse(details.premises.size)).getOrElse(0),
-      isSubmitted            = checkFlag(answers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
+      // The premises are counted rather than using totalRows, so that the count agrees with the premises addresses list, also after removals
+      premisesCount = answers.get(PremisesDetailsPage).map(_.premises.size).getOrElse(0),
+      isSubmitted   = checkFlag(answers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
     )
-
-  // The backend holds booleans as "1" or "0", an oracle implementation detail that has been propagated through 3 layers of microservices.
-  // A missing flag is treated as indicating false.
-  private def flag(answers: UserAnswers, page: QuestionPage[String]): Boolean =
-    answers.get(page).fold(false) {
-      case "1"   => true
-      case "0"   => false
-      case value => throw new IllegalArgumentException(s"Unexpected value '$value' for $page, expected 1 or 0")
-    }
 }
