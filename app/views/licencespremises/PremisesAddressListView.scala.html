@@ -39,10 +39,10 @@
 
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("premisesAddressList.heading", classes="govuk-heading-l")
-    @p(message = "premisesAddressList.records", args = Seq(<strong>1</strong>, <strong>{addressList.length}</strong>, <strong>{addressList.length}</strong>))
     @p("premisesAddressList.message.submit")
 <!--the bold values below will need to be updated when creating pagination-->
-    @p(message = "premisesAddressList.records", args = Seq(<strong>1</strong>, <strong>{addressList.length}</strong>, <strong>{addressList.length}</strong>))
+     @if(addressList.length > 9){@p(message = "premisesAddressList.records", args = Seq(<strong>1</strong>, <strong>{addressList.length}</strong>,
+     <strong>{addressList.length}</strong>))}
     @govukSummaryList(PremisesAddressListViewModel.from(addressList))
     @if(form.errors.nonEmpty){
         @govukErrorSummary(ErrorSummaryViewModel(form))
