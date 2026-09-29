@@ -21,11 +21,10 @@ import forms.licencespremises.PremisesAddressListFormProvider
 import models.{NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
+import pages.licencespremises.PremisesDetailsPage
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import uk.gov.hmrc.govukfrontend.views.Aliases.{Checkboxes, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
 import views.html.licencespremises.PremisesAddressListView
 
@@ -81,11 +80,7 @@ class PremisesAddressListViewModelSpec extends SpecBase {
       )
     )
     private val formProvider = new PremisesAddressListFormProvider()
-    private val form = formProvider()
-    private val preparedFormWithAnswers =
-      userAnswers
-        .get(AddPremisesAddressPage)
-        .fold(form)(form.fill)
+
     private val maxPremisesNumber = 100
     private val addressList = userAnswers.get(PremisesDetailsPage).fold(Seq.empty)(list => list.premises)
     private val view = app.injector.instanceOf[PremisesAddressListView]

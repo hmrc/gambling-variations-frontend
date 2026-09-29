@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.partner
+package viewmodels.checkAnswers.partnerdetails
 
-import controllers.partner.routes
+import controllers.partnerdetails.*
 import models.BusinessType.*
-import models.{Address, BusinessType, UserAnswers}
+import models.{Address, BusinessType, NormalMode, UserAnswers}
 import pages.QuestionPage
-import pages.partner.*
 import pages.partnerdetails.*
 import play.api.libs.json.Reads
 import play.api.mvc.Call
@@ -31,7 +30,7 @@ import scala.util.Try
 object PartnerMandatoryFields {
 
   /** A mandatory answer: the page it's stored on, where to send the user, and how to tell it's answered. */
-  final case class Field(page: Settable[_], call: Call, isAnswered: UserAnswers => Boolean)
+  final case class Field(page: Settable[?], call: Call, isAnswered: UserAnswers => Boolean)
 
   object Field {
     def of[A: Reads](page: QuestionPage[A], call: Call): Field =
@@ -41,22 +40,22 @@ object PartnerMandatoryFields {
   // --- Public API ---
 
   /** Mandatory fields for the partner's current answers, in journey order. */
-  def required(userAnswers: UserAnswers, index: Int): Seq[Field] = {
-    val businessTypeField = Field.of(PartnerDetailsBusinessTypePage(index), routes.PartnerDetailsBusinessTypeController.onPageLoad())
+  def required(userAnswers: UserAnswers, index: String): Seq[Field] = {
+    val businessTypeField = Field.of(PartnerDetailsBusinessTypePage(index), routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode))
     val businessFields = userAnswers.get(PartnerDetailsBusinessTypePage(index)).fold(Seq.empty[Field])(businessFieldsFor(userAnswers, index, _))
 
     (businessTypeField +: businessFields) ++ commonFields(index)
   }
 
   /** The first unanswered mandatory field, used to redirect on continue. */
-  def firstMissing(userAnswers: UserAnswers, index: Int): Option[Field] =
+  private def firstMissing(userAnswers: UserAnswers, index: String): Option[Field] =
     required(userAnswers, index).find(field => !field.isAnswered(userAnswers))
 
-  def isMissing(userAnswers: UserAnswers, index: Int): Boolean =
+  def isMissing(userAnswers: UserAnswers, index: String): Boolean =
     firstMissing(userAnswers, index).isDefined
 
   /** Removes answers to conditional pages that don't apply to the partner's current business type / incorporation. */
-  def cleanUp(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
+  def cleanUp(userAnswers: UserAnswers, index: String): Try[UserAnswers] = {
     val keep = required(userAnswers, index).map(_.page).toSet
 
     conditionalPages(index)
@@ -66,35 +65,43 @@ object PartnerMandatoryFields {
 
   // --- Rules ---
 
-  private def businessFieldsFor(userAnswers: UserAnswers, index: Int, bt: BusinessType): Seq[Field] = {
+  private def businessFieldsFor(userAnswers: UserAnswers, index: String, bt: BusinessType): Seq[Field] = {
 
     val businessName = Field.of(
       PartnerDetailsBusinessNamePage(index),
-      routes.ChangePartnerDetailsBusinessNameController.onPageLoad(businessType = bt)
+      routes.PartnerDetailsChangeBusinessNameController.onPageLoad(index, businessType = bt, NormalMode)
     )
-    val utr = Field.of(PartnerDetailsUtrPage(index), routes.PartnerDetailsAddUTRController.onPageLoad())
+    val utr = Field.of(PartnerDetailsUtrPage(index), routes.PartnerDetailsAddUTRController.onPageLoad(index, NormalMode))
 
     val ukIncorporation = Seq(
-      Field.of(PartnerDetailsDateOfIncorporation(index), routes.PartnerDateOfIncorporationController.onPageLoad()),
-      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad()) // TODO: CRN page
+      Field.of(PartnerDetailsDateOfIncorporation(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index, NormalMode)),
+      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode)) // TODO: CRN page
     )
 
     val nonUkIncorporation = Seq(
-      Field.of(PartnerDetailsCountryOfIncorporation(index), routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad()), // TODO: country page
-      Field.of(PartnerDetailsForeignCorporateReferencePage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad())
+      Field.of(PartnerDetailsCountryOfIncorporation(index),
+               routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index, NormalMode)
+              ), // TODO: country page
+      Field.of(PartnerDetailsForeignCorporateReferencePage(index),
+               routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode)
+              )
     )
 
     bt match {
       case Soleproprietor =>
         Seq(
-          Field.of(PartnerDetailsSoleProprietorPage(index), routes.ChangePartnerDetailsBusinessNameController.onPageLoad(businessType = Soleproprietor)),
-          Field.of(PartnerDetailsDateOfBirthPage(index), routes.PartnerSoleProprietorDobController.onPageLoad()),
+          Field.of(PartnerDetailsSoleProprietorPage(index),
+                   routes.PartnerDetailsChangeBusinessNameController.onPageLoad(index, businessType = Soleproprietor, NormalMode)
+                  ),
+          Field.of(PartnerDetailsDateOfBirthPage(index), routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode)),
           utr
         )
 
       case Corporatebody =>
         val isIncorporatedInUk =
-          Field.of(PartnerDetailsIsBusinessIncorporatedUkPage(index), routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad())
+          Field.of(PartnerDetailsIsBusinessIncorporatedUkPage(index),
+                   routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index, NormalMode)
+                  )
 
         val incorporation = userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)) match {
           case Some(true)  => ukIncorporation
@@ -110,18 +117,20 @@ object PartnerMandatoryFields {
     }
   }
 
-  private def commonFields(index: Int): Seq[Field] = Seq(
-    Field.of(PartnerDetailsDateOfJoiningPage(index), routes.PartnerSoleProprietorDobController.onPageLoad()), // TODO: date-of-joining page
+  private def commonFields(index: String): Seq[Field] = Seq(
+    Field.of(PartnerDetailsDateOfJoiningPage(index),
+             routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode)
+            ), // TODO: date-of-joining page
     Field(
-      NewPartnerDetailsCorrespondenceDetailsSectionPage(index),
-      routes.PartnerDetailsBusinessTypeController.onPageLoad(), // TODO: address page
+      PartnerDetailsNewCorrespondenceDetailsSectionPage(index),
+      routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode), // TODO: address page
       ua => correspondenceAddress(ua, index).isDefined
     ),
-    Field.of(PartnerDetailsContactNumberPage(index), routes.PartnerContactDetailsController.onPageLoad())
+    Field.of(PartnerDetailsContactNumberPage(index), routes.PartnerDetailsContactDetailsController.onPageLoad(index, NormalMode))
   )
 
   /** Every page that only applies to some business types / incorporation answers. */
-  private def conditionalPages(index: Int): Seq[Settable[_]] = Seq(
+  private def conditionalPages(index: String): Seq[Settable[_]] = Seq(
     PartnerDetailsSoleProprietorPage(index),
     PartnerDetailsDateOfBirthPage(index),
     PartnerDetailsBusinessNamePage(index),
@@ -133,6 +142,6 @@ object PartnerMandatoryFields {
     PartnerDetailsForeignCorporateReferencePage(index)
   )
 
-  private def correspondenceAddress(userAnswers: UserAnswers, index: Int): Option[Address] =
-    userAnswers.get(NewPartnerDetailsCorrespondenceDetailsSectionPage(index)).flatMap(_.correspondenceAddress)
+  private def correspondenceAddress(userAnswers: UserAnswers, index: String): Option[Address] =
+    userAnswers.get(PartnerDetailsNewCorrespondenceDetailsSectionPage(index)).flatMap(_.correspondenceAddress)
 }

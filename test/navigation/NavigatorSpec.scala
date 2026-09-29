@@ -27,11 +27,9 @@ import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
+import pages.licencespremises.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json

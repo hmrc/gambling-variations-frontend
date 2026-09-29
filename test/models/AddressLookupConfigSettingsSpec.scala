@@ -145,6 +145,7 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
 
     "print the generated JSON for use in the address-lookup-frontend stub" in {
       val json: JsValue = Json.toJson(settings)
+      println(json)
       succeed
     }
 

@@ -17,7 +17,6 @@
 package views.licencespremises
 
 import base.SpecBase
-import controllers.licencespremises.routes
 import models.licencespremises.LicencesAndPremisesRadioOptions.{ByPost, Online}
 import models.licencespremises.OtherLicencesAndPermitsGB.clubMachine
 import org.jsoup.Jsoup

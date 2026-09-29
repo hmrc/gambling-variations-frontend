@@ -149,3 +149,5 @@ GET       /change-registration-details/partner-details/date-to-remove           
 POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
 GET       /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()
+
+GET       /change-registration-details/partner-details/check                                      controllers.partnerdetails.PartnerDetailsCheckYourAnswersController.onPageLoad(index: String, mode: Mode = CheckMode)
