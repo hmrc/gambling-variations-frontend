@@ -1045,9 +1045,10 @@ partnerDetailsCheckYourAnswers.title = Check your partner details
 partnerDetailsCheckYourAnswers.heading = Check your partner details
 partnerDetailsCheckYourAnswers.error.missingChanges = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.
 partnerDetailsCheckYourAnswers.error.missingDetails = You must add missing details before you submit this partner for approval.
-partnerDetailsCheckYourAnswers.error.contactUs = To update details you cannot change online, you need to contact us (opens in new tab).
-partnerDetailsCheckYourAnswers.error.cannotChangeLeaving = You cannot change this partner's details online because they are due to leave. If you want to make changes before {0}, you need to contact us (opens in new tab).
-partnerDetailsCheckYourAnswers.error.cannotChangeJoining = You cannot change this partner's details online because they are due to join. If you want to make changes before they join on {0}, you need to contact us (opens in new tab).
+partnerDetailsCheckYourAnswers.error.contactUsLinkText = you need to contact us
+partnerDetailsCheckYourAnswers.error.contactUs = To update details you cannot change online, {0}.
+partnerDetailsCheckYourAnswers.error.cannotChangeLeaving = You cannot change this partner''s details online because they are due to leave. If you want to make changes before {0}, {1}.
+partnerDetailsCheckYourAnswers.error.cannotChangeJoining = You cannot change this partner''s details online because they are due to join. If you want to make changes before they join on {0}, {1}.
 partnerDetailsCheckYourAnswers.noData = Not provided
 
 partnerDetailsCheckYourAnswers.businessDetails = Business details

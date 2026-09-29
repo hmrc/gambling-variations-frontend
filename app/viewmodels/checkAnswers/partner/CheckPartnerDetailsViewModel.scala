@@ -75,16 +75,32 @@ case class CheckPartnerDetailsViewModel(
   import CheckPartnerDetailsViewModel.NoDataActionClasses
 
   // --- Update this ---
-  def continueCall: Call = if isMissingMandatoryFields then routes.PartnerDetailsCheckYourAnswersController.onPageLoad()
-  else routes.PartnerDetailsCheckYourAnswersController.onPageLoad()
+  def continueCall: Call = if (isMissingMandatoryFields) {
+    routes.PartnerDetailsCheckYourAnswersController.onPageLoad()
+  } else {
+    routes.PartnerDetailsCheckYourAnswersController.onPageLoad()
+  }
 
-  def joinLeaveNotices(implicit messages: Messages): Seq[String] =
+  def notices(implicit messages: Messages): Seq[Html] =
     if (isNew) Nil
-    else
-      Seq(
-        dateOfLeaving.filter(_ => isDueToLeave).map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", _)),
-        dateOfJoining.filter(_ => isDueToJoin).map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", _))
-      ).flatten
+    else {
+      val url = "" // TODO: contact-us URL
+      val link = s"""<a href="$url" class="govuk-link">${messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")}</a>"""
+
+      val leaving = dateOfLeaving
+        .filter(_ => isDueToLeave)
+        .map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", _, link))
+
+      val joining = dateOfJoining
+        .filter(_ => isDueToJoin)
+        .map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", _, link))
+
+      val contactUs = Option.when(isSubmitted && leaving.isEmpty && joining.isEmpty)(
+        messages("partnerDetailsCheckYourAnswers.error.contactUs", link)
+      )
+
+      Seq(leaving, joining, contactUs).flatten.map(Html(_))
+    }
 
   // --- Summary lists ---
 
