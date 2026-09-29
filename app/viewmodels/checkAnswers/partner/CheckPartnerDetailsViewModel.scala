@@ -499,7 +499,7 @@ object CheckPartnerDetailsViewModel {
       isSubmitted      = isSubmitted,
       isDueToJoin      = joiningDate.exists(d => today.isBefore(d)),
       isDueToLeave     = leavingDate.exists(d => today.isBefore(d)),
-      isMissingMandatoryFields = missingMandatoryFields(userAnswers, index)
+      isMissingMandatoryFields = PartnerMandatoryFields.isMissing(userAnswers, index)
     )
   }
 
@@ -516,39 +516,4 @@ object CheckPartnerDetailsViewModel {
     clean.replaceFirst("^([A-Z]{2})([0-9]{6})([A-Z])$", "$1-$2-$3")
   }
 
-  private def missingMandatoryFields(userAnswers: UserAnswers, index: Int): Boolean = {
-
-    def missing[A: Reads](page: Gettable[A]): Boolean = userAnswers.get(page).isEmpty
-
-    def nameOrUtrMissing: Boolean =
-      missing(PartnerDetailsBusinessNamePage(index)) || missing(PartnerDetailsUtrPage(index))
-
-    def ukIncorporationMissing: Boolean =
-      missing(PartnerDetailsDateOfIncorporation(index)) || missing(PartnerDetailsCrnPage(index))
-
-    def incorporationMissing: Boolean =
-      userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)) match {
-        case None       => true
-        case Some(true) => ukIncorporationMissing
-        case Some(false) =>
-          missing(PartnerDetailsCountryOfIncorporation(index)) || missing(PartnerDetailsForeignCorporateReferencePage(index))
-      }
-
-    def businessMissing: Boolean =
-      userAnswers.get(PartnerDetailsBusinessTypePage(index)).forall {
-        case Soleproprietor =>
-          missing(PartnerDetailsSoleProprietorPage(index)) ||
-          missing(PartnerDetailsDateOfBirthPage(index)) ||
-          missing(PartnerDetailsUtrPage(index))
-        case Corporatebody               => nameOrUtrMissing || incorporationMissing
-        case LimitedLiabilityPartnership => nameOrUtrMissing || ukIncorporationMissing
-        case Unincorporatedbody          => nameOrUtrMissing
-        case Partnership                 => missing(PartnerDetailsBusinessNamePage(index))
-      }
-
-    missing(PartnerDetailsDateOfJoiningPage(index)) ||
-    missing(PartnerDetailsContactNumberPage(index)) ||
-    correspondenceAddress(userAnswers, index).isEmpty ||
-    businessMissing
-  }
 }
