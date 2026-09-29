@@ -29,7 +29,7 @@
     govukSummaryList : GovukSummaryList
 )
 
-@(vm: CheckPartnerDetailsViewModel, index: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(vm: CheckPartnerDetailsViewModel, index: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("partnerDetailsCheckYourAnswers.title"), Some(messages("changeRegistrationDetails.caption")))) {
 

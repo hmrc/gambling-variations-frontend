@@ -150,4 +150,4 @@ POST      /change-registration-details/partner-details/date-to-remove           
 
 GET       /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()
 
-GET       /change-registration-details/partner-details/check                                      controllers.partnerdetails.PartnerDetailsCheckYourAnswersController.onPageLoad(index: String, mode: Mode = CheckMode)
+GET       /change-registration-details/partner-details/check/:index                               controllers.partnerdetails.PartnerDetailsCheckYourAnswersController.onPageLoad(index: String, mode: Mode = CheckMode)

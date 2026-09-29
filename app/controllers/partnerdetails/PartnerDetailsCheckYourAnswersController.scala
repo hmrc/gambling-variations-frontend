@@ -52,6 +52,6 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
     val model: CheckPartnerDetailsViewModel = CheckPartnerDetailsViewModel
       .from(request.userAnswers, newIndex, isNewPartner, isSubmitted)
 
-    Ok(view(model, index, mode))
+    Ok(view(model, index))
   }
 }
