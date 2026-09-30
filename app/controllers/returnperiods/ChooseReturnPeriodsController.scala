@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
 import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers}
 import navigation.Navigator
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -90,10 +90,20 @@ class ChooseReturnPeriodsController @Inject() (
             for {
               updatedAnswers <-
                 Future.fromTry(
-                  request.userAnswers.set(
-                    ChooseReturnPeriodsPage,
-                    value.returnPeriodsId
-                  )
+                  request.userAnswers
+                    .set(
+                      ChooseReturnPeriodsPage,
+                      value.returnPeriodsId
+                    )
+                    .flatMap(
+                      _.set(
+                        HasExistingNstpValuesPage,
+                        request.userAnswers
+                          .get(GamblingReturnPeriodsPage)
+                          .flatMap(_.hasExistingNstpValues)
+                          .get
+                      )
+                    )
                 )
 
               _ <- sessionRepository.set(updatedAnswers)
@@ -107,7 +117,6 @@ class ChooseReturnPeriodsController @Inject() (
             )
         )
     }
-
   private def variantFrom(
     userAnswers: UserAnswers
   ): ReturnPeriodsVariant =

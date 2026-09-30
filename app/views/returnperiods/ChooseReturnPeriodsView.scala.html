@@ -67,16 +67,14 @@ messages: Messages
             )
         )
 
-        @govukButton(
-        ButtonViewModel(
-        messages("site.continue")
-        )
-        )
+        @if(variant.showCaption) {
+        @p("chooseReturnPeriods.p")
         }
 
-        @if(variant.showCaption) {
-            @p("chooseReturnPeriods.p")
+        @govukButton(ButtonViewModel(messages("site.continue")))
         }
+
+
 
     </div>
 </div>
