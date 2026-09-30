@@ -49,7 +49,7 @@
                 field = form("phoneNumber"),
                 label = LabelViewModel(messages("partnerContactDetails.phoneNumber"))
             )
-            .withWidth(Full)
+            .withWidth(Fixed20)
             .withAttribute("autocomplete" -> "tel")
             .withAttribute("inputmode", "tel")
         )
@@ -59,7 +59,7 @@
                 field = form("mobileNumber"),
                 label = LabelViewModel(messages("partnerContactDetails.mobilePhoneNumber"))
             )
-            .withWidth(Full)
+            .withWidth(Fixed20)
             .withAttribute("autocomplete" -> "tel")
             .withAttribute("inputmode", "tel")
         )
