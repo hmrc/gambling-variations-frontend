@@ -14,65 +14,60 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import controllers.actions.*
-import forms.FaxNumberFormProvider
+import controllers.routes
+import forms.EmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.contactdetails.*
-import utils.FlagsUtil.checkIfChanged
 import pages.GroupMemberPage
+import pages.contactdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.FaxNumberView
+import utils.FlagsUtil.checkIfChanged
+import views.html.BusinessEmailAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FaxNumberController @Inject() (
+class BusinessEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: FaxNumberFormProvider,
+  formProvider: EmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: FaxNumberView
+  view: BusinessEmailAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider("faxNumber")
+  val form = formProvider("emailAddress")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
     request.userAnswers.get(GroupMemberPage) match {
       case Some(true) =>
         Redirect(routes.AccessDeniedController.onPageLoad())
       case Some(false) =>
         val preparedForm = request.userAnswers
-          .get(BusinessFaxNumberPage)
+          .get(BusinessEmailAddressPage)
           .fold(form)(form.fill)
 
         Ok(view(preparedForm, mode))
-
       case None =>
         Redirect(routes.SystemErrorController.onPageLoad())
     }
-
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     request.userAnswers.get(GroupMemberPage) match {
       case Some(true) =>
-        Future.successful(
-          Redirect(routes.AccessDeniedController.onPageLoad())
-        )
+        Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
       case Some(false) =>
         form
           .bindFromRequest()
@@ -80,20 +75,16 @@ class FaxNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
             value =>
               val isChanged: Boolean =
-                checkIfChanged(value, request.userAnswers, BusinessFaxNumberPage, ContactDetailsChangesPage)
+                checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage, ContactDetailsChangesPage)
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessFaxNumberPage, value))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(BusinessFaxNumberPage, mode, updatedAnswers))
+              } yield Redirect(navigator.nextPage(BusinessEmailAddressPage, mode, updatedAnswers))
           )
-
       case None =>
-        Future.successful(
-          Redirect(routes.SystemErrorController.onPageLoad())
-        )
+        Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
     }
-
   }
 }

@@ -14,34 +14,35 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import controllers.actions.*
-import forms.RemoveFaxNumberFormProvider
+import controllers.routes
+import forms.RemoveEmailAddressFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.contactdetails.*
 import pages.GroupMemberPage
+import pages.contactdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.RemoveFaxNumberView
+import views.html.RemoveEmailAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class RemoveFaxNumberController @Inject() (
+class RemoveEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessContactDetailsDataRequiredAction,
-  formProvider: RemoveFaxNumberFormProvider,
+  formProvider: RemoveEmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: RemoveFaxNumberView
+  view: RemoveEmailAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -50,19 +51,18 @@ class RemoveFaxNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-
       request.userAnswers.get(GroupMemberPage) match {
         case Some(true) =>
           Redirect(routes.AccessDeniedController.onPageLoad())
         case Some(false) =>
-          request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
+          request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
 
-            val preparedForm = request.userAnswers.get(RemoveFaxNumberPage) match {
+            val preparedForm = request.userAnswers.get(RemoveEmailAddressPage) match {
               case Some(value) => form.fill(value)
               case None        => form
             }
 
-            Ok(view(preparedForm, mode, faxNumber))
+            Ok(view(preparedForm, mode, emailAddress))
 
           } getOrElse Redirect(routes.SystemErrorController.onPageLoad())
 
@@ -75,35 +75,31 @@ class RemoveFaxNumberController @Inject() (
     (authorise andThen getData andThen requireData).async { implicit request =>
       request.userAnswers.get(GroupMemberPage) match {
         case Some(true) =>
-          Future.successful(
-            Redirect(routes.AccessDeniedController.onPageLoad())
-          )
+          Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
         case Some(false) =>
-          request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
+          request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
 
             form
               .bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, faxNumber))),
+                formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, emailAddress))),
                 value =>
                   for {
                     updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                    updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveFaxNumberPage, value))
+                    updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveEmailAddressPage, value))
                     updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, value))
                     _              <- sessionRepository.set(updatedAnswers)
                   } yield Redirect(
-                    navigator.nextPage(RemoveFaxNumberPage, mode, updatedAnswers)
+                    navigator.nextPage(RemoveEmailAddressPage, mode, updatedAnswers)
                   )
               )
 
           } getOrElse Future.successful(
             Redirect(routes.SystemErrorController.onPageLoad())
           )
-        case None =>
-          Future.successful(
-            Redirect(routes.SystemErrorController.onPageLoad())
-          )
 
+        case None =>
+          Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
       }
     }
 
@@ -116,7 +112,7 @@ class RemoveFaxNumberController @Inject() (
       ua <- userAnswers.set(BusinessContactDetailsSubmittedPage, true)
       ua1 <- {
         if (value) {
-          ua.remove(BusinessFaxNumberPage)
+          ua.remove(BusinessEmailAddressPage)
         } else {
           Try(ua)
         }

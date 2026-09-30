@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import controllers.actions.*
+import controllers.routes
 import pages.GroupMemberPage
 import pages.contactdetails.*
-import javax.inject.Inject
-import utils.FlagsUtil.checkFlag
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkFlag
 import views.html.CheckContactDetailsView
+
+import javax.inject.Inject
 
 class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
