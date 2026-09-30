@@ -236,7 +236,7 @@ object International {
         line1Label    = "correspondenceNonUKAddress.addressLine1",
         line2Label    = "correspondenceNonUKAddress.addressLine2",
         line3Label    = "correspondenceNonUKAddress.Region",
-        townLabel     = "correspondenceNonUKAddress.townLabel",
+        townLabel     = "correspondenceNonUKAddress.townOrCity",
         postcodeLabel = None,
         countryLabel  = Some("correspondenceNonUKAddress.Country"),
         submitLabel   = Some("site.continue")
