@@ -101,6 +101,7 @@ class LicencesPremisesDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(ClubLicencePage, licencesAndPremisesDetails.clubLicence)
       updatedAnswers <- updatedAnswers.setIfDefined(LicencePrizeGamingPage, licencesAndPremisesDetails.prizeGaming)
       updatedAnswers <- updatedAnswers.setIfDefined(LicenceOnPremisesPage, licencesAndPremisesDetails.onPremises)
+      updatedAnswers <- updatedAnswers.setIfDefined(LicenceClubPremisesPage, licencesAndPremisesDetails.clubPremises)
       updatedAnswers <- updatedAnswers.setIfDefined(LicenceRegCertPage, licencesAndPremisesDetails.regCert)
       updatedAnswers <- updatedAnswers.setIfDefined(LicenceBookmakingPage, licencesAndPremisesDetails.bookmaking)
       updatedAnswers <- updatedAnswers.setIfDefined(LicenceBingoPage, licencesAndPremisesDetails.bingo)

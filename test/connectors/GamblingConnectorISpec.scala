@@ -19,8 +19,9 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
+import models.controllingbody.ControlBodyDetails
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
-import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails}
+import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, BusinessType, ContactNumber, CorrespondenceDetails, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails,GamblingReturnPeriods}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
@@ -394,6 +395,60 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
   }
 
+  "GamblingConnector.getGamblingReturnPeriods" should {
+
+    "return gambling return periods when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "$mgdRegNumber",
+           |  "returnPeriodsId": 123,
+           |  "nstpEndDate1": "31-MAR-26",
+           |  "nstpEndDate2": "30-JUN-26",
+           |  "nstpEndDate3": "30-SEP-26",
+           |  "nstpEndDate4": "31-DEC-26",
+           |  "nstpEndDate5": "31-MAR-27",
+           |  "nstpEndDate6": "30-JUN-27",
+           |  "nstpEndDate7": "30-SEP-27",
+           |  "nstpEndDate8": "31-DEC-27",
+           |  "isInLastNstp": "0",
+           |  "finalPeriodWarning": "0",
+           |  "hasExistingNstpValues": "1"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/return-periods/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getGamblingReturnPeriods(mgdRegNumber).futureValue mustBe gamblingReturnPeriods
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/return-periods/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGamblingReturnPeriods(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/return-periods/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGamblingReturnPeriods(mgdRegNumber)
+      }
+    }
+  }
+
   "GamblingConnector.getCorrespondenceDetails" should {
 
     "return correspondenceDetails when backend returns 200" in {
@@ -573,6 +628,81 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
   }
+
+  "GamblingConnector.getControlBodyDetails" should {
+
+    "return ControlBodyDetails when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |"mgdRegNumber":"$mgdRegNumber",
+           |"businessPartnerNumber":"0100053091",
+           |"dateOfJoining":"2013-02-01",
+           |"dateOfLeaving":"2023-03-01",
+           |"solePropTitle":"Mx",
+           |"solePropFirstName":"solePropFirstName",
+           |"solePropMiddleName":"solePropMiddleName",
+           |"solePropLastName":"solePropLastName",
+           |"businessName":"BRUCE HOPKINS LIMITED",
+           |"tradingName":"Trading name 1",
+           |"dateOfBirth":"1998-06-24",
+           |"nino":"AB123456C",
+           |"utr":5202020208,
+           |"vrn":127207785,
+           |"crn":"12345678",
+           |"dateOfIncorporation":"2020-02-15",
+           |"countryOfIncorporation":"Spain",
+           |"foreignCorporateRef":"foreignCorporateRef",
+           |"address1":"Address 1",
+           |"address2":"Address 2",
+           |"address3":"Address 3",
+           |"address4":"Address 4",
+           |"postcode":"postcode",
+           |"country":"Spain",
+           |"adi":"adi",
+           |"isIomOrCiFlag":"0",
+           |"phoneNumber":"phoneNumber",
+           |"mobilePhoneNumber":"mobilePhoneNumber",
+           |"faxNumber":"faxNumber",
+           |"emailAddr":"emailAddr",
+           |"typeOfControllingBody":1,
+           |"isRepMemSameAsCb":"0",
+           |"isUkIncorporated":"0"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getControlBodyDetails(mgdRegNumber).futureValue mustBe controlBodyResponse
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getControlBodyDetails(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getControlBodyDetails(mgdRegNumber)
+      }
+    }
+
+  }
 }
 
 object GamblingConnectorISpec {
@@ -698,6 +828,23 @@ object GamblingConnectorISpec {
     iomOrCiFlag = Some("FALSE")
   )
 
+  val gamblingReturnPeriods: GamblingReturnPeriods =
+    GamblingReturnPeriods(
+      mgdRegNumber          = mgdRegNumber,
+      returnPeriodsId       = Some(123),
+      nstpEndDate1          = Some(LocalDate.of(2026, 3, 31)),
+      nstpEndDate2          = Some(LocalDate.of(2026, 6, 30)),
+      nstpEndDate3          = Some(LocalDate.of(2026, 9, 30)),
+      nstpEndDate4          = Some(LocalDate.of(2026, 12, 31)),
+      nstpEndDate5          = Some(LocalDate.of(2027, 3, 31)),
+      nstpEndDate6          = Some(LocalDate.of(2027, 6, 30)),
+      nstpEndDate7          = Some(LocalDate.of(2027, 9, 30)),
+      nstpEndDate8          = Some(LocalDate.of(2027, 12, 31)),
+      isInLastNstp          = Some(false),
+      finalPeriodWarning    = Some(false),
+      hasExistingNstpValues = Some(true)
+    )
+
   val partnersDetailsBusinessName = PartnersDetails(
     partners = Seq(
       PartnerDetails(
@@ -785,4 +932,42 @@ object GamblingConnectorISpec {
     premisesNotCovered    = Some("0"),
     premisesDetails       = Some(premisesDetailsResponse)
   )
+
+  val controlBodyResponse: ControlBodyDetails =
+    ControlBodyDetails(
+      mgdRegNumber           = mgdRegNumber,
+      businessPartnerNumber  = Some("0100053091"),
+      dateOfJoining          = Some(LocalDate.of(2013, 2, 1)),
+      dateOfLeaving          = Some(LocalDate.of(2023, 3, 1)),
+      solePropTitle          = Some("Mx"),
+      solePropFirstName      = Some("solePropFirstName"),
+      solePropMiddleName     = Some("solePropMiddleName"),
+      solePropLastName       = Some("solePropLastName"),
+      businessName           = Some("BRUCE HOPKINS LIMITED"),
+      tradingName            = Some("Trading name 1"),
+      dateOfBirth            = Some(LocalDate.of(1998, 6, 24)),
+      nino                   = Some("AB123456C"),
+      utr                    = Some(5202020208L),
+      vrn                    = Some(127207785L),
+      crn                    = Some("12345678"),
+      dateOfIncorporation    = Some(LocalDate.of(2020, 2, 15)),
+      countryOfIncorporation = Some("Spain"),
+      foreignCorporateRef    = Some("foreignCorporateRef"),
+      address1               = Some("Address 1"),
+      address2               = Some("Address 2"),
+      address3               = Some("Address 3"),
+      address4               = Some("Address 4"),
+      postcode               = Some("postcode"),
+      country                = Some("Spain"),
+      adi                    = Some("adi"),
+      isIomOrCiFlag          = Some("0"),
+      phoneNumber            = Some("phoneNumber"),
+      mobilePhoneNumber      = Some("mobilePhoneNumber"),
+      faxNumber              = Some("faxNumber"),
+      emailAddr              = Some("emailAddr"),
+      typeOfControllingBody  = Some(BusinessType.Soleproprietor),
+      isRepMemSameAsCb       = Some("0"),
+      isUkIncorporated       = Some("0")
+    )
+
 }

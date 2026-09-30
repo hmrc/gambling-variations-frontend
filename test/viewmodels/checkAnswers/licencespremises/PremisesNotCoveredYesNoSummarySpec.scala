@@ -20,7 +20,6 @@ import base.SpecBase
 import pages.licencespremises.PremisesNotCoveredYesNoPage
 import play.api.Application
 import play.api.i18n.Messages
-import viewmodels.checkAnswers.licensepremises.PremisesNotCoveredYesNoSummary
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 

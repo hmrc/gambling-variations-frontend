@@ -16,52 +16,96 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
 import java.time.LocalDate
 
-class PartnerDetailsDateOfLeavingPageSpec extends PlaySpec {
+class PartnerDetailsDateOfLeavingPageSpec extends PlaySpec with PartnerDetailsHelper {
 
-  val Index = 0
+  "partners" must {
+    "PartnerDetailsDateOfLeavingPage" must {
 
-  "PartnerDetailsDateOfLeavingPage" must {
+      "have the correct path" in {
+        PartnerDetailsDateOfLeavingPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsDateOfLeaving")
+      }
 
-    "have the correct path" in {
-      PartnerDetailsDateOfLeavingPage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsDateOfLeaving")
-    }
+      "have the correct toString value" in {
 
-    "have the correct toString value" in {
+        PartnerDetailsDateOfLeavingPage(businessNumber1).toString mustEqual "partnerDetailsDateOfLeaving"
+      }
 
-      PartnerDetailsDateOfLeavingPage(Index).toString mustEqual "partnerDetailsDateOfLeaving"
-    }
+      "be able to read and write PartnerDetailsDateOfLeavingPage values with correct index" in {
 
-    "be able to read and write PartnerDetailsDateOfLeavingPage values with correct index" in {
+        val value1 = LocalDate.of(2026, 1, 1)
+        val value2 = LocalDate.of(2025, 1, 1)
 
-      val value1 = LocalDate.of(2026, 1, 1)
-      val value2 = LocalDate.of(2025, 1, 1)
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsDateOfLeavingPage(Index).toString -> Json.toJson(value1)
-          ),
-          Json.obj(
-            PartnerDetailsDateOfLeavingPage(Index + 1).toString -> Json.toJson(value2)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsDateOfLeavingPage(businessNumber1).toString -> Json.toJson(value1)
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsDateOfLeavingPage(businessNumber2).toString -> Json.toJson(value2)
+            )
           )
         )
-      )
 
-      PartnerDetailsDateOfLeavingPage(Index).path
-        .asSingleJson(json)
-        .validate[LocalDate]
-        .get mustEqual value1
+        PartnerDetailsDateOfLeavingPage(businessNumber1).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value1
 
-      PartnerDetailsDateOfLeavingPage(Index + 1).path
-        .asSingleJson(json)
-        .validate[LocalDate]
-        .get mustEqual value2
+        PartnerDetailsDateOfLeavingPage(businessNumber2).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsDateOfLeavingPage" must {
+
+      "have the correct path" in {
+        PartnerDetailsDateOfLeavingPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsDateOfLeaving")
+      }
+
+      "have the correct toString value" in {
+
+        PartnerDetailsDateOfLeavingPage(newPartnersIndex1).toString mustEqual "partnerDetailsDateOfLeaving"
+      }
+
+      "be able to read and write PartnerDetailsDateOfLeavingPage values with correct index" in {
+
+        val value1 = LocalDate.of(2026, 1, 1)
+        val value2 = LocalDate.of(2025, 1, 1)
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsDateOfLeavingPage(newPartnersIndex1).toString -> Json.toJson(value1)
+            ),
+            Json.obj(
+              PartnerDetailsDateOfLeavingPage(newPartnersIndex2).toString -> Json.toJson(value2)
+            )
+          )
+        )
+
+        PartnerDetailsDateOfLeavingPage(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value1
+
+        PartnerDetailsDateOfLeavingPage(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[LocalDate]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }

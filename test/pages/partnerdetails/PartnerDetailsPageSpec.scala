@@ -17,49 +17,25 @@
 package pages.partnerdetails
 
 import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.{JsPath, Json}
+import play.api.libs.json.{JsObject, JsPath, Json}
 
 class PartnerDetailsPageSpec extends PlaySpec {
-
-  val Index = 0
 
   "PartnerDetailsPage" must {
 
     "have the correct path" in {
-      PartnerDetailsPage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsMgdRegNumber")
+      PartnerDetailsPage.path mustEqual (JsPath \ "partners")
     }
 
     "have the correct toString value" in {
-
-      PartnerDetailsPage(Index).toString mustEqual "partnerDetailsMgdRegNumber"
+      PartnerDetailsPage.toString mustEqual "partners"
     }
 
-    "be able to read and write PartnerDetailsPage values with correct index" in {
+    "be able to read and write values" in {
+      val partnersObj: JsObject = Json.obj("12345" -> Json.obj("partnerDetailsMgdRegNumber" -> "XGM00000001761"))
+      val json = Json.obj(PartnerDetailsPage.toString -> partnersObj)
 
-      val value1 = "Value1"
-      val value2 = "Value2"
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsPage(Index).toString -> Json.toJson(value1)
-          ),
-          Json.obj(
-            PartnerDetailsPage(Index + 1).toString -> Json.toJson(value2)
-          )
-        )
-      )
-
-      PartnerDetailsPage(Index).path
-        .asSingleJson(json)
-        .validate[String]
-        .get mustEqual value1
-
-      PartnerDetailsPage(Index + 1).path
-        .asSingleJson(json)
-        .validate[String]
-        .get mustEqual value2
+      PartnerDetailsPage.path.asSingleJson(json).validate[JsObject].get mustEqual partnersObj
     }
-
   }
 }
