@@ -283,13 +283,13 @@ class PartnerDetailsViewModelSpec extends SpecBase {
           .set(PartnerDetailsMgdRegNumberPage(index), "XWM00000001761")
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(index+1), "XWM00000001762")
+          .set(PartnerDetailsMgdRegNumberPage(index + 1), "XWM00000001762")
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(index+2), "XWM00000001763")
+          .set(PartnerDetailsMgdRegNumberPage(index + 2), "XWM00000001763")
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(index+3), "XWM00000001764")
+          .set(PartnerDetailsMgdRegNumberPage(index + 3), "XWM00000001764")
           .success
           .value
 
