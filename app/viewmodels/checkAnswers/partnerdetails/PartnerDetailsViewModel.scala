@@ -22,6 +22,7 @@ import models.UserAnswers
 import pages.partnerdetails.*
 import play.api.i18n.Messages
 import utils.PartnerUtils
+import scala.collection.Seq
 
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
