@@ -17,14 +17,10 @@
 package forms.licencespremises
 
 import forms.behaviours.CheckboxFieldBehaviours
-import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
 import models.UserAnswers
 import models.licencespremises.OtherLicencesAndPermitsGB
-import models.licencespremises.OtherLicencesAndPermitsGB.*
 import play.api.data.FormError
-import play.api.i18n.Messages
 import play.api.libs.json.Json
-import play.api.test.Helpers.stubMessages
 
 class OtherLicencesAndPermitsGBFormProviderSpec extends CheckboxFieldBehaviours {
 
