@@ -54,6 +54,7 @@ object PartnerDetailsViewModel {
     userAnswers: UserAnswers,
     frontendAppConfig: FrontendAppConfig
   )(implicit messages: Messages): PartnerDetailsViewModel = {
+
     val maxPartners = frontendAppConfig.maxPartners
 
     val existingPartners = PartnerUtils.getExistingPartnersBusinessNumbers(userAnswers, maxPartners)
@@ -73,6 +74,22 @@ object PartnerDetailsViewModel {
             .exists(_.isBefore(today))
 
         hasPartner && !hasPastLeavingDate
+      }
+
+    val activePartnerCount =
+      partnerNumbers.count { partnerNumber =>
+
+        val dateOfLeaving =
+          userAnswers.get(
+            PartnerDetailsDateOfLeavingPage(partnerNumber)
+          )
+
+        dateOfLeaving match {
+          case Some(leavingDate) if !leavingDate.isBefore(today) =>
+            false
+          case _ =>
+            true
+        }
       }
 
     val rows: Seq[PartnerDetailsRow] =
@@ -102,13 +119,6 @@ object PartnerDetailsViewModel {
                   PartnerDetailsDateOfLeavingPage(partnerNumber)
                 )
 
-              /*
-               * Status logic:
-               *
-               * 1. Future leaving date -> Due to leave
-               * 2. Future joining date -> Due to join
-               * 3. Otherwise -> Active
-               */
               val status =
                 dateOfLeaving match {
                   case Some(leavingDate) if !leavingDate.isBefore(today) =>
@@ -139,14 +149,9 @@ object PartnerDetailsViewModel {
                     }
                 }
 
-              /*
-               * Action logic:
-               *
-               * dateOfLeaving blank/null -> Remove
-               * dateOfLeaving populated -> Cannot remove
-               */
               val canRemove =
-                dateOfLeaving.isEmpty
+                dateOfLeaving.isEmpty &&
+                  activePartnerCount > 2
 
               val removeUrl =
                 if (canRemove) {
@@ -174,11 +179,6 @@ object PartnerDetailsViewModel {
         }
         .sortBy(_.name.toLowerCase)
 
-    val activePartnerCount =
-      rows.count { row =>
-        row.status == messages("partnerDetails.status.active")
-      }
-
     val hasPartners =
       rows.nonEmpty
 
@@ -189,7 +189,7 @@ object PartnerDetailsViewModel {
       partners                   = rows,
       addAnotherPartner          = canAddAnotherPartner,
       showNoPartnersMessage      = !hasPartners,
-      showMinimumPartnersMessage = hasPartners && activePartnerCount < 3,
+      showMinimumPartnersMessage = hasPartners && activePartnerCount <= 2,
       showMaximumPartnersMessage = rows.size >= maxPartners,
       showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage).contains(true)
     )

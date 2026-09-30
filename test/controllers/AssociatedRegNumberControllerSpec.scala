@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.tradingdetails.associatedregnumbers.{AssociatedRegNumberPage, AssociatedRegistrationNumbersPage}
+import pages.tradingdetails.associatedregnumbers.{AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
 import pages.tradingdetails.{MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -68,7 +68,7 @@ class AssociatedRegNumberControllerSpec extends SpecBase with MockitoSugar {
           .set(MgdTradeDetailsSectionPage, mgdRegNum)
           .success
           .value
-          .set(AssociatedRegNumberPage, "answer")
+          .set(ChosenAssociatedRegNumberPage, "answer")
           .success
           .value
 
