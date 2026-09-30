@@ -16,50 +16,97 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsIsFutureLeaveDatePageSpec extends PlaySpec {
+class PartnerDetailsIsFutureLeaveDatePageSpec extends PlaySpec with PartnerDetailsHelper {
 
-  val Index = 0
+  "partners" must {
+    "PartnerDetailsIsFutureLeaveDatePage" must {
 
-  "PartnerDetailsIsFutureLeaveDatePage" must {
+      "have the correct path" in {
+        PartnerDetailsIsFutureLeaveDatePage(
+          businessNumber1
+        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsIsFutureLeaveDate")
+      }
 
-    "have the correct path" in {
-      PartnerDetailsIsFutureLeaveDatePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsIsFutureLeaveDate")
-    }
+      "have the correct toString value" in {
 
-    "have the correct toString value" in {
+        PartnerDetailsIsFutureLeaveDatePage(businessNumber1).toString mustEqual "partnerDetailsIsFutureLeaveDate"
+      }
 
-      PartnerDetailsIsFutureLeaveDatePage(Index).toString mustEqual "partnerDetailsIsFutureLeaveDate"
-    }
+      "be able to read and write PartnerDetailsIsFutureLeaveDatePage values with correct index" in {
 
-    "be able to read and write PartnerDetailsIsFutureLeaveDatePage values with correct index" in {
+        val value1 = 1
+        val value2 = 2
 
-      val value1 = 1
-      val value2 = 2
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsIsFutureLeaveDatePage(Index).toString -> Json.toJson(value1)
-          ),
-          Json.obj(
-            PartnerDetailsIsFutureLeaveDatePage(Index + 1).toString -> Json.toJson(value2)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsIsFutureLeaveDatePage(businessNumber1).toString -> Json.toJson(value1)
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsIsFutureLeaveDatePage(businessNumber2).toString -> Json.toJson(value2)
+            )
           )
         )
-      )
 
-      PartnerDetailsIsFutureLeaveDatePage(Index).path
-        .asSingleJson(json)
-        .validate[Int]
-        .get mustEqual value1
+        PartnerDetailsIsFutureLeaveDatePage(businessNumber1).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value1
 
-      PartnerDetailsIsFutureLeaveDatePage(Index + 1).path
-        .asSingleJson(json)
-        .validate[Int]
-        .get mustEqual value2
+        PartnerDetailsIsFutureLeaveDatePage(businessNumber2).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsIsFutureLeaveDatePage" must {
+
+      "have the correct path" in {
+        PartnerDetailsIsFutureLeaveDatePage(
+          newPartnersIndex1
+        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsIsFutureLeaveDate")
+      }
+
+      "have the correct toString value" in {
+        PartnerDetailsIsFutureLeaveDatePage(newPartnersIndex1).toString mustEqual "partnerDetailsIsFutureLeaveDate"
+      }
+
+      "be able to read and write PartnerDetailsIsFutureLeaveDatePage values with correct index" in {
+
+        val value1 = 1
+        val value2 = 2
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsIsFutureLeaveDatePage(newPartnersIndex1).toString -> Json.toJson(value1)
+            ),
+            Json.obj(
+              PartnerDetailsIsFutureLeaveDatePage(newPartnersIndex2).toString -> Json.toJson(value2)
+            )
+          )
+        )
+
+        PartnerDetailsIsFutureLeaveDatePage(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value1
+
+        PartnerDetailsIsFutureLeaveDatePage(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }
