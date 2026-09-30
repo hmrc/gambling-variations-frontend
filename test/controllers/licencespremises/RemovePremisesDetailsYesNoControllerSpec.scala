@@ -197,6 +197,35 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
+    "must keep an earlier change to the section when the user selects no" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val answersWithEarlierChange = userAnswersWithPremisesDetails.set(LicencesPremisesDetailsChangesPage, true).success.value
+
+      val application =
+        applicationBuilder(userAnswers = Some(answersWithEarlierChange))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, removePremisesDetailsYesNoRoute)
+            .withFormUrlEncodedBody(("value", "false"))
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
+      }
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithPremisesDetails)).build()

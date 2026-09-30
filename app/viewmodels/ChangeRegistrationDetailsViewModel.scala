@@ -23,6 +23,7 @@ import pages.businessaddress.BusinessAddressChangesPage
 import pages.businessname.BusinessNameChangesPage
 import pages.contactdetails.ContactDetailsChangesPage
 import pages.correspondencedetails.CorrespondenceDetailsChangesPage
+import pages.licencespremises.LicencesPremisesDetailsChangesPage
 import pages.tradingdetails.TradingDetailsChangesPage
 import play.api.i18n.Messages
 
@@ -103,7 +104,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(isPartnership)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.partnerDetails"),
-            controllers.partner.routes.PartnerDetailsController.onPageLoad.url,
+            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad.url,
             NoDetailsChanged
           )
         ),
@@ -117,8 +118,8 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.licencesAndPremises"),
-            routes.PageNotFoundController.onPageLoad().url,
-            NoDetailsChanged
+            controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url,
+            status(LicencesPremisesDetailsChangesPage)
           )
         ),
         Some(

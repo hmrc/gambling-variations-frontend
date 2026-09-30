@@ -20,6 +20,7 @@ import controllers.actions.*
 import controllers.routes
 import forms.licencespremises.RemoveLicenceNumberFormProvider
 import models.{Mode, UserAnswers}
+import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
 import pages.licencespremises.*
 import play.api.data.Form
@@ -70,10 +71,9 @@ class RemoveLicenceNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, licenceNumber))),
             value =>
               for {
-                updatedAnswers              <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-                updatedAnswersWithSubmitted <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsSubmittedPage, true))
-                finalAnswers                <- Future.fromTry(updatedAnswersWithSubmitted.set(LicencesPremisesDetailsChangesPage, value))
-                _                           <- sessionRepository.set(finalAnswers)
+                updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                finalAnswers   <- Future.fromTry(updatedAnswers.withLicencesPremisesFlags(isChanged = value))
+                _              <- sessionRepository.set(finalAnswers)
               } yield Redirect(navigator.nextPage(RemoveLicenceNumberPage, mode, finalAnswers))
           )
       }
