@@ -911,7 +911,7 @@ partnerDetails.title = Partner details
 partnerDetails.heading = Partner details
 partnerDetails.status.active = Active
 partnerDetails.noPartners = You have not provided any partners yet.
-partnerDetails.minimumPartners = You must have at least 3 active partners.
+partnerDetails.minimumPartners = You must have at least 3 active partners before you can remove a partner.
 partnerDetails.addAnotherPartner = Do you want to add another partner?
 partnerDetails.addPartner = Do you want to add a partner?
 partnerDetails.notProvidedPartnerYet = You have not provided any partners yet.
@@ -1084,3 +1084,7 @@ premisesAddressList.yesLabel = Yes, add another address
 premisesAddressList.records = Showing {0} to {1} of {2} records
 premisesAddressList.noLabel = No, return to check your licence and premises details
 premisesAddressList.error.required = Select yes if you want to add another address
+
+controllingBodyBusinessType.title = What type of business is the controlling body?
+controllingBodyBusinessType.heading = What type of business is the controlling body?
+controllingBodyBusinessType.error.required = Select the type of business for the controlling body
