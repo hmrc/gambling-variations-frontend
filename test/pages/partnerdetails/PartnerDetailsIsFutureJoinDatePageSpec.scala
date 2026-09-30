@@ -16,50 +16,96 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsIsFutureJoinDatePageSpec extends PlaySpec {
+class PartnerDetailsIsFutureJoinDatePageSpec extends PlaySpec with PartnerDetailsHelper {
 
-  val Index = 0
+  "partners" must {
+    "PartnerDetailsIsFutureJoinDatePage" must {
 
-  "PartnerDetailsIsFutureJoinDatePage" must {
+      "have the correct path" in {
+        PartnerDetailsIsFutureJoinDatePage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsIsFutureJoinDate")
+      }
 
-    "have the correct path" in {
-      PartnerDetailsIsFutureJoinDatePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsIsFutureJoinDate")
-    }
+      "have the correct toString value" in {
 
-    "have the correct toString value" in {
+        PartnerDetailsIsFutureJoinDatePage(businessNumber1).toString mustEqual "partnerDetailsIsFutureJoinDate"
+      }
 
-      PartnerDetailsIsFutureJoinDatePage(Index).toString mustEqual "partnerDetailsIsFutureJoinDate"
-    }
+      "be able to read and write PartnerDetailsIsFutureJoinDatePage values with correct index" in {
 
-    "be able to read and write PartnerDetailsIsFutureJoinDatePage values with correct index" in {
+        val value1 = 1
+        val value2 = 2
 
-      val value1 = 1
-      val value2 = 2
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsIsFutureJoinDatePage(Index).toString -> Json.toJson(value1)
-          ),
-          Json.obj(
-            PartnerDetailsIsFutureJoinDatePage(Index + 1).toString -> Json.toJson(value2)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsIsFutureJoinDatePage(businessNumber1).toString -> Json.toJson(value1)
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsIsFutureJoinDatePage(businessNumber2).toString -> Json.toJson(value2)
+            )
           )
         )
-      )
 
-      PartnerDetailsIsFutureJoinDatePage(Index).path
-        .asSingleJson(json)
-        .validate[Int]
-        .get mustEqual value1
+        PartnerDetailsIsFutureJoinDatePage(businessNumber1).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value1
 
-      PartnerDetailsIsFutureJoinDatePage(Index + 1).path
-        .asSingleJson(json)
-        .validate[Int]
-        .get mustEqual value2
+        PartnerDetailsIsFutureJoinDatePage(businessNumber2).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsIsFutureJoinDatePage" must {
+
+      "have the correct path" in {
+        PartnerDetailsIsFutureJoinDatePage(
+          newPartnersIndex1
+        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsIsFutureJoinDate")
+      }
+
+      "have the correct toString value" in {
+
+        PartnerDetailsIsFutureJoinDatePage(newPartnersIndex1).toString mustEqual "partnerDetailsIsFutureJoinDate"
+      }
+
+      "be able to read and write PartnerDetailsIsFutureJoinDatePage values with correct index" in {
+
+        val value1 = 1
+        val value2 = 2
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsIsFutureJoinDatePage(newPartnersIndex1).toString -> Json.toJson(value1)
+            ),
+            Json.obj(
+              PartnerDetailsIsFutureJoinDatePage(newPartnersIndex2).toString -> Json.toJson(value2)
+            )
+          )
+        )
+
+        PartnerDetailsIsFutureJoinDatePage(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value1
+
+        PartnerDetailsIsFutureJoinDatePage(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[Int]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }

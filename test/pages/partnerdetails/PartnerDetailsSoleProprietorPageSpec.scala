@@ -16,62 +16,119 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import models.SoleProprietorName
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsSoleProprietorPageSpec extends PlaySpec {
+class PartnerDetailsSoleProprietorPageSpec extends PlaySpec with PartnerDetailsHelper {
 
-  val Index = 0
+  "partners" must {
+    "PartnerDetailsSoleProprietorPage" must {
 
-  "PartnerDetailsSoleProprietorPage" must {
+      "have the correct path" in {
+        PartnerDetailsSoleProprietorPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsSoleProprietor")
+      }
 
-    "have the correct path" in {
-      PartnerDetailsSoleProprietorPage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsSoleProprietor")
-    }
+      "have the correct toString value" in {
 
-    "have the correct toString value" in {
+        PartnerDetailsSoleProprietorPage(businessNumber1).toString mustEqual "partnerDetailsSoleProprietor"
+      }
 
-      PartnerDetailsSoleProprietorPage(Index).toString mustEqual "partnerDetailsSoleProprietor"
-    }
+      "be able to read and write PartnerDetailsSoleProprietorPage values with correct index" in {
 
-    "be able to read and write PartnerDetailsSoleProprietorPage values with correct index" in {
+        val value1 = SoleProprietorName(
+          title      = "111",
+          firstName  = "111",
+          middleName = Some("111"),
+          lastName   = "111"
+        )
 
-      val value1 = SoleProprietorName(
-        title      = "111",
-        firstName  = "111",
-        middleName = Some("111"),
-        lastName   = "111"
-      )
+        val value2 = SoleProprietorName(
+          title      = "222",
+          firstName  = "222",
+          middleName = Some("222"),
+          lastName   = "222"
+        )
 
-      val value2 = SoleProprietorName(
-        title      = "222",
-        firstName  = "222",
-        middleName = Some("222"),
-        lastName   = "222"
-      )
-
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsSoleProprietorPage(Index).toString -> Json.toJson(value1)
-          ),
-          Json.obj(
-            PartnerDetailsSoleProprietorPage(Index + 1).toString -> Json.toJson(value2)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsSoleProprietorPage(businessNumber1).toString -> Json.toJson(value1)
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsSoleProprietorPage(businessNumber2).toString -> Json.toJson(value2)
+            )
           )
         )
-      )
 
-      PartnerDetailsSoleProprietorPage(Index).path
-        .asSingleJson(json)
-        .validate[SoleProprietorName]
-        .get mustEqual value1
+        PartnerDetailsSoleProprietorPage(businessNumber1).path
+          .asSingleJson(json)
+          .validate[SoleProprietorName]
+          .get mustEqual value1
 
-      PartnerDetailsSoleProprietorPage(Index + 1).path
-        .asSingleJson(json)
-        .validate[SoleProprietorName]
-        .get mustEqual value2
+        PartnerDetailsSoleProprietorPage(businessNumber2).path
+          .asSingleJson(json)
+          .validate[SoleProprietorName]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsSoleProprietorPage" must {
+
+      "have the correct path" in {
+        PartnerDetailsSoleProprietorPage(
+          newPartnersIndex1
+        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsSoleProprietor")
+      }
+
+      "have the correct toString value" in {
+
+        PartnerDetailsSoleProprietorPage(newPartnersIndex1).toString mustEqual "partnerDetailsSoleProprietor"
+      }
+
+      "be able to read and write PartnerDetailsSoleProprietorPage values with correct index" in {
+
+        val value1 = SoleProprietorName(
+          title      = "111",
+          firstName  = "111",
+          middleName = Some("111"),
+          lastName   = "111"
+        )
+
+        val value2 = SoleProprietorName(
+          title      = "222",
+          firstName  = "222",
+          middleName = Some("222"),
+          lastName   = "222"
+        )
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsSoleProprietorPage(newPartnersIndex1).toString -> Json.toJson(value1)
+            ),
+            Json.obj(
+              PartnerDetailsSoleProprietorPage(newPartnersIndex2).toString -> Json.toJson(value2)
+            )
+          )
+        )
+
+        PartnerDetailsSoleProprietorPage(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[SoleProprietorName]
+          .get mustEqual value1
+
+        PartnerDetailsSoleProprietorPage(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[SoleProprietorName]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }

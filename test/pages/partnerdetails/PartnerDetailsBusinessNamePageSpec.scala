@@ -16,50 +16,95 @@
 
 package pages.partnerdetails
 
+import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsBusinessNamePageSpec extends PlaySpec {
+class PartnerDetailsBusinessNamePageSpec extends PlaySpec with PartnerDetailsHelper {
 
-  val Index = 0
+  "partners" must {
 
-  "PartnerDetailsBusinessNamePage" must {
+    "PartnerDetailsBusinessNamePage" must {
 
-    "have the correct path" in {
-      PartnerDetailsBusinessNamePage(Index).path mustEqual (JsPath \ "partners" \ Index \ "partnerDetailsBusinessName")
-    }
+      "have the correct path" in {
+        PartnerDetailsBusinessNamePage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsBusinessName")
+      }
 
-    "have the correct toString value" in {
+      "have the correct toString value" in {
 
-      PartnerDetailsBusinessNamePage(Index).toString mustEqual "partnerDetailsBusinessName"
-    }
+        PartnerDetailsBusinessNamePage(businessNumber1).toString mustEqual "partnerDetailsBusinessName"
+      }
 
-    "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
+      "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
 
-      val value1 = "Value1"
-      val value2 = "Value2"
+        val value1 = "12345"
+        val value2 = "54321"
 
-      val json = Json.obj(
-        "partners" -> Json.arr(
-          Json.obj(
-            PartnerDetailsBusinessNamePage(Index).toString -> Json.toJson(value1)
-          ),
-          Json.obj(
-            PartnerDetailsBusinessNamePage(Index + 1).toString -> Json.toJson(value2)
+        val json = Json.obj(
+          "partners" -> Json.obj(
+            businessNumber1 -> Json.obj(
+              PartnerDetailsBusinessNamePage(businessNumber1).toString -> Json.toJson(value1)
+            ),
+            businessNumber2 -> Json.obj(
+              PartnerDetailsBusinessNamePage(businessNumber2).toString -> Json.toJson(value2)
+            )
           )
         )
-      )
 
-      PartnerDetailsBusinessNamePage(Index).path
-        .asSingleJson(json)
-        .validate[String]
-        .get mustEqual value1
+        PartnerDetailsBusinessNamePage(businessNumber1).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value1
 
-      PartnerDetailsBusinessNamePage(Index + 1).path
-        .asSingleJson(json)
-        .validate[String]
-        .get mustEqual value2
+        PartnerDetailsBusinessNamePage(businessNumber2).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value2
+      }
+
     }
-
   }
+
+  "newPartners" must {
+    "PartnerDetailsBusinessNamePage" must {
+
+      "have the correct path" in {
+        PartnerDetailsBusinessNamePage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsBusinessName")
+      }
+
+      "have the correct toString value" in {
+
+        PartnerDetailsBusinessNamePage(newPartnersIndex1).toString mustEqual "partnerDetailsBusinessName"
+      }
+
+      "be able to read and write PartnerDetailsBusinessNamePage values with correct index" in {
+
+        val value1 = "12345"
+        val value2 = "54321"
+
+        val json = Json.obj(
+          "newPartners" -> Json.arr(
+            Json.obj(
+              PartnerDetailsBusinessNamePage(newPartnersIndex1).toString -> Json.toJson(value1)
+            ),
+            Json.obj(
+              PartnerDetailsBusinessNamePage(newPartnersIndex2).toString -> Json.toJson(value2)
+            )
+          )
+        )
+
+        PartnerDetailsBusinessNamePage(newPartnersIndex1).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value1
+
+        PartnerDetailsBusinessNamePage(newPartnersIndex2).path
+          .asSingleJson(json)
+          .validate[String]
+          .get mustEqual value2
+      }
+
+    }
+  }
+
 }
