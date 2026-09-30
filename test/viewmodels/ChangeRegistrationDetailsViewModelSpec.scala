@@ -24,6 +24,7 @@ import pages.businessaddress.*
 import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
 import pages.contactdetails.{BusinessContactDetailsSubmittedPage, ContactDetailsChangesPage}
 import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
+import pages.licencespremises.LicencesPremisesDetailsChangesPage
 import pages.tradingdetails.{TradingDetailsChangesPage, TradingDetailsSubmittedPage}
 import play.api.Application
 import play.api.i18n.Messages
@@ -128,6 +129,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       urlOf("Business contact details") mustEqual routes.CheckContactDetailsController.onPageLoad().url
       urlOf("Correspondence details") mustEqual routes.CheckCorrespondenceDetailsController.onPageLoad().url
       urlOf("Trading details") mustEqual routes.CheckTradingDetailsController.onPageLoad().url
+      urlOf("Licences and premises") mustEqual controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url
     }
 
     "must send the sections that are not built yet to the page not found screen" in {
@@ -137,7 +139,6 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       val notBuiltYet = Set(
         "Controlling body details",
         "Group member details",
-        "Licences and premises",
         "Return periods"
       )
 
@@ -164,7 +165,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
         vm.sections.find(_.name == "Partner details").value
 
       partnerDetails.url mustEqual
-        controllers.partner.routes.PartnerDetailsController.onPageLoad.url
+        controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad.url
     }
 
     "must point the submit link at the declaration page" in {
@@ -194,7 +195,8 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       (BusinessAddressChangesPage, "Business address"),
       (ContactDetailsChangesPage, "Business contact details"),
       (CorrespondenceDetailsChangesPage, "Correspondence details"),
-      (TradingDetailsChangesPage, "Trading details")
+      (TradingDetailsChangesPage, "Trading details"),
+      (LicencesPremisesDetailsChangesPage, "Licences and premises")
     )
 
     changeFlags.foreach { case (page, sectionName) =>

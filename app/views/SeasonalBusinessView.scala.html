@@ -40,7 +40,7 @@
         @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel.yesNo(
-                field = form("isBusinessSeasonal"),
+                field = form("value"),
                 legend = LegendViewModel(messages("seasonalBusiness.heading")).asPageHeading(viewmodels.LegendSize.Large)
             ).withHint(HintViewModel(HtmlContent(
                 paragraph(

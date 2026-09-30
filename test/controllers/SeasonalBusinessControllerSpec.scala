@@ -99,7 +99,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isBusinessSeasonal", "true"))
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -126,7 +126,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isBusinessSeasonal", "true"))
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -154,7 +154,7 @@ class SeasonalBusinessControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, seasonalBusinessRoute)
-            .withFormUrlEncodedBody(("isBusinessSeasonal", "true"))
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 

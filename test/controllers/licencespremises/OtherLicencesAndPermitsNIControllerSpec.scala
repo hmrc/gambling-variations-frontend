@@ -196,6 +196,62 @@ class OtherLicencesAndPermitsNIControllerSpec extends SpecBase with MockitoSugar
       }
     }
 
+    "must flag the section as submitted but not changed when the same licences and permits are submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+      val set = getSelectedLicencesAndPermits(userAnswers)
+
+      running(application) {
+        val request =
+          FakeRequest(POST, otherLicencesAndPermitsNIRoute)
+            .withFormUrlEncodedBody(form.fill(set).data.toSeq*)
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsSubmittedPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual false
+      }
+    }
+
+    "must flag the section as changed when different licences and permits are submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+      val set: Set[OtherLicencesAndPermitsNI] = Set(noOtherLicencesAndPermits)
+
+      running(application) {
+        val request =
+          FakeRequest(POST, otherLicencesAndPermitsNIRoute)
+            .withFormUrlEncodedBody(form.fill(set).data.toSeq*)
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsSubmittedPage).value mustEqual true
+        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
+      }
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(blankAnswers)).build()
