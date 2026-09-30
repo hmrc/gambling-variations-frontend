@@ -510,15 +510,14 @@ class Navigator @Inject() () {
         controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
       )
 
-
+  /** If user is in the add partner flow, go to PT-FOR. Otherwise, if user has directly come from PT-CYA and hasn't changed answer to PT-IN, then
+    * return to PT-CYA.
+    */
   private def navigatePartnerDetailsCountryOfIncorporationPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
     answers
-      .get(PartnerDetailsCountryOfIncorporationPage(index))
+      .get(PartnerDetailsUtrPage(index))
       .fold(routes.SystemErrorController.onPageLoad())(_ =>
-        /** If user is in the add partner flow, go to PT-FOR. Otherwise, if user has directly come from PT-CYA and hasn't changed answer to PT-IN,
-         * then return to PT-CYA.
-         */
-        controllers.partner.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad()
+        controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index.toString, NormalMode)
       )
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
