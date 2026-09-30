@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package pages.returnperiods
 
-import models.GamblingReturnPeriods
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object GamblingReturnPeriodsPage extends QuestionPage[GamblingReturnPeriods] {
+case object ChooseReturnPeriodsPage extends QuestionPage[Int] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "gamblingReturnPeriods"
+  override def toString: String = "chooseReturnPeriods"
 }

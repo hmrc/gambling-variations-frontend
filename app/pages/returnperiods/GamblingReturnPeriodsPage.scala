@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages.returnperiods
 
-import forms.mappings.Mappings
-import models.ChooseReturnPeriods
-import play.api.data.Form
+import models.GamblingReturnPeriods
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-import javax.inject.Inject
+case object GamblingReturnPeriodsPage extends QuestionPage[GamblingReturnPeriods] {
 
-class ChooseReturnPeriodsFormProvider @Inject() extends Mappings {
+  override def path: JsPath = JsPath \ toString
 
-  def apply(errorMessageKey: String): Form[ChooseReturnPeriods] =
-    Form(
-      "value" ->
-        enumerable[ChooseReturnPeriods](errorMessageKey)
-    )
+  override def toString: String = "gamblingReturnPeriods"
 }

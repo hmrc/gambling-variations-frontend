@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.returnperiods
 
-import controllers.actions._
-import forms.ChooseReturnPeriodsFormProvider
+import controllers.actions.*
+import forms.returnperiods.ChooseReturnPeriodsFormProvider
 import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers}
 import navigation.Navigator
-import pages.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChooseReturnPeriodsView
+import views.html.returnperiods.ChooseReturnPeriodsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChooseReturnPeriodsController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               sessionRepository: SessionRepository,
-                                               navigator: Navigator,
-                                               authorise: AuthorisedAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: GamblingReturnPeriodsDataRequiredAction,
-                                               formProvider: ChooseReturnPeriodsFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: ChooseReturnPeriodsView
-                                             )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+class ChooseReturnPeriodsController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: GamblingReturnPeriodsDataRequiredAction,
+  formProvider: ChooseReturnPeriodsFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: ChooseReturnPeriodsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
@@ -72,21 +72,20 @@ class ChooseReturnPeriodsController @Inject()(
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async {
-      implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-        val variant = variantFrom(request.userAnswers)
-        val form = formProvider(variant.errorMessageKey)
+      val variant = variantFrom(request.userAnswers)
+      val form = formProvider(variant.errorMessageKey)
 
-        form.bindFromRequest().fold(
-
+      form
+        .bindFromRequest()
+        .fold(
           formWithErrors =>
             Future.successful(
               BadRequest(
                 view(formWithErrors, mode, variant)
               )
             ),
-
           value =>
             for {
               updatedAnswers <-
@@ -110,8 +109,8 @@ class ChooseReturnPeriodsController @Inject()(
     }
 
   private def variantFrom(
-                           userAnswers: UserAnswers
-                         ): ReturnPeriodsVariant =
+    userAnswers: UserAnswers
+  ): ReturnPeriodsVariant =
     userAnswers
       .get(GamblingReturnPeriodsPage)
       .map(_.hasExistingNstpValues.get)

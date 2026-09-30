@@ -1,17 +1,17 @@
 package controllers
 
 import base.SpecBase
-import forms.ChooseReturnPeriodsFormProvider
-import models.{NormalMode, ChooseReturnPeriods, UserAnswers}
+import forms.returnperiods.ChooseReturnPeriodsFormProvider
+import models.{ChooseReturnPeriods, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ChooseReturnPeriodsPage
+import pages.returnperiods.ChooseReturnPeriodsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.ChooseReturnPeriodsView
 

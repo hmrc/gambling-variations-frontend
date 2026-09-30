@@ -39,7 +39,7 @@ messages: Messages
 
         @caption(messages("changeRegistrationDetails.caption"))
         @formHelper(
-        action = routes.ChooseReturnPeriodsController.onSubmit(mode),
+        action = controllers.returnperiods.routes.ChooseReturnPeriodsController.onSubmit(mode),
         Symbol("autoComplete") -> "off"
         ) {
 

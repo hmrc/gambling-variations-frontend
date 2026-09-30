@@ -16,10 +16,9 @@ class ChooseReturnPeriodsSpec extends AnyFreeSpec with Matchers with ScalaCheckP
 
       val gen = Gen.oneOf(ChooseReturnPeriods.values.toSeq)
 
-      forAll(gen) {
-        chooseReturnPeriods =>
+      forAll(gen) { chooseReturnPeriods =>
 
-          JsString(chooseReturnPeriods.toString).validate[ChooseReturnPeriods].asOpt.value mustEqual chooseReturnPeriods
+        JsString(chooseReturnPeriods.toString).validate[ChooseReturnPeriods].asOpt.value mustEqual chooseReturnPeriods
       }
     }
 
@@ -27,10 +26,9 @@ class ChooseReturnPeriodsSpec extends AnyFreeSpec with Matchers with ScalaCheckP
 
       val gen = arbitrary[String] suchThat (!ChooseReturnPeriods.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
+      forAll(gen) { invalidValue =>
 
-          JsString(invalidValue).validate[ChooseReturnPeriods] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[ChooseReturnPeriods] mustEqual JsError("error.invalid")
       }
     }
 
@@ -38,10 +36,9 @@ class ChooseReturnPeriodsSpec extends AnyFreeSpec with Matchers with ScalaCheckP
 
       val gen = Gen.oneOf(ChooseReturnPeriods.values.toSeq)
 
-      forAll(gen) {
-        chooseReturnPeriods =>
+      forAll(gen) { chooseReturnPeriods =>
 
-          Json.toJson(chooseReturnPeriods) mustEqual JsString(chooseReturnPeriods.toString)
+        Json.toJson(chooseReturnPeriods) mustEqual JsString(chooseReturnPeriods.toString)
       }
     }
   }

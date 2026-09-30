@@ -16,35 +16,33 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.ChooseReturnPeriodsPage
+import pages.returnperiods.ChooseReturnPeriodsPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object ChooseReturnPeriodsSummary  {
+object ChooseReturnPeriodsSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(ChooseReturnPeriodsPage).map {
-      answer =>
+    answers.get(ChooseReturnPeriodsPage).map { answer =>
 
-        val value = ValueViewModel(
-          HtmlContent(
-            HtmlFormat.escape(messages(s"chooseReturnPeriods.$answer"))
-          )
+      val value = ValueViewModel(
+        HtmlContent(
+          HtmlFormat.escape(messages(s"chooseReturnPeriods.$answer"))
         )
+      )
 
-        SummaryListRowViewModel(
-          key     = "chooseReturnPeriods.checkYourAnswersLabel",
-          value   = value,
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("chooseReturnPeriods.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "chooseReturnPeriods.checkYourAnswersLabel",
+        value = value,
+        actions = Seq(
+          ActionItemViewModel("site.change", controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("chooseReturnPeriods.change.hidden"))
         )
+      )
     }
 }

@@ -48,25 +48,24 @@ object ChooseReturnPeriods extends Enumerable.Implicits {
     values.find(_.returnPeriodsId == id)
 
   def options(
-               messagePrefix: String
-             )(implicit messages: Messages): Seq[RadioItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        RadioItem(
-          content = Text(
-            messages(s"$messagePrefix.${value.toString}")
-          ),
-          value = Some(value.toString),
-          id = Some(
-            if (index == 0) {
-              "returnPeriods"
-            } else {
-              s"returnPeriods-${index + 1}"
-            }
-          )
+    messagePrefix: String
+  )(implicit messages: Messages): Seq[RadioItem] =
+    values.zipWithIndex.map { case (value, index) =>
+      RadioItem(
+        content = Text(
+          messages(s"$messagePrefix.${value.toString}")
+        ),
+        value = Some(value.toString),
+        id = Some(
+          if (index == 0) {
+            "returnPeriods"
+          } else {
+            s"returnPeriods-${index + 1}"
+          }
         )
+      )
     }
 
   implicit val enumerable: Enumerable[ChooseReturnPeriods] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+    Enumerable(values.map(v => v.toString -> v)*)
 }
