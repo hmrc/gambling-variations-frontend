@@ -128,8 +128,8 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
           filterLabel                = "Property name or number (optional)",
           postcodeLabel              = "Postcode",
           submitLabel                = "Find address",
-          noResultsFoundMessage      = "No addresses found",
-          resultLimitExceededMessage = "Too many addresses found",
+          noResultsFoundMessage      = "We could not find any results to match that postcode",
+          resultLimitExceededMessage = "There were too many results, add additional details to limit the number of results",
           manualAddressLinkText      = "Enter address manually"
         ),
         confirmPageLabels = ConfirmPageLabels(
