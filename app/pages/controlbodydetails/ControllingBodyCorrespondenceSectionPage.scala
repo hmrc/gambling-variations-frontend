@@ -16,7 +16,7 @@
 
 package pages.controlbodydetails
 
-import models.{Address, CorrespondenceDetails}
+import models.CorrespondenceDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
