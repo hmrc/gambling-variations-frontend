@@ -617,8 +617,8 @@ correspondenceAddressLookupAddress.heading = Find the correspondence address
 correspondenceAddressLookupAddress.filter = Property name or number (optional)
 correspondenceAddressLookupAddress.postcode = Postcode
 correspondenceAddressLookupAddress.submit = Find address
-correspondenceAddressLookupAddress.noResults = Sorry, we couldn''t find anything for that postcode.
-correspondenceAddressLookupAddress.tooManyResults = There were too many results. Please add additional details to limit the number of results.
+correspondenceAddressLookupAddress.noResults = We could not find any results to match that postcode
+correspondenceAddressLookupAddress.tooManyResults = There were too many results, add additional details to limit the number of results
 correspondenceAddressLookupAddress.manualAddress = Enter the address manually
 
 correspondenceAddressConfirmAddress.title = Confirm the correspondence address
