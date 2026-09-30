@@ -20,7 +20,6 @@ import models.{Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.libs.json.{JsArray, JsObject}
-import scala.collection.Seq
 
 object PartnerUtils {
 
@@ -29,7 +28,9 @@ object PartnerUtils {
     else index
 
   def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = (userAnswers.data \ "partners")
+    .asOpt[JsObject]
     .fold(Seq.empty[String])(_.fields.map(_._1))
+    // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
     .toSeq
 
   def findIndexForNewPartner(userAnswers: UserAnswers): Int = {

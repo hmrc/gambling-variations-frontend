@@ -57,7 +57,6 @@ object PartnerDetailsViewModel {
     frontendAppConfig: FrontendAppConfig
   )(implicit messages: Messages): PartnerDetailsViewModel = {
 
-    //TODO check
     val activePartnerCount =
       partnerNumbers.count { partnerNumber =>
 
@@ -67,13 +66,12 @@ object PartnerDetailsViewModel {
           )
 
         dateOfLeaving match {
-          case Some(leavingDate) if !leavingDate.isBefore(today) =>
+          case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
             false
           case _ =>
             true
         }
       }
-    //TODO end of check
 
     val rows: Seq[PartnerDetailsRow] =
       partnerNumbers

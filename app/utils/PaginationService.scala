@@ -39,14 +39,17 @@ case class PaginationResult(
   paginationViewModel: PaginationViewModel,
   totalRecords: Int,
   currentPage: Int,
-  totalPages: Int
+  totalPages: Int,
+  from: Int,
+  to: Int
 )
 
 class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: Int) {
 
   def paginatePartnerDetails(
     partnerDetails: Seq[String],
-    currentPage: Int = 1,
+    currentPage: Int,
+    elementsPerPage: Int,
     baseUrl: String
   ): PaginationResult = {
 
@@ -69,12 +72,17 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
       baseUrl     = baseUrl
     )
 
+    val from = validCurrentPage * elementsPerPage - elementsPerPage + 1
+    val to = (validCurrentPage * elementsPerPage).min(totalRecords)
+
     PaginationResult(
       paginatedData       = paginatedData,
       paginationViewModel = paginationViewModel,
       totalRecords        = totalRecords,
       currentPage         = validCurrentPage,
-      totalPages          = totalPages
+      totalPages          = totalPages,
+      from                = from,
+      to                  = to
     )
   }
 

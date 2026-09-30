@@ -55,14 +55,11 @@ class PartnerDetailsController @Inject() (
 
   def onPageLoad(page: Option[Int]): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val partnersPerPage = frontendAppConfig.partnersPerPage
+      val selectedPage = page.getOrElse(1)
 
       val todayDate = LocalDate.now(ZoneOffset.UTC)
+      val paginatedPartnerNumbers = fetchPaginatedPartnerDetails(request.userAnswers, todayDate, selectedPage)
 
-      val existingPartners = getPresentExistingPartners(request.userAnswers, todayDate)
-
-      val paginatedPartnerNumbers =
-        paginationService.paginatePartnerDetails(existingPartners, page.getOrElse(1), routes.PartnerDetailsController.onPageLoad(None).url)
       val viewModel =
         PartnerDetailsViewModel.from(
           paginatedPartnerNumbers.paginatedData,
@@ -82,28 +79,30 @@ class PartnerDetailsController @Inject() (
           .get(PartnerDetailsAddAnotherPartnerYesNoPage)
           .fold(form)(form.fill)
 
-      val from = paginatedPartnerNumbers.currentPage * partnersPerPage - partnersPerPage + 1
-      val to = (paginatedPartnerNumbers.currentPage * partnersPerPage).min(paginatedPartnerNumbers.totalRecords)
-
       Ok(
         view(
           preparedForm,
           viewModel,
           paginatedPartnerNumbers.paginationViewModel,
-          from,
-          to,
+          selectedPage,
+          paginatedPartnerNumbers.from,
+          paginatedPartnerNumbers.to,
           paginatedPartnerNumbers.totalRecords
         )
       )
     }
 
-  def onSubmit: Action[AnyContent] =
+  def onSubmit(page: Option[Int]): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+      val selectedPage = page.getOrElse(1)
+
+      val todayDate = LocalDate.now(ZoneOffset.UTC)
+      val paginatedPartnerNumbers = fetchPaginatedPartnerDetails(request.userAnswers, todayDate, selectedPage)
 
       val viewModel =
         PartnerDetailsViewModel.from(
-          ???,
-          ???,
+          paginatedPartnerNumbers.paginatedData,
+          todayDate,
           request.userAnswers,
           frontendAppConfig
         )
@@ -123,10 +122,11 @@ class PartnerDetailsController @Inject() (
                 view(
                   formWithErrors,
                   viewModel,
-                  ???,
-                  ???,
-                  ???,
-                  ???
+                  paginatedPartnerNumbers.paginationViewModel,
+                  selectedPage,
+                  paginatedPartnerNumbers.from,
+                  paginatedPartnerNumbers.to,
+                  paginatedPartnerNumbers.totalRecords
                 )
               )
             ),
@@ -192,7 +192,16 @@ class PartnerDetailsController @Inject() (
       )
     }
 
-  private def getPresentExistingPartners(userAnswers: UserAnswers, todayDate: LocalDate) = PartnerUtils
+  private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int) = {
+    val partnersPerPage = frontendAppConfig.partnersPerPage
+
+    val existingPartners = getPresentExistingPartners(userAnswers, todayDate)
+
+    paginationService
+      .paginatePartnerDetails(existingPartners, page, partnersPerPage, routes.PartnerDetailsController.onPageLoad(None).url)
+  }
+
+  private def getPresentExistingPartners(userAnswers: UserAnswers, todayDate: LocalDate): Seq[String] = PartnerUtils
     .getExistingPartnersBusinessNumbers(userAnswers)
     .filter { partnerNumber =>
       val hasPartner =
