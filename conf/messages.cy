@@ -425,3 +425,7 @@ previousRegistrationNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes w
 removePremisesAddress.title = cy: Are you sure you want to remove this premises address?
 removePremisesAddress.heading = cy: Are you sure you want to remove this premises address?
 removePremisesAddress.error.required = cy: Select yes if you want to remove this premises address
+
+controllingBodyBusinessType.title = cy: What type of business is the controlling body?
+controllingBodyBusinessType.heading = cy: What type of business is the controlling body?
+controllingBodyBusinessType.error.required = cy: Select the type of business for the controlling body

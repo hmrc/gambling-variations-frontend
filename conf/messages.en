@@ -1086,3 +1086,7 @@ premisesAddressList.yesLabel = Yes, add another address
 premisesAddressList.records = Showing {0} to {1} of {2} records
 premisesAddressList.noLabel = No, return to check your licence and premises details
 premisesAddressList.error.required = Select yes if you want to add another address
+
+controllingBodyBusinessType.title = What type of business is the controlling body?
+controllingBodyBusinessType.heading = What type of business is the controlling body?
+controllingBodyBusinessType.error.required = Select the type of business for the controlling body
