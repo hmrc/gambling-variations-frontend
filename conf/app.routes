@@ -242,3 +242,8 @@ POST       /change-registration-details/licences-and-premises/remove-address    
 
 GET        /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/addresses                       controllers.licencespremises.PremisesAddressListController.onSubmit(mode: Mode = NormalMode)
+
+GET        /partnerDetailsCompanyRegistrationNumber                        controllers.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /partnerDetailsCompanyRegistrationNumber                        controllers.PartnerDetailsCompanyRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /changePartnerDetailsCompanyRegistrationNumber                  controllers.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /changePartnerDetailsCompanyRegistrationNumber                  controllers.PartnerDetailsCompanyRegistrationNumberController.onSubmit(mode: Mode = CheckMode)
