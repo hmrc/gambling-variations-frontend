@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.controlbodydetails
+package pages.controllingbody
 
+import models.CorrespondenceDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyForeignCorporateReferencePage extends QuestionPage[String] {
+case object ControllingBodyCorrespondenceSectionPage extends QuestionPage[CorrespondenceDetails] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
-  override def toString: String = "foreignCorporateRef"
+  override def toString: String = "correspondenceSection"
 }
