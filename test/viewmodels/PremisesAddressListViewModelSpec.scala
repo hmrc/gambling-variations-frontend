@@ -90,7 +90,7 @@ class PremisesAddressListViewModelSpec extends SpecBase {
     private val addressList = userAnswers.get(PremisesDetailsPage).fold(Seq.empty)(list => list.premises)
     private val view = app.injector.instanceOf[PremisesAddressListView]
     private val formWithErrors = formProvider().bind(Map.empty[String, String])
-    private val html = view(formWithErrors, NormalMode, addressList, maxPremisesNumber)(request, messages)
+    private val html = view(formWithErrors, NormalMode, addressList, maxPremisesNumber, false)(request, messages)
     val viewModel: SummaryList = PremisesAddressListViewModel.from(addressList)
     val doc: Document = Jsoup.parse(html.body)
   }
