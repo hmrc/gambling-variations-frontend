@@ -30,6 +30,17 @@ class ControllingBodyDetailsSpec extends SpecBase {
         result.businessName.value mustBe "Name"
       }
     }
+    "use the controlling body's type independently of the registered business type" in {
+      val json = Json.obj(
+        "mgdRegNumber"          -> mgdRegNum,
+        "typeOfControllingBody" -> 4,
+        "businessType"          -> 2
+      )
+      json.as[ControllingBodyDetails].typeOfControllingBody mustBe BusinessType.Partnership
+    }
+    "not substitute businessType when the controlling body type is missing" in {
+      Json.obj("mgdRegNumber" -> mgdRegNum, "businessType" -> 2).validate[ControllingBodyDetails].isError mustBe true
+    }
     "read missing optional name fields" in {
       Json.obj("mgdRegNumber" -> mgdRegNum, "typeOfControllingBody" -> 4).as[ControllingBodyDetails] mustBe
         ControllingBodyDetails(mgdRegNum, BusinessType.Partnership)

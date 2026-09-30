@@ -236,11 +236,7 @@ class ChangeControllingBodyNameControllerSpec extends SpecBase with MockitoSugar
         "missing business type"              -> Some(emptyUserAnswers.set(ControllingBodyDetailsLoadedPage, true).success.value),
         "different business type in the URL" -> Some(answers(BusinessType.Soleproprietor)),
         "invalid cached business type" -> Some(
-          UserAnswers(userAnswersId,
-                      Json.obj("controllingBodyDetails"        -> Json.obj("loaded" -> true),
-                               "controllingBodyDetailsSection" -> Json.obj("typeOfControllingBody" -> 99)
-                              )
-                     )
+          UserAnswers(userAnswersId, Json.obj("controllingBodyDetails" -> Json.obj("loaded" -> true, "typeOfControllingBody" -> 99)))
         )
       ).foreach { case (scenario, userAnswers) =>
         s"redirect $method to the service error without saving when there is $scenario" in {
