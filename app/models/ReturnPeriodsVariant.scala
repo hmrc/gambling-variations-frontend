@@ -32,7 +32,7 @@ object ReturnPeriodsVariant {
       "chooseReturnPeriods.nonStandard.error.required"
 
     override val showCaption: Boolean =
-      false
+      true
   }
 
   case object Standard extends ReturnPeriodsVariant {
@@ -43,6 +43,6 @@ object ReturnPeriodsVariant {
       "chooseReturnPeriods.standard.error.required"
 
     override val showCaption: Boolean =
-      true
+      false
   }
 }

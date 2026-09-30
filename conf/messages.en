@@ -1093,6 +1093,7 @@ chooseReturnPeriods.heading = What are your non-standard return periods?
 chooseReturnPeriods.jan = January, April, July and October
 chooseReturnPeriods.feb = February, May, August and November
 chooseReturnPeriods.mar = March, June, September and December
+chooseReturnPeriods.p = You must now provide 8 end dates to cover the next 2 years of non-standard return periods.
 
 chooseReturnPeriods.standard.error.required = Select your standard return periods
 chooseReturnPeriods.nonStandard.error.required = Select your non-standard return periods

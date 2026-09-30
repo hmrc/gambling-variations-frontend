@@ -16,7 +16,7 @@
 
 @import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant}
 @import viewmodels.LegendSize.Large
-@import views.html.components.Caption
+@import views.html.components._
 
 @this(
 layout: templates.Layout,
@@ -24,6 +24,7 @@ formHelper: FormWithCSRF,
 govukErrorSummary: GovukErrorSummary,
 govukRadios: GovukRadios,
 govukButton: GovukButton,
+p: Paragraph,
 caption: Caption
 )
 
@@ -74,15 +75,7 @@ messages: Messages
         }
 
         @if(variant.showCaption) {
-        <p class="govuk-!-margin-top-8 govuk-body-s">
-            <a
-                    target="_blank"
-                    href="https://www.qa.tax.service.gov.uk/contact/report-technical-problem?service=gambling-filing-frontend"
-                    class="govuk-link"
-            >
-                @messages("chooseReturnPeriods.problemLink")
-            </a>
-        </p>
+            @p("chooseReturnPeriods.p")
         }
 
     </div>
