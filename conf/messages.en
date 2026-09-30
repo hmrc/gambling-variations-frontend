@@ -66,10 +66,10 @@ pageNotFound.p3 = If the web address is correct or you selected a link or button
 pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
 pageNotFound.p3.after = if you need to speak to someone.
 
-addressLookup.manualAddressLine1 = Address line 1 must be 35 characters or fewer
-addressLookup.manualAddressLine2 = Address line 2 must be 35 characters or fewer
-addressLookup.manualAddressLine3 = Town or city must be 35 characters or fewer
-addressLookup.manualAddressLine4 = County must be 35 characters or fewer
+addressLookup.manualAddressLine1 = Address line 1 must be 35 characters or less
+addressLookup.manualAddressLine2 = Address line 2 must be 35 characters or less
+addressLookup.manualAddressLine3 = Town or city must be 35 characters or less
+addressLookup.manualAddressLine4 = County must be 35 characters or less
 
 
 businessType.soleproprietor = Sole proprietor
@@ -620,6 +620,8 @@ correspondenceAddressLookupAddress.submit = Find address
 correspondenceAddressLookupAddress.noResults = We could not find any results to match that postcode
 correspondenceAddressLookupAddress.tooManyResults = There were too many results, add additional details to limit the number of results
 correspondenceAddressLookupAddress.manualAddress = Enter the address manually
+correspondenceAddressSelectAddress.proposalListLabel = Select an address
+correspondenceAddressSelectAddress.manualAddress = Enter the address manually
 
 correspondenceAddressConfirmAddress.title = Confirm the correspondence address
 correspondenceAddressConfirmAddress.heading = Review and confirm
