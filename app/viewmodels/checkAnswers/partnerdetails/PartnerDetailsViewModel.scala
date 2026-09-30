@@ -163,7 +163,7 @@ object PartnerDetailsViewModel {
 
               val canRemove =
                 dateOfLeaving.isEmpty &&
-                  activePartnerCount > 3
+                  activePartnerCount > 2
 
               val removeUrl =
                 if (canRemove) {
@@ -201,7 +201,7 @@ object PartnerDetailsViewModel {
       partners                   = rows,
       addAnotherPartner          = canAddAnotherPartner,
       showNoPartnersMessage      = !hasPartners,
-      showMinimumPartnersMessage = hasPartners && activePartnerCount <= 3,
+      showMinimumPartnersMessage = hasPartners && activePartnerCount <= 2,
       showMaximumPartnersMessage = rows.size >= maxPartners,
       showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage).contains(true)
     )

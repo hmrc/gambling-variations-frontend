@@ -289,9 +289,6 @@ class PartnerDetailsViewModelSpec extends SpecBase {
           .set(PartnerDetailsMgdRegNumberPage(index + 2), "XWM00000001763")
           .success
           .value
-          .set(PartnerDetailsMgdRegNumberPage(index + 3), "XWM00000001764")
-          .success
-          .value
 
       val viewModel =
         PartnerDetailsViewModel.from(
