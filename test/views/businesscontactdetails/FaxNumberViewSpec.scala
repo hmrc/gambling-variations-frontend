@@ -14,46 +14,48 @@
  * limitations under the License.
  */
 
-package views
+package views.businesscontactdetails
 
 import base.SpecBase
-import forms.BusinessTradingNameFormProvider
+import forms.FaxNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.BusinessEmailAddressView
+import views.html.businesscontactdetails.FaxNumberView
 
-class BusinessEmailAddressViewSpec extends SpecBase {
+class FaxNumberViewSpec extends SpecBase {
 
   trait Setup {
-    val app = applicationBuilder().build()
+    private val app = applicationBuilder().build()
 
-    val view = app.injector.instanceOf[BusinessEmailAddressView]
+    private val view = app.injector.instanceOf[FaxNumberView]
 
-    implicit val request: play.api.mvc.Request[?] = FakeRequest()
+    implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    val formProvider = new BusinessTradingNameFormProvider()
-    val form = formProvider()
+    private val formProvider = new FaxNumberFormProvider()
+    private val form = formProvider("TEST")
 
-    val html = view(form, NormalMode)(request, messages)
+    private val html = view(form, NormalMode)(request, messages)
 
-    val doc = Jsoup.parse(html.body)
+    val doc: Document = Jsoup.parse(html.body)
 
   }
 
-  "BusinessEmailAddressView" - {
+  "FaxNumberView" - {
 
     "must render page correctly" in new Setup {
-      doc.title must include(messages("emailAddress.title"))
 
-      doc.body().select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
+      doc.title must include(messages("faxNumber.title"))
 
-      doc.select(".govuk-hint").isEmpty mustBe true
+      doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
+
+      doc.select("h1").select(".govuk-label-wrapper").text() must include(messages("faxNumber.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 

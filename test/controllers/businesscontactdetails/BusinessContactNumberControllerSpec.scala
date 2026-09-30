@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import base.SpecBase
+import controllers.routes
 import forms.ContactNumberFormProvider
 import models.{ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -24,15 +25,15 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.contactdetails.{BusinessContactNumberPage, ContactDetailsChangesPage}
 import pages.GroupMemberPage
+import pages.contactdetails.{BusinessContactNumberPage, ContactDetailsChangesPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessContactNumberView
+import views.html.businesscontactdetails.BusinessContactNumberView
 
 import scala.concurrent.Future
 
@@ -58,7 +59,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
   )
 
   lazy val businessContactNumberRoute =
-    routes.BusinessContactNumberController.onPageLoad().url
+    controllers.businesscontactdetails.routes.BusinessContactNumberController.onPageLoad().url
 
   val userAnswers =
     UserAnswers(
