@@ -31,12 +31,12 @@
     pageNavigator: PageNavigator
 )
 
-@(form: Form[Boolean], viewModel: PartnerDetailsViewModel, paginatedViewModel: PaginationViewModel, from: Int, to: Int, totalRecords: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], viewModel: PartnerDetailsViewModel, paginatedViewModel: PaginationViewModel, page:Int, from: Int, to: Int, totalRecords: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("partnerDetails.title"), Some("changeRegistrationDetails.caption")), isFullWidth = true) {
 
     @formHelper(
-        action = controllers.partnerdetails.routes.PartnerDetailsController.onSubmit(),
+        action = controllers.partnerdetails.routes.PartnerDetailsController.onSubmit(Some(page)),
         Symbol("autoComplete") -> "off"
         ) {
 
