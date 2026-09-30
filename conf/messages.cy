@@ -437,3 +437,8 @@ partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country t
 partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
 partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?
+
+
+site.pagination.next = cy: Next
+site.pagination.previous = cy: Previous
+partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
