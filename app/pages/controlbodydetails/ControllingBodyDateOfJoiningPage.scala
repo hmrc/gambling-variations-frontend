@@ -23,7 +23,7 @@ import java.time.LocalDate
 
 case object ControllingBodyDateOfJoiningPage extends QuestionPage[LocalDate] {
 
-  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
 
   override def toString: String = "dateOfJoining"
 }

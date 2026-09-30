@@ -39,6 +39,11 @@ class ControllingBodyNameDataRequiredActionSpec extends SpecBase with MockitoSug
     def run(answers: Option[UserAnswers]) = refine(OptionalDataRequest(FakeRequest(), mgdRegNum, answers))
   }
 
+  private class DetailsHarness(repository: SessionRepository, connector: GamblingConnector)
+      extends ControllingBodyDetailsDataRequiredActionImpl(repository, connector) {
+    def run(answers: Option[UserAnswers]) = refine(OptionalDataRequest(FakeRequest(), mgdRegNum, answers))
+  }
+
   private val backendDetails = ControllingBodyDetails(mgdRegNum, BusinessType.Partnership, Some("Backend Partnership"))
 
   private trait Setup {
@@ -50,6 +55,35 @@ class ControllingBodyNameDataRequiredActionSpec extends SpecBase with MockitoSug
   }
 
   "ControllingBodyNameDataRequiredAction" - {
+    "preserve the full section and edited name when the name loader runs afterwards" in new Setup {
+      when(connector.getControlBodyDetails(any())(any())) thenReturn
+        Future.successful(ControllingBodyDetailsDataRequiredActionSpec.controlBodyDetails)
+      val full = new DetailsHarness(repository, connector).run(None).futureValue.toOption.value.userAnswers
+      val edited = full.set(ControllingBodyBusinessNamePage, "Edited name").success.value
+
+      val result = action.run(Some(edited)).futureValue.toOption.value.userAnswers
+
+      result mustBe edited.set(ControllingBodyDetailsLoadedPage, true).success.value
+    }
+
+    "retain the name edit across loading and revisiting the full section" in new Setup {
+      when(connector.getControlBodyDetails(any())(any())) thenReturn
+        Future.successful(ControllingBodyDetailsDataRequiredActionSpec.controlBodyDetails)
+      val names = action.run(None).futureValue.toOption.value.userAnswers
+      val edited = names.set(ControllingBodyBusinessNamePage, "Edited name").success.value
+      val detailsAction = new DetailsHarness(repository, connector)
+
+      val full = detailsAction.run(Some(edited)).futureValue.toOption.value.userAnswers
+
+      full.get(ControllingBodyBusinessNamePage).value mustBe "Edited name"
+      full.get(ControllingBodyBusinessTypePage).value mustBe BusinessType.Partnership
+      full.get(pages.controlbodydetails.ControllingBodySectionPage).isDefined mustBe true
+      action.run(Some(full)).futureValue.toOption.value.userAnswers mustBe full
+      detailsAction.run(Some(full)).futureValue.toOption.value.userAnswers mustBe full
+      verify(connector).getControlBodyDetails(any())(any())
+      verify(connector).getControllingBodyDetails(any())(any())
+    }
+
     "load and cache the name and business type when no session exists" in new Setup {
       val result = action.run(None).futureValue.toOption.value.userAnswers
       result.id mustEqual mgdRegNum
