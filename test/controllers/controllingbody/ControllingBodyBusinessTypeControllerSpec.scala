@@ -187,7 +187,6 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
         }
       }
 
-
       "must redirect to SystemError for a POST if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()

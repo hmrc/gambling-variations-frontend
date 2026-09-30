@@ -25,4 +25,5 @@ case object ControllingBodyBusinessTypePage extends QuestionPage[BusinessType] {
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
   override def toString: String = "typeOfControllingBody"
+
 }
