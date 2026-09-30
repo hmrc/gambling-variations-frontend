@@ -78,19 +78,26 @@ case class CheckPartnerDetailsViewModel(
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
   }
 
+  println()
+  println()
+  println()
+  println(s"new=$isNewPartnerFlow leave=$isDueToLeave join=$isDueToJoin leavingDate=$dateOfLeaving joiningDate=$dateOfJoining")
+  println()
+  println()
+  println()
+
   def notices(implicit messages: Messages): Seq[Html] =
     if (isNewPartnerFlow) Nil
     else {
-      val url = "" // TODO: contact-us URL
+      val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
       val link = s"""<a href="$url" class="govuk-link">${messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")}</a>"""
+      val leaving =
+        if (isDueToLeave) dateOfLeaving.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", _, link))
+        else None
 
-      val leaving = dateOfLeaving
-        .filter(_ => isDueToLeave)
-        .map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", _, link))
-
-      val joining = dateOfJoining
-        .filter(_ => isDueToJoin)
-        .map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", _, link))
+      val joining =
+        if (isDueToJoin) dateOfJoining.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", _, link))
+        else None
 
       val contactUs = Option.when(isNewPartnerSubmitted && leaving.isEmpty && joining.isEmpty)(
         messages("partnerDetailsCheckYourAnswers.error.contactUs", link)
@@ -138,43 +145,6 @@ case class CheckPartnerDetailsViewModel(
 
   private def dueToJoinOrLeave: Boolean = isDueToJoin || isDueToLeave
 
-  /** Mandatory fields: locked once submitted, or while the partner is due to join or leave. */
-  private def editable: Boolean = isNewPartnerFlow
-
-  /** Mandatory fields: locked once submitted, or while the partner is due to join or leave. */
-  private def removable: Boolean = isNewPartnerFlow || (!isNewPartnerSubmitted && !dueToJoinOrLeave)
-
-  /** Business name, joining date, VRN: locked once submitted only. */
-  private def editableUntilSubmitted: Boolean = isNewPartnerFlow || !isNewPartnerSubmitted
-
-  /** Address and contact numbers: locked only while due to join or leave. */
-  private def editableUnlessJoiningOrLeaving: Boolean = isNewPartnerFlow || !dueToJoinOrLeave
-
-  println()
-  println()
-  println()
-  println("isNewPartnerFlow")
-  println(isNewPartnerFlow)
-  println()
-  println()
-  println("dueToJoinOrLeave")
-  println(dueToJoinOrLeave)
-  println()
-  println()
-  println("editable")
-  println(editable)
-  println()
-  println()
-  println("editableUntilSubmitted")
-  println(editableUntilSubmitted)
-  println()
-  println()
-  println("editableUnlessJoiningOrLeaving")
-  println(editableUnlessJoiningOrLeaving)
-  println()
-  println()
-  println()
-
   /** Optional fields that can also be removed outside the new-partner flow. */
   private def changeOrRemove(change: ActionItem, remove: ActionItem): Seq[ActionItem] =
     if (isNewPartnerFlow) Seq(change)
@@ -205,7 +175,7 @@ case class CheckPartnerDetailsViewModel(
         businessNameKey(bt),
         businessName,
         routes.PartnerDetailsChangeBusinessNameController.onPageLoad(index, businessType = bt, NormalMode).url,
-        editable
+        isNewPartnerFlow
       )
     }
 
@@ -222,7 +192,7 @@ case class CheckPartnerDetailsViewModel(
       requiredRow("soleProprietorDob",
                   soleProprietorDob,
                   routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode).url,
-                  editable
+                  isNewPartnerFlow
                  )
     )
 
@@ -247,7 +217,7 @@ case class CheckPartnerDetailsViewModel(
       "dateOfJoining",
       dateOfJoining,
       routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode).url, // TODO: point at the date-of-joining page
-      editableUnlessJoiningOrLeaving
+      isNewPartnerFlow
     )
 
   private def addNinoRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -259,16 +229,19 @@ case class CheckPartnerDetailsViewModel(
     Option.when(is(Soleproprietor)) {
       val label = labelFor("nino")
       val change = changeAction(routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index, NormalMode).url, label)
-      val remove =
-        removeAction(routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index, NormalMode).url, label)
-      val actions = if (isNewPartnerFlow) Seq(change) else if (!isNewPartnerSubmitted && !dueToJoinOrLeave) Seq(remove) else Nil
+      val remove = removeAction(routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index, NormalMode).url, label)
+
+      val actions =
+        if (!isNewPartnerFlow) Nil
+        else if (isNewPartnerSubmitted) Seq(change, remove)
+        else Seq(change)
 
       optionalRow(label, nino.map(Text(_)), actions, change)
     }
 
   private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(!is(Partnership))(
-      requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, NormalMode).url, editable)
+      requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, NormalMode).url, isNewPartnerFlow)
     )
 
   private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -280,7 +253,12 @@ case class CheckPartnerDetailsViewModel(
     Option.when(is(Soleproprietor)) {
       val label = labelFor("vatRegistrationNumber")
       val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, NormalMode).url, label)
-      val actions = if (editableUnlessJoiningOrLeaving) Seq(change) else Nil // TODO: add remove action
+      val remove = removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, NormalMode).url, label)
+
+      val actions =
+        if (!isNewPartnerFlow) Nil
+        else if (isNewPartnerSubmitted) Seq(change, remove)
+        else Seq(change)
 
       optionalRow(label, vatRegistrationNumber.map(Text(_)), actions, change)
     }
@@ -291,7 +269,7 @@ case class CheckPartnerDetailsViewModel(
         "isIncorporatedInUk",
         isIncorporatedInUk.map(b => yesNo(b)),
         routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index, NormalMode).url,
-        editable
+        isNewPartnerFlow
       )
     )
 
@@ -303,7 +281,7 @@ case class CheckPartnerDetailsViewModel(
         routes.PartnerDetailsIsBusinessIncorporatedUkController
           .onPageLoad(index, NormalMode)
           .url, // TODO: point at the country-of-incorporation page
-        editable
+        isNewPartnerFlow
       )
     )
 
@@ -313,7 +291,7 @@ case class CheckPartnerDetailsViewModel(
         "foreignCorporateReference",
         foreignCorporateReference,
         routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode).url,
-        editable
+        isNewPartnerFlow
       )
     )
 
@@ -323,7 +301,7 @@ case class CheckPartnerDetailsViewModel(
         "dateOfIncorporation",
         dateOfIncorporation,
         routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index, NormalMode).url,
-        editable
+        isNewPartnerFlow
       )
     )
 
@@ -333,7 +311,7 @@ case class CheckPartnerDetailsViewModel(
         "companyRegistrationNumber",
         companyRegistrationNumber,
         routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode).url, // TODO: point at the CRN page
-        editable
+        isNewPartnerFlow
       )
     )
 
@@ -343,7 +321,7 @@ case class CheckPartnerDetailsViewModel(
     val label = labelFor("address")
     val url = routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode).url // TODO: point at the address page
 
-    createSummaryListRow(label, addressContent, if (editableUnlessJoiningOrLeaving) Seq(changeAction(url, label)) else Nil)
+    createSummaryListRow(label, addressContent, if (isNewPartnerFlow || !dueToJoinOrLeave) Seq(changeAction(url, label)) else Nil)
   }
 
   private def addAdditionalInformationRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -366,7 +344,7 @@ case class CheckPartnerDetailsViewModel(
   private def contactNumbersRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("contactNumbers")
     val change = changeAction(routes.PartnerDetailsContactDetailsController.onPageLoad(index, NormalMode).url, label)
-    val actions = if (editableUnlessJoiningOrLeaving) Seq(change) else Nil
+    val actions = if (isNewPartnerFlow || !dueToJoinOrLeave) Seq(change) else Nil
     val row = optionalRow(label, contactNumbers.map(n => contactNumbersContent(n)), actions, change)
 
     if (contactNumbers.isDefined) row.copy(value = row.value.withCssClass("contact-numbers")) else row
@@ -435,7 +413,7 @@ case class CheckPartnerDetailsViewModel(
 
   /** Yes/no question rows, only shown in the new-partner flow. */
   private def yesNoRow(key: String, value: Option[Boolean], url: String)(implicit messages: Messages): Option[SummaryListRow] =
-    if (isNewPartnerFlow)
+    if (isNewPartnerFlow && !isNewPartnerSubmitted)
       value.map { v =>
         val label = labelFor(key)
         createSummaryListRow(label, Text(yesNo(v)), Seq(changeAction(url, label)))
@@ -490,10 +468,6 @@ case class CheckPartnerDetailsViewModel(
     else HtmlContent(Html(blocks.mkString("<br><br>")))
   }
 }
-
-sealed trait Partner
-case class NewPartner(index: Int, isExisting: Boolean = true, isSubmitted: Option[Boolean])                extends Partner
-case class ExistingPartner(index: String, isExisting: Boolean = true, isSubmitted: Option[Boolean] = None) extends Partner
 
 object CheckPartnerDetailsViewModel {
 

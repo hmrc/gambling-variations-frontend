@@ -27,7 +27,6 @@ case class PartnerDetailsDateOfJoiningPage(businessNumberOrIndex: BusinessNumber
     case key: String => JsPath \ "partners" \ key \ toString
     case index: Int  => JsPath \ "newPartners" \ index \ toString
   }
-  println(path)
 
   override def toString: String = "partnerDetailsDateOfJoining"
 }

@@ -24,7 +24,6 @@
     caption: Caption,
     h1:H1,
     h2:H2,
-    link: Link,
     paragraph: Paragraph,
     govukSummaryList : GovukSummaryList
 )
@@ -53,7 +52,7 @@
     @h2("partnerDetailsCheckYourAnswers.contactDetails", classes = "govuk-heading-m")
     @govukSummaryList(SummaryList(rows = vm.contactDetailsSummaryList))
 
-    @if(vm.isSubmitted) {
+    @if(vm.isNewPartnerSubmitted) {
         @paragraph(messages("changeRegistrationDetails.readyToSubmit"))
     }
 
