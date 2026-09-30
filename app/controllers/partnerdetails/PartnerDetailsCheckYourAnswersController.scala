@@ -19,6 +19,7 @@ package controllers.partnerdetails
 import controllers.actions.*
 import models.Mode
 import pages.BusinessNumberOrIndex
+import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -38,16 +39,13 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  // TODO: Interim solutions
-
-  // index -> will be refactored with the indexing ticket
-  // is new partner -> to use flag!
-  private val isNewPartner: Option[Boolean] = Some(false)
-  // is submitted -> to use flag!
-  private val isSubmitted: Boolean = false
-
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex: BusinessNumberOrIndex = PartnerUtils.parseIndex(index, mode)
+
+    val (isNewPartner, isSubmitted): (Boolean, Option[Boolean]) = newIndex.toString.toIntOption match {
+      case Some(numericIndex) => (true, request.userAnswers.get(PartnerDetailsAddPartnerCompletedPage(numericIndex)))
+      case None               => (false, None)
+    }
 
     val model: CheckPartnerDetailsViewModel = CheckPartnerDetailsViewModel
       .from(request.userAnswers, newIndex, isNewPartner, isSubmitted)

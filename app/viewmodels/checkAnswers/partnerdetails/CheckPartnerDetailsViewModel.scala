@@ -35,9 +35,8 @@ import java.time.LocalDate
 
 case class CheckPartnerDetailsViewModel(
   businessNumberOrIndex: BusinessNumberOrIndex,
-  // Business details
   typeOfBusiness: Option[BusinessType],
-  businessName: Option[String], // sole proprietor's full name, or the business name for every other type
+  businessName: Option[String],
   soleProprietorDob: Option[String],
   addTradingName: Option[Boolean],
   tradingName: Option[String],
@@ -49,23 +48,20 @@ case class CheckPartnerDetailsViewModel(
   addVatRegistrationNumber: Option[Boolean],
   vatRegistrationNumber: Option[String],
   isIncorporatedInUk: Option[Boolean],
-  countryOfIncorporation: Option[String], // non-UK corporate body
-  dateOfIncorporation: Option[String], // UK corporate body, LLP
-  foreignCorporateReference: Option[String], // non-UK corporate body
-  companyRegistrationNumber: Option[String], // UK corporate body, LLP
-  // Address
+  countryOfIncorporation: Option[String],
+  dateOfIncorporation: Option[String],
+  foreignCorporateReference: Option[String],
+  companyRegistrationNumber: Option[String],
   address: Option[Address],
   addAdditionalInformation: Option[Boolean],
   additionalInformation: Option[String],
-  // Contact details
   contactNumbers: Option[ContactNumber],
   addFaxNumber: Option[Boolean],
   faxNumber: Option[String],
   addEmailAddress: Option[Boolean],
   emailAddress: Option[String],
-  // Conditions
-  isNewPartnerFlow: Option[Boolean],
-  isSubmitted: Boolean,
+  isNewPartnerFlow: Boolean,
+  maybeSubmitted: Option[Boolean],
   isDueToLeave: Boolean,
   isDueToJoin: Boolean,
   isMissingMandatoryFields: Boolean
@@ -73,6 +69,7 @@ case class CheckPartnerDetailsViewModel(
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
   private val index = businessNumberOrIndex.toString
+  val isSubmitted: Boolean = maybeSubmitted.exists(identity)
 
   // --- Update this ---
   def continueCall: Call = if (isMissingMandatoryFields) {
@@ -82,7 +79,7 @@ case class CheckPartnerDetailsViewModel(
   }
 
   def notices(implicit messages: Messages): Seq[Html] =
-    if (isNew) Nil
+    if (isNewPartnerFlow) Nil
     else {
       val url = "" // TODO: contact-us URL
       val link = s"""<a href="$url" class="govuk-link">${messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")}</a>"""
@@ -139,22 +136,20 @@ case class CheckPartnerDetailsViewModel(
 
   // --- Access rules ---
 
-  private def isNew: Boolean = isNewPartnerFlow.contains(true)
-
   private def dueToJoinOrLeave: Boolean = isDueToJoin || isDueToLeave
 
   /** Mandatory fields: locked once submitted, or while the partner is due to join or leave. */
-  private def editable: Boolean = isNew || (!isSubmitted && !dueToJoinOrLeave)
+  private def editable: Boolean = isNewPartnerFlow || (!isSubmitted && !dueToJoinOrLeave)
 
   /** Business name, joining date, VRN: locked once submitted only. */
-  private def editableUntilSubmitted: Boolean = isNew || !isSubmitted
+  private def editableUntilSubmitted: Boolean = isNewPartnerFlow || !isSubmitted
 
   /** Address and contact numbers: locked only while due to join or leave. */
-  private def editableUnlessJoiningOrLeaving: Boolean = isNew || !dueToJoinOrLeave
+  private def editableUnlessJoiningOrLeaving: Boolean = isNewPartnerFlow || !dueToJoinOrLeave
 
   /** Optional fields that can also be removed outside the new-partner flow. */
   private def changeOrRemove(change: ActionItem, remove: ActionItem): Seq[ActionItem] =
-    if (isNew) Seq(change)
+    if (isNewPartnerFlow) Seq(change)
     else if (dueToJoinOrLeave) Nil
     else Seq(change, remove)
 
@@ -171,7 +166,7 @@ case class CheckPartnerDetailsViewModel(
     val change = changeAction(routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode).url, label)
 
     typeOfBusiness match {
-      case Some(bt) => createSummaryListRow(label, Text(messages(s"businessType.$bt")), if (isNew) Seq(change) else Nil)
+      case Some(bt) => createSummaryListRow(label, Text(messages(s"businessType.$bt")), if (isNewPartnerFlow) Seq(change) else Nil)
       case None     => createSummaryListRow(label, Text("Add type of business"), Seq(change)) // TODO: move to messages
     }
   }
@@ -210,7 +205,7 @@ case class CheckPartnerDetailsViewModel(
     val label = labelFor("tradingName")
     val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, NormalMode).url, label)
     val remove = removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, NormalMode).url, label)
-    val actions = if (isNew) Seq(change) else if (dueToJoinOrLeave) Nil else Seq(change, remove)
+    val actions = if (isNewPartnerFlow) Seq(change) else if (dueToJoinOrLeave) Nil else Seq(change, remove)
 
     optionalRow(label, tradingName.map(Text(_)), actions, change)
   }
@@ -234,7 +229,7 @@ case class CheckPartnerDetailsViewModel(
       val change = changeAction(routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index, NormalMode).url, label)
       val remove =
         removeAction(routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index, NormalMode).url, label)
-      val actions = if (isNew) Seq(change) else if (!isSubmitted && !dueToJoinOrLeave) Seq(remove) else Nil
+      val actions = if (isNewPartnerFlow) Seq(change) else if (!isSubmitted && !dueToJoinOrLeave) Seq(remove) else Nil
 
       optionalRow(label, nino.map(Text(_)), actions, change)
     }
@@ -408,7 +403,7 @@ case class CheckPartnerDetailsViewModel(
 
   /** Yes/no question rows, only shown in the new-partner flow. */
   private def yesNoRow(key: String, value: Option[Boolean], url: String)(implicit messages: Messages): Option[SummaryListRow] =
-    if (isNew)
+    if (isNewPartnerFlow)
       value.map { v =>
         val label = labelFor(key)
         createSummaryListRow(label, Text(yesNo(v)), Seq(changeAction(url, label)))
@@ -472,14 +467,11 @@ object CheckPartnerDetailsViewModel {
   def from(
     userAnswers: UserAnswers,
     index: BusinessNumberOrIndex,
-    isNewPartnerFlow: Option[Boolean],
-    isSubmitted: Boolean
+    isNewPartnerFlow: Boolean,
+    isSubmitted: Option[Boolean]
   ): CheckPartnerDetailsViewModel = {
 
-    val today = LocalDate.now()
     val businessType = userAnswers.get(PartnerDetailsBusinessTypePage(index))
-    val joiningDate = userAnswers.get(PartnerDetailsDateOfJoiningPage(index))
-    val leavingDate = userAnswers.get(PartnerDetailsDateOfLeavingPage(index))
 
     CheckPartnerDetailsViewModel(
       businessNumberOrIndex     = index,
@@ -488,8 +480,8 @@ object CheckPartnerDetailsViewModel {
       soleProprietorDob         = userAnswers.get(PartnerDetailsDateOfBirthPage(index)).map(shortDateDisplay),
       addTradingName            = userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)),
       tradingName               = userAnswers.get(PartnerDetailsTradingNamePage(index)),
-      dateOfJoining             = joiningDate.map(shortDateDisplay),
-      dateOfLeaving             = leavingDate.map(shortDateDisplay),
+      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(shortDateDisplay),
+      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(shortDateDisplay),
       addNino                   = userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)),
       nino                      = userAnswers.get(PartnerDetailsNinoPage(index)).map(formatNino),
       utr                       = userAnswers.get(PartnerDetailsUtrPage(index)),
@@ -509,9 +501,9 @@ object CheckPartnerDetailsViewModel {
       addEmailAddress           = userAnswers.get(PartnerDetailsAddEmailAddressYesNoPage(index)),
       emailAddress              = userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(index)),
       isNewPartnerFlow          = isNewPartnerFlow,
-      isSubmitted               = isSubmitted,
-      isDueToJoin               = joiningDate.exists(d => today.isBefore(d)),
-      isDueToLeave              = leavingDate.exists(d => today.isBefore(d)),
+      maybeSubmitted            = isSubmitted,
+      isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
+      isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
       isMissingMandatoryFields  = PartnerMandatoryFields.isMissing(userAnswers, index.toString)
     )
   }
