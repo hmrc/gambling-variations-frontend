@@ -81,7 +81,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
       includeHMRCBranding    = false,
       ukMode                 = true,
       pageHeadingStyle       = "govuk-heading-l",
-      selectPageConfig       = SelectPageConfig(30, showSearchAgainLink = true, showNoneOfTheseOption = false),
+      selectPageConfig       = SelectPageConfig(100, showSearchAgainLink = true, showNoneOfTheseOption = false),
       confirmPageConfig = ConfirmPageConfig(
         showConfirmChangeText = true
       ),

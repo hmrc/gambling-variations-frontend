@@ -57,7 +57,7 @@ class AddressLookupService @Inject() (
         ukMode              = ukMode,
         pageHeadingStyle    = "govuk-heading-l",
         selectPageConfig = SelectPageConfig(
-          proposalListLimit     = 10,
+          proposalListLimit     = 100,
           showSearchAgainLink   = true,
           showNoneOfTheseOption = true
         ),
