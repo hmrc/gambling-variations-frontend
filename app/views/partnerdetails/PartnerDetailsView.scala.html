@@ -17,6 +17,7 @@
 @import play.api.data.Form
 @import viewmodels.checkAnswers.partnerdetails.PartnerDetailsViewModel
 @import views.html.components.*
+@import viewmodels.govuk.PaginationFluency.PaginationViewModel
 
 @this(
     layout: templates.Layout,
@@ -26,15 +27,16 @@
     govukButton: GovukButton,
     caption: Caption,
     h1:H1,
-    p:Paragraph
+    p:Paragraph,
+    pageNavigator: PageNavigator
 )
 
-@(form: Form[Boolean], viewModel: PartnerDetailsViewModel)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], viewModel: PartnerDetailsViewModel, paginatedViewModel: PaginationViewModel, from: Int, to: Int, totalRecords: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("partnerDetails.title"), Some("changeRegistrationDetails.caption")), isFullWidth = true) {
 
     @formHelper(
-        action = controllers.partnerdetails.routes.PartnerDetailsController.onSubmit,
+        action = controllers.partnerdetails.routes.PartnerDetailsController.onSubmit(),
         Symbol("autoComplete") -> "off"
         ) {
 
@@ -48,6 +50,7 @@
 
         @h1("partnerDetails.heading")
 
+        @p(messages("partnerDetails.partner.count", from, to, totalRecords))
         @if(viewModel.showNoPartnersMessage) {
             @p("partnerDetails.noPartners")
 
@@ -156,6 +159,7 @@
             </tbody>
         </table>
 
+        @pageNavigator(paginatedViewModel)
         @if(viewModel.addAnotherPartner) {
 
         @govukRadios(

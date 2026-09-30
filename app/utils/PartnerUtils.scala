@@ -28,10 +28,9 @@ object PartnerUtils {
     if mode == NormalMode then index.toInt
     else index
 
-  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers, maxPartners: Int): Seq[String] = (userAnswers.data \ "partners")
-    .asOpt[JsObject]
-    .fold(Seq.empty[String])(_.fields.map(_._1).sorted)
-    .take(maxPartners)
+  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = (userAnswers.data \ "partners")
+    .fold(Seq.empty[String])(_.fields.map(_._1))
+    .toSeq
 
   def findIndexForNewPartner(userAnswers: UserAnswers): Int = {
     val newPartnersSize = getNewPartnersSize(userAnswers)

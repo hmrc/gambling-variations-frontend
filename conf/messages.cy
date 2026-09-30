@@ -441,3 +441,8 @@ partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the
 controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body
+
+
+site.pagination.next = cy: Next
+site.pagination.previous = cy: Previous
+partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records

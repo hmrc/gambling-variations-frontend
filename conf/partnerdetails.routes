@@ -139,6 +139,8 @@ POST       /change-registration-details/partner-details/foreign-corporate-refere
 GET        /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = CheckMode)
 POST       /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = CheckMode)
 
+GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad(page: Option[Int])
+POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit()
 GET        /change-registration-details/partner-details/business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onSubmit(index: String, mode: Mode = NormalMode)
 GET        /change-registration-details/partner-details/change-business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index: String, mode: Mode = CheckMode)

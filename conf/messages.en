@@ -930,6 +930,7 @@ partnerDetails.maxPartners.hint = You can only add up to 100 partners
 partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
 partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner
 partnerDetails.addPartner.error.required = Select yes if you want to add a partner
+partnerDetails.partner.count = Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
 partnerDetailsBusinessType.title = What type of business is the partner?
 partnerDetailsBusinessType.heading = What type of business is the partner?
@@ -1138,3 +1139,6 @@ chooseStandardReturnPeriods.mar = Last day of March, June, September and Decembe
 controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
+
+site.pagination.next = Next
+site.pagination.previous = Previous

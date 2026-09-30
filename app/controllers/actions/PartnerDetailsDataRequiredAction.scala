@@ -96,7 +96,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     answers: UserAnswers
   ): Try[UserAnswers] = {
     partnersDetails.partners
-      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+//      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
       .foldLeft(Try(answers)) { case (userAnswers, partnerDetails) =>
         partnerDetails.businessPartnerNumber.fold(userAnswers)(businessNumber => buildPartnerDetails(partnerDetails, businessNumber, userAnswers))
       }
