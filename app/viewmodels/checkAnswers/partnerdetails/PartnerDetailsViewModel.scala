@@ -79,11 +79,6 @@ object PartnerDetailsViewModel {
     val activePartnerCount =
       partnerNumbers.count { partnerNumber =>
 
-        val dateOfJoining =
-          userAnswers.get(
-            PartnerDetailsDateOfJoiningPage(partnerNumber)
-          )
-
         val dateOfLeaving =
           userAnswers.get(
             PartnerDetailsDateOfLeavingPage(partnerNumber)
@@ -92,15 +87,8 @@ object PartnerDetailsViewModel {
         dateOfLeaving match {
           case Some(leavingDate) if !leavingDate.isBefore(today) =>
             false
-
           case _ =>
-            dateOfJoining match {
-              case Some(joiningDate) if !joiningDate.isBefore(today) =>
-                false
-
-              case _ =>
-                true
-            }
+            true
         }
       }
 
