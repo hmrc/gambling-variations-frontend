@@ -79,22 +79,6 @@ case class CheckPartnerDetailsViewModel(
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
   }
 
-  println()
-  println()
-  println(s"new=$isNewPartnerFlow")
-  println()
-  println(s"leave=$isDueToLeave")
-  println()
-  println(s"join=$isDueToJoin")
-  println()
-  println(s"leavingDate=$dateOfLeaving")
-  println()
-  println(s"joiningDate=$dateOfJoining")
-  println()
-  println(s"missingMandatory=$isMissingMandatoryDetails")
-  println()
-  println()
-  println()
 
   def notices(implicit messages: Messages): Seq[Html] = {
     val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
@@ -119,7 +103,12 @@ case class CheckPartnerDetailsViewModel(
         Seq(joining.orElse(leaving), contactUs).flatten
       }
 
-    messagesToShow.map(Html(_))
+    val submitChanges =
+      Option.when(!isNewPartnerFlow || isNewPartnerSubmitted)(
+        messages("partnerDetailsCheckYourAnswers.error.missingChanges")
+      )
+
+    (messagesToShow ++ submitChanges).map(Html(_))
   }
 
   // --- Summary lists ---
