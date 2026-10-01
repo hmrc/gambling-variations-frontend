@@ -137,8 +137,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
           heading             = "Confirm address",
           submitLabel         = "Continue",
           searchAgainLinkText = "Search again",
-          changeLinkText      = "Change",
-          confirmChangeText   = "The information is complete and correct"
+          changeLinkText      = "Change"
         ),
         editPageLabels = editPageLabels,
         international  = International(editPageLabels)

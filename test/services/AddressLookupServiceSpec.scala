@@ -75,12 +75,12 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
       config.labels.en.lookupPageLabels.heading mustBe "Find the correspondence address"
       config.labels.en.lookupPageLabels.postcodeLabel mustBe "Postcode"
       config.labels.en.lookupPageLabels.filterLabel mustBe "Property name or number (optional)"
-      config.labels.en.lookupPageLabels.submitLabel mustBe "Find address"
+      config.labels.en.lookupPageLabels.submitLabel mustBe "Continue"
       config.labels.en.lookupPageLabels.manualAddressLinkText mustBe "Enter the address manually"
-      config.labels.en.confirmPageLabels.heading mustBe "Review and confirm"
-      config.labels.en.confirmPageLabels.changeLinkText mustBe "Change"
+      config.labels.en.confirmPageLabels.heading mustBe "Review and confirm the correspondence address"
+      config.labels.en.confirmPageLabels.changeLinkText mustBe "Edit address"
       config.labels.en.confirmPageLabels.submitLabel mustBe "Confirm address"
-      config.labels.en.editPageLabels.townLabel mustBe "Town or city (optional)"
+      config.labels.en.editPageLabels.townLabel mustBe "Town or city"
       config.options.manualAddressEntryConfig.maxLengthErrorMessages.en.addressLine1 mustBe
         "Address line 1 must be 35 characters or less"
     }
