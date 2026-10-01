@@ -22,7 +22,7 @@ import forms.controllingbodydetails.ControllingBodySameAsRepYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.controllingbodydetails.ControllingBodySameAsRepYesNoPage
-import pages.controllingbodydetails.ControllingBodyPage
+import pages.controlbodydetails.ControllingBodyBusinessNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,13 +33,13 @@ import views.html.controllingBodyDetails.ControllingBodySameAsRepYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodySameAsRepYesNoController @Inject()(
+class ControllingBodySameAsRepYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodySameAsRepYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodySameAsRepYesNoView
@@ -51,19 +51,18 @@ class ControllingBodySameAsRepYesNoController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-
-      request.userAnswers.get(ControllingBodyPage) match {
-        case Some(controllingBody) =>
-          Ok(view(form, mode, controllingBody))
-        case None =>
-          Redirect(routes.SystemErrorController.onPageLoad())
+      val controllingBody = request.userAnswers.get(ControllingBodyBusinessNamePage).getOrElse("")
+      val preparedForm = request.userAnswers.get(ControllingBodySameAsRepYesNoPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
       }
 
+      Ok(view(preparedForm, mode, controllingBody))
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     request.userAnswers
-      .get(ControllingBodyPage)
+      .get(ControllingBodyBusinessNamePage)
       .map { controllingBody =>
         form
           .bindFromRequest()
@@ -71,8 +70,8 @@ class ControllingBodySameAsRepYesNoController @Inject()(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, controllingBody))),
             value =>
               for {
-                updatedAnswers              <- Future.fromTry(request.userAnswers.set(ControllingBodySameAsRepYesNoPage, value))
-                _                           <- sessionRepository.set(updatedAnswers)
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodySameAsRepYesNoPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(ControllingBodySameAsRepYesNoPage, mode, updatedAnswers))
           )
       }

@@ -28,9 +28,9 @@ class ControllingBodySameAsRepYesNoPageSpec extends AnyFreeSpec with Matchers {
       ControllingBodySameAsRepYesNoPage.toString mustBe "controllingBodySameAsRepYesNo"
     }
 
-    "must have a path corresponding to its name and index" in {
+    "must have a path corresponding to its name" in {
       val expectedPath: JsPath =
-        (JsPath \ "")(0) \ "controllingBodySameAsRepYesNo"
+        (JsPath \ "controllingBodyDetailsSection") \ "controllingBodySameAsRepYesNo"
 
       ControllingBodySameAsRepYesNoPage.path mustBe expectedPath
     }

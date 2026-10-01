@@ -1090,7 +1090,7 @@ controllingBodyBusinessType.heading = What type of business is the controlling b
 controllingBodyBusinessType.error.required = Select the type of business for the controlling body
 
 
-controllingBodySameAsRep.title = Controlling body details
-controllingBodySameAsRep.p1 = Your current controlling body, {0}, is also your group's representative member.
-controllingBodySameAsRep.heading = Do you want to provide a new controlling body?
-controllingBodySameAsRep.error.required = Select yes if you want to provide a new controlling body
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group's representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body

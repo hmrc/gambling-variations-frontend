@@ -40,11 +40,15 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
         @h1("controllingBodySameAsRepYesNo.title", classes="govuk-heading-l")
-        @p("controllingBodySameAsRepYesNo.p1")
+        @p(
+            "controllingBodySameAsRepYesNo.p1",
+            args = Seq(controllingBody)
+        )
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("controllingBodySameAsRepYesNo.heading")).asPageHeading(Large)
+                legend = LegendViewModel(messages("controllingBodySameAsRepYesNo.text"))
             )
         )
 

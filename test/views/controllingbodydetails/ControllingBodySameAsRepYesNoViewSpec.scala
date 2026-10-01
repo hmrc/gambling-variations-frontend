@@ -41,7 +41,8 @@ class ControllingBodySameAsRepYesNoViewSpec extends SpecBase {
 
         val html = view(
           form,
-          NormalMode, ""
+          NormalMode,
+          ""
         )(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
@@ -51,7 +52,7 @@ class ControllingBodySameAsRepYesNoViewSpec extends SpecBase {
         )
 
         document.select("h1").text() mustEqual
-          messages(application)("controllingBodySameAsRepYesNo.heading")
+          messages(application)("controllingBodySameAsRepYesNo.title")
 
         document.body().text() must include(
           messages(application)("site.continue")
@@ -83,7 +84,8 @@ class ControllingBodySameAsRepYesNoViewSpec extends SpecBase {
 
         val html = view(
           boundForm,
-          NormalMode, ""
+          NormalMode,
+          ""
         )(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)

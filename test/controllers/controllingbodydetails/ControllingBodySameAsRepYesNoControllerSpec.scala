@@ -24,7 +24,6 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.controllingbodydetails.ControllingBodySameAsRepYesNoPage
-import pages.partnerdetails.PartnerDetailsPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -42,21 +41,24 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
   val formProvider = new ControllingBodySameAsRepYesNoFormProvider()
   val form = formProvider()
 
-  lazy val controllingBodySameAsRepYesNoRoute =
-    controllers.controllingbodydetails.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
+  lazy val controllingBodySameAsRepYesNoRoute: String = routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
 
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+  private val baseAnswers =
+    UserAnswers(userAnswersId,
+                Json.obj(
+                  "controllingBodyDetailsSection" -> Json.obj(
+                    "mgdRegNum"    -> userAnswersId,
+                    "businessName" -> "abc"
+                  )
+                )
+               )
 
   "ControllingBodySameAsRepYesNoController Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =
@@ -72,15 +74,18 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
         contentAsString(result) mustEqual
           view(
             form,
-            NormalMode, ""
+            NormalMode,
+            "abc"
           )(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
+      val userAnswers =
+        baseAnswers.set(ControllingBodySameAsRepYesNoPage, true).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
@@ -96,7 +101,8 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
         contentAsString(result) mustEqual
           view(
             form.fill(true),
-            NormalMode, ""
+            NormalMode,
+            "abc"
           )(request, messages(application)).toString
       }
     }
@@ -110,7 +116,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -139,7 +145,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -162,7 +168,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =
@@ -182,7 +188,8 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
         contentAsString(result) mustEqual
           view(
             boundForm,
-            NormalMode, ""
+            NormalMode,
+            "abc"
           )(request, messages(application)).toString
       }
     }
