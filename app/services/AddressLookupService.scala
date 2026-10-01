@@ -62,7 +62,7 @@ class AddressLookupService @Inject() (
           showNoneOfTheseOption = true
         ),
         confirmPageConfig = ConfirmPageConfig(
-          showConfirmChangeText = false
+          showConfirmChangeText = true
         ),
         manualAddressEntryConfig = ManualAddressEntryConfig(
           line1MaxLength = 35,
