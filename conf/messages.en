@@ -616,7 +616,7 @@ correspondenceAddressLookupAddress.title = Find the correspondence address
 correspondenceAddressLookupAddress.heading = Find the correspondence address
 correspondenceAddressLookupAddress.filter = Property name or number (optional)
 correspondenceAddressLookupAddress.postcode = Postcode
-correspondenceAddressLookupAddress.submit = Find address
+correspondenceAddressLookupAddress.submit = Continue
 correspondenceAddressLookupAddress.noResults = We could not find any results to match that postcode
 correspondenceAddressLookupAddress.tooManyResults = There were too many results, add additional details to limit the number of results
 correspondenceAddressLookupAddress.manualAddress = Enter the address manually
@@ -624,11 +624,10 @@ correspondenceAddressSelectAddress.proposalListLabel = Select an address
 correspondenceAddressSelectAddress.manualAddress = Enter the address manually
 
 correspondenceAddressConfirmAddress.title = Confirm the correspondence address
-correspondenceAddressConfirmAddress.heading = Review and confirm
+correspondenceAddressConfirmAddress.heading = Review and confirm the correspondence address
 correspondenceAddressConfirmAddress.change = Change
 correspondenceAddressConfirmAddress.submit = Confirm address
 correspondenceAddressConfirmAddress.searchAgain = Search again
-correspondenceAddressConfirmAddress.confirmChange = By confirming this change, you agree that the information you have given is complete and correct.
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address
 correspondenceAddressManualAddressUk.county = County
