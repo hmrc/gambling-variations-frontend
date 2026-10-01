@@ -1088,3 +1088,16 @@ premisesAddressList.error.required = Select yes if you want to add another addre
 controllingBodyBusinessType.title = What type of business is the controlling body?
 controllingBodyBusinessType.heading = What type of business is the controlling body?
 controllingBodyBusinessType.error.required = Select the type of business for the controlling body
+
+partnerDateOfJoining.title = When is the partner’s date of joining?
+partnerDateOfJoining.heading = When is the partner’s date of joining?
+partnerDateOfJoining.hint = The date of joining must be before {0}
+partnerDateOfJoining.checkYourAnswersLabel = When is the partner’s date of joining?
+partnerDateOfJoining.error.required.all = Enter a date of joining for the partner
+partnerDateOfJoining.error.required.two = Date of joining must include a {0} and a {1}
+partnerDateOfJoining.error.required = Date of joining  must include a {0}
+partnerDateOfJoining.error.invalid = Date of joining  must be a real date
+partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
+partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
+partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
+
