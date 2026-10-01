@@ -85,7 +85,7 @@ trait PartnerDetailsHelper {
           "emailAddr" -> emailAddress
         ),
         "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-        "partnerDetailsCountryOfIncorporation" -> "GB",
+        "partnerDetailsCountryOfIncorporation" -> None,
         "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
         "partnerDetailsTradingName"            -> "XYZ Consulting",
         "partnerDetailsDateOfBirth"            -> "1985-06-20",
@@ -138,7 +138,7 @@ trait PartnerDetailsHelper {
           "emailAddr" -> emailAddress
         ),
         "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-        "partnerDetailsCountryOfIncorporation" -> "GB",
+        "partnerDetailsCountryOfIncorporation" -> null,
         "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
         "partnerDetailsTradingName"            -> "XYZ Consulting",
         "partnerDetailsDateOfBirth"            -> "1985-06-20",

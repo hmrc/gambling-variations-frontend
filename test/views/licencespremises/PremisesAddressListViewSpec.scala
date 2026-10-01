@@ -22,7 +22,7 @@ import models.{NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
-import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
+import pages.licencespremises.PremisesDetailsPage
 import play.api.i18n.Messages
 import play.api.libs.json.{JsArray, Json}
 import play.api.test.FakeRequest
