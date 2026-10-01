@@ -79,7 +79,6 @@ case class CheckPartnerDetailsViewModel(
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
   }
 
-
   def notices(implicit messages: Messages): Seq[Html] = {
     val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
     val link = s"""<a href="$url" class="govuk-link">${messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")}</a>"""
@@ -523,7 +522,7 @@ object CheckPartnerDetailsViewModel {
       addVatRegistrationNumber  = userAnswers.get(PartnerDetailsVatRegistrationNumberYesNoPage(index)),
       vatRegistrationNumber     = userAnswers.get(PartnerDetailsVrnPage(index)),
       isIncorporatedInUk        = userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)),
-      countryOfIncorporation    = userAnswers.get(PartnerDetailsCountryOfIncorporation(index)),
+      countryOfIncorporation    = userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)),
       dateOfIncorporation       = userAnswers.get(PartnerDetailsDateOfIncorporation(index)).map(shortDateDisplay),
       foreignCorporateReference = userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)),
       companyRegistrationNumber = userAnswers.get(PartnerDetailsCrnPage(index)),
