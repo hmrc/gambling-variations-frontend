@@ -24,17 +24,17 @@ import views.html.CheckControllingBodyDetailsView
 
 import javax.inject.Inject
 
-class CheckControllingBodyDetailsController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       authorise: AuthorisedAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: CheckControllingBodyDetailsView
-                                     ) extends FrontendBaseController with I18nSupport {
+class CheckControllingBodyDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckControllingBodyDetailsView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request =>
-      Ok(view())
+  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    Ok(view())
   }
 }
