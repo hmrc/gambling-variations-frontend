@@ -19,11 +19,12 @@ package controllers.licencespremises
 import controllers.actions.*
 import controllers.routes
 import models.{Mode, NormalMode}
-import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
+import pages.licencespremises.{AddPremisesAddressPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage, PremisesDetailsPage}
 import forms.licencespremises.PremisesAddressListFormProvider
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import utils.FlagsUtil.*
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.licencespremises.PremisesAddressListView
 
@@ -62,26 +63,33 @@ class PremisesAddressListController @Inject() (
         if (addressList.isEmpty) {
           Redirect(routes.AccessDeniedController.onPageLoad())
         } else {
-          Ok(view(preparedForm, NormalMode, addressList, maxPremisesAddresses))
+          val isSubmitted = checkFlag(request.userAnswers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
+          Ok(view(preparedForm, NormalMode, addressList, maxPremisesAddresses, isSubmitted))
         }
       )
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+    val isSubmitted = checkFlag(request.userAnswers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
     request.userAnswers
       .get(PremisesDetailsPage)
       .fold(
         Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
       )(premisesList =>
         val addressList = premisesList.premises
+
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, NormalMode, addressList, maxPremisesAddresses))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, NormalMode, addressList, maxPremisesAddresses, isSubmitted))),
             value =>
+              val isChanged = checkIfChanged(value, request.userAnswers, AddPremisesAddressPage, LicencesPremisesDetailsChangesPage)
+
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(AddPremisesAddressPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
+                updatedAnswers              <- Future.fromTry(request.userAnswers.set(AddPremisesAddressPage, value))
+                updatedAnswersWithSubmitted <- Future.fromTry(updatedAnswers.set(LicencesPremisesDetailsSubmittedPage, true))
+                finalAnswers                <- Future.fromTry(updatedAnswersWithSubmitted.set(LicencesPremisesDetailsChangesPage, isChanged))
+                _                           <- sessionRepository.set(finalAnswers)
               } yield {
                 if (value) {
                   Redirect(routes.PageNotFoundController.onPageLoad().url)

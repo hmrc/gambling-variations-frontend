@@ -109,7 +109,9 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[PremisesAddressListView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustBe view(preparedFormWithAnswers, NormalMode, addressList, maxPremises)(request, messages(application)).toString
+        contentAsString(result) mustBe view(preparedFormWithAnswers, NormalMode, addressList, maxPremises, false)(request,
+                                                                                                                  messages(application)
+                                                                                                                 ).toString
       }
     }
 
@@ -187,7 +189,7 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, addressList, maxPremises)(
+          view(boundForm, NormalMode, addressList, maxPremises, false)(
             request,
             messages(application)
           ).toString
@@ -202,8 +204,6 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
         val request = FakeRequest(GET, premisesAddressListRoute)
 
         val result = route(application, request).value
-
-        val view = application.injector.instanceOf[PremisesAddressListView]
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url

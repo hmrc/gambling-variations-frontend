@@ -20,23 +20,23 @@ import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec with PartnerDetailsHelper {
+class PartnerDetailsCountryOfIncorporationPageSpec extends PlaySpec with PartnerDetailsHelper {
 
   "partners" must {
-    "PartnerDetailsCountryOfIncorporation" must {
+    "PartnerDetailsCountryOfIncorporationPage" must {
 
       "have the correct path" in {
-        PartnerDetailsCountryOfIncorporation(
+        PartnerDetailsCountryOfIncorporationPage(
           businessNumber1
         ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsCountryOfIncorporation")
       }
 
       "have the correct toString value" in {
 
-        PartnerDetailsCountryOfIncorporation(businessNumber1).toString mustEqual "partnerDetailsCountryOfIncorporation"
+        PartnerDetailsCountryOfIncorporationPage(businessNumber1).toString mustEqual "partnerDetailsCountryOfIncorporation"
       }
 
-      "be able to read and write PartnerDetailsCountryOfIncorporation values with correct index" in {
+      "be able to read and write PartnerDetailsCountryOfIncorporationPage values with correct index" in {
 
         val value1 = "Value1"
         val value2 = "Value2"
@@ -44,20 +44,20 @@ class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec with PartnerDeta
         val json = Json.obj(
           "partners" -> Json.obj(
             businessNumber1 -> Json.obj(
-              PartnerDetailsCountryOfIncorporation(businessNumber1).toString -> Json.toJson(value1)
+              PartnerDetailsCountryOfIncorporationPage(businessNumber1).toString -> Json.toJson(value1)
             ),
             businessNumber2 -> Json.obj(
-              PartnerDetailsCountryOfIncorporation(businessNumber2).toString -> Json.toJson(value2)
+              PartnerDetailsCountryOfIncorporationPage(businessNumber2).toString -> Json.toJson(value2)
             )
           )
         )
 
-        PartnerDetailsCountryOfIncorporation(businessNumber1).path
+        PartnerDetailsCountryOfIncorporationPage(businessNumber1).path
           .asSingleJson(json)
           .validate[String]
           .get mustEqual value1
 
-        PartnerDetailsCountryOfIncorporation(businessNumber2).path
+        PartnerDetailsCountryOfIncorporationPage(businessNumber2).path
           .asSingleJson(json)
           .validate[String]
           .get mustEqual value2
@@ -67,20 +67,20 @@ class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec with PartnerDeta
   }
 
   "newPartners" must {
-    "PartnerDetailsCountryOfIncorporation" must {
+    "PartnerDetailsCountryOfIncorporationPage" must {
 
       "have the correct path" in {
-        PartnerDetailsCountryOfIncorporation(
+        PartnerDetailsCountryOfIncorporationPage(
           newPartnersIndex1
         ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCountryOfIncorporation")
       }
 
       "have the correct toString value" in {
 
-        PartnerDetailsCountryOfIncorporation(newPartnersIndex1).toString mustEqual "partnerDetailsCountryOfIncorporation"
+        PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1).toString mustEqual "partnerDetailsCountryOfIncorporation"
       }
 
-      "be able to read and write PartnerDetailsCountryOfIncorporation values with correct index" in {
+      "be able to read and write PartnerDetailsCountryOfIncorporationPage values with correct index" in {
 
         val value1 = "Value1"
         val value2 = "Value2"
@@ -88,20 +88,20 @@ class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec with PartnerDeta
         val json = Json.obj(
           "newPartners" -> Json.arr(
             Json.obj(
-              PartnerDetailsCountryOfIncorporation(newPartnersIndex1).toString -> Json.toJson(value1)
+              PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1).toString -> Json.toJson(value1)
             ),
             Json.obj(
-              PartnerDetailsCountryOfIncorporation(newPartnersIndex1).toString -> Json.toJson(value2)
+              PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1).toString -> Json.toJson(value2)
             )
           )
         )
 
-        PartnerDetailsCountryOfIncorporation(newPartnersIndex1).path
+        PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1).path
           .asSingleJson(json)
           .validate[String]
           .get mustEqual value1
 
-        PartnerDetailsCountryOfIncorporation(newPartnersIndex2).path
+        PartnerDetailsCountryOfIncorporationPage(newPartnersIndex2).path
           .asSingleJson(json)
           .validate[String]
           .get mustEqual value2

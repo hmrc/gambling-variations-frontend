@@ -15,7 +15,8 @@
  *@
 
 @import viewmodels.InputWidth._
-@import views.html.components.{Caption, H1, Paragraph}
+@import viewmodels.LabelSize.Large
+@import views.html.components.Caption
 
 @this(
     layout: templates.Layout,
@@ -23,16 +24,14 @@
     govukErrorSummary: GovukErrorSummary,
     govukInput: GovukInput,
     govukButton: GovukButton,
-    caption: Caption,
-    h1: H1,
-    paragraph: Paragraph
+    caption: Caption
 )
 
 @(form: Form[_], index: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("partnerContactDetails.title"))) {
+@layout(pageTitle = title(form, messages("partnerDetailsAddCountryOfIncorporation.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onSubmit(index, mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onSubmit(index, mode), Symbol("autoComplete") -> "on") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -40,28 +39,12 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
 
-        @h1("partnerContactDetails.heading")
-
-        @paragraph("partnerContactDetails.paragraph")
 
         @govukInput(
             InputViewModel(
-                field = form("phoneNumber"),
-                label = LabelViewModel(messages("partnerContactDetails.phoneNumber"))
-            )
-            .withWidth(Fixed20)
-            .withAttribute("autocomplete" -> "tel")
-            .withAttribute("inputmode", "tel")
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("mobileNumber"),
-                label = LabelViewModel(messages("partnerContactDetails.mobilePhoneNumber"))
-            )
-            .withWidth(Fixed20)
-            .withAttribute("autocomplete" -> "tel")
-            .withAttribute("inputmode", "tel")
+                field = form("value"),
+                label = LabelViewModel(messages("partnerDetailsAddCountryOfIncorporation.heading")).asPageHeading(Large)
+            ).withCssClass("govuk-input--width-100").withAttribute("autocomplete" -> "country-name")
         )
 
         @govukButton(
