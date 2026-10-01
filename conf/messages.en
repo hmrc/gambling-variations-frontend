@@ -66,10 +66,10 @@ pageNotFound.p3 = If the web address is correct or you selected a link or button
 pageNotFound.p3.link = HMRC Online Services Helpdesk (opens in new tab)
 pageNotFound.p3.after = if you need to speak to someone.
 
-addressLookup.manualAddressLine1 = Address line 1 must be 35 characters or fewer
-addressLookup.manualAddressLine2 = Address line 2 must be 35 characters or fewer
-addressLookup.manualAddressLine3 = Town or city must be 35 characters or fewer
-addressLookup.manualAddressLine4 = County must be 35 characters or fewer
+addressLookup.manualAddressLine1 = Address line 1 must be 35 characters or less
+addressLookup.manualAddressLine2 = Address line 2 must be 35 characters or less
+addressLookup.manualAddressLine3 = Town or city must be 35 characters or less
+addressLookup.manualAddressLine4 = County must be 35 characters or less
 
 
 businessType.soleproprietor = Sole proprietor
@@ -616,17 +616,18 @@ correspondenceAddressLookupAddress.title = Find the correspondence address
 correspondenceAddressLookupAddress.heading = Find the correspondence address
 correspondenceAddressLookupAddress.filter = Property name or number (optional)
 correspondenceAddressLookupAddress.postcode = Postcode
-correspondenceAddressLookupAddress.submit = Find address
-correspondenceAddressLookupAddress.noResults = Sorry, we couldn''t find anything for that postcode.
-correspondenceAddressLookupAddress.tooManyResults = There were too many results. Please add additional details to limit the number of results.
+correspondenceAddressLookupAddress.submit = Continue
+correspondenceAddressLookupAddress.noResults = We could not find any results to match that postcode
+correspondenceAddressLookupAddress.tooManyResults = There were too many results, add additional details to limit the number of results
 correspondenceAddressLookupAddress.manualAddress = Enter the address manually
+correspondenceAddressSelectAddress.proposalListLabel = Select an address
+correspondenceAddressSelectAddress.manualAddress = Enter the address manually
 
 correspondenceAddressConfirmAddress.title = Confirm the correspondence address
-correspondenceAddressConfirmAddress.heading = Review and confirm
-correspondenceAddressConfirmAddress.change = Change
+correspondenceAddressConfirmAddress.heading = Review and confirm the correspondence address
+correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Confirm address
 correspondenceAddressConfirmAddress.searchAgain = Search again
-correspondenceAddressConfirmAddress.confirmChange = By confirming this change, you agree that the information you have given is complete and correct.
 
 correspondenceAddressManualAddressUk.title = Enter the correspondence address
 correspondenceAddressManualAddressUk.county = County
@@ -988,7 +989,6 @@ licenceDetailsLandlordLicenceYesNo.checkYourAnswersLabel = Are you a pub tenant 
 licenceDetailsLandlordLicenceYesNo.error.required = Select yes if you are a pub tenant whose landlord holds the alcohol licence
 licenceDetailsLandlordLicenceYesNo.change.hidden = Are you a pub tenant whose landlord holds the alcohol licence?
 
-
 partnerSoleProprietorDob.title = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.heading = What is the sole proprietor’s date of birth?
 partnerSoleProprietorDob.hint = For example, 31 3 1980
@@ -1034,6 +1034,7 @@ otherLicencesAndPermitsNI.option.serveAlcohol = Licence allowing the serving of 
 otherLicencesAndPermitsNI.option.regCert = Registration certificate including a club registration certificate
 otherLicencesAndPermitsNI.option.none = No, I do not have any other licences and permits in Northern Ireland
 otherLicencesAndPermitsNI.error.required = Select all the licences and permits you have in Northern Ireland
+
 partnerDetailsForeignCorporateReference.title = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.heading = What is the partner’s foreign corporate reference?
 partnerDetailsForeignCorporateReference.checkYourAnswersLabel = What is the partner’s foreign corporate reference?
@@ -1088,3 +1089,24 @@ premisesAddressList.error.required = Select yes if you want to add another addre
 controllingBodyBusinessType.title = What type of business is the controlling body?
 controllingBodyBusinessType.heading = What type of business is the controlling body?
 controllingBodyBusinessType.error.required = Select the type of business for the controlling body
+
+partnerDetailsAddCountryOfIncorporation.title = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = Which country is the partner’s business incorporated in?
+
+partnerDateOfJoining.title = When is the partner’s date of joining?
+partnerDateOfJoining.heading = When is the partner’s date of joining?
+partnerDateOfJoining.hint = The date of joining must be before {0}
+partnerDateOfJoining.checkYourAnswersLabel = When is the partner’s date of joining?
+partnerDateOfJoining.error.required.all = Enter a date of joining for the partner
+partnerDateOfJoining.error.required.two = Date of joining must include a {0} and a {1}
+partnerDateOfJoining.error.required = Date of joining  must include a {0}
+partnerDateOfJoining.error.invalid = Date of joining  must be a real date
+partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
+partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
+partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
+

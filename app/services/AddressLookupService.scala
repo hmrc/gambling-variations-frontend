@@ -57,12 +57,12 @@ class AddressLookupService @Inject() (
         ukMode              = ukMode,
         pageHeadingStyle    = "govuk-heading-l",
         selectPageConfig = SelectPageConfig(
-          proposalListLimit     = 10,
+          proposalListLimit     = 100,
           showSearchAgainLink   = true,
           showNoneOfTheseOption = true
         ),
         confirmPageConfig = ConfirmPageConfig(
-          showConfirmChangeText = true
+          showConfirmChangeText = false
         ),
         manualAddressEntryConfig = ManualAddressEntryConfig(
           line1MaxLength = 35,
