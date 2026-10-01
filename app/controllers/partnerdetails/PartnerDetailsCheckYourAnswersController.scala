@@ -19,8 +19,6 @@ package controllers.partnerdetails
 import controllers.actions.*
 import controllers.routes
 import models.{Mode, UserAnswers}
-import pages.BusinessNumberOrIndex
-import pages.partnerdetails.*
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Redirect
@@ -46,8 +44,7 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
       val answers: UserAnswers = request.userAnswers
-      Partner
-        .parsePartner(index, answers)
+      indexParser(index, answers)
         .fold(
           error => {
             logger.warn(error)

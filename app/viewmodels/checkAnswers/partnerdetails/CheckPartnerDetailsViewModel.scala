@@ -577,9 +577,9 @@ final case class ExistingPartner(businessPartnerNumber: String) extends Partner 
 object Partner {
   def indexParser(index: String, userAnswers: UserAnswers): Either[String, Partner] =
     index.toIntOption match {
-      case Some(i) if i >= 0 => Right(NewPartner(i, userAnswers.get(PartnerDetailsAddPartnerCompletedPage(i))))
+      case Some(i) if i >= 0                     => Right(NewPartner(i, userAnswers.get(PartnerDetailsAddPartnerCompletedPage(i))))
       case None if index.matches("[A-Za-z0-9]+") => Right(ExistingPartner(index))
-      case _ => Left(s"Invalid partner reference: $index")
+      case _                                     => Left(s"Invalid partner reference: $index")
     }
 
 }
