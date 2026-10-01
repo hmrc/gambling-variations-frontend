@@ -175,16 +175,13 @@ case class ConfirmPageLabels(
   submitLabel: String = "correspondenceAddressConfirmAddress.submit",
   searchAgainLinkText: String = "correspondenceAddressConfirmAddress.searchAgain",
   changeLinkText: String = "correspondenceAddressConfirmAddress.change",
-  confirmChangeText: String = "correspondenceAddressConfirmAddress.confirmChange"
 ) {
   def messages(implicit messages: Messages) = ConfirmPageLabels(
     title               = messages(title),
     heading             = messages(heading),
     submitLabel         = messages(submitLabel),
     searchAgainLinkText = messages(searchAgainLinkText),
-    changeLinkText      = messages(changeLinkText),
-    confirmChangeText   = messages(confirmChangeText)
-  )
+    changeLinkText      = messages(changeLinkText))
 }
 
 object ConfirmPageLabels {
