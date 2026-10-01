@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.controlbodydetails
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyUtrPage extends QuestionPage[String] {
+case object ControllingBodyNinoPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
-  override def toString: String = "utr"
+  override def toString: String = "nino"
 }

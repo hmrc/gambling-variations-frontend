@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package pages.controlbodydetails
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodySubmittedPage extends QuestionPage[Boolean] {
+import java.time.LocalDate
+
+case object ControllingBodyDateOfLeavingPage extends QuestionPage[LocalDate] {
+
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
-  override def toString: String = "submitted"
+
+  override def toString: String = "dateOfLeaving"
 }

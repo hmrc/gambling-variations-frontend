@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package pages.controlbodydetails
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyIsUkIncorporatedPage extends QuestionPage[String] {
+case object ControllingBodyTypeOfControllingBodyPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
   override def toString: String =
-    "isUkIncorporated"
+    "typeOfControllingBody"
 }
