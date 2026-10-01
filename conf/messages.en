@@ -1096,3 +1096,16 @@ partnerDetailsAddCountryOfIncorporation.error.required = Enter the country the p
 partnerDetailsAddCountryOfIncorporation.error.invalid = The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAddCountryOfIncorporation.error.length = The country must be 100 characters or less
 partnerDetailsAddCountryOfIncorporation.change.hidden = Which country is the partner’s business incorporated in?
+
+partnerDateOfJoining.title = When is the partner’s date of joining?
+partnerDateOfJoining.heading = When is the partner’s date of joining?
+partnerDateOfJoining.hint = The date of joining must be before {0}
+partnerDateOfJoining.checkYourAnswersLabel = When is the partner’s date of joining?
+partnerDateOfJoining.error.required.all = Enter a date of joining for the partner
+partnerDateOfJoining.error.required.two = Date of joining must include a {0} and a {1}
+partnerDateOfJoining.error.required = Date of joining  must include a {0}
+partnerDateOfJoining.error.invalid = Date of joining  must be a real date
+partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
+partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
+partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
+
