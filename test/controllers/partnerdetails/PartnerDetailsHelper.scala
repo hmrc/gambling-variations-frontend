@@ -22,8 +22,8 @@ import play.api.mvc.Call
 
 trait PartnerDetailsHelper {
 
-  val businessNumber1: String = "12345"
-  val businessNumber2: String = "123456"
+  val businessNumber1: String = "0500085011"
+  val businessNumber2: String = "0500085012"
   val newPartnersIndex1: Int = 0
   val newPartnersIndex2: Int = 1
 
@@ -38,9 +38,9 @@ trait PartnerDetailsHelper {
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
-  def emptyData = Json.obj()
+  def emptyData: JsObject = Json.obj()
 
-  def minimalValidData = Json.obj(
+  def minimalValidData: JsObject = Json.obj(
     "partners" -> Json.obj()
   )
 
