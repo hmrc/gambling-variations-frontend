@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.businesscontactdetails
 
 import base.SpecBase
 import forms.BusinessTradingNameFormProvider
@@ -23,7 +23,7 @@ import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.BusinessContactNumberView
+import views.html.businesscontactdetails.BusinessContactNumberView
 
 class BusinessContactNumberViewSpec extends SpecBase {
 

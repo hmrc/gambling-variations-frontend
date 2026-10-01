@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views
+package views.businesscontactdetails
 
 import base.SpecBase
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.CheckContactDetailsView
+import views.html.businesscontactdetails.CheckContactDetailsView
 
 class CheckContactDetailsViewSpec extends SpecBase {
 
@@ -86,7 +86,7 @@ class CheckContactDetailsViewSpec extends SpecBase {
       doc.text must include(messages("contactDetails.error.contactNumber"))
 
       val continueButton = doc.select(".govuk-button")
-      continueButton.attr("href") mustBe controllers.routes.CheckContactDetailsController.onPageLoad().url
+      continueButton.attr("href") mustBe controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url
     }
 
     "must display ready to submit message when isFlagged is true" in new Setup {

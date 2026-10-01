@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.FaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.contactdetails.*
-import utils.FlagsUtil.checkIfChanged
 import pages.GroupMemberPage
+import pages.contactdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.FaxNumberView
+import utils.FlagsUtil.checkIfChanged
+import views.html.businesscontactdetails.FaxNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
