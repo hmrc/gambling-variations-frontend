@@ -45,10 +45,14 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
   lazy val controllingBodyNotProvidedYesNoRoute =
     controllers.controllingbodydetails.routes.ControllingBodyNotProvidedYesNoController.onPageLoad().url
 
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+  private val baseAnswers =
+    UserAnswers(userAnswersId,
+      Json.obj(
+        "controllingBodyDetailsSection" -> Json.obj(
+          "mgdRegNum"    -> userAnswersId,
+          "businessName" -> "abc"
+        )
+      )
     )
 
   "ControllingBodyNotProvidedYesNoController Controller" - {
@@ -56,7 +60,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =
@@ -79,8 +83,11 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
+      val userAnswers =
+        baseAnswers.set(ControllingBodyNotProvidedYesNoPage, true).success.value
+
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
@@ -110,7 +117,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -139,7 +146,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -162,7 +169,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(noAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =

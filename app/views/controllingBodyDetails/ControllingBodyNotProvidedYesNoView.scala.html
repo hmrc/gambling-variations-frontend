@@ -23,7 +23,9 @@
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     govukButton: GovukButton,
-    caption:Caption
+    caption:Caption,
+    h1: H1,
+    p: Paragraph
 )
 
 @(form: Form[_], mode: Mode, controllingBody: String)(implicit request: Request[_], messages: Messages)
@@ -38,11 +40,16 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
         @h1("controllingBodyNotProvidedYesNo.title", classes="govuk-heading-l")
-        @p("controllingBodyNotProvidedYesNo.p1")
+        @p(
+            "controllingBodyNotProvidedYesNo.p1",
+            args = Seq(controllingBody)
+        )
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("controllingBodyNotProvidedYesNo.heading")).asPageHeading(Large)
+                legend = LegendViewModel(messages("controllingBodyNotProvidedYesNo.text", args = Seq(controllingBody))),
+                noLabel = messages("controllingBodyNotProvidedYesNo.noLabel")
             )
         )
 

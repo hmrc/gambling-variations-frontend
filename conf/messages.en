@@ -1071,8 +1071,9 @@ premisesNotCoveredYesNo.hint = If you select yes, you must provide details of th
 
 controllingBodySameAsRep.title = Tell us about your controlling body
 controllingBodySameAsRep.p1 = Your group's representative member, {0}, can also be your controlling body.
-controllingBodySameAsRep.heading = Do you want {0}} to be your controlling body?
+controllingBodySameAsRep.text = Do you want {0} to be your controlling body?
 controllingBodySameAsRep.error.required = Select yes if you want your group's representative member to also be your controlling body
+controllingBodySameAsRep.noLabel = No, I want to provide new details
 
 removePremisesAddress.title = Are you sure you want to remove this premises address?
 removePremisesAddress.heading = Are you sure you want to remove this premises address?

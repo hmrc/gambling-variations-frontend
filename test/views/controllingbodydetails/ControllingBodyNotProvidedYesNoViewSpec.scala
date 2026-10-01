@@ -51,7 +51,7 @@ class ControllingBodyNotProvidedYesNoViewSpec extends SpecBase {
         )
 
         document.select("h1").text() mustEqual
-          messages(application)("controllingBodyNotProvidedYesNo.heading")
+          messages(application)("controllingBodyNotProvidedYesNo.title")
 
         document.body().text() must include(
           messages(application)("site.continue")

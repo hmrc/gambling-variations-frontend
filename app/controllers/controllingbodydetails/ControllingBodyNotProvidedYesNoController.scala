@@ -22,7 +22,7 @@ import forms.controllingbodydetails.ControllingBodyNotProvidedYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.controllingbodydetails.ControllingBodyNotProvidedYesNoPage
-import pages.controllingbodydetails.ControllingBodyPage
+import pages.controllingbody.ControllingBodyBusinessNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -39,7 +39,7 @@ class ControllingBodyNotProvidedYesNoController @Inject()(
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodyNotProvidedYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyNotProvidedYesNoView
@@ -52,18 +52,18 @@ class ControllingBodyNotProvidedYesNoController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-      request.userAnswers.get(ControllingBodyPage) match {
-        case Some(controllingBody) =>
-          Ok(view(form, mode, controllingBody))
-        case None =>
-          Redirect(routes.SystemErrorController.onPageLoad())
-      }
+        val controllingBody = request.userAnswers.get(ControllingBodyBusinessNamePage).getOrElse("")
+        val preparedForm = request.userAnswers.get(ControllingBodyNotProvidedYesNoPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-    }
+        Ok(view(preparedForm, mode, controllingBody))
+      }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     request.userAnswers
-      .get(ControllingBodyPage)
+      .get(ControllingBodyBusinessNamePage)
       .map { controllingBody =>
         form
           .bindFromRequest()
