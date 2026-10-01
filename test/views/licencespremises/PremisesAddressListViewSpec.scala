@@ -22,7 +22,7 @@ import models.{NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
-import pages.licencespremises.{AddPremisesAddressPage, PremisesDetailsPage}
+import pages.licencespremises.PremisesDetailsPage
 import play.api.i18n.Messages
 import play.api.libs.json.{JsArray, Json}
 import play.api.test.FakeRequest
@@ -113,11 +113,13 @@ class PremisesAddressListViewSpec extends SpecBase {
 
     private val maxPremises = 100
 
-    private val html = view(form, NormalMode, addressList, maxPremises)(request, messages)
-    private val htmlWith100 = view(form, NormalMode, addressListOneHundred, maxPremises)(request, messages)
-    private val htmlWithError = view(formWithErrors, NormalMode, addressList, maxPremises)(request, messages)
+    private val html = view(form, NormalMode, addressList, maxPremises, true)(request, messages)
+    private val htmlNotSubmitted = view(form, NormalMode, addressList, maxPremises, false)(request, messages)
+    private val htmlWith100 = view(form, NormalMode, addressListOneHundred, maxPremises, true)(request, messages)
+    private val htmlWithError = view(formWithErrors, NormalMode, addressList, maxPremises, true)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
+    val docNotSubmitted: Document = Jsoup.parse(htmlNotSubmitted.body)
     val doc100: Document = Jsoup.parse(htmlWith100.body)
     val docWithFormErrors: Document = Jsoup.parse(htmlWithError.body)
   }
@@ -132,11 +134,14 @@ class PremisesAddressListViewSpec extends SpecBase {
       doc.select(".govuk-hint").text mustEqual messages("premisesAddressList.hint")
       doc.text must include(messages("premisesAddressList.question.add"))
       doc.text must include(messages("premisesAddressList.message.submit"))
-      doc.text must include("Showing 1 to 3 of 3 records")
       doc.text must include(messages("premisesAddressList.yesLabel"))
       doc.text must include(messages("premisesAddressList.noLabel"))
       doc.select(".govuk-hint").text mustEqual messages("premisesAddressList.hint")
       doc.select("button.govuk-button").text must include(messages("site.continue"))
+    }
+
+    "must not show submit message one arrival records" in new Setup {
+      doc.text must not include "premisesAddressList.message.submit"
     }
 
     "must render page correctly for 100 records" in new Setup {
