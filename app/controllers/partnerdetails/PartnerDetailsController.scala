@@ -24,7 +24,7 @@ import pages.partnerdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.PaginationService
+import services.{PaginationResult, PaginationService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerDetailsViewModel
@@ -193,13 +193,14 @@ class PartnerDetailsController @Inject() (
       )
     }
 
-  private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int) = {
+  private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int): PaginationResult = {
     val partnersPerPage = frontendAppConfig.partnersPerPage
 
+    val completedNewPartners = PartnerUtils.getCompletedNewPartners(userAnswers)
     val existingPartners = getPresentExistingPartners(userAnswers, todayDate)
 
     paginationService
-      .paginatePartnerDetails(existingPartners, page, partnersPerPage, routes.PartnerDetailsController.onPageLoad(None).url)
+      .paginatePartnerDetails(completedNewPartners, existingPartners, page, partnersPerPage, routes.PartnerDetailsController.onPageLoad(None).url)
   }
 
   private def getPresentExistingPartners(userAnswers: UserAnswers, todayDate: LocalDate): Seq[String] = PartnerUtils

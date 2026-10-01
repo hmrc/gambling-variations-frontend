@@ -42,6 +42,13 @@ object PartnerUtils {
     newPartnerExistingIndex getOrElse 0
   }
 
+  def getCompletedNewPartners(userAnswers: UserAnswers): Seq[Int] = (0 to getNewPartnersSize(userAnswers))
+    .map(index => userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)))
+    .zipWithIndex
+    .collect { case (Some(true), i) =>
+      i
+    }
+
   private def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
 

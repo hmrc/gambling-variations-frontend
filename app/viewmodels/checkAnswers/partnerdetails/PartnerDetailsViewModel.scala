@@ -19,11 +19,11 @@ package viewmodels.checkAnswers.partnerdetails
 import config.FrontendAppConfig
 import controllers.partnerdetails.routes
 import models.UserAnswers
+import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
 import play.api.i18n.Messages
-import utils.PartnerUtils
-import scala.collection.Seq
 
+import scala.collection.Seq
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -37,7 +37,7 @@ final case class PartnerDetailsViewModel(
 )
 
 final case class PartnerDetailsRow(
-  partnerNumber: String,
+  partnerNumber: BusinessNumberOrIndex,
   name: String,
   status: String,
   statusDetails: Option[String],
@@ -51,11 +51,12 @@ object PartnerDetailsViewModel {
   private val dateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def from(
-    partnerNumbers: Seq[String],
+    partnerNumbers: Seq[BusinessNumberOrIndex],
     todayDate: LocalDate,
     userAnswers: UserAnswers,
     frontendAppConfig: FrontendAppConfig
   )(implicit messages: Messages): PartnerDetailsViewModel = {
+    println("partnerNUmbers: " + partnerNumbers)
 
     val activePartnerCount =
       partnerNumbers.count { partnerNumber =>
@@ -73,6 +74,7 @@ object PartnerDetailsViewModel {
         }
       }
 
+    println("activepartnerscount: " + activePartnerCount)
     val rows: Seq[PartnerDetailsRow] =
       partnerNumbers
         .flatMap { partnerNumber =>
@@ -138,20 +140,21 @@ object PartnerDetailsViewModel {
                 if (canRemove) {
                   Some(
                     routes.PartnerDetailsController
-                      .onRemove(partnerNumber)
+                      .onRemove(partnerNumber.toString) // TODO needs Normal/CheckMode
                       .url
                   )
                 } else {
                   None
                 }
 
+              println("partnerNumber: " + partnerNumber)
               PartnerDetailsRow(
                 partnerNumber = partnerNumber,
                 name          = name,
                 status        = status,
                 statusDetails = statusDetails,
                 partnerDetailsUrl = routes.PartnerDetailsController
-                  .onPartnerDetails(partnerNumber)
+                  .onPartnerDetails(partnerNumber.toString) // TODO needs Normal/CheckMode
                   .url,
                 removeUrl = removeUrl,
                 canRemove = canRemove
