@@ -51,12 +51,11 @@ class PartnerDetailsAddCountryOfIncorporationController @Inject() (
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
+    val userAnswers = request.userAnswers
 
-    (request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)),
-     request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex))
-    ) match {
+    (userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)), userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex))) match {
       case (Some(Corporatebody), Some(false)) =>
-        val preparedForm = request.userAnswers.get(PartnerDetailsCountryOfIncorporationPage(newIndex)) match {
+        val preparedForm = userAnswers.get(PartnerDetailsCountryOfIncorporationPage(newIndex)) match {
           case None        => form
           case Some(value) => form.fill(value)
         }
