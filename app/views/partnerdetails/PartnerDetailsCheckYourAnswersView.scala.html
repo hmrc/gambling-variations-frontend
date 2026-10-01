@@ -35,10 +35,6 @@
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("partnerDetailsCheckYourAnswers.heading", classes = "govuk-heading-l")
 
-    @if(vm.isMissingMandatoryFields && vm.isNewPartnerFlow) {
-        @paragraph(messages("partnerDetailsCheckYourAnswers.error.missingDetails"))
-    }
-
     @for(notice <- vm.notices) {
         <p class="govuk-body">@notice</p>
     }

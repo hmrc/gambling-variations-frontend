@@ -116,7 +116,7 @@ case class CheckPartnerDetailsViewModel(
           messages("partnerDetailsCheckYourAnswers.error.contactUs", link)
         )
 
-        Seq(leaving, joining, contactUs).flatten
+        Seq(joining.orElse(leaving), contactUs).flatten
       }
 
     messagesToShow.map(Html(_))
