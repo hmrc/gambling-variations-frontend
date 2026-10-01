@@ -625,7 +625,7 @@ correspondenceAddressSelectAddress.manualAddress = Enter the address manually
 
 correspondenceAddressConfirmAddress.title = Confirm the correspondence address
 correspondenceAddressConfirmAddress.heading = Review and confirm the correspondence address
-correspondenceAddressConfirmAddress.change = Change
+correspondenceAddressConfirmAddress.change = Edit address
 correspondenceAddressConfirmAddress.submit = Confirm address
 correspondenceAddressConfirmAddress.searchAgain = Search again
 
