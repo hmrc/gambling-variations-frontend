@@ -57,6 +57,22 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
             CheckPartnerDetailsViewModel.from(userAnswersExistingPartners, businessNumber1, isNewPartnerFlow = false, isSubmitted = None)
 
           status(result) mustEqual OK
+          println()
+          println()
+          println()
+          println("contentAsString(result)")
+          println(contentAsString(result))
+          println()
+          println()
+          println()
+          println()
+          println()
+          println("view(expectedViewModel)(request, messages(application)).toString")
+          println(view(expectedViewModel)(request, messages(application)).toString)
+          println()
+          println()
+          println()
+
           contentAsString(result) mustEqual view(expectedViewModel)(request, messages(application)).toString
         }
       }
