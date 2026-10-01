@@ -26,12 +26,12 @@ class ControllingBodyBusinessTypePageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "typeOfControllingBody")
+      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodyDetails" \ "businessType")
     }
 
     "have the correct toString value" in {
 
-      ControllingBodyBusinessTypePage.toString mustEqual "typeOfControllingBody"
+      ControllingBodyBusinessTypePage.toString mustEqual "businessType"
     }
   }
 }

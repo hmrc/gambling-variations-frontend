@@ -1088,3 +1088,6 @@ premisesAddressList.error.required = Select yes if you want to add another addre
 controllingBodyBusinessType.title = What type of business is the controlling body?
 controllingBodyBusinessType.heading = What type of business is the controlling body?
 controllingBodyBusinessType.error.required = Select the type of business for the controlling body
+controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body

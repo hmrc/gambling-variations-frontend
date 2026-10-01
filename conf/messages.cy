@@ -429,3 +429,6 @@ removePremisesAddress.error.required = cy: Select yes if you want to remove this
 controllingBodyBusinessType.title = cy: What type of business is the controlling body?
 controllingBodyBusinessType.heading = cy: What type of business is the controlling body?
 controllingBodyBusinessType.error.required = cy: Select the type of business for the controlling body
+controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body

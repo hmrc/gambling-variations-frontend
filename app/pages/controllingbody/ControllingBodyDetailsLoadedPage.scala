@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package pages.controlbodydetails
+package pages.controllingbody
 
-import models.SoleProprietorName
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodySoleProprietorPage extends QuestionPage[SoleProprietorName] {
-
-  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
-
-  override def toString: String = "soleProprietor"
+case object ControllingBodyDetailsLoadedPage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+  override def toString: String = "loaded"
 }
