@@ -20,7 +20,7 @@ import controllers.partnerdetails.PartnerDetailsHelper
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsPath, Json}
 
-class PartnerDetailsCountryOfIncorporationSpec extends PlaySpec with PartnerDetailsHelper {
+class PartnerDetailsCountryOfIncorporationPageSpec extends PlaySpec with PartnerDetailsHelper {
 
   "partners" must {
     "PartnerDetailsCountryOfIncorporationPage" must {
