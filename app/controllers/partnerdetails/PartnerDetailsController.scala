@@ -24,8 +24,9 @@ import pages.partnerdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.PaginationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{PaginationService, PartnerUtils}
+import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerDetailsViewModel
 import views.html.partnerdetails.PartnerDetailsView
 
@@ -169,7 +170,7 @@ class PartnerDetailsController @Inject() (
     (authorise andThen getData andThen requireData) { implicit request =>
 
       Redirect(
-        routes.PartnerDetailsController.onPageLoad(None) // TODO
+        routes.PartnerDetailsController.onPageLoad(None)
       )
     }
 

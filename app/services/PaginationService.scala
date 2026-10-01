@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils
+package services
 
 /*
  * Copyright 2026 HM Revenue & Customs
@@ -54,7 +54,7 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
   ): PaginationResult = {
 
     val sortedDirectDebits = partnerDetails
-      .sortBy(_.toInt)
+      .sortBy(_.toLong)
       .take(maxRecords)
 
     val totalRecords = sortedDirectDebits.length

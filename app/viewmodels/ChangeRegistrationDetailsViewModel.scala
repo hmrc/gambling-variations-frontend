@@ -104,7 +104,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(isPartnership)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.partnerDetails"),
-            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None).url, // TODO
+            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None).url,
             NoDetailsChanged
           )
         ),
