@@ -1089,5 +1089,9 @@ controllingBodyBusinessType.title = What type of business is the controlling bod
 controllingBodyBusinessType.heading = What type of business is the controlling body?
 controllingBodyBusinessType.error.required = Select the type of business for the controlling body
 
-checkControllingBodyDetails.title = checkControllingBodyDetails
-checkControllingBodyDetails.heading = checkControllingBodyDetails
+checkControllingBodyDetails.title =
+checkControllingBodyDetails.heading =
+checkControllingBodyDetails.submit =
+checkControllingBodyDetails.h2.businessDetails =
+
+checkControllingBodyDetails.h2.address =

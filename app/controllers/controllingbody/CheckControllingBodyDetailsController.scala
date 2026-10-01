@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.controllingbody
 
-import controllers.actions._
-import javax.inject.Inject
+import controllers.actions.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CheckControllingBodyDetailsView
+
+import javax.inject.Inject
 
 class CheckControllingBodyDetailsController @Inject()(
                                        override val messagesApi: MessagesApi,
