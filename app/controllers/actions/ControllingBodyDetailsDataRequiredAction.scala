@@ -22,7 +22,7 @@ import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName
 import models.controllingbody.ControlBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
 import pages.*
-import pages.controlbodydetails.*
+import pages.controllingbody.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}

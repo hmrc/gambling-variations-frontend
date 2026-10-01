@@ -24,7 +24,7 @@ import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controlbodydetails.ControllingBodySectionPage
+import pages.controllingbody.ControllingBodySectionPage
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
 import play.api.mvc.Results.*
