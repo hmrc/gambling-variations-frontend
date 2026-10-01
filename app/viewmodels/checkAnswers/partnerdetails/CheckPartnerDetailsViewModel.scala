@@ -72,6 +72,7 @@ case class CheckPartnerDetailsViewModel(
   val isNewPartnerSubmitted: Boolean = maybeSubmitted.exists(identity) // NEW PARTNERS ONLY
 
   // --- Update this ---
+  // NOTE: routing will be done with the integration ticket
   def continueCall: Call = if (isMissingMandatoryFields) {
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
   } else {
@@ -161,6 +162,7 @@ case class CheckPartnerDetailsViewModel(
 
   private def typeOfBusinessRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("typeOfBusiness")
+    // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode).url, label)
 
     typeOfBusiness match {
@@ -174,6 +176,7 @@ case class CheckPartnerDetailsViewModel(
       requiredRow(
         businessNameKey(bt),
         businessName,
+        // NOTE: routing will be done with the integration ticket
         routes.PartnerDetailsChangeBusinessNameController.onPageLoad(index, businessType = bt, NormalMode).url,
         isNewPartnerFlow
       )
@@ -189,18 +192,22 @@ case class CheckPartnerDetailsViewModel(
 
   private def soleProprietorDobRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(is(Soleproprietor))(
-      requiredRow("soleProprietorDob",
-                  soleProprietorDob,
-                  routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode).url,
-                  isNewPartnerFlow
-                 )
+      requiredRow(
+        "soleProprietorDob",
+        soleProprietorDob,
+        // NOTE: routing will be done with the integration ticket
+        routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode).url,
+        isNewPartnerFlow
+      )
     )
 
   private def addTradingNameRow(implicit messages: Messages): Option[SummaryListRow] =
+    // NOTE: routing will be done with the integration ticket
     yesNoRow("addTradingName", addTradingName, routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index).url)
 
   private def tradingNameRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("tradingName")
+    // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, NormalMode).url, label)
     val remove = removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, NormalMode).url, label)
 
@@ -216,18 +223,21 @@ case class CheckPartnerDetailsViewModel(
     requiredRow(
       "dateOfJoining",
       dateOfJoining,
-      routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode).url, // TODO: point at the date-of-joining page
+      // NOTE: routing will be done with the integration ticket (currently points at the DOB page placeholder)
+      routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, NormalMode).url,
       isNewPartnerFlow
     )
 
   private def addNinoRow(implicit messages: Messages): Option[SummaryListRow] =
     if (is(Soleproprietor))
+      // NOTE: routing will be done with the integration ticket
       yesNoRow("addNino", addNino, routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index).url)
     else None
 
   private def ninoRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(is(Soleproprietor)) {
       val label = labelFor("nino")
+      // NOTE: routing will be done with the integration ticket
       val change = changeAction(routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index, NormalMode).url, label)
       val remove = removeAction(routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index, NormalMode).url, label)
 
@@ -241,17 +251,20 @@ case class CheckPartnerDetailsViewModel(
 
   private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(!is(Partnership))(
+      // NOTE: routing will be done with the integration ticket
       requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, NormalMode).url, isNewPartnerFlow)
     )
 
   private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
     if (is(Corporatebody))
+      // NOTE: routing will be done with the integration ticket
       yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
     else None
 
   private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(is(Soleproprietor)) {
       val label = labelFor("vatRegistrationNumber")
+      // NOTE: routing will be done with the integration ticket
       val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, NormalMode).url, label)
       val remove = removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, NormalMode).url, label)
 
@@ -268,6 +281,7 @@ case class CheckPartnerDetailsViewModel(
       requiredRow(
         "isIncorporatedInUk",
         isIncorporatedInUk.map(b => yesNo(b)),
+        // NOTE: routing will be done with the integration ticket
         routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index, NormalMode).url,
         isNewPartnerFlow
       )
@@ -278,9 +292,8 @@ case class CheckPartnerDetailsViewModel(
       requiredRow(
         "countryOfIncorporation",
         countryOfIncorporation,
-        routes.PartnerDetailsIsBusinessIncorporatedUkController
-          .onPageLoad(index, NormalMode)
-          .url, // TODO: point at the country-of-incorporation page
+        // NOTE: routing will be done with the integration ticket (currently points at the "incorporated in UK" page placeholder)
+        routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index, NormalMode).url,
         isNewPartnerFlow
       )
     )
@@ -290,6 +303,7 @@ case class CheckPartnerDetailsViewModel(
       requiredRow(
         "foreignCorporateReference",
         foreignCorporateReference,
+        // NOTE: routing will be done with the integration ticket
         routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode).url,
         isNewPartnerFlow
       )
@@ -300,6 +314,7 @@ case class CheckPartnerDetailsViewModel(
       requiredRow(
         "dateOfIncorporation",
         dateOfIncorporation,
+        // NOTE: routing will be done with the integration ticket
         routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index, NormalMode).url,
         isNewPartnerFlow
       )
@@ -310,7 +325,8 @@ case class CheckPartnerDetailsViewModel(
       requiredRow(
         "companyRegistrationNumber",
         companyRegistrationNumber,
-        routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode).url, // TODO: point at the CRN page
+        // NOTE: routing will be done with the integration ticket (currently points at the foreign corporate reference page placeholder)
+        routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, NormalMode).url,
         isNewPartnerFlow
       )
     )
@@ -319,7 +335,8 @@ case class CheckPartnerDetailsViewModel(
 
   private def addressRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("address")
-    val url = routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode).url // TODO: point at the address page
+    // NOTE: routing will be done with the integration ticket (currently points at the business type page placeholder)
+    val url = routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode).url
 
     createSummaryListRow(label, addressContent, if (isNewPartnerFlow || !dueToJoinOrLeave) Seq(changeAction(url, label)) else Nil)
   }
@@ -328,11 +345,13 @@ case class CheckPartnerDetailsViewModel(
     yesNoRow(
       "addAdditionalInformation",
       addAdditionalInformation,
+      // NOTE: routing will be done with the integration ticket
       routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index).url
     )
 
   private def additionalInformationRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("additionalInformation")
+    // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index).url, label)
     val remove = removeAction(routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index, NormalMode).url, label)
 
@@ -343,6 +362,7 @@ case class CheckPartnerDetailsViewModel(
 
   private def contactNumbersRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("contactNumbers")
+    // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsContactDetailsController.onPageLoad(index, NormalMode).url, label)
     val actions = if (isNewPartnerFlow || !dueToJoinOrLeave) Seq(change) else Nil
     val row = optionalRow(label, contactNumbers.map(n => contactNumbersContent(n)), actions, change)
@@ -351,10 +371,12 @@ case class CheckPartnerDetailsViewModel(
   }
 
   private def addFaxNumberRow(implicit messages: Messages): Option[SummaryListRow] =
+    // NOTE: routing will be done with the integration ticket
     yesNoRow("addFaxNumber", addFaxNumber, routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index).url)
 
   private def faxNumberRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("faxNumber")
+    // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index, NormalMode).url, label)
     val remove = removeAction(routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index, NormalMode).url, label)
 
@@ -362,10 +384,12 @@ case class CheckPartnerDetailsViewModel(
   }
 
   private def addEmailAddressRow(implicit messages: Messages): Option[SummaryListRow] =
+    // NOTE: routing will be done with the integration ticket
     yesNoRow("addEmailAddress", addEmailAddress, routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index).url)
 
   private def emailAddressRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("emailAddress")
+    // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsEmailAddressController.onPageLoad(index, NormalMode).url, label)
     val remove = removeAction(routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index, NormalMode).url, label)
 
