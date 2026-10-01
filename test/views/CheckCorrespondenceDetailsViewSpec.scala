@@ -178,7 +178,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
       )
     }
 
-    "must display required to submit message when submitted" in new Setup {
+    "must not display required to submit message when submitted" in new Setup {
 
       val submittedViewModel =
         viewModel.copy(
@@ -189,19 +189,19 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
 
       val doc = Jsoup.parse(html.body)
 
-      doc.text must include(
+      doc.text must not include (
         messages("changeRegistrationDetails.readyToSubmit")
       )
     }
 
-    "must not display required to submit message when not submitted" in new Setup {
+    "must display required to submit message when not submitted" in new Setup {
 
       val html = view(viewModel)
 
       val doc = Jsoup.parse(html.body)
 
-      doc.text must not include
-        messages("changeRegistrationDetails.readyToSubmit")
+      doc.text must include
+      messages("changeRegistrationDetails.readyToSubmit")
     }
   }
 }
