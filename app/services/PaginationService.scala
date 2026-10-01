@@ -16,26 +16,11 @@
 
 package services
 
-/*
- * Copyright 2026 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+import pages.BusinessNumberOrIndex
 import viewmodels.govuk.PaginationFluency.{PaginationItemViewModel, PaginationLinkViewModel, PaginationViewModel}
 
 case class PaginationResult(
-  paginatedData: Seq[String],
+  paginatedData: Seq[BusinessNumberOrIndex],
   paginationViewModel: PaginationViewModel,
   totalRecords: Int,
   currentPage: Int,
@@ -47,23 +32,26 @@ case class PaginationResult(
 class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: Int) {
 
   def paginatePartnerDetails(
-    partnerDetails: Seq[String],
+    completedNewPartners: Seq[Int],
+    existingPartnerDetails: Seq[String],
     currentPage: Int,
     elementsPerPage: Int,
     baseUrl: String
   ): PaginationResult = {
 
-    val sortedDirectDebits = partnerDetails
-      .sortBy(_.toLong)
-      .take(maxRecords)
+    val sortedPartnerDetails: Seq[BusinessNumberOrIndex] = (completedNewPartners ++ existingPartnerDetails.sortBy(_.toLong)).take(maxRecords)
 
-    val totalRecords = sortedDirectDebits.length
+//    val sortedPartnerDetails = existingPartnerDetails
+//      .sortBy(_.toLong)
+//      .take(maxRecords)
+
+    val totalRecords = sortedPartnerDetails.length
     val totalPages = calculateTotalPages(totalRecords)
     val validCurrentPage = validateCurrentPage(currentPage, totalPages)
 
     val (startIndex, endIndex) = calculatePageIndices(validCurrentPage, totalRecords)
 
-    val paginatedData = sortedDirectDebits
+    val paginatedData = sortedPartnerDetails
       .slice(startIndex, endIndex)
 
     val paginationViewModel = createPaginationViewModel(

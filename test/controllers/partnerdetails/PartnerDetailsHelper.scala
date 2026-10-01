@@ -56,9 +56,9 @@ trait PartnerDetailsHelper {
 
     val paginationService = new PaginationService(10, 100, 5)
     val paginationResult: PaginationResult = paginationService.paginatePartnerDetails(
-      partnerDetails  = partnerDetailsBusinessNumberList,
-      currentPage     = currentPage,
-      elementsPerPage = 10,
+      existingPartnerDetails = partnerDetailsBusinessNumberList,
+      currentPage            = currentPage,
+      elementsPerPage        = 10,
       // Note: I had to prepend "gambling-variations" when testing in IDE, in sbt works fine
       baseUrl = routes.PartnerDetailsController.onPageLoad(None).url
     )
