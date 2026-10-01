@@ -429,3 +429,11 @@ removePremisesAddress.error.required = cy: Select yes if you want to remove this
 controllingBodyBusinessType.title = cy: What type of business is the controlling body?
 controllingBodyBusinessType.heading = cy: What type of business is the controlling body?
 controllingBodyBusinessType.error.required = cy: Select the type of business for the controlling body
+
+partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?

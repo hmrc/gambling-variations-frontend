@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package pages.controlbodydetails
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyIsRepMemSameAsCbPage extends QuestionPage[String] {
+case object ControllingBodyCrnPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
 
-  override def toString: String =
-    "isRepMemSameAsCb"
+  override def toString: String = "crn"
 }

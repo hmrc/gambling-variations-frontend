@@ -205,8 +205,6 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[PremisesAddressListView]
-
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
