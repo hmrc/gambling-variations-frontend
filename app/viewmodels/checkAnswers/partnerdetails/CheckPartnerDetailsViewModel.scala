@@ -556,3 +556,30 @@ object CheckPartnerDetailsViewModel {
   }
 
 }
+
+sealed trait Partner {
+  def ref: BusinessNumberOrIndex
+  def isNew: Boolean
+  def isSubmitted: Option[Boolean]
+}
+
+final case class NewPartner(index: Int, isSubmitted: Option[Boolean]) extends Partner {
+  val ref: BusinessNumberOrIndex = index
+  val isNew: Boolean = true
+}
+
+final case class ExistingPartner(businessPartnerNumber: String) extends Partner {
+  val ref: BusinessNumberOrIndex = businessPartnerNumber
+  val isNew: Boolean = false
+  val isSubmitted: Option[Boolean] = None
+}
+
+object Partner {
+  def indexParser(index: String, userAnswers: UserAnswers): Either[String, Partner] =
+    index.toIntOption match {
+      case Some(i) if i >= 0 => Right(NewPartner(i, userAnswers.get(PartnerDetailsAddPartnerCompletedPage(i))))
+      case None if index.matches("[A-Za-z0-9]+") => Right(ExistingPartner(index))
+      case _ => Left(s"Invalid partner reference: $index")
+    }
+
+}

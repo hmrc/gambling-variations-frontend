@@ -27,6 +27,7 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.partnerdetails.CheckPartnerDetailsViewModel.from
+import viewmodels.checkAnswers.partnerdetails.Partner.indexParser
 import views.html.partnerdetails.PartnerDetailsCheckYourAnswersView
 
 import javax.inject.Inject
@@ -45,36 +46,15 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
       val answers: UserAnswers = request.userAnswers
-      parsePartner(index, answers).fold(
-        error => {
-          logger.warn(error)
-          Redirect(routes.SystemErrorController.onPageLoad())
-        },
-        partner => Ok(view(from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
-      )
+      Partner
+        .parsePartner(index, answers)
+        .fold(
+          error => {
+            logger.warn(error)
+            Redirect(routes.SystemErrorController.onPageLoad())
+          },
+          partner => Ok(view(from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
+        )
     }
 
-  private def parsePartner(index: String, userAnswers: UserAnswers): Either[String, Partner] =
-    index.toIntOption match {
-      case Some(i) if i >= 0                     => Right(NewPartner(i, userAnswers.get(PartnerDetailsAddPartnerCompletedPage(i))))
-      case None if index.matches("[A-Za-z0-9]+") => Right(ExistingPartner(index))
-      case _                                     => Left(s"Invalid partner reference: $index")
-    }
-}
-
-sealed trait Partner {
-  def ref: BusinessNumberOrIndex
-  def isNew: Boolean
-  def isSubmitted: Option[Boolean]
-}
-
-final case class NewPartner(index: Int, isSubmitted: Option[Boolean]) extends Partner {
-  val ref: BusinessNumberOrIndex = index
-  val isNew: Boolean = true
-}
-
-final case class ExistingPartner(businessPartnerNumber: String) extends Partner {
-  val ref: BusinessNumberOrIndex = businessPartnerNumber
-  val isNew: Boolean = false
-  val isSubmitted: Option[Boolean] = None
 }
