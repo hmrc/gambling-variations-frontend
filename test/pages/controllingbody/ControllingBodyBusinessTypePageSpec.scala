@@ -17,7 +17,7 @@
 package pages.controllingbody
 
 import org.scalatestplus.play.PlaySpec
-import pages.controllingbody.ControllingBodyBusinessTypePage
+import pages.controllingbody.ControllingBodyBusinessTypePage.*
 import play.api.libs.json.JsPath
 
 class ControllingBodyBusinessTypePageSpec extends PlaySpec {
@@ -26,12 +26,12 @@ class ControllingBodyBusinessTypePageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "typeOfControllingBody")
+      path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "typeOfControllingBody")
     }
 
     "have the correct toString value" in {
 
-      ControllingBodyBusinessTypePage.toString mustEqual "typeOfControllingBody"
+      toString mustEqual "typeOfControllingBody"
     }
   }
 }

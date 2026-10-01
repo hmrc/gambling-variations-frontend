@@ -27,7 +27,7 @@ import queries.Settable
 
 import scala.util.Try
 
-object PartnerMandatoryFields {
+object PartnerMandatoryDetails {
 
   /** A mandatory answer: the page it's stored on, where to send the user, and how to tell it's answered. */
   final case class Field(page: Settable[?], call: Call, isAnswered: UserAnswers => Boolean)

@@ -64,7 +64,7 @@ case class CheckPartnerDetailsViewModel(
   maybeSubmitted: Option[Boolean],
   isDueToLeave: Boolean,
   isDueToJoin: Boolean,
-  isMissingMandatoryFields: Boolean
+  isMissingMandatoryDetails: Boolean
 ) {
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
@@ -73,7 +73,7 @@ case class CheckPartnerDetailsViewModel(
 
   // --- Update this ---
   // NOTE: routing will be done with the integration ticket
-  def continueCall: Call = if (isMissingMandatoryFields) {
+  def continueCall: Call = if (isMissingMandatoryDetails) {
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
   } else {
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
@@ -81,31 +81,46 @@ case class CheckPartnerDetailsViewModel(
 
   println()
   println()
+  println(s"new=$isNewPartnerFlow")
   println()
-  println(s"new=$isNewPartnerFlow leave=$isDueToLeave join=$isDueToJoin leavingDate=$dateOfLeaving joiningDate=$dateOfJoining")
+  println(s"leave=$isDueToLeave")
+  println()
+  println(s"join=$isDueToJoin")
+  println()
+  println(s"leavingDate=$dateOfLeaving")
+  println()
+  println(s"joiningDate=$dateOfJoining")
+  println()
+  println(s"missingMandatory=$isMissingMandatoryDetails")
   println()
   println()
   println()
 
-  def notices(implicit messages: Messages): Seq[Html] =
-    if (isNewPartnerFlow) Nil
-    else {
-      val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
-      val link = s"""<a href="$url" class="govuk-link">${messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")}</a>"""
-      val leaving =
-        if (isDueToLeave) dateOfLeaving.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", _, link))
-        else None
+  def notices(implicit messages: Messages): Seq[Html] = {
+    val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
+    val link = s"""<a href="$url" class="govuk-link">${messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")}</a>"""
 
-      val joining =
-        if (isDueToJoin) dateOfJoining.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", _, link))
-        else None
+    val messagesToShow =
+      if (isNewPartnerFlow)
+        Option.when(isMissingMandatoryDetails)(messages("partnerDetailsCheckYourAnswers.error.missingDetails")).toSeq
+      else {
+        val leaving =
+          if (isDueToLeave) dateOfLeaving.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", _, link))
+          else None
 
-      val contactUs = Option.when(isNewPartnerSubmitted && leaving.isEmpty && joining.isEmpty)(
-        messages("partnerDetailsCheckYourAnswers.error.contactUs", link)
-      )
+        val joining =
+          if (isDueToJoin) dateOfJoining.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", _, link))
+          else None
 
-      Seq(leaving, joining, contactUs).flatten.map(Html(_))
-    }
+        val contactUs = Option.when(leaving.isEmpty && joining.isEmpty)(
+          messages("partnerDetailsCheckYourAnswers.error.contactUs", link)
+        )
+
+        Seq(leaving, joining, contactUs).flatten
+      }
+
+    messagesToShow.map(Html(_))
+  }
 
   // --- Summary lists ---
 
@@ -160,16 +175,14 @@ case class CheckPartnerDetailsViewModel(
 
   // --- Business details rows ---
 
-  private def typeOfBusinessRow(implicit messages: Messages): SummaryListRow = {
-    val label = labelFor("typeOfBusiness")
-    // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode).url, label)
-
-    typeOfBusiness match {
-      case Some(bt) => createSummaryListRow(label, Text(messages(s"businessType.$bt")), if (isNewPartnerFlow) Seq(change) else Nil)
-      case None     => createSummaryListRow(label, Text("Add type of business"), Seq(change)) // TODO: move to messages
-    }
-  }
+  private def typeOfBusinessRow(implicit messages: Messages): SummaryListRow =
+    requiredRow(
+      "typeOfBusiness",
+      typeOfBusiness.map(bt => messages(s"businessType.$bt")),
+      // NOTE: routing will be done with the integration ticket
+      routes.PartnerDetailsBusinessTypeController.onPageLoad(index, NormalMode).url,
+      isNewPartnerFlow
+    )
 
   private def businessNameRow(implicit messages: Messages): Option[SummaryListRow] =
     typeOfBusiness.map { bt =>
@@ -537,7 +550,7 @@ object CheckPartnerDetailsViewModel {
       maybeSubmitted            = isSubmitted,
       isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
       isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
-      isMissingMandatoryFields  = PartnerMandatoryFields.isMissing(userAnswers, index.toString)
+      isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index.toString)
     )
   }
 
