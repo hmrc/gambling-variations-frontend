@@ -245,3 +245,5 @@ POST       /change-registration-details/licences-and-premises/addresses         
 
 GET        /change-registration-details/controlling-body-details/business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onSubmit(mode: Mode = NormalMode)
+
+GET        /checkControllingBodyDetails                       controllers.CheckControllingBodyDetailsController.onPageLoad()

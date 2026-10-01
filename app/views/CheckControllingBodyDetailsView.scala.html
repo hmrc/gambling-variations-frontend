@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages.controlbodydetails
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton
+)
 
-import models.CorrespondenceDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+@()(implicit request: Request[_], messages: Messages)
 
-case object ControllingBodyCorrespondenceSectionPage extends QuestionPage[CorrespondenceDetails] {
+@layout(pageTitle = titleNoForm(messages("checkControllingBodyDetails.title"))) {
 
-  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
-
-  override def toString: String = "correspondenceSection"
+    <h1 class="govuk-heading-xl">@messages("checkControllingBodyDetails.heading")</h1>
 }
