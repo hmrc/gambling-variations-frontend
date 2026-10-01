@@ -59,7 +59,6 @@ class PartnerDateOfJoiningController @Inject() (
           implicit val lang: Lang = messagesApi.preferred(request).lang
 
           val newIndex = PartnerUtils.parseIndex(index, mode)
-
           val registrationDate = getRegistrationDate(businessDetails)
 
           val latestDate = calculateLatestDate(registrationDate)

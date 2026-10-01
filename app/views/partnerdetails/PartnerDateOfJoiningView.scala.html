@@ -18,59 +18,41 @@
 @import views.html.components.Caption
 
     @this(
-    layout: templates.Layout,
-    formHelper: FormWithCSRF,
-    govukErrorSummary: GovukErrorSummary,
-    govukDateInput: GovukDateInput,
-    govukButton: GovukButton,
-    caption: Caption
+        layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        govukErrorSummary: GovukErrorSummary,
+        govukDateInput: GovukDateInput,
+        govukButton: GovukButton,
+        caption: Caption
     )
 
-    @(form: Form[_], index: String, mode: Mode, registrationDate: String, latestDate: String)(
-    implicit request: Request[_],
-    messages: Messages
-    )
+    @(form: Form[_], index: String, mode: Mode, registrationDate: String, latestDate: String)(implicit request: Request[_],messages: Messages)
 
-@layout(
-    pageTitle = title(
-    form,
-    messages("partnerDateOfJoining.title"),
-    Some("changeRegistrationDetails.caption")
-    )
-    ) {
+@layout(pageTitle = title(form, messages("partnerDateOfJoining.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(
-    action = controllers.partnerdetails.routes.PartnerDateOfJoiningController.onSubmit(index, mode),
-    Symbol("autoComplete") -> "off"
-    ) {
+        @formHelper(action = controllers.partnerdetails.routes.PartnerDateOfJoiningController.onSubmit(index, mode),Symbol("autoComplete") -> "off") {
 
-    @if(form.errors.nonEmpty) {
-    @govukErrorSummary(
-    ErrorSummaryViewModel(
-    form,
-    errorLinkOverrides = Map("value" -> "value.day")
-    )
-    )
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(
+                ErrorSummaryViewModel(
+                form,
+                errorLinkOverrides = Map("value" -> "value.day")
+                )
+            )
+        }
+
+        @caption(messages("changeRegistrationDetails.caption"))
+
+        @govukDateInput(
+            DateViewModel(
+                field = form("value"),
+                legend = LegendViewModel(messages("partnerDateOfJoining.heading")).asPageHeading(Large)
+            )
+            .withHint(HintViewModel(messages("partnerDateOfJoining.hint", latestDate)))
+        )
+
+        @govukButton(
+          ButtonViewModel(messages("site.continue"))
+        )
     }
-
-    @caption(messages("changeRegistrationDetails.caption"))
-
-    @govukDateInput(
-    DateViewModel(
-    field = form("value"),
-    legend = LegendViewModel(
-    messages("partnerDateOfJoining.heading")
-    ).asPageHeading(Large)
-    )
-    .withHint(
-    HintViewModel(
-    messages("partnerDateOfJoining.hint", latestDate)
-    )
-    )
-    )
-
-    @govukButton(
-    ButtonViewModel(messages("site.continue"))
-    )
-}
 }
