@@ -146,8 +146,12 @@ POST       /change-registration-details/partner-details/change-business-country-
 
 GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
 POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
+
 GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
 GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String)
+
+GET        //change-registration-details/partner-details/remove-partner-yes-no/:index                        controllers.partnerdetails.PartnerDetailsRemovePartnerYesNoController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       //change-registration-details/partner-details/remove-partner-yes-no/:index                        controllers.partnerdetails.PartnerDetailsRemovePartnerYesNoController.onSubmit(index: String, mode: Mode = NormalMode)
 
 GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
 GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
