@@ -142,15 +142,18 @@ POST       /change-registration-details/partner-details/change-foreign-corporate
 GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad(page: Option[Int])
 POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit(page: Option[Int])
 
-GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
-GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String)
+GET       /change-registration-details/partner-details/remove/:partnerNumber              controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String, mode: Mode = NormalMode)
+GET       /change-registration-details/partner-details/change-remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String, mode: Mode = CheckMode)
+
+GET       /change-registration-details/partner-details/details/:partnerNumber             controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String, mode: Mode = NormalMode)
+GET       /change-registration-details/partner-details/change-details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String, mode: Mode = CheckMode)
 
 GET        /change-registration-details/partner-details/business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onSubmit(index: String, mode: Mode = NormalMode)
 GET        /change-registration-details/partner-details/change-business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index: String, mode: Mode = CheckMode)
 POST       /change-registration-details/partner-details/change-business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onSubmit(index: String, mode: Mode = CheckMode)
 
-GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
+GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String, mode: Mode = NormalMode)
 GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 

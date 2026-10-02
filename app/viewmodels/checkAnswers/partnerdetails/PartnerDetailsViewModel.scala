@@ -18,10 +18,11 @@ package viewmodels.checkAnswers.partnerdetails
 
 import config.FrontendAppConfig
 import controllers.partnerdetails.routes
-import models.UserAnswers
+import models.{CheckMode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
 import play.api.i18n.Messages
+import utils.PartnerUtils
 
 import scala.collection.Seq
 import java.time.LocalDate
@@ -37,7 +38,7 @@ final case class PartnerDetailsViewModel(
 )
 
 final case class PartnerDetailsRow(
-  partnerNumber: BusinessNumberOrIndex,
+  index: BusinessNumberOrIndex,
   name: String,
   status: String,
   statusDetails: Option[String],
@@ -138,26 +139,20 @@ object PartnerDetailsViewModel {
 
               val removeUrl =
                 if (canRemove) {
-                  Some(
-                    routes.PartnerDetailsController
-                      .onRemove(partnerNumber.toString) // TODO needs Normal/CheckMode
-                      .url
-                  )
+                  Some(onRemoveRoute(partnerNumber))
                 } else {
                   None
                 }
 
               println("partnerNumber: " + partnerNumber)
               PartnerDetailsRow(
-                partnerNumber = partnerNumber,
-                name          = name,
-                status        = status,
-                statusDetails = statusDetails,
-                partnerDetailsUrl = routes.PartnerDetailsController
-                  .onPartnerDetails(partnerNumber.toString) // TODO needs Normal/CheckMode
-                  .url,
-                removeUrl = removeUrl,
-                canRemove = canRemove
+                index             = partnerNumber,
+                name              = name,
+                status            = status,
+                statusDetails     = statusDetails,
+                partnerDetailsUrl = onPartnerDetailsRoute(partnerNumber),
+                removeUrl         = removeUrl,
+                canRemove         = canRemove
               )
             }
         }
@@ -179,4 +174,27 @@ object PartnerDetailsViewModel {
     )
 
   }
+
+  private def onPartnerDetailsRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
+    case _: Int =>
+      routes.PartnerDetailsController
+        .onPartnerDetails(partnerNumber.toString, NormalMode)
+        .url
+    case _: String =>
+      routes.PartnerDetailsController
+        .onPartnerDetails(partnerNumber.toString, CheckMode)
+        .url
+  }
+
+  private def onRemoveRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
+    case _: Int =>
+      routes.PartnerDetailsController
+        .onRemove(partnerNumber.toString, NormalMode)
+        .url
+    case _: String =>
+      routes.PartnerDetailsController
+        .onRemove(partnerNumber.toString, CheckMode)
+        .url
+  }
+
 }

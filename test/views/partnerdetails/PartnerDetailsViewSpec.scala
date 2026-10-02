@@ -60,7 +60,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
       canRemove: Boolean = true
     ): PartnerDetailsRow =
       PartnerDetailsRow(
-        partnerNumber     = "0",
+        index             = "0",
         name              = name,
         status            = status,
         statusDetails     = statusDetails,
@@ -533,7 +533,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
       val partners =
         Seq(
           PartnerDetailsRow(
-            partnerNumber     = "0",
+            index             = "0",
             name              = "Alpha Partners",
             status            = messages("partnerDetails.status.active"),
             statusDetails     = None,
@@ -542,7 +542,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
             canRemove         = true
           ),
           PartnerDetailsRow(
-            partnerNumber     = "1",
+            index             = "1",
             name              = "Beta Partners",
             status            = messages("partnerDetails.status.dueToJoin"),
             statusDetails     = Some("10 Sep 2026"),
