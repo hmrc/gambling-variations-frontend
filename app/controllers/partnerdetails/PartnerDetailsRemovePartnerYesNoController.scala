@@ -18,9 +18,10 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import forms.partnerdetails.PartnerDetailsRemovePartnerYesNoFormProvider
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsRemovePartnerYesNoPage
+import pages.BusinessNumberOrIndex
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,7 +39,7 @@ class PartnerDetailsRemovePartnerYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsRemovePartnerYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsRemovePartnerYesNoView
@@ -48,29 +49,44 @@ class PartnerDetailsRemovePartnerYesNoController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
+  private def partnerName(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Option[String] =
+    userAnswers
+      .get(PartnerDetailsBusinessNamePage(index))
+      .orElse(userAnswers.get(PartnerDetailsSoleProprietorPage(index)).map(_.fullName))
+
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsRemovePartnerYesNoPage(newIndex)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+    partnerName(request.userAnswers, newIndex) match {
+      case Some(name) =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsRemovePartnerYesNoPage(newIndex)).fold(form)(form.fill)
+        Ok(view(preparedForm, index, name))
+      case None =>
+        Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
-
-    Ok(view(preparedForm, index, mode, "NAME GOES HERE"))
   }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode, ""))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemovePartnerYesNoPage(newIndex), value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newIndex), mode, updatedAnswers))
-      )
+    partnerName(request.userAnswers, newIndex) match {
+      case None =>
+        Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
+
+      case Some(name) =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, name))),
+            wantToRemove =>
+              for {
+                withAnswer <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemovePartnerYesNoPage(newIndex), wantToRemove))
+                withChosen <- Future.fromTry(withAnswer.set(PartnerDetailsChosenPartnerToRemovePage, newIndex.toString))
+                _          <- sessionRepository.set(withChosen)
+              } yield
+                if (wantToRemove) Redirect(controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad())
+                else Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newIndex), mode, withChosen))
+          )
+    }
   }
 }
