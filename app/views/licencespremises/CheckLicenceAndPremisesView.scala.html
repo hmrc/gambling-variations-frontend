@@ -23,7 +23,6 @@
         caption: Caption,
         paragraph: Paragraph,
         h2: H2,
-        paragraphWithLink: ParagraphMessageWithLink,
         govukSummaryList: GovukSummaryList,
         govukButton: GovukButton
 )
@@ -45,13 +44,10 @@
     @if(viewModel.showSendByPost) {
         @h2("checkLicenceAndPremises.byPost.heading")
 
-        @paragraphWithLink(
-            linkMessage = messages("checkLicenceAndPremises.byPost.link"),
-            message2    = Some(messages("checkLicenceAndPremises.byPost.p1")),
-            linkUrl     = "https://www.tax.service.gov.uk/print-and-post/form/Customs/1.0/MGD5/mgd5.xdp",
-            linkRel     = "noreferrer noopener",
-            target      = "_blank"
-        )
+        @* There must not be any whitespace between the link and the text, since it would show as a space before the comma *@
+        <p class="govuk-body">
+            <a href="https://www.tax.service.gov.uk/print-and-post/form/Customs/1.0/MGD5/mgd5.xdp" class="govuk-link" rel="noreferrer noopener" target="_blank">@messages("checkLicenceAndPremises.byPost.link")</a>@messages("checkLicenceAndPremises.byPost.p1")
+        </p>
 
         <p class="govuk-body">
             @for(line <- 1 to 6) {
