@@ -24,6 +24,7 @@ import pages.BusinessNumberOrIndex
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.{JsArray, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -32,6 +33,7 @@ import views.html.partnerdetails.PartnerDetailsRemovePartnerYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
 class PartnerDetailsRemovePartnerYesNoController @Inject() (
   override val messagesApi: MessagesApi,
@@ -60,7 +62,7 @@ class PartnerDetailsRemovePartnerYesNoController @Inject() (
     partnerName(request.userAnswers, newIndex) match {
       case Some(name) =>
         val preparedForm = request.userAnswers.get(PartnerDetailsRemovePartnerYesNoPage(newIndex)).fold(form)(form.fill)
-        Ok(view(preparedForm, index, name))
+        Ok(view(preparedForm, index, mode, name))
       case None =>
         Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
@@ -77,16 +79,34 @@ class PartnerDetailsRemovePartnerYesNoController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, name))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode, name))),
             wantToRemove =>
-              for {
-                withAnswer <- Future.fromTry(request.userAnswers.set(PartnerDetailsRemovePartnerYesNoPage(newIndex), wantToRemove))
-                withChosen <- Future.fromTry(withAnswer.set(PartnerDetailsChosenPartnerToRemovePage, newIndex.toString))
-                _          <- sessionRepository.set(withChosen)
-              } yield
-                if (wantToRemove) Redirect(controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad())
-                else Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newIndex), mode, withChosen))
+              if (!wantToRemove)
+                Future.successful(Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newIndex), mode, request.userAnswers)))
+              else
+                newIndex match {
+                  case businessNumber: String =>
+                    for {
+                      updated <- Future.fromTry(request.userAnswers.set(PartnerDetailsChosenPartnerToRemovePage, businessNumber))
+                      _       <- sessionRepository.set(updated)
+                    } yield Redirect(controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad())
+
+                  case newPartnerIndex: Int =>
+                    for {
+                      updated <- Future.fromTry(removeNewPartner(request.userAnswers, newPartnerIndex))
+                      _       <- sessionRepository.set(updated)
+                    } yield Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnerIndex), mode, updated)) 
+                }
           )
     }
+  }
+
+  private def removeNewPartner(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
+    val newPartners = (userAnswers.data \ "newPartners").asOpt[JsArray].getOrElse(JsArray())
+
+    if (index < 0 || index >= newPartners.value.size)
+      Failure(new IndexOutOfBoundsException(s"No new partner at index $index"))
+    else
+      Success(userAnswers.copy(data = userAnswers.data ++ Json.obj("newPartners" -> JsArray(newPartners.value.patch(index, Nil, 1)))))
   }
 }

@@ -26,15 +26,17 @@
     caption: Caption
 )
 
-@(form: Form[_], index: String, partnerName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: String, mode: Mode, partnerName: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("partnerDetailsRemovePartnerYesNo.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onSubmit(index), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onSubmit(index, mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
+
+        @caption(messages("changeRegistrationDetails.caption"))
 
         @govukRadios(
             RadiosViewModel.yesNo(

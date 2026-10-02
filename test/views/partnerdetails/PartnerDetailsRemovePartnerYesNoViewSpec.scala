@@ -1,3 +1,19 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package views.partnerdetails
 
 import base.SpecBase
@@ -7,11 +23,13 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.PartnerDetailsRemovePartnerYesNoView
+import views.html.partnerdetails.PartnerDetailsRemovePartnerYesNoView
 
 class PartnerDetailsRemovePartnerYesNoViewSpec extends SpecBase {
 
   private val form = new PartnerDetailsRemovePartnerYesNoFormProvider()()
+  private val partnerTradingName = "ABC Trading"
+  private val newPartnersIndex = 0.toString
 
   "PartnerDetailsRemovePartnerYesNoView" - {
 
@@ -23,7 +41,7 @@ class PartnerDetailsRemovePartnerYesNoViewSpec extends SpecBase {
 
         val view = application.injector.instanceOf[PartnerDetailsRemovePartnerYesNoView]
 
-        val html = view(form, NormalMode)(FakeRequest(), messages(application))
+        val html = view(form, newPartnersIndex, NormalMode, partnerTradingName)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
@@ -32,7 +50,7 @@ class PartnerDetailsRemovePartnerYesNoViewSpec extends SpecBase {
         )
 
         document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("partnerDetailsRemovePartnerYesNo.heading")
+          messages(application)("partnerDetailsRemovePartnerYesNo.heading", partnerTradingName)
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption")
@@ -56,7 +74,7 @@ class PartnerDetailsRemovePartnerYesNoViewSpec extends SpecBase {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(boundForm, NormalMode)(FakeRequest(), messages(application))
+        val html = view(boundForm, newPartnersIndex, NormalMode, partnerTradingName)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
