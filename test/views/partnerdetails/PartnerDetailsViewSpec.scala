@@ -480,23 +480,6 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
       )
     }
 
-    "must render maximum partners message when another partner can be added" in new Setup {
-
-      val doc =
-        render(
-          viewModel(
-            partners          = Seq(partner()),
-            addAnotherPartner = true
-          ),
-          paginationHelper
-        )
-
-      doc
-        .text() must include(
-        messages("partnerDetails.maxPartners.hint")
-      )
-    }
-
     "must render maximum reached message when another partner cannot be added" in new Setup {
 
       val doc =

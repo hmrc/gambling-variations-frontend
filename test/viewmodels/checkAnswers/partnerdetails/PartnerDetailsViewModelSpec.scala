@@ -157,12 +157,19 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
     }
 
     "show active status when no future join or leave dates exist" in {
+      val pastDate = LocalDate.of(2025, 1, 1)
 
       val answers =
         emptyUserAnswers
           .set(
             PartnerDetailsMgdRegNumberPage(businessNumber1),
             "XWM00000001762"
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsDateOfJoiningPage(businessNumber1),
+            pastDate
           )
           .success
           .value
@@ -177,7 +184,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
 
       val row = viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.active")
+      row.status mustBe messages("partnerDetails.status.active", pastDate)
       row.statusDetails mustBe None
     }
 

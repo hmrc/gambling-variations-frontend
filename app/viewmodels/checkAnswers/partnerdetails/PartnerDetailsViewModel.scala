@@ -110,6 +110,8 @@ object PartnerDetailsViewModel {
                       case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
                         messages("partnerDetails.status.dueToJoin")
 
+                      case Some(joiningDate) =>
+                        messages("partnerDetails.status.active", joiningDate.toString)
                       case _ =>
                         messages("partnerDetails.status.active")
                     }
