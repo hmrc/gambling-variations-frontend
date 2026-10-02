@@ -50,18 +50,6 @@ class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with
   private val emptyUserAnswersExistingPartners =
     userAnswersPartnerDetailsMinimalValidData
 
-  private val userAnswersNewPartners =
-    userAnswersPartnerDetailsNewPartners
-      .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), BusinessType.Corporatebody)
-      .success
-      .value
-      .set(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), true)
-      .success
-      .value
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-
   private val emptyUserAnswersNewPartners =
     userAnswersPartnerDetailsMinimalValidData
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)

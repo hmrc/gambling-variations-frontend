@@ -17,17 +17,8 @@
 package forms.licencespremises
 
 import base.SpecBase
-import forms.behaviours.{BooleanFieldBehaviours, CheckboxFieldBehaviours}
-import forms.licencespremises.OtherLicencesAndPermitsGBFormProvider
-import models.UserAnswers
-import models.licencespremises.OtherLicencesAndPermitsGB
-import models.licencespremises.OtherLicencesAndPermitsGB.*
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
-import play.api.i18n.Messages
-import play.api.libs.json.Json
-import play.api.test.Helpers.stubMessages
-
-import java.time.LocalDate
 
 class PremisesAddressListFormProviderSpec extends SpecBase with BooleanFieldBehaviours {
 
