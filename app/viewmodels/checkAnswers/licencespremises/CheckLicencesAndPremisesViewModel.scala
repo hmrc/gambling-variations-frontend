@@ -56,6 +56,10 @@ case class CheckLicencesAndPremisesViewModel(
   private val provideAddresses: LicencesAndPremisesRadioOptions =
     provideAddressesAnswer.getOrElse(if (premisesCount > 0) Online else ByPost)
 
+  // Without an answer or any premises to derive it from, the method must be chosen on the provide premises addresses screen before continuing
+  private val isMissingProvideAddresses: Boolean =
+    isPremisesDetailsRequired && provideAddressesAnswer.isEmpty && premisesCount == 0
+
   private val isMissingOnlinePremises: Boolean =
     isPremisesDetailsRequired && provideAddresses == Online && premisesCount == 0
 
@@ -68,7 +72,9 @@ case class CheckLicencesAndPremisesViewModel(
     isPremisesDetailsRequired && provideAddresses == ByPost
 
   val continueUrl: String =
-    if (isMissingOnlinePremises) {
+    if (isMissingProvideAddresses) {
+      routes.LicencesPremisesController.onPageLoad().url
+    } else if (isMissingOnlinePremises) {
       findPremisesAddressUrl
     } else {
       controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
