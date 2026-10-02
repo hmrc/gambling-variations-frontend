@@ -22,10 +22,12 @@ import controllers.routes
 import models.*
 import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
+import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
+import pages.controllingbody.ControllingBodyChangeScreenerPage
 import pages.correspondencedetails.*
 import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.partnerdetails.*
@@ -1206,6 +1208,47 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
 
+    }
+
+    "normal mode controlling body details navigation" - {
+
+      "should route ControllingBodyChangeScreenerPage to Index when the answer is EditDetails" in {
+        val answers =
+          emptyAnswers
+            .set(ControllingBodyChangeScreenerPage, EditDetails)
+            .success
+            .value
+
+        navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, answers) mustBe
+          routes.IndexController.onPageLoad()
+      }
+
+      "should route ControllingBodyChangeScreenerPage to ControllingBodyBusinessType when the answer is ProvideNew" in {
+        val answers =
+          emptyAnswers
+            .set(ControllingBodyChangeScreenerPage, ProvideNew)
+            .success
+            .value
+
+        navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+      }
+
+      "should route ControllingBodyChangeScreenerPage to ChangeRegistrationDetails when the answer is KeepSame" in {
+        val answers =
+          emptyAnswers
+            .set(ControllingBodyChangeScreenerPage, KeepSame)
+            .success
+            .value
+
+        navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, answers) mustBe
+          routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+
+      "should route ControllingBodyChangeScreenerPage to SystemError when there is no answer" in {
+        navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
     }
   }
 }
