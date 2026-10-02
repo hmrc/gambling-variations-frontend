@@ -66,6 +66,22 @@ class PaginationServiceSpec extends SpecBase with Matchers {
         result.paginationViewModel.next mustBe defined
       }
 
+      "must correctly align new partners indexes and existing partners business numbers" in {
+        val testDataExisting = createTestExistingPartnerDetails(25)
+        val testDataNew = createTestNewCompletedPartnerDetails(25)
+        val result = paginationService.paginatePartnerDetails(testDataNew, testDataExisting, currentPage = 3, elementsPerPage = 10, baseUrl = "/test")
+
+        result.paginatedData.slice(0, 5).forall(e => e.isInstanceOf[Int]) mustBe true
+        result.paginatedData.slice(5, 10).forall(e => e.isInstanceOf[String]) mustBe true
+
+        result.paginatedData.length mustBe 10
+        result.currentPage mustBe 3
+        result.totalPages mustBe 5
+        result.totalRecords mustBe 50
+        result.paginationViewModel.previous mustBe defined
+        result.paginationViewModel.next mustBe defined
+      }
+
       "must handle empty data" in {
         val result = paginationService.paginatePartnerDetails(Seq.empty, Seq.empty, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
