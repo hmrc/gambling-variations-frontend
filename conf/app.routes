@@ -237,3 +237,8 @@ POST       /change-registration-details/licences-and-premises/addresses         
 
 GET        /change-registration-details/controlling-body-details/business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
