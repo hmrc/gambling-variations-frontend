@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partnerdetails.AddAnotherPartnerFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.partnerdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -166,7 +166,7 @@ class PartnerDetailsController @Inject() (
         )
     }
 
-  def onPartnerDetails(partnerNumber: String): Action[AnyContent] =
+  def onPartnerDetails(partnerNumber: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
       Redirect(
@@ -174,23 +174,26 @@ class PartnerDetailsController @Inject() (
       )
     }
 
-  def onRemove(partnerNumber: String): Action[AnyContent] =
+  def onRemove(partnerNumber: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-
-      for {
-        updatedAnswers <-
-          Future.fromTry(
-            request.userAnswers.set(
-              PartnerDetailsChosenPartnerToRemovePage,
-              partnerNumber
-            )
+      mode match {
+        case NormalMode =>
+          // TODO journey for removing newPartners
+          Future.successful(Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)))
+        case CheckMode =>
+          for {
+            updatedAnswers <-
+              Future.fromTry(
+                request.userAnswers.set(
+                  PartnerDetailsChosenPartnerToRemovePage,
+                  partnerNumber
+                )
+              )
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(
+            controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
           )
-
-        _ <- sessionRepository.set(updatedAnswers)
-
-      } yield Redirect(
-        controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
-      )
+      }
     }
 
   private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int): PaginationResult = {

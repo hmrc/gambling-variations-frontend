@@ -38,12 +38,7 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
     elementsPerPage: Int,
     baseUrl: String
   ): PaginationResult = {
-
     val sortedPartnerDetails: Seq[BusinessNumberOrIndex] = (completedNewPartners ++ existingPartnerDetails.sortBy(_.toLong)).take(maxRecords)
-
-//    val sortedPartnerDetails = existingPartnerDetails
-//      .sortBy(_.toLong)
-//      .take(maxRecords)
 
     val totalRecords = sortedPartnerDetails.length
     val totalPages = calculateTotalPages(totalRecords)

@@ -20,6 +20,8 @@ import base.SpecBase
 import org.scalatest.matchers.must.Matchers
 import viewmodels.govuk.PaginationFluency.*
 
+import scala.util.Random
+
 class PaginationServiceSpec extends SpecBase with Matchers {
 
   val paginationService = new PaginationService(10, 100, 5)
@@ -29,8 +31,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
     "paginateDirectDebits" - {
 
       "must return correct pagination for first page with 10 records per page" in {
-        val testData = createTestPartnerDetails(5)
-        val result = paginationService.paginatePartnerDetails(testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val testData = createTestExistingPartnerDetails(5)
+        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 5
         result.currentPage mustBe 1
@@ -41,8 +43,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       }
 
       "must return correct pagination for last page" in {
-        val testData = createTestPartnerDetails(25)
-        val result = paginationService.paginatePartnerDetails(testData, currentPage = 3, elementsPerPage = 10, baseUrl = "/test")
+        val testData = createTestExistingPartnerDetails(25)
+        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 3, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 5
         result.currentPage mustBe 3
@@ -53,8 +55,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       }
 
       "must return correct pagination for middle page" in {
-        val testData = createTestPartnerDetails(25)
-        val result = paginationService.paginatePartnerDetails(testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
+        val testData = createTestExistingPartnerDetails(25)
+        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 10
         result.currentPage mustBe 2
@@ -65,7 +67,7 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       }
 
       "must handle empty data" in {
-        val result = paginationService.paginatePartnerDetails(Seq.empty, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val result = paginationService.paginatePartnerDetails(Seq.empty, Seq.empty, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 0
         result.currentPage mustBe 1
@@ -75,8 +77,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       }
 
       "must limit records to maximum of 99" in {
-        val testData = createTestPartnerDetails(150)
-        val result = paginationService.paginatePartnerDetails(testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val testData = createTestExistingPartnerDetails(150)
+        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.totalRecords mustBe 100
         result.totalPages mustBe 10
@@ -91,7 +93,7 @@ class PaginationServiceSpec extends SpecBase with Matchers {
           "1234567"
         )
 
-        val result = paginationService.paginatePartnerDetails(testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.head mustBe "12345"
         result.paginatedData(1) mustBe "123456"
@@ -101,18 +103,18 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       }
 
       "must handle invalid page numbers gracefully" in {
-        val testData = createTestPartnerDetails(5)
+        val testData = createTestExistingPartnerDetails(5)
 
-        val resultNegative = paginationService.paginatePartnerDetails(testData, currentPage = -1, elementsPerPage = 10, baseUrl = "/test")
+        val resultNegative = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = -1, elementsPerPage = 10, baseUrl = "/test")
         resultNegative.currentPage mustBe 1
 
-        val resultTooHigh = paginationService.paginatePartnerDetails(testData, currentPage = 999, elementsPerPage = 10, baseUrl = "/test")
+        val resultTooHigh = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 999, elementsPerPage = 10, baseUrl = "/test")
         resultTooHigh.currentPage mustBe 1
       }
 
       "must generate correct pagination links" in {
-        val testData = createTestPartnerDetails(25)
-        val result = paginationService.paginatePartnerDetails(testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
+        val testData = createTestExistingPartnerDetails(25)
+        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginationViewModel.previous.get.href mustBe "/test?page=1"
         result.paginationViewModel.next.get.href mustBe "/test?page=3"
@@ -121,8 +123,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       }
 
       "must not show pagination when only one page" in {
-        val testData = createTestPartnerDetails(2)
-        val result = paginationService.paginatePartnerDetails(testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val testData = createTestExistingPartnerDetails(2)
+        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginationViewModel.items.length mustBe 0
         result.paginationViewModel.previous mustBe None
@@ -131,9 +133,14 @@ class PaginationServiceSpec extends SpecBase with Matchers {
     }
   }
 
-  private def createTestPartnerDetails(count: Int): Seq[String] = {
+  private def createTestExistingPartnerDetails(count: Int): Seq[String] = {
     (1 to count).map { i =>
       i.toString
     }
+  }
+  // TODO not used in these tests RN, make new tests to count both
+  private def createTestNewCompletedPartnerDetails(count: Int): Seq[Int] = {
+    val max = if count > 100 then count else 100
+    Random.shuffle(1 to 100).take(count)
   }
 }
