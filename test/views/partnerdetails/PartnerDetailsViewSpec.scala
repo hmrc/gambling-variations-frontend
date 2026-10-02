@@ -20,6 +20,7 @@ import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import pages.BusinessNumberOrIndex
 import play.api.data.Form
 import play.api.data.Forms.boolean
 import play.api.i18n.Messages
@@ -52,6 +53,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
         .preferred(request)
 
     def partner(
+      index: BusinessNumberOrIndex = "0",
       name: String = "Test Partner",
       status: String = messages("partnerDetails.status.active"),
       statusDetails: Option[String] = None,
@@ -308,13 +310,48 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
       tableText must include("5 Sep 2026")
     }
 
-    "must render remove link when partner can be removed" in new Setup {
+    "must render remove link when new partner can be removed" in new Setup {
 
       val doc =
         render(
           viewModel(
             partners = Seq(
               partner(
+                index     = 1,
+                name      = "ABC Partners",
+                removeUrl = Some("/partner-details/change-remove/1"),
+                canRemove = true
+              )
+            )
+          ),
+          paginationHelper
+        )
+
+      val links =
+        doc
+          .select("tbody.govuk-table__body a.govuk-link")
+
+      links.size() mustBe 2
+
+      val removeLink = links.last()
+
+      removeLink.attr("href") mustBe "/partner-details/change-remove/1"
+
+      removeLink.text() must include(
+        messages("site.remove")
+      )
+
+      removeLink.text() must include("ABC Partners")
+    }
+
+    "must render remove link when existing partner can be removed" in new Setup {
+
+      val doc =
+        render(
+          viewModel(
+            partners = Seq(
+              partner(
+                index     = "0",
                 name      = "ABC Partners",
                 removeUrl = Some("/partner-details/remove/0"),
                 canRemove = true

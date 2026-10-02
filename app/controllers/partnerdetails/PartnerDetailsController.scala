@@ -220,6 +220,5 @@ class PartnerDetailsController @Inject() (
           .exists(_.isBefore(todayDate))
 
       hasPartner && !hasPastLeavingDate
-      true
     }
 }

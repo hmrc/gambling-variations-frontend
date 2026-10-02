@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.AddAnotherPartnerFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{CheckMode, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -56,12 +56,12 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
 
   private lazy val onPartnerDetailsRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onPartnerDetails(businessNumber1)
+      .onPartnerDetails(businessNumber1, CheckMode) // TODO added checkMode
       .url
 
   private lazy val onRemoveRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onRemove(businessNumber1)
+      .onRemove(businessNumber1, CheckMode) // TODO added checkMode
       .url
 
   private val userAnswersWithPartner =

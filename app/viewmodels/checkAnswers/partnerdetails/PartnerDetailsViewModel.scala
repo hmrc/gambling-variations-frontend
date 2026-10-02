@@ -57,8 +57,6 @@ object PartnerDetailsViewModel {
     userAnswers: UserAnswers,
     frontendAppConfig: FrontendAppConfig
   )(implicit messages: Messages): PartnerDetailsViewModel = {
-    println("partnerNUmbers: " + partnerNumbers)
-
     val activePartnerCount =
       partnerNumbers.count { partnerNumber =>
 
@@ -75,7 +73,6 @@ object PartnerDetailsViewModel {
         }
       }
 
-    println("activepartnerscount: " + activePartnerCount)
     val rows: Seq[PartnerDetailsRow] =
       partnerNumbers
         .flatMap { partnerNumber =>
@@ -144,7 +141,6 @@ object PartnerDetailsViewModel {
                   None
                 }
 
-              println("partnerNumber: " + partnerNumber)
               PartnerDetailsRow(
                 index             = partnerNumber,
                 name              = name,
