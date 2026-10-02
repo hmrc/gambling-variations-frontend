@@ -21,13 +21,14 @@ import controllers.routes
 import forms.partnerdetails.PartnerDetailsRemovePartnerYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -67,6 +68,15 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
       .success
       .value
 
+  private def newPartnersIn(userAnswers: UserAnswers): Seq[JsObject] =
+    (userAnswers.data \ "newPartners").asOpt[JsArray].map(_.value.toSeq.map(_.as[JsObject])).getOrElse(Seq.empty)
+
+  private def mockedSessionRepository: SessionRepository = {
+    val mockSessionRepository = mock[SessionRepository]
+    when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+    mockSessionRepository
+  }
+
   "partners" - {
     "PartnerDetailsRemovePartnerYesNo Controller" - {
 
@@ -82,7 +92,7 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val view = application.injector.instanceOf[PartnerDetailsRemovePartnerYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, businessNumber1, NormalMode, testBusinessName)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, businessNumber1, CheckMode, testBusinessName)(request, messages(application)).toString
         }
       }
 
@@ -104,9 +114,9 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form.fill(true), businessNumber1, NormalMode, testBusinessName)(request,
-                                                                                                                 messages(application)
-                                                                                                                ).toString
+          contentAsString(result) mustEqual view(form.fill(true), businessNumber1, CheckMode, testBusinessName)(request,
+                                                                                                                messages(application)
+                                                                                                               ).toString
         }
       }
 
@@ -146,7 +156,7 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val view = application.injector.instanceOf[PartnerDetailsRemovePartnerYesNoView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(form, businessNumber1, NormalMode, expectedName)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, businessNumber1, CheckMode, expectedName)(request, messages(application)).toString
         }
       }
 
@@ -167,11 +177,9 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
         }
       }
 
-      "must save the answer and chosen partner, and redirect to the delete date page when yes is submitted" in {
+      "must save the chosen partner and redirect to the delete date page when yes is submitted" in {
 
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val mockSessionRepository = mockedSessionRepository
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswersExistingPartners))
@@ -185,9 +193,6 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
 
           val expectedAnswers =
             userAnswersExistingPartners
-              .set(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
-              .success
-              .value
               .set(PartnerDetailsChosenPartnerToRemovePage, businessNumber1)
               .success
               .value
@@ -204,11 +209,9 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
         }
       }
 
-      "must redirect to the next page when no is submitted" in {
+      "must redirect to the next page without saving when no is submitted" in {
 
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val mockSessionRepository = mockedSessionRepository
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswersExistingPartners))
@@ -227,6 +230,7 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
+          verify(mockSessionRepository, never()).set(any())
         }
       }
 
@@ -246,7 +250,7 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, businessNumber1, NormalMode, testBusinessName)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode, testBusinessName)(request, messages(application)).toString
         }
       }
 
@@ -301,7 +305,6 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
     }
   }
 
-  // might not need this
   "newPartners" - {
     "PartnerDetailsRemovePartnerYesNo Controller" - {
 
@@ -323,11 +326,9 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
         }
       }
 
-      "must save the answer and chosen partner, and redirect to the delete date page when yes is submitted" in {
+      "must delete the new partner and redirect to the next page when yes is submitted" in {
 
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val mockSessionRepository = mockedSessionRepository
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswersNewPartners))
@@ -338,16 +339,6 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
             .build()
 
         running(application) {
-
-          val expectedAnswers =
-            userAnswersNewPartners
-              .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
-              .success
-              .value
-              .set(PartnerDetailsChosenPartnerToRemovePage, newPartnersIndex1.toString)
-              .success
-              .value
-
           val request =
             FakeRequest(POST, removePartnerYesNoRouteNewPartners)
               .withFormUrlEncodedBody(("value", "true"))
@@ -355,20 +346,95 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual deleteDateRoute
-          verify(mockSessionRepository).set(expectedAnswers)
+          redirectLocation(result).value mustEqual onwardRoute.url
+
+          val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(mockSessionRepository).set(captor.capture())
+          val saved = captor.getValue
+
+          newPartnersIn(saved).size mustEqual newPartnersIn(userAnswersNewPartners).size - 1
+          saved.get(PartnerDetailsChosenPartnerToRemovePage) mustBe None
         }
       }
 
-      "must redirect to SystemError for a GET when the partner has no name" in {
+      "must shift later new partners down when an earlier one is deleted" in {
 
-        val userAnswersNoName: UserAnswers =
-          userAnswersNewPartners.remove(PartnerDetailsBusinessNamePage(newPartnersIndex1)).success.value
+        val twoNewPartners: UserAnswers =
+          UserAnswers(
+            mgdRegNumber,
+            cleanedDataNewPartners() ++ Json.obj(
+              "newPartners" -> Json.arr(
+                Json.obj("partnerDetailsBusinessName" -> "First Partner Ltd"),
+                Json.obj("partnerDetailsBusinessName" -> "Second Partner Ltd")
+              )
+            )
+          )
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersNoName)).build()
+        val mockSessionRepository = mockedSessionRepository
+
+        val application =
+          applicationBuilder(userAnswers = Some(twoNewPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
         running(application) {
-          val request = FakeRequest(GET, removePartnerYesNoRouteNewPartners)
+          val request =
+            FakeRequest(
+              POST,
+              controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad("0", NormalMode).url
+            ).withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(mockSessionRepository).set(captor.capture())
+          val saved = captor.getValue
+
+          newPartnersIn(saved).size mustEqual 1
+          saved.get(PartnerDetailsBusinessNamePage(0)).value mustEqual "Second Partner Ltd"
+        }
+      }
+
+      "must redirect to the next page without deleting when no is submitted" in {
+
+        val mockSessionRepository = mockedSessionRepository
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersNewPartners))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, removePartnerYesNoRouteNewPartners)
+              .withFormUrlEncodedBody(("value", "false"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+          verify(mockSessionRepository, never()).set(any())
+        }
+      }
+
+      "must redirect to SystemError when the new partner does not exist" in {
+
+        val application = applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(
+              POST,
+              controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad("99", NormalMode).url
+            ).withFormUrlEncodedBody(("value", "true"))
 
           val result = route(application, request).value
 

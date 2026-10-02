@@ -95,7 +95,7 @@ class PartnerDetailsRemovePartnerYesNoController @Inject() (
                     for {
                       updated <- Future.fromTry(removeNewPartner(request.userAnswers, newPartnerIndex))
                       _       <- sessionRepository.set(updated)
-                    } yield Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnerIndex), mode, updated)) 
+                    } yield Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnerIndex), mode, updated))
                 }
           )
     }
