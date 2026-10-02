@@ -19,11 +19,16 @@ package controllers.partnerdetails
 import models.UserAnswers
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
+import services.{PaginationResult, PaginationService}
+import viewmodels.govuk.PaginationFluency.PaginationViewModel
+
+import java.time.LocalDate
 
 trait PartnerDetailsHelper {
 
   val businessNumber1: String = "12345"
   val businessNumber2: String = "123456"
+  val businessNumber3: String = "1234567"
   val newPartnersIndex1: Int = 0
   val newPartnersIndex2: Int = 1
 
@@ -37,6 +42,35 @@ trait PartnerDetailsHelper {
   val testForeignCorpRef = "FCR-987654"
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
+
+  val todayDate = LocalDate.of(2026, 1, 1)
+
+  class PaginationHelper(size: 1 | 2 | 3 | 10 | 100, currentPage: Int = 1) {
+    val partnerDetailsBusinessNumberList = size match {
+      case 1   => Seq(businessNumber1)
+      case 2   => Seq(businessNumber1, businessNumber2)
+      case 3   => Seq(businessNumber1, businessNumber2, businessNumber3)
+      case 10  => (1 to 10).map(_.toString) // Ten numbers in the same pattern
+      case 100 => (1 to 100).map(_.toString) // 100 numbers in the same pattern
+    }
+
+    val paginationService = new PaginationService(10, 100, 5)
+    val paginationResult: PaginationResult = paginationService.paginatePartnerDetails(
+      completedNewPartners   = Seq.empty, // TODO important
+      existingPartnerDetails = partnerDetailsBusinessNumberList,
+      currentPage            = currentPage,
+      elementsPerPage        = 10,
+      // Note: I had to prepend "gambling-variations" when testing in IDE, in sbt works fine
+      baseUrl = routes.PartnerDetailsController.onPageLoad(None).url
+    )
+    val elementsPerPage = 10
+    val paginatedViewModel: PaginationViewModel = paginationResult.paginationViewModel
+    val page: Int = currentPage
+    val totalRecords: Int = size
+
+    val from: Int = page * elementsPerPage - elementsPerPage + 1
+    val to: Int = (page * elementsPerPage).min(totalRecords)
+  }
 
   def emptyData = Json.obj()
 

@@ -20,7 +20,6 @@ import models.{Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.libs.json.{JsArray, JsObject}
-import scala.collection.Seq
 
 object PartnerUtils {
 
@@ -28,10 +27,11 @@ object PartnerUtils {
     if mode == NormalMode then index.toInt
     else index
 
-  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers, maxPartners: Int): Seq[String] = (userAnswers.data \ "partners")
+  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = (userAnswers.data \ "partners")
     .asOpt[JsObject]
-    .fold(Seq.empty[String])(_.fields.map(_._1).sorted)
-    .take(maxPartners)
+    .fold(Seq.empty[String])(_.fields.map(_._1))
+    // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
+    .toSeq
 
   def findIndexForNewPartner(userAnswers: UserAnswers): Int = {
     val newPartnersSize = getNewPartnersSize(userAnswers)
@@ -41,6 +41,13 @@ object PartnerUtils {
     }
     newPartnerExistingIndex getOrElse 0
   }
+
+  def getCompletedNewPartners(userAnswers: UserAnswers): Seq[Int] = (0 to getNewPartnersSize(userAnswers))
+    .map(index => userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)))
+    .zipWithIndex
+    .collect { case (Some(true), i) =>
+      i
+    }
 
   private def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
