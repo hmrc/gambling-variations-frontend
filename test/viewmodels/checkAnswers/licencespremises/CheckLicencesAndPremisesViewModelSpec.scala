@@ -102,12 +102,12 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("checkLicenceAndPremises.provideAddresses.byPost")
       }
 
-      "must use by post and show the post details when the method is not provided and there are no premises" in {
+      "must use by post and show the post details but continue to provide premises addresses when the method is not provided and there are no premises" in {
         val vm = viewModel()
 
         vm.premisesDetailsRequiredMessage mustBe None
         vm.showSendByPost mustBe true
-        vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+        vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
         keys(vm) must not contain msgs("checkLicenceAndPremises.addressesOnline")
       }
 
@@ -178,7 +178,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
-      "must use by post when premises are not covered, the method is not provided and there are no premises" in {
+      "must use by post but continue to provide premises addresses when premises are not covered, the method is not provided and there are no premises" in {
         val vm = viewModel(isPubTenant = true, hasPremisesNotCovered = true)
 
         keys(vm) must contain allOf (msgs("checkLicenceAndPremises.premisesNotCovered"), msgs("checkLicenceAndPremises.provideAddresses"))
@@ -186,6 +186,13 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("checkLicenceAndPremises.provideAddresses.byPost")
         vm.premisesDetailsRequiredMessage mustBe None
         vm.showSendByPost mustBe true
+        vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
+      }
+
+      "must not ask for the method when all premises are covered, the method is not provided and there are no premises" in {
+        val vm = viewModel(isPubTenant = true)
+
+        keys(vm) must not contain msgs("checkLicenceAndPremises.provideAddresses")
         vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
