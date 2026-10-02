@@ -39,7 +39,7 @@
         rows = checkCorrespondenceDetailsViewModel.summaryList
     ))
 
-    @if(!checkCorrespondenceDetailsViewModel.isSubmitted) {
+    @if(checkCorrespondenceDetailsViewModel.isSubmitted) {
         @paragraph(messages("changeRegistrationDetails.readyToSubmit"))
     }
     <p class="govuk-body">
