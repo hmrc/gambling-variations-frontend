@@ -81,7 +81,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
       includeHMRCBranding    = false,
       ukMode                 = true,
       pageHeadingStyle       = "govuk-heading-l",
-      selectPageConfig       = SelectPageConfig(30, showSearchAgainLink = true, showNoneOfTheseOption = false),
+      selectPageConfig       = SelectPageConfig(100, showSearchAgainLink = true, showNoneOfTheseOption = false),
       confirmPageConfig = ConfirmPageConfig(
         showConfirmChangeText = true
       ),
@@ -128,8 +128,8 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
           filterLabel                = "Property name or number (optional)",
           postcodeLabel              = "Postcode",
           submitLabel                = "Find address",
-          noResultsFoundMessage      = "No addresses found",
-          resultLimitExceededMessage = "Too many addresses found",
+          noResultsFoundMessage      = "We could not find any results to match that postcode",
+          resultLimitExceededMessage = "There were too many results, add additional details to limit the number of results",
           manualAddressLinkText      = "Enter address manually"
         ),
         confirmPageLabels = ConfirmPageLabels(
@@ -137,8 +137,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
           heading             = "Confirm address",
           submitLabel         = "Continue",
           searchAgainLinkText = "Search again",
-          changeLinkText      = "Change",
-          confirmChangeText   = "The information is complete and correct"
+          changeLinkText      = "Change"
         ),
         editPageLabels = editPageLabels,
         international  = International(editPageLabels)

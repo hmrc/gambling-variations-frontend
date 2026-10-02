@@ -47,15 +47,15 @@ class Navigator @Inject() () {
     case TradingNamePage =>
       _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessFaxNumberPage =>
-      _ => routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage =>
-      _ => routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case RemoveEmailAddressPage =>
-      _ => routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case BusinessContactNumberPage =>
-      _ => routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case BusinessEmailAddressPage =>
-      _ => routes.CheckContactDetailsController.onPageLoad()
+      _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case BusinessTradeClassPage =>
       _ => routes.CheckTradingDetailsController.onPageLoad()
     case IsSeasonalBusinessPage =>
@@ -174,6 +174,8 @@ class Navigator @Inject() () {
       userAnswers => controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsCorrespondenceEmailAddressPage(index) =>
       userAnswers => controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(index.toString, NormalMode)
+    case PartnerDetailsCountryOfIncorporationPage(index) =>
+      userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -506,6 +508,16 @@ class Navigator @Inject() () {
       .get(PartnerDetailsUtrPage(index))
       .fold(routes.SystemErrorController.onPageLoad())(_ =>
         controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
+      )
+
+  /** If user is in the add partner flow, go to PT-FOR. Otherwise, if user has directly come from PT-CYA and hasn't changed answer to PT-IN, then
+    * return to PT-CYA.
+    */
+  private def navigatePartnerDetailsCountryOfIncorporationPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsUtrPage(index))
+      .fold(routes.SystemErrorController.onPageLoad())(_ =>
+        controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index.toString, NormalMode)
       )
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
