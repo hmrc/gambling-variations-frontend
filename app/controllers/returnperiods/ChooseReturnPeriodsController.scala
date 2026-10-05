@@ -122,10 +122,15 @@ class ChooseReturnPeriodsController @Inject() (
   ): ReturnPeriodsVariant =
     userAnswers
       .get(GamblingReturnPeriodsPage)
-      .map(_.hasExistingNstpValues.get)
+      .flatMap(_.hasExistingNstpValues)
       .map {
         case true  => ReturnPeriodsVariant.NonStandard
         case false => ReturnPeriodsVariant.Standard
       }
-      .get
+      .getOrElse(
+        throw new IllegalStateException(
+          "Gambling return periods data is missing"
+        )
+      )
+
 }
