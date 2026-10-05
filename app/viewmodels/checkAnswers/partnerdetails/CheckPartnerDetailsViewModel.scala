@@ -107,7 +107,7 @@ case class CheckPartnerDetailsViewModel(
         messages("partnerDetailsCheckYourAnswers.error.missingChanges")
       )
 
-    (messagesToShow ++ submitChanges).map(Html(_))
+    (submitChanges.toSeq ++ messagesToShow).map(Html(_))
   }
 
   // --- Summary lists ---
@@ -576,12 +576,12 @@ final case class ExistingPartner(businessPartnerNumber: String) extends Partner 
 
 object Partner {
   def indexParser(index: String, userAnswers: UserAnswers): Either[String, Partner] =
-      if ((userAnswers.data \ "partners" \ index).toOption.isDefined)
-        Right(ExistingPartner(index))
-      else if (index.matches("\\d{1,2}")) {
-        val i = index.toInt
-        Right(NewPartner(i, userAnswers.get(PartnerDetailsAddPartnerCompletedPage(i))))
-      } else
-        Left(s"Invalid partner reference: $index")
+    if ((userAnswers.data \ "partners" \ index).toOption.isDefined)
+      Right(ExistingPartner(index))
+    else if (index.matches("\\d{1,2}")) {
+      val i = index.toInt
+      Right(NewPartner(i, userAnswers.get(PartnerDetailsAddPartnerCompletedPage(i))))
+    } else
+      Left(s"Invalid partner reference: $index")
 
 }
