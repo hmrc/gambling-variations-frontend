@@ -1204,6 +1204,44 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
 
+      "should route RemovePartnerYesNoPage to RemovePartnerYesNoPage when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route RemovePartnerYesNoPage to RemovePartnerYesNoPage when answer is true and it's an new partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route RemovePartnerYesNoPage to PartnerDetailsDeleteDateController when answer is true and it's an existing partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
+      }
+
+      "should route RemovePartnerYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
     }
   }
 }

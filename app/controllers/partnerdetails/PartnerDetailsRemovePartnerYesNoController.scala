@@ -21,7 +21,7 @@ import forms.partnerdetails.PartnerDetailsRemovePartnerYesNoFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsArray, Json}
@@ -89,7 +89,7 @@ class PartnerDetailsRemovePartnerYesNoController @Inject() (
                     for {
                       updated <- Future.fromTry(request.userAnswers.set(PartnerDetailsChosenPartnerToRemovePage, businessNumber))
                       _       <- sessionRepository.set(updated)
-                    } yield Redirect(controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad())
+                    } yield Redirect(navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newIndex), mode, updated))
 
                   case newPartnerIndex: Int =>
                     for {
