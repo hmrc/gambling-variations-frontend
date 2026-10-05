@@ -389,6 +389,48 @@ class ChooseReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to the system error page when hasExistingNstpValues is missing" in {
+
+      val gamblingReturnPeriods =
+        standardGamblingReturnPeriods.copy(
+          hasExistingNstpValues = None
+        )
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(
+            GET,
+            chooseReturnPeriodsNormalRoute
+          )
+
+        val result =
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(request)
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController.onPageLoad().url
+
+      }
+    }
+
     "must return OK and use the CheckMode route for a GET" in {
 
       val application =
@@ -670,6 +712,50 @@ class ChooseReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             .value
 
         verify(mockSessionRepository).set(expectedAnswers)
+      }
+    }
+
+    "must redirect to the system error page when hasExistingNstpValues is missing on POST" in {
+
+      val gamblingReturnPeriods =
+        standardGamblingReturnPeriods.copy(
+          hasExistingNstpValues = None
+        )
+
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(
+          userAnswers = Some(userAnswers)
+        ).build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(
+            POST,
+            chooseReturnPeriodsNormalRoute
+          ).withFormUrlEncodedBody(
+            "value" -> Feb.toString
+          )
+
+        val result =
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController.onPageLoad().url
+
       }
     }
   }

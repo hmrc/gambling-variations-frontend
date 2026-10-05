@@ -47,79 +47,91 @@ class ChooseReturnPeriodsController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-      val variant = variantFrom(request.userAnswers)
-      val form = formProvider(variant.errorMessageKey)
+      variantFrom(request.userAnswers) match {
 
-      val preparedForm =
-        request.userAnswers.get(ChooseReturnPeriodsPage) match {
+        case Some(variant) =>
+          val form = formProvider(variant.errorMessageKey)
 
-          case Some(returnPeriodsId) =>
-            ChooseReturnPeriods
-              .fromReturnPeriodsId(returnPeriodsId)
-              .map(form.fill)
-              .getOrElse(form)
+          val preparedForm =
+            request.userAnswers.get(ChooseReturnPeriodsPage) match {
 
-          case None =>
-            request.userAnswers
-              .get(GamblingReturnPeriodsPage)
-              .flatMap(_.returnPeriodsId)
-              .flatMap(ChooseReturnPeriods.fromReturnPeriodsId)
-              .map(form.fill)
-              .getOrElse(form)
-        }
+              case Some(returnPeriodsId) =>
+                ChooseReturnPeriods
+                  .fromReturnPeriodsId(returnPeriodsId)
+                  .map(form.fill)
+                  .getOrElse(form)
 
-      Ok(view(preparedForm, mode, variant))
+              case None =>
+                request.userAnswers
+                  .get(GamblingReturnPeriodsPage)
+                  .flatMap(_.returnPeriodsId)
+                  .flatMap(ChooseReturnPeriods.fromReturnPeriodsId)
+                  .map(form.fill)
+                  .getOrElse(form)
+            }
+
+          Ok(view(preparedForm, mode, variant))
+
+        case None =>
+          Redirect(controllers.routes.SystemErrorController.onPageLoad())
+      }
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      val variant = variantFrom(request.userAnswers)
-      val form = formProvider(variant.errorMessageKey)
+      variantFrom(request.userAnswers) match {
 
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors =>
-            Future.successful(
-              BadRequest(
-                view(formWithErrors, mode, variant)
-              )
-            ),
-          value =>
-            for {
-              updatedAnswers <-
-                Future.fromTry(
-                  request.userAnswers
-                    .set(
-                      ChooseReturnPeriodsPage,
-                      value.returnPeriodsId
+        case Some(variant) =>
+          val form = formProvider(variant.errorMessageKey)
+
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(formWithErrors, mode, variant)
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <-
+                    Future.fromTry(
+                      request.userAnswers
+                        .set(
+                          ChooseReturnPeriodsPage,
+                          value.returnPeriodsId
+                        )
+                        .flatMap(
+                          _.set(
+                            HasExistingNstpValuesPage,
+                            variant == ReturnPeriodsVariant.NonStandard
+                          )
+                        )
                     )
-                    .flatMap(
-                      _.set(
-                        HasExistingNstpValuesPage,
-                        request.userAnswers
-                          .get(GamblingReturnPeriodsPage)
-                          .flatMap(_.hasExistingNstpValues)
-                          .get
-                      )
-                    )
+
+                  _ <- sessionRepository.set(updatedAnswers)
+
+                } yield Redirect(
+                  navigator.nextPage(
+                    ChooseReturnPeriodsPage,
+                    mode,
+                    updatedAnswers
+                  )
                 )
-
-              _ <- sessionRepository.set(updatedAnswers)
-
-            } yield Redirect(
-              navigator.nextPage(
-                ChooseReturnPeriodsPage,
-                mode,
-                updatedAnswers
-              )
             )
-        )
+
+        case None =>
+          Future.successful(
+            Redirect(controllers.routes.SystemErrorController.onPageLoad())
+          )
+      }
     }
+
   private def variantFrom(
     userAnswers: UserAnswers
-  ): ReturnPeriodsVariant =
+  ): Option[ReturnPeriodsVariant] =
     userAnswers
       .get(GamblingReturnPeriodsPage)
       .flatMap(_.hasExistingNstpValues)
@@ -127,10 +139,4 @@ class ChooseReturnPeriodsController @Inject() (
         case true  => ReturnPeriodsVariant.NonStandard
         case false => ReturnPeriodsVariant.Standard
       }
-      .getOrElse(
-        throw new IllegalStateException(
-          "Gambling return periods data is missing"
-        )
-      )
-
 }
