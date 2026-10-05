@@ -1112,7 +1112,7 @@ partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be bef
 
 # Non-standard return periods
 
-chooseReturnPeriods.title= What are your non - standard return periods?
+chooseReturnPeriods.title= What are your non-standard return periods?
 chooseReturnPeriods.heading = What are your non-standard return periods?
 
 chooseReturnPeriods.jan = January, April, July and October
