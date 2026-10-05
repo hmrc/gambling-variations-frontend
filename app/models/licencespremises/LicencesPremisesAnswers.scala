@@ -35,13 +35,13 @@ object LicencesPremisesAnswers {
         case value => throw new IllegalArgumentException(s"Unexpected value '$value' for $page, expected 1 or 0")
       }
 
-    // The yes/no pages hold the answers given in this session, otherwise the flags from the backend apply.
-    // As with the backend flags, an unanswered question means "No".
-    def pubTenantAnswer: Boolean =
-      answers.get(LicenceDetailsLandlordLicenceYesNoPage).getOrElse(backendFlag(LicenceHeldByLandlordPage))
+    // Answers given in this session are written back in the backend format, so the backend key always holds the current answer
+    def setBackendFlag(page: QuestionPage[String], value: Boolean): Try[UserAnswers] =
+      answers.set(page, if (value) "1" else "0")
 
-    def premisesNotCoveredAnswer: Boolean =
-      answers.get(PremisesNotCoveredYesNoPage).getOrElse(backendFlag(LicencePremisesNotCoveredPage))
+    def pubTenantAnswer: Boolean = backendFlag(LicenceHeldByLandlordPage)
+
+    def premisesNotCoveredAnswer: Boolean = backendFlag(LicencePremisesNotCoveredPage)
 
     // The section is flagged as submitted once a change screen has been continued from, and as changed once any answer differs
     def withLicencesPremisesFlags(isChanged: Boolean): Try[UserAnswers] = {

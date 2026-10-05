@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.{LicencePremisesNotCoveredPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage, PremisesNotCoveredYesNoPage}
+import pages.licencespremises.{LicencePremisesNotCoveredPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -75,7 +75,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val userAnswers = noAnswers
-          .set(PremisesNotCoveredYesNoPage, true)
+          .set(LicencePremisesNotCoveredPage, "1")
           .success
           .value
 
@@ -93,10 +93,10 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
-      "must populate the view from the backend flag on a GET when the question has not been answered in this session" in {
+      "must preselect No on a GET when the backend flag is 0" in {
 
         val userAnswers = noAnswers
-          .set(LicencePremisesNotCoveredPage, "1")
+          .set(LicencePremisesNotCoveredPage, "0")
           .success
           .value
 
@@ -110,7 +110,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(true), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form.fill(false), NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -153,7 +153,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           val expectedAnswers = noAnswers
-            .set(PremisesNotCoveredYesNoPage, true)
+            .set(LicencePremisesNotCoveredPage, "1")
             .success
             .value
             .set(LicencesPremisesDetailsSubmittedPage, true)
@@ -196,7 +196,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           val expectedAnswers = userAnswers
-            .set(PremisesNotCoveredYesNoPage, true)
+            .set(LicencePremisesNotCoveredPage, "1")
             .success
             .value
             .set(LicencesPremisesDetailsSubmittedPage, true)

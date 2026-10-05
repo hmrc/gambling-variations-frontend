@@ -301,18 +301,12 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         )
       }
 
-      "must use the answers given in this session over the backend values" in {
+      "must read the yes/no answers from the backend flags" in {
         val answers = emptyUserAnswers
-          .set(LicenceHeldByLandlordPage, "1")
+          .set(LicenceHeldByLandlordPage, "0")
           .success
           .value
-          .set(LicenceDetailsLandlordLicenceYesNoPage, false)
-          .success
-          .value
-          .set(LicencePremisesNotCoveredPage, "0")
-          .success
-          .value
-          .set(PremisesNotCoveredYesNoPage, true)
+          .set(LicencePremisesNotCoveredPage, "1")
           .success
           .value
           .set(LicencesPremisesPage, ByPost)

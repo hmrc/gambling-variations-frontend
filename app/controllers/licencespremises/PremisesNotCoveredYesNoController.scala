@@ -21,7 +21,7 @@ import forms.licencespremises.PremisesNotCoveredYesNoFormProvider
 import models.Mode
 import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
-import pages.licencespremises.PremisesNotCoveredYesNoPage
+import pages.licencespremises.LicencePremisesNotCoveredPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -63,12 +63,12 @@ class PremisesNotCoveredYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            answersWithValue <- Future.fromTry(request.userAnswers.set(PremisesNotCoveredYesNoPage, value))
+            answersWithValue <- Future.fromTry(request.userAnswers.setBackendFlag(LicencePremisesNotCoveredPage, value))
             updatedAnswers <- Future.fromTry(
                                 answersWithValue.withLicencesPremisesFlags(isChanged = request.userAnswers.premisesNotCoveredAnswer != value)
                               )
             _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PremisesNotCoveredYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(LicencePremisesNotCoveredPage, mode, updatedAnswers))
       )
   }
 }

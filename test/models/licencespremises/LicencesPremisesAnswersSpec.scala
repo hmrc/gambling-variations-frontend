@@ -39,50 +39,40 @@ class LicencesPremisesAnswersSpec extends SpecBase {
     }
   }
 
+  "setBackendFlag" - {
+
+    "must write true as 1 and false as 0" in {
+      emptyUserAnswers.setBackendFlag(ClubLicencePage, true).success.value.get(ClubLicencePage) mustBe Some("1")
+      emptyUserAnswers.setBackendFlag(ClubLicencePage, false).success.value.get(ClubLicencePage) mustBe Some("0")
+    }
+
+    "must round trip through backendFlag" in {
+      emptyUserAnswers.setBackendFlag(ClubLicencePage, true).success.value.backendFlag(ClubLicencePage) mustBe true
+      emptyUserAnswers.setBackendFlag(ClubLicencePage, false).success.value.backendFlag(ClubLicencePage) mustBe false
+    }
+  }
+
   "pubTenantAnswer" - {
 
-    "must be No when neither the session nor the backend has an answer" in {
+    "must be No when there is no answer" in {
       emptyUserAnswers.pubTenantAnswer mustBe false
     }
 
-    "must use the backend flag when there is no answer from this session" in {
+    "must read the backend flag" in {
       emptyUserAnswers.set(LicenceHeldByLandlordPage, "1").success.value.pubTenantAnswer mustBe true
       emptyUserAnswers.set(LicenceHeldByLandlordPage, "0").success.value.pubTenantAnswer mustBe false
-    }
-
-    "must prefer the answer from this session over the backend flag" in {
-      val answers = emptyUserAnswers
-        .set(LicenceHeldByLandlordPage, "1")
-        .success
-        .value
-        .set(LicenceDetailsLandlordLicenceYesNoPage, false)
-        .success
-        .value
-
-      answers.pubTenantAnswer mustBe false
     }
   }
 
   "premisesNotCoveredAnswer" - {
 
-    "must be No when neither the session nor the backend has an answer" in {
+    "must be No when there is no answer" in {
       emptyUserAnswers.premisesNotCoveredAnswer mustBe false
     }
 
-    "must use the backend flag when there is no answer from this session" in {
+    "must read the backend flag" in {
       emptyUserAnswers.set(LicencePremisesNotCoveredPage, "1").success.value.premisesNotCoveredAnswer mustBe true
-    }
-
-    "must prefer the answer from this session over the backend flag" in {
-      val answers = emptyUserAnswers
-        .set(LicencePremisesNotCoveredPage, "0")
-        .success
-        .value
-        .set(PremisesNotCoveredYesNoPage, true)
-        .success
-        .value
-
-      answers.premisesNotCoveredAnswer mustBe true
+      emptyUserAnswers.set(LicencePremisesNotCoveredPage, "0").success.value.premisesNotCoveredAnswer mustBe false
     }
   }
 
