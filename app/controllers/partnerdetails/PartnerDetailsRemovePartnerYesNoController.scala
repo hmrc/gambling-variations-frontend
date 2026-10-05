@@ -21,7 +21,7 @@ import forms.partnerdetails.PartnerDetailsRemovePartnerYesNoFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsArray, Json}
