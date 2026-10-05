@@ -324,7 +324,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
-      "should route CorrespondenceAdditionalNameYesNoPage to CorrespondenceUKAddrScreener when answer is false and adding correspondence details" in {
+      "should route CorrespondenceAdditionalNameYesNoPage to Address Lookup when answer is false and adding correspondence details" in {
         val answers =
           emptyAnswers
             .set(CorrespondenceAdditionalNameYesNoPage, false)
@@ -335,7 +335,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+          routes.AddressLookupController.initialise(false)
       }
 
       "should route CorrespondenceAdditionalNameYesNoPage to SystemError when unanswered" in {
@@ -348,7 +348,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
-      "should route CorrespondenceAdditionalNamePage to CorrespondenceUKAddrScreener when adding correspondence details" in {
+      "should route CorrespondenceAdditionalNamePage to Address Lookup when adding correspondence details" in {
         val answers =
           emptyAnswers
             .set(AddCorrespondingDetailsYesNoPage, true)
@@ -356,7 +356,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalNamePage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+          routes.AddressLookupController.initialise(true)
       }
 
       "should route CorrespondenceUKAddrScreenerPage to Address Lookup when answer is true" in {
@@ -367,7 +367,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.AddressLookupController.initialise()
+          routes.AddressLookupController.initialise(false)
       }
 
       "should route CorrespondenceUKAddrScreenerPage to CorrespondenceNonUKAddress when answer is false" in {
@@ -558,7 +558,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.AddressLookupController.initialise()
+          routes.AddressLookupController.initialise(false)
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceUKAddress when editing a UK address" in {
@@ -593,7 +593,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.AddressLookupController.initialise()
+          routes.AddressLookupController.initialise(false)
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when editing a non-UK address" in {

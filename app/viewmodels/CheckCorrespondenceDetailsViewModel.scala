@@ -46,7 +46,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     if (correspondenceName.isEmpty) {
       controllers.routes.CorrespondenceNameController.onPageLoad()
     } else if (correspondenceAddress.forall(_.address1.trim.isEmpty)) {
-      controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+      controllers.routes.AddressLookupController.initialise(false)
     } else if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
       controllers.routes.CorrespondenceContactNumberController.onPageLoad()
     } else {
@@ -196,19 +196,8 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     val changeUrl =
       if (correspondenceAddress.isEmpty) {
         controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
-      } else if (isAddingNewCorrespondenceDetails.contains(true)) {
-        hasUkPostcode match {
-          case Some(true) =>
-            controllers.routes.CorrespondenceUKAddressController.onPageLoad().url
-
-          case Some(false) =>
-            controllers.routes.CorrespondenceNonUKAddressController.onPageLoad().url
-
-          case None =>
-            controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url
-        }
       } else {
-        controllers.routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
+        controllers.routes.AddressLookupController.initialise(false).url
       }
 
     SummaryListRow(
