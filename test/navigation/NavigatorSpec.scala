@@ -223,6 +223,35 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
       }
 
+      "should route a licence change to PremisesNotCoveredYesNoController when the premises not covered question is in scope and unanswered" in {
+        val inScope = emptyAnswers.set(LicenceHeldByLandlordPage, "1").success.value
+
+        Seq(LicenceNumberPage, LicenceHeldByLandlordPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage).foreach { page =>
+          navigator.nextPage(page, NormalMode, inScope) mustBe
+            controllers.licencespremises.routes.PremisesNotCoveredYesNoController.onPageLoad()
+        }
+      }
+
+      "should route a licence change to CheckLicencesAndPremisesController when the premises not covered question has been answered" in {
+        val answered = emptyAnswers
+          .set(LicenceHeldByLandlordPage, "1")
+          .success
+          .value
+          .set(LicencePremisesNotCoveredPage, "0")
+          .success
+          .value
+
+        navigator.nextPage(LicenceHeldByLandlordPage, NormalMode, answered) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route a licence change to CheckLicencesAndPremisesController when the premises not covered question is out of scope" in {
+        val outOfScope = emptyAnswers.set(LicenceHeldByLandlordPage, "0").success.value
+
+        navigator.nextPage(LicenceHeldByLandlordPage, NormalMode, outOfScope) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
       "should route LicenceHeldByLandlordPage to CheckLicencesAndPremisesController" in {
         navigator.nextPage(LicenceHeldByLandlordPage, NormalMode, emptyAnswers) mustBe
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()

@@ -183,12 +183,10 @@ object CheckLicencesAndPremisesViewModel {
 
   def from(answers: UserAnswers): CheckLicencesAndPremisesViewModel =
     CheckLicencesAndPremisesViewModel(
-      licenceNumber = answers.get(LicenceNumberPage).map(_.trim).filter(_.nonEmpty),
-      isPubTenant   = answers.pubTenantAnswer,
-      licencesAndPermitsGB =
-        OtherLicencesAndPermitsGB.positiveValues.filter(value => answers.backendFlag(OtherLicencesAndPermitsGB.mappedValuesWithPages(value))),
-      licencesAndPermitsNI =
-        OtherLicencesAndPermitsNI.positiveValues.filter(value => answers.backendFlag(OtherLicencesAndPermitsNI.mappedValuesWithPages(value))),
+      licenceNumber          = answers.licenceNumberAnswer,
+      isPubTenant            = answers.pubTenantAnswer,
+      licencesAndPermitsGB   = answers.licencesAndPermitsGB,
+      licencesAndPermitsNI   = answers.licencesAndPermitsNI,
       hasPremisesNotCovered  = answers.premisesNotCoveredAnswer,
       provideAddressesAnswer = answers.get(LicencesPremisesPage),
       premisesCount          = answers.premisesCount,

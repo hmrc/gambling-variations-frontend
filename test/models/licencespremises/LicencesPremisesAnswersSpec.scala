@@ -92,6 +92,41 @@ class LicencesPremisesAnswersSpec extends SpecBase {
     }
   }
 
+  "hasLicencesOrPermits" - {
+
+    "must be false when nothing has been provided" in {
+      emptyUserAnswers.hasLicencesOrPermits mustBe false
+    }
+
+    "must treat a blank licence number as not provided" in {
+      emptyUserAnswers.set(LicenceNumberPage, " ").success.value.hasLicencesOrPermits mustBe false
+    }
+
+    "must be true when any single licence or permit has been provided" in {
+      Seq(
+        emptyUserAnswers.set(LicenceNumberPage, "123").success.value,
+        emptyUserAnswers.set(LicenceHeldByLandlordPage, "1").success.value,
+        emptyUserAnswers.set(ClubLicencePage, "1").success.value,
+        emptyUserAnswers.set(LicenceBingoPage, "1").success.value
+      ).foreach(_.hasLicencesOrPermits mustBe true)
+    }
+
+    "must ignore the no other licences flags and flags set to 0" in {
+      val answers = emptyUserAnswers
+        .set(NoOtherLicencesAndPermitsGBPage, "1")
+        .success
+        .value
+        .set(NoOtherLicencesAndPermitsNIPage, "1")
+        .success
+        .value
+        .set(ClubLicencePage, "0")
+        .success
+        .value
+
+      answers.hasLicencesOrPermits mustBe false
+    }
+  }
+
   "premisesCount" - {
 
     "must count the premises rather than use the total" in {

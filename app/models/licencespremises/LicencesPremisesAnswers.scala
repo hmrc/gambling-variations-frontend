@@ -46,6 +46,19 @@ object LicencesPremisesAnswers {
 
     def premisesNotCoveredAnswer: Boolean = backendFlag(LicencePremisesNotCoveredPage)
 
+    def licenceNumberAnswer: Option[String] =
+      answers.get(LicenceNumberPage).map(_.trim).filter(_.nonEmpty)
+
+    def licencesAndPermitsGB: Seq[OtherLicencesAndPermitsGB] =
+      OtherLicencesAndPermitsGB.positiveValues.filter(value => backendFlag(OtherLicencesAndPermitsGB.mappedValuesWithPages(value)))
+
+    def licencesAndPermitsNI: Seq[OtherLicencesAndPermitsNI] =
+      OtherLicencesAndPermitsNI.positiveValues.filter(value => backendFlag(OtherLicencesAndPermitsNI.mappedValuesWithPages(value)))
+
+    // The premises not covered question is only in scope when some kind of licence or permit has been provided
+    def hasLicencesOrPermits: Boolean =
+      licenceNumberAnswer.isDefined || pubTenantAnswer || licencesAndPermitsGB.nonEmpty || licencesAndPermitsNI.nonEmpty
+
     // The premises are counted rather than using totalRows, so that the count agrees with the premises addresses list, also after removals
     def premisesCount: Int =
       answers.get(PremisesDetailsPage).map(_.premises.size).getOrElse(0)
