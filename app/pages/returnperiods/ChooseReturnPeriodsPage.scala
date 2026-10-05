@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package pages
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import pages.returnperiods.GamblingReturnPeriodsPage
+package pages.returnperiods
+
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-class GamblingReturnPeriodsPageSpec extends AnyFreeSpec with Matchers {
+case object ChooseReturnPeriodsPage extends QuestionPage[Int] {
 
-  "GamblingReturnPeriodsPage" - {
+  override def path: JsPath = JsPath \ toString
 
-    "must have the correct toString" in {
-      GamblingReturnPeriodsPage.toString mustBe "gamblingReturnPeriods"
-    }
-
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath =
-        JsPath \ "gamblingReturnPeriods"
-
-      GamblingReturnPeriodsPage.path mustBe expectedPath
-    }
-  }
+  override def toString: String = "chooseReturnPeriods"
 }

@@ -1110,3 +1110,27 @@ partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
 partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
 partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
 
+
+# Non-standard return periods
+
+chooseReturnPeriods.title= What are your non-standard return periods?
+chooseReturnPeriods.heading = What are your non-standard return periods?
+
+chooseReturnPeriods.jan = January, April, July and October
+chooseReturnPeriods.feb = February, May, August and November
+chooseReturnPeriods.mar = March, June, September and December
+chooseReturnPeriods.p = You must now provide 8 end dates to cover the next 2 years of non-standard return periods.
+
+chooseReturnPeriods.standard.error.required = Select your standard return periods
+chooseReturnPeriods.nonStandard.error.required = Select your non-standard return periods
+
+
+# Standard return periods
+
+chooseStandardReturnPeriods.title = What are your standard return periods?
+chooseStandardReturnPeriods.heading = What are your standard return periods?
+chooseStandardReturnPeriods.caption = Change registration details
+
+chooseStandardReturnPeriods.jan = Last day of January, April, July and October
+chooseStandardReturnPeriods.feb = Last day of February, May, August and November
+chooseStandardReturnPeriods.mar = Last day of March, June, September and December
