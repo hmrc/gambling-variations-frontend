@@ -20,14 +20,14 @@ import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
 case class PartnerDetailsAdditionalAddressInfoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[String] {
-
   override val path: JsPath = businessNumberOrIndex match {
-    case key: String => JsPath \ "partners" \ key \ toString
-    case index: Int  => JsPath \ "newPartners" \ index \ toString
+    case key: String => JsPath \ "partners" \ key \ "partnerDetailsCorrespondenceDetailsSection" \ toString
+    case index: Int  => JsPath \ "newPartners" \ index \ "partnerDetailsCorrespondenceDetailsSection" \ toString
   }
 
-  override def toString: String = "partnerDetailsAdditionalInfo"
+  override def toString: String = "additionalInformation"
 }
+
 object PartnerDetailsAdditionalAddressInfoPage {
   def apply(index: Int) = new PartnerDetailsAdditionalAddressInfoPage(index)
   def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsAdditionalAddressInfoPage(partnerDetailsBusinessNumber)

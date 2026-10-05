@@ -155,7 +155,7 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
       "show contact us and submit changes for an existing partner not due to join or leave" in {
 
-        noticeBodies(existingPartner) mustBe Seq(contactUs, missingChanges)
+        noticeBodies(existingPartner) mustBe Seq(missingChanges, contactUs)
       }
 
       "show the joining notice for an existing partner due to join" in {
