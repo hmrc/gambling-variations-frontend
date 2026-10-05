@@ -27,13 +27,16 @@ object LicencesPremisesAnswers {
   extension (answers: UserAnswers) {
 
     // The backend holds booleans as "1" or "0", an oracle implementation detail that has been propagated through 3 layers of microservices.
-    // A missing flag is treated as indicating false.
-    def backendFlag(page: QuestionPage[String]): Boolean =
-      answers.get(page).fold(false) {
+    def backendFlagOption(page: QuestionPage[String]): Option[Boolean] =
+      answers.get(page).map {
         case "1"   => true
         case "0"   => false
         case value => throw new IllegalArgumentException(s"Unexpected value '$value' for $page, expected 1 or 0")
       }
+
+    // A missing flag is treated as indicating false.
+    def backendFlag(page: QuestionPage[String]): Boolean =
+      backendFlagOption(page).getOrElse(false)
 
     // Answers given in this session are written back in the backend format, so the backend key always holds the current answer
     def setBackendFlag(page: QuestionPage[String], value: Boolean): Try[UserAnswers] =

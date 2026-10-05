@@ -56,7 +56,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "onPageLoad" - {
 
-      "must return OK and preselect No for a GET when no previous data exists" in {
+      "must return OK and preselect nothing for a GET when the question has not been answered" in {
 
         val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
@@ -68,7 +68,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val view = application.injector.instanceOf[PremisesNotCoveredYesNoView]
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(false), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form, NormalMode)(request, messages(application)).toString
         }
       }
 

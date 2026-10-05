@@ -23,6 +23,22 @@ class LicencesPremisesAnswersSpec extends SpecBase {
 
   import LicencesPremisesAnswers.*
 
+  "backendFlagOption" - {
+
+    "must convert 1 to true and 0 to false" in {
+      emptyUserAnswers.set(ClubLicencePage, "1").success.value.backendFlagOption(ClubLicencePage) mustBe Some(true)
+      emptyUserAnswers.set(ClubLicencePage, "0").success.value.backendFlagOption(ClubLicencePage) mustBe Some(false)
+    }
+
+    "must be empty when the flag is missing" in {
+      emptyUserAnswers.backendFlagOption(ClubLicencePage) mustBe None
+    }
+
+    "must throw an exception when the flag is neither 1 nor 0" in {
+      an[IllegalArgumentException] mustBe thrownBy(emptyUserAnswers.set(ClubLicencePage, "Y").success.value.backendFlagOption(ClubLicencePage))
+    }
+  }
+
   "backendFlag" - {
 
     "must convert 1 to true and 0 to false" in {

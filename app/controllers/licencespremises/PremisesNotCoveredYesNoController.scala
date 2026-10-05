@@ -50,7 +50,7 @@ class PremisesNotCoveredYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = form.fill(request.userAnswers.premisesNotCoveredAnswer)
+    val preparedForm = request.userAnswers.backendFlagOption(LicencePremisesNotCoveredPage).fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
   }
