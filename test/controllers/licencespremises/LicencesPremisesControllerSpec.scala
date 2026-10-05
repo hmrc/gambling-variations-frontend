@@ -23,7 +23,7 @@ import models.licencespremises.{LicencesAndPremisesRadioOptions, PremisesDetails
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage, LicencesPremisesPage, PremisesDetailsPage}
 import play.api.inject.bind
@@ -164,6 +164,70 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual LicencesAndPremisesRadioOptions.ByPost
+      }
+    }
+
+    "must redirect to the remove premises warning without saving when by post is selected and there are premises" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      val userAnswers = emptyLicencesPremisesAnswers
+        .set(PremisesDetailsPage, PremisesDetailsResponse(Some(1), Seq(premises)))
+        .success
+        .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, licencesPremisesRoute)
+            .withFormUrlEncodedBody(("value", LicencesAndPremisesRadioOptions.ByPost.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.RemovePremisesDetailsYesNoController.onPageLoad().url
+        verify(mockSessionRepository, never()).set(any())
+      }
+    }
+
+    "must save online and continue to the next page when there are premises" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers = emptyLicencesPremisesAnswers
+        .set(PremisesDetailsPage, PremisesDetailsResponse(Some(1), Seq(premises)))
+        .success
+        .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, licencesPremisesRoute)
+            .withFormUrlEncodedBody(("value", LicencesAndPremisesRadioOptions.Online.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+        savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual LicencesAndPremisesRadioOptions.Online
       }
     }
 

@@ -18,6 +18,7 @@ package controllers.licencespremises
 
 import base.SpecBase
 import forms.licencespremises.RemovePremisesDetailsYesNoFormProvider
+import models.licencespremises.LicencesAndPremisesRadioOptions.{ByPost, Online}
 import models.licencespremises.{PremisesDetails, PremisesDetailsResponse}
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -25,7 +26,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesSectionPage, PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesPage, LicencesPremisesSectionPage, PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -137,7 +138,7 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    "must remove the premises details and flag the section as changed when the user selects yes" in {
+    "must remove the premises details, switch to by post and flag the section as changed when the user selects yes" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
@@ -164,10 +165,11 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
         savedAnswersCaptor.getValue.get(RemovePremisesDetailsYesNoPage).value mustEqual true
         savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
         savedAnswersCaptor.getValue.get(PremisesDetailsPage) mustBe None
+        savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual ByPost
       }
     }
 
-    "must keep the premises details and not flag the section as changed when the user selects no" in {
+    "must keep the premises details and the online method and not flag the section as changed when the user selects no" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
@@ -194,6 +196,7 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
         savedAnswersCaptor.getValue.get(RemovePremisesDetailsYesNoPage).value mustEqual false
         savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual false
         savedAnswersCaptor.getValue.get(PremisesDetailsPage).value mustEqual premisesDetails
+        savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual Online
       }
     }
 
