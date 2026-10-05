@@ -49,7 +49,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
     new FrontendAppConfig(application.configuration)
 
   private val dateFormatter =
-    DateTimeFormatter.ofPattern("d MMM yyyy")
+    DateTimeFormatter.ofPattern("dd MMM yyyy")
 
   "PartnerDetailsViewModel" - {
 
@@ -184,7 +184,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
 
       val row = viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.active", pastDate)
+      row.status mustBe messages("partnerDetails.status.active", pastDate.format(dateFormatter))
       row.statusDetails mustBe None
     }
 

@@ -49,7 +49,7 @@ final case class PartnerDetailsRow(
 
 object PartnerDetailsViewModel {
 
-  private val dateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+  private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
   def from(
     partnerNumbers: Seq[BusinessNumberOrIndex],
@@ -111,7 +111,7 @@ object PartnerDetailsViewModel {
                         messages("partnerDetails.status.dueToJoin")
 
                       case Some(joiningDate) =>
-                        messages("partnerDetails.status.active", joiningDate.toString)
+                        messages("partnerDetails.status.active", joiningDate.format(dateFormatter))
                       case _ =>
                         messages("partnerDetails.status.active")
                     }
