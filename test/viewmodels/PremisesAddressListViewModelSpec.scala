@@ -82,7 +82,6 @@ class PremisesAddressListViewModelSpec extends SpecBase {
       )
     )
     private val formProvider = new PremisesAddressListFormProvider()
-    private val form: Form[Boolean] = formProvider()
 
     private val maxPremisesNumber = 100
     private val addressList = userAnswers.get(PremisesDetailsPage).fold(Seq.empty)(list => list.premises)
