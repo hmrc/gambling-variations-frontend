@@ -16,7 +16,6 @@
 
 package viewmodels
 
-import models.NormalMode
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
@@ -45,7 +44,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
         Actions(
           items = Seq(
             ActionItem(
-              href               = controllers.routes.BusinessContactNumberController.onPageLoad().url,
+              href               = controllers.businesscontactdetails.routes.BusinessContactNumberController.onPageLoad().url,
               content            = "site.change",
               visuallyHiddenText = Some(messages("contactDetails.label.contactNumbers"))
             )
@@ -69,7 +68,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.FaxNumberController.onPageLoad(NormalMode).url,
+                href               = controllers.businesscontactdetails.routes.FaxNumberController.onPageLoad().url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
               )
@@ -81,12 +80,12 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.FaxNumberController.onPageLoad(NormalMode).url,
+                href               = controllers.businesscontactdetails.routes.FaxNumberController.onPageLoad().url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
               ),
               ActionItem(
-                href               = controllers.routes.RemoveFaxNumberController.onPageLoad(NormalMode).url,
+                href               = controllers.businesscontactdetails.routes.RemoveFaxNumberController.onPageLoad().url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("contactDetails.label.faxNumber"))
               )
@@ -111,7 +110,7 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.BusinessEmailAddressController.onPageLoad().url,
+                href               = controllers.businesscontactdetails.routes.BusinessEmailAddressController.onPageLoad().url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               )
@@ -123,12 +122,12 @@ case class CheckBusinessContactDetailsViewModel(phoneNumber: Option[String],
           Actions(
             items = Seq(
               ActionItem(
-                href               = controllers.routes.BusinessEmailAddressController.onPageLoad().url,
+                href               = controllers.businesscontactdetails.routes.BusinessEmailAddressController.onPageLoad().url,
                 content            = "site.change",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               ),
               ActionItem(
-                href               = controllers.routes.RemoveEmailAddressController.onPageLoad(NormalMode).url,
+                href               = controllers.businesscontactdetails.routes.RemoveEmailAddressController.onPageLoad().url,
                 content            = "site.remove",
                 visuallyHiddenText = Some(messages("contactDetails.label.emailAddr"))
               )

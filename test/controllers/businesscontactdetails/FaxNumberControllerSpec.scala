@@ -14,72 +14,89 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import base.SpecBase
-import forms.EmailAddressFormProvider
+import controllers.routes
+import forms.FaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.contactdetails.{BusinessEmailAddressPage, ContactDetailsChangesPage}
 import pages.GroupMemberPage
+import pages.contactdetails.{BusinessFaxNumberPage, ContactDetailsChangesPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessEmailAddressView
+import views.html.businesscontactdetails.FaxNumberView
 
 import scala.concurrent.Future
 
-class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
+class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new EmailAddressFormProvider()
-  val form = formProvider("emailAddress")
-
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        GroupMemberPage.toString        -> false,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+  val formProvider = new FaxNumberFormProvider()
+  val form = formProvider("faxNumber")
+  val noAnswers = UserAnswers(
+    userAnswersId,
+    Json.obj(
+      GroupMemberPage.toString        -> false,
+      "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
     )
+  )
+  lazy val faxNumberRoute = controllers.businesscontactdetails.routes.FaxNumberController.onPageLoad().url
 
-  lazy val emailAddressRoute =
-    routes.BusinessEmailAddressController.onPageLoad().url
-
-  "BusinessEmailAddress Controller" - {
+  "FaxNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, emailAddressRoute)
+        val request = FakeRequest(GET, faxNumberRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[BusinessEmailAddressView]
+        val view = application.injector.instanceOf[FaxNumberView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to access denied when group member is true on GET" in {
+
+      val data = Json.obj(
+        GroupMemberPage.toString        -> true,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+        val request = FakeRequest(GET, faxNumberRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
       }
     }
 
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "businessContactDetailsSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
-        BusinessEmailAddressPage.toString -> "validEmail@example.com",
-        GroupMemberPage.toString          -> false
+        GroupMemberPage.toString        -> false,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId),
+        BusinessFaxNumberPage.toString  -> "07700900999"
       )
 
       val userAnswers = UserAnswers(userAnswersId, data)
@@ -87,48 +104,21 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, emailAddressRoute)
+        val request = FakeRequest(GET, faxNumberRoute)
 
-        val view = application.injector.instanceOf[BusinessEmailAddressView]
+        val view = application.injector.instanceOf[FaxNumberView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual
-          view(form.fill("validEmail@example.com"), NormalMode)(request, messages(application)).toString
-      }
-    }
-
-    "must redirect to access denied when group member is true on GET" in {
-
-      val userAnswers =
-        UserAnswers(
-          userAnswersId,
-          Json.obj(
-            GroupMemberPage.toString        -> true,
-            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-          )
-        )
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-
-        val request = FakeRequest(GET, emailAddressRoute)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          routes.AccessDeniedController.onPageLoad().url
+        contentAsString(result) mustEqual view(form.fill("07700900999"), NormalMode)(request, messages(application)).toString
       }
     }
 
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
+
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
@@ -141,8 +131,8 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
+          FakeRequest(POST, faxNumberRoute)
+            .withFormUrlEncodedBody(("faxNumber", "01632 960 001"))
 
         val result = route(application, request).value
 
@@ -161,20 +151,44 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository)
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 
       running(application) {
         val request =
-          FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
+          FakeRequest(POST, faxNumberRoute)
+            .withFormUrlEncodedBody(("faxNumber", "01632 960 001"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(BusinessEmailAddressPage).value mustEqual "validEmail@example.com"
+        savedAnswersCaptor.getValue.get(BusinessFaxNumberPage).value mustEqual "01632 960 001"
+      }
+    }
+
+    "must redirect to access denied when group member is true on POST" in {
+
+      val data = Json.obj(
+        GroupMemberPage.toString        -> true,
+        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+      )
+
+      val application =
+        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, faxNumberRoute)
+            .withFormUrlEncodedBody(("faxNumber", "01632 960 001"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual
+          routes.AccessDeniedController.onPageLoad().url
       }
     }
 
@@ -188,20 +202,21 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository)
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute))
           )
           .build()
 
       running(application) {
         val request =
-          FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
+          FakeRequest(POST, faxNumberRoute)
+            .withFormUrlEncodedBody(("faxNumber", "01632 960 001"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(BusinessEmailAddressPage).value mustEqual "validEmail@example.com"
+        savedAnswersCaptor.getValue.get(BusinessFaxNumberPage).value mustEqual "01632 960 001"
         savedAnswersCaptor.getValue.get(ContactDetailsChangesPage).value mustEqual true
       }
     }
@@ -212,18 +227,17 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, faxNumberRoute)
+            .withFormUrlEncodedBody(("faxNumber", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("faxNumber" -> ""))
 
-        val view = application.injector.instanceOf[BusinessEmailAddressView]
+        val view = application.injector.instanceOf[FaxNumberView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual
-          view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -232,44 +246,12 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, emailAddressRoute)
+        val request = FakeRequest(GET, faxNumberRoute)
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
-      }
-    }
-
-    "must redirect to access denied when group member is true on POST" in {
-
-      val userAnswers =
-        UserAnswers(
-          userAnswersId,
-          Json.obj(
-            GroupMemberPage.toString        -> true,
-            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-          )
-        )
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-
-        val request =
-          FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(
-              ("emailAddress", "validEmail@example.com")
-            )
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual
-          routes.AccessDeniedController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
 
@@ -279,14 +261,13 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, emailAddressRoute)
-            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
+          FakeRequest(POST, faxNumberRoute)
+            .withFormUrlEncodedBody(("faxNumber", "01632960001"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual
-          routes.SystemErrorController.onPageLoad().url
+        redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
       }
     }
   }

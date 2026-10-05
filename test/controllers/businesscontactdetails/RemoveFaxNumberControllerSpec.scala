@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import base.SpecBase
+import controllers.routes
 import forms.RemoveFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -24,15 +25,15 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.contactdetails.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
 import pages.GroupMemberPage
+import pages.contactdetails.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.RemoveFaxNumberView
+import views.html.businesscontactdetails.RemoveFaxNumberView
 
 import scala.concurrent.Future
 
@@ -74,7 +75,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   lazy val removeFaxNumberRoute =
-    routes.RemoveFaxNumberController.onPageLoad(NormalMode).url
+    controllers.businesscontactdetails.routes.RemoveFaxNumberController.onPageLoad().url
 
   "RemoveFaxNumber Controller" - {
 

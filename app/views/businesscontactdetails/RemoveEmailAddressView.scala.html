@@ -29,7 +29,7 @@
 
 @layout(pageTitle = title(form, messages("removeEmailAddress.title"))) {
 
-    @formHelper(action = routes.RemoveEmailAddressController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.businesscontactdetails.routes.RemoveEmailAddressController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import base.SpecBase
+import controllers.routes
 import forms.RemoveEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
@@ -24,14 +25,14 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.contactdetails.{ContactDetailsChangesPage, RemoveEmailAddressPage}
 import pages.GroupMemberPage
+import pages.contactdetails.{ContactDetailsChangesPage, RemoveEmailAddressPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.RemoveEmailAddressView
+import views.html.businesscontactdetails.RemoveEmailAddressView
 
 import scala.concurrent.Future
 
@@ -53,7 +54,7 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   lazy val removeEmailRoute =
-    routes.RemoveEmailAddressController.onPageLoad(NormalMode).url
+    controllers.businesscontactdetails.routes.RemoveEmailAddressController.onPageLoad().url
 
   "RemoveEmailAddress Controller" - {
 

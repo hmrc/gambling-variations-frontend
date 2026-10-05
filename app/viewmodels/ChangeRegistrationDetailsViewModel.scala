@@ -90,7 +90,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.businessContactDetails"),
-            routes.CheckContactDetailsController.onPageLoad().url,
+            controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url,
             status(ContactDetailsChangesPage)
           )
         ),

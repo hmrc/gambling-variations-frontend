@@ -170,6 +170,14 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
+      "must not require premises details when all premises are covered, even if online has been selected without any premises" in {
+        val vm = viewModel(isPubTenant = true, provideAddressesAnswer = Some(Online))
+
+        keys(vm) must contain noneOf (msgs("checkLicenceAndPremises.provideAddresses"), msgs("checkLicenceAndPremises.addressesOnline"))
+        vm.premisesDetailsRequiredMessage mustBe None
+        vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+      }
+
       "must use by post when premises are not covered, the method is not provided and there are no premises" in {
         val vm = viewModel(isPubTenant = true, hasPremisesNotCovered = true)
 

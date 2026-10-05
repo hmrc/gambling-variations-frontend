@@ -174,16 +174,14 @@ case class ConfirmPageLabels(
   heading: String = "correspondenceAddressConfirmAddress.heading",
   submitLabel: String = "correspondenceAddressConfirmAddress.submit",
   searchAgainLinkText: String = "correspondenceAddressConfirmAddress.searchAgain",
-  changeLinkText: String = "correspondenceAddressConfirmAddress.change",
-  confirmChangeText: String = "correspondenceAddressConfirmAddress.confirmChange"
+  changeLinkText: String = "correspondenceAddressConfirmAddress.change"
 ) {
   def messages(implicit messages: Messages) = ConfirmPageLabels(
     title               = messages(title),
     heading             = messages(heading),
     submitLabel         = messages(submitLabel),
     searchAgainLinkText = messages(searchAgainLinkText),
-    changeLinkText      = messages(changeLinkText),
-    confirmChangeText   = messages(confirmChangeText)
+    changeLinkText      = messages(changeLinkText)
   )
 }
 
@@ -196,8 +194,8 @@ case class EditPageLabels(
   heading: String = "correspondenceUKAddress.heading",
   line1Label: String = "correspondenceUKAddress.addressLine1",
   line2Label: String = "correspondenceUKAddress.addressLine2",
-  line3Label: String = "correspondenceUKAddress.townOrCity",
-  townLabel: String = "correspondenceUKAddress.County",
+  line3Label: String = "correspondenceUKAddress.County",
+  townLabel: String = "correspondenceUKAddress.townOrCity",
   postcodeLabel: Option[String] = Some("correspondenceUKAddress.Postcode"),
   countryLabel: Option[String] = None,
   submitLabel: Option[String] = Some("site.continue")
@@ -235,8 +233,8 @@ object International {
         heading       = "correspondenceNonUKAddress.heading",
         line1Label    = "correspondenceNonUKAddress.addressLine1",
         line2Label    = "correspondenceNonUKAddress.addressLine2",
-        line3Label    = "correspondenceNonUKAddress.townOrCity",
-        townLabel     = "correspondenceNonUKAddress.Region",
+        line3Label    = "correspondenceNonUKAddress.Region",
+        townLabel     = "correspondenceNonUKAddress.townOrCity",
         postcodeLabel = None,
         countryLabel  = Some("correspondenceNonUKAddress.Country"),
         submitLabel   = Some("site.continue")

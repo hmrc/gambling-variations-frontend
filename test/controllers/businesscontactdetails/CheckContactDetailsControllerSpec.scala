@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businesscontactdetails
 
 import base.SpecBase
+import controllers.routes
 import models.UserAnswers
+import pages.GroupMemberPage
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.CheckContactDetailsView
-import pages.GroupMemberPage
+import views.html.businesscontactdetails.CheckContactDetailsView
 
 class CheckContactDetailsControllerSpec extends SpecBase {
 
@@ -48,7 +49,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
 
       running(application) {
         val request =
-          FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -73,7 +74,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
         val view = application.injector.instanceOf[CheckContactDetailsView]
@@ -105,7 +106,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
 
       running(application) {
         val request =
-          FakeRequest(GET, routes.CheckContactDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 
