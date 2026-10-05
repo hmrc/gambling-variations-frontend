@@ -72,7 +72,7 @@ case class CheckPartnerDetailsViewModel(
   val isNewPartnerSubmitted: Boolean = maybeSubmitted.exists(identity) // NEW PARTNERS ONLY
 
   // --- Update this ---
-  // NOTE: routing will be done with the integration ticket
+  // NOTE: routing will be done with the integration ticket.
   def continueCall: Call = if (isMissingMandatoryDetails) {
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
   } else {
@@ -81,33 +81,33 @@ case class CheckPartnerDetailsViewModel(
 
   def notices(implicit messages: Messages): Seq[Html] = {
     val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
-    val link = s"""<a href="$url" class="govuk-link">${messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")}</a>"""
+    val contactUsLink = messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")
+    val link =
+      s"""<a href="$url" class="govuk-link" target="_blank" rel="noopener noreferrer">$contactUsLink</a>"""
 
     val messagesToShow =
       if (isNewPartnerFlow)
-        Option.when(isMissingMandatoryDetails)(messages("partnerDetailsCheckYourAnswers.error.missingDetails")).toSeq
+        Seq(
+          Some(messages("partnerDetailsCheckYourAnswers.error.missingChanges")),
+          Option.when(isMissingMandatoryDetails)(messages("partnerDetailsCheckYourAnswers.error.missingDetails"))
+        ).flatten
       else {
         val leaving =
-          if (isDueToLeave) dateOfLeaving.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", _, link))
+          if (isDueToLeave) dateOfLeaving.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", d, link))
           else None
 
         val joining =
-          if (isDueToJoin) dateOfJoining.map(messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", _, link))
+          if (isDueToJoin) dateOfJoining.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", d, link))
           else None
 
-        val contactUs = Option.when(leaving.isEmpty && joining.isEmpty)(
-          messages("partnerDetailsCheckYourAnswers.error.contactUs", link)
-        )
-
-        Seq(joining.orElse(leaving), contactUs).flatten
+        // If due to both join and leave, show only the leaving notice (per design spec)
+        leaving.orElse(joining) match {
+          case Some(lockedNotice) => Seq(lockedNotice)
+          case None               => Seq(messages("partnerDetailsCheckYourAnswers.error.contactUs", link))
+        }
       }
 
-    val submitChanges =
-      Option.when(!isNewPartnerFlow || isNewPartnerSubmitted)(
-        messages("partnerDetailsCheckYourAnswers.error.missingChanges")
-      )
-
-    (submitChanges.toSeq ++ messagesToShow).map(Html(_))
+    messagesToShow.map(Html(_))
   }
 
   // --- Summary lists ---
@@ -538,7 +538,7 @@ object CheckPartnerDetailsViewModel {
       maybeSubmitted            = isSubmitted,
       isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
       isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
-      isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index.toString)
+      isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index)
     )
   }
 

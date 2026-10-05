@@ -16,10 +16,11 @@
 
 package utils
 
-import models.{Mode, NormalMode, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.libs.json.{JsArray, JsObject}
+
 import scala.collection.Seq
 
 object PartnerUtils {
@@ -27,6 +28,12 @@ object PartnerUtils {
   def parseIndex(index: String, mode: Mode): BusinessNumberOrIndex =
     if mode == NormalMode then index.toInt
     else index
+
+  /** Inverse of parseIndex: the mode a link must carry so the target controller parses the index correctly. */
+  def modeFor(index: BusinessNumberOrIndex): Mode = index match {
+    case _: Int    => NormalMode
+    case _: String => CheckMode
+  }
 
   def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers, maxPartners: Int): Seq[String] = (userAnswers.data \ "partners")
     .asOpt[JsObject]
