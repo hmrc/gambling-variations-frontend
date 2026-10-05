@@ -573,9 +573,6 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       running(application) {
 
-        implicit val lang: Lang =
-          messages(application).lang
-
         val request =
           getRequest()
 
