@@ -46,6 +46,14 @@ object LicencesPremisesAnswers {
 
     def premisesNotCoveredAnswer: Boolean = backendFlag(LicencePremisesNotCoveredPage)
 
+    // The premises are counted rather than using totalRows, so that the count agrees with the premises addresses list, also after removals
+    def premisesCount: Int =
+      answers.get(PremisesDetailsPage).map(_.premises.size).getOrElse(0)
+
+    // The check page and the provide premises addresses question show the same method, derived when it has not been answered
+    def provideAddressesAnswer: LicencesAndPremisesRadioOptions =
+      answers.get(LicencesPremisesPage).getOrElse(LicencesAndPremisesRadioOptions.derivedFrom(premisesCount))
+
     // The section is flagged as submitted once a change screen has been continued from, and as changed once any answer differs
     def withLicencesPremisesFlags(isChanged: Boolean): Try[UserAnswers] = {
       val isAlreadyFlagged = answers.get(LicencesPremisesDetailsChangesPage).contains(true)

@@ -92,6 +92,47 @@ class LicencesPremisesAnswersSpec extends SpecBase {
     }
   }
 
+  "premisesCount" - {
+
+    "must count the premises rather than use the total" in {
+      val premises = PremisesDetails("id", Some("1 Street"), None, None, None, Some("AA1 1AA"), None)
+      val answers = emptyUserAnswers.set(PremisesDetailsPage, PremisesDetailsResponse(Some(1000), Seq(premises, premises))).success.value
+
+      answers.premisesCount mustBe 2
+    }
+
+    "must be zero when there are no premises details" in {
+      emptyUserAnswers.premisesCount mustBe 0
+    }
+  }
+
+  "provideAddressesAnswer" - {
+
+    "must use the stored answer when the question has been answered" in {
+      val premises = PremisesDetails("id", Some("1 Street"), None, None, None, Some("AA1 1AA"), None)
+      val answers = emptyUserAnswers
+        .set(PremisesDetailsPage, PremisesDetailsResponse(Some(1), Seq(premises)))
+        .success
+        .value
+        .set(LicencesPremisesPage, LicencesAndPremisesRadioOptions.ByPost)
+        .success
+        .value
+
+      answers.provideAddressesAnswer mustBe LicencesAndPremisesRadioOptions.ByPost
+    }
+
+    "must derive online from the premises when the question has not been answered" in {
+      val premises = PremisesDetails("id", Some("1 Street"), None, None, None, Some("AA1 1AA"), None)
+      val answers = emptyUserAnswers.set(PremisesDetailsPage, PremisesDetailsResponse(Some(1), Seq(premises))).success.value
+
+      answers.provideAddressesAnswer mustBe LicencesAndPremisesRadioOptions.Online
+    }
+
+    "must derive by post when the question has not been answered and there are no premises" in {
+      emptyUserAnswers.provideAddressesAnswer mustBe LicencesAndPremisesRadioOptions.ByPost
+    }
+  }
+
   "withLicencesPremisesFlags" - {
 
     "must set submitted, and changed only when the answer is changed" in {

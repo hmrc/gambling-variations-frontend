@@ -51,9 +51,7 @@ class LicencesPremisesController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers
-      .get(LicencesPremisesPage)
-      .fold(form)(form.fill)
+    val preparedForm = form.fill(request.userAnswers.provideAddressesAnswer)
 
     Ok(view(preparedForm))
   }
