@@ -16,13 +16,10 @@
 
 package pages.controllingbody
 
-import models.CorrespondenceDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyCorrespondenceSectionPage extends QuestionPage[CorrespondenceDetails] {
-
+case object ControllingBodyAddTradingNameYesNoPage extends QuestionPage[Boolean] {
   override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
-
-  override def toString: String = "correspondenceSection"
+  override def toString: String = "addTradingName"
 }

@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package forms.controllingbody
 
-import models.CorrespondenceDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object ControllingBodyCorrespondenceSectionPage extends QuestionPage[CorrespondenceDetails] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+class ControllingBodyAddTradingNameYesNoFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "correspondenceSection"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("controllingBodyAddTradingNameYesNo.error.required")
+    )
 }

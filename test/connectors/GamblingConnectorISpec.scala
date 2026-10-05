@@ -61,6 +61,43 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   private lazy val connector =
     app.injector.instanceOf[GamblingConnector]
 
+  "GamblingConnector.getControllingBodyDetails" should {
+    "read the I1.36 response from the controlling body endpoint" in {
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(s"""{"mgdRegNumber":"$mgdRegNumber","typeOfControllingBody":4,"businessName":"Test Partnership"}"""))
+      )
+      connector.getControllingBodyDetails(mgdRegNumber).map { result =>
+        result mustBe models.controllingbody.ControllingBodyDetails(mgdRegNumber, models.BusinessType.Partnership, Some("Test Partnership"))
+      }
+    }
+
+    Seq(404, 500).foreach { status =>
+      s"fail when the controlling body endpoint returns $status" in {
+        wireMockServer.stubFor(
+          get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+            .willReturn(aResponse().withStatus(status))
+        )
+        recoverToSucceededIf[UpstreamErrorResponse](connector.getControllingBodyDetails(mgdRegNumber))
+      }
+    }
+
+    Seq(
+      "missing registration number" -> """{"typeOfControllingBody":4}""",
+      "missing business type"       -> s"""{"mgdRegNumber":"$mgdRegNumber"}""",
+      "null business type"          -> s"""{"mgdRegNumber":"$mgdRegNumber","typeOfControllingBody":null}""",
+      "invalid business type"       -> s"""{"mgdRegNumber":"$mgdRegNumber","typeOfControllingBody":99}"""
+    ).foreach { case (scenario, payload) =>
+      s"fail when the backend returns a $scenario" in {
+        wireMockServer.stubFor(
+          get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+            .willReturn(okJson(payload))
+        )
+        recoverToSucceededIf[RuntimeException](connector.getControllingBodyDetails(mgdRegNumber))
+      }
+    }
+  }
+
   "GamblingConnector.getParterDetails" should {
 
     "return partnerDetails when backend returns 200" in {

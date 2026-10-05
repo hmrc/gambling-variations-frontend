@@ -50,7 +50,7 @@ class ControllingBodyBusinessTypeControllerSpec extends SpecBase with MockitoSug
   private val userAnswers = UserAnswers(
     mgdRegNum,
     Json.obj(
-      "controllingBodyDetailsSection" -> Json.obj(
+      "controllingBodyDetails" -> Json.obj(
         "mgdRegNum"              -> "ZM1000001",
         "businessPartnerNumber"  -> "12787",
         "dateOfJoining"          -> LocalDate.of(2026, 9, 25),

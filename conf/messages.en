@@ -1134,3 +1134,7 @@ chooseStandardReturnPeriods.caption = Change registration details
 chooseStandardReturnPeriods.jan = Last day of January, April, July and October
 chooseStandardReturnPeriods.feb = Last day of February, May, August and November
 chooseStandardReturnPeriods.mar = Last day of March, June, September and December
+
+controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
