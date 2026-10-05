@@ -445,3 +445,7 @@ partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country t
 partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
 partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?
+
+controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body

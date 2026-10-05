@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package forms.controllingbody
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-case object ControllingBodyTypeOfControllingBodyPage extends QuestionPage[String] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
+class ControllingBodyAddTradingNameYesNoFormProvider @Inject() extends Mappings {
 
-  override def toString: String =
-    "typeOfControllingBody"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("controllingBodyAddTradingNameYesNo.error.required")
+    )
 }
