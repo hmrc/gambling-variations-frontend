@@ -22,21 +22,25 @@ import pages.*
 import pages.correspondencedetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkFlag
 import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
+import scala.concurrent.{ExecutionContext, Future}
 
 import javax.inject.Inject
 
 class CheckCorrespondenceDetailsController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckCorrespondenceDetailsView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
@@ -85,4 +89,13 @@ class CheckCorrespondenceDetailsController @Inject() (
         contact.phoneNumber.isDefined ||
         contact.mobilePhoneNumber.isDefined
       }
+
+  def onContinue: Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val ua = request.userAnswers
+      for {
+        updatedAnswers <- Future.fromTry(ua.remove(IsAddingNewCorrespondenceDetailsPage))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+    }
 }
