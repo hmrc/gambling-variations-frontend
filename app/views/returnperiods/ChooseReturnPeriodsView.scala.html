@@ -28,55 +28,41 @@
     caption: Caption
 )
 
-@(form: Form[_], mode: Mode, variant: ReturnPeriodsVariant)(
-implicit request: Request[_],
-messages: Messages
-)
+@(form: Form[_], mode: Mode, variant: ReturnPeriodsVariant)(implicit request: Request[_],messages: Messages)
 
-@layout(pageTitle = title(form, messages(s"${variant.messagePrefix}.title"), Some(messages("changeRegistrationDetails.caption"))), isFullWidth = true) {
+@layout(pageTitle = title(form, messages(s"${variant.messagePrefix}.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-
-        @caption(messages("changeRegistrationDetails.caption"))
-        @formHelper(
-        action = controllers.returnperiods.routes.ChooseReturnPeriodsController.onSubmit(mode),
-        Symbol("autoComplete") -> "off"
-        ) {
+    @caption(messages("changeRegistrationDetails.caption"))
+    @formHelper(action = controllers.returnperiods.routes.ChooseReturnPeriodsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-        @govukErrorSummary(
-        ErrorSummaryViewModel(
-        form,
-        errorLinkOverrides =
-        Map("value" -> "returnPeriods")
-        )
-        )
+            @govukErrorSummary(
+                ErrorSummaryViewModel(
+                    form,
+                    errorLinkOverrides =
+                    Map("value" -> "returnPeriods")
+                )
+            )
         }
 
         @govukRadios(
             RadiosViewModel(
                 field = form("value"),
-                    legend =
-                    LegendViewModel(
-                    messages(
-                    s"${variant.messagePrefix}.heading"
-                )
+                legend =
+                LegendViewModel(
+                messages(s"${variant.messagePrefix}.heading")
                 ).asPageHeading(viewmodels.LegendSize.Large),
                 items = ChooseReturnPeriods.options(variant.messagePrefix)
             )
         )
 
         @if(variant.showCaption) {
-        @p("chooseReturnPeriods.p")
+            @p("chooseReturnPeriods.p")
         }
 
         @govukButton(ButtonViewModel(messages("site.continue")))
         }
 
 
-
-    </div>
-</div>
 }
 
