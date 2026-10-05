@@ -203,7 +203,14 @@ class PartnerDetailsController @Inject() (
     val existingPartners = getPresentExistingPartners(userAnswers, todayDate)
 
     paginationService
-      .paginatePartnerDetails(completedNewPartners, existingPartners, page, partnersPerPage, routes.PartnerDetailsController.onPageLoad(None).url)
+      .paginateAlphabeticallyPartnerDetails(
+        completedNewPartners,
+        existingPartners,
+        userAnswers,
+        page,
+        partnersPerPage,
+        routes.PartnerDetailsController.onPageLoad(None).url
+      )
   }
 
   private def getPresentExistingPartners(userAnswers: UserAnswers, todayDate: LocalDate): Seq[String] = PartnerUtils
@@ -220,5 +227,6 @@ class PartnerDetailsController @Inject() (
           .exists(_.isBefore(todayDate))
 
       hasPartner && !hasPastLeavingDate
+      true
     }
 }

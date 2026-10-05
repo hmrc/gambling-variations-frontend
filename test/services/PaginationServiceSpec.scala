@@ -32,7 +32,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
 
       "must return correct pagination for first page with 10 records per page" in {
         val testData = createTestExistingPartnerDetails(5)
-        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 5
         result.currentPage mustBe 1
@@ -44,7 +45,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
 
       "must return correct pagination for last page" in {
         val testData = createTestExistingPartnerDetails(25)
-        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 3, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 3, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 5
         result.currentPage mustBe 3
@@ -56,7 +58,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
 
       "must return correct pagination for middle page" in {
         val testData = createTestExistingPartnerDetails(25)
-        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 10
         result.currentPage mustBe 2
@@ -69,7 +72,12 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       "must correctly align new partners indexes and existing partners business numbers" in {
         val testDataExisting = createTestExistingPartnerDetails(25)
         val testDataNew = createTestNewCompletedPartnerDetails(25)
-        val result = paginationService.paginatePartnerDetails(testDataNew, testDataExisting, currentPage = 3, elementsPerPage = 10, baseUrl = "/test")
+        val result = paginationService.paginateAlphabeticallyPartnerDetails(testDataNew,
+                                                                            testDataExisting,
+                                                                            currentPage     = 3,
+                                                                            elementsPerPage = 10,
+                                                                            baseUrl         = "/test"
+                                                                           )
 
         result.paginatedData.slice(0, 5).forall(e => e.isInstanceOf[Int]) mustBe true
         result.paginatedData.slice(5, 10).forall(e => e.isInstanceOf[String]) mustBe true
@@ -83,7 +91,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       }
 
       "must handle empty data" in {
-        val result = paginationService.paginatePartnerDetails(Seq.empty, Seq.empty, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, Seq.empty, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.length mustBe 0
         result.currentPage mustBe 1
@@ -94,7 +103,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
 
       "must limit records to maximum of 99" in {
         val testData = createTestExistingPartnerDetails(150)
-        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.totalRecords mustBe 100
         result.totalPages mustBe 10
@@ -109,7 +119,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
           "1234567"
         )
 
-        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginatedData.head mustBe "12345"
         result.paginatedData(1) mustBe "123456"
@@ -121,16 +132,19 @@ class PaginationServiceSpec extends SpecBase with Matchers {
       "must handle invalid page numbers gracefully" in {
         val testData = createTestExistingPartnerDetails(5)
 
-        val resultNegative = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = -1, elementsPerPage = 10, baseUrl = "/test")
+        val resultNegative =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = -1, elementsPerPage = 10, baseUrl = "/test")
         resultNegative.currentPage mustBe 1
 
-        val resultTooHigh = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 999, elementsPerPage = 10, baseUrl = "/test")
+        val resultTooHigh =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 999, elementsPerPage = 10, baseUrl = "/test")
         resultTooHigh.currentPage mustBe 1
       }
 
       "must generate correct pagination links" in {
         val testData = createTestExistingPartnerDetails(25)
-        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 2, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginationViewModel.previous.get.href mustBe "/test?page=1"
         result.paginationViewModel.next.get.href mustBe "/test?page=3"
@@ -140,7 +154,8 @@ class PaginationServiceSpec extends SpecBase with Matchers {
 
       "must not show pagination when only one page" in {
         val testData = createTestExistingPartnerDetails(2)
-        val result = paginationService.paginatePartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
+        val result =
+          paginationService.paginateAlphabeticallyPartnerDetails(Seq.empty, testData, currentPage = 1, elementsPerPage = 10, baseUrl = "/test")
 
         result.paginationViewModel.items.length mustBe 0
         result.paginationViewModel.previous mustBe None

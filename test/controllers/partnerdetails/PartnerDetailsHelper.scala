@@ -55,8 +55,8 @@ trait PartnerDetailsHelper {
     }
 
     val paginationService = new PaginationService(10, 100, 5)
-    val paginationResult: PaginationResult = paginationService.paginatePartnerDetails(
-      completedNewPartners   = Seq.empty, // TODO important
+    val paginationResult: PaginationResult = paginationService.paginateAlphabeticallyPartnerDetails(
+      completedNewPartners   = Seq.empty,
       existingPartnerDetails = partnerDetailsBusinessNumberList,
       currentPage            = currentPage,
       elementsPerPage        = 10,

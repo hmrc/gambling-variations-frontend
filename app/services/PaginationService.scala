@@ -16,7 +16,9 @@
 
 package services
 
+import models.UserAnswers
 import pages.BusinessNumberOrIndex
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import viewmodels.govuk.PaginationFluency.{PaginationItemViewModel, PaginationLinkViewModel, PaginationViewModel}
 
 case class PaginationResult(
@@ -31,14 +33,26 @@ case class PaginationResult(
 
 class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: Int) {
 
-  def paginatePartnerDetails(
+  def paginateAlphabeticallyPartnerDetails(
     completedNewPartners: Seq[Int],
     existingPartnerDetails: Seq[String],
+    userAnswers: UserAnswers,
     currentPage: Int,
     elementsPerPage: Int,
     baseUrl: String
   ): PaginationResult = {
-    val sortedPartnerDetails: Seq[BusinessNumberOrIndex] = (completedNewPartners ++ existingPartnerDetails.sortBy(_.toLong)).take(maxRecords)
+    val partnerDetailsList: Seq[BusinessNumberOrIndex] = completedNewPartners ++ existingPartnerDetails
+    val sortedPartnerDetails = partnerDetailsList
+      .flatMap { bOrI =>
+        userAnswers
+          .get(PartnerDetailsTradingNamePage(bOrI))
+          .orElse(userAnswers.get(PartnerDetailsBusinessNamePage(bOrI)))
+          .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(bOrI)))
+          .map(_ -> bOrI)
+      }
+      .sortBy(_._1)
+      .map((_, a) => a)
+      .take(maxRecords)
 
     val totalRecords = sortedPartnerDetails.length
     val totalPages = calculateTotalPages(totalRecords)
