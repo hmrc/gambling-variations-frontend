@@ -82,7 +82,7 @@ class ChooseReturnPeriodsViewSpec extends SpecBase {
           messages(application)("site.continue")
         )
 
-        document.body().text() must include(
+        document.body().text() must not include (
           messages(application)("chooseReturnPeriods.p")
         )
 
@@ -138,6 +138,10 @@ class ChooseReturnPeriodsViewSpec extends SpecBase {
 
         document.body().text() must include(
           messages(application)("site.continue")
+        )
+
+        document.body().text() must include(
+          messages(application)("chooseReturnPeriods.p")
         )
 
         document.select("input[type=radio]").size() mustEqual 3
@@ -262,41 +266,7 @@ class ChooseReturnPeriodsViewSpec extends SpecBase {
       }
     }
 
-    "render the standard variant explanatory paragraph" in {
-
-      val application = applicationBuilder().build()
-
-      running(application) {
-
-        val view =
-          application.injector
-            .instanceOf[ChooseReturnPeriodsView]
-
-        val form =
-          formProvider(
-            ReturnPeriodsVariant.Standard.errorMessageKey
-          )
-
-        val html =
-          view(
-            form,
-            NormalMode,
-            ReturnPeriodsVariant.Standard
-          )(
-            FakeRequest(),
-            messages(application)
-          )
-
-        val document =
-          Jsoup.parse(html.toString)
-
-        document.body().text() must include(
-          messages(application)("chooseReturnPeriods.p")
-        )
-      }
-    }
-
-    "not render the explanatory paragraph for the non-standard variant" in {
+    "render the explanatory paragraph for the non-standard variant" in {
 
       val application = applicationBuilder().build()
 
@@ -316,6 +286,40 @@ class ChooseReturnPeriodsViewSpec extends SpecBase {
             form,
             NormalMode,
             ReturnPeriodsVariant.NonStandard
+          )(
+            FakeRequest(),
+            messages(application)
+          )
+
+        val document =
+          Jsoup.parse(html.toString)
+
+        document.body().text() must include(
+          messages(application)("chooseReturnPeriods.p")
+        )
+      }
+    }
+
+    "not render the explanatory paragraph for the standard variant" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        val view =
+          application.injector
+            .instanceOf[ChooseReturnPeriodsView]
+
+        val form =
+          formProvider(
+            ReturnPeriodsVariant.Standard.errorMessageKey
+          )
+
+        val html =
+          view(
+            form,
+            NormalMode,
+            ReturnPeriodsVariant.Standard
           )(
             FakeRequest(),
             messages(application)
