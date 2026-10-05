@@ -23,7 +23,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import pages.licencespremises.PremisesDetailsPage
 import play.api.Application
-import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
