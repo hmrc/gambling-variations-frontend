@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.*
 import models.{Address, NormalMode}
 import navigation.Navigator
-import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, IsAddingNewCorrespondenceDetailsPage}
+import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
 import pages.isleMOrChannelFlagPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
