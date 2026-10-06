@@ -243,3 +243,6 @@ POST       /change-registration-details/licences-and-premises/addresses         
 
 GET        /change-registration-details/controlling-body-details/business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/business-type                        controllers.controllingbody.ControllingBodyBusinessTypeController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)

@@ -1109,3 +1109,8 @@ partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
 partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
 partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
 
+controllingBodyFaxNumber.title = What is the controlling body's fax number?
+controllingBodyFaxNumber.heading = What is the controlling body's fax number?
+controllingBodyFaxNumber.error.required = Enter the controlling body's fax number
+controllingBodyFaxNumber.error.invalid = The fax number must only include numbers 0 to 9 and spaces
+controllingBodyFaxNumber.error.length = The fax number must be 20 characters or less
