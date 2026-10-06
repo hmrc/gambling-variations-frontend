@@ -1,0 +1,134 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.LegendSize.Large
+@import java.time.LocalDate
+@import java.time.format.DateTimeFormatter
+@import java.util.Locale
+@import views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+
+@this(
+ layout: templates.Layout,
+ formHelper: FormWithCSRF,
+ govukErrorSummary: GovukErrorSummary,
+ govukDateInput: GovukDateInput,
+ govukButton: GovukButton,
+ caption: Caption
+)
+
+@(
+form: Form[_],
+mode: Mode,
+periodNumber: Int,
+numberOfPeriods: Int,
+periodEnd: LocalDate,
+lowerBoundary: LocalDate,
+upperBoundary: LocalDate
+)(
+implicit request: Request[_],
+messages: Messages
+)
+
+@monthYearFormatter = @{
+DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)
+}
+
+@longDateFormatter = @{
+DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH)
+}
+
+@periodMonthYear = @{
+periodEnd.format(monthYearFormatter)
+}
+
+@lowerBoundaryText = @{
+lowerBoundary.format(longDateFormatter)
+}
+
+@upperBoundaryText = @{
+upperBoundary.format(longDateFormatter)
+}
+
+@hintText = @{
+HtmlContent(
+messages(
+"enterNonStandardPeriodDate.range",
+lowerBoundaryText,
+upperBoundaryText
+) +
+"<br><br>" +
+messages("enterNonStandardPeriodDate.hint")
+)
+}
+
+@layout(
+pageTitle = title(
+form,
+messages(
+"enterNonStandardPeriodDate.title",
+periodMonthYear,
+periodNumber,
+numberOfPeriods
+)
+)
+) {
+
+@formHelper(
+action = controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onSubmit(
+periodNumber,
+mode
+),
+Symbol("autoComplete") -> "off"
+) {
+
+@if(form.errors.nonEmpty) {
+@govukErrorSummary(
+ErrorSummaryViewModel(
+form,
+errorLinkOverrides = Map(
+"value" -> "value.day"
+)
+)
+)
+}
+
+@caption(messages("changeRegistrationDetails.caption"))
+
+@govukDateInput(
+DateViewModel(
+field = form("value"),
+legend = LegendViewModel(
+messages(
+"enterNonStandardPeriodDate.heading",
+periodMonthYear,
+periodNumber,
+numberOfPeriods
+)
+).asPageHeading(Large)
+).withHint(
+HintViewModel(hintText)
+)
+)
+
+
+@govukButton(
+ButtonViewModel(
+messages("site.continue")
+)
+)
+}
+}

@@ -242,3 +242,10 @@ GET        /change-registration-details/return-periods/select         controller
 POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
+
+
+GET     /change-registration-details/return-periods/end-date-:periodNumber   controllers.returnperiods.EnterNonStandardPeriodDateController.onPageLoad(periodNumber: Int, mode: Mode = NormalMode)
+POST    /change-registration-details/return-periods/end-date-:periodNumber   controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit( periodNumber: Int, mode: Mode = NormalMode)
+GET     /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onPageLoad(periodNumber: Int, mode: Mode = CheckMode)
+POST    /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit(periodNumber: Int, mode: Mode = CheckMode)
+

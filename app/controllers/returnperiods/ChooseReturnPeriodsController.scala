@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
 import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers}
 import navigation.Navigator
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage, NonStandardPeriodDate1Page, NonStandardPeriodDate2Page, NonStandardPeriodDate3Page, NonStandardPeriodDate4Page, NonStandardPeriodDate5Page, NonStandardPeriodDate6Page, NonStandardPeriodDate7Page, NonStandardPeriodDate8Page}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,6 +29,7 @@ import views.html.returnperiods.ChooseReturnPeriodsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class ChooseReturnPeriodsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -94,11 +95,24 @@ class ChooseReturnPeriodsController @Inject() (
                     view(formWithErrors, mode, variant)
                   )
                 ),
-              value =>
+              value => {
+
+                val previousReturnPeriodsId =
+                  request.userAnswers.get(ChooseReturnPeriodsPage)
+
+                val answers =
+                  if (previousReturnPeriodsId.exists(_ != value.returnPeriodsId)) {
+                    clearNstpDates(request.userAnswers)
+                  } else {
+                    Try(request.userAnswers)
+                  }
+
                 for {
+                  answersAfterClear <- Future.fromTry(answers)
+
                   updatedAnswers <-
                     Future.fromTry(
-                      request.userAnswers
+                      answersAfterClear
                         .set(
                           ChooseReturnPeriodsPage,
                           value.returnPeriodsId
@@ -120,6 +134,7 @@ class ChooseReturnPeriodsController @Inject() (
                     updatedAnswers
                   )
                 )
+              }
             )
 
         case None =>
@@ -128,6 +143,19 @@ class ChooseReturnPeriodsController @Inject() (
           )
       }
     }
+
+  private def clearNstpDates(
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    userAnswers
+      .remove(NonStandardPeriodDate1Page)
+      .flatMap(_.remove(NonStandardPeriodDate2Page))
+      .flatMap(_.remove(NonStandardPeriodDate3Page))
+      .flatMap(_.remove(NonStandardPeriodDate4Page))
+      .flatMap(_.remove(NonStandardPeriodDate5Page))
+      .flatMap(_.remove(NonStandardPeriodDate6Page))
+      .flatMap(_.remove(NonStandardPeriodDate7Page))
+      .flatMap(_.remove(NonStandardPeriodDate8Page))
 
   private def variantFrom(
     userAnswers: UserAnswers
