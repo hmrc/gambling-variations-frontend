@@ -106,9 +106,10 @@ class CheckLicenceAndPremisesViewSpec extends SpecBase {
       val formLink = document.select("main a[href*=mgd5]")
       formLink.attr("href") mustEqual "https://www.tax.service.gov.uk/print-and-post/form/Customs/1.0/MGD5/mgd5.xdp"
       formLink.attr("rel") mustEqual "noreferrer noopener"
+      formLink.attr("target") mustEqual "_blank"
       formLink.text() mustEqual msgs("checkLicenceAndPremises.byPost.link")
       formLink.parents().get(0).text() mustEqual
-        s"${msgs("checkLicenceAndPremises.byPost.link")} ${msgs("checkLicenceAndPremises.byPost.p1")}"
+        s"${msgs("checkLicenceAndPremises.byPost.link")}${msgs("checkLicenceAndPremises.byPost.p1")}"
 
       val addressLines = (1 to 6).map(line => msgs(s"checkLicenceAndPremises.byPost.address.line$line"))
       addressLines.foreach(line => document.select("main").text() must include(line))

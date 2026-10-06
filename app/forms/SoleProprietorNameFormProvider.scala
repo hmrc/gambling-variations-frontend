@@ -43,7 +43,7 @@ class SoleProprietorNameFormProvider @Inject() extends Mappings {
 
   private def optionalValidateText(max: Int, lengthKey: String, invalidKey: String) =
     optional(
-      text()
+      play.api.data.Forms.text
         .transform[String](_.trim, identity)
         .verifying(maxLength(max, lengthKey))
         .verifying(regexp(optionalNameRegex, invalidKey))
