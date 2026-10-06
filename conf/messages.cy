@@ -441,3 +441,9 @@ partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the
 controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body
+
+partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = cy: Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to remove this partner now
