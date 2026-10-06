@@ -48,7 +48,9 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("controllingBodyNotProvidedYesNo.text", args = Seq(controllingBody))),
+                legend = LegendViewModel(
+                messages("controllingBodyNotProvidedYesNo.text", controllingBody)
+                ),
                 noLabel = messages("controllingBodyNotProvidedYesNo.noLabel")
             )
         )
