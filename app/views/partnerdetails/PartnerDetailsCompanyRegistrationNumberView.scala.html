@@ -35,7 +35,7 @@
 
 @layout(pageTitle = title(form, messages("partnerDetailsCompanyRegistrationNumber.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onSubmit(index)) {
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onSubmit(index, mode)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -59,7 +59,8 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("partnerDetailsCompanyRegistrationNumber.heading")).withCssClass("govuk-visually-hidden")
+                label = LabelViewModel(messages("partnerDetailsCompanyRegistrationNumber.heading"))
+                    .withCssClass("govuk-visually-hidden")
             )
             .withWidth(Full)
             .withHint(HintViewModel(messages("partnerDetailsCompanyRegistrationNumber.hint"))
