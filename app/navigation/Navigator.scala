@@ -237,17 +237,8 @@ class Navigator @Inject() () {
 
   private def navigateCorrespondenceAdditionalNamePage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.AddressLookupController.initialise(true)
+      case Some(true) => routes.AddressLookupController.initialise(false)
       case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
-    }
-
-  private def navigateAfterAddressLookup(answers: UserAnswers): Call =
-    answers.get(IsAddingNewCorrespondenceDetailsPage) match {
-      case Some(true) =>
-        routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
-
-      case _ =>
-        routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateCorrespondenceAddressUkPage()(answers: UserAnswers): Call =
