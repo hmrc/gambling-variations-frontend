@@ -45,7 +45,7 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
     val sortedPartnerDetails = partnerDetailsList
       .flatMap(bOrI => 
         PartnerUtils
-          .getName(bOrI, userAnswers)
+          .getPartnerDetailsName(bOrI, userAnswers)
           .map(_ -> bOrI)
       )
       .sortBy(_._1)

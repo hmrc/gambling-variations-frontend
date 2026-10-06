@@ -49,9 +49,7 @@ object PartnerUtils {
       i
     }
 
-  // TODO name etc
-  // TODO need test for that
-  def getName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = for {
+  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = for {
     businessType <- userAnswers.get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
     name <- businessType match {
               case BusinessType.Soleproprietor =>
@@ -67,7 +65,7 @@ object PartnerUtils {
             }
   } yield name
 
-  private def getNewPartnersSize(userAnswers: UserAnswers): Int =
+  def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
 
 }

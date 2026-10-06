@@ -80,7 +80,7 @@ object PartnerDetailsViewModel {
             .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
             .map { mgdRegNumber =>
 
-              val name = PartnerUtils.getName(partnerNumber, userAnswers)
+              val name = PartnerUtils.getPartnerDetailsName(partnerNumber, userAnswers)
 
               val dateOfJoining =
                 userAnswers.get(
