@@ -22,7 +22,7 @@ import forms.controllingbodydetails.ControllingBodySameAsRepYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.controllingbodydetails.ControllingBodySameAsRepYesNoPage
-import pages.controlbodydetails.ControllingBodyBusinessNamePage
+import pages.controllingbody.ControllingBodyBusinessNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
