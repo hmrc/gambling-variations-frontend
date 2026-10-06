@@ -77,6 +77,19 @@ class SessionRepositorySpec
 
   ".get" - {
 
+    "must migrate legacy controlling body answers and retain edits on the next save" in {
+      val legacy = userAnswers.copy(data = Json.obj(
+        "controllingBodyDetailsSection" -> Json.obj("typeOfControllingBody" -> "partnership", "businessName" -> "Original"),
+        "controllingBodyDetails" -> Json.obj("businessName" -> "Edited", "loaded" -> true)
+      ))
+      insert(legacy).futureValue
+
+      val migrated = repository.get(legacy.id).futureValue.value
+      migrated.data mustBe Json.obj("controllingBodyDetails" -> Json.obj("typeOfControllingBody" -> 4, "businessName" -> "Edited", "loaded" -> true))
+      repository.set(migrated).futureValue mustBe true
+      repository.get(legacy.id).futureValue.value.data mustBe migrated.data
+    }
+
     "when there is a record for this id" - {
 
       "must update the lastUpdated time and get the record" in {

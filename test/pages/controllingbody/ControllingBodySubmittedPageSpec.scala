@@ -25,8 +25,7 @@ class ControllingBodySubmittedPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      ControllingBodySubmittedPage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "submitted")
-
+      ControllingBodySubmittedPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "submitted")
     }
 
     "have the correct toString value" in {

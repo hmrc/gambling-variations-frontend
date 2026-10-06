@@ -24,7 +24,7 @@ class ControllingBodyBusinessTypePageSpec extends PlaySpec {
   "ControllingBodyBusinessTypePage" must {
 
     "have the correct path" in {
-      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "typeOfControllingBody")
+      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodyDetails" \ "typeOfControllingBody")
     }
 
     "have the correct toString value" in {
