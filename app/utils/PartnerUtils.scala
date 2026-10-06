@@ -16,9 +16,9 @@
 
 package utils
 
-import models.{Mode, NormalMode, UserAnswers}
+import models.{BusinessType, Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage, PartnerDetailsSoleProprietorPage, PartnerDetailsTradingNamePage}
 import play.api.libs.json.{JsArray, JsObject}
 
 object PartnerUtils {
@@ -48,6 +48,24 @@ object PartnerUtils {
     .collect { case (Some(true), i) =>
       i
     }
+
+  // TODO name etc
+  // TODO need test for that
+  def getName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = for {
+    businessType <- userAnswers.get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
+    name <- businessType match {
+              case BusinessType.Soleproprietor =>
+                userAnswers
+                  .get(PartnerDetailsSoleProprietorPage(businessNumberOrIndex))
+                  .map(_.fullName)
+                  .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(businessNumberOrIndex)))
+              case _ =>
+                userAnswers
+                  .get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
+                  .orElse(userAnswers.get(PartnerDetailsTradingNamePage(businessNumberOrIndex)))
+                  .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(businessNumberOrIndex)))
+            }
+  } yield name
 
   private def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)

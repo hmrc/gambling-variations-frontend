@@ -80,15 +80,7 @@ object PartnerDetailsViewModel {
             .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
             .map { mgdRegNumber =>
 
-              val name =
-                userAnswers
-                  .get(PartnerDetailsTradingNamePage(partnerNumber))
-                  .orElse(
-                    userAnswers.get(
-                      PartnerDetailsBusinessNamePage(partnerNumber)
-                    )
-                  )
-                  .getOrElse(mgdRegNumber)
+              val name = PartnerUtils.getName(partnerNumber, userAnswers)
 
               val dateOfJoining =
                 userAnswers.get(
@@ -145,7 +137,7 @@ object PartnerDetailsViewModel {
 
               PartnerDetailsRow(
                 index             = partnerNumber,
-                name              = name,
+                name              = name.getOrElse("bug, not found name"), // todo unsafe use of get
                 status            = status,
                 statusDetails     = statusDetails,
                 partnerDetailsUrl = onPartnerDetailsRoute(partnerNumber),
