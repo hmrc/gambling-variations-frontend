@@ -18,7 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import forms.partnerdetails.AddAnotherPartnerFormProvider
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -77,6 +77,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
       .set(PartnerDetailsBusinessNamePage(businessNumber1), "XYZ Consulting Ltd")
       .success
       .value
+      .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+      .success
+      .value
 
   private val userAnswersWithPartnerMaxSize = (1 to 100).foldLeft(emptyUserAnswers)((userAnswers, businessNumber) => {
     userAnswers
@@ -87,6 +90,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
       .success
       .value
       .set(PartnerDetailsBusinessNamePage(businessNumber.toString), f"XYZ Consulting Ltd-$businessNumber%03d")
+      .success
+      .value
+      .set(PartnerDetailsBusinessTypePage(businessNumber.toString), BusinessType.Partnership)
       .success
       .value
   })

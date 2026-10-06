@@ -16,9 +16,8 @@
 
 package services
 
-import models.{BusinessType, UserAnswers}
+import models.UserAnswers
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage, PartnerDetailsSoleProprietorPage, PartnerDetailsTradingNamePage}
 import utils.PartnerUtils
 import viewmodels.govuk.PaginationFluency.{PaginationItemViewModel, PaginationLinkViewModel, PaginationViewModel}
 
@@ -43,7 +42,7 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
   ): PaginationResult = {
     val partnerDetailsList: Seq[BusinessNumberOrIndex] = completedNewPartners ++ existingPartnerDetails
     val sortedPartnerDetails = partnerDetailsList
-      .flatMap(bOrI => 
+      .flatMap(bOrI =>
         PartnerUtils
           .getPartnerDetailsName(bOrI, userAnswers)
           .map(_ -> bOrI)

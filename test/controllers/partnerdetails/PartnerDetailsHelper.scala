@@ -16,9 +16,9 @@
 
 package controllers.partnerdetails
 
-import models.UserAnswers
+import models.{BusinessType, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.partnerdetails.PartnerDetailsBusinessNamePage
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import services.{PaginationResult, PaginationService}
@@ -57,11 +57,29 @@ trait PartnerDetailsHelper {
       val userAnswers = UserAnswers("id")
       val userAnswersExistingUsers = businessNumbers
         .foldLeft(userAnswers)((answers, indexAndBusinessName) =>
-          answers.set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2).success.value
+          answers
+            .set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
+            .set(PartnerDetailsBusinessTypePage(indexAndBusinessName._1), BusinessType.Partnership)
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
         )
       newPartnersIndexes
         .foldLeft(userAnswersExistingUsers)((answers, indexAndBusinessName) =>
-          answers.set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2).success.value
+          answers
+            .set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
+            .set(PartnerDetailsBusinessTypePage(indexAndBusinessName._1), BusinessType.Partnership)
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
         )
     }
 

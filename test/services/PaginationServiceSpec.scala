@@ -17,9 +17,9 @@
 package services
 
 import base.SpecBase
-import models.UserAnswers
+import models.{BusinessType, UserAnswers}
 import org.scalatest.matchers.must.Matchers
-import pages.partnerdetails.PartnerDetailsBusinessNamePage
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage}
 import viewmodels.govuk.PaginationFluency.*
 
 class PaginationServiceSpec extends SpecBase with Matchers {
@@ -254,20 +254,48 @@ class PaginationServiceSpec extends SpecBase with Matchers {
     val userAnswers = UserAnswers("id")
 
     val userAnswersExistingUsers = (0 to count)
-      .foldLeft(userAnswers)((answers, b) => answers.set(PartnerDetailsBusinessNamePage(b.toString), b.toString).success.value)
+      .foldLeft(userAnswers)((answers, b) =>
+        answers
+          .set(PartnerDetailsBusinessNamePage(b.toString), b.toString)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(b.toString), BusinessType.Partnership)
+          .success
+          .value
+      )
     (0 to count)
-      .foldLeft(userAnswersExistingUsers)((answers, b) => answers.set(PartnerDetailsBusinessNamePage(b), b.toString).success.value)
+      .foldLeft(userAnswersExistingUsers)((answers, b) =>
+        answers
+          .set(PartnerDetailsBusinessNamePage(b), b.toString)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(b), BusinessType.Partnership)
+          .success
+          .value
+      )
   }
 
   private def createValidUserAnswers(businessNumbers: Seq[(String, String)], newPartnersIndexes: Seq[(Int, String)]): UserAnswers = {
     val userAnswers = UserAnswers("id")
     val userAnswersExistingUsers = businessNumbers
       .foldLeft(userAnswers)((answers, indexAndBusinessName) =>
-        answers.set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2).success.value
+        answers
+          .set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(indexAndBusinessName._1), BusinessType.Partnership)
+          .success
+          .value
       )
     newPartnersIndexes
       .foldLeft(userAnswersExistingUsers)((answers, indexAndBusinessName) =>
-        answers.set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2).success.value
+        answers
+          .set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2)
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(indexAndBusinessName._1), BusinessType.Partnership)
+          .success
+          .value
       )
   }
 

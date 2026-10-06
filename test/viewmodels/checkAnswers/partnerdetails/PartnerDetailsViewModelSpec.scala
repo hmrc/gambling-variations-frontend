@@ -19,6 +19,7 @@ package viewmodels.checkAnswers.partnerdetails
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.partnerdetails.PartnerDetailsHelper
+import models.BusinessType
 import pages.partnerdetails.*
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
@@ -81,6 +82,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
+          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .success
+          .value
 
       val viewModel =
         PartnerDetailsViewModel.from(
@@ -110,10 +114,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(
-            PartnerDetailsBusinessNamePage(businessNumber1),
-            "XYZ Business"
-          )
+          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
           .success
           .value
 
@@ -142,6 +143,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
             PartnerDetailsBusinessNamePage(businessNumber1),
             "XYZ Business"
           )
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
           .success
           .value
 
@@ -374,6 +378,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
+          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .success
+          .value
           .set(
             PartnerDetailsMgdRegNumberPage(businessNumber2),
             "1"
@@ -384,6 +391,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
             PartnerDetailsTradingNamePage(businessNumber2),
             "Alpha"
           )
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(businessNumber2), BusinessType.Partnership)
           .success
           .value
 
@@ -417,6 +427,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
+          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .success
+          .value
           .set(
             PartnerDetailsMgdRegNumberPage(businessNumber2),
             "2"
@@ -427,6 +440,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
             PartnerDetailsTradingNamePage(businessNumber2),
             "Alpha"
           )
+          .success
+          .value
+          .set(PartnerDetailsBusinessTypePage(businessNumber2), BusinessType.Partnership)
           .success
           .value
 

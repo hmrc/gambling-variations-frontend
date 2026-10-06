@@ -137,7 +137,8 @@ object PartnerDetailsViewModel {
 
               PartnerDetailsRow(
                 index             = partnerNumber,
-                name              = name.getOrElse("bug, not found name"), // todo unsafe use of get
+                //Note: Realistically this should never happen, left it here for now to easily identify if it happens
+                name              = name.getOrElse("Business Name not found!"),
                 status            = status,
                 statusDetails     = statusDetails,
                 partnerDetailsUrl = onPartnerDetailsRoute(partnerNumber),
