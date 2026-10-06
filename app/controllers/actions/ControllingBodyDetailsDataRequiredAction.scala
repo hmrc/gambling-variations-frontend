@@ -21,7 +21,6 @@ import controllers.routes
 import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
 import models.controllingbody.ControlBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
-import pages.*
 import pages.controllingbody.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
@@ -134,12 +133,18 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyUtrPage, details.utr.map(_.toString))
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyVrnPage, details.vrn.map(_.toString))
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyCrnPage, details.crn)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyBusinessNamePage, details.businessName)
+      updatedAnswers <-
+        updatedAnswers.setIfDefined(ControllingBodyBusinessNamePage, answers.get(ControllingBodyBusinessNamePage).orElse(details.businessName))
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyTradingNamePage, details.tradingName)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyTypeOfControllingBodyPage, details.typeOfControllingBody.map(_.toString))
+      updatedAnswers <-
+        updatedAnswers.setIfDefined(ControllingBodyBusinessTypePage,
+                                    answers.get(ControllingBodyBusinessTypePage).orElse(details.typeOfControllingBody)
+                                   )
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyIsRepMemSameAsCbPage, details.isRepMemSameAsCb)
       updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodyIsUkIncorporatedPage, details.isUkIncorporated)
-      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodySoleProprietorPage, buildSoleProprietorName(details))
+      updatedAnswers <- updatedAnswers.setIfDefined(ControllingBodySoleProprietorPage,
+                                                    answers.get(ControllingBodySoleProprietorPage).orElse(buildSoleProprietorName(details))
+                                                   )
     } yield updatedAnswers
   }
 
