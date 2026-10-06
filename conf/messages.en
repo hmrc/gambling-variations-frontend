@@ -1085,9 +1085,16 @@ premisesAddressList.records = Showing {0} to {1} of {2} records
 premisesAddressList.noLabel = No, return to check your licence and premises details
 premisesAddressList.error.required = Select yes if you want to add another address
 
-partnerDetailsCompanyRegistrationNumber.title = partnerDetailsCompanyRegistrationNumber
-partnerDetailsCompanyRegistrationNumber.heading = partnerDetailsCompanyRegistrationNumber
-partnerDetailsCompanyRegistrationNumber.checkYourAnswersLabel = partnerDetailsCompanyRegistrationNumber
-partnerDetailsCompanyRegistrationNumber.error.required = Enter partnerDetailsCompanyRegistrationNumber
-partnerDetailsCompanyRegistrationNumber.error.length = PartnerDetailsCompanyRegistrationNumber must be 100 characters or less
-partnerDetailsCompanyRegistrationNumber.change.hidden = PartnerDetailsCompanyRegistrationNumber
+partnerDetailsCompanyRegistrationNumber.title = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.heading = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.paragraph = What is the company registration number?
+partnerDetailsCompanyRegistrationNumber.checkYourAnswersLabel = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.hint = It must be 8 characters long, for example, CR345678 or 00012345
+partnerDetailsCompanyRegistrationNumber.error.required = Enter the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.error.invalid.characters = The partner’s company registration number must only include letters a to z and numbers 0 to 9
+partnerDetailsCompanyRegistrationNumber.error.invalid.format = The partner’s company registration number must in the correct format
+partnerDetailsCompanyRegistrationNumber.error.length = The partner’s company registration number must be 8 characters
+partnerDetailsCompanyRegistrationNumber.change.hidden = Tell us the partner’s company registration number
+
+partnerDetailsCompanyRegistrationNumber.p1 = You can find this by
+partnerDetailsCompanyRegistrationNumber.link = searching for the company on the Companies House register (opens in new tab).

@@ -149,3 +149,8 @@ GET       /change-registration-details/partner-details/date-to-remove           
 POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
 GET       /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()
+
+GET        /change-registration-details/partner-details/company-registration-number/:index     controllers.partnerdetails.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(index: String, mode: Mode = NormalMode)
+POST       /change-registration-details/partner-details/company-registration-number/:index     controllers.partnerdetails.PartnerDetailsCompanyRegistrationNumberController.onSubmit(index: String, mode: Mode = NormalMode)
+GET        /change-registration-details/partner-details/change-company-registration-number/:index     controllers.partnerdetails.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(index: String, mode: Mode = CheckMode)
+POST       /change-registration-details/partner-details/change-company-registration-number/:index     controllers.partnerdetails.PartnerDetailsCompanyRegistrationNumberController.onSubmit(index: String, mode: Mode = CheckMode)

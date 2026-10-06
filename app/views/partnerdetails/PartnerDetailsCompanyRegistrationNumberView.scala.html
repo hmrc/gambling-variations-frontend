@@ -1,0 +1,74 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.InputWidth._
+@import viewmodels.LabelSize.Large
+@import views.html.components._
+
+@this(
+    layout: templates.Layout,
+    h1: H1,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukInput: GovukInput,
+    govukButton: GovukButton,
+    caption: Caption,
+    fieldSet: GovukFieldset,
+    paragraph: Paragraph,
+    paragraphWithLink: ParagraphMessageWithLink
+)
+
+@(form: Form[_], index: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("partnerDetailsCompanyRegistrationNumber.title"), Some(messages("changeRegistrationDetails.caption")))) {
+
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onSubmit(index)) {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form))
+        }
+
+        @caption(messages("changeRegistrationDetails.caption"))
+
+        @h1("partnerDetailsCompanyRegistrationNumber.heading", classes = "govuk-heading-l")
+
+        @paragraphWithLink(
+            message1    = Some(messages("partnerDetailsCompanyRegistrationNumber.p1")),
+            linkMessage = messages("partnerDetailsCompanyRegistrationNumber.link"),
+            message2    = None,
+            linkUrl     = "https://find-and-update.company-information.service.gov.uk/",
+            linkRel     = "noreferrer noopener",
+            target      = "_blank"
+        )
+
+        @paragraph(messages("partnerDetailsCompanyRegistrationNumber.paragraph"), true)
+
+        @govukInput(
+            InputViewModel(
+                field = form("value"),
+                label = LabelViewModel(messages("partnerDetailsCompanyRegistrationNumber.heading")).withCssClass("govuk-visually-hidden")
+            )
+            .withWidth(Full)
+            .withHint(HintViewModel(messages("partnerDetailsCompanyRegistrationNumber.hint"))
+            )
+            .withCssClass("govuk-input--width-10")
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}
