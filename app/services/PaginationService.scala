@@ -47,7 +47,7 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
           .getPartnerDetailsName(bOrI, userAnswers)
           .map(_ -> bOrI)
       )
-      .sortBy(_._1)
+      .sortBy(_._1.toLowerCase)
       .map((_, a) => a)
       .take(maxRecords)
 
