@@ -18,9 +18,10 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import forms.partnerdetails.PartnerDetailsCompanyRegistrationNumberFormProvider
+import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership}
 import models.Mode
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsCompanyRegistrationNumberPage
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCrnPage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -37,7 +38,7 @@ class PartnerDetailsCompanyRegistrationNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: PartnerDetailsDataRequiredAction,
   formProvider: PartnerDetailsCompanyRegistrationNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsCompanyRegistrationNumberView
@@ -50,12 +51,20 @@ class PartnerDetailsCompanyRegistrationNumberController @Inject() (
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsCompanyRegistrationNumberPage(newIndex)) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
+    val incorporatedInUK = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex))
+    val businessType = request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex))
 
-    Ok(view(preparedForm, index, mode))
+    (businessType, incorporatedInUK) match {
+      case (Some(Corporatebody), Some(true)) | (Some(LimitedLiabilityPartnership), _) =>
+        val preparedForm = request.userAnswers.get(PartnerDetailsCrnPage(newIndex)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+        Ok(view(preparedForm, index, mode))
+
+      case _ =>
+        Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
@@ -66,9 +75,9 @@ class PartnerDetailsCompanyRegistrationNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCompanyRegistrationNumberPage(newIndex), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCrnPage(newIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsCompanyRegistrationNumberPage(newIndex), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsCrnPage(newIndex), mode, updatedAnswers))
       )
   }
 }

@@ -94,7 +94,7 @@ class PartnerDetailsCompanyRegistrationNumberFormProviderSpec extends StringFiel
         result.value.value mustBe "SC123456"
       }
     }
-    
+
     "fail to bind the Confluence incorrect-format example ZZ345678" in {
       errorsFor("ZZ345678") mustBe Seq(invalidFormatError)
     }
