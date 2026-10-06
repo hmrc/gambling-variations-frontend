@@ -1112,6 +1112,6 @@ partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be bef
 
 
 controllingBodySameAsRepYesNo.title = Controlling body details
-controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group's representative member.
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
