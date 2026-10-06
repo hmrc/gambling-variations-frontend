@@ -25,7 +25,7 @@ class ControllingBodyChangeScreenerPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      ControllingBodyChangeScreenerPage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "controllingBodyChangeScreener")
+      ControllingBodyChangeScreenerPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "controllingBodyChangeScreener")
     }
 
     "have the correct toString value" in {

@@ -54,7 +54,7 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
     UserAnswers(
       mgdRegNum,
       Json.obj(
-        "controllingBodyDetailsSection" -> (Json.obj("mgdRegNum" -> mgdRegNum) ++ Json.obj(fields*))
+        "controllingBodyDetails" -> (Json.obj("mgdRegNum" -> mgdRegNum) ++ Json.obj(fields*))
       )
     )
 
