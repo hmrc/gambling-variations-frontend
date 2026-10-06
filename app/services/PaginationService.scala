@@ -38,7 +38,6 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
     existingPartnerDetails: Seq[String],
     userAnswers: UserAnswers,
     currentPage: Int,
-    elementsPerPage: Int,
     baseUrl: String
   ): PaginationResult = {
     val partnerDetailsList: Seq[BusinessNumberOrIndex] = completedNewPartners ++ existingPartnerDetails
@@ -69,8 +68,8 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
       baseUrl     = baseUrl
     )
 
-    val from = validCurrentPage * elementsPerPage - elementsPerPage + 1
-    val to = (validCurrentPage * elementsPerPage).min(totalRecords)
+    val from = validCurrentPage * recordsPerPage - recordsPerPage + 1
+    val to = (validCurrentPage * recordsPerPage).min(totalRecords)
 
     PaginationResult(
       paginatedData       = paginatedData,

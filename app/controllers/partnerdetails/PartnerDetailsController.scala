@@ -197,8 +197,6 @@ class PartnerDetailsController @Inject() (
     }
 
   private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int): PaginationResult = {
-    val partnersPerPage = frontendAppConfig.partnersPerPage
-
     val completedNewPartners = PartnerUtils.getCompletedNewPartners(userAnswers)
     val existingPartners = getPresentExistingPartners(userAnswers, todayDate)
 
@@ -208,7 +206,6 @@ class PartnerDetailsController @Inject() (
         existingPartners,
         userAnswers,
         page,
-        partnersPerPage,
         routes.PartnerDetailsController.onPageLoad(None).url
       )
   }
@@ -227,6 +224,5 @@ class PartnerDetailsController @Inject() (
           .exists(_.isBefore(todayDate))
 
       hasPartner && !hasPastLeavingDate
-      true
     }
 }

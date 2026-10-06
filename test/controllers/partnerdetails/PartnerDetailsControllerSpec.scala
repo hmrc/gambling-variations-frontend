@@ -35,9 +35,11 @@ import scala.concurrent.Future
 
 class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
+  private val existingPartners = (0 to 100).map(e => (e.toString, f"XYZ Consulting-$e%03d"))
+
   private val paginationHelper = PaginationHelper(1)
-  private val paginationHelperMaxSize = PaginationHelper(100, 2)
-  private val paginationHelperMaxSizePage1 = PaginationHelper(100, 1)
+  private val paginationHelperMaxSizePage1 = PaginationHelper(100, 1, existingPartners)
+  private val paginationHelperMaxSizePage2 = PaginationHelper(100, 2, existingPartners)
 
   private val formProvider =
     new AddAnotherPartnerFormProvider()
@@ -56,12 +58,12 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
 
   private lazy val onPartnerDetailsRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onPartnerDetails(businessNumber1, CheckMode) // TODO added checkMode
+      .onPartnerDetails(businessNumber1, CheckMode)
       .url
 
   private lazy val onRemoveRoute =
     controllers.partnerdetails.routes.PartnerDetailsController
-      .onRemove(businessNumber1, CheckMode) // TODO added checkMode
+      .onRemove(businessNumber1, CheckMode)
       .url
 
   private val userAnswersWithPartner =
@@ -78,13 +80,13 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
 
   private val userAnswersWithPartnerMaxSize = (1 to 100).foldLeft(emptyUserAnswers)((userAnswers, businessNumber) => {
     userAnswers
-      .set(PartnerDetailsMgdRegNumberPage(businessNumber.toString), s"XWM00000001762-$businessNumber")
+      .set(PartnerDetailsMgdRegNumberPage(businessNumber.toString), f"XWM00000001762-$businessNumber%03d")
       .success
       .value
-      .set(PartnerDetailsTradingNamePage(businessNumber.toString), s"XYZ Consulting-$businessNumber")
+      .set(PartnerDetailsTradingNamePage(businessNumber.toString), f"XYZ Consulting-$businessNumber%03d")
       .success
       .value
-      .set(PartnerDetailsBusinessNamePage(businessNumber.toString), s"XYZ Consulting Ltd-$businessNumber")
+      .set(PartnerDetailsBusinessNamePage(businessNumber.toString), f"XYZ Consulting Ltd-$businessNumber%03d")
       .success
       .value
   })
@@ -220,13 +222,13 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               viewModel(
                 application,
                 userAnswersWithPartnerMaxSize,
-                paginationHelperMaxSize.partnerDetailsBusinessNumberList.slice(10, 20)
+                paginationHelperMaxSizePage2.partnerDetailsBusinessNumberList.slice(10, 20)
               ),
-              paginationHelperMaxSize.paginatedViewModel,
-              paginationHelperMaxSize.page,
-              paginationHelperMaxSize.from,
-              paginationHelperMaxSize.to,
-              paginationHelperMaxSize.totalRecords
+              paginationHelperMaxSizePage2.paginatedViewModel,
+              paginationHelperMaxSizePage2.page,
+              paginationHelperMaxSizePage2.from,
+              paginationHelperMaxSizePage2.to,
+              paginationHelperMaxSizePage2.totalRecords
             )(
               request,
               messages(application)
@@ -456,13 +458,13 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               viewModel(
                 application,
                 userAnswersWithPartnerMaxSize,
-                paginationHelperMaxSize.partnerDetailsBusinessNumberList.slice(10, 20)
+                paginationHelperMaxSizePage2.partnerDetailsBusinessNumberList.slice(10, 20)
               ),
-              paginationHelperMaxSize.paginatedViewModel,
-              paginationHelperMaxSize.page,
-              paginationHelperMaxSize.from,
-              paginationHelperMaxSize.to,
-              paginationHelperMaxSize.totalRecords
+              paginationHelperMaxSizePage2.paginatedViewModel,
+              paginationHelperMaxSizePage2.page,
+              paginationHelperMaxSizePage2.from,
+              paginationHelperMaxSizePage2.to,
+              paginationHelperMaxSizePage2.totalRecords
             )(
               request,
               messages(application)

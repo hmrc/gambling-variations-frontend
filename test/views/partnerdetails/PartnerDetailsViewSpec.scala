@@ -32,7 +32,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
 
   trait Setup {
     val paginationHelper = PaginationHelper(1)
-    val paginationHelperMaxSizePage2 = PaginationHelper(100, 2)
+    val paginationHelperMaxSizePage2 = PaginationHelper(100, 2, (0 to 100).map(e => (e.toString, e.toString)))
 
     private val app = applicationBuilder().build()
 

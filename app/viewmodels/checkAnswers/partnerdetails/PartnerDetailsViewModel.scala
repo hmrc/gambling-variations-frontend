@@ -156,8 +156,6 @@ object PartnerDetailsViewModel {
         }
         .sortBy(_.name.toLowerCase)
 
-    println("rows.len: " + rows.length)
-
     val hasPartners =
       rows.nonEmpty
 
