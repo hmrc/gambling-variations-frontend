@@ -356,7 +356,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalNamePage, NormalMode, answers) mustBe
-          routes.AddressLookupController.initialise(true)
+          routes.AddressLookupController.initialise(false)
       }
 
       "should route CorrespondenceUKAddrScreenerPage to Address Lookup when answer is true" in {

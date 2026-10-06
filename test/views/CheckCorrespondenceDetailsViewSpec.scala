@@ -102,10 +102,6 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
       doc.text must include("07123456789")
       doc.text must include("02000000000")
       doc.text must include("test@test.com")
-      doc
-        .select(".govuk-summary-list__value")
-        .select(".changeCorrespondenceChangeAddr")
-        .text must include(messages("correspondenceChangeAddrScreener.uk.differentAddress"))
     }
 
     "must render continue button" in new Setup {
@@ -203,5 +199,159 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
       doc.text must not include
         messages("changeRegistrationDetails.readyToSubmit")
     }
+
+    "must render correct links for correspondence name" in new Setup {
+
+      val html = view(
+        viewModel.copy(
+          correspondenceName = None,
+          isAddingNewCorrespondenceDetails = Some(true)
+        )
+      )
+
+      val doc = Jsoup.parse(html.body)
+
+      val nameNotProvided =
+        messages("checkCorrespondenceDetails.message.nameNotProvided")
+
+      val nameNotProvidedLink = doc
+        .select("a[href]")
+        .asScala
+        .find(_.text() == nameNotProvided)
+        .value
+
+      nameNotProvidedLink.attr("href") mustEqual
+        routes.CorrespondenceNameController.onPageLoad().url
+
+      doc
+        .select(".govuk-summary-list__actions a")
+        .eachAttr("href")
+        .asScala must not contain
+        routes.CorrespondenceNameController.onPageLoad().url
+
+      val existingNameHtml = view(
+        viewModel.copy(
+          correspondenceName = Some("Test Name"),
+          isAddingNewCorrespondenceDetails = Some(true)
+        )
+      )
+
+      val existingNameDoc = Jsoup.parse(existingNameHtml.body)
+
+      existingNameDoc
+        .select(".govuk-summary-list__actions a")
+        .eachAttr("href")
+        .asScala must contain
+      routes.CorrespondenceNameController.onPageLoad().url
+
+      existingNameDoc.text must not include nameNotProvided
+    }
+
+    "must render correct links for correspondence address" in new Setup {
+
+      val html = view(
+        viewModel.copy(
+          correspondenceAddress = None,
+          isAddingNewCorrespondenceDetails = Some(true)
+        )
+      )
+
+      val doc = Jsoup.parse(html.body)
+
+      val addressNotProvided =
+        messages("checkCorrespondenceDetails.message.AddressNotProvided")
+
+      val addressNotProvidedLink = doc
+        .select("a[href]")
+        .asScala
+        .find(_.text() == addressNotProvided)
+        .value
+
+      addressNotProvidedLink.attr("href") mustEqual
+        routes.AddressLookupController.initialise(false).url
+
+      doc
+        .select(".govuk-summary-list__actions a")
+        .eachAttr("href")
+        .asScala must not contain
+        routes.AddressLookupController.initialise(false).url
+
+      val existingAddressHtml = view(
+        viewModel.copy(
+          correspondenceAddress = Some(
+            Address(
+              address1 = "Line 1",
+              address2 = Some("Line 2"),
+              address3 = None,
+              address4 = None,
+              postcode = Some("AA1 1AA"),
+              country = None
+            )
+          ),
+          isAddingNewCorrespondenceDetails = Some(true)
+        )
+      )
+
+      val existingAddressDoc = Jsoup.parse(existingAddressHtml.body)
+
+      existingAddressDoc
+        .select(".govuk-summary-list__actions a")
+        .eachAttr("href")
+        .asScala must contain
+      routes.AddressLookupController.initialise(false).url
+
+      existingAddressDoc.text must not include addressNotProvided
+    }
+
+    "must render correct links for contact numbers" in new Setup {
+
+      val html = view(
+        viewModel.copy(
+          phoneNumber = None,
+          mobilePhoneNumber = None,
+          isAddingNewCorrespondenceDetails = Some(true)
+        )
+      )
+
+      val doc = Jsoup.parse(html.body)
+
+      val contactNotProvided =
+        messages("checkCorrespondenceDetails.message.contactNotProvided")
+
+      val contactNotProvidedLink = doc
+        .select("a[href]")
+        .asScala
+        .find(_.text() == contactNotProvided)
+        .value
+
+      contactNotProvidedLink.attr("href") mustEqual
+        routes.CorrespondenceContactNumberController.onPageLoad().url
+
+      doc
+        .select(".govuk-summary-list__actions a")
+        .eachAttr("href")
+        .asScala must not contain
+        routes.CorrespondenceContactNumberController.onPageLoad().url
+
+      val existingContactHtml = view(
+        viewModel.copy(
+          phoneNumber = Some("01234567890"),
+          mobilePhoneNumber = Some("07123456789"),
+          isAddingNewCorrespondenceDetails = Some(true)
+        )
+      )
+
+      val existingContactDoc = Jsoup.parse(existingContactHtml.body)
+
+      existingContactDoc
+        .select(".govuk-summary-list__actions a")
+        .eachAttr("href")
+        .asScala must contain
+      routes.CorrespondenceContactNumberController.onPageLoad().url
+
+      existingContactDoc.text must not include contactNotProvided
+    }
+
+
   }
 }
