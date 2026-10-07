@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import models.{Address, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{any, anyBoolean}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSectionPage, CorrespondenceDetailsSubmittedPage}
@@ -50,7 +50,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
 
       val mockAddressLookupService = mock[AddressLookupService]
 
-      when(mockAddressLookupService.initJourney()(any[HeaderCarrier], any[Messages]))
+      when(mockAddressLookupService.initJourney(anyBoolean())(any[HeaderCarrier], any[Messages]))
         .thenReturn(Future.successful(addressLookupUrl))
 
       val application =
@@ -59,7 +59,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
           .build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.AddressLookupController.initialise().url)
+        val request = FakeRequest(GET, routes.AddressLookupController.initialise(true).url)
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER

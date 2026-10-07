@@ -49,7 +49,7 @@ class AddressLookupServiceSpec extends SpecBase with MockitoSugar {
       when(mockConnector.initJourney(any[AddressLookupConfigSettings])(any[HeaderCarrier]))
         .thenReturn(Future.successful(onRampUrl))
 
-      val result = service.initJourney().futureValue
+      val result = service.initJourney(true).futureValue
 
       result mustBe onRampUrl
 

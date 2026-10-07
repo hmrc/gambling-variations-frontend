@@ -450,6 +450,8 @@ controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name
 controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body
 
+checkCorrespondenceDetails.hasMissingMandatoryDetails = cy: You must add missing details before you submit these corrospondence details for approval.
+
 
 site.pagination.next = cy: Next
 site.pagination.previous = cy: Previous

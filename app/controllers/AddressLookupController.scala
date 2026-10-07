@@ -17,7 +17,8 @@
 package controllers
 
 import controllers.actions.*
-import models.Address
+import models.{Address, NormalMode}
+import navigation.Navigator
 import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
 import pages.isleMOrChannelFlagPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,6 +35,7 @@ class AddressLookupController @Inject() (
   override val messagesApi: MessagesApi,
   addressLookupService: AddressLookupService,
   sessionRepository: SessionRepository,
+  navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
@@ -42,21 +44,23 @@ class AddressLookupController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def initialise(): Action[AnyContent] =
+  def initialise(ukMode: Boolean): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      addressLookupService.initJourney().map(Redirect(_))
+      addressLookupService.initJourney(ukMode).map(Redirect(_))
     }
 
   def callback(id: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
         address <- addressLookupService.retrieveAddress(id)
+
         isChanged = checkIfChanged(
                       address,
                       request.userAnswers,
                       CorrespondenceAddressUkPage,
                       CorrespondenceDetailsChangesPage
                     )
+
         userAnswersWithAddress <- Future.fromTry(
                                     request.userAnswers
                                       .set(CorrespondenceAddressUkPage, address)
@@ -65,8 +69,16 @@ class AddressLookupController @Inject() (
                                       .flatMap(_.set(CorrespondenceDetailsSubmittedPage, true))
                                       .flatMap(_.set(CorrespondenceDetailsChangesPage, isChanged))
                                   )
+
         _ <- sessionRepository.set(userAnswersWithAddress)
-      } yield Redirect(routes.CheckCorrespondenceDetailsController.onPageLoad())
+
+      } yield Redirect(
+        navigator.nextPage(
+          CorrespondenceAddressUkPage,
+          NormalMode,
+          userAnswersWithAddress
+        )
+      )
     }
 
   private def isIomOrCiAddress(address: Address): Boolean =

@@ -32,8 +32,8 @@ class AddressLookupService @Inject() (
   appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext) {
 
-  def initJourney()(implicit hc: HeaderCarrier, messages: Messages): Future[String] =
-    connector.initJourney(configureAddressLookup(ukMode = true))
+  def initJourney(ukMode: Boolean)(implicit hc: HeaderCarrier, messages: Messages): Future[String] =
+    connector.initJourney(configureAddressLookup(ukMode))
 
   def retrieveAddress(id: String)(implicit hc: HeaderCarrier): Future[Address] =
     connector.retrieveAddress(id)

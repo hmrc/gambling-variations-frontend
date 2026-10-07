@@ -78,14 +78,14 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
         controllers.routes.CorrespondenceNameController.onPageLoad()
     }
 
-    "navigate to CorrespondenceUKAddrScreenerController when correspondence address is missing" in {
+    "navigate to Address Lookup when correspondence address is missing" in {
       val vm = viewModel(correspondenceAddress = None)
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.routes.AddressLookupController.initialise(false)
     }
 
-    "navigate to CorrespondenceUKAddrScreenerController when address line 1 is empty" in {
+    "navigate to Address Lookup when address line 1 is empty" in {
       val vm = viewModel(
         correspondenceAddress = Some(
           Address(
@@ -100,7 +100,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.routes.AddressLookupController.initialise(false)
     }
 
     "navigate to CorrespondenceContactNumberController when both phone numbers are missing" in {
@@ -133,17 +133,17 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
         controllers.routes.CorrespondenceNameController.onPageLoad()
     }
 
-    "navigate to CorrespondenceUKAddrScreenerController when address is missing" in {
+    "navigate to Address Lookup when address is missing" in {
       val vm = viewModel(
         correspondenceAddress            = None,
         isAddingNewCorrespondenceDetails = Some(false)
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.routes.AddressLookupController.initialise(false)
     }
 
-    "navigate to CorrespondenceUKAddrScreenerController when address line 1 is empty" in {
+    "navigate to Address Lookup when address line 1 is empty" in {
       val vm = viewModel(
         correspondenceAddress = Some(
           Address(
@@ -159,7 +159,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.routes.AddressLookupController.initialise(false)
     }
 
     "navigate to CorrespondenceContactNumberController when contact numbers are missing" in {

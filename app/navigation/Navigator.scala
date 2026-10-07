@@ -237,7 +237,7 @@ class Navigator @Inject() () {
 
   private def navigateCorrespondenceAdditionalNamePage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+      case Some(true) => routes.AddressLookupController.initialise(false)
       case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
@@ -301,7 +301,7 @@ class Navigator @Inject() () {
         routes.CorrespondenceAdditionalNameController.onPageLoad()
       case Some(false) =>
         if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
-          routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+          routes.AddressLookupController.initialise(false)
         } else {
           routes.CheckCorrespondenceDetailsController.onPageLoad()
         }
@@ -340,7 +340,7 @@ class Navigator @Inject() () {
         routes.CheckCorrespondenceDetailsController.onPageLoad()
 
       case Some(true) =>
-        routes.AddressLookupController.initialise()
+        routes.AddressLookupController.initialise(false)
 
       case Some(false) =>
         routes.CorrespondenceNonUKAddressController.onPageLoad()
@@ -394,13 +394,13 @@ class Navigator @Inject() () {
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
         case DifferentUkAddress =>
-          routes.AddressLookupController.initialise()
+          routes.AddressLookupController.initialise(false)
 
         case ChangeToNonUkAddress =>
           routes.CorrespondenceNonUKAddressController.onPageLoad()
 
         case ChangeToUkAddress =>
-          routes.AddressLookupController.initialise()
+          routes.AddressLookupController.initialise(false)
 
         case EditCurrentAddress if isUkAddress =>
           routes.CorrespondenceUKAddressController.onPageLoad()
