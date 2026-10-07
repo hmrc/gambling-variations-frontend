@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import pages.controllingbody.ControllingBodySectionPage
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyBusinessTypePage, ControllingBodySoleProprietorPage}
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
 import play.api.mvc.Results.*
@@ -47,6 +48,31 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
 
   "ControllingBodyDetails DataRequiredAction" - {
 
+    "preserve edited names and business type when loading the rest of the section" in {
+      val repository = mock[SessionRepository]
+      val connector = mock[GamblingConnector]
+      when(repository.set(any())) thenReturn Future.successful(true)
+      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(controlBodyDetails)
+      val editedProprietor = SoleProprietorName("Ms", "Jane", None, "Jones")
+      val answers = (for {
+        withType       <- emptyUserAnswers.set(ControllingBodyBusinessTypePage, models.BusinessType.Soleproprietor)
+        withName       <- withType.set(ControllingBodyBusinessNamePage, "Edited name")
+        withProprietor <- withName.set(ControllingBodySoleProprietorPage, editedProprietor)
+      } yield withProprietor).success.value
+      val result = new Harness(repository, connector)
+        .callRefine(OptionalDataRequest(FakeRequest(), mgdRegNum, Some(answers)))
+        .futureValue
+        .toOption
+        .value
+        .userAnswers
+
+      result.get(ControllingBodyBusinessTypePage).value mustBe models.BusinessType.Soleproprietor
+      result.get(ControllingBodyBusinessNamePage).value mustBe "Edited name"
+      result.get(ControllingBodySoleProprietorPage).value mustBe editedProprietor
+      result.get(ControllingBodySectionPage).value mustBe controlBodyDetails.mgdRegNumber
+      verify(repository).set(result)
+    }
+
     "when there is no User Answers in the cache" - {
 
       "return the request with a populated User Answers with data from the backend" in {
@@ -61,7 +87,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "controllingBodyDetailsSection" -> Json.obj(
+          "controllingBodyDetails" -> Json.obj(
             "mgdRegNum"             -> "XGM00000001761",
             "businessPartnerNumber" -> "0100053091",
             "dateOfJoining"         -> "2013-02-01",
@@ -95,7 +121,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
             "crn"                    -> "12345678",
             "businessName"           -> "BRUCE HOPKINS LIMITED",
             "tradingName"            -> "Trading name 1",
-            "typeOfControllingBody"  -> "corporatebody",
+            "typeOfControllingBody"  -> 2,
             "isRepMemSameAsCb"       -> "0",
             "isUkIncorporated"       -> "0",
             "soleProprietor" -> Json.obj(
@@ -113,11 +139,10 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         val expected =
           DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
 
-        result.map { req =>
-          req.request mustBe expected.request
-          req.userAnswers.data mustBe expected.userAnswers.data
-          req.userAnswers.id mustBe expected.userAnswers.id
-        }
+        val req = result.toOption.value
+        req.request mustBe expected.request
+        req.userAnswers.data mustBe expected.userAnswers.data
+        req.userAnswers.id mustBe expected.userAnswers.id
 
         verify(sessionRepository, times(1)).set(any())
         verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
@@ -179,7 +204,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           val data = Json.obj(
-            "controllingBodyDetailsSection" -> Json.obj(
+            "controllingBodyDetails" -> Json.obj(
               "mgdRegNum" -> "XGM00000001761"
             )
           )

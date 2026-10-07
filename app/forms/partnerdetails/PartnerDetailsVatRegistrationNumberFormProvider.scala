@@ -27,7 +27,7 @@ class PartnerDetailsVatRegistrationNumberFormProvider @Inject() extends Mappings
   def apply(): Form[String] = Form(
     "partnerDetailsVatRegistrationNumber" ->
       text(required)
-        .transform[String](_.trim, identity)
+        .transform[String](_.filterNot(_.isWhitespace), identity)
         .verifying(
           regexp(zeroToNineRegex, invalidChars),
           fixedLength(vrnLength, invalidLength),

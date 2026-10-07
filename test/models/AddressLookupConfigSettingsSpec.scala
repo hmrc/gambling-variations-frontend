@@ -116,8 +116,7 @@ class AddressLookupConfigSettingsSpec extends AnyWordSpec with Matchers {
         heading             = "Review and confirm",
         submitLabel         = "Confirm address",
         searchAgainLinkText = "Search again",
-        changeLinkText      = "Change",
-        confirmChangeText   = "The information is complete and correct"
+        changeLinkText      = "Change"
       ),
       editPageLabels = editPageLabels,
       international  = International(editPageLabels = editPageLabels)

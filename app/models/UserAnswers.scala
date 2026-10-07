@@ -16,6 +16,7 @@
 
 package models
 
+import models.controllingbody.ControllingBodyCacheMigration
 import play.api.libs.json.*
 import queries.{Gettable, Settable}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -82,7 +83,7 @@ object UserAnswers {
 
     (
       (__ \ "_id").read[String] and
-        (__ \ "data").read[JsObject] and
+        (__ \ "data").read[JsObject].map(ControllingBodyCacheMigration.apply) and
         (__ \ "lastUpdated").read(MongoJavatimeFormats.instantFormat)
     )(UserAnswers.apply _)
   }
