@@ -21,10 +21,13 @@ import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
 import models.licencespremises.LicencesPremisesAnswers.*
+import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
+import pages.controllingbody.ControllingBodyChangeScreenerPage
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodySoleProprietorPage}
 import pages.correspondencedetails.*
 import pages.licencespremises.{LicenceHeldByLandlordPage, LicenceNumberPage, LicencePremisesNotCoveredPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
 import pages.partnerdetails.*
@@ -39,6 +42,13 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
+    case ControllingBodyBusinessNamePage =>
+      _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
+    case ControllingBodyAddTradingNameYesNoPage =>
+      // TODO: Connect CB-TN and the business-type-specific identity screens when that journey is built.
+      _ => routes.IndexController.onPageLoad()
+    case ControllingBodySoleProprietorPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case RemoveTradeNamePage =>
       _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -197,6 +207,10 @@ class Navigator @Inject() () {
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
     case RemovePremisesAddressPage =>
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad() // Change it
+
+    // Controlling Body Details
+    case ControllingBodyChangeScreenerPage =>
+      userAnswers => navigateControllingBodyChangeScreenerPage(userAnswers)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -609,4 +623,14 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   }
+
+  private def navigateControllingBodyChangeScreenerPage(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(ControllingBodyChangeScreenerPage)
+      .map {
+        case EditDetails => routes.IndexController.onPageLoad() // TODO later -> CB-CYA, controlling body check your answers
+        case ProvideNew  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+        case KeepSame    => routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
 }

@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages.controllingbody
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukPagination
+@import viewmodels.govuk.PaginationFluency
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+@this(govukPagination: GovukPagination)
 
-case object ControllingBodyTypeOfControllingBodyPage extends QuestionPage[String] {
+@(pagination: PaginationFluency.PaginationViewModel)(implicit messages: Messages)
 
-  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
-
-  override def toString: String =
-    "typeOfControllingBody"
-}
+@govukPagination(pagination.asPagination)
