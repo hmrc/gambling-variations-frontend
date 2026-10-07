@@ -76,7 +76,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
           view(
             form,
             NormalMode,
-            ""
+            "abc"
           )(request, messages(application)).toString
       }
     }
@@ -104,7 +104,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
           view(
             form.fill(true),
             NormalMode,
-            ""
+            "abc"
           )(request, messages(application)).toString
       }
     }
@@ -191,7 +191,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
           view(
             boundForm,
             NormalMode,
-            ""
+            "abc"
           )(request, messages(application)).toString
       }
     }

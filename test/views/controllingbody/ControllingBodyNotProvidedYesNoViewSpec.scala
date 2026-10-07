@@ -42,7 +42,7 @@ class ControllingBodyNotProvidedYesNoViewSpec extends SpecBase {
         val html = view(
           form,
           NormalMode,
-          ""
+          "abc"
         )(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
@@ -51,8 +51,8 @@ class ControllingBodyNotProvidedYesNoViewSpec extends SpecBase {
           messages(application)("controllingBodyNotProvidedYesNo.title")
         )
 
-        document.select("h1").text() mustEqual
-          messages(application)("controllingBodyNotProvidedYesNo.title")
+        document.select("p").text() must include
+          messages(application)("controllingBodyNotProvidedYesNo.p1")
 
         document.body().text() must include(
           messages(application)("site.continue")
