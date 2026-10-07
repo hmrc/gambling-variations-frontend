@@ -430,6 +430,14 @@ controllingBodyBusinessType.title = cy: What type of business is the controlling
 controllingBodyBusinessType.heading = cy: What type of business is the controlling body?
 controllingBodyBusinessType.error.required = cy: Select the type of business for the controlling body
 
+controllingBodyChangeScreener.title = cy: What do you want to do with your controlling body?
+controllingBodyChangeScreener.heading = cy: What do you want to do with your controlling body?
+controllingBodyChangeScreener.p1 = cy: Your current controlling body is {0}.
+controllingBodyChangeScreener.editDetails = cy: Edit controlling body details
+controllingBodyChangeScreener.provideNew = cy: Provide a new controlling body
+controllingBodyChangeScreener.keepSame = cy: Keep controlling body the same
+controllingBodyChangeScreener.error.required = cy: Select what you want to do with your controlling body
+
 partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?

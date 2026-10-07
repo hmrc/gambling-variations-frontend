@@ -20,10 +20,12 @@ import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
+import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
+import pages.controllingbody.ControllingBodyChangeScreenerPage
 import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodySoleProprietorPage}
 import pages.correspondencedetails.*
 import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
@@ -204,6 +206,10 @@ class Navigator @Inject() () {
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
     case RemovePremisesAddressPage =>
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad() // Change it
+
+    // Controlling Body Details
+    case ControllingBodyChangeScreenerPage =>
+      userAnswers => navigateControllingBodyChangeScreenerPage(userAnswers)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -608,4 +614,14 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   }
+
+  private def navigateControllingBodyChangeScreenerPage(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(ControllingBodyChangeScreenerPage)
+      .map {
+        case EditDetails => routes.IndexController.onPageLoad() // TODO later -> CB-CYA, controlling body check your answers
+        case ProvideNew  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+        case KeepSame    => routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
 }
