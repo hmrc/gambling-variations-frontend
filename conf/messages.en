@@ -416,6 +416,7 @@ checkCorrespondenceDetails.message.remove = Remove all correspondence details
 checkCorrespondenceDetails.message.nameNotProvided = Add correspondence name
 checkCorrespondenceDetails.message.contactNotProvided = Add correspondence contact numbers
 checkCorrespondenceDetails.message.AddressNotProvided = Add correspondence address
+checkCorrespondenceDetails.hasMissingMandatoryDetails = You must add missing details before you submit these corrospondence details for approval.
 
 correspondenceEmailAddress.title = What email address should we use for correspondence?
 correspondenceEmailAddress.heading = What email address should we use for correspondence?

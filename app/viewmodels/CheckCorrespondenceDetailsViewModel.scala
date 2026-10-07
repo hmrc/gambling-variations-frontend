@@ -53,6 +53,14 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
       controllers.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
+  def hasMissingMandatoryDetails: Boolean =
+    isAddingNewCorrespondenceDetails.contains(true) &&
+      (
+        correspondenceName.isEmpty ||
+          correspondenceAddress.forall(_.address1.trim.isEmpty) ||
+          (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty)
+      )
+
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     Some(correspondenceNameSummaryListRow),
     addAdditionalCorrespondenceNameSummaryListRow,
@@ -561,24 +569,5 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
         )
       )
     }
-  }
-
-  private def addressModeChange(label: String)(implicit messages: Messages) = {
-    SummaryListRow(
-      key   = Key(content = messages("correspondenceChangeAddrScreener.heading")),
-      value = Value(content = HtmlContent(Html(messages(label)))).withCssClass("changeCorrespondenceChangeAddr"),
-      actions = Some(
-        Actions(
-          items = Seq(
-            ActionItem(
-              href               = "#",
-              content            = "site.change",
-              visuallyHiddenText = Some(messages("correspondenceChangeAddrScreener.change.hidden"))
-            )
-          )
-        )
-      )
-    )
-
   }
 }

@@ -204,7 +204,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
 
       val html = view(
         viewModel.copy(
-          correspondenceName = None,
+          correspondenceName               = None,
           isAddingNewCorrespondenceDetails = Some(true)
         )
       )
@@ -231,7 +231,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
 
       val existingNameHtml = view(
         viewModel.copy(
-          correspondenceName = Some("Test Name"),
+          correspondenceName               = Some("Test Name"),
           isAddingNewCorrespondenceDetails = Some(true)
         )
       )
@@ -251,7 +251,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
 
       val html = view(
         viewModel.copy(
-          correspondenceAddress = None,
+          correspondenceAddress            = None,
           isAddingNewCorrespondenceDetails = Some(true)
         )
       )
@@ -285,7 +285,7 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
               address3 = None,
               address4 = None,
               postcode = Some("AA1 1AA"),
-              country = None
+              country  = None
             )
           ),
           isAddingNewCorrespondenceDetails = Some(true)
@@ -307,8 +307,8 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
 
       val html = view(
         viewModel.copy(
-          phoneNumber = None,
-          mobilePhoneNumber = None,
+          phoneNumber                      = None,
+          mobilePhoneNumber                = None,
           isAddingNewCorrespondenceDetails = Some(true)
         )
       )
@@ -335,8 +335,8 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
 
       val existingContactHtml = view(
         viewModel.copy(
-          phoneNumber = Some("01234567890"),
-          mobilePhoneNumber = Some("07123456789"),
+          phoneNumber                      = Some("01234567890"),
+          mobilePhoneNumber                = Some("07123456789"),
           isAddingNewCorrespondenceDetails = Some(true)
         )
       )
@@ -352,6 +352,32 @@ class CheckCorrespondenceDetailsViewSpec extends SpecBase with OptionValues {
       existingContactDoc.text must not include contactNotProvided
     }
 
+    "must display missing mandatory details message when mandatory data is missing" in new Setup {
+
+      val html = view(
+        viewModel.copy(
+          phoneNumber                      = None,
+          mobilePhoneNumber                = None,
+          isAddingNewCorrespondenceDetails = Some(true)
+        )
+      )
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.text must include(
+        messages("checkCorrespondenceDetails.hasMissingMandatoryDetails")
+      )
+    }
+
+    "must not display missing mandatory details message when mandatory data is present" in new Setup {
+
+      val html = view(viewModel)
+
+      val doc = Jsoup.parse(html.body)
+
+      doc.text must not include
+        messages("checkCorrespondenceDetails.hasMissingMandatoryDetails")
+    }
 
   }
 }

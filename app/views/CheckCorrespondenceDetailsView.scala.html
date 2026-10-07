@@ -35,6 +35,10 @@
     @caption(messages("changeRegistrationDetails.caption"))
     @h1("checkCorrespondenceDetails.heading", classes="govuk-heading-l")
 
+    @if(checkCorrespondenceDetailsViewModel.hasMissingMandatoryDetails)  {
+        @paragraph(messages("checkCorrespondenceDetails.hasMissingMandatoryDetails"))
+    }
+
     @govukSummaryList(SummaryList(
         rows = checkCorrespondenceDetailsViewModel.summaryList
     ))
