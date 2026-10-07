@@ -20,7 +20,7 @@ import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{GamblingReturnPeriods, UserAnswers}
-import pages.GamblingReturnPeriodsPage
+import pages.returnperiods.GamblingReturnPeriodsPage
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
