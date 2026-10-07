@@ -226,7 +226,6 @@ POST       /change-registration-details/licences-and-premises/add-licence-number
 GET        /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onSubmit(mode: Mode = NormalMode)
 
-
 GET        /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onSubmit(mode: Mode = NormalMode)
 
@@ -241,10 +240,6 @@ POST       /change-registration-details/controlling-body-details/business-type  
 
 GET        /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
@@ -263,3 +258,16 @@ POST       /change-registration-details/controlling-body-details/limited-liabili
 
 GET        /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+# return-periods - start
+
+GET        /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/return-periods         controllers.returnperiods.ReturnPeriodsController.onPageLoad()
+POST       /change-registration-details/return-periods         controllers.returnperiods.ReturnPeriodsController.onContinue()
+
+# return-periods - end

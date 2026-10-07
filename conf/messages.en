@@ -1149,3 +1149,8 @@ controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to ad
 
 site.pagination.next = Next
 site.pagination.previous = Previous
+
+returnPeriods.title = You cannot make any further changes to your return periods
+returnPeriods.heading = You cannot make any further changes to your return periods
+returnPeriods.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
+returnPeriods.p2 = You must continue to the change registration details page to submit any changes.
