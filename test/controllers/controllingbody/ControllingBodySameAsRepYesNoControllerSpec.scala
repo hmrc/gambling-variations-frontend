@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package controllers.controllingbodydetails
+package controllers.controllingbody
 
 import base.SpecBase
-import forms.controllingbodydetails.ControllingBodySameAsRepYesNoFormProvider
+import forms.controllingbody.ControllingBodySameAsRepYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbodydetails.ControllingBodySameAsRepYesNoPage
+import pages.controllingbody.ControllingBodySameAsRepYesNoPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call

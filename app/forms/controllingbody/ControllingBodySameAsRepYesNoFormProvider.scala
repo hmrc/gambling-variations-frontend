@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages.controllingbodydetails
+package forms.controllingbody
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object GroupRepMemberPage extends QuestionPage[String] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+class ControllingBodySameAsRepYesNoFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "groupRepMember"
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("controllingBodySameAsRepYesNo.error.required")
+    )
 }

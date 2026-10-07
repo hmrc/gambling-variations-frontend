@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms.controllingbodydetails
+package forms.controllingbody
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.controllingbody.ControllingBodySameAsRepYesNoFormProvider
 import play.api.data.FormError
 
 class ControllingBodySameAsRepYesNoFormProviderSpec extends BooleanFieldBehaviours {

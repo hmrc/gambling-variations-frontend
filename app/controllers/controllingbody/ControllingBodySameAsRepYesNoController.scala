@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package controllers.controllingbodydetails
+package controllers.controllingbody
 
 import controllers.actions.*
 import controllers.routes
-import forms.controllingbodydetails.ControllingBodySameAsRepYesNoFormProvider
+import forms.controllingbody.ControllingBodySameAsRepYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.controllingbodydetails.ControllingBodySameAsRepYesNoPage
-import pages.controllingbody.ControllingBodyBusinessNamePage
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodySameAsRepYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.controllingBodyDetails.ControllingBodySameAsRepYesNoView
+import views.html.controllingbody.ControllingBodySameAsRepYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

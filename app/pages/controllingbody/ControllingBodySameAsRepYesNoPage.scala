@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.controllingbodydetails
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
