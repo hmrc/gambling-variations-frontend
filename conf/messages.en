@@ -1151,7 +1151,7 @@ site.pagination.next = Next
 site.pagination.previous = Previous
 
 returnPeriodsChoice.title = Your return periods
-returnPeriodsChoice.heading = Your return periods
+returnPeriodsChoice.heading =  Do you want to use standard or non-standard return periods?
 returnPeriodsChoice.standard = Standard
 returnPeriodsChoice.non-standard = Non-standard
 returnPeriodsChoice.error.required = Select the return periods you want to use
