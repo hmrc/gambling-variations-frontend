@@ -241,6 +241,7 @@ POST       /change-registration-details/controlling-body-details/business-type  
 
 GET        /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
@@ -264,5 +265,5 @@ POST       /change-registration-details/controlling-body-details/limited-liabili
 GET        /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/controlling-body-details/groups-representative-member             controllers.controllingbodydetails.ControllingBodyNotProvidedYesNoController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/controlling-body-details/groups-representative-member             controllers.controllingbodydetails.ControllingBodyNotProvidedYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/controlling-body-details/groups-representative-member             controllers.controllingbody.ControllingBodyNotProvidedYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/groups-representative-member             controllers.controllingbody.ControllingBodyNotProvidedYesNoController.onSubmit(mode: Mode = NormalMode)

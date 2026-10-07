@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.controllingbodydetails
+package controllers.controllingbody
 
 import base.SpecBase
-import forms.controllingbodydetails.ControllingBodyNotProvidedYesNoFormProvider
+import forms.controllingbody.ControllingBodyNotProvidedYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbodydetails.ControllingBodyNotProvidedYesNoPage
-import pages.partnerdetails.PartnerDetailsPage
+import pages.controllingbody.ControllingBodyNotProvidedYesNoPage
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.controllingBodyDetails.ControllingBodyNotProvidedYesNoView
+import views.html.controllingbody.ControllingBodyNotProvidedYesNoView
 
 import scala.concurrent.Future
 
@@ -43,7 +42,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
   val form = formProvider()
 
   lazy val controllingBodyNotProvidedYesNoRoute =
-    controllers.controllingbodydetails.routes.ControllingBodyNotProvidedYesNoController.onPageLoad().url
+    controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad().url
 
   private val baseAnswers =
     UserAnswers(userAnswersId,

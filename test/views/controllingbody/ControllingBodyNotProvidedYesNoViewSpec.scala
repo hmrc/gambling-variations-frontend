@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package views.controllingbodydetails
+package views.controllingbody
 
 import base.SpecBase
-import forms.controllingbodydetails.ControllingBodyNotProvidedYesNoFormProvider
+import forms.controllingbody.ControllingBodyNotProvidedYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.controllingBodyDetails.ControllingBodyNotProvidedYesNoView
+import views.html.controllingbody.ControllingBodyNotProvidedYesNoView
 
 class ControllingBodyNotProvidedYesNoViewSpec extends SpecBase {
 

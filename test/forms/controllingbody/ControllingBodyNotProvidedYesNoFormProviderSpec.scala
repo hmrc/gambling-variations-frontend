@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms.controllingbodydetails
+package forms.controllingbody
 
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError

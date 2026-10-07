@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.controllingbodydetails
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object GroupRepMemberPage extends QuestionPage[String] {
+case object ControllingBodyNotProvidedYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
 
-  override def toString: String = "groupRepMember"
+  override def toString: String = "controllingBodyNotProvidedYesNo"
 }

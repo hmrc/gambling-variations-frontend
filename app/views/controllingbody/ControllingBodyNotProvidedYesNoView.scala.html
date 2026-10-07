@@ -32,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages("controllingBodyNotProvidedYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
-    @formHelper(action = controllers.controllingbodydetails.routes.ControllingBodyNotProvidedYesNoController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

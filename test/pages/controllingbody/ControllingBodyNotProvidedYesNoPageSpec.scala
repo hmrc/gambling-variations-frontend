@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package pages.controllingbodydetails
+package pages.controllingbody
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.controllingbody.ControllingBodyNotProvidedYesNoPage
 import play.api.libs.json.JsPath
 
 class ControllingBodyNotProvidedYesNoPageSpec extends AnyFreeSpec with Matchers {
