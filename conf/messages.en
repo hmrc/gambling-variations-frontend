@@ -910,9 +910,9 @@ removePremisesDetailsYesNo.change.hidden = Are you sure you want to make this ch
 
 partnerDetails.title = Partner details
 partnerDetails.heading = Partner details
-partnerDetails.status.active = Active
+partnerDetails.status.active = Joined {0}
 partnerDetails.noPartners = You have not provided any partners yet.
-partnerDetails.minimumPartners = You must have at least 3 active partners before you can remove a partner.
+partnerDetails.minimumPartners = You cannot remove any of these partners because you must always have at least 2 partners that are not due to leave.
 partnerDetails.addAnotherPartner = Do you want to add another partner?
 partnerDetails.addPartner = Do you want to add a partner?
 partnerDetails.notProvidedPartnerYet = You have not provided any partners yet.
@@ -925,11 +925,11 @@ partnerDetails.viewOrChange = View or change
 partnerDetails.status.dueToLeave =  Due to leave
 partnerDetails.status.dueToJoin =  	Due to join
 partnerDetails.cannotRemove =  	Cannot remove
-partnerDetails.maximumReached = You can only have up to 100 partners. If you need to add a new partner, you must change or remove a current one.
-partnerDetails.maxPartners.hint = You can only add up to 100 partners
+partnerDetails.maximumReached = If you need to add a new partner, you must change or remove a current one.
 partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
 partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner
 partnerDetails.addPartner.error.required = Select yes if you want to add a partner
+partnerDetails.partner.count = Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
 partnerDetailsBusinessType.title = What type of business is the partner?
 partnerDetailsBusinessType.heading = What type of business is the partner?
@@ -1138,3 +1138,6 @@ chooseStandardReturnPeriods.mar = Last day of March, June, September and Decembe
 controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
+
+site.pagination.next = Next
+site.pagination.previous = Previous

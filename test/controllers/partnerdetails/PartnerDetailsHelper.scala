@@ -16,14 +16,21 @@
 
 package controllers.partnerdetails
 
-import models.UserAnswers
+import models.{BusinessType, UserAnswers}
+import org.scalatest.TryValues.convertTryToSuccessOrFailure
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
+import services.{PaginationResult, PaginationService}
+import viewmodels.govuk.PaginationFluency.PaginationViewModel
+
+import java.time.LocalDate
 
 trait PartnerDetailsHelper {
 
   val businessNumber1: String = "12345"
   val businessNumber2: String = "123456"
+  val businessNumber3: String = "1234567"
   val newPartnersIndex1: Int = 0
   val newPartnersIndex2: Int = 1
 
@@ -37,6 +44,70 @@ trait PartnerDetailsHelper {
   val testForeignCorpRef = "FCR-987654"
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
+
+  val todayDate = LocalDate.of(2026, 1, 1)
+
+  class PaginationHelper(
+    size: 1 | 2 | 3 | 10 | 100,
+    currentPage: Int = 1,
+    businessNumbers: Seq[(String, String)] = Seq.empty,
+    newPartnersIndexes: Seq[(Int, String)] = Seq.empty
+  ) {
+    private def createValidUserAnswers(businessNumbers: Seq[(String, String)], newPartnersIndexes: Seq[(Int, String)]): UserAnswers = {
+      val userAnswers = UserAnswers("id")
+      val userAnswersExistingUsers = businessNumbers
+        .foldLeft(userAnswers)((answers, indexAndBusinessName) =>
+          answers
+            .set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
+            .set(PartnerDetailsBusinessTypePage(indexAndBusinessName._1), BusinessType.Partnership)
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
+        )
+      newPartnersIndexes
+        .foldLeft(userAnswersExistingUsers)((answers, indexAndBusinessName) =>
+          answers
+            .set(PartnerDetailsBusinessNamePage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
+            .set(PartnerDetailsBusinessTypePage(indexAndBusinessName._1), BusinessType.Partnership)
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(indexAndBusinessName._1), indexAndBusinessName._2)
+            .success
+            .value
+        )
+    }
+
+    val partnerDetailsBusinessNumberList: Seq[String] = size match {
+      case 1   => Seq(businessNumber1)
+      case 2   => Seq(businessNumber1, businessNumber2)
+      case 3   => Seq(businessNumber1, businessNumber2, businessNumber3)
+      case 10  => (1 to 10).map(_.toString) // Ten numbers in the same pattern
+      case 100 => (1 to 100).map(_.toString) // 100 numbers in the same pattern
+    }
+
+    val paginationService = new PaginationService(10, 100, 5)
+    def paginationResult: PaginationResult = paginationService.paginateAlphabeticallyPartnerDetails(
+      completedNewPartners   = Seq.empty,
+      existingPartnerDetails = partnerDetailsBusinessNumberList,
+      userAnswers            = createValidUserAnswers(businessNumbers, newPartnersIndexes),
+      currentPage            = currentPage,
+      // Note: I had to prepend "gambling-variations" when testing in IDE, in sbt works fine
+      baseUrl = routes.PartnerDetailsController.onPageLoad(None).url
+    )
+    val elementsPerPage = 10
+    val paginatedViewModel: PaginationViewModel = paginationResult.paginationViewModel
+    val page: Int = currentPage
+    val totalRecords: Int = size
+
+    val from: Int = page * elementsPerPage - elementsPerPage + 1
+    val to: Int = (page * elementsPerPage).min(totalRecords)
+  }
 
   def emptyData = Json.obj()
 
