@@ -47,13 +47,13 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
 
   private val baseAnswers =
     UserAnswers(userAnswersId,
-      Json.obj(
-        "controllingBodyDetailsSection" -> Json.obj(
-          "mgdRegNum"    -> userAnswersId,
-          "businessName" -> "abc"
-        )
-      )
-    )
+                Json.obj(
+                  "controllingBodyDetailsSection" -> Json.obj(
+                    "mgdRegNum"    -> userAnswersId,
+                    "businessName" -> "abc"
+                  )
+                )
+               )
 
   "ControllingBodyNotProvidedYesNoController Controller" - {
 
@@ -76,7 +76,8 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
         contentAsString(result) mustEqual
           view(
             form,
-            NormalMode, ""
+            NormalMode,
+            ""
           )(request, messages(application)).toString
       }
     }
@@ -103,7 +104,8 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
         contentAsString(result) mustEqual
           view(
             form.fill(true),
-            NormalMode, ""
+            NormalMode,
+            ""
           )(request, messages(application)).toString
       }
     }
@@ -189,7 +191,8 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
         contentAsString(result) mustEqual
           view(
             boundForm,
-            NormalMode, ""
+            NormalMode,
+            ""
           )(request, messages(application)).toString
       }
     }

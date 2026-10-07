@@ -41,7 +41,8 @@ class ControllingBodyNotProvidedYesNoViewSpec extends SpecBase {
 
         val html = view(
           form,
-          NormalMode, ""
+          NormalMode,
+          ""
         )(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
@@ -83,7 +84,8 @@ class ControllingBodyNotProvidedYesNoViewSpec extends SpecBase {
 
         val html = view(
           boundForm,
-          NormalMode, ""
+          NormalMode,
+          ""
         )(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)

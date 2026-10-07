@@ -33,7 +33,7 @@ import views.html.controllingBodyDetails.ControllingBodyNotProvidedYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodyNotProvidedYesNoController @Inject()(
+class ControllingBodyNotProvidedYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -52,14 +52,14 @@ class ControllingBodyNotProvidedYesNoController @Inject()(
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-        val controllingBody = request.userAnswers.get(ControllingBodyBusinessNamePage).getOrElse("")
-        val preparedForm = request.userAnswers.get(ControllingBodyNotProvidedYesNoPage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, mode, controllingBody))
+      val controllingBody = request.userAnswers.get(ControllingBodyBusinessNamePage).getOrElse("")
+      val preparedForm = request.userAnswers.get(ControllingBodyNotProvidedYesNoPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
       }
+
+      Ok(view(preparedForm, mode, controllingBody))
+    }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     request.userAnswers
@@ -71,8 +71,8 @@ class ControllingBodyNotProvidedYesNoController @Inject()(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, controllingBody))),
             value =>
               for {
-                updatedAnswers              <- Future.fromTry(request.userAnswers.set(ControllingBodyNotProvidedYesNoPage, value))
-                _                           <- sessionRepository.set(updatedAnswers)
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyNotProvidedYesNoPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(ControllingBodyNotProvidedYesNoPage, mode, updatedAnswers))
           )
       }
