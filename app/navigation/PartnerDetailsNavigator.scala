@@ -122,8 +122,6 @@ object PartnerDetailsNavigator {
   val normalRoutes: PartialFunction[Page, UserAnswers => Call] = partnerDetailsRoutes
   val checkRoutes: PartialFunction[Page, UserAnswers => Call] = partnerDetailsRoutes
 
-  // --- Decision ---
-
   /** Existing partners and saved new partners go back to check your answers. */
   private def returnsToCheckYourAnswers(index: BusinessNumberOrIndex, answers: UserAnswers): Boolean =
     index match {
@@ -135,8 +133,9 @@ object PartnerDetailsNavigator {
     if (returnsToCheckYourAnswers(index, answers)) checkYourAnswers(index)
     else nextInAddJourney(index, answers)
 
-  /** TODO: replace with the designed journey order. For now: the first unanswered mandatory page, or check your answers
-   * when there is none. Skips optional "add X?" questions the user hasn't reached yet.
+  /** TODO: replace with the designed journey order.
+   * For now: the first unanswered mandatory page, or check your answers when there is none.
+   * Skips optional "add X?" questions the user hasn't reached yet.
    */
   private def nextInAddJourney(index: BusinessNumberOrIndex, answers: UserAnswers): Call =
     PartnerMandatoryDetails.firstMissing(answers, index).map(_.call).getOrElse(checkYourAnswers(index))
