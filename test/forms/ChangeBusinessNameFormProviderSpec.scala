@@ -63,4 +63,34 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
       result.errors must contain only FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
     }
   }
+  "a partnership name" - {
+    val partnershipForm = formProvider(BusinessType.Partnership)
+
+    "accept every documented character and trim surrounding spaces" in {
+      partnershipForm.bind(Map("value" -> "  A-Z 09 & '(),!/  ")).value.value mustEqual "A-Z 09 & '(),!/"
+    }
+
+    Seq("", "   ").foreach { value =>
+      s"reject an empty name '$value'" in {
+        partnershipForm.bind(Map("value" -> value)).errors.map(_.message) must contain("changeBusinessName.error.required.partnership")
+      }
+    }
+
+    "accept exactly 35 characters" in {
+      partnershipForm.bind(Map("value" -> ("A" * 35))).value.value mustEqual ("A" * 35)
+    }
+
+    "reject 36 characters using the partnership length message" in {
+      partnershipForm.bind(Map("value" -> ("A" * 36))).errors must contain only
+        FormError("value", "changeBusinessName.error.length.partnership", Seq(35))
+    }
+
+    Seq(".", "@", ":", "_", "[", "]").foreach { character =>
+      s"reject the undocumented character $character" in {
+        partnershipForm.bind(Map("value" -> s"Name${character}Name")).errors.map(_.message) must contain only
+          "changeBusinessName.error.invalid.partnership"
+      }
+    }
+  }
+
 }

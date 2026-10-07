@@ -18,14 +18,15 @@ package viewmodels.checkAnswers.partnerdetails
 
 import config.FrontendAppConfig
 import controllers.partnerdetails.routes
-import models.UserAnswers
+import models.{CheckMode, NormalMode, UserAnswers}
+import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
 import play.api.i18n.Messages
 import utils.PartnerUtils
-import scala.collection.Seq
 
+import scala.collection.Seq
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, ZoneOffset}
 
 final case class PartnerDetailsViewModel(
   partners: Seq[PartnerDetailsRow],
@@ -37,7 +38,7 @@ final case class PartnerDetailsViewModel(
 )
 
 final case class PartnerDetailsRow(
-  partnerNumber: String,
+  index: BusinessNumberOrIndex,
   name: String,
   status: String,
   statusDetails: Option[String],
@@ -48,34 +49,14 @@ final case class PartnerDetailsRow(
 
 object PartnerDetailsViewModel {
 
-  private val dateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+  private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
   def from(
+    partnerNumbers: Seq[BusinessNumberOrIndex],
+    todayDate: LocalDate,
     userAnswers: UserAnswers,
     frontendAppConfig: FrontendAppConfig
   )(implicit messages: Messages): PartnerDetailsViewModel = {
-
-    val maxPartners = frontendAppConfig.maxPartners
-
-    val existingPartners = PartnerUtils.getExistingPartnersBusinessNumbers(userAnswers, maxPartners)
-
-    val today = LocalDate.now(ZoneOffset.UTC)
-
-    val partnerNumbers: Seq[String] =
-      existingPartners.filter { partnerNumber =>
-        val hasPartner =
-          userAnswers
-            .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
-            .isDefined
-
-        val hasPastLeavingDate =
-          userAnswers
-            .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
-            .exists(_.isBefore(today))
-
-        hasPartner && !hasPastLeavingDate
-      }
-
     val activePartnerCount =
       partnerNumbers.count { partnerNumber =>
 
@@ -85,7 +66,7 @@ object PartnerDetailsViewModel {
           )
 
         dateOfLeaving match {
-          case Some(leavingDate) if !leavingDate.isBefore(today) =>
+          case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
             false
           case _ =>
             true
@@ -99,15 +80,7 @@ object PartnerDetailsViewModel {
             .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
             .map { mgdRegNumber =>
 
-              val name =
-                userAnswers
-                  .get(PartnerDetailsTradingNamePage(partnerNumber))
-                  .orElse(
-                    userAnswers.get(
-                      PartnerDetailsBusinessNamePage(partnerNumber)
-                    )
-                  )
-                  .getOrElse(mgdRegNumber)
+              val name = PartnerUtils.getPartnerDetailsName(partnerNumber, userAnswers)
 
               val dateOfJoining =
                 userAnswers.get(
@@ -121,14 +94,16 @@ object PartnerDetailsViewModel {
 
               val status =
                 dateOfLeaving match {
-                  case Some(leavingDate) if !leavingDate.isBefore(today) =>
+                  case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
                     messages("partnerDetails.status.dueToLeave")
 
                   case _ =>
                     dateOfJoining match {
-                      case Some(joiningDate) if !joiningDate.isBefore(today) =>
+                      case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
                         messages("partnerDetails.status.dueToJoin")
 
+                      case Some(joiningDate) =>
+                        messages("partnerDetails.status.active", joiningDate.format(dateFormatter))
                       case _ =>
                         messages("partnerDetails.status.active")
                     }
@@ -136,12 +111,12 @@ object PartnerDetailsViewModel {
 
               val statusDetails =
                 dateOfLeaving match {
-                  case Some(leavingDate) if !leavingDate.isBefore(today) =>
+                  case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
                     Some(leavingDate.format(dateFormatter))
 
                   case _ =>
                     dateOfJoining match {
-                      case Some(joiningDate) if !joiningDate.isBefore(today) =>
+                      case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
                         Some(joiningDate.format(dateFormatter))
 
                       case _ =>
@@ -155,25 +130,20 @@ object PartnerDetailsViewModel {
 
               val removeUrl =
                 if (canRemove) {
-                  Some(
-                    routes.PartnerDetailsController
-                      .onRemove(partnerNumber)
-                      .url
-                  )
+                  Some(onRemoveRoute(partnerNumber))
                 } else {
                   None
                 }
 
               PartnerDetailsRow(
-                partnerNumber = partnerNumber,
-                name          = name,
-                status        = status,
-                statusDetails = statusDetails,
-                partnerDetailsUrl = routes.PartnerDetailsController
-                  .onPartnerDetails(partnerNumber)
-                  .url,
-                removeUrl = removeUrl,
-                canRemove = canRemove
+                index = partnerNumber,
+                // Note: Realistically this should never happen, left it here for now to easily identify if it happens
+                name              = name.getOrElse("Business Name not found!"),
+                status            = status,
+                statusDetails     = statusDetails,
+                partnerDetailsUrl = onPartnerDetailsRoute(partnerNumber),
+                removeUrl         = removeUrl,
+                canRemove         = canRemove
               )
             }
         }
@@ -183,16 +153,39 @@ object PartnerDetailsViewModel {
       rows.nonEmpty
 
     val canAddAnotherPartner =
-      rows.size < maxPartners
+      rows.size < frontendAppConfig.maxPartners
 
     PartnerDetailsViewModel(
       partners                   = rows,
       addAnotherPartner          = canAddAnotherPartner,
       showNoPartnersMessage      = !hasPartners,
       showMinimumPartnersMessage = hasPartners && activePartnerCount <= 2,
-      showMaximumPartnersMessage = rows.size >= maxPartners,
+      showMaximumPartnersMessage = rows.size >= frontendAppConfig.maxPartners,
       showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage).contains(true)
     )
 
   }
+
+  private def onPartnerDetailsRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
+    case _: Int =>
+      routes.PartnerDetailsController
+        .onPartnerDetails(partnerNumber.toString, NormalMode)
+        .url
+    case _: String =>
+      routes.PartnerDetailsController
+        .onPartnerDetails(partnerNumber.toString, CheckMode)
+        .url
+  }
+
+  private def onRemoveRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
+    case _: Int =>
+      routes.PartnerDetailsController
+        .onRemove(partnerNumber.toString, NormalMode)
+        .url
+    case _: String =>
+      routes.PartnerDetailsController
+        .onRemove(partnerNumber.toString, CheckMode)
+        .url
+  }
+
 }

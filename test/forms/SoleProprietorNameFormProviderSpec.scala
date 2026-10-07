@@ -115,18 +115,18 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
     }
 
     "bind None when field is missing" in {
-      val result = form.bind(Map.empty[String, String]).value
-      result.flatMap(_.middleName) mustBe None
+      val result = form.bind(Map("title" -> "Mr", "firstName" -> "John", "lastName" -> "Doe"))
+      result.value.value.middleName mustBe None
     }
 
     "bind None when field is empty" in {
-      val result = form.bind(Map(fieldName -> "")).value
-      result.flatMap(_.middleName) mustBe None
+      val result = form.bind(Map("title" -> "Mr", "firstName" -> "John", "lastName" -> "Doe", fieldName -> ""))
+      result.value.value.middleName mustBe None
     }
 
     "bind None when field is whitespace" in {
-      val result = form.bind(Map(fieldName -> "   ")).value
-      result.flatMap(_.middleName) mustBe None
+      val result = form.bind(Map("title" -> "Mr", "firstName" -> "John", "lastName" -> "Doe", fieldName -> "   "))
+      result.value.value.middleName mustBe None
     }
 
     "bind Some when valid value provided" in {

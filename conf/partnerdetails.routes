@@ -139,22 +139,25 @@ POST       /change-registration-details/partner-details/foreign-corporate-refere
 GET        /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index: String, mode: Mode = CheckMode)
 POST       /change-registration-details/partner-details/change-foreign-corporate-reference/:index            controllers.partnerdetails.PartnerDetailsForeignCorporateReferenceController.onSubmit(index: String, mode: Mode = CheckMode)
 
+GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad(page: Option[Int])
+POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit(page: Option[Int])
+
+GET       /change-registration-details/partner-details/remove/:partnerNumber              controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String, mode: Mode = NormalMode)
+GET       /change-registration-details/partner-details/change-remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String, mode: Mode = CheckMode)
+
+GET       /change-registration-details/partner-details/details/:partnerNumber             controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String, mode: Mode = NormalMode)
+GET       /change-registration-details/partner-details/change-details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String, mode: Mode = CheckMode)
+
 GET        /change-registration-details/partner-details/business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST       /change-registration-details/partner-details/business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onSubmit(index: String, mode: Mode = NormalMode)
 GET        /change-registration-details/partner-details/change-business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index: String, mode: Mode = CheckMode)
 POST       /change-registration-details/partner-details/change-business-country-incorporated/:index                      controllers.partnerdetails.PartnerDetailsAddCountryOfIncorporationController.onSubmit(index: String, mode: Mode = CheckMode)
 
-GET       /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onPageLoad
-POST      /change-registration-details/partner-details                             controllers.partnerdetails.PartnerDetailsController.onSubmit
-GET       /change-registration-details/partner-details/remove/:partnerNumber       controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
-GET       /change-registration-details/partner-details/details/:partnerNumber      controllers.partnerdetails.PartnerDetailsController.onPartnerDetails(partnerNumber: String)
-
-GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String)
+GET       /change-registration-details/partner-details/date-to-remove-redirect     controllers.partnerdetails.PartnerDetailsController.onRemove(partnerNumber: String, mode: Mode = NormalMode)
 GET       /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onPageLoad(mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-to-remove           controllers.partnerdetails.PartnerDetailsDeleteDateController.onSubmit(mode: Mode = NormalMode)
 
 GET       /change-registration-details/partner-details/check-date-to-remove                       controllers.partnerdetails.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad()
-
 
 GET       /change-registration-details/partner-details/date-of-joining/:index          controllers.partnerdetails.PartnerDateOfJoiningController.onPageLoad(index: String, mode: Mode = NormalMode)
 POST      /change-registration-details/partner-details/date-of-joining/:index          controllers.partnerdetails.PartnerDateOfJoiningController.onSubmit(index: String, mode: Mode = NormalMode)
