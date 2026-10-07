@@ -23,5 +23,5 @@ case object ControllingBodyEmailPage extends QuestionPage[String] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ toString
 
-  override def toString: String = "email"
+  override def toString: String = "emailAddr"
 }

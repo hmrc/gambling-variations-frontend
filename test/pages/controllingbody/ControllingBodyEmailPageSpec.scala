@@ -26,12 +26,12 @@ class ControllingBodyEmailPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      ControllingBodyEmailPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ "email" )
+      ControllingBodyEmailPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ "emailAddr" )
     }
 
     "have the correct toString value" in {
 
-      ControllingBodyEmailPage.toString mustEqual "email"
+      ControllingBodyEmailPage.toString mustEqual "emailAddr"
     }
   }
 }

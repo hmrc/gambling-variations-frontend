@@ -76,7 +76,7 @@ class ControllingBodyEmailAddressControllerSpec extends SpecBase with MockitoSug
         "controllingBodyDetails" -> Json.obj(
           "mgdRegNum" -> userAnswersId,
           "correspondenceSection" -> Json.obj(
-            "email" -> "validEmail@example.com"
+            "emailAddr" -> "validEmail@example.com"
           )
         )
       )
@@ -123,7 +123,7 @@ class ControllingBodyEmailAddressControllerSpec extends SpecBase with MockitoSug
       }
     }
 
-    "must update data correctly when submitted in" in {
+    "must update data correctly when submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
@@ -151,7 +151,7 @@ class ControllingBodyEmailAddressControllerSpec extends SpecBase with MockitoSug
       }
     }
 
-    "must flag ControllingBodyChangesPage when data changed in" in {
+    "must flag ControllingBodyChangesPage when data changed" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
@@ -179,6 +179,48 @@ class ControllingBodyEmailAddressControllerSpec extends SpecBase with MockitoSug
         savedAnswersCaptor.getValue.get(ControllingBodyChangesPage).value mustEqual true
       }
     }
+
+    "must not flag ControllingBodyChangesPage when data has not changed" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val userAnswers = noAnswers
+        .set(ControllingBodyEmailPage, "validEmail@example.com")
+        .success
+        .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, emailAddressRoute)
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        savedAnswersCaptor.getValue
+          .get(ControllingBodyEmailPage)
+          .value mustEqual "validEmail@example.com"
+
+        savedAnswersCaptor.getValue
+          .get(ControllingBodyChangesPage)
+          .value mustEqual false
+      }
+    }
+
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
