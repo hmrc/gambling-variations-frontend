@@ -12,6 +12,9 @@ site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
 site.notProvided = Not provided
+site.pagination.next = Next
+site.pagination.previous = Previous
+
 
 date.day = Day
 date.month = Month
@@ -925,7 +928,9 @@ partnerDetails.viewOrChange = View or change
 partnerDetails.status.dueToLeave =  Due to leave
 partnerDetails.status.dueToJoin =  	Due to join
 partnerDetails.cannotRemove =  	Cannot remove
-partnerDetails.maximumReached = If you need to add a new partner, you must change or remove a current one.
+partnerDetails.maximumReached = You can only have up to 100 partners. If you need to add a new partner, you must change or remove a current one.
+partnerDetails.maxPartners.hint = You can only add up to 100 partners
+partnerDetails.maxPartners.hint = You can only add up to 100 partners
 partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
 partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner
 partnerDetails.addPartner.error.required = Select yes if you want to add a partner
@@ -1070,12 +1075,6 @@ premisesNotCoveredYesNo.error.required = Select yes if you have any other premis
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
 
-controllingBodyNotProvidedYesNo.title = Tell us about your controlling body
-controllingBodyNotProvidedYesNo.p1 = Your group''s representative member, {0}, can also be your controlling body.
-controllingBodyNotProvidedYesNo.text = Do you want {0} to be your controlling body?
-controllingBodyNotProvidedYesNo.error.required = Select yes if you want your group''s representative member to also be your controlling body
-controllingBodyNotProvidedYesNo.noLabel = No, I want to provide new details
-
 removePremisesAddress.title = Are you sure you want to remove this premises address?
 removePremisesAddress.heading = Are you sure you want to remove this premises address?
 removePremisesAddress.error.required = Select yes if you want to remove this premises address
@@ -1095,14 +1094,6 @@ premisesAddressList.error.required = Select yes if you want to add another addre
 controllingBodyBusinessType.title = What type of business is the controlling body?
 controllingBodyBusinessType.heading = What type of business is the controlling body?
 controllingBodyBusinessType.error.required = Select the type of business for the controlling body
-
-controllingBodyChangeScreener.title = What do you want to do with your controlling body?
-controllingBodyChangeScreener.heading = What do you want to do with your controlling body?
-controllingBodyChangeScreener.p1 = Your current controlling body is {0}.
-controllingBodyChangeScreener.editDetails = Edit controlling body details
-controllingBodyChangeScreener.provideNew = Provide a new controlling body
-controllingBodyChangeScreener.keepSame = Keep controlling body the same
-controllingBodyChangeScreener.error.required = Select what you want to do with your controlling body
 
 partnerDetailsAddCountryOfIncorporation.title = Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.heading = Which country is the partner’s business incorporated in?
@@ -1158,6 +1149,23 @@ controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for
 controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
 
+controllingBodyTradingName.title = What is the controlling body's trading name?
+controllingBodyTradingName.heading = What is the controlling body's trading name?
+controllingBodyTradingName.checkYourAnswersLabel = What is the controlling body's trading name?
+controllingBodyTradingName.hint = The controlling body's trading name should not include 'Ltd', 'Limited', 'PLC' or 'LLP'. These terms are legally protected, which could cause investigation and delays.
+controllingBodyTradingName.error.required = Enter the controlling body's trading name
+controllingBodyTradingName.error.length = The controlling body's trading name must be 100 characters or less
+controllingBodyTradingName.error.invalid = The controlling body's trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
+controllingBodyTradingName.change.hidden = What is the controlling body's trading name?
+
+controllingBodyChangeScreener.title = What do you want to do with your controlling body?
+controllingBodyChangeScreener.heading = What do you want to do with your controlling body?
+controllingBodyChangeScreener.p1 = Your current controlling body is {0}.
+controllingBodyChangeScreener.editDetails = Edit controlling body details
+controllingBodyChangeScreener.provideNew = Provide a new controlling body
+controllingBodyChangeScreener.keepSame = Keep controlling body the same
+controllingBodyChangeScreener.error.required = Select what you want to do with your controlling body
+
 controllingBodyEmailAddress.title = What is the controlling body’s email address?
 controllingBodyEmailAddress.heading = What is the controlling body’s email address?
 controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
@@ -1165,8 +1173,10 @@ controllingBodyEmailAddress.error.required = Enter the controlling body’s emai
 controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
 
-site.pagination.next = Next
-site.pagination.previous = Previous
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
 
 whatToDoWithStandardReturnPeriods.title = Your standard return periods
 whatToDoWithStandardReturnPeriods.heading = Your standard return periods
@@ -1178,13 +1188,8 @@ whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last
 whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
 whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
 whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
-
 whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
 whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
 whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
 
 
-controllingBodySameAsRepYesNo.title = Controlling body details
-controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
-controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
-controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
