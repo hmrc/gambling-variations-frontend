@@ -263,3 +263,6 @@ POST       /change-registration-details/controlling-body-details/limited-liabili
 
 GET        /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/return-periods                                            controllers.returnperiods.ReturnPeriodsChoiceController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods                                            controllers.returnperiods.ReturnPeriodsChoiceController.onSubmit(mode: Mode = NormalMode)

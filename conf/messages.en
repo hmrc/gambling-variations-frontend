@@ -1149,3 +1149,12 @@ controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to ad
 
 site.pagination.next = Next
 site.pagination.previous = Previous
+
+returnPeriodsChoice.title = Your return periods
+returnPeriodsChoice.heading = Your return periods
+returnPeriodsChoice.standard = Standard
+returnPeriodsChoice.non-standard = Non-standard
+returnPeriodsChoice.error.required = Select the return periods you want to use
+returnPeriodsChoice.change.hidden = ReturnPeriodsChoice
+returnPeriodsChoice.change.p1 = If you want to use standard return periods, the end dates are set to the last day of the month, for example 31 March.
+returnPeriodsChoice.change.p2 = If you want to use non‑standard return periods, you must provide end dates that cover the next 2 years.
