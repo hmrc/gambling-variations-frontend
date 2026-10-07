@@ -27,7 +27,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.ControllingBodyChangeScreenerPage
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyChangeScreenerPage}
 import pages.correspondencedetails.*
 import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
 import pages.partnerdetails.*
@@ -1248,6 +1248,28 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       "should route ControllingBodyChangeScreenerPage to SystemError when there is no answer" in {
         navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is Yes" in {
+        val answers =
+          emptyAnswers
+            .set(ControllingBodyAddTradingNameYesNoPage, true)
+            .success
+            .value
+
+        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+          routes.IndexController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is No" in {
+        val answers =
+          emptyAnswers
+            .set(ControllingBodyAddTradingNameYesNoPage, false)
+            .success
+            .value
+
+        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+          routes.IndexController.onPageLoad()
       }
     }
   }
