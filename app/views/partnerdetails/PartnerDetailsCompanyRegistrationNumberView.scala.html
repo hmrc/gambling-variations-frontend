@@ -15,7 +15,6 @@
  *@
 
 @import viewmodels.InputWidth._
-@import viewmodels.LabelSize.Large
 @import views.html.components._
 
 @this(
@@ -26,8 +25,6 @@
     govukInput: GovukInput,
     govukButton: GovukButton,
     caption: Caption,
-    fieldSet: GovukFieldset,
-    paragraph: Paragraph,
     paragraphWithLink: ParagraphMessageWithLink
 )
 
@@ -51,21 +48,19 @@
             message2    = None,
             linkUrl     = "https://find-and-update.company-information.service.gov.uk/",
             linkRel     = "noreferrer noopener",
-            target      = "_blank"
+            target      = "_blank",
+            linkFullStop = true
         )
-
-        @paragraph(messages("partnerDetailsCompanyRegistrationNumber.paragraph"), true)
 
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages("partnerDetailsCompanyRegistrationNumber.heading"))
-                    .withCssClass("govuk-visually-hidden")
+                label = LabelViewModel(messages("partnerDetailsCompanyRegistrationNumber.paragraph"))
+                    .withCssClass("govuk-label--m")
             )
-            .withWidth(Full)
+            .withWidth(Fixed10)
             .withHint(HintViewModel(messages("partnerDetailsCompanyRegistrationNumber.hint"))
             )
-            .withCssClass("govuk-input--width-10")
         )
 
         @govukButton(

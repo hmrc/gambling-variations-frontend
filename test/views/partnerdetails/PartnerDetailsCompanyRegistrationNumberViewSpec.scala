@@ -63,11 +63,8 @@ class PartnerDetailsCompanyRegistrationNumberViewSpec extends SpecBase {
 
       doc.select("h1.govuk-heading-l").text mustBe messages("partnerDetailsCompanyRegistrationNumber.heading")
 
-      doc.select(".govuk-body").text must
-        include(messages("partnerDetailsCompanyRegistrationNumber.paragraph"))
-
-      doc.select(s"label[for=$fieldName].govuk-visually-hidden").text mustBe
-        messages("partnerDetailsCompanyRegistrationNumber.heading")
+      doc.select(s"label[for=$fieldName].govuk-label--m").text mustBe
+        messages("partnerDetailsCompanyRegistrationNumber.paragraph")
 
       doc.select(".govuk-hint").text mustBe messages("partnerDetailsCompanyRegistrationNumber.hint")
 
@@ -85,6 +82,7 @@ class PartnerDetailsCompanyRegistrationNumberViewSpec extends SpecBase {
       link.attr("target") mustBe "_blank"
       link.attr("rel") mustBe "noreferrer noopener"
       link.parents().first().text must startWith(messages("partnerDetailsCompanyRegistrationNumber.p1"))
+      link.parents().first().text must endWith(").")
     }
 
     "must render a 10-character-wide input with the name the form provider binds" in new Setup {
