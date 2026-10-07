@@ -48,7 +48,7 @@ class ControllingBodyNotProvidedYesNoControllerSpec extends SpecBase with Mockit
   private val baseAnswers =
     UserAnswers(userAnswersId,
                 Json.obj(
-                  "controllingBodyDetailsSection" -> Json.obj(
+                  "controllingBodyDetails" -> Json.obj(
                     "mgdRegNum"    -> userAnswersId,
                     "businessName" -> "abc"
                   )

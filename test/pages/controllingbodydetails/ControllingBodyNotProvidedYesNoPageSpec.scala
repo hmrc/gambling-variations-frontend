@@ -30,7 +30,7 @@ class ControllingBodyNotProvidedYesNoPageSpec extends AnyFreeSpec with Matchers 
 
     "must have a path corresponding to its name and index" in {
       val expectedPath: JsPath =
-        (JsPath \ "controllingBodyDetailsSection") \ "controllingBodyNotProvidedYesNo"
+        (JsPath \ "controllingBodyDetails") \ "controllingBodyNotProvidedYesNo"
 
       ControllingBodyNotProvidedYesNoPage.path mustBe expectedPath
     }
