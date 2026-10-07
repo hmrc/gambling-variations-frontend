@@ -17,7 +17,6 @@
 package pages.controllingbody
 
 import org.scalatestplus.play.PlaySpec
-import pages.controllingbody.ControllingBodyFaxNumberPage
 import play.api.libs.json.JsPath
 
 class ControllingBodyFaxNumberPageSpec extends PlaySpec {
@@ -26,7 +25,7 @@ class ControllingBodyFaxNumberPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      ControllingBodyFaxNumberPage.path mustEqual (JsPath \ "controllingBodyDetailsSection" \ "controllingBodyFaxNumber")
+      ControllingBodyFaxNumberPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "controllingBodyFaxNumber")
     }
 
     "have the correct toString value" in {

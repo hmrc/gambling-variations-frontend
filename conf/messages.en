@@ -1150,8 +1150,8 @@ controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to ad
 site.pagination.next = Next
 site.pagination.previous = Previous
 
-controllingBodyFaxNumber.title = What is the controlling body's fax number?
-controllingBodyFaxNumber.heading = What is the controlling body's fax number?
-controllingBodyFaxNumber.error.required = Enter the controlling body's fax number
+controllingBodyFaxNumber.title = What is the controlling body''s fax number?
+controllingBodyFaxNumber.heading = What is the controlling body''s fax number?
+controllingBodyFaxNumber.error.required = Enter the controlling body''s fax number
 controllingBodyFaxNumber.error.invalid = The fax number must only include numbers 0 to 9 and spaces
 controllingBodyFaxNumber.error.length = The fax number must be 20 characters or less

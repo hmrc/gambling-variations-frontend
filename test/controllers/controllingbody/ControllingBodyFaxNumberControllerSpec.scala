@@ -44,13 +44,13 @@ class ControllingBodyFaxNumberControllerSpec extends SpecBase with MockitoSugar 
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("controllingBodyDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
 
   val data: JsObject = Json.obj(
-    "controllingBodyDetailsSection" -> Json.obj(
+    "controllingBodyDetails" -> Json.obj(
       "mgdRegNum"                                       -> userAnswersId,
-      ControllingBodyFaxNumberPage.toString -> "jlkjfdlkjsls"
+      ControllingBodyFaxNumberPage.toString -> "1234"
     )
   )
 
@@ -91,7 +91,7 @@ class ControllingBodyFaxNumberControllerSpec extends SpecBase with MockitoSugar 
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill("jlkjfdlkjsls"), NormalMode)(request, messages(application)).toString
+          view(form.fill("1234"), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -114,7 +114,7 @@ class ControllingBodyFaxNumberControllerSpec extends SpecBase with MockitoSugar 
 
         val request =
           FakeRequest(POST, busAddRoute)
-            .withFormUrlEncodedBody("controllingBodyFaxNumber" -> "jlkjfdlkjsls")
+            .withFormUrlEncodedBody("controllingBodyFaxNumber" -> "123")
 
         val result = route(application, request).value
 

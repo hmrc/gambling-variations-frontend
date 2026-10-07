@@ -35,7 +35,6 @@ class ControllingBodyFaxNumberViewSpec extends SpecBase {
 
       doc.title must include(messages("controllingBodyFaxNumber.title"))
       doc.select(".govuk-caption-l").text mustEqual messages("changeRegistrationDetails.caption")
-      doc.select(".govuk-hint").text mustEqual messages("controllingBodyFaxNumber.hint")
       doc.select("h1").text mustEqual messages("controllingBodyFaxNumber.heading")
 
       doc.select("form").attr("action") mustEqual controllers.controllingbody.routes.ControllingBodyFaxNumberController.onSubmit().url
@@ -46,13 +45,13 @@ class ControllingBodyFaxNumberViewSpec extends SpecBase {
     "must render populated values when the form is filled" in new Setup {
 
       val populatedForm = form.fill(
-        "ajklasjlkjsalkjslkdjflksdjflk"
+        "1234"
       )
 
       val html = view(populatedForm, NormalMode)
       val doc = Jsoup.parse(html.body)
 
-      doc.select("input").attr("value") mustEqual "ajklasjlkjsalkjslkdjflksdjflk"
+      doc.select("input").attr("value") mustEqual "1234"
     }
 
     "must render correct error summary when the submitted value is empty" in new Setup {
@@ -66,7 +65,7 @@ class ControllingBodyFaxNumberViewSpec extends SpecBase {
       val html = view(errorForm, NormalMode)
       val doc = Jsoup.parse(html.body)
 
-      doc.select(".govuk-error-summary").text() must include("Enter additional information for your business address")
+      doc.select(".govuk-error-summary").text() must include("Enter the controlling body's fax number")
     }
 
     "must render correct error summary when the submitted value is invalid" in new Setup {
@@ -81,8 +80,7 @@ class ControllingBodyFaxNumberViewSpec extends SpecBase {
       val doc = Jsoup.parse(html.body)
 
       doc.select(".govuk-error-summary").text() must include(
-        "The additional information must only include letters a to z, " +
-          "numbers 0 to 9, apostrophes, hyphens or spaces"
+        "The fax number must only include numbers 0 to 9 and spaces"
       )
     }
 
@@ -101,7 +99,7 @@ class ControllingBodyFaxNumberViewSpec extends SpecBase {
 
       val html = view(errorForm, NormalMode)
       val doc = Jsoup.parse(html.body)
-      doc.select(".govuk-error-summary").text() must include("The additional information must be 100 characters or less")
+      doc.select(".govuk-error-summary").text() must include("The fax number must be 20 characters or less")
     }
   }
 
