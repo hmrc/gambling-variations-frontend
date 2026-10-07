@@ -30,50 +30,28 @@
  caption: Caption
 )
 
-@(
-form: Form[_],
-mode: Mode,
-periodNumber: Int,
-numberOfPeriods: Int,
-periodEnd: LocalDate,
-lowerBoundary: LocalDate,
-upperBoundary: LocalDate
-)(
-implicit request: Request[_],
-messages: Messages
-)
+@(form: Form[_], mode: Mode, periodNumber: Int, numberOfPeriods: Int, periodEnd: LocalDate, lowerBoundary: LocalDate, upperBoundary: LocalDate)(implicit request: Request[_], messages: Messages)
 
-@monthYearFormatter = @{
-DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)
-}
+ @monthYearFormatter = @{
+  DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)
+ }
 
-@longDateFormatter = @{
-DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH)
-}
+ @longDateFormatter = @{
+  DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH)
+ }
 
-@periodMonthYear = @{
-periodEnd.format(monthYearFormatter)
-}
+ @periodMonthYear = @{
+  periodEnd.format(monthYearFormatter)
+ }
 
-@lowerBoundaryText = @{
-lowerBoundary.format(longDateFormatter)
-}
+ @lowerBoundaryText = @{
+  lowerBoundary.format(longDateFormatter)
+ }
 
-@upperBoundaryText = @{
-upperBoundary.format(longDateFormatter)
-}
+ @upperBoundaryText = @{
+  upperBoundary.format(longDateFormatter)
+ }
 
-@hintText = @{
-HtmlContent(
-messages(
-"enterNonStandardPeriodDate.range",
-lowerBoundaryText,
-upperBoundaryText
-) +
-"<br><br>" +
-messages("enterNonStandardPeriodDate.hint")
-)
-}
 
 @layout(
 pageTitle = title(
@@ -120,7 +98,11 @@ numberOfPeriods
 )
 ).asPageHeading(Large)
 ).withHint(
-HintViewModel(hintText)
+HintViewModel(messages(
+"enterNonStandardPeriodDate.hint",
+lowerBoundaryText,
+upperBoundaryText
+))
 )
 )
 

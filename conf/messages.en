@@ -1141,13 +1141,11 @@ controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to ad
 
 enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
 enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
-enterNonStandardPeriodDate.range = The end date must be between {0} and {1}.
-enterNonStandardPeriodDate.hint = For example, 30 6 2026
+enterNonStandardPeriodDate.hint = The end date must be after {0}  and before  {1}. For example, 30 6 2026
 enterNonStandardPeriodDate.dateLabel = End date
 
 enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
 enterNonStandardPeriodDate.error.required.two = Enter the {0} and {1} for the end date
 enterNonStandardPeriodDate.error.required = Enter the {0} for the end date
-
 enterNonStandardPeriodDate.error.invalid = End date must be a real date
-enterNonStandardPeriodDate.error.outsideBoundaries = End date must be between {0} and {1}
+enterNonStandardPeriodDate.error.outsideBoundaries=End date must be after {0} and before {1}

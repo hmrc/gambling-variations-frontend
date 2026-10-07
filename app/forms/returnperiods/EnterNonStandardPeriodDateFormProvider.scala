@@ -18,17 +18,36 @@ package forms.returnperiods
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.i18n.Messages
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 class EnterNonStandardPeriodDateFormProvider @Inject() extends Mappings {
+
+  private val longDateFormatter =
+    DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH)
 
   def apply(
     lowerBoundary: LocalDate,
     upperBoundary: LocalDate
   )(implicit messages: Messages): Form[LocalDate] = {
+
+    val outsideBoundariesConstraint =
+      Constraint[LocalDate] { date =>
+        if (date.isAfter(lowerBoundary) && date.isBefore(upperBoundary)) {
+          Valid
+        } else {
+          Invalid(
+            "enterNonStandardPeriodDate.error.outsideBoundaries",
+            lowerBoundary.format(longDateFormatter),
+            upperBoundary.format(longDateFormatter)
+          )
+        }
+      }
 
     Form(
       "value" -> localDate(
@@ -37,10 +56,7 @@ class EnterNonStandardPeriodDateFormProvider @Inject() extends Mappings {
         twoRequiredKey = "enterNonStandardPeriodDate.error.required.two",
         requiredKey    = "enterNonStandardPeriodDate.error.required"
       ).verifying(
-        "enterNonStandardPeriodDate.error.outsideBoundaries",
-        date =>
-          date.isAfter(lowerBoundary) &&
-            date.isBefore(upperBoundary)
+        outsideBoundariesConstraint
       )
     )
   }
