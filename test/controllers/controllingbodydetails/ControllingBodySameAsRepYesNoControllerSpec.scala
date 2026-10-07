@@ -46,7 +46,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
   private val baseAnswers =
     UserAnswers(userAnswersId,
                 Json.obj(
-                  "controllingBodyDetailsSection" -> Json.obj(
+                  "controllingBodyDetails" -> Json.obj(
                     "mgdRegNum"    -> userAnswersId,
                     "businessName" -> "abc"
                   )

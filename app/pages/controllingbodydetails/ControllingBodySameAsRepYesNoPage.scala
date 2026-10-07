@@ -21,7 +21,7 @@ import play.api.libs.json.JsPath
 
 case object ControllingBodySameAsRepYesNoPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ "controllingBodyDetailsSection" \ toString
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
 
   override def toString: String = "controllingBodySameAsRepYesNo"
 }
