@@ -43,13 +43,15 @@ class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
     private val formProvider = new WhatToDoWithStandardReturnPeriodsFormProvider()
     private val form = formProvider()
 
-    private val html = view(form, NormalMode)(request, messages)
+    private val returnPeriodsId = Some("3")
+
+    private val html = view(form, NormalMode, returnPeriodsId)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
 
     def renderWithErrors: Document = {
       val formWithErrors = formProvider().bind(Map("value" -> ""))
-      Jsoup.parse(view(formWithErrors, NormalMode)(request, messages).body)
+      Jsoup.parse(view(formWithErrors, NormalMode, returnPeriodsId)(request, messages).body)
     }
   }
 
@@ -69,6 +71,9 @@ class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
 
       doc.select(".govuk-fieldset__legend").text() mustBe
         messages("whatToDoWithStandardReturnPeriods.h2")
+
+      doc.select("p.govuk-body").text() mustBe
+        messages("whatToDoWithStandardReturnPeriods.p3")
 
       doc.select("button.govuk-button").text() mustBe
         messages("site.continue")
@@ -91,6 +96,9 @@ class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
       )
 
       doc.select("input[type=radio]").size mustBe 3
+
+      doc.select("#value_1-item-hint").text() mustBe
+        messages("whatToDoWithStandardReturnPeriods.switchToNonStandard.hint")
     }
 
     "must render an error summary when the form has errors" in new Setup {

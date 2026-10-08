@@ -29,7 +29,7 @@
     p:Paragraph
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, returnPeriodsId: Option[String])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("whatToDoWithStandardReturnPeriods.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
@@ -42,7 +42,21 @@
 
         @caption(messages("changeRegistrationDetails.caption"))
         @h1("whatToDoWithStandardReturnPeriods.heading", classes = "govuk-heading-l")
-        @p("whatToDoWithStandardReturnPeriods.p1")
+
+        @returnPeriodsId match {
+        case Some("1") => {
+          @p("whatToDoWithStandardReturnPeriods.p1")
+        }
+        case Some("2") => {
+            @p("whatToDoWithStandardReturnPeriods.p2")
+        }
+        case Some("3") => {
+         @p("whatToDoWithStandardReturnPeriods.p3")
+        }
+        case _ => {
+         @p("whatToDoWithStandardReturnPeriods.p3")
+        }
+        }
 
         @govukRadios(
             RadiosViewModel(

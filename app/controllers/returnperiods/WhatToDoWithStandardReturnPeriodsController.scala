@@ -20,7 +20,7 @@ import controllers.actions.*
 import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
+import pages.returnperiods.{GamblingReturnPeriodsPage, WhatToDoWithStandardReturnPeriodsPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,27 +46,53 @@ class WhatToDoWithStandardReturnPeriodsController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+      val preparedForm =
+        request.userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+
+      val returnPeriodsId =
+        request.userAnswers
+          .get(GamblingReturnPeriodsPage)
+          .flatMap(_.returnPeriodsId)
+          .map(_.toString)
+
+      Ok(view(preparedForm, mode, returnPeriodsId))
     }
 
-    Ok(view(preparedForm, mode))
-  }
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful {
+              val returnPeriodsId =
+                request.userAnswers
+                  .get(GamblingReturnPeriodsPage)
+                  .flatMap(_.returnPeriodsId)
+                  .map(_.toString)
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatToDoWithStandardReturnPeriodsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WhatToDoWithStandardReturnPeriodsPage, mode, updatedAnswers))
-      )
-  }
+              BadRequest(view(formWithErrors, mode, returnPeriodsId))
+            },
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(
+                                  request.userAnswers.set(WhatToDoWithStandardReturnPeriodsPage, value)
+                                )
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(
+              navigator.nextPage(
+                WhatToDoWithStandardReturnPeriodsPage,
+                mode,
+                updatedAnswers
+              )
+            )
+        )
+    }
 }

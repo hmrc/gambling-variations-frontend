@@ -18,7 +18,6 @@ package controllers.returnperiods
 
 import base.SpecBase
 import controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController
-import controllers.routes
 import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.ChooseReturnPeriods.Jan
 import models.{GamblingReturnPeriods, NormalMode, UserAnswers, WhatToDoWithStandardReturnPeriods}
@@ -96,6 +95,9 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
       .success
       .value
 
+  private val returnPeriodsId =
+    Some(Jan.returnPeriodsId.toString)
+
   private def controller(application: play.api.Application) =
     application.injector
       .instanceOf[WhatToDoWithStandardReturnPeriodsController]
@@ -131,7 +133,8 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
         contentAsString(result) mustEqual
           view(
             form,
-            NormalMode
+            NormalMode,
+            returnPeriodsId
           )(
             request,
             messages(application)
@@ -168,7 +171,8 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
         contentAsString(result) mustEqual
           view(
             form.fill(switchToNonStandard),
-            NormalMode
+            NormalMode,
+            returnPeriodsId
           )(
             request,
             messages(application)
@@ -385,7 +389,8 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
         contentAsString(result) mustEqual
           view(
             boundForm,
-            NormalMode
+            NormalMode,
+            returnPeriodsId
           )(
             request,
             messages(application)
@@ -425,7 +430,8 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
         contentAsString(result) mustEqual
           view(
             boundForm,
-            NormalMode
+            NormalMode,
+            returnPeriodsId
           )(
             request,
             messages(application)

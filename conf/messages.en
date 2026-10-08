@@ -1163,8 +1163,10 @@ whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the m
 whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
 whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
 whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
-whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of March, June, September and December.
-whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years 
+whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
+whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
+whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
+whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
 
 whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
 whatToDoWithStandardReturnPeriods.error.required = Select whatToDoWithStandardReturnPeriods
