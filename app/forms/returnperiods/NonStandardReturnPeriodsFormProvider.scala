@@ -17,15 +17,15 @@
 package forms.returnperiods
 
 import forms.mappings.Mappings
-import models.ReturnPeriods
+import models.NonStandardReturnPeriodsOptions
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class ReturnPeriodsFormProvider @Inject() extends Mappings {
+class NonStandardReturnPeriodsFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[ReturnPeriods] =
+  def apply(): Form[NonStandardReturnPeriodsOptions] =
     Form(
-      "value" -> enumerable[ReturnPeriods]("returnPeriods.error.required")
+      "value" -> enumerable[NonStandardReturnPeriodsOptions]("returnPeriods.nonStandard.error.required")
     )
 }

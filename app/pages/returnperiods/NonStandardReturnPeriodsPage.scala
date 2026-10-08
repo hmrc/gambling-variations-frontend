@@ -16,13 +16,13 @@
 
 package pages.returnperiods
 
-import models.ReturnPeriods
+import models.NonStandardReturnPeriodsOptions
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ReturnPeriodsPage extends QuestionPage[ReturnPeriods] {
+case object NonStandardReturnPeriodsPage extends QuestionPage[NonStandardReturnPeriodsOptions] {
 
   override def path: JsPath = JsPath \ toString
 
-  override def toString: String = "returnPeriods"
+  override def toString: String = "nonStandardReturnPeriods"
 }

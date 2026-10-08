@@ -15,7 +15,7 @@
  *@
 
 @import viewmodels.LegendSize.*
-@import viewmodels.checkAnswers.returnperiods.ReturnPeriodsViewModel
+@import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
 @import views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.hint
 
@@ -31,9 +31,9 @@
     h1: H1
 )
 
-@(form: Form[_], viewModel: ReturnPeriodsViewModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], viewModel: NonStandardReturnPeriodsViewModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("returnPeriods.title"))) {
+@layout(pageTitle = title(form, messages("returnPeriods.nonStandard.title"))) {
 
     @formHelper(action = controllers.returnperiods.routes.ReturnPeriodsController.onSubmit(), Symbol("autoComplete") -> "off") {
 
@@ -43,12 +43,12 @@
 
     @caption(messages("changeRegistrationDetails.caption"))
 
-    @h1(messages("returnPeriods.title"))
+    @h1(messages("returnPeriods.nonStandard.title"))
 
     @if(viewModel.hasFuturePeriods){
         <table class="govuk-table">
 
-            <caption class="govuk-table__caption govuk-table__caption--m">@messages("returnPeriods.upcomingTable.caption")</caption>
+            <caption class="govuk-table__caption govuk-table__caption--m">@messages("returnPeriods.nonStandard.upcomingTable.caption")</caption>
 
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
@@ -57,14 +57,14 @@
                         scope="col"
                         class="govuk-table__header"
                 >
-                    @messages("returnPeriods.column1")
+                    @messages("returnPeriods.nonStandard.column1")
                 </th>
 
                 <th
                         scope="col"
                         class="govuk-table__header"
                 >
-                    @messages("returnPeriods.column2")
+                    @messages("returnPeriods.nonStandard.column2")
                 </th>
 
             </tr>
@@ -78,7 +78,7 @@
 
                     <td class="govuk-table__cell">
                             <span class="govuk-visually-hidden">
-                                @messages("partnerDetails.viewOrChange")
+                                @messages("site.viewOrChange")
                             </span>
                             @viewModel.month
                     </td>
@@ -100,7 +100,7 @@
     @if(viewModel.hasPastPeriods){
         <table class="govuk-table">
 
-            <caption class="govuk-table__caption govuk-table__caption--m">@messages("returnPeriods.pastTable.caption")</caption>
+            <caption class="govuk-table__caption govuk-table__caption--m">@messages("returnPeriods.nonStandard.pastTable.caption")</caption>
 
             <thead class="govuk-table__head">
             <tr class="govuk-table__row">
@@ -109,14 +109,14 @@
                         scope="col"
                         class="govuk-table__header"
                 >
-                    @messages("returnPeriods.column1")
+                    @messages("returnPeriods.nonStandard.column1")
                 </th>
 
                 <th
                         scope="col"
                         class="govuk-table__header"
                 >
-                    @messages("returnPeriods.column2")
+                    @messages("returnPeriods.nonStandard.column2")
                 </th>
 
             </tr>
@@ -130,7 +130,7 @@
 
                     <td class="govuk-table__cell">
                         <span class="govuk-visually-hidden">
-                            @messages("partnerDetails.viewOrChange")
+                            @messages("site.viewOrChange")
                         </span>
                         @viewModel.month
                     </td>
@@ -152,8 +152,8 @@
     @govukRadios(
        RadiosViewModel(
            field  = form("value"),
-           legend = LegendViewModel(messages("returnPeriods.option.legend")).asPageHeading(Medium),
-           items  = ReturnPeriods.options(viewModel.isInLastNonStandardReturnPeriod, viewModel.selectedMonths)
+           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).asPageHeading(Medium),
+           items  = NonStandardReturnPeriodsOptions.options(viewModel.isInLastNonStandardReturnPeriod, viewModel.selectedMonths)
        )
     )
 

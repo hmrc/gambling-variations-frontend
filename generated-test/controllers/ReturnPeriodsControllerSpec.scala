@@ -2,7 +2,7 @@ package controllers
 
 import base.SpecBase
 import forms.ReturnPeriodsFormProvider
-import models.{NormalMode, ReturnPeriods, UserAnswers}
+import models.{NormalMode, NonStandardReturnPeriodsOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -47,7 +47,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ReturnPeriodsPage, ReturnPeriods.values.head).success.value
+      val userAnswers = UserAnswers(userAnswersId).set(ReturnPeriodsPage, NonStandardReturnPeriodsOptions.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -59,7 +59,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(ReturnPeriods.values.head), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(NonStandardReturnPeriodsOptions.values.head), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -80,7 +80,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, returnPeriodsRoute)
-            .withFormUrlEncodedBody(("value", ReturnPeriods.values.head.toString))
+            .withFormUrlEncodedBody(("value", NonStandardReturnPeriodsOptions.values.head.toString))
 
         val result = route(application, request).value
 
@@ -130,7 +130,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, returnPeriodsRoute)
-            .withFormUrlEncodedBody(("value", ReturnPeriods.values.head.toString))
+            .withFormUrlEncodedBody(("value", NonStandardReturnPeriodsOptions.values.head.toString))
 
         val result = route(application, request).value
 

@@ -18,27 +18,20 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import controllers.routes
-import forms.returnperiods.ReturnPeriodsFormProvider
-import models.{GamblingReturnPeriods, Mode}
+import forms.returnperiods.NonStandardReturnPeriodsFormProvider
+import models.{GamblingReturnPeriods, Mode, NonStandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
-import pages.GamblingReturnPeriodsPage
-import pages.partnerdetails.PartnerDetailsMgdRegNumberPage
-import pages.returnperiods.ReturnPeriodsPage
-import play.api.i18n.{I18nSupport, MessagesApi}
+import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.returnperiods.ReturnPeriodsViewModel
+import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
 import views.html.returnperiods.ReturnPeriodsView
 
-import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-
-case class ReturnPeriod(
-  pastPeriods: Seq[LocalDate],
-  futurePeriods: Seq[LocalDate]
-)
 
 class ReturnPeriodsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -47,38 +40,47 @@ class ReturnPeriodsController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: GamblingReturnPeriodsDataRequiredAction,
-  formProvider: ReturnPeriodsFormProvider,
+  formProvider: NonStandardReturnPeriodsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ReturnPeriodsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[NonStandardReturnPeriodsOptions] = formProvider()
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    (for {
-      gamblingReturnPeriods <- request.userAnswers.get(GamblingReturnPeriodsPage)
-      viewModel             <- ReturnPeriodsViewModel.from(gamblingReturnPeriods)
-      preparedForm = request.userAnswers.get(ReturnPeriodsPage) match {
-                       case None        => form
-                       case Some(value) => form.fill(value)
-                     }
-    } yield Ok(view(preparedForm, viewModel, mode))).fold(
+    getNonStandardReturnPeriodsViewModel(request.userAnswers).fold(
       Redirect(routes.SystemErrorController.onPageLoad())
-    )(identity)
+    )(viewModel => {
+      val preparedForm = request.userAnswers.get(NonStandardReturnPeriodsPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+      Ok(view(preparedForm, viewModel, mode))
+    })
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, ???, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ReturnPeriodsPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ReturnPeriodsPage, mode, updatedAnswers))
-      )
+    getNonStandardReturnPeriodsViewModel(request.userAnswers).fold(
+      Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+    )(viewModel =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, viewModel, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(NonStandardReturnPeriodsPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(NonStandardReturnPeriodsPage, mode, updatedAnswers))
+        )
+    )
   }
+
+  private def getNonStandardReturnPeriodsViewModel(userAnswers: UserAnswers)(implicit messages: Messages): Option[NonStandardReturnPeriodsViewModel] =
+    for {
+      gamblingReturnPeriods <- userAnswers.get(GamblingReturnPeriodsPage)
+      viewModel             <- NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods)
+    } yield viewModel
 }

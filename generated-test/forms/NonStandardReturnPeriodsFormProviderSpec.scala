@@ -1,23 +1,23 @@
 package forms
 
 import forms.behaviours.OptionFieldBehaviours
-import models.ReturnPeriods
+import models.NonStandardReturnPeriodsOptions
 import play.api.data.FormError
 
 //TODO
-class ReturnPeriodsFormProviderSpec extends OptionFieldBehaviours {
+class NonStandardReturnPeriodsFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new ReturnPeriodsFormProvider()()
+  val form = new NonStandardReturnPeriodsOptions()()
 
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "returnPeriods.error.required"
+    val requiredKey = "returnPeriods.nonStandard.error.required"
 
-    behave like optionsField[ReturnPeriods](
+    behave like optionsField[NonStandardReturnPeriodsOptions](
       form,
       fieldName,
-      validValues  = ReturnPeriods.values,
+      validValues  = NonStandardReturnPeriodsOptions.values,
       invalidError = FormError(fieldName, "error.invalid")
     )
 
