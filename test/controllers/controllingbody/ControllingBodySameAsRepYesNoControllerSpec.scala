@@ -30,7 +30,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.controllingBodyDetails.ControllingBodySameAsRepYesNoView
+import views.html.controllingbody.ControllingBodySameAsRepYesNoView
 
 import scala.concurrent.Future
 
