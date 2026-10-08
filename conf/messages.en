@@ -1177,3 +1177,9 @@ whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide en
 whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
 whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
 whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
+
+
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
