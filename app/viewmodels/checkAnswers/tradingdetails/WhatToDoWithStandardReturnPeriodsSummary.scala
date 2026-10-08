@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers.licencespremises
+package viewmodels.checkAnswers.tradingdetails
 
-import models.UserAnswers
-import pages.licencespremises.LicenceDetailsLandlordLicenceYesNoPage
+import models.{CheckMode, UserAnswers}
+import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object LicenceDetailsLandlordLicenceYesNoSummary {
+object WhatToDoWithStandardReturnPeriodsSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(LicenceDetailsLandlordLicenceYesNoPage).map { answer =>
+    answers.get(WhatToDoWithStandardReturnPeriodsPage).map { answer =>
 
-      val value = if (answer) "site.yes" else "site.no"
+      val value = ValueViewModel(
+        HtmlContent(
+          HtmlFormat.escape(messages(s"whatToDoWithStandardReturnPeriods.$answer"))
+        )
+      )
 
       SummaryListRowViewModel(
-        key   = "licenceDetailsLandlordLicenceYesNo.checkYourAnswersLabel",
-        value = ValueViewModel(value),
+        key   = "whatToDoWithStandardReturnPeriods.checkYourAnswersLabel",
+        value = value,
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.licencespremises.routes.LicenceDetailsLandlordLicenceYesNoController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("licenceDetailsLandlordLicenceYesNo.change.hidden"))
+          ActionItemViewModel("site.change", controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("whatToDoWithStandardReturnPeriods.change.hidden"))
         )
       )
     }

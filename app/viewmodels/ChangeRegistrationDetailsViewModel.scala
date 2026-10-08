@@ -17,7 +17,7 @@
 package viewmodels
 
 import controllers.routes
-import models.{BusinessType, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import pages.*
 import pages.businessaddress.BusinessAddressChangesPage
 import pages.businessname.BusinessNameChangesPage
@@ -104,7 +104,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(isPartnership)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.partnerDetails"),
-            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad.url,
+            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None).url,
             NoDetailsChanged
           )
         ),
@@ -125,7 +125,7 @@ object ChangeRegistrationDetailsViewModel {
         Some(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.returnPeriod"),
-            routes.PageNotFoundController.onPageLoad().url,
+            controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(NormalMode).url,
             NoDetailsChanged
           )
         )
