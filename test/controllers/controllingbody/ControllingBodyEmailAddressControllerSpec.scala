@@ -14,75 +14,55 @@
  * limitations under the License.
  */
 
-package controllers.licencespremises
+package controllers.controllingbody
 
 import base.SpecBase
-import forms.licencespremises.RemovePremisesDetailsYesNoFormProvider
-import models.licencespremises.LicencesAndPremisesRadioOptions.{ByPost, Online}
-import models.licencespremises.{PremisesDetails, PremisesDetailsResponse}
+import forms.EmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesPage, LicencesPremisesSectionPage, PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
-import play.api.data.Form
+import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyEmailPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.licencespremises.RemovePremisesDetailsYesNoView
+import views.html.controllingbody.ControllingBodyEmailAddressView
 
 import scala.concurrent.Future
 
-class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSugar {
+class ControllingBodyEmailAddressControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute: Call = Call("GET", "/foo")
+  def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new RemovePremisesDetailsYesNoFormProvider()
-  val form: Form[Boolean] = formProvider()
+  val formProvider = new EmailAddressFormProvider()
+  val form = formProvider("controllingBodyEmailAddress")
 
-  private val premisesDetails = PremisesDetailsResponse(
-    totalRows = Some(1),
-    premises = Seq(
-      PremisesDetails(
-        mgdRegNumber = userAnswersId,
-        address1     = Some("1 Test Street"),
-        address2     = None,
-        address3     = None,
-        address4     = None,
-        postcode     = Some("AA1 1AA"),
-        systemDate   = None
-      )
+  val noAnswers =
+    UserAnswers(
+      userAnswersId,
+      Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
-  )
 
-  val userAnswersWithPremisesDetails: UserAnswers =
-    emptyUserAnswers
-      .set(LicencesPremisesSectionPage, userAnswersId)
-      .success
-      .value
-      .set(PremisesDetailsPage, premisesDetails)
-      .success
-      .value
+  lazy val emailAddressRoute =
+    routes.ControllingBodyEmailAddressController.onPageLoad().url
 
-  lazy val removePremisesDetailsYesNoRoute: String =
-    routes.RemovePremisesDetailsYesNoController.onPageLoad().url
-
-  "RemovePremisesDetailsYesNoController Controller" - {
+  "ControllingBodyEmailAddress Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithPremisesDetails)).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, removePremisesDetailsYesNoRoute)
+        val request = FakeRequest(GET, emailAddressRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[RemovePremisesDetailsYesNoView]
+        val view = application.injector.instanceOf[ControllingBodyEmailAddressView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
@@ -92,24 +72,29 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val userAnswers =
-        userAnswersWithPremisesDetails
-          .set(RemovePremisesDetailsYesNoPage, true)
-          .success
-          .value
+      val data = Json.obj(
+        "controllingBodyDetails" -> Json.obj(
+          "mgdRegNum" -> userAnswersId,
+          "correspondenceSection" -> Json.obj(
+            "emailAddr" -> "validEmail@example.com"
+          )
+        )
+      )
+
+      val userAnswers = UserAnswers(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, removePremisesDetailsYesNoRoute)
+        val request = FakeRequest(GET, emailAddressRoute)
 
-        val view = application.injector.instanceOf[RemovePremisesDetailsYesNoView]
+        val view = application.injector.instanceOf[ControllingBodyEmailAddressView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form.fill(true), NormalMode)(request, messages(application)).toString
+          view(form.fill("validEmail@example.com"), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -119,7 +104,7 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithPremisesDetails))
+        applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -128,8 +113,8 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, removePremisesDetailsYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+          FakeRequest(POST, emailAddressRoute)
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 
@@ -138,7 +123,7 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
       }
     }
 
-    "must remove the premises details, switch to by post and flag the section as changed when the user selects yes" in {
+    "must update data correctly when submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
@@ -146,7 +131,7 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithPremisesDetails))
+        applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -155,21 +140,18 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, removePremisesDetailsYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+          FakeRequest(POST, emailAddressRoute)
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(RemovePremisesDetailsYesNoPage).value mustEqual true
-        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
-        savedAnswersCaptor.getValue.get(PremisesDetailsPage) mustBe None
-        savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual ByPost
+        savedAnswersCaptor.getValue.get(ControllingBodyEmailPage).value mustEqual "validEmail@example.com"
       }
     }
 
-    "must keep the premises details and the online method and not flag the section as changed when the user selects no" in {
+    "must flag ControllingBodyChangesPage when data changed" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
@@ -177,7 +159,7 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithPremisesDetails))
+        applicationBuilder(userAnswers = Some(noAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -186,31 +168,32 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, removePremisesDetailsYesNoRoute)
-            .withFormUrlEncodedBody(("value", "false"))
+          FakeRequest(POST, emailAddressRoute)
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(RemovePremisesDetailsYesNoPage).value mustEqual false
-        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual false
-        savedAnswersCaptor.getValue.get(PremisesDetailsPage).value mustEqual premisesDetails
-        savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual Online
+        savedAnswersCaptor.getValue.get(ControllingBodyEmailPage).value mustEqual "validEmail@example.com"
+        savedAnswersCaptor.getValue.get(ControllingBodyChangesPage).value mustEqual true
       }
     }
 
-    "must keep an earlier change to the section when the user selects no" in {
+    "must not flag ControllingBodyChangesPage when data has not changed" in {
 
       val mockSessionRepository = mock[SessionRepository]
       val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-      val answersWithEarlierChange = userAnswersWithPremisesDetails.set(LicencesPremisesDetailsChangesPage, true).success.value
+      val userAnswers = noAnswers
+        .set(ControllingBodyEmailPage, "validEmail@example.com")
+        .success
+        .value
 
       val application =
-        applicationBuilder(userAnswers = Some(answersWithEarlierChange))
+        applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -219,28 +202,37 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, removePremisesDetailsYesNoRoute)
-            .withFormUrlEncodedBody(("value", "false"))
+          FakeRequest(POST, emailAddressRoute)
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
-        status(route(application, request).value) mustEqual SEE_OTHER
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
 
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
-        savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
+
+        savedAnswersCaptor.getValue
+          .get(ControllingBodyEmailPage)
+          .value mustEqual "validEmail@example.com"
+
+        savedAnswersCaptor.getValue
+          .get(ControllingBodyChangesPage)
+          .value mustEqual false
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithPremisesDetails)).build()
+      val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, removePremisesDetailsYesNoRoute)
+          FakeRequest(POST, emailAddressRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[RemovePremisesDetailsYesNoView]
+        val view = application.injector.instanceOf[ControllingBodyEmailAddressView]
 
         val result = route(application, request).value
 
@@ -255,7 +247,7 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, removePremisesDetailsYesNoRoute)
+        val request = FakeRequest(GET, emailAddressRoute)
 
         val result = route(application, request).value
 
@@ -271,8 +263,8 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, removePremisesDetailsYesNoRoute)
-            .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, emailAddressRoute)
+            .withFormUrlEncodedBody(("value", "validEmail@example.com"))
 
         val result = route(application, request).value
 

@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import forms.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.ChooseReturnPeriods.Jan
-import models.{GamblingReturnPeriods, NormalMode, WhatToDoWithStandardReturnPeriods, UserAnswers}
+import models.{GamblingReturnPeriods, NormalMode, UserAnswers, WhatToDoWithStandardReturnPeriods}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -35,9 +35,7 @@ import views.html.WhatToDoWithStandardReturnPeriodsView
 
 import scala.concurrent.Future
 
-class WhatToDoWithStandardReturnPeriodsControllerSpec
-  extends SpecBase
-    with MockitoSugar {
+class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
   private val onwardRoute =
     Call("GET", "/foo")

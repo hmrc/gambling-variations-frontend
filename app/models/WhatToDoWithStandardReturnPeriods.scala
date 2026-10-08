@@ -25,17 +25,11 @@ sealed trait WhatToDoWithStandardReturnPeriods
 
 object WhatToDoWithStandardReturnPeriods extends Enumerable.Implicits {
 
-  case object Changemonthsstandardperiodcover
-    extends WithName("changeMonthsStandardPeriodCover")
-      with WhatToDoWithStandardReturnPeriods
+  case object Changemonthsstandardperiodcover extends WithName("changeMonthsStandardPeriodCover") with WhatToDoWithStandardReturnPeriods
 
-  case object Switchtononstandard
-    extends WithName("switchToNonStandard")
-      with WhatToDoWithStandardReturnPeriods
+  case object Switchtononstandard extends WithName("switchToNonStandard") with WhatToDoWithStandardReturnPeriods
 
-  case object Keepstandardreturnperiod
-    extends WithName("keepStandardReturnPeriod")
-      with WhatToDoWithStandardReturnPeriods
+  case object Keepstandardreturnperiod extends WithName("keepStandardReturnPeriod") with WhatToDoWithStandardReturnPeriods
 
   val values: Seq[WhatToDoWithStandardReturnPeriods] =
     Seq(
@@ -53,7 +47,7 @@ object WhatToDoWithStandardReturnPeriods extends Enumerable.Implicits {
           )
         ),
         value = Some(Changemonthsstandardperiodcover.toString),
-        id = Some("value_0")
+        id    = Some("value_0")
       ),
       RadioItem(
         content = Text(
@@ -62,7 +56,7 @@ object WhatToDoWithStandardReturnPeriods extends Enumerable.Implicits {
           )
         ),
         value = Some(Switchtononstandard.toString),
-        id = Some("value_1"),
+        id    = Some("value_1"),
         hint = Some(
           Hint(
             content = Text(
@@ -83,12 +77,12 @@ object WhatToDoWithStandardReturnPeriods extends Enumerable.Implicits {
           )
         ),
         value = Some(Keepstandardreturnperiod.toString),
-        id = Some("value_3")
+        id    = Some("value_3")
       )
     )
 
   implicit val enumerable: Enumerable[WhatToDoWithStandardReturnPeriods] =
     Enumerable(
-      values.map(v => v.toString -> v): _*
+      values.map(v => v.toString -> v)*
     )
 }

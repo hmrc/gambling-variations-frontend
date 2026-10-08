@@ -1147,6 +1147,13 @@ controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for
 controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
 
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
 site.pagination.next = Next
 site.pagination.previous = Previous
 

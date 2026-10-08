@@ -20,15 +20,17 @@ import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
+import models.licencespremises.LicencesPremisesAnswers.*
 import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodyEmailPage, ControllingBodySoleProprietorPage}
 import pages.controllingbody.ControllingBodyChangeScreenerPage
 import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodySoleProprietorPage}
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{LicenceHeldByLandlordPage, LicenceNumberPage, LicencePremisesNotCoveredPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
 import pages.partnerdetails.*
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
@@ -48,6 +50,8 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad()
     case ControllingBodySoleProprietorPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
+    case ControllingBodyEmailPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
     case RemoveTradeNamePage =>
       _ => routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -189,16 +193,16 @@ class Navigator @Inject() () {
 
     // License and Premises Details
     case LicenceNumberPage =>
-      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      userAnswers => navigateLicenceChange(userAnswers)
     case RemoveLicenceNumberPage =>
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
-    case LicenceDetailsLandlordLicenceYesNoPage =>
-      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    case LicenceHeldByLandlordPage =>
+      userAnswers => navigateLicenceChange(userAnswers)
     case OtherLicencesAndPermitsGBPage =>
-      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      userAnswers => navigateLicenceChange(userAnswers)
     case OtherLicencesAndPermitsNIPage =>
-      _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
-    case PremisesNotCoveredYesNoPage =>
+      userAnswers => navigateLicenceChange(userAnswers)
+    case LicencePremisesNotCoveredPage =>
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
     case LicencesPremisesPage =>
       _ => controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
@@ -377,6 +381,14 @@ class Navigator @Inject() () {
         routes.SystemErrorController.onPageLoad()
     }
   }
+
+  // Once a licence or permit brings the premises not covered question into scope, it is asked until it has been answered
+  private def navigateLicenceChange(userAnswers: UserAnswers): Call =
+    if (userAnswers.hasLicencesOrPermits && userAnswers.backendFlagOption(LicencePremisesNotCoveredPage).isEmpty) {
+      controllers.licencespremises.routes.PremisesNotCoveredYesNoController.onPageLoad()
+    } else {
+      controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+    }
 
   private def navigateAddCorrespondingDetailsYesNoPage()(userAnswers: UserAnswers): Call =
     userAnswers

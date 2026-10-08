@@ -23,28 +23,27 @@ import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object WhatToDoWithStandardReturnPeriodsSummary  {
+object WhatToDoWithStandardReturnPeriodsSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(WhatToDoWithStandardReturnPeriodsPage).map {
-      answer =>
+    answers.get(WhatToDoWithStandardReturnPeriodsPage).map { answer =>
 
-        val value = ValueViewModel(
-          HtmlContent(
-            HtmlFormat.escape(messages(s"whatToDoWithStandardReturnPeriods.$answer"))
-          )
+      val value = ValueViewModel(
+        HtmlContent(
+          HtmlFormat.escape(messages(s"whatToDoWithStandardReturnPeriods.$answer"))
         )
+      )
 
-        SummaryListRowViewModel(
-          key     = "whatToDoWithStandardReturnPeriods.checkYourAnswersLabel",
-          value   = value,
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("whatToDoWithStandardReturnPeriods.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "whatToDoWithStandardReturnPeriods.checkYourAnswersLabel",
+        value = value,
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("whatToDoWithStandardReturnPeriods.change.hidden"))
         )
+      )
     }
 }

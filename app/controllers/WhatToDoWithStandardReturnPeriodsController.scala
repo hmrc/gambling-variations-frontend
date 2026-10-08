@@ -15,7 +15,7 @@
  */
 
 package controllers
-import controllers.actions._
+import controllers.actions.*
 import forms.WhatToDoWithStandardReturnPeriodsFormProvider
 import javax.inject.Inject
 import models.Mode
@@ -29,38 +29,38 @@ import views.html.WhatToDoWithStandardReturnPeriodsView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class WhatToDoWithStandardReturnPeriodsController @Inject()(
-   override val messagesApi: MessagesApi,
-   sessionRepository: SessionRepository,
-   navigator: Navigator,
-   authorise: AuthorisedAction,
-   getData: DataRetrievalAction,
-   requireData: GamblingReturnPeriodsDataRequiredAction,
-   formProvider: WhatToDoWithStandardReturnPeriodsFormProvider,
-   val controllerComponents: MessagesControllerComponents,
-   view: WhatToDoWithStandardReturnPeriodsView
-   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class WhatToDoWithStandardReturnPeriodsController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  requireData: GamblingReturnPeriodsDataRequiredAction,
+  formProvider: WhatToDoWithStandardReturnPeriodsFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: WhatToDoWithStandardReturnPeriodsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-      val preparedForm = request.userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+    val preparedForm = request.userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm, mode))
+    Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
-
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhatToDoWithStandardReturnPeriodsPage, value))

@@ -32,10 +32,12 @@ class WhatToDoWithStandardReturnPeriodsSpec extends AnyFreeSpec with Matchers wi
 
       val gen = Gen.oneOf(WhatToDoWithStandardReturnPeriods.values.toSeq)
 
-      forAll(gen) {
-        whatToDoWithStandardReturnPeriods =>
+      forAll(gen) { whatToDoWithStandardReturnPeriods =>
 
-          JsString(whatToDoWithStandardReturnPeriods.toString).validate[WhatToDoWithStandardReturnPeriods].asOpt.value mustEqual whatToDoWithStandardReturnPeriods
+        JsString(whatToDoWithStandardReturnPeriods.toString)
+          .validate[WhatToDoWithStandardReturnPeriods]
+          .asOpt
+          .value mustEqual whatToDoWithStandardReturnPeriods
       }
     }
 
@@ -43,10 +45,9 @@ class WhatToDoWithStandardReturnPeriodsSpec extends AnyFreeSpec with Matchers wi
 
       val gen = arbitrary[String] suchThat (!WhatToDoWithStandardReturnPeriods.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
+      forAll(gen) { invalidValue =>
 
-          JsString(invalidValue).validate[WhatToDoWithStandardReturnPeriods] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[WhatToDoWithStandardReturnPeriods] mustEqual JsError("error.invalid")
       }
     }
 
@@ -54,10 +55,9 @@ class WhatToDoWithStandardReturnPeriodsSpec extends AnyFreeSpec with Matchers wi
 
       val gen = Gen.oneOf(WhatToDoWithStandardReturnPeriods.values.toSeq)
 
-      forAll(gen) {
-        whatToDoWithStandardReturnPeriods =>
+      forAll(gen) { whatToDoWithStandardReturnPeriods =>
 
-          Json.toJson(whatToDoWithStandardReturnPeriods) mustEqual JsString(whatToDoWithStandardReturnPeriods.toString)
+        Json.toJson(whatToDoWithStandardReturnPeriods) mustEqual JsString(whatToDoWithStandardReturnPeriods.toString)
       }
     }
   }
