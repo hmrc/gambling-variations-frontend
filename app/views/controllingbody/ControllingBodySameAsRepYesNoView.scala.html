@@ -28,7 +28,7 @@
     p: Paragraph
 )
 
-@(form: Form[_], mode: Mode, controllingBodyName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, businessName: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("controllingBodySameAsRepYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
@@ -42,7 +42,7 @@
         @h1("controllingBodySameAsRepYesNo.title", classes="govuk-heading-l")
         @p(
             "controllingBodySameAsRepYesNo.p1",
-            args = Seq(controllingBodyName)
+            args = Seq(businessName)
         )
 
         @govukRadios(
