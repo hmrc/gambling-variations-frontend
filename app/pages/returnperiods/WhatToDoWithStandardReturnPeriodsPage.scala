@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package pages.returnperiods
 
-import org.scalatestplus.play.PlaySpec
+import models.WhatToDoWithStandardReturnPeriods
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-class ControllingBodyEmailPageSpec extends PlaySpec {
+case object WhatToDoWithStandardReturnPeriodsPage extends QuestionPage[WhatToDoWithStandardReturnPeriods] {
 
-  "ControllingBodyEmailPage" must {
+  override def path: JsPath = JsPath \ toString
 
-    "have the correct path" in {
-
-      ControllingBodyEmailPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ "emailAddr")
-    }
-
-    "have the correct toString value" in {
-
-      ControllingBodyEmailPage.toString mustEqual "emailAddr"
-    }
-  }
+  override def toString: String = "whatToDoWithStandardReturnPeriods"
 }
