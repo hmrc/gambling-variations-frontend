@@ -20,8 +20,7 @@ import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
 import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers, WhatToDoWithStandardReturnPeriods}
 import navigation.Navigator
-import pages.WhatToDoWithStandardReturnPeriodsPage
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage, WhatToDoWithStandardReturnPeriodsPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

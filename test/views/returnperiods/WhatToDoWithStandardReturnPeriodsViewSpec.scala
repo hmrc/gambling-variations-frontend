@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package views
+package views.returnperiods
 
 import base.SpecBase
-import forms.WhatToDoWithStandardReturnPeriodsFormProvider
+import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.WhatToDoWithStandardReturnPeriodsView
+import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
 
 class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
 

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.returnperiods
 
 import forms.behaviours.OptionFieldBehaviours
+import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.WhatToDoWithStandardReturnPeriods
 import play.api.data.FormError
 

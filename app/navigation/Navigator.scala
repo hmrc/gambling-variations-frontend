@@ -32,6 +32,7 @@ import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, Controllin
 import pages.correspondencedetails.*
 import pages.licencespremises.{LicenceHeldByLandlordPage, LicenceNumberPage, LicencePremisesNotCoveredPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
 import pages.partnerdetails.*
+import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*

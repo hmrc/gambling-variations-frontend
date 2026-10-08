@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.returnperiods
 
 import base.SpecBase
-import forms.WhatToDoWithStandardReturnPeriodsFormProvider
+import controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController
+import controllers.routes
+import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.ChooseReturnPeriods.Jan
 import models.{GamblingReturnPeriods, NormalMode, UserAnswers, WhatToDoWithStandardReturnPeriods}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.WhatToDoWithStandardReturnPeriodsPage
-import pages.returnperiods.GamblingReturnPeriodsPage
+import pages.returnperiods.{GamblingReturnPeriodsPage, WhatToDoWithStandardReturnPeriodsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.WhatToDoWithStandardReturnPeriodsView
+import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
 
 import scala.concurrent.Future
 
@@ -41,7 +42,7 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
     Call("GET", "/foo")
 
   private lazy val whatToDoWithStandardReturnPeriodsRoute =
-    routes.WhatToDoWithStandardReturnPeriodsController
+    controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController
       .onPageLoad(NormalMode)
       .url
 

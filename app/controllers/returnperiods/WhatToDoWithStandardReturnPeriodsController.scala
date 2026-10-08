@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.returnperiods
+
 import controllers.actions.*
-import forms.WhatToDoWithStandardReturnPeriodsFormProvider
-import javax.inject.Inject
+import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.WhatToDoWithStandardReturnPeriodsPage
+import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.WhatToDoWithStandardReturnPeriodsView
+import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhatToDoWithStandardReturnPeriodsController @Inject() (

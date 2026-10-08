@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages.returnperiods
 
-import javax.inject.Inject
-
-import forms.mappings.Mappings
-import play.api.data.Form
 import models.WhatToDoWithStandardReturnPeriods
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class WhatToDoWithStandardReturnPeriodsFormProvider @Inject() extends Mappings {
+case object WhatToDoWithStandardReturnPeriodsPage extends QuestionPage[WhatToDoWithStandardReturnPeriods] {
 
-  def apply(): Form[WhatToDoWithStandardReturnPeriods] =
-    Form(
-      "value" -> enumerable[WhatToDoWithStandardReturnPeriods]("whatToDoWithStandardReturnPeriods.error.required")
-    )
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "whatToDoWithStandardReturnPeriods"
 }

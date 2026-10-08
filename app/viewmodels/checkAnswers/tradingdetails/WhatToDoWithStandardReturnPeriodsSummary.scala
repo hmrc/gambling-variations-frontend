@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package viewmodels.checkAnswers
+package viewmodels.checkAnswers.tradingdetails
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.WhatToDoWithStandardReturnPeriodsPage
+import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -41,7 +41,7 @@ object WhatToDoWithStandardReturnPeriodsSummary {
         key   = "whatToDoWithStandardReturnPeriods.checkYourAnswersLabel",
         value = value,
         actions = Seq(
-          ActionItemViewModel("site.change", routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("whatToDoWithStandardReturnPeriods.change.hidden"))
         )
       )
