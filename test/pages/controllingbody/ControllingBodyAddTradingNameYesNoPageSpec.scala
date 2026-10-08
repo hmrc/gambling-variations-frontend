@@ -19,18 +19,18 @@ package pages.controllingbody
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-class ControllingBodyEmailPageSpec extends PlaySpec {
+class ControllingBodyAddTradingNameYesNoPageSpec extends PlaySpec {
 
-  "ControllingBodyEmailPage" must {
+  "ControllingBodyAddTradingNameYesNoPage" must {
 
     "have the correct path" in {
 
-      ControllingBodyEmailPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ "emailAddr")
+      ControllingBodyAddTradingNameYesNoPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "addTradingName")
     }
 
     "have the correct toString value" in {
 
-      ControllingBodyEmailPage.toString mustEqual "emailAddr"
+      ControllingBodyAddTradingNameYesNoPage.toString mustEqual "addTradingName"
     }
   }
 }
