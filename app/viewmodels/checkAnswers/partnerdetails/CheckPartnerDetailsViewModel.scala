@@ -420,6 +420,11 @@ case class CheckPartnerDetailsViewModel(
     value match {
       case Some(v) =>
         createSummaryListRow(label, Text(v), if (canChange) Seq(changeAction(url, label)) else Nil)
+
+      // Due to join or leave: details can't be changed online, so no add link
+      case None if dueToJoinOrLeave =>
+        createSummaryListRow(label, Text(messages("partnerDetailsCheckYourAnswers.noData")), Nil)
+
       case None =>
         val addText = messages(s"partnerDetailsCheckYourAnswers.$key.add")
         createSummaryListRow(label, HtmlContent(s"""<a href="$url">$addText</a>"""), Nil)
