@@ -1188,3 +1188,8 @@ controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = For example, building name or floor number
