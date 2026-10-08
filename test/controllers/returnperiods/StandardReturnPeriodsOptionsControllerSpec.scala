@@ -17,14 +17,15 @@
 package controllers.returnperiods
 
 import base.SpecBase
-import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
+import controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController
+import forms.returnperiods.StandardReturnPeriodsFormProvider
 import models.ChooseReturnPeriods.Jan
-import models.{GamblingReturnPeriods, NormalMode, UserAnswers, WhatToDoWithStandardReturnPeriods}
+import models.{GamblingReturnPeriods, NormalMode, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{GamblingReturnPeriodsPage, WhatToDoWithStandardReturnPeriodsPage}
+import pages.returnperiods.{GamblingReturnPeriodsPage, StandardReturnPeriodsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -34,7 +35,8 @@ import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
 
 import scala.concurrent.Future
 
-class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
+//TODO use it for my base controller
+class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSugar {
 
   private val onwardRoute =
     Call("GET", "/foo")
@@ -45,19 +47,19 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
       .url
 
   private val formProvider =
-    new WhatToDoWithStandardReturnPeriodsFormProvider()
+    new StandardReturnPeriodsFormProvider()
 
   private val form =
     formProvider()
 
   private val switchToNonStandard =
-    WhatToDoWithStandardReturnPeriods.Switchtononstandard
+    StandardReturnPeriodsOptions.SwitchToNonStandard
 
   private val changeMonthsStandardPeriodCover =
-    WhatToDoWithStandardReturnPeriods.Changemonthsstandardperiodcover
+    StandardReturnPeriodsOptions.ChangeMonthsStandardPeriodCover
 
   private val keepStandardReturnPeriod =
-    WhatToDoWithStandardReturnPeriods.Keepstandardreturnperiod
+    StandardReturnPeriodsOptions.KeepStandardReturnPeriod
 
   private val gamblingReturnPeriods =
     GamblingReturnPeriods(
@@ -88,7 +90,7 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
   private val answeredUserAnswers =
     userAnswers
       .set(
-        WhatToDoWithStandardReturnPeriodsPage,
+        StandardReturnPeriodsPage,
         switchToNonStandard
       )
       .success
@@ -226,7 +228,7 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
         val expectedAnswers =
           userAnswers
             .set(
-              WhatToDoWithStandardReturnPeriodsPage,
+              StandardReturnPeriodsPage,
               switchToNonStandard
             )
             .success
@@ -283,7 +285,7 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
         val expectedAnswers =
           userAnswers
             .set(
-              WhatToDoWithStandardReturnPeriodsPage,
+              StandardReturnPeriodsPage,
               changeMonthsStandardPeriodCover
             )
             .success
@@ -340,7 +342,7 @@ class WhatToDoWithStandardReturnPeriodsControllerSpec extends SpecBase with Mock
         val expectedAnswers =
           userAnswers
             .set(
-              WhatToDoWithStandardReturnPeriodsPage,
+              StandardReturnPeriodsPage,
               keepStandardReturnPeriod
             )
             .success

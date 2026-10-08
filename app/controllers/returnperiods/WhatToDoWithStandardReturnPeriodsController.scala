@@ -16,83 +16,85 @@
 
 package controllers.returnperiods
 
-import controllers.actions.*
-import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
-import models.Mode
-import navigation.Navigator
-import pages.returnperiods.{GamblingReturnPeriodsPage, WhatToDoWithStandardReturnPeriodsPage}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
+//import controllers.actions.*
+//import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
+//import models.{Mode, StandardReturnPeriodsOptions}
+//import navigation.Navigator
+//import pages.returnperiods.{GamblingReturnPeriodsPage, StandardReturnPeriodsPage}
+//import play.api.data.Form
+//import play.api.i18n.{I18nSupport, MessagesApi}
+//import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+//import repositories.SessionRepository
+//import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+//import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
+//
+//import javax.inject.Inject
+//import scala.concurrent.{ExecutionContext, Future}
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-
-class WhatToDoWithStandardReturnPeriodsController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  authorise: AuthorisedAction,
-  getData: DataRetrievalAction,
-  requireData: GamblingReturnPeriodsDataRequiredAction,
-  formProvider: WhatToDoWithStandardReturnPeriodsFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: WhatToDoWithStandardReturnPeriodsView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport {
-
-  val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
-
-      val preparedForm =
-        request.userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
-
-      val returnPeriodsId =
-        request.userAnswers
-          .get(GamblingReturnPeriodsPage)
-          .flatMap(_.returnPeriodsId)
-          .map(_.toString)
-
-      Ok(view(preparedForm, mode, returnPeriodsId))
-    }
-
-  def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors =>
-            Future.successful {
-              val returnPeriodsId =
-                request.userAnswers
-                  .get(GamblingReturnPeriodsPage)
-                  .flatMap(_.returnPeriodsId)
-                  .map(_.toString)
-
-              BadRequest(view(formWithErrors, mode, returnPeriodsId))
-            },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(
-                                  request.userAnswers.set(WhatToDoWithStandardReturnPeriodsPage, value)
-                                )
-              _ <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(
-              navigator.nextPage(
-                WhatToDoWithStandardReturnPeriodsPage,
-                mode,
-                updatedAnswers
-              )
-            )
-        )
-    }
-}
+//TODO should be okay to delete
+//class WhatToDoWithStandardReturnPeriodsController @Inject() (
+//  override val messagesApi: MessagesApi,
+//  sessionRepository: SessionRepository,
+//  navigator: Navigator,
+//  authorise: AuthorisedAction,
+//  getData: DataRetrievalAction,
+//  requireData: GamblingReturnPeriodsDataRequiredAction,
+//  formProvider: WhatToDoWithStandardReturnPeriodsFormProvider,
+//  val controllerComponents: MessagesControllerComponents,
+//  view: WhatToDoWithStandardReturnPeriodsView
+//)(implicit ec: ExecutionContext)
+//    extends FrontendBaseController
+//    with I18nSupport {
+//
+//  val form: Form[StandardReturnPeriodsOptions] = formProvider()
+//
+//  def onPageLoad(mode: Mode): Action[AnyContent] =
+//    (authorise andThen getData andThen requireData) { implicit request =>
+//
+//      val preparedForm =
+//        request.userAnswers.get(StandardReturnPeriodsPage) match {
+//          case None        => form
+//          case Some(value) => form.fill(value)
+//        }
+//
+//      val returnPeriodsId =
+//        request.userAnswers
+//          .get(GamblingReturnPeriodsPage)
+//          .flatMap(_.returnPeriodsId)
+//          .map(_.toString)
+//
+//      Ok(view(preparedForm, mode, returnPeriodsId))
+//    }
+//
+//  def onSubmit(mode: Mode): Action[AnyContent] =
+//    (authorise andThen getData andThen requireData).async { implicit request =>
+//
+//      form
+//        .bindFromRequest()
+//        .fold(
+//          formWithErrors =>
+//            Future.successful {
+//              val returnPeriodsId =
+//                request.userAnswers
+//                  .get(GamblingReturnPeriodsPage)
+//                  .flatMap(_.returnPeriodsId)
+//                  .map(_.toString)
+//
+//              BadRequest(view(formWithErrors, mode, returnPeriodsId))
+//            },
+//          value =>
+//            for {
+//              updatedAnswers <- Future.fromTry(
+//                                  request.userAnswers.set(StandardReturnPeriodsPage, value)
+//                                )
+//              _ <- sessionRepository.set(updatedAnswers)
+//            } yield Redirect(
+//              navigator.nextPage(
+//                StandardReturnPeriodsPage,
+//                mode,
+//                updatedAnswers
+//              )
+//            )
+//        )
+//    }
+//}

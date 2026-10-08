@@ -35,7 +35,7 @@
 
 @layout(pageTitle = title(form, messages("returnPeriods.nonStandard.title"))) {
 
-    @formHelper(action = controllers.returnperiods.routes.ReturnPeriodsController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.returnperiods.routes.ReturnPeriodsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))

@@ -23,9 +23,9 @@ import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryWhatToDoWithStandardReturnPeriods: Arbitrary[WhatToDoWithStandardReturnPeriods] =
+  implicit lazy val arbitraryStandardReturnPeriodsOptions: Arbitrary[StandardReturnPeriodsOptions] =
     Arbitrary {
-      Gen.oneOf(WhatToDoWithStandardReturnPeriods.values.toSeq)
+      Gen.oneOf(StandardReturnPeriodsOptions.values.toSeq)
     }
 
   implicit lazy val arbitraryChooseReturnPeriods: Arbitrary[ChooseReturnPeriods] =
