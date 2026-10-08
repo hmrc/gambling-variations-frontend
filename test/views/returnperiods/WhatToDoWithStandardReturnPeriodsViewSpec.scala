@@ -67,7 +67,7 @@ class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
       doc.select("h1.govuk-heading-l").text() mustBe
         messages("whatToDoWithStandardReturnPeriods.heading")
 
-      doc.select(".govuk-fieldset__heading").text() mustBe
+      doc.select(".govuk-fieldset__legend").text() mustBe
         messages("whatToDoWithStandardReturnPeriods.h2")
 
       doc.select("button.govuk-button").text() mustBe

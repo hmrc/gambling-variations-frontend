@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers.tradingdetails
 
-import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
 import play.api.i18n.Messages
