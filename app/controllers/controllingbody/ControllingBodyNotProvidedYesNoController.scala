@@ -52,23 +52,23 @@ class ControllingBodyNotProvidedYesNoController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-      val controllingBody = request.userAnswers.get(ControllingBodyBusinessNamePage).getOrElse("")
+      val businessName = request.userAnswers.get(ControllingBodyBusinessNamePage).getOrElse("")
       val preparedForm = request.userAnswers.get(ControllingBodyNotProvidedYesNoPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, controllingBody))
+      Ok(view(preparedForm, mode, businessName))
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     request.userAnswers
       .get(ControllingBodyBusinessNamePage)
-      .map { controllingBody =>
+      .map { businessName =>
         form
           .bindFromRequest()
           .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, controllingBody))),
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessName))),
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyNotProvidedYesNoPage, value))

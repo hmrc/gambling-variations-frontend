@@ -28,7 +28,7 @@
     p: Paragraph
 )
 
-@(form: Form[_], mode: Mode, controllingBodyName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, businessName: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("controllingBodyNotProvidedYesNo.title"), Some("changeRegistrationDetails.caption"))) {
 
@@ -42,14 +42,14 @@
         @h1("controllingBodyNotProvidedYesNo.title", classes="govuk-heading-l")
         @p(
             "controllingBodyNotProvidedYesNo.p1",
-            args = Seq(controllingBodyName)
+            args = Seq(businessName)
         )
 
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
                 legend = LegendViewModel(
-                messages("controllingBodyNotProvidedYesNo.text", controllingBodyName)
+                messages("controllingBodyNotProvidedYesNo.text", businessName)
                 ).asPageHeading(viewmodels.LegendSize.Medium),
                 noLabel = messages("controllingBodyNotProvidedYesNo.noLabel")
             )
