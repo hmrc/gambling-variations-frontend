@@ -52,9 +52,12 @@ case class CheckLicencesAndPremisesViewModel(
   private val isPremisesDetailsRequired: Boolean =
     !hasLicencesOrPermits || hasPremisesNotCovered
 
-  // There is no stored value for the method, so when the provide premises addresses question has not been answered it is derived from the premises
   private val provideAddresses: LicencesAndPremisesRadioOptions =
-    provideAddressesAnswer.getOrElse(if (premisesCount > 0) Online else ByPost)
+    provideAddressesAnswer.getOrElse(LicencesAndPremisesRadioOptions.derivedFrom(premisesCount))
+
+  // Without an answer or any premises to derive it from, the method must be chosen on the provide premises addresses screen before continuing
+  private val isMissingProvideAddresses: Boolean =
+    isPremisesDetailsRequired && provideAddressesAnswer.isEmpty && premisesCount == 0
 
   private val isMissingOnlinePremises: Boolean =
     isPremisesDetailsRequired && provideAddresses == Online && premisesCount == 0
@@ -68,7 +71,9 @@ case class CheckLicencesAndPremisesViewModel(
     isPremisesDetailsRequired && provideAddresses == ByPost
 
   val continueUrl: String =
-    if (isMissingOnlinePremises) {
+    if (isMissingProvideAddresses) {
+      routes.LicencesPremisesController.onPageLoad().url
+    } else if (isMissingOnlinePremises) {
       findPremisesAddressUrl
     } else {
       controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
@@ -178,16 +183,13 @@ object CheckLicencesAndPremisesViewModel {
 
   def from(answers: UserAnswers): CheckLicencesAndPremisesViewModel =
     CheckLicencesAndPremisesViewModel(
-      licenceNumber = answers.get(LicenceNumberPage).map(_.trim).filter(_.nonEmpty),
-      isPubTenant   = answers.pubTenantAnswer,
-      licencesAndPermitsGB =
-        OtherLicencesAndPermitsGB.positiveValues.filter(value => answers.backendFlag(OtherLicencesAndPermitsGB.mappedValuesWithPages(value))),
-      licencesAndPermitsNI =
-        OtherLicencesAndPermitsNI.positiveValues.filter(value => answers.backendFlag(OtherLicencesAndPermitsNI.mappedValuesWithPages(value))),
+      licenceNumber          = answers.licenceNumberAnswer,
+      isPubTenant            = answers.pubTenantAnswer,
+      licencesAndPermitsGB   = answers.licencesAndPermitsGB,
+      licencesAndPermitsNI   = answers.licencesAndPermitsNI,
       hasPremisesNotCovered  = answers.premisesNotCoveredAnswer,
       provideAddressesAnswer = answers.get(LicencesPremisesPage),
-      // The premises are counted rather than using totalRows, so that the count agrees with the premises addresses list, also after removals
-      premisesCount = answers.get(PremisesDetailsPage).map(_.premises.size).getOrElse(0),
-      isSubmitted   = checkFlag(answers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
+      premisesCount          = answers.premisesCount,
+      isSubmitted            = checkFlag(answers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
     )
 }
