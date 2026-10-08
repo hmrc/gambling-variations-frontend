@@ -18,8 +18,9 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
-import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers}
+import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers, WhatToDoWithStandardReturnPeriods}
 import navigation.Navigator
+import pages.WhatToDoWithStandardReturnPeriodsPage
 import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -131,12 +132,25 @@ class ChooseReturnPeriodsController @Inject() (
 
   private def variantFrom(
     userAnswers: UserAnswers
-  ): Option[ReturnPeriodsVariant] =
+  ): Option[ReturnPeriodsVariant] = {
     userAnswers
       .get(GamblingReturnPeriodsPage)
       .flatMap(_.hasExistingNstpValues)
       .map {
-        case true  => ReturnPeriodsVariant.NonStandard
-        case false => ReturnPeriodsVariant.Standard
+
+        case true =>
+          ReturnPeriodsVariant.NonStandard
+
+        case false =>
+          userAnswers
+            .get(WhatToDoWithStandardReturnPeriodsPage) match {
+
+            case Some(WhatToDoWithStandardReturnPeriods.Switchtononstandard) =>
+              ReturnPeriodsVariant.NonStandard
+
+            case _ =>
+              ReturnPeriodsVariant.Standard
+          }
       }
+  }
 }

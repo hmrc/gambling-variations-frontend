@@ -210,6 +210,8 @@ class Navigator @Inject() () {
     // Controlling Body Details
     case ControllingBodyChangeScreenerPage =>
       userAnswers => navigateControllingBodyChangeScreenerPage(userAnswers)
+    case WhatToDoWithStandardReturnPeriodsPage =>
+      userAnswers => navigateWhatToDoWithStandardReturnPeriodsPage(userAnswers)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -601,6 +603,28 @@ class Navigator @Inject() () {
     userAnswers.get(BusinessAddressAddFlowPage) match {
       case Some(isInAddFlow) => if (isInAddFlow) addFlowRoute else normalRoute
       case None              => normalRoute
+    }
+  }
+
+  private def navigateWhatToDoWithStandardReturnPeriodsPage(
+    userAnswers: UserAnswers
+  ): Call = {
+
+    userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
+
+      case Some(WhatToDoWithStandardReturnPeriods.Changemonthsstandardperiodcover) =>
+        controllers.returnperiods.routes.ChooseReturnPeriodsController
+          .onPageLoad(NormalMode)
+
+      case Some(WhatToDoWithStandardReturnPeriods.Switchtononstandard) =>
+        controllers.returnperiods.routes.ChooseReturnPeriodsController
+          .onPageLoad(NormalMode)
+
+      case Some(WhatToDoWithStandardReturnPeriods.Keepstandardreturnperiod) =>
+        routes.ChangeRegistrationDetailsController.onPageLoad()
+
+      case None =>
+        routes.SystemErrorController.onPageLoad()
     }
   }
 
