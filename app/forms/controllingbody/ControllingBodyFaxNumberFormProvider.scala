@@ -18,24 +18,35 @@ package forms.controllingbody
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
 import javax.inject.Inject
 
 class ControllingBodyFaxNumberFormProvider @Inject() extends Mappings {
 
-  private val controllingBodyFaxNumberRegex = "^[0-9 ]+$"
-  private val maxL = 20
-  def apply(): Form[String] =
+  private val faxNumberCharactersRegex = "^[0-9 ]+$"
+  private val MaxDigits = 20
+
+  private def digitCount(number: String): Int =
+    number.replaceAll("\\s{2,}", " ").length // compress white space down to a single space
+
+  def apply(prefix: String): Form[String] =
     Form(
-      "controllingBodyFaxNumber" -> text("controllingBodyFaxNumber.error.required")
-        .verifying(
-          maxLength(maxL, "controllingBodyFaxNumber.error.length")
-        )
-        .verifying(
-          regexp(
-            controllingBodyFaxNumberRegex,
-            "controllingBodyFaxNumber.error.invalid"
-          )
-        )
+      "controllingBodyFaxNumber" -> text(s"$prefix.error.required")
+        .verifying(maxLength(prefix))
+        .verifying(regexp(faxNumberCharactersRegex, s"$prefix.error.invalid.characters"))
     )
+
+  def maxLength(prefix: String): Constraint[String] =
+    Constraint { value =>
+      val trimmed = value.trim
+      val digits = digitCount(trimmed)
+
+      if (digits > MaxDigits) {
+        Invalid(s"$prefix.error.length", MaxDigits)
+      } else {
+        Valid
+      }
+    }
 }
+

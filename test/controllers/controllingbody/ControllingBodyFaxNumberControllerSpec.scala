@@ -39,7 +39,7 @@ class ControllingBodyFaxNumberControllerSpec extends SpecBase with MockitoSugar 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ControllingBodyFaxNumberFormProvider()
-  val form = formProvider()
+  val form = formProvider("controllingBodyFaxNumber")
 
   val noAnswers =
     UserAnswers(

@@ -105,7 +105,7 @@ class ControllingBodyFaxNumberViewSpec extends SpecBase {
 
   trait Setup {
     val app = applicationBuilder().build()
-    val form = new ControllingBodyFaxNumberFormProvider()()
+    val form = new ControllingBodyFaxNumberFormProvider()("controllingBodyFaxNumber")
     val view = app.injector.instanceOf[ControllingBodyFaxNumberView]
 
     implicit val request: play.api.mvc.Request[?] = FakeRequest()
