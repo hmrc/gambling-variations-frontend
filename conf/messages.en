@@ -1169,5 +1169,5 @@ whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last
 whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
 
 whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
-whatToDoWithStandardReturnPeriods.error.required = Select whatToDoWithStandardReturnPeriods
+whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
 whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
