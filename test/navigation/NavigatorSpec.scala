@@ -1063,6 +1063,53 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
 
+      "should route PartnerDetailsBusinessNamePage to PartnerDetailsAddTradingNameYesNoController" in {
+        navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+      }
+
+      "should route PartnerDetailsSoleProprietorPage to PartnerDetailsSoleProprietorDobController" in {
+        navigator.nextPage(PartnerDetailsSoleProprietorPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route PartnerDetailsDateOfBirthPage to PartnerDetailsAddTradingNameYesNoController" in {
+        navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+      }
+
+      "should route PartnerDetailsTradingNamePage to PartnerDateOfJoiningController" in {
+        navigator.nextPage(PartnerDetailsTradingNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDetailsTradingNameController when answer is true" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDateOfJoiningController when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route PartnerDetailsAddTradingNameYesNoPage to SystemErrorController when the question has not been answered" in {
+        navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
       "should route PartnerDetailsContactNumberPage to PartnerContactDetailsController" in {
         navigator.nextPage(PartnerDetailsContactNumberPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
           controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)

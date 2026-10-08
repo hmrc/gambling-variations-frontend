@@ -26,9 +26,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodyEmailPage, ControllingBodySoleProprietorPage}
-import pages.controllingbody.ControllingBodyChangeScreenerPage
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodySoleProprietorPage}
+import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.{LicenceHeldByLandlordPage, LicenceNumberPage, LicencePremisesNotCoveredPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, RemoveLicenceNumberPage, RemovePremisesAddressPage, RemovePremisesDetailsYesNoPage}
 import pages.partnerdetails.*
@@ -174,8 +172,14 @@ class Navigator @Inject() () {
       userAnswers => controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsVatRegistrationNumberYesNoPage(index) =>
       userAnswers => navigateVatRegistrationNumberYesNoPage(index)(userAnswers)
+    case PartnerDetailsBusinessNamePage(index) =>
+      _ => controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index.toString)
+    case PartnerDetailsSoleProprietorPage(index) =>
+      _ => controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index.toString, NormalMode)
+    case PartnerDetailsDateOfBirthPage(index) =>
+      _ => controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index.toString)
     case PartnerDetailsTradingNamePage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(index.toString, NormalMode)
+      _ => controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsAddTradingNameYesNoPage(index) =>
       userAnswers => navigatePartnerAddTradingNameYesNoPage(index)(userAnswers)
     case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
@@ -514,11 +518,9 @@ class Navigator @Inject() () {
       .get(PartnerDetailsAddTradingNameYesNoPage(index))
       .map {
         case false =>
-          // Should go to Add/change trading name
-          controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index.toString)
+          controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(index.toString, NormalMode)
         case true =>
-          // Should go to Is the partner's business incorporated in the UK? or PT-UTR - UTR Taxpayer Reference
-          controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index.toString)
+          controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(index.toString, NormalMode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
