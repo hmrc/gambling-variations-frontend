@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package forms.licencespremises
+package forms.partnerdetails
 
-import base.SpecBase
 import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class PremisesAddressListFormProviderSpec extends SpecBase with BooleanFieldBehaviours {
+class PartnerDetailsRemovePartnerYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "premisesAddressList.error.required"
+  val requiredKey = "partnerDetailsRemovePartnerYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new PremisesAddressListFormProvider()()
+  val form = new PartnerDetailsRemovePartnerYesNoFormProvider()()
 
-  ".addPremisesAddress" - {
+  ".value" - {
 
-    val fieldName = "addPremisesAddress"
+    val fieldName = "value"
 
     behave like booleanField(
       form,

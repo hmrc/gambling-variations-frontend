@@ -44,9 +44,6 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
   private val formProvider =
     new AddAnotherPartnerFormProvider()
 
-  private val addPartnerForm =
-    formProvider("partnerDetails.addPartner.error.required")
-
   private val addAnotherPartnerForm =
     formProvider("partnerDetails.addAnotherPartner.error.required")
 

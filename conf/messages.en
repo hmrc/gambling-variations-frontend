@@ -1124,6 +1124,11 @@ partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
 partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
 partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
 
+partnerDetailsRemovePartnerYesNo.title = Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = Select yes if you want to remove this partner now
 
 # Non-standard return periods
 

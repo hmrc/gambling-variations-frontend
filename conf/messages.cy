@@ -461,3 +461,9 @@ controllingBodyEmailAddress.error.length = cy: The email address must be 70 char
 site.pagination.next = cy: Next
 site.pagination.previous = cy: Previous
 partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
+
+partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = cy: Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to remove this partner now

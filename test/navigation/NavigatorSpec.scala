@@ -29,11 +29,9 @@ import pages.businessname.*
 import pages.contactdetails.*
 import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyChangeScreenerPage}
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
+import pages.licencespremises.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceHeldByLandlordPage, LicenceNumberPage, LicencePremisesNotCoveredPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -1235,6 +1233,44 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
         navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), NormalMode, answers) mustBe
           controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route RemovePartnerYesNoPage to RemovePartnerYesNoPage when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an new partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+      }
+
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an existing partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+      }
+
+      "should route RemovePartnerYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
       }
 
     }

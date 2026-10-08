@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package forms.partnerdetails
 
-import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-class ControllingBodySubmittedPageSpec extends PlaySpec {
+import javax.inject.Inject
 
-  "ControllingBodySubmittedPage" must {
+class PartnerDetailsRemovePartnerYesNoFormProvider @Inject() extends Mappings {
 
-    "have the correct path" in {
-
-      ControllingBodySubmittedPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "submitted")
-    }
-
-    "have the correct toString value" in {
-
-      ControllingBodySubmittedPage.toString mustEqual "submitted"
-    }
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("partnerDetailsRemovePartnerYesNo.error.required")
+    )
 }
