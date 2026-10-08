@@ -17,15 +17,15 @@
 package forms.returnperiods
 
 import forms.mappings.Mappings
-import models.WhatToDoWithStandardReturnPeriods
+import models.StandardReturnPeriodsOptions
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class WhatToDoWithStandardReturnPeriodsFormProvider @Inject() extends Mappings {
+class StandardReturnPeriodsFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[WhatToDoWithStandardReturnPeriods] =
+  def apply(): Form[StandardReturnPeriodsOptions] =
     Form(
-      "value" -> enumerable[WhatToDoWithStandardReturnPeriods]("whatToDoWithStandardReturnPeriods.error.required")
+      "value" -> enumerable[StandardReturnPeriodsOptions]("returnPeriods.standard.error.required")
     )
 }

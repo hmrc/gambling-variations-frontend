@@ -1181,20 +1181,22 @@ controllingBodyEmailAddress.error.length = The email address must be 70 characte
 site.pagination.next = Next
 site.pagination.previous = Previous
 
-whatToDoWithStandardReturnPeriods.title = Your standard return periods
-whatToDoWithStandardReturnPeriods.heading = Your standard return periods
-whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
-whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
-whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
-whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
-whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
-whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
-whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
-whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
+returnPeriods.standard.title = Your standard return periods
+returnPeriods.standard.heading = Your standard return periods
 
-whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
-whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
-whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
+returnPeriods.standard.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
+returnPeriods.standard.switchToNonStandard = Switch to non-standard return periods
+returnPeriods.standard.keepStandardReturnPeriod = Keep standard return periods the same
+
+returnPeriods.standard.option.legend = What do you want to do with your return periods?
+returnPeriods.standard.p1 = Your return period end dates are the last day of January, April, July and October .
+returnPeriods.standard.p2 = Your return period end dates are the last day of February, May, August and November.
+returnPeriods.standard.p3 = Your return period end dates are the last day of March, June, September and December.
+returnPeriods.standard.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
+
+returnPeriods.standard.checkYourAnswersLabel = Your standard return periods
+returnPeriods.standard.error.required = Select what you want to do with your return periods
+returnPeriods.standard.change.hidden = StandardReturnPeriods
 
 controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
@@ -1221,9 +1223,8 @@ returnPeriods.nonStandard.column1 = Return period ending
 returnPeriods.nonStandard.column2 = End date
 returnPeriods.nonStandard.pastTable.caption = Upcoming non-standard return periods
 returnPeriods.nonStandard.upcomingTable.caption = Past non-standard return periods
-
 returnPeriods.nonStandard.switchToStandard.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
 
-returnPeriods.nonStandard.checkYourAnswersLabel = returnPeriods
+returnPeriods.nonStandard.checkYourAnswersLabel = Your non-standard return periods
 returnPeriods.nonStandard.error.required = Select what you want to do when your last non-standard return period ends
-returnPeriods.nonStandard.change.hidden = ReturnPeriods
+returnPeriods.nonStandard.change.hidden = NonStandardReturnPeriods

@@ -21,21 +21,21 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
-sealed trait WhatToDoWithStandardReturnPeriods
+sealed trait StandardReturnPeriodsOptions
 
-object WhatToDoWithStandardReturnPeriods extends Enumerable.Implicits {
+object StandardReturnPeriodsOptions extends Enumerable.Implicits {
 
-  case object Changemonthsstandardperiodcover extends WithName("changeMonthsStandardPeriodCover") with WhatToDoWithStandardReturnPeriods
+  case object ChangeMonthsStandardPeriodCover extends WithName("changeMonthsStandardPeriodCover") with StandardReturnPeriodsOptions
 
-  case object Switchtononstandard extends WithName("switchToNonStandard") with WhatToDoWithStandardReturnPeriods
+  case object SwitchToNonStandard extends WithName("switchToNonStandard") with StandardReturnPeriodsOptions
 
-  case object Keepstandardreturnperiod extends WithName("keepStandardReturnPeriod") with WhatToDoWithStandardReturnPeriods
+  case object KeepStandardReturnPeriod extends WithName("keepStandardReturnPeriod") with StandardReturnPeriodsOptions
 
-  val values: Seq[WhatToDoWithStandardReturnPeriods] =
+  val values: Seq[StandardReturnPeriodsOptions] =
     Seq(
-      Changemonthsstandardperiodcover,
-      Switchtononstandard,
-      Keepstandardreturnperiod
+      ChangeMonthsStandardPeriodCover,
+      SwitchToNonStandard,
+      KeepStandardReturnPeriod
     )
 
   def options(implicit messages: Messages): Seq[RadioItem] =
@@ -43,45 +43,45 @@ object WhatToDoWithStandardReturnPeriods extends Enumerable.Implicits {
       RadioItem(
         content = Text(
           messages(
-            "whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover"
+            "returnPeriods.standard.changeMonthsStandardPeriodCover"
           )
         ),
-        value = Some(Changemonthsstandardperiodcover.toString),
+        value = Some(ChangeMonthsStandardPeriodCover.toString),
         id    = Some("value_0")
       ),
       RadioItem(
         content = Text(
           messages(
-            "whatToDoWithStandardReturnPeriods.switchToNonStandard"
+            "returnPeriods.standard.switchToNonStandard"
           )
         ),
-        value = Some(Switchtononstandard.toString),
+        value = Some(SwitchToNonStandard.toString),
         id    = Some("value_1"),
         hint = Some(
           Hint(
             content = Text(
               messages(
-                "whatToDoWithStandardReturnPeriods.switchToNonStandard.hint"
+                "returnPeriods.standard.switchToNonStandard.hint"
               )
             )
           )
         )
       ),
       RadioItem(
-        divider = Some("or")
+        divider = Some(messages("site.or"))
       ),
       RadioItem(
         content = Text(
           messages(
-            "whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod"
+            "returnPeriods.standard.keepStandardReturnPeriod"
           )
         ),
-        value = Some(Keepstandardreturnperiod.toString),
+        value = Some(KeepStandardReturnPeriod.toString),
         id    = Some("value_3")
       )
     )
 
-  implicit val enumerable: Enumerable[WhatToDoWithStandardReturnPeriods] =
+  implicit val enumerable: Enumerable[StandardReturnPeriodsOptions] =
     Enumerable(
       values.map(v => v.toString -> v)*
     )
