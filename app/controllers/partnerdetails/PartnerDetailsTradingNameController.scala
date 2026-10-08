@@ -53,52 +53,37 @@ class PartnerDetailsTradingNameController @Inject() (
     (authorise andThen getData andThen requireData) { implicit request =>
       val newIndex = PartnerUtils.parseIndex(index, mode)
 
-      request.userAnswers.get(PartnerDetailsTradingNamePage(newIndex)) match {
-        case Some(partnerTradingName) =>
-          val preparedForm = form.fill(partnerTradingName)
-
-          Ok(view(preparedForm, index, mode))
-
-        case None =>
-          Redirect(routes.SystemErrorController.onPageLoad())
-      }
+      val preparedForm = request.userAnswers.get(PartnerDetailsTradingNamePage(newIndex)).fold(form)(form.fill)
+      Ok(view(preparedForm, index, mode))
     }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       val newIndex = PartnerUtils.parseIndex(index, mode)
 
-      request.userAnswers.get(PartnerDetailsTradingNamePage(newIndex)) match {
-        case Some(_) =>
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors =>
-                Future.successful(
-                  BadRequest(view(formWithErrors, index, mode))
-                ),
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(
-                                      request.userAnswers.set(
-                                        PartnerDetailsTradingNamePage(newIndex),
-                                        value
-                                      )
-                                    )
-                  _ <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(
-                  navigator.nextPage(
-                    PartnerDetailsTradingNamePage(newIndex),
-                    mode,
-                    updatedAnswers
-                  )
-                )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(view(formWithErrors, index, mode))
+            ),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(
+                                  request.userAnswers.set(
+                                    PartnerDetailsTradingNamePage(newIndex),
+                                    value
+                                  )
+                                )
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(
+              navigator.nextPage(
+                PartnerDetailsTradingNamePage(newIndex),
+                mode,
+                updatedAnswers
+              )
             )
-
-        case None =>
-          Future.successful(
-            Redirect(routes.SystemErrorController.onPageLoad())
-          )
-      }
+        )
     }
 }
