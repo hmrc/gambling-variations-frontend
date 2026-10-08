@@ -28,7 +28,7 @@ import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
-import utils.DateTimeFormats.shortDateDisplay
+import utils.DateTimeFormats.{longDateDisplay, shortDateDisplay}
 import utils.PartnerUtils
 import viewmodels.govuk.all.FluentValue
 
@@ -520,8 +520,8 @@ object CheckPartnerDetailsViewModel {
       soleProprietorDob         = userAnswers.get(PartnerDetailsDateOfBirthPage(index)).map(shortDateDisplay),
       addTradingName            = userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)),
       tradingName               = userAnswers.get(PartnerDetailsTradingNamePage(index)),
-      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(shortDateDisplay),
-      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(shortDateDisplay),
+      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(longDateDisplay),
+      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(longDateDisplay),
       addNino                   = userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)),
       nino                      = userAnswers.get(PartnerDetailsNinoPage(index)).map(formatNino),
       utr                       = userAnswers.get(PartnerDetailsUtrPage(index)),

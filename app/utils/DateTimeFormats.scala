@@ -39,6 +39,10 @@ object DateTimeFormats {
       .format(shortDateTimeFormatter)
       .replace("Sept", "Sep")
 
+  def longDateDisplay(date: LocalDate): String =
+    date
+      .format(dateTimeFormatter)
+
   def dateTimeFormat()(implicit lang: Lang): DateTimeFormatter = {
     localisedDateTimeFormatters.getOrElse(lang.code, dateTimeFormatter)
   }
