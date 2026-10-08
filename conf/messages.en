@@ -1177,3 +1177,7 @@ controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+controllingBodyAddNINumberYesNo.title = Do you want to add a National Insurance number for the controlling body?
+controllingBodyAddNINumberYesNo.heading = Do you want to add a National Insurance number for the controlling body?
+controllingBodyAddNINumberYesNo.error.required = Select yes to add a National Insurance number for the controlling body
