@@ -556,9 +556,9 @@ class Navigator @Inject() () {
         if (wantToRemove) {
           index match {
             case businessNumber: String =>
-              controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
+              controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
             case newPartnerIndex: Int =>
-              controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(index.toString, NormalMode)
+              controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
           }
         } else
           controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(index.toString, NormalMode)

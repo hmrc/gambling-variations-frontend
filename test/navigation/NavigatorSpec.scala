@@ -32,8 +32,6 @@ import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceHeldByLandlordPage, LicenceNumberPage, LicencePremisesNotCoveredPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -1248,7 +1246,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
 
-      "should route RemovePartnerYesNoPage to RemovePartnerYesNoPage when answer is true and it's an new partner" in {
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an new partner" in {
         val answers =
           emptyAnswers
             .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
@@ -1256,10 +1254,10 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
       }
 
-      "should route RemovePartnerYesNoPage to PartnerDetailsDeleteDateController when answer is true and it's an existing partner" in {
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an existing partner" in {
         val answers =
           emptyAnswers
             .set(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
@@ -1267,7 +1265,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
       }
 
       "should route RemovePartnerYesNoPage to SystemError when unanswered" in {
