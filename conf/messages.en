@@ -1070,6 +1070,12 @@ premisesNotCoveredYesNo.error.required = Select yes if you have any other premis
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
 
+controllingBodyNotProvidedYesNo.title = Tell us about your controlling body
+controllingBodyNotProvidedYesNo.p1 = Your group''s representative member, {0}, can also be your controlling body.
+controllingBodyNotProvidedYesNo.text = Do you want {0} to be your controlling body?
+controllingBodyNotProvidedYesNo.error.required = Select yes if you want your group''s representative member to also be your controlling body
+controllingBodyNotProvidedYesNo.noLabel = No, I want to provide new details
+
 removePremisesAddress.title = Are you sure you want to remove this premises address?
 removePremisesAddress.heading = Are you sure you want to remove this premises address?
 removePremisesAddress.error.required = Select yes if you want to remove this premises address
@@ -1118,6 +1124,11 @@ partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
 partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
 partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
 
+partnerDetailsRemovePartnerYesNo.title = Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = Select yes if you want to remove this partner now
 
 # Non-standard return periods
 

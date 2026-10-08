@@ -16,21 +16,24 @@
 
 package pages.controllingbody
 
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import pages.controllingbody.ControllingBodyNotProvidedYesNoPage
 import play.api.libs.json.JsPath
 
-class ControllingBodySubmittedPageSpec extends PlaySpec {
+class ControllingBodyNotProvidedYesNoPageSpec extends AnyFreeSpec with Matchers {
 
-  "ControllingBodySubmittedPage" must {
+  "ControllingBodyNotProvidedYesNoPage" - {
 
-    "have the correct path" in {
-
-      ControllingBodySubmittedPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "submitted")
+    "must have the correct toString" in {
+      ControllingBodyNotProvidedYesNoPage.toString mustBe "controllingBodyNotProvidedYesNo"
     }
 
-    "have the correct toString value" in {
+    "must have a path corresponding to its name and index" in {
+      val expectedPath: JsPath =
+        (JsPath \ "controllingBodyDetails") \ "controllingBodyNotProvidedYesNo"
 
-      ControllingBodySubmittedPage.toString mustEqual "submitted"
+      ControllingBodyNotProvidedYesNoPage.path mustBe expectedPath
     }
   }
 }
