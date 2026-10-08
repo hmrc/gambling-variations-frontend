@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
+import views.html.returnperiods.StandardReturnPeriodsView
 
 class StandardReturnPeriodsOptionsViewSpec extends SpecBase {
 
@@ -33,7 +33,7 @@ class StandardReturnPeriodsOptionsViewSpec extends SpecBase {
     private val app = applicationBuilder().build()
 
     private val view =
-      app.injector.instanceOf[WhatToDoWithStandardReturnPeriodsView]
+      app.injector.instanceOf[StandardReturnPeriodsView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
@@ -70,10 +70,10 @@ class StandardReturnPeriodsOptionsViewSpec extends SpecBase {
         messages("returnPeriods.standard.heading")
 
       doc.select(".govuk-fieldset__legend").text() mustBe
-        messages("returnPeriods.nonStandard.option.legend")
+        messages("returnPeriods.standard.option.legend")
 
       doc.select("p.govuk-body").text() mustBe
-        messages("whatToDoWithStandardReturnPeriods.p3")
+        messages("returnPeriods.standard.p3")
 
       doc.select("button.govuk-button").text() mustBe
         messages("site.continue")
@@ -84,7 +84,7 @@ class StandardReturnPeriodsOptionsViewSpec extends SpecBase {
       val radioOptions = doc.select(".govuk-radios__item label").eachText()
 
       radioOptions must contain(
-        messages("returnPeriods.standard.changeMonthsStandardPeriodCover ")
+        messages("returnPeriods.standard.changeMonthsStandardPeriodCover")
       )
 
       radioOptions must contain(
