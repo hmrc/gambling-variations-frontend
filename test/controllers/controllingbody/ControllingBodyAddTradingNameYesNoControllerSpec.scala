@@ -41,7 +41,7 @@ class ControllingBodyAddTradingNameYesNoControllerSpec extends SpecBase with Moc
     .set(ControllingBodyDetailsLoadedPage, true)
     .success
     .value
-  private val url = routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url
+  private lazy val url = routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url
 
   "ControllingBodyAddTradingNameYesNoController" - {
     "render the specified title, caption, radios, Back and Continue" in {
