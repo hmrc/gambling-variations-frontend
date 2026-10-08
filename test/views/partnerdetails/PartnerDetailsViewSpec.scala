@@ -17,8 +17,10 @@
 package views.partnerdetails
 
 import base.SpecBase
+import controllers.partnerdetails.PartnerDetailsHelper
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import pages.BusinessNumberOrIndex
 import play.api.data.Form
 import play.api.data.Forms.boolean
 import play.api.i18n.Messages
@@ -26,9 +28,11 @@ import play.api.test.FakeRequest
 import viewmodels.checkAnswers.partnerdetails.{PartnerDetailsRow, PartnerDetailsViewModel}
 import views.html.partnerdetails.PartnerDetailsView
 
-class PartnerDetailsViewSpec extends SpecBase {
+class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
 
   trait Setup {
+    val paginationHelper = PaginationHelper(1)
+    val paginationHelperMaxSizePage2 = PaginationHelper(100, 2, (0 to 100).map(e => (e.toString, e.toString)))
 
     private val app = applicationBuilder().build()
 
@@ -49,6 +53,7 @@ class PartnerDetailsViewSpec extends SpecBase {
         .preferred(request)
 
     def partner(
+      index: BusinessNumberOrIndex = "0",
       name: String = "Test Partner",
       status: String = messages("partnerDetails.status.active"),
       statusDetails: Option[String] = None,
@@ -57,7 +62,7 @@ class PartnerDetailsViewSpec extends SpecBase {
       canRemove: Boolean = true
     ): PartnerDetailsRow =
       PartnerDetailsRow(
-        partnerNumber     = "0",
+        index             = "0",
         name              = name,
         status            = status,
         statusDetails     = statusDetails,
@@ -84,13 +89,18 @@ class PartnerDetailsViewSpec extends SpecBase {
       )
 
     def render(
-      model: PartnerDetailsViewModel
+      model: PartnerDetailsViewModel,
+      paginationHelper: PaginationHelper
     ): Document = {
-
       val html =
         view(
           form,
-          model
+          model,
+          paginationHelper.paginatedViewModel,
+          paginationHelper.page,
+          paginationHelper.from,
+          paginationHelper.to,
+          paginationHelper.totalRecords
         )(request, messages)
 
       Jsoup.parse(html.body)
@@ -105,7 +115,8 @@ class PartnerDetailsViewSpec extends SpecBase {
         render(
           viewModel(
             showNoPartnersMessage = true
-          )
+          ),
+          paginationHelper
         )
 
       doc.title must include(
@@ -154,7 +165,8 @@ class PartnerDetailsViewSpec extends SpecBase {
             partners = Seq(
               partner()
             )
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -164,6 +176,28 @@ class PartnerDetailsViewSpec extends SpecBase {
       doc
         .select("tbody.govuk-table__body tr.govuk-table__row")
         .size() mustBe 1
+    }
+
+    "must render multiple pages naviagtion" in new Setup {
+      val doc =
+        render(
+          viewModel(
+            partners = Seq(
+              partner()
+            )
+          ),
+          paginationHelperMaxSizePage2
+        )
+
+      doc
+        .select(".govuk-pagination__prev a")
+        .first()
+        .attr("href") must include("change-registration-details/partner-details?page=1")
+
+      doc
+        .select(".govuk-pagination__next a")
+        .first()
+        .attr("href") must include("change-registration-details/partner-details?page=3")
     }
 
     "must render partner name" in new Setup {
@@ -176,7 +210,8 @@ class PartnerDetailsViewSpec extends SpecBase {
                 name = "ABC Partners"
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -194,7 +229,8 @@ class PartnerDetailsViewSpec extends SpecBase {
                 partnerDetailsUrl = "/partner-details/0"
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       val link =
@@ -215,7 +251,8 @@ class PartnerDetailsViewSpec extends SpecBase {
                 name = "ABC Partners"
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -235,7 +272,8 @@ class PartnerDetailsViewSpec extends SpecBase {
                 status = messages("partnerDetails.status.active")
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -256,7 +294,8 @@ class PartnerDetailsViewSpec extends SpecBase {
                 statusDetails = Some("5 Sep 2026")
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       val tableText =
@@ -271,19 +310,55 @@ class PartnerDetailsViewSpec extends SpecBase {
       tableText must include("5 Sep 2026")
     }
 
-    "must render remove link when partner can be removed" in new Setup {
+    "must render remove link when new partner can be removed" in new Setup {
 
       val doc =
         render(
           viewModel(
             partners = Seq(
               partner(
+                index     = 1,
+                name      = "ABC Partners",
+                removeUrl = Some("/partner-details/change-remove/1"),
+                canRemove = true
+              )
+            )
+          ),
+          paginationHelper
+        )
+
+      val links =
+        doc
+          .select("tbody.govuk-table__body a.govuk-link")
+
+      links.size() mustBe 2
+
+      val removeLink = links.last()
+
+      removeLink.attr("href") mustBe "/partner-details/change-remove/1"
+
+      removeLink.text() must include(
+        messages("site.remove")
+      )
+
+      removeLink.text() must include("ABC Partners")
+    }
+
+    "must render remove link when existing partner can be removed" in new Setup {
+
+      val doc =
+        render(
+          viewModel(
+            partners = Seq(
+              partner(
+                index     = "0",
                 name      = "ABC Partners",
                 removeUrl = Some("/partner-details/remove/0"),
                 canRemove = true
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       val links =
@@ -314,7 +389,8 @@ class PartnerDetailsViewSpec extends SpecBase {
                 removeUrl = None
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -335,7 +411,8 @@ class PartnerDetailsViewSpec extends SpecBase {
                 removeUrl = None
               )
             )
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -350,7 +427,8 @@ class PartnerDetailsViewSpec extends SpecBase {
           viewModel(
             partners                   = Seq(partner()),
             showMinimumPartnersMessage = true
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -366,7 +444,8 @@ class PartnerDetailsViewSpec extends SpecBase {
           viewModel(
             partners                   = Seq(partner()),
             showMinimumPartnersMessage = false
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -382,7 +461,8 @@ class PartnerDetailsViewSpec extends SpecBase {
           viewModel(
             partners          = Seq(partner()),
             addAnotherPartner = true
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -400,22 +480,6 @@ class PartnerDetailsViewSpec extends SpecBase {
       )
     }
 
-    "must render maximum partners message when another partner can be added" in new Setup {
-
-      val doc =
-        render(
-          viewModel(
-            partners          = Seq(partner()),
-            addAnotherPartner = true
-          )
-        )
-
-      doc
-        .text() must include(
-        messages("partnerDetails.maxPartners.hint")
-      )
-    }
-
     "must render maximum reached message when another partner cannot be added" in new Setup {
 
       val doc =
@@ -424,7 +488,8 @@ class PartnerDetailsViewSpec extends SpecBase {
             partners                   = Seq(partner()),
             addAnotherPartner          = false,
             showMaximumPartnersMessage = true
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -441,7 +506,8 @@ class PartnerDetailsViewSpec extends SpecBase {
             partners                   = Seq(partner()),
             addAnotherPartner          = false,
             showMaximumPartnersMessage = true
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -452,12 +518,12 @@ class PartnerDetailsViewSpec extends SpecBase {
     "must render must continue message when required" in new Setup {
 
       val doc =
-        render(
-          viewModel(
-            partners          = Seq(partner()),
-            showSubmitMessage = true
-          )
-        )
+        render(viewModel(
+                 partners          = Seq(partner()),
+                 showSubmitMessage = true
+               ),
+               paginationHelper
+              )
 
       doc
         .text() must include(
@@ -472,7 +538,8 @@ class PartnerDetailsViewSpec extends SpecBase {
           viewModel(
             partners          = Seq(partner()),
             showSubmitMessage = false
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -486,7 +553,7 @@ class PartnerDetailsViewSpec extends SpecBase {
       val partners =
         Seq(
           PartnerDetailsRow(
-            partnerNumber     = "0",
+            index             = "0",
             name              = "Alpha Partners",
             status            = messages("partnerDetails.status.active"),
             statusDetails     = None,
@@ -495,7 +562,7 @@ class PartnerDetailsViewSpec extends SpecBase {
             canRemove         = true
           ),
           PartnerDetailsRow(
-            partnerNumber     = "1",
+            index             = "1",
             name              = "Beta Partners",
             status            = messages("partnerDetails.status.dueToJoin"),
             statusDetails     = Some("10 Sep 2026"),
@@ -509,7 +576,8 @@ class PartnerDetailsViewSpec extends SpecBase {
         render(
           viewModel(
             partners = partners
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -541,7 +609,12 @@ class PartnerDetailsViewSpec extends SpecBase {
           boundForm,
           viewModel(
             showNoPartnersMessage = true
-          )
+          ),
+          paginationHelper.paginatedViewModel,
+          paginationHelper.page,
+          paginationHelper.from,
+          paginationHelper.to,
+          paginationHelper.totalRecords
         )(request, messages)
 
       val doc =
@@ -558,7 +631,8 @@ class PartnerDetailsViewSpec extends SpecBase {
         render(
           viewModel(
             showNoPartnersMessage = true
-          )
+          ),
+          paginationHelper
         )
 
       doc
@@ -578,13 +652,14 @@ class PartnerDetailsViewSpec extends SpecBase {
         render(
           viewModel(
             showNoPartnersMessage = true
-          )
+          ),
+          paginationHelper
         )
 
       doc
         .select("form")
         .attr("action") mustBe
-        controllers.partnerdetails.routes.PartnerDetailsController.onSubmit.url
+        controllers.partnerdetails.routes.PartnerDetailsController.onSubmit(Some(1)).url
     }
 
     "must render form with autocomplete disabled" in new Setup {
@@ -593,7 +668,8 @@ class PartnerDetailsViewSpec extends SpecBase {
         render(
           viewModel(
             showNoPartnersMessage = true
-          )
+          ),
+          paginationHelper
         )
 
       doc
