@@ -1157,6 +1157,11 @@ controllingBodyEmailAddress.error.length = The email address must be 70 characte
 site.pagination.next = Next
 site.pagination.previous = Previous
 
+returnPeriods.title = You cannot make any further changes to your return periods
+returnPeriods.heading = You cannot make any further changes to your return periods
+returnPeriods.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
+returnPeriods.p2 = You must continue to the change registration details page to submit any changes.
+
 whatToDoWithStandardReturnPeriods.title = Your standard return periods
 whatToDoWithStandardReturnPeriods.heading = Your standard return periods
 whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
