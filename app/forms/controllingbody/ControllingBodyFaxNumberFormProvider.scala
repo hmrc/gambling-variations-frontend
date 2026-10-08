@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class ControllingBodyFaxNumberFormProvider @Inject() extends Mappings {
 
-  private val controllingBodyFaxNumberRegex = "^[0-9 ]{1,20}$"
+  private val controllingBodyFaxNumberRegex = "^[0-9 ]+$"
   private val maxL = 20
   def apply(): Form[String] =
     Form(
