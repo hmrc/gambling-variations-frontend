@@ -266,3 +266,6 @@ POST       /change-registration-details/controlling-body-details/trading-name-ye
 
 GET        /change-registration-details/controlling-body-details/email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
