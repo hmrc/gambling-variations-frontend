@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.licencespremises
+package pages.controllingbody
 
+import models.controllingbody.ControllingBodyChangeOption
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object PremisesNotCoveredYesNoPage extends QuestionPage[Boolean] {
+case object ControllingBodyChangeScreenerPage extends QuestionPage[ControllingBodyChangeOption] {
 
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
 
-  override def toString: String = "premisesNotCoveredYesNo"
+  override def toString: String = "controllingBodyChangeScreener"
 }

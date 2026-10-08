@@ -165,7 +165,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
         vm.sections.find(_.name == "Partner details").value
 
       partnerDetails.url mustEqual
-        controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad.url
+        controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None).url
     }
 
     "must point the submit link at the declaration page" in {
