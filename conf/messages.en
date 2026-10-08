@@ -1156,3 +1156,24 @@ controllingBodyEmailAddress.error.length = The email address must be 70 characte
 
 site.pagination.next = Next
 site.pagination.previous = Previous
+
+whatToDoWithStandardReturnPeriods.title = Your standard return periods
+whatToDoWithStandardReturnPeriods.heading = Your standard return periods
+whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
+whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
+whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
+whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
+whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
+whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
+whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
+whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
+
+whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
+whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
+whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
+
+
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
