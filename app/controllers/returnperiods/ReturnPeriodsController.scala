@@ -25,6 +25,8 @@ import views.html.returnperiods.ReturnPeriodsView
 import javax.inject.Inject
 import scala.concurrent.Future
 
+//todo: we need to have one controller that uses the correct view depending on the scenario
+
 class ReturnPeriodsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
