@@ -24,7 +24,7 @@ import models.{GamblingReturnPeriods, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.GamblingReturnPeriodsPage
+import pages.returnperiods.GamblingReturnPeriodsPage
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.Results.*
 import play.api.mvc.{AnyContent, Result}

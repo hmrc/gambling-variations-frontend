@@ -138,8 +138,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       // not exist. Remove a name from this list as each journey is built.
       val notBuiltYet = Set(
         "Controlling body details",
-        "Group member details",
-        "Return periods"
+        "Group member details"
       )
 
       val allSections =
@@ -165,7 +164,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
         vm.sections.find(_.name == "Partner details").value
 
       partnerDetails.url mustEqual
-        controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad.url
+        controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None).url
     }
 
     "must point the submit link at the declaration page" in {

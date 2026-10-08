@@ -910,9 +910,9 @@ removePremisesDetailsYesNo.change.hidden = Are you sure you want to make this ch
 
 partnerDetails.title = Partner details
 partnerDetails.heading = Partner details
-partnerDetails.status.active = Active
+partnerDetails.status.active = Joined {0}
 partnerDetails.noPartners = You have not provided any partners yet.
-partnerDetails.minimumPartners = You must have at least 3 active partners before you can remove a partner.
+partnerDetails.minimumPartners = You cannot remove any of these partners because you must always have at least 2 partners that are not due to leave.
 partnerDetails.addAnotherPartner = Do you want to add another partner?
 partnerDetails.addPartner = Do you want to add a partner?
 partnerDetails.notProvidedPartnerYet = You have not provided any partners yet.
@@ -925,11 +925,11 @@ partnerDetails.viewOrChange = View or change
 partnerDetails.status.dueToLeave =  Due to leave
 partnerDetails.status.dueToJoin =  	Due to join
 partnerDetails.cannotRemove =  	Cannot remove
-partnerDetails.maximumReached = You can only have up to 100 partners. If you need to add a new partner, you must change or remove a current one.
-partnerDetails.maxPartners.hint = You can only add up to 100 partners
+partnerDetails.maximumReached = If you need to add a new partner, you must change or remove a current one.
 partnerDetails.mustContinue = You must continue to the change registration details page to submit any changes.
 partnerDetails.addAnotherPartner.error.required = Select yes if you want to add another partner
 partnerDetails.addPartner.error.required = Select yes if you want to add a partner
+partnerDetails.partner.count = Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
 partnerDetailsBusinessType.title = What type of business is the partner?
 partnerDetailsBusinessType.heading = What type of business is the partner?
@@ -1090,6 +1090,14 @@ controllingBodyBusinessType.title = What type of business is the controlling bod
 controllingBodyBusinessType.heading = What type of business is the controlling body?
 controllingBodyBusinessType.error.required = Select the type of business for the controlling body
 
+controllingBodyChangeScreener.title = What do you want to do with your controlling body?
+controllingBodyChangeScreener.heading = What do you want to do with your controlling body?
+controllingBodyChangeScreener.p1 = Your current controlling body is {0}.
+controllingBodyChangeScreener.editDetails = Edit controlling body details
+controllingBodyChangeScreener.provideNew = Provide a new controlling body
+controllingBodyChangeScreener.keepSame = Keep controlling body the same
+controllingBodyChangeScreener.error.required = Select what you want to do with your controlling body
+
 partnerDetailsAddCountryOfIncorporation.title = Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.heading = Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = Which country is the partner’s business incorporated in?
@@ -1110,3 +1118,56 @@ partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
 partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
 partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
 
+
+# Non-standard return periods
+
+chooseReturnPeriods.title= What are your non-standard return periods?
+chooseReturnPeriods.heading = What are your non-standard return periods?
+
+chooseReturnPeriods.jan = January, April, July and October
+chooseReturnPeriods.feb = February, May, August and November
+chooseReturnPeriods.mar = March, June, September and December
+chooseReturnPeriods.p = You must now provide 8 end dates to cover the next 2 years of non-standard return periods.
+
+chooseReturnPeriods.standard.error.required = Select your standard return periods
+chooseReturnPeriods.nonStandard.error.required = Select your non-standard return periods
+
+
+# Standard return periods
+
+chooseStandardReturnPeriods.title = What are your standard return periods?
+chooseStandardReturnPeriods.heading = What are your standard return periods?
+chooseStandardReturnPeriods.caption = Change registration details
+
+chooseStandardReturnPeriods.jan = Last day of January, April, July and October
+chooseStandardReturnPeriods.feb = Last day of February, May, August and November
+chooseStandardReturnPeriods.mar = Last day of March, June, September and December
+
+controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
+
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
+site.pagination.next = Next
+site.pagination.previous = Previous
+
+whatToDoWithStandardReturnPeriods.title = Your standard return periods
+whatToDoWithStandardReturnPeriods.heading = Your standard return periods
+whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
+whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
+whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
+whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
+whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
+whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
+whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
+whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
+
+whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
+whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
+whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods

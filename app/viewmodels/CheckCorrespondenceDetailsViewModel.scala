@@ -50,7 +50,7 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     } else if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {
       controllers.routes.CorrespondenceContactNumberController.onPageLoad()
     } else {
-      controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
+      controllers.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
   def summaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
@@ -105,31 +105,33 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     )
 
   private def addAdditionalCorrespondenceNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addCorrespondenceAdditionalName map { add =>
-      SummaryListRow(
-        key = Key(
-          content = messages("checkCorrespondenceDetails.heading.addAdditionalCorrespondenceName")
-        ),
-        value = Value(
-          content = if (add) {
-            messages("site.yes")
-          } else {
-            messages("site.no")
-          }
-        ),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceAdditionalNameYesNoController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden"))
+    if (isAddingNewCorrespondenceDetails.contains(true)) {
+      addCorrespondenceAdditionalName map { add =>
+        SummaryListRow(
+          key = Key(
+            content = messages("checkCorrespondenceDetails.heading.addAdditionalCorrespondenceName")
+          ),
+          value = Value(
+            content = if (add) {
+              messages("site.yes")
+            } else {
+              messages("site.no")
+            }
+          ),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.routes.CorrespondenceAdditionalNameYesNoController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalCorrespondenceName.hidden"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else { None }
 
   private def additionalCorrespondenceNameSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (additionalCorrespondenceName.isEmpty && isAddingNewCorrespondenceDetails.contains(true)) {
@@ -233,31 +235,33 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
   }
 
   private def addAdditionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addCorrespondenceAdditionalInformation map { add =>
-      SummaryListRow(
-        key = Key(
-          content = messages("checkCorrespondenceDetails.heading.addAdditionalInformation")
-        ),
-        value = Value(
-          content = if (add) {
-            messages("site.yes")
-          } else {
-            messages("site.no")
-          }
-        ),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceAddrInfoScreenerController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
+    if (isAddingNewCorrespondenceDetails.contains(true)) {
+      addCorrespondenceAdditionalInformation map { add =>
+        SummaryListRow(
+          key = Key(
+            content = messages("checkCorrespondenceDetails.heading.addAdditionalInformation")
+          ),
+          value = Value(
+            content = if (add) {
+              messages("site.yes")
+            } else {
+              messages("site.no")
+            }
+          ),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.routes.CorrespondenceAddrInfoScreenerController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addAdditionalInformation.hidden"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else { None }
 
   private def additionalInformationSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (correspondenceAdditionalInformation.isEmpty && isAddingNewCorrespondenceDetails.contains(true)) {
@@ -337,31 +341,33 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     )
 
   private def addFaxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addCorrespondenceFaxNumber map { add =>
-      SummaryListRow(
-        key = Key(
-          content = messages("checkCorrespondenceDetails.heading.addFaxNumber")
-        ),
-        value = Value(
-          content = if (add) {
-            messages("site.yes")
-          } else {
-            messages("site.no")
-          }
-        ),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.FaxNumberForCorrespondenceYesNoController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addFaxNumber.hidden"))
+    if (isAddingNewCorrespondenceDetails.contains(true)) {
+      addCorrespondenceFaxNumber map { add =>
+        SummaryListRow(
+          key = Key(
+            content = messages("checkCorrespondenceDetails.heading.addFaxNumber")
+          ),
+          value = Value(
+            content = if (add) {
+              messages("site.yes")
+            } else {
+              messages("site.no")
+            }
+          ),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.routes.FaxNumberForCorrespondenceYesNoController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addFaxNumber.hidden"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else { None }
 
   private def faxNumberSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (faxNumber.isEmpty && isAddingNewCorrespondenceDetails.contains(true)) {
@@ -422,31 +428,33 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     }
 
   private def addEmailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    addCorrespondenceEmailAddress map { add =>
-      SummaryListRow(
-        key = Key(
-          content = messages("checkCorrespondenceDetails.heading.addEmailAddress")
-        ),
-        value = Value(
-          content = if (add) {
-            messages("site.yes")
-          } else {
-            messages("site.no")
-          }
-        ),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addEmailAddress.hidden"))
+    if (isAddingNewCorrespondenceDetails.contains(true)) {
+      addCorrespondenceEmailAddress map { add =>
+        SummaryListRow(
+          key = Key(
+            content = messages("checkCorrespondenceDetails.heading.addEmailAddress")
+          ),
+          value = Value(
+            content = if (add) {
+              messages("site.yes")
+            } else {
+              messages("site.no")
+            }
+          ),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("checkCorrespondenceDetails.label.addEmailAddress.hidden"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else { None }
 
   private def emailAddressSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
     if (emailAddress.isEmpty && isAddingNewCorrespondenceDetails.contains(true)) {
@@ -507,29 +515,31 @@ case class CheckCorrespondenceDetailsViewModel(correspondenceName: Option[String
     }
 
   private def hasUkPostcodeSummaryListRow(implicit messages: Messages): Option[SummaryListRow] =
-    hasUkPostcode map { answer =>
-      SummaryListRow(
-        key = Key(
-          content = messages("correspondenceUKAddrScreener.heading.addAdditionalInformation")
-        ),
-        value = Value(
-          content =
-            if (answer) messages("site.yes")
-            else messages("site.no")
-        ),
-        actions = Some(
-          Actions(
-            items = Seq(
-              ActionItem(
-                href               = controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url,
-                content            = "site.change",
-                visuallyHiddenText = Some(messages("correspondenceUKAddrScreener.label.addAdditionalInformation.hidden"))
+    if (isAddingNewCorrespondenceDetails.contains(true)) {
+      hasUkPostcode map { answer =>
+        SummaryListRow(
+          key = Key(
+            content = messages("correspondenceUKAddrScreener.heading.addAdditionalInformation")
+          ),
+          value = Value(
+            content =
+              if (answer) messages("site.yes")
+              else messages("site.no")
+          ),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  href               = controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad().url,
+                  content            = "site.change",
+                  visuallyHiddenText = Some(messages("correspondenceUKAddrScreener.label.addAdditionalInformation.hidden"))
+                )
               )
             )
           )
         )
-      )
-    }
+      }
+    } else { None }
 
   private def contactNumbersContent(implicit messages: Messages): Content =
     if (phoneNumber.isEmpty && mobilePhoneNumber.isEmpty) {

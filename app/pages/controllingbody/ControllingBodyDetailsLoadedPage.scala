@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package pages.licencespremises
+package pages.controllingbody
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object LicenceDetailsLandlordLicenceYesNoPage extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
-
-  override def toString: String = "licenceDetailsLandlordLicenceYesNo"
+case object ControllingBodyDetailsLoadedPage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+  override def toString: String = "loaded"
 }
