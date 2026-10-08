@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.{LicencePremisesNotCoveredPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage, PremisesNotCoveredYesNoPage}
+import pages.licencespremises.{LicencePremisesNotCoveredPage, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -56,7 +56,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
 
     "onPageLoad" - {
 
-      "must return OK and preselect No for a GET when no previous data exists" in {
+      "must return OK and preselect nothing for a GET when the question has not been answered" in {
 
         val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
@@ -68,32 +68,11 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val view = application.injector.instanceOf[PremisesNotCoveredYesNoView]
 
           status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(false), NormalMode)(request, messages(application)).toString
+          contentAsString(result) mustBe view(form, NormalMode)(request, messages(application)).toString
         }
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
-
-        val userAnswers = noAnswers
-          .set(PremisesNotCoveredYesNoPage, true)
-          .success
-          .value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        running(application) {
-          val request = FakeRequest(GET, addRoute)
-
-          val view = application.injector.instanceOf[PremisesNotCoveredYesNoView]
-
-          val result = route(application, request).value
-
-          status(result) mustBe OK
-          contentAsString(result) mustBe view(form.fill(true), NormalMode)(request, messages(application)).toString
-        }
-      }
-
-      "must populate the view from the backend flag on a GET when the question has not been answered in this session" in {
 
         val userAnswers = noAnswers
           .set(LicencePremisesNotCoveredPage, "1")
@@ -111,6 +90,27 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
 
           status(result) mustBe OK
           contentAsString(result) mustBe view(form.fill(true), NormalMode)(request, messages(application)).toString
+        }
+      }
+
+      "must preselect No on a GET when the backend flag is 0" in {
+
+        val userAnswers = noAnswers
+          .set(LicencePremisesNotCoveredPage, "0")
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, addRoute)
+
+          val view = application.injector.instanceOf[PremisesNotCoveredYesNoView]
+
+          val result = route(application, request).value
+
+          status(result) mustBe OK
+          contentAsString(result) mustBe view(form.fill(false), NormalMode)(request, messages(application)).toString
         }
       }
 
@@ -153,7 +153,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           val expectedAnswers = noAnswers
-            .set(PremisesNotCoveredYesNoPage, true)
+            .set(LicencePremisesNotCoveredPage, "1")
             .success
             .value
             .set(LicencesPremisesDetailsSubmittedPage, true)
@@ -196,7 +196,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           val expectedAnswers = userAnswers
-            .set(PremisesNotCoveredYesNoPage, true)
+            .set(LicencePremisesNotCoveredPage, "1")
             .success
             .value
             .set(LicencesPremisesDetailsSubmittedPage, true)

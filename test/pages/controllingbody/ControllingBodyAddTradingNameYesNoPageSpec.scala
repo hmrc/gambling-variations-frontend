@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package pages.licencespremises
+package pages.controllingbody
 
-import pages.QuestionPage
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case object PremisesNotCoveredYesNoPage extends QuestionPage[Boolean] {
+class ControllingBodyAddTradingNameYesNoPageSpec extends PlaySpec {
 
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
+  "ControllingBodyAddTradingNameYesNoPage" must {
 
-  override def toString: String = "premisesNotCoveredYesNo"
+    "have the correct path" in {
+
+      ControllingBodyAddTradingNameYesNoPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "addTradingName")
+    }
+
+    "have the correct toString value" in {
+
+      ControllingBodyAddTradingNameYesNoPage.toString mustEqual "addTradingName"
+    }
+  }
 }

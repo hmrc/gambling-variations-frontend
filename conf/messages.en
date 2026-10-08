@@ -1147,6 +1147,13 @@ controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for
 controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
 
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
 site.pagination.next = Next
 site.pagination.previous = Previous
 
@@ -1154,3 +1161,18 @@ returnPeriods.title = You cannot make any further changes to your return periods
 returnPeriods.heading = You cannot make any further changes to your return periods
 returnPeriods.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
 returnPeriods.p2 = You must continue to the change registration details page to submit any changes.
+
+whatToDoWithStandardReturnPeriods.title = Your standard return periods
+whatToDoWithStandardReturnPeriods.heading = Your standard return periods
+whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
+whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
+whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
+whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
+whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
+whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
+whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
+whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
+
+whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
+whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
+whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods

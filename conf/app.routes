@@ -241,6 +241,11 @@ POST       /change-registration-details/controlling-body-details/business-type  
 GET        /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
+
 GET        /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
 
@@ -258,6 +263,14 @@ POST       /change-registration-details/controlling-body-details/limited-liabili
 
 GET        /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/return-periods                       controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods                       controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/change-return-periods                 controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/change-return-periods                 controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
 
 # return-periods - start
 

@@ -138,8 +138,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       // not exist. Remove a name from this list as each journey is built.
       val notBuiltYet = Set(
         "Controlling body details",
-        "Group member details",
-        "Return periods"
+        "Group member details"
       )
 
       val allSections =
