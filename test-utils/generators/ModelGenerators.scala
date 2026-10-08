@@ -33,6 +33,12 @@ trait ModelGenerators {
       Gen.oneOf(ChooseReturnPeriods.values.toSeq)
     }
 
+  // TODO needed?
+  implicit lazy val arbitraryReturnPeriods: Arbitrary[ReturnPeriods] =
+    Arbitrary {
+      Gen.oneOf(ReturnPeriods.values.toSeq)
+    }
+
   implicit lazy val arbitraryLicencesPremises: Arbitrary[LicencesAndPremisesRadioOptions] =
     Arbitrary {
       Gen.oneOf(LicencesAndPremisesRadioOptions.values.toSeq)

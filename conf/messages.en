@@ -1188,3 +1188,35 @@ controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+returnPeriods.title = Your non-standard return periods
+returnPeriods.heading = Your non-standard return periods
+
+returnPeriods.option1 = Switch to standard return periods and end dates
+returnPeriods.option2 = Keep non-standard return periods and add new end dates
+returnPeriods.option3 = Keep non-standard return periods and end dates the same
+returnPeriods.option.legend = What do you want to do when your last non‑standard return period ends?
+
+returnPeriods.column1 = Return period ending
+returnPeriods.column2 = End date
+returnPeriods.pastTable.caption = Upcoming non-standard return periods
+returnPeriods.upcomingTable.caption = Past non-standard return periods
+
+returnPeriods.option1.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
+
+returnPeriods.checkYourAnswersLabel = returnPeriods
+returnPeriods.error.required = Select returnPeriods
+returnPeriods.change.hidden = ReturnPeriods
+
+months.january = January
+months.february = February
+months.march = March
+months.april = April
+months.may = May
+months.june = June
+months.july = July
+months.august = August
+months.september = September
+months.october = October
+months.november = November
+months.december = December
