@@ -221,7 +221,6 @@ class ControllingBodyEmailAddressControllerSpec extends SpecBase with MockitoSug
       }
     }
 
-
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
