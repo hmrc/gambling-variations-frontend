@@ -9,35 +9,35 @@ import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
 //TODO
-class ReturnPeriodsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class NonStandardReturnPeriodsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
   "ReturnPeriods" - {
 
     "must deserialise valid values" in {
 
-      val gen = Gen.oneOf(ReturnPeriods.values.toSeq)
+      val gen = Gen.oneOf(NonStandardReturnPeriodsOptions.values.toSeq)
 
       forAll(gen) {
         returnPeriods =>
 
-          JsString(returnPeriods.toString).validate[ReturnPeriods].asOpt.value mustEqual returnPeriods
+          JsString(returnPeriods.toString).validate[NonStandardReturnPeriodsOptions].asOpt.value mustEqual returnPeriods
       }
     }
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!ReturnPeriods.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!NonStandardReturnPeriodsOptions.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>
 
-          JsString(invalidValue).validate[ReturnPeriods] mustEqual JsError("error.invalid")
+          JsString(invalidValue).validate[NonStandardReturnPeriodsOptions] mustEqual JsError("error.invalid")
       }
     }
 
     "must serialise" in {
 
-      val gen = Gen.oneOf(ReturnPeriods.values.toSeq)
+      val gen = Gen.oneOf(NonStandardReturnPeriodsOptions.values.toSeq)
 
       forAll(gen) {
         returnPeriods =>

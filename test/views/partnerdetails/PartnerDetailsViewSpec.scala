@@ -258,7 +258,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
       doc
         .select(".govuk-visually-hidden")
         .text() must include(
-        messages("partnerDetails.viewOrChange")
+        messages("site.viewOrChange")
       )
     }
 

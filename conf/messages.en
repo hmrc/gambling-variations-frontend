@@ -12,6 +12,7 @@ site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
 site.notProvided = Not provided
+site.viewOrChange = View or change
 
 date.day = Day
 date.month = Month
@@ -19,6 +20,19 @@ date.year = Year
 date.error.day = day
 date.error.month = month
 date.error.year = year
+
+months.january = January
+months.february = February
+months.march = March
+months.april = April
+months.may = May
+months.june = June
+months.july = July
+months.august = August
+months.september = September
+months.october = October
+months.november = November
+months.december = December
 
 timeout.title = You’re about to be signed out
 timeout.message = For security reasons, you will be signed out of this service in
@@ -921,7 +935,6 @@ partnerDetails.noReturn = No, return to change registration details
 partnerDetails.partnerName = Partner name
 partnerDetails.status = Status
 partnerDetails.action = Action
-partnerDetails.viewOrChange = View or change
 partnerDetails.status.dueToLeave =  Due to leave
 partnerDetails.status.dueToJoin =  	Due to join
 partnerDetails.cannotRemove =  	Cannot remove
@@ -1183,40 +1196,34 @@ whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return p
 whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
 whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
 
-
 controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
 
-returnPeriods.title = Your non-standard return periods
-returnPeriods.heading = Your non-standard return periods
+returnPeriods.nonStandard.title = Your non-standard return periods
+returnPeriods.nonStandard.heading = Your non-standard return periods
+
+returnPeriods.nonStandard.title = Your non-standard return periods
+returnPeriods.nonStandard.heading = Your non-standard return periods
 
 returnPeriods.option1 = Switch to standard return periods and end dates
 returnPeriods.option2 = Keep non-standard return periods and add new end dates
 returnPeriods.option3 = Keep non-standard return periods and end dates the same
 returnPeriods.option.legend = What do you want to do when your last non‑standard return period ends?
 
-returnPeriods.column1 = Return period ending
-returnPeriods.column2 = End date
-returnPeriods.pastTable.caption = Upcoming non-standard return periods
-returnPeriods.upcomingTable.caption = Past non-standard return periods
+returnPeriods.nonStandard.switchToStandard = Switch to standard return periods and end dates
+returnPeriods.nonStandard.keepNonStandardAndChangeDates = Keep non-standard return periods and add new end dates
+returnPeriods.nonStandard.keepNonStandard = Keep non-standard return periods and end dates the same
+returnPeriods.nonStandard.option.legend = What do you want to do when your last non‑standard return period ends?
 
-returnPeriods.option1.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
+returnPeriods.nonStandard.column1 = Return period ending
+returnPeriods.nonStandard.column2 = End date
+returnPeriods.nonStandard.pastTable.caption = Upcoming non-standard return periods
+returnPeriods.nonStandard.upcomingTable.caption = Past non-standard return periods
 
-returnPeriods.checkYourAnswersLabel = returnPeriods
-returnPeriods.error.required = Select returnPeriods
-returnPeriods.change.hidden = ReturnPeriods
+returnPeriods.nonStandard.switchToStandard.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
 
-months.january = January
-months.february = February
-months.march = March
-months.april = April
-months.may = May
-months.june = June
-months.july = July
-months.august = August
-months.september = September
-months.october = October
-months.november = November
-months.december = December
+returnPeriods.nonStandard.checkYourAnswersLabel = returnPeriods
+returnPeriods.nonStandard.error.required = Select what you want to do when your last non-standard return period ends
+returnPeriods.nonStandard.change.hidden = ReturnPeriods

@@ -30,7 +30,7 @@ import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
-import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
+import pages.returnperiods.{WhatToDoWithStandardReturnPeriodsPage, NonStandardReturnPeriodsPage}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -191,6 +191,9 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
     case PartnerDetailsRemovePartnerYesNoPage(index) =>
       userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
+    // Return Periods
+    case NonStandardReturnPeriodsPage =>
+      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad() // change it
 
     // License and Premises Details
     case LicenceNumberPage =>

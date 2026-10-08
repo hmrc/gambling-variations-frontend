@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, Month}
 import java.util.Locale
 
-final case class ReturnPeriodsViewModel(
+final case class NonStandardReturnPeriodsViewModel(
   hasNonStandardReturnPeriods: Boolean,
   isInLastNonStandardReturnPeriod: Boolean,
   hasPastPeriods: Boolean,
@@ -38,9 +38,9 @@ final case class NstpReturnPeriod(
   endDate: String
 )
 
-object ReturnPeriodsViewModel {
+object NonStandardReturnPeriodsViewModel {
 
-  def from(gamblingReturnPeriods: GamblingReturnPeriods)(implicit messages: Messages): Option[ReturnPeriodsViewModel] = {
+  def from(gamblingReturnPeriods: GamblingReturnPeriods)(implicit messages: Messages): Option[NonStandardReturnPeriodsViewModel] = {
     val today = LocalDate.now()
 
     val hasExistingNstpValues = gamblingReturnPeriods.hasExistingNstpValues.getOrElse(false)
@@ -63,7 +63,7 @@ object ReturnPeriodsViewModel {
                      ).flatten.span(_.isBefore(today.plusDays(1)))
 
                      Some(
-                       ReturnPeriodsViewModel(
+                       NonStandardReturnPeriodsViewModel(
                          hasNonStandardReturnPeriods     = hasExistingNstpValues,
                          isInLastNonStandardReturnPeriod = isInLastNstp,
                          hasPastPeriods                  = nstpEndDates._1.nonEmpty,
