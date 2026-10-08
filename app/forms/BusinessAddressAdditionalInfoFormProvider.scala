@@ -34,7 +34,7 @@ class BusinessAddressAdditionalInfoFormProvider @Inject() extends Mappings {
         .verifying(
           regexp(
             businessAddressAdditionalInfoRegex,
-            "correspondenceAdditionalInfo.error.invalid"
+            "businessAddressAdditionalInfo.error.invalid"
           )
         )
     )
