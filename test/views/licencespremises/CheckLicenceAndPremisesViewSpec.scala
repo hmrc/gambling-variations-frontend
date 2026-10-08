@@ -96,7 +96,7 @@ class CheckLicenceAndPremisesViewSpec extends SpecBase {
 
       document.select("main h2").text() mustEqual msgs("checkLicenceAndPremises.byPost.heading")
       document.select("main").text() must not include msgs("checkLicenceAndPremises.noLicences.p1")
-      document.select(".govuk-button").attr("href") mustEqual routes.LicencesPremisesController.onPageLoad().url
+      document.select(".govuk-button").attr("href") mustEqual controllers.licencespremises.routes.LicencesPremisesController.onPageLoad().url
     }
 
     "must render the by post section with the download link and address, and the ready to submit message" in {
