@@ -76,7 +76,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.businessName"),
-            routes.CheckBusinessNameController.onPageLoad().url,
+            controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url,
             status(BusinessNameChangesPage)
           )
         ),

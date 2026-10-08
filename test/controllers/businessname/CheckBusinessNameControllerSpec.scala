@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessname
 
 import base.SpecBase
+import controllers.routes
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, SoleProprietorName, UserAnswers}
 import pages.*
@@ -40,7 +41,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" - {
 
       "with the expected URL" in {
-        routes.CheckBusinessNameController.onPageLoad().url must endWith("/change-registration-details/business-name/check")
+        controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url must endWith("/change-registration-details/business-name/check")
       }
 
       "when sole proprietor" in {
@@ -68,7 +69,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
+          val request = FakeRequest(GET, controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url)
 
           val result = route(application, request).value
 
@@ -105,7 +106,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
+          val request = FakeRequest(GET, controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url)
 
           val result = route(application, request).value
 
@@ -143,7 +144,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -157,7 +158,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckBusinessNameController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url)
 
         val result = route(application, request).value
 

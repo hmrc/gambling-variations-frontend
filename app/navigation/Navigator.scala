@@ -26,7 +26,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodyEmailPage, ControllingBodySoleProprietorPage}
+import pages.controllingbody.ControllingBodyEmailPage
 import pages.controllingbody.ControllingBodyChangeScreenerPage
 import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessNamePage, ControllingBodySoleProprietorPage}
 import pages.correspondencedetails.*
@@ -53,13 +53,13 @@ class Navigator @Inject() () {
     case ControllingBodyEmailPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
     case RemoveTradeNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage =>
-      _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor)
+      _ => controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(Soleproprietor)
     case TradingNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessFaxNumberPage =>
       _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage =>

@@ -82,7 +82,7 @@ class ChangeBusinessNameController @Inject() (
                 }
             }
           ).getOrElse(
-            Redirect(routes.CheckBusinessNameController.onPageLoad())
+            Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad())
           )
 
         case None =>
@@ -137,7 +137,7 @@ class ChangeBusinessNameController @Inject() (
                     } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
                 )
             }
-          } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+          } getOrElse Future.successful(Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad()))
 
         case None =>
           Future.successful(

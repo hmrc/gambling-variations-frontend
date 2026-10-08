@@ -56,22 +56,22 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route TradingNamePage to CheckBusinessName" in {
         navigator.nextPage(TradingNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route BusinessNamePage to CheckBusinessName" in {
         navigator.nextPage(BusinessNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route RemoveTradeNamePage to CheckBusinessName" in {
         navigator.nextPage(RemoveTradeNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route SoleProprietorPage to ChangeBusinessName" in {
         navigator.nextPage(SoleProprietorPage, NormalMode, emptyAnswers) mustBe
-          routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor)
+          controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor)
       }
 
       "should route BusinessContactNumberPage to CheckContactDetails" in {

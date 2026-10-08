@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessname
 
 import base.SpecBase
+import controllers.routes
 import forms.RemoveTradeNameFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -24,8 +25,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.businessname.BusinessNameChangesPage
 import pages.GroupMemberPage
+import pages.businessname.BusinessNameChangesPage
 import pages.tradingdetails.RemoveTradeNamePage
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -56,7 +57,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
     "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
   )
 
-  lazy val removeTradeNameRoute = routes.RemoveTradeNameController.onPageLoad().url
+  lazy val removeTradeNameRoute = controllers.businessname.routes.RemoveTradeNameController.onPageLoad().url
 
   "RemoveTradeName Controller" - {
 
@@ -129,7 +130,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
+            redirectLocation(result).value mustEqual controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url
           }
         }
 
@@ -146,7 +147,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
+            redirectLocation(result).value mustEqual controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url
           }
         }
       }

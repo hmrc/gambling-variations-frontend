@@ -60,7 +60,7 @@ class RemoveTradeNameController @Inject() (
       case Some(false) =>
         request.userAnswers.get(TradingNamePage) map { tradingName =>
           Ok(view(form, mode, tradingName))
-        } getOrElse Redirect(routes.CheckBusinessNameController.onPageLoad())
+        } getOrElse Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad())
 
       case None =>
         Redirect(routes.SystemErrorController.onPageLoad())
@@ -91,7 +91,7 @@ class RemoveTradeNameController @Inject() (
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
             )
-        } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+        } getOrElse Future.successful(Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad()))
 
       case None =>
         Future.successful(
