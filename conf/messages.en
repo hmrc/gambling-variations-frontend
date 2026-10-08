@@ -1170,7 +1170,7 @@ site.pagination.previous = Previous
 
 removeControllingBodyTradeName.title = Are you sure you want to remove this controlling body’s trading name?
 removeControllingBodyTradeName.heading = Are you sure you want to remove {0} as this controlling body’s trading name?
-removeControllingBodyTradeName.error.required = Select yes if you want to remove the trading name
+removeControllingBodyTradeName.error.required = Select yes if you want to remove this controlling body’s trading name
 
 whatToDoWithStandardReturnPeriods.title = Your standard return periods
 whatToDoWithStandardReturnPeriods.heading = Your standard return periods
