@@ -14,43 +14,43 @@
  * limitations under the License.
  */
 
-package controllers.licencespremises
+package controllers.controllingbody
 
 import controllers.actions.*
-import forms.licencespremises.PremisesNotCoveredYesNoFormProvider
+import forms.EmailAddressFormProvider
 import models.Mode
-import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
-import pages.licencespremises.LicencePremisesNotCoveredPage
-import play.api.data.Form
+import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyEmailPage, ControllingBodySubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.licencespremises.PremisesNotCoveredYesNoView
+import utils.FlagsUtil.checkIfChanged
+import views.html.controllingbody.ControllingBodyEmailAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PremisesNotCoveredYesNoController @Inject() (
+class ControllingBodyEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: LicencesPremisesDataRequiredAction,
-  formProvider: PremisesNotCoveredYesNoFormProvider,
+  requireData: ControllingBodyDetailsDataRequiredAction,
+  formProvider: EmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: PremisesNotCoveredYesNoView
+  view: ControllingBodyEmailAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  val form = formProvider("controllingBodyEmailAddress")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.backendFlagOption(LicencePremisesNotCoveredPage).fold(form)(form.fill)
+    val preparedForm = request.userAnswers
+      .get(ControllingBodyEmailPage)
+      .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
   }
@@ -62,13 +62,15 @@ class PremisesNotCoveredYesNoController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, ControllingBodyEmailPage, ControllingBodyChangesPage)
+
           for {
-            answersWithValue <- Future.fromTry(request.userAnswers.setBackendFlag(LicencePremisesNotCoveredPage, value))
-            updatedAnswers <- Future.fromTry(
-                                answersWithValue.withLicencesPremisesFlags(isChanged = request.userAnswers.premisesNotCoveredAnswer != value)
-                              )
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LicencePremisesNotCoveredPage, mode, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyEmailPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodyChangesPage, isChanged))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(ControllingBodyEmailPage, mode, updatedAnswers))
       )
   }
 }

@@ -21,7 +21,8 @@ import forms.licencespremises.RemovePremisesDetailsYesNoFormProvider
 import models.Mode
 import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
-import pages.licencespremises.{PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
+import models.licencespremises.LicencesAndPremisesRadioOptions.{ByPost, Online}
+import pages.licencespremises.{LicencesPremisesPage, PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -64,11 +65,12 @@ class RemovePremisesDetailsYesNoController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
+          // Confirming switches the method to by post and removes the premises, declining keeps the premises and the online method
           for {
             updatedAnswers <- if (value) {
-                                Future.fromTry(request.userAnswers.remove(PremisesDetailsPage))
+                                Future.fromTry(request.userAnswers.remove(PremisesDetailsPage).flatMap(_.set(LicencesPremisesPage, ByPost)))
                               } else {
-                                Future.successful(request.userAnswers)
+                                Future.fromTry(request.userAnswers.set(LicencesPremisesPage, Online))
                               }
             updatedAnswers <- Future.fromTry(updatedAnswers.set(RemovePremisesDetailsYesNoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.withLicencesPremisesFlags(isChanged = value))
