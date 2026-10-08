@@ -22,3 +22,6 @@ import play.api.mvc.{Request, WrappedRequest}
 case class OptionalDataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
 
 case class DataRequest[A](request: Request[A], mgdRegNum: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+
+case class SessionDataRequest[A](request: Request[A], mgdRegNum: String, submittedAnswers: UserAnswers, sessionAnswers: Option[UserAnswers])
+    extends WrappedRequest[A](request)

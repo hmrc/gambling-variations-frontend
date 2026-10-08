@@ -39,7 +39,8 @@ class RemoveFaxNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  sessionData: BusinessContactDetailsSessionDataAction,
+  submittedData: BusinessContactDetailsSubmittedDataAction,
   formProvider: RemoveFaxNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveFaxNumberView
@@ -50,15 +51,15 @@ class RemoveFaxNumberController @Inject() (
   private val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+    (authorise andThen getData andThen submittedData andThen sessionData) { implicit request =>
 
-      request.userAnswers.get(GroupMemberPage) match {
+      request.submittedAnswers.get(GroupMemberPage) match {
         case Some(true) =>
           Redirect(routes.AccessDeniedController.onPageLoad())
         case Some(false) =>
-          request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
+          request.submittedAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
 
-            val preparedForm = request.userAnswers.get(RemoveFaxNumberPage) match {
+            val preparedForm = request.submittedAnswers.get(RemoveFaxNumberPage) match {
               case Some(value) => form.fill(value)
               case None        => form
             }
@@ -73,14 +74,14 @@ class RemoveFaxNumberController @Inject() (
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-      request.userAnswers.get(GroupMemberPage) match {
+    (authorise andThen getData andThen submittedData andThen sessionData).async { implicit request =>
+      request.submittedAnswers.get(GroupMemberPage) match {
         case Some(true) =>
           Future.successful(
             Redirect(routes.AccessDeniedController.onPageLoad())
           )
         case Some(false) =>
-          request.userAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
+          request.submittedAnswers.get(BusinessFaxNumberPage) map { faxNumber =>
 
             form
               .bindFromRequest()
@@ -88,7 +89,7 @@ class RemoveFaxNumberController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, faxNumber))),
                 value =>
                   for {
-                    updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                    updatedAnswers <- Future.fromTry(updateUserAnswers(request.submittedAnswers, value))
                     updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveFaxNumberPage, value))
                     updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, value))
                     _              <- sessionRepository.set(updatedAnswers)

@@ -39,7 +39,8 @@ class BusinessEmailAddressController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  sessionData: BusinessContactDetailsSessionDataAction,
+  submittedData: BusinessContactDetailsSubmittedDataAction,
   formProvider: EmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessEmailAddressView
@@ -49,12 +50,12 @@ class BusinessEmailAddressController @Inject() (
 
   val form = formProvider("emailAddress")
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.get(GroupMemberPage) match {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen submittedData andThen sessionData) { implicit request =>
+    request.submittedAnswers.get(GroupMemberPage) match {
       case Some(true) =>
         Redirect(routes.AccessDeniedController.onPageLoad())
       case Some(false) =>
-        val preparedForm = request.userAnswers
+        val preparedForm = request.submittedAnswers
           .get(BusinessEmailAddressPage)
           .fold(form)(form.fill)
 
@@ -64,8 +65,8 @@ class BusinessEmailAddressController @Inject() (
     }
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.get(GroupMemberPage) match {
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen submittedData andThen sessionData).async { implicit request =>
+    request.submittedAnswers.get(GroupMemberPage) match {
       case Some(true) =>
         Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
       case Some(false) =>
@@ -75,9 +76,9 @@ class BusinessEmailAddressController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
             value =>
               val isChanged: Boolean =
-                checkIfChanged(value, request.userAnswers, BusinessEmailAddressPage, ContactDetailsChangesPage)
+                checkIfChanged(value, request.submittedAnswers, BusinessEmailAddressPage, ContactDetailsChangesPage)
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessEmailAddressPage, value))
+                updatedAnswers <- Future.fromTry(request.submittedAnswers.set(BusinessEmailAddressPage, value))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))
                 _              <- sessionRepository.set(updatedAnswers)

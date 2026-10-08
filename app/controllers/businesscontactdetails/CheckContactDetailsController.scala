@@ -32,18 +32,19 @@ class CheckContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  sessionData: BusinessContactDetailsSessionDataAction,
+  submittedData: BusinessContactDetailsSubmittedDataAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckContactDetailsView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.get(GroupMemberPage) match {
+  def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen submittedData andThen sessionData) { implicit request =>
+    request.submittedAnswers.get(GroupMemberPage) match {
       case Some(true) =>
         Redirect(routes.AccessDeniedController.onPageLoad())
       case Some(false) =>
-        val ua = request.userAnswers
+        val ua = request.submittedAnswers
 
         val showChangeMessage: Boolean = checkFlag(ua, ContactDetailsChangesPage, BusinessContactDetailsSubmittedPage)
 

@@ -39,7 +39,8 @@ class BusinessContactNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  sessionData: BusinessContactDetailsSessionDataAction,
+  submittedData: BusinessContactDetailsSubmittedDataAction,
   formProvider: ContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: BusinessContactNumberView
@@ -50,13 +51,13 @@ class BusinessContactNumberController @Inject() (
   private val form = formProvider("businessContactNumber")
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
-      request.userAnswers.get(GroupMemberPage) match {
+    (authorise andThen getData andThen submittedData andThen sessionData) { implicit request =>
+      request.submittedAnswers.get(GroupMemberPage) match {
         case Some(true) =>
           Redirect(routes.AccessDeniedController.onPageLoad())
 
         case Some(false) =>
-          val preparedForm = request.userAnswers
+          val preparedForm = request.submittedAnswers
             .get(BusinessContactNumberPage)
             .map(form.fill)
             .getOrElse(form)
@@ -70,8 +71,8 @@ class BusinessContactNumberController @Inject() (
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-      request.userAnswers.get(GroupMemberPage) match {
+    (authorise andThen getData andThen submittedData andThen sessionData).async { implicit request =>
+      request.submittedAnswers.get(GroupMemberPage) match {
         case Some(true) =>
           Future.successful(
             Redirect(routes.AccessDeniedController.onPageLoad())
@@ -97,10 +98,10 @@ class BusinessContactNumberController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
             value =>
               val isChanged: Boolean =
-                checkIfChanged(value, request.userAnswers, BusinessContactNumberPage, ContactDetailsChangesPage)
+                checkIfChanged(value, request.submittedAnswers, BusinessContactNumberPage, ContactDetailsChangesPage)
               for {
                 updatedAnswers <- Future.fromTry(
-                                    request.userAnswers.set(BusinessContactNumberPage, value)
+                                    request.submittedAnswers.set(BusinessContactNumberPage, value)
                                   )
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessContactDetailsSubmittedPage, true))
                 updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, isChanged))

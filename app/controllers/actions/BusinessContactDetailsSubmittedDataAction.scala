@@ -23,8 +23,8 @@ import models.{BusinessContactDetails, ContactNumber, UserAnswers}
 import pages.*
 import pages.contactdetails.{BusinessContactDetailsSectionPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
 import play.api.Logging
-import play.api.mvc.{ActionRefiner, Result}
 import play.api.mvc.Results.Redirect
+import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
@@ -34,11 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
 
-class BusinessContactDetailsDataRequiredActionImpl @Inject() (
+class BusinessContactDetailsSubmittedDataActionImpl @Inject() (
   val sessionRepository: SessionRepository,
   val gamblingConnector: GamblingConnector
 )(implicit val executionContext: ExecutionContext)
-    extends BusinessContactDetailsDataRequiredAction
+    extends BusinessContactDetailsSubmittedDataAction
     with Logging {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
@@ -100,4 +100,4 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
 
 }
 
-trait BusinessContactDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+trait BusinessContactDetailsSubmittedDataAction extends ActionRefiner[OptionalDataRequest, DataRequest]

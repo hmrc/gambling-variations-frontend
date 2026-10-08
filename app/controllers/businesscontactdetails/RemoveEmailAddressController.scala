@@ -39,7 +39,8 @@ class RemoveEmailAddressController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessContactDetailsDataRequiredAction,
+  sessionData: BusinessContactDetailsSessionDataAction,
+  submittedData: BusinessContactDetailsSubmittedDataAction,
   formProvider: RemoveEmailAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveEmailAddressView
@@ -50,14 +51,14 @@ class RemoveEmailAddressController @Inject() (
   private val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
-      request.userAnswers.get(GroupMemberPage) match {
+    (authorise andThen getData andThen submittedData andThen sessionData) { implicit request =>
+      request.submittedAnswers.get(GroupMemberPage) match {
         case Some(true) =>
           Redirect(routes.AccessDeniedController.onPageLoad())
         case Some(false) =>
-          request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
+          request.submittedAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
 
-            val preparedForm = request.userAnswers.get(RemoveEmailAddressPage) match {
+            val preparedForm = request.submittedAnswers.get(RemoveEmailAddressPage) match {
               case Some(value) => form.fill(value)
               case None        => form
             }
@@ -72,12 +73,12 @@ class RemoveEmailAddressController @Inject() (
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-      request.userAnswers.get(GroupMemberPage) match {
+    (authorise andThen getData andThen submittedData andThen sessionData).async { implicit request =>
+      request.submittedAnswers.get(GroupMemberPage) match {
         case Some(true) =>
           Future.successful(Redirect(routes.AccessDeniedController.onPageLoad()))
         case Some(false) =>
-          request.userAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
+          request.submittedAnswers.get(BusinessEmailAddressPage) map { emailAddress =>
 
             form
               .bindFromRequest()
@@ -85,7 +86,7 @@ class RemoveEmailAddressController @Inject() (
                 formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, emailAddress))),
                 value =>
                   for {
-                    updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                    updatedAnswers <- Future.fromTry(updateUserAnswers(request.submittedAnswers, value))
                     updatedAnswers <- Future.fromTry(updatedAnswers.set(RemoveEmailAddressPage, value))
                     updatedAnswers <- Future.fromTry(updatedAnswers.set(ContactDetailsChangesPage, value))
                     _              <- sessionRepository.set(updatedAnswers)

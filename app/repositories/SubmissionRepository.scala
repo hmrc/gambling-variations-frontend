@@ -32,13 +32,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionRepository @Inject() (
+class SubmissionRepository @Inject() (
   mongoComponent: MongoComponent,
   appConfig: FrontendAppConfig,
   clock: Clock
 )(implicit ec: ExecutionContext)
     extends PlayMongoRepository[UserAnswers](
-      collectionName = "session-answers",
+      collectionName = "submitted-answers",
       mongoComponent = mongoComponent,
       domainFormat   = UserAnswers.format,
       indexes = Seq(

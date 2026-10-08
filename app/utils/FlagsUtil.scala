@@ -21,6 +21,7 @@ import models.requests.DataRequest
 import pages.QuestionPage
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.Reads
+import play.api.mvc.WrappedRequest
 
 import scala.concurrent.ExecutionContext
 
@@ -33,7 +34,7 @@ object FlagsUtil {
 
   def checkIfChanged[A](value: Any, ua: UserAnswers, referencePage: QuestionPage[A], changesPage: QuestionPage[Boolean])(implicit
     rds: Reads[A],
-    request: DataRequest[?],
+    request: WrappedRequest[?],
     ec: ExecutionContext
   ): Boolean = {
 
