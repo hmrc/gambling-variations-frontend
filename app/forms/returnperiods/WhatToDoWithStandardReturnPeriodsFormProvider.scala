@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package forms.returnperiods
 
-import org.scalatestplus.play.PlaySpec
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import models.WhatToDoWithStandardReturnPeriods
+import play.api.data.Form
 
-class ControllingBodyEmailPageSpec extends PlaySpec {
+import javax.inject.Inject
 
-  "ControllingBodyEmailPage" must {
+class WhatToDoWithStandardReturnPeriodsFormProvider @Inject() extends Mappings {
 
-    "have the correct path" in {
-
-      ControllingBodyEmailPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ "emailAddr")
-    }
-
-    "have the correct toString value" in {
-
-      ControllingBodyEmailPage.toString mustEqual "emailAddr"
-    }
-  }
+  def apply(): Form[WhatToDoWithStandardReturnPeriods] =
+    Form(
+      "value" -> enumerable[WhatToDoWithStandardReturnPeriods]("whatToDoWithStandardReturnPeriods.error.required")
+    )
 }
