@@ -17,7 +17,6 @@
 package controllers.returnperiods
 
 import base.SpecBase
-import controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController
 import forms.returnperiods.StandardReturnPeriodsFormProvider
 import models.ChooseReturnPeriods.Jan
 import models.{GamblingReturnPeriods, NormalMode, StandardReturnPeriodsOptions, UserAnswers}
@@ -31,7 +30,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
+import views.html.returnperiods.StandardReturnPeriodsView
 
 import scala.concurrent.Future
 
@@ -41,8 +40,8 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
   private val onwardRoute =
     Call("GET", "/foo")
 
-  private lazy val whatToDoWithStandardReturnPeriodsRoute =
-    controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController
+  private lazy val standardReturnPeriodsRoute =
+    controllers.returnperiods.routes.ReturnPeriodsController
       .onPageLoad(NormalMode)
       .url
 
@@ -101,7 +100,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
 
   private def controller(application: play.api.Application) =
     application.injector
-      .instanceOf[WhatToDoWithStandardReturnPeriodsController]
+      .instanceOf[ReturnPeriodsController]
 
   "WhatToDoWithStandardReturnPeriods Controller" - {
 
@@ -117,7 +116,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             GET,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           )
 
         val result =
@@ -127,7 +126,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
 
         val view =
           application.injector
-            .instanceOf[WhatToDoWithStandardReturnPeriodsView]
+            .instanceOf[StandardReturnPeriodsView]
 
         status(result) mustEqual OK
 
@@ -155,7 +154,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             GET,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           )
 
         val result =
@@ -165,7 +164,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
 
         val view =
           application.injector
-            .instanceOf[WhatToDoWithStandardReturnPeriodsView]
+            .instanceOf[StandardReturnPeriodsView]
 
         status(result) mustEqual OK
 
@@ -211,7 +210,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             POST,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           ).withFormUrlEncodedBody(
             "value" -> switchToNonStandard.toString
           )
@@ -268,7 +267,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             POST,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           ).withFormUrlEncodedBody(
             "value" -> changeMonthsStandardPeriodCover.toString
           )
@@ -325,7 +324,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             POST,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           ).withFormUrlEncodedBody(
             "value" -> keepStandardReturnPeriod.toString
           )
@@ -364,7 +363,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             POST,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           ).withFormUrlEncodedBody(
             "value" -> "invalid-value"
           )
@@ -378,7 +377,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
 
         val view =
           application.injector
-            .instanceOf[WhatToDoWithStandardReturnPeriodsView]
+            .instanceOf[StandardReturnPeriodsView]
 
         val result =
           controller(application)
@@ -411,7 +410,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             POST,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           )
 
         val boundForm =
@@ -419,7 +418,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
 
         val view =
           application.injector
-            .instanceOf[WhatToDoWithStandardReturnPeriodsView]
+            .instanceOf[StandardReturnPeriodsView]
 
         val result =
           controller(application)
@@ -452,7 +451,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             GET,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           )
 
         val result =
@@ -479,7 +478,7 @@ class StandardReturnPeriodsOptionsControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(
             POST,
-            whatToDoWithStandardReturnPeriodsRoute
+            standardReturnPeriodsRoute
           ).withFormUrlEncodedBody(
             "value" -> switchToNonStandard.toString
           )
