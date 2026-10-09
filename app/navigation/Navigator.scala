@@ -30,7 +30,7 @@ import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
-import pages.returnperiods.WhatToDoWithStandardReturnPeriodsPage
+import pages.returnperiods.{NonStandardReturnPeriodsPage, StandardReturnPeriodsPage}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -191,6 +191,9 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
     case PartnerDetailsRemovePartnerYesNoPage(index) =>
       userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
+    // Return Periods
+//    case NonStandardReturnPeriodsPage =>
+//      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -215,8 +218,8 @@ class Navigator @Inject() () {
     // Controlling Body Details
     case ControllingBodyChangeScreenerPage =>
       userAnswers => navigateControllingBodyChangeScreenerPage(userAnswers)
-    case WhatToDoWithStandardReturnPeriodsPage =>
-      userAnswers => navigateWhatToDoWithStandardReturnPeriodsPage(userAnswers)
+    case StandardReturnPeriodsPage =>
+      userAnswers => navigateReturnPeriodsPage(userAnswers)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -634,21 +637,21 @@ class Navigator @Inject() () {
     }
   }
 
-  private def navigateWhatToDoWithStandardReturnPeriodsPage(
+  private def navigateReturnPeriodsPage(
     userAnswers: UserAnswers
   ): Call = {
 
-    userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
+    userAnswers.get(StandardReturnPeriodsPage) match {
 
-      case Some(WhatToDoWithStandardReturnPeriods.Changemonthsstandardperiodcover) =>
+      case Some(StandardReturnPeriodsOptions.ChangeMonthsStandardPeriodCover) =>
         controllers.returnperiods.routes.ChooseReturnPeriodsController
           .onPageLoad(NormalMode)
 
-      case Some(WhatToDoWithStandardReturnPeriods.Switchtononstandard) =>
+      case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
         controllers.returnperiods.routes.ChooseReturnPeriodsController
           .onPageLoad(NormalMode)
 
-      case Some(WhatToDoWithStandardReturnPeriods.Keepstandardreturnperiod) =>
+      case Some(StandardReturnPeriodsOptions.KeepStandardReturnPeriod) =>
         routes.ChangeRegistrationDetailsController.onPageLoad()
 
       case None =>

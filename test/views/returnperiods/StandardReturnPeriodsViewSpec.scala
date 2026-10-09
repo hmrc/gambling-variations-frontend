@@ -17,30 +17,30 @@
 package views.returnperiods
 
 import base.SpecBase
-import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
+import forms.returnperiods.StandardReturnPeriodsFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.returnperiods.WhatToDoWithStandardReturnPeriodsView
+import views.html.returnperiods.StandardReturnPeriodsView
 
-class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
+class StandardReturnPeriodsViewSpec extends SpecBase {
 
   trait Setup {
 
     private val app = applicationBuilder().build()
 
     private val view =
-      app.injector.instanceOf[WhatToDoWithStandardReturnPeriodsView]
+      app.injector.instanceOf[StandardReturnPeriodsView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new WhatToDoWithStandardReturnPeriodsFormProvider()
+    private val formProvider = new StandardReturnPeriodsFormProvider()
     private val form = formProvider()
 
     private val returnPeriodsId = Some("3")
@@ -60,20 +60,20 @@ class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
     "must render page correctly" in new Setup {
 
       doc.title must include(
-        messages("whatToDoWithStandardReturnPeriods.title")
+        messages("returnPeriods.standard.title")
       )
 
       doc.select(".govuk-caption-l").text() mustBe
         messages("changeRegistrationDetails.caption")
 
       doc.select("h1.govuk-heading-l").text() mustBe
-        messages("whatToDoWithStandardReturnPeriods.heading")
+        messages("returnPeriods.standard.heading")
 
       doc.select(".govuk-fieldset__legend").text() mustBe
-        messages("whatToDoWithStandardReturnPeriods.h2")
+        messages("returnPeriods.standard.option.legend")
 
       doc.select("p.govuk-body").text() mustBe
-        messages("whatToDoWithStandardReturnPeriods.p3")
+        messages("returnPeriods.standard.p3")
 
       doc.select("button.govuk-button").text() mustBe
         messages("site.continue")
@@ -84,21 +84,21 @@ class WhatToDoWithStandardReturnPeriodsViewSpec extends SpecBase {
       val radioOptions = doc.select(".govuk-radios__item label").eachText()
 
       radioOptions must contain(
-        messages("whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover")
+        messages("returnPeriods.standard.changeMonthsStandardPeriodCover")
       )
 
       radioOptions must contain(
-        messages("whatToDoWithStandardReturnPeriods.switchToNonStandard")
+        messages("returnPeriods.standard.switchToNonStandard")
       )
 
       radioOptions must contain(
-        messages("whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod")
+        messages("returnPeriods.standard.keepStandardReturnPeriod")
       )
 
       doc.select("input[type=radio]").size mustBe 3
 
       doc.select("#value_1-item-hint").text() mustBe
-        messages("whatToDoWithStandardReturnPeriods.switchToNonStandard.hint")
+        messages("returnPeriods.standard.switchToNonStandard.hint")
     }
 
     "must render an error summary when the form has errors" in new Setup {
