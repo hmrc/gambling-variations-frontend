@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import base.SpecBase
 import connectors.GamblingConnector
+import controllers.routes
 import forms.PreviousRegistrationNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor

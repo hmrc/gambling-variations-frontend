@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import base.SpecBase
 import controllers.actions.{OtherTradeClassDataRequiredAction, OtherTradeClassDataRequiredActionImpl}
+import controllers.routes
 import forms.OtherTradeClassFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}

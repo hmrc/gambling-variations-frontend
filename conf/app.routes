@@ -81,8 +81,8 @@ POST       /change-registration-details/trading-details/associated-registration-
 GET        /change-registration-details/trading-details/business-trade-class                        controllers.tradingdetails.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/business-trade-class                        controllers.tradingdetails.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/seasonal-business                        controllers.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/seasonal-business                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/seasonal-business                        controllers.tradingdetails.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/seasonal-business                        controllers.tradingdetails.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
@@ -90,8 +90,8 @@ POST       /change-registration-details/correspondence-details/fax-number       
 GET        /change-registration-details/trading-details/remove-previous-registration-number                      controllers.tradingdetails.RemovePreviousRegNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/remove-previous-registration-number                      controllers.tradingdetails.RemovePreviousRegNumberController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/remove-associated-registration-number                      controllers.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/remove-associated-registration-number                      controllers.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/remove-associated-registration-number                      controllers.tradingdetails.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/remove-associated-registration-number                      controllers.tradingdetails.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/correspondence-details/email-address                                    controllers.CorrespondenceEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/email-address                                    controllers.CorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
@@ -115,8 +115,8 @@ GET        /change-registration-details/trading-details/check                   
 POST       /change-registration-details/trading-details/check                       controllers.tradingdetails.CheckTradingDetailsController.onContinue()
 
 
-GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.tradingdetails.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.tradingdetails.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/trading-details/associated-registration-number                  controllers.tradingdetails.AssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/trading-details/associated-registration-number                  controllers.tradingdetails.AssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
@@ -129,13 +129,13 @@ POST       /change-registration-details/correspondence-details/remove-fax-number
 GET        /change-registration-details/correspondence-details/remove-email-address                        controllers.RemoveCorrespondenceEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/remove-email-address                        controllers.RemoveCorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/change-previous-registration-numbers-redirect         controllers.PreviousRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, prevRegNumber: String)
-GET        /change-registration-details/trading-details/previous-registration-numbers-redirect                controllers.PreviousRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, prevRegNumber: String)
-GET        /change-registration-details/trading-details/previous-registration-numbers                         controllers.PreviousRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/previous-registration-numbers                         controllers.PreviousRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-previous-registration-numbers-redirect         controllers.tradingdetails.PreviousRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /change-registration-details/trading-details/previous-registration-numbers-redirect                controllers.tradingdetails.PreviousRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /change-registration-details/trading-details/previous-registration-numbers                         controllers.tradingdetails.PreviousRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/previous-registration-numbers                         controllers.tradingdetails.PreviousRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/previous-registration-number                 controllers.PreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/previous-registration-number                 controllers.PreviousRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/previous-registration-number                 controllers.tradingdetails.PreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/previous-registration-number                 controllers.tradingdetails.PreviousRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)

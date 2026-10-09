@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.OtherTradeClassFormProvider
 import models.Mode
 import navigation.Navigator

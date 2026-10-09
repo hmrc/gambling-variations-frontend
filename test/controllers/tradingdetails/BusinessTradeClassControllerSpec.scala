@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import base.SpecBase
+import controllers.routes
 import forms.BusinessTradeClassFormProvider
 import models.{BusinessTradeClass, BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -27,11 +28,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.tradingdetails.{BusinessTradeClassPage, MgdTradeDetailsSectionPage, TradingDetailsChangesPage}
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.BusinessTradeClassView
-import play.api.mvc.Call
 
 import scala.concurrent.Future
 
