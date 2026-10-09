@@ -717,8 +717,6 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-
-
     "must redirect to SystemError for a GET if isInLastNstp is None" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingIsInLastNstp)).build()
