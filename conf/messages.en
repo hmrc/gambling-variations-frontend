@@ -1188,3 +1188,8 @@ controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+removeControllingBodyEmail.title = Are you sure you want to remove this controlling body's email address?
+removeControllingBodyEmail.heading = Are you sure you want to remove {0} as this controlling body’s email address?
+removeControllingBodyEmail.error.required = Select yes if you want to remove this controlling body’s email address
+
