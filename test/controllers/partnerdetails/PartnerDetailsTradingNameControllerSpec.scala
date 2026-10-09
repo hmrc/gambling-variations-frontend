@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsTradingNamePage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -211,58 +211,53 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
         }
       }
 
-      "must redirect to SystemError for a GET when trading name is missing" in {
-
-        val userAnswers =
-          emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
-            .success
-            .value
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
-            .success
-            .value
+      "must return OK and an empty form for a GET when trading name is missing" in {
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
 
         running(application) {
           val request =
             FakeRequest(GET, partnerTradingNameRouteExistingPartners)
 
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
+
           val result =
             route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            routes.SystemErrorController.onPageLoad().url
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(form, businessNumber1, CheckMode)(request, messages(application)).toString
         }
       }
 
-      "must redirect to SystemError for a POST when trading name is missing" in {
+      "must redirect to the next page for a POST when trading name is missing" in {
 
-        val userAnswers =
-          emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
-            .success
-            .value
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
-            .success
-            .value
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(mockSessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
         running(application) {
           val request =
             FakeRequest(POST, partnerTradingNameRouteExistingPartners)
-              .withFormUrlEncodedBody(("value", "Trading Name"))
+              .withFormUrlEncodedBody(("partnerTradingName", "Trading Name"))
 
           val result =
             route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            routes.SystemErrorController.onPageLoad().url
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
     }
@@ -417,16 +412,10 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
         }
       }
 
-      "must redirect to SystemError for a GET when trading name is missing" in {
+      "must return OK and an empty form for a GET when trading name is missing" in {
 
         val userAnswers =
-          emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-            .success
-            .value
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-            .success
-            .value
+          userAnswersPartnerDetailsMinimalValidData
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -438,43 +427,49 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
           val request =
             FakeRequest(GET, partnerTradingNameRouteNewPartners)
 
+          val view =
+            application.injector.instanceOf[PartnerDetailsTradingNameView]
+
           val result =
             route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            routes.SystemErrorController.onPageLoad().url
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual
+            view(form, newPartnersIndex1.toString, NormalMode)(request, messages(application)).toString
         }
       }
 
-      "must redirect to SystemError for a POST when trading name is missing" in {
+      "must redirect to the next page for a POST when trading name is missing" in {
 
-        val userAnswers =
-          emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-            .success
-            .value
-            .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-            .success
-            .value
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-            .success
-            .value
+        val userAnswers = userAnswersPartnerDetailsMinimalValidData
+          .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+          .success
+          .value
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(mockSessionRepository.set(any()))
+          .thenReturn(Future.successful(true))
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
+          applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
 
         running(application) {
           val request =
             FakeRequest(POST, partnerTradingNameRouteNewPartners)
-              .withFormUrlEncodedBody(("value", "Trading Name"))
+              .withFormUrlEncodedBody(("partnerTradingName", "Trading Name"))
 
           val result =
             route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            routes.SystemErrorController.onPageLoad().url
+          redirectLocation(result).value mustEqual onwardRoute.url
         }
       }
     }
