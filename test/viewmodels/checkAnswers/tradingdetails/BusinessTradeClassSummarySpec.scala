@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
 import models.BusinessTradeClass
 import pages.tradingdetails.BusinessTradeClassPage
 import play.api.Application

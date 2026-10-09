@@ -45,6 +45,15 @@ class ControllingBodyTradingNameFormProviderSpec extends StringFieldBehaviours {
       }
     }
 
+    "accept the punctuation listed in the error copy" in {
+      form.bind(Map(fieldName -> "O'Brien / Trading-1")).value mustBe Some("O'Brien / Trading-1")
+    }
+
+    "use the trading-name error for invalid characters" in {
+      form.bind(Map(fieldName -> "Trading@Name")).errors must contain only
+        FormError(fieldName, "controllingBodyTradingName.error.invalid", Seq(ControllingBodyTradingNameFormProvider.tradingNameRegex))
+    }
+
     behave like mandatoryField(
       form,
       fieldName,

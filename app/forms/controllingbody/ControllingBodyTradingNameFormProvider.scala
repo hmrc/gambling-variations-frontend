@@ -28,13 +28,13 @@ class ControllingBodyTradingNameFormProvider @Inject() extends Mappings {
     Form(
       "controllingBodyTradingName" -> text("controllingBodyTradingName.error.required")
         .verifying(
-          regexp(tradingNameRegex, "partnerDetailsAddCountryOfIncorporation.error.invalid"),
+          regexp(tradingNameRegex, "controllingBodyTradingName.error.invalid"),
           maxLength(maxStringLength, "controllingBodyTradingName.error.length")
         )
     )
 }
 
 object ControllingBodyTradingNameFormProvider {
-  private[forms] val tradingNameRegex: String = """^[A-Za-z 0-9-\']+$"""
+  private[forms] val tradingNameRegex: String = """^[A-Za-z0-9' /-]+$"""
   private[forms] val maxStringLength = 100
 }

@@ -1240,14 +1240,6 @@ controllingBodyEmailAddress.error.required = Enter the controlling body’s emai
 controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
 
-controllingBodyTradingName.title = What is the controlling body's trading name?
-controllingBodyTradingName.heading = What is the controlling body's trading name?
-controllingBodyTradingName.checkYourAnswersLabel = What is the controlling body's trading name?
-controllingBodyTradingName.hint = The controlling body's trading name should not include 'Ltd', 'Limited', 'PLC' or 'LLP'. These terms are legally protected, which could cause investigation and delays.
-controllingBodyTradingName.error.required = Enter the controlling body's trading name
-controllingBodyTradingName.error.length = The controlling body's trading name must be 100 characters or less
-controllingBodyTradingName.error.invalid = The controlling body's trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
-controllingBodyTradingName.change.hidden = What is the controlling body's trading name?
 
 controllingBodyChangeScreener.title = What do you want to do with your controlling body?
 controllingBodyChangeScreener.heading = What do you want to do with your controlling body?
@@ -1257,25 +1249,38 @@ controllingBodyChangeScreener.provideNew = Provide a new controlling body
 controllingBodyChangeScreener.keepSame = Keep controlling body the same
 controllingBodyChangeScreener.error.required = Select what you want to do with your controlling body
 
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+controllingBodyTradingName.title = What is the controlling body’s trading name?
+controllingBodyTradingName.heading = What is the controlling body’s trading name?
+controllingBodyTradingName.checkYourAnswersLabel = What is the controlling body’s trading name?
+controllingBodyTradingName.hint = The controlling body’s trading name should not include ’Ltd’, ’Limited’, ’PLC’ or ’LLP’. These terms are legally protected, which could cause investigation and delays.
+controllingBodyTradingName.error.required = Enter the controlling body’s trading name
+controllingBodyTradingName.error.length = The controlling body’s trading name must be 100 characters or less
+controllingBodyTradingName.error.invalid = The controlling body’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
+controllingBodyTradingName.change.hidden = What is the controlling body’s trading name?
+
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
+
 removeControllingBodyTradeName.title = Are you sure you want to remove this controlling body’s trading name?
 removeControllingBodyTradeName.heading = Are you sure you want to remove {0} as this controlling body’s trading name?
 removeControllingBodyTradeName.error.required = Select yes if you want to remove this controlling body’s trading name
-
-whatToDoWithStandardReturnPeriods.title = Your standard return periods
-whatToDoWithStandardReturnPeriods.heading = Your standard return periods
-whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
-whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
-whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
-whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
-whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
-whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
-whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
-whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
-
-whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
-whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
-whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
-
 
 controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
