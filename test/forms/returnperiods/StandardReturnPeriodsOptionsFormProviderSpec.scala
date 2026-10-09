@@ -17,7 +17,6 @@
 package forms.returnperiods
 
 import forms.behaviours.OptionFieldBehaviours
-import models.WhatToDoWithStandardReturnPeriods
 import forms.returnperiods.StandardReturnPeriodsFormProvider
 import models.StandardReturnPeriodsOptions
 import play.api.data.FormError

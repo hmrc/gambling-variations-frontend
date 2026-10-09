@@ -30,11 +30,15 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
+import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
 import views.html.returnperiods.{NonStandardReturnPeriodsView, StandardReturnPeriodsView}
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 //TODO, some tests for idenitifying which view to use
+//isStandardReturnsPeriod test that on all routes
+//getNonStandardReturnPeriodsViewModel test that on all routes
 class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
@@ -87,6 +91,15 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           .set(
             StandardReturnPeriodsPage,
             switchToNonStandard
+          )
+          .success
+          .value
+
+      val userAnswersMissingHasExistingNstpValues =
+        userAnswers
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods.copy(hasExistingNstpValues = None)
           )
           .success
           .value
@@ -488,127 +501,255 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
             controllers.routes.SystemErrorController.onPageLoad().url
         }
       }
-    }
 
-    ///////////////////////////////
-
-    "NonStandard Return Periods" - {
-
-      val nonStandardFormProvider = new NonStandardReturnPeriodsFormProvider()
-      val nonStandardForm = nonStandardFormProvider()
-
-      "must return OK and the correct view for a GET" in {
-
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-        running(application) {
-          val request = FakeRequest(GET, returnPeriodsRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
-
-          status(result) mustEqual OK
-          contentAsString(result) mustEqual view(nonStandardForm, ???, NormalMode)(request, messages(application)).toString
-        }
-      }
-
-      "must populate the view correctly on a GET when the question has previously been answered" in {
-
-        val userAnswers = UserAnswers(userAnswersId).set(NonStandardReturnPeriodsPage, NonStandardReturnPeriodsOptions.values.head).success.value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        running(application) {
-          val request = FakeRequest(GET, returnPeriodsRoute)
-
-          val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
-
-          val result = route(application, request).value
-
-          status(result) mustEqual OK
-          contentAsString(result) mustEqual view(nonStandardForm.fill(NonStandardReturnPeriodsOptions.values.head), ???, NormalMode)(
-            request,
-            messages(application)
-          ).toString
-        }
-      }
-
-      "must redirect to the next page when valid data is submitted" in {
-
-        val mockSessionRepository = mock[SessionRepository]
-
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      "must redirect to the system error page for a GET if GamblingReturnPeriodsPage is None" in {
 
         val application =
-          applicationBuilder(userAnswers = Some(emptyUserAnswers))
-            .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-              bind[SessionRepository].toInstance(mockSessionRepository)
+          applicationBuilder(
+            userAnswers = Some(userAnswersMissingHasExistingNstpValues)
+          ).build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              GET,
+              returnPeriodsRoute
             )
-            .build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, returnPeriodsRoute)
-              .withFormUrlEncodedBody(("value", NonStandardReturnPeriodsOptions.values.head.toString))
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual onwardRoute.url
-        }
-      }
-
-      "must return a Bad Request and errors when invalid data is submitted" in {
-
-        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-        running(application) {
-          val request =
-            FakeRequest(POST, returnPeriodsRoute)
-              .withFormUrlEncodedBody(("value", "invalid value"))
-
-          val boundForm = nonStandardForm.bind(Map("value" -> "invalid value"))
-
-          val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
-
-          val result = route(application, request).value
-
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, ???, NormalMode)(request, messages(application)).toString
-        }
-      }
-
-      "must redirect to SystemError for a GET if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request = FakeRequest(GET, returnPeriodsRoute)
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
-        }
-      }
-
-      "redirect to SystemError for a POST if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request =
-            FakeRequest(POST, returnPeriodsRoute)
-              .withFormUrlEncodedBody(("value", NonStandardReturnPeriodsOptions.values.head.toString))
-
-          val result = route(application, request).value
+          val result =
+            controller(application)
+              .onPageLoad(NormalMode)
+              .apply(request)
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+          redirectLocation(result).value mustEqual
+            controllers.routes.SystemErrorController.onPageLoad().url
         }
+      }
+
+      "must redirect to the system error page for a POST if GamblingReturnPeriodsPage is None" in {
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(userAnswersMissingHasExistingNstpValues)
+          ).build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              POST,
+              returnPeriodsRoute
+            ).withFormUrlEncodedBody(
+              "value" -> switchToNonStandard.toString
+            )
+
+          val result =
+            controller(application)
+              .onSubmit(NormalMode)
+              .apply(request)
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.routes.SystemErrorController.onPageLoad().url
+        }
+      }
+    }
+  }
+
+  ///////////////////////////////
+
+  "NonStandard Return Periods" - {
+
+    val nonStandardFormProvider = new NonStandardReturnPeriodsFormProvider()
+    val nonStandardForm = nonStandardFormProvider()
+
+    val date = LocalDate.of(2026, 5, 1)
+    val gamblingReturnPeriods = GamblingReturnPeriods(
+      mgdRegNumber          = "mgd1",
+      returnPeriodsId       = Some(1),
+      nstpEndDate1          = Some(date),
+      nstpEndDate2          = Some(date.plusMonths(3)),
+      nstpEndDate3          = Some(date.plusMonths(6)),
+      nstpEndDate4          = Some(date.plusMonths(9)),
+      nstpEndDate5          = Some(date.plusMonths(12)),
+      nstpEndDate6          = Some(date.plusMonths(15)),
+      nstpEndDate7          = Some(date.plusMonths(18)),
+      nstpEndDate8          = Some(date.plusMonths(21)),
+      isInLastNstp          = Some(true),
+      finalPeriodWarning    = Some(false),
+      hasExistingNstpValues = Some(true)
+    )
+    val userAnswersNonStandardReturnPeriods = emptyUserAnswers
+      .set(
+        GamblingReturnPeriodsPage,
+        gamblingReturnPeriods
+      )
+      .success
+      .value
+
+    val userAnswersNonStandardReturnPeriodsMissingNstpValues = emptyUserAnswers
+      .set(
+        GamblingReturnPeriodsPage,
+        gamblingReturnPeriods.copy(hasExistingNstpValues = None)
+      )
+      .success
+      .value
+
+    "must return OK and the correct view for a GET" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriods)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+
+        val viewModel = NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods)(messages(application))
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(nonStandardForm, viewModel.get, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers =
+        userAnswersNonStandardReturnPeriods.set(NonStandardReturnPeriodsPage, NonStandardReturnPeriodsOptions.values.head).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+
+        val viewModel = NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods)(messages(application))
+
+        val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(nonStandardForm.fill(NonStandardReturnPeriodsOptions.values.head), viewModel.get, NormalMode)(
+          request,
+          messages(application)
+        ).toString
+      }
+    }
+
+    "must redirect to the next page when valid data is submitted" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriods))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, returnPeriodsRoute)
+            .withFormUrlEncodedBody(("value", NonStandardReturnPeriodsOptions.values.head.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriods)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, returnPeriodsRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
+
+        val viewModel = NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods)(messages(application))
+
+        val boundForm = nonStandardForm.bind(Map("value" -> "invalid value"))
+
+        val view = application.injector.instanceOf[NonStandardReturnPeriodsView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, viewModel.get, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to SystemError for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "redirect to SystemError for a POST if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, returnPeriodsRoute)
+            .withFormUrlEncodedBody(("value", NonStandardReturnPeriodsOptions.values.head.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+
+
+    "must redirect to SystemError for a GET if GamblingReturnPeriodsPage is None" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingNstpValues)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "redirect to SystemError for a POST if GamblingReturnPeriodsPage is None" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingNstpValues)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, returnPeriodsRoute)
+            .withFormUrlEncodedBody(("value", NonStandardReturnPeriodsOptions.values.head.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
   }
