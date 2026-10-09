@@ -25,17 +25,16 @@ class PartnerDetailsCompanyRegistrationNumberFormProviderSpec extends StringFiel
 
   private val form = new PartnerDetailsCompanyRegistrationNumberFormProvider()()
 
-  // One 8-character example per branch of the Confluence regex
+  // Based on Confluence regex
   private val validCrns = Seq(
-    "12345678",
-    "AC123456",
-    "SC123456",
+    "AC123456", // hint example
+    "IPCFGEDT", // hint example
+    "000123", // hint example
     "NI123456",
     "RO123456",
     "IP123456",
     "CU123456",
     "12345678", // 8 digits
-    "00012345", // hint example
     "SC123456", // AC FC IC OC RC SC ZC + 6 digits
     "OC303030",
     "ZC000009",
@@ -103,6 +102,12 @@ class PartnerDetailsCompanyRegistrationNumberFormProviderSpec extends StringFiel
       errorsFor("C@345678") mustBe Seq(invalidCharactersError, invalidFormatError)
     }
 
+    "fail to bind numbers with length greater than 8 chars" in {
+      Seq("123456789", "SC1234567", "IP1234567").foreach { crn =>
+        withClue(s"$crn: ")(errorsFor(crn) mustBe Seq(invalidFormatError))
+      }
+    }
+
     "fail to bind 8 letters without a valid prefix" in {
       Seq("dddddddd", "ABCDEFGH").foreach { crn =>
         withClue(s"$crn: ")(errorsFor(crn) mustBe Seq(invalidFormatError))
@@ -133,7 +138,7 @@ class PartnerDetailsCompanyRegistrationNumberFormProviderSpec extends StringFiel
       }
     }
 
-    "report every error, in order, for a value that breaks all three rules" in {
+    "report every error, in order, for a value that breaks all both rules" in {
       errorsFor("SC@1") mustBe Seq(invalidCharactersError, invalidFormatError)
     }
   }
