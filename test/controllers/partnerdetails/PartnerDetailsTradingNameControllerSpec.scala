@@ -24,6 +24,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -34,15 +35,14 @@ import scala.concurrent.Future
 
 class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
-  val formProvider = new PartnerTradingNameFormProvider()
-  val form = formProvider()
+  val form: Form[String] = (new PartnerTradingNameFormProvider())()
 
-  lazy val partnerTradingNameRouteNewPartners =
+  lazy val partnerTradingNameRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsTradingNameController
       .onPageLoad(newPartnersIndex1.toString, NormalMode)
       .url
 
-  lazy val partnerTradingNameRouteExistingPartners =
+  lazy val partnerTradingNameRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsTradingNameController
       .onPageLoad(businessNumber1, CheckMode)
       .url
