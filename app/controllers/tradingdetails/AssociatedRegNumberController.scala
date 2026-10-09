@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
 import forms.AssociatedRegNumberFormProvider
@@ -23,12 +23,12 @@ import navigation.Navigator
 import pages.*
 import pages.tradingdetails.TradingDetailsChangesPage
 import pages.tradingdetails.associatedregnumbers.{AssociatedRegNumberPage, AssociatedRegNumberSubmittedPage, AssociatedRegistrationNumbersPage, ChosenAssociatedRegNumberPage}
-import utils.FlagsUtil.checkIfChanged
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.AssociatedRegNumberView
 
 import javax.inject.Inject

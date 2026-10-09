@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.BusinessTradeClassFormProvider
-
-import javax.inject.Inject
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
 import pages.tradingdetails.*
@@ -30,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
 import views.html.BusinessTradeClassView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessTradeClassController @Inject() (

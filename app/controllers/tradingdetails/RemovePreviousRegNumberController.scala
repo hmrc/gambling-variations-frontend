@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.RemovePreviousRegNumberFormProvider
-
-import javax.inject.Inject
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.tradingdetails.previousregnumbers.*
 import pages.tradingdetails.TradingDetailsChangesPage
+import pages.tradingdetails.previousregnumbers.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemovePreviousRegNumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
