@@ -45,6 +45,36 @@ class ControllingBodyTradingNameControllerSpec extends SpecBase with MockitoSuga
 
   "ControllingBodyTradingName Controller" - {
 
+    "render the registration-details caption and page title" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      running(application) {
+        val result = route(application, FakeRequest(GET, controllingBodyTradingNameRoute)).value
+        status(result) mustEqual OK
+        val document = org.jsoup.Jsoup.parse(contentAsString(result))
+        document.select("span.govuk-caption-l").text() mustEqual "Change registration details"
+        document.title() must include("Change registration details")
+      }
+    }
+
+    Seq(
+      "" -> "Enter the controlling body’s trading name",
+      "Trading@Name" -> "The controlling body’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces",
+      ("A" * 101) -> "The controlling body’s trading name must be 100 characters or less"
+    ).foreach { case (value, expectedError) =>
+      s"render the exact error copy: $expectedError" in {
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+        running(application) {
+          val request = FakeRequest(POST, controllingBodyTradingNameRoute)
+            .withFormUrlEncodedBody("controllingBodyTradingName" -> value)
+          val result = route(application, request).value
+          status(result) mustEqual BAD_REQUEST
+          val document = org.jsoup.Jsoup.parse(contentAsString(result))
+          document.select(".govuk-error-summary__list a").text() mustEqual expectedError
+          document.select(".govuk-error-message").text() must include(expectedError)
+        }
+      }
+    }
+
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()

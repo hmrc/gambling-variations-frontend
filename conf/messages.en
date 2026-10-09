@@ -1149,14 +1149,14 @@ controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for
 controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
 
-controllingBodyTradingName.title = What is the controlling body's trading name?
-controllingBodyTradingName.heading = What is the controlling body's trading name?
-controllingBodyTradingName.checkYourAnswersLabel = What is the controlling body's trading name?
-controllingBodyTradingName.hint = The controlling body's trading name should not include 'Ltd', 'Limited', 'PLC' or 'LLP'. These terms are legally protected, which could cause investigation and delays.
-controllingBodyTradingName.error.required = Enter the controlling body's trading name
-controllingBodyTradingName.error.length = The controlling body's trading name must be 100 characters or less
-controllingBodyTradingName.error.invalid = The controlling body's trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
-controllingBodyTradingName.change.hidden = What is the controlling body's trading name?
+controllingBodyTradingName.title = What is the controlling body’s trading name?
+controllingBodyTradingName.heading = What is the controlling body’s trading name?
+controllingBodyTradingName.checkYourAnswersLabel = What is the controlling body’s trading name?
+controllingBodyTradingName.hint = The controlling body’s trading name should not include ’Ltd’, ’Limited’, ’PLC’ or ’LLP’. These terms are legally protected, which could cause investigation and delays.
+controllingBodyTradingName.error.required = Enter the controlling body’s trading name
+controllingBodyTradingName.error.length = The controlling body’s trading name must be 100 characters or less
+controllingBodyTradingName.error.invalid = The controlling body’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
+controllingBodyTradingName.change.hidden = What is the controlling body’s trading name?
 
 controllingBodyChangeScreener.title = What do you want to do with your controlling body?
 controllingBodyChangeScreener.heading = What do you want to do with your controlling body?
@@ -1174,7 +1174,7 @@ controllingBodyEmailAddress.error.invalid = The email address must only include 
 controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
 
 controllingBodySameAsRepYesNo.title = Controlling body details
-controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group’s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
 
