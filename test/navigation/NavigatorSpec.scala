@@ -27,7 +27,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessTypePage, ControllingBodyChangeScreenerPage, ControllingBodyDateOfIncorporationPage, RemoveControllingBodyFaxNumberPage}
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessTypePage, ControllingBodyChangeScreenerPage, ControllingBodyDateOfIncorporationPage, ControllingBodyEmailPage, RemoveControllingBodyFaxNumberPage}
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
@@ -1403,7 +1403,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
     "normal mode controlling body details navigation" - {
 
-      "should route ControllingBodyChangeScreenerPage to Index when the answer is EditDetails" in {
+      "should route ControllingBodyChangeScreenerPage to CheckControllingBodyDetails when the answer is EditDetails" in {
         val answers =
           emptyAnswers
             .set(ControllingBodyChangeScreenerPage, EditDetails)
@@ -1411,7 +1411,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
       "should route ControllingBodyChangeScreenerPage to ControllingBodyBusinessType when the answer is ProvideNew" in {
@@ -1461,6 +1461,11 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
         navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
           routes.IndexController.onPageLoad()
+      }
+
+      "should route ControllingBodyEmailPage to CheckControllingBodyDetails" in {
+        navigator.nextPage(ControllingBodyEmailPage, NormalMode, emptyAnswers) mustBe
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
       "should route ControllingBodyDateOfIncorporationPage to Index until the onward journey is built" in {
