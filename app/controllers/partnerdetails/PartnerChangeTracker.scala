@@ -19,7 +19,6 @@ package controllers.partnerdetails
 import models.UserAnswers
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.PartnerDetailsHasClickedOnChangeOrRemovePage
-import play.api.i18n.MessagesApi
 import repositories.SessionRepository
 
 import javax.inject.Inject

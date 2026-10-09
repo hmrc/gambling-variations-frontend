@@ -27,11 +27,11 @@ class PartnerDetailsVatRegistrationNumberYesNoPageSpec extends AnyFreeSpec with 
     "VatRegistrationNumberYesNoPage" - {
 
       "must have the correct toString" in {
-        PartnerDetailsVatRegistrationNumberYesNoPage(businessNumber1).toString mustBe "vatRegistrationNumberYesNo"
+        PartnerDetailsVatRegistrationNumberYesNoPage(businessNumber1).toString mustBe "partnerDetailsVrnYesNo"
       }
 
       "must have a path corresponding to its name and index" in {
-        val expectedPath: JsPath = JsPath \ "partners" \ businessNumber1 \ "vatRegistrationNumberYesNo"
+        val expectedPath: JsPath = JsPath \ "partners" \ businessNumber1 \ "partnerDetailsVrnYesNo"
 
         PartnerDetailsVatRegistrationNumberYesNoPage(businessNumber1).path mustBe expectedPath
       }
@@ -42,11 +42,11 @@ class PartnerDetailsVatRegistrationNumberYesNoPageSpec extends AnyFreeSpec with 
     "VatRegistrationNumberYesNoPage" - {
 
       "must have the correct toString" in {
-        PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1).toString mustBe "vatRegistrationNumberYesNo"
+        PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1).toString mustBe "partnerDetailsVrnYesNo"
       }
 
       "must have a path corresponding to its name and index" in {
-        val expectedPath: JsPath = JsPath \ "newPartners" \ newPartnersIndex1 \ "vatRegistrationNumberYesNo"
+        val expectedPath: JsPath = JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsVrnYesNo"
 
         PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1).path mustBe expectedPath
       }

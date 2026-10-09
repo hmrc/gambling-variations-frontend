@@ -133,14 +133,26 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
     "notices" - {
 
-      "show submit changes then missing details for a new partner with missing mandatory fields" in {
+      // --- New partners ---
+
+      "show only missing details for a new partner with missing mandatory fields" in {
 
         val viewModel =
           newPartnerNotSaved.copy(
             isMissingMandatoryDetails = true
           )
 
-        noticeBodies(viewModel) mustBe Seq(missingChanges, missingDetails)
+        noticeBodies(viewModel) mustBe Seq(missingDetails)
+      }
+
+      "show only missing details for a saved new partner with missing mandatory fields" in {
+
+        val viewModel =
+          newPartnerSaved.copy(
+            isMissingMandatoryDetails = true
+          )
+
+        noticeBodies(viewModel) mustBe Seq(missingDetails)
       }
 
       "show only submit changes for a complete new partner" in {
@@ -149,9 +161,32 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         noticeBodies(newPartnerSaved) mustBe Seq(missingChanges)
       }
 
-      "show only contact us for an existing partner not due to join or leave" in {
+      "ignore the changes flag for a new partner" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(
+            hasChanges = Some(true)
+          )
+
+        noticeBodies(viewModel) mustBe Seq(missingChanges)
+      }
+
+      // --- Existing partners ---
+
+      "show only contact us for an existing partner with no changes" in {
 
         noticeBodies(existingPartner) mustBe Seq(contactUs)
+        noticeBodies(existingPartner.copy(hasChanges = Some(false))) mustBe Seq(contactUs)
+      }
+
+      "show submit changes then contact us for an existing partner who has made changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges = Some(true)
+          )
+
+        noticeBodies(viewModel) mustBe Seq(missingChanges, contactUs)
       }
 
       "show only the joining notice for an existing partner due to join" in {
@@ -187,10 +222,45 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         noticeBodies(viewModel) mustBe Seq(cannotChangeLeaving)
       }
 
+      "not show submit changes when due to leave, even if the partner has changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges    = Some(true),
+            isDueToLeave  = true,
+            dateOfLeaving = Some(leavingDate)
+          )
+
+        noticeBodies(viewModel) mustBe Seq(cannotChangeLeaving)
+      }
+
+      "not show submit changes when due to join, even if the partner has changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges  = Some(true),
+            isDueToJoin = true
+          )
+
+        noticeBodies(viewModel) mustBe Seq(cannotChangeJoining)
+      }
+
       "fall back to contact us when due to join but the joining date is missing" in {
 
         val viewModel =
           existingPartner.copy(
+            isDueToJoin   = true,
+            dateOfJoining = None
+          )
+
+        noticeBodies(viewModel) mustBe Seq(contactUs)
+      }
+
+      "not show submit changes when the join flag is set without a date, even if the partner has changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges    = Some(true),
             isDueToJoin   = true,
             dateOfJoining = None
           )
