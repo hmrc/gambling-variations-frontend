@@ -462,6 +462,10 @@ site.pagination.next = cy: Next
 site.pagination.previous = cy: Previous
 partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
+controllingBodyAdditionalAddressInformationYesNo.title = cy: Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = cy: Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = cy: Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = cy: For example, building name or floor number
 partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
 partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
 partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
