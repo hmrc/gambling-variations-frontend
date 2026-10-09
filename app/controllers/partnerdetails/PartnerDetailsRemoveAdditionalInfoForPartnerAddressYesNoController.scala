@@ -21,6 +21,7 @@ import forms.partnerdetails.RemoveAdditionalInfoForPartnerAddressYesNoFormProvid
 import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.{PartnerDetailsAdditionalAddressInfoPage, PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,6 +36,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController @Inject
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
+  changeTracker: PartnerChangeTracker,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
@@ -45,23 +47,28 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController @Inject
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
       val newIndex = PartnerUtils.parseIndex(index, mode)
 
       request.userAnswers.get(PartnerDetailsAdditionalAddressInfoPage(newIndex)) match {
         case Some(additionalInformation) =>
-          val preparedForm = request.userAnswers.get(PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(newIndex)) match {
-            case None        => form
-            case Some(value) => form.fill(value)
+          val preparedForm =
+            request.userAnswers.get(PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(newIndex)).fold(form)(form.fill)
+
+          newIndex match {
+            case businessNumber: String =>
+              changeTracker
+                .markClicked(request.userAnswers, businessNumber)
+                .map(_ => Ok(view(preparedForm, index, mode, additionalInformation)))
+            case _: Int =>
+              Future.successful(Ok(view(preparedForm, index, mode, additionalInformation)))
           }
 
-          Ok(view(preparedForm, index, mode, additionalInformation))
-
         case None =>
-          Redirect(controllers.routes.SystemErrorController.onPageLoad())
+          Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
       }
     }
 

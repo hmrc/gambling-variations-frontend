@@ -65,7 +65,8 @@ case class CheckPartnerDetailsViewModel(
   maybeSubmitted: Option[Boolean],
   isDueToLeave: Boolean,
   isDueToJoin: Boolean,
-  isMissingMandatoryDetails: Boolean
+  isMissingMandatoryDetails: Boolean,
+  hasChanges: Option[Boolean]
 ) {
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
@@ -94,6 +95,9 @@ case class CheckPartnerDetailsViewModel(
           Option.when(isMissingMandatoryDetails)(messages("partnerDetailsCheckYourAnswers.error.missingDetails"))
         ).flatten
       else {
+        val submitChanges =
+          Option.when(hasChanges.contains(true))(messages("partnerDetailsCheckYourAnswers.error.missingChanges"))
+
         val leaving =
           if (isDueToLeave) dateOfLeaving.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", d, link))
           else None
@@ -103,12 +107,11 @@ case class CheckPartnerDetailsViewModel(
           else None
 
         // If due to both join and leave, show only the leaving notice (per design spec)
-        leaving.orElse(joining) match {
-          case Some(lockedNotice) => Seq(lockedNotice)
-          case None               => Seq(messages("partnerDetailsCheckYourAnswers.error.contactUs", link))
-        }
-      }
+        val lockedOrContactUs =
+          leaving.orElse(joining).getOrElse(messages("partnerDetailsCheckYourAnswers.error.contactUs", link))
 
+        submitChanges.toSeq :+ lockedOrContactUs
+      }
     messagesToShow.map(Html(_))
   }
 
@@ -549,7 +552,8 @@ object CheckPartnerDetailsViewModel {
       maybeSubmitted            = isSubmitted,
       isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
       isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
-      isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index)
+      isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index),
+      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)) // exisisting partners only
     )
   }
 

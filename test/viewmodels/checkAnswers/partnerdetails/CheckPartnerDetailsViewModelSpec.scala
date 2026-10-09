@@ -78,7 +78,8 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       maybeSubmitted            = None,
       isDueToLeave              = false,
       isDueToJoin               = false,
-      isMissingMandatoryDetails = false
+      isMissingMandatoryDetails = false,
+      hasChanges                = None
     )
 
   private val newPartnerNotSaved: CheckPartnerDetailsViewModel =

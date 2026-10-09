@@ -37,6 +37,7 @@ class PartnerDetailsChangePartnerFaxNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
+  changeTracker: PartnerChangeTracker,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
@@ -49,16 +50,17 @@ class PartnerDetailsChangePartnerFaxNumberController @Inject() (
 
   val form: Form[String] = formProvider("partnerDetailsFaxNumber")
 
-  def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val newIndex = PartnerUtils.parseIndex(index, mode)
+  def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val newIndex = PartnerUtils.parseIndex(index, mode)
 
-    val preparedForm = request.userAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(newIndex)) match {
-      case None            => form
-      case Some(faxNumber) => form.fill(faxNumber)
+      val preparedForm =
+        request.userAnswers.get(PartnerDetailsCorrespondenceFaxNumberPage(newIndex)).fold(form)(form.fill)
+
+      changeTracker
+        .markClicked(request.userAnswers, newIndex)
+        .map(_ => Ok(view(preparedForm, index, mode)))
     }
-
-    Ok(view(preparedForm, index, mode))
-  }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
