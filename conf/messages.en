@@ -13,6 +13,8 @@ site.signIn = Sign in
 site.govuk = GOV.UK
 site.notProvided = Not provided
 site.viewOrChange = View or change
+site.pagination.next = Next
+site.pagination.previous = Previous
 
 date.day = Day
 date.month = Month
@@ -1178,8 +1180,10 @@ controllingBodyEmailAddress.error.required = Enter the controlling body’s emai
 controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
 
-site.pagination.next = Next
-site.pagination.previous = Previous
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
 
 returnPeriods.standard.title = Your standard return periods
 returnPeriods.standard.heading = Your standard return periods
@@ -1197,11 +1201,6 @@ returnPeriods.standard.switchToNonStandard.hint = You must provide end dates to 
 returnPeriods.standard.checkYourAnswersLabel = Your standard return periods
 returnPeriods.standard.error.required = Select what you want to do with your return periods
 returnPeriods.standard.change.hidden = StandardReturnPeriods
-
-controllingBodySameAsRepYesNo.title = Controlling body details
-controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
-controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
-controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
 
 returnPeriods.nonStandard.title = Your non-standard return periods
 returnPeriods.nonStandard.heading = Your non-standard return periods

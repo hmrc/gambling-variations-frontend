@@ -193,7 +193,7 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
     // Return Periods
 //    case NonStandardReturnPeriodsPage =>
-//      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad() // change it
+//      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
 
     // License and Premises Details
     case LicenceNumberPage =>
