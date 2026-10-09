@@ -217,6 +217,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyChangeScreenerPage(userAnswers)
     case WhatToDoWithStandardReturnPeriodsPage =>
       userAnswers => navigateWhatToDoWithStandardReturnPeriodsPage(userAnswers)
+    case RemoveControllingBodyTradeNamePage =>
+      _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
