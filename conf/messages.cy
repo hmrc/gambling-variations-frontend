@@ -456,7 +456,20 @@ controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name
 controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body
 
+controllingBodyEmailAddress.title = cy: What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = cy: What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = cy: Email Address
+controllingBodyEmailAddress.error.required = cy: Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = cy: The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = cy: The email address must be 70 characters or less
+
 
 site.pagination.next = cy: Next
 site.pagination.previous = cy: Previous
 partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
+
+partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = cy: Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to remove this partner now

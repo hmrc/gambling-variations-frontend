@@ -1129,6 +1129,12 @@ premisesNotCoveredYesNo.error.required = Select yes if you have any other premis
 premisesNotCoveredYesNo.change.hidden = Do you have any other premises that are not covered by licences or permits?
 premisesNotCoveredYesNo.hint = If you select yes, you must provide details of these premises
 
+controllingBodyNotProvidedYesNo.title = Tell us about your controlling body
+controllingBodyNotProvidedYesNo.p1 = Your group''s representative member, {0}, can also be your controlling body.
+controllingBodyNotProvidedYesNo.text = Do you want {0} to be your controlling body?
+controllingBodyNotProvidedYesNo.error.required = Select yes if you want your group''s representative member to also be your controlling body
+controllingBodyNotProvidedYesNo.noLabel = No, I want to provide new details
+
 removePremisesAddress.title = Are you sure you want to remove this premises address?
 removePremisesAddress.heading = Are you sure you want to remove this premises address?
 removePremisesAddress.error.required = Select yes if you want to remove this premises address
@@ -1177,6 +1183,11 @@ partnerDateOfJoining.change.hidden = when is the partner’s date of joining?
 partnerDateOfJoining.error.afterLatestDate = Date of joining must be before {0}
 partnerDateOfJoining.error.beforeRegistrationDate = Date of joining  must be before {0}
 
+partnerDetailsRemovePartnerYesNo.title = Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = Select yes if you want to remove this partner now
 
 # Non-standard return periods
 
@@ -1206,5 +1217,33 @@ controllingBodyAddTradingNameYesNo.title = Do you want to add a trading name for
 controllingBodyAddTradingNameYesNo.heading = Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = Select yes if you want to add a trading name for the controlling body
 
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
 site.pagination.next = Next
 site.pagination.previous = Previous
+
+whatToDoWithStandardReturnPeriods.title = Your standard return periods
+whatToDoWithStandardReturnPeriods.heading = Your standard return periods
+whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
+whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
+whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
+whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
+whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
+whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
+whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
+whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
+
+whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
+whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
+whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
+
+
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body

@@ -22,6 +22,7 @@ import models.{NormalMode, UserAnswers}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import pages.licencespremises.PremisesDetailsPage
+import play.api.Application
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -33,7 +34,7 @@ import java.time.LocalDate
 class PremisesAddressListViewModelSpec extends SpecBase {
 
   trait Setup {
-    val app = applicationBuilder().build()
+    val app: Application = applicationBuilder().build()
     implicit val request: play.api.mvc.Request[?] = FakeRequest()
     implicit val messages: Messages =
       app.injector

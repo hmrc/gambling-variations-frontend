@@ -14,89 +14,85 @@
  * limitations under the License.
  */
 
-package controllers.partnerdetails
+package controllers.controllingbody
 
 import base.SpecBase
-import forms.partnerdetails.VatRegistrationNumberYesNoFormProvider
+import forms.controllingbody.ControllingBodySameAsRepYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsVatRegistrationNumberYesNoPage}
-import play.api.data.Form
+import pages.controllingbody.ControllingBodySameAsRepYesNoPage
 import play.api.inject.bind
+import play.api.libs.json.Json
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.partnerdetails.PartnerDetailsVatRegistrationNumberYesNoView
+import views.html.controllingbody.ControllingBodySameAsRepYesNoView
 
 import scala.concurrent.Future
 
-class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
+class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new VatRegistrationNumberYesNoFormProvider()
-  val form: Form[Boolean] = formProvider()
+  def onwardRoute = Call("GET", "/foo")
 
-  lazy val vatRegistrationNumberYesNoRouteNewPartners: String =
-    controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
+  val formProvider = new ControllingBodySameAsRepYesNoFormProvider()
+  val form = formProvider()
 
-  private val userAnswersWithoutVatAnswerNewPartners =
-    UserAnswers(userAnswersId, minimalValidData)
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-      .success
-      .value
-      .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-      .success
-      .value
+  lazy val controllingBodySameAsRepYesNoRoute: String = routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
 
-  private val userAnswersWithVatAnswerNewPartners =
-    userAnswersWithoutVatAnswerNewPartners
-      .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), true)
-      .success
-      .value
+  private val baseAnswers =
+    UserAnswers(userAnswersId,
+                Json.obj(
+                  "controllingBodyDetails" -> Json.obj(
+                    "mgdRegNum"    -> userAnswersId,
+                    "businessName" -> "abc"
+                  )
+                )
+               )
 
-  "VatRegistrationNumberYesNoController Controller" - {
+  "ControllingBodySameAsRepYesNoController Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners)).build()
+        applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(GET, vatRegistrationNumberYesNoRouteNewPartners)
+          FakeRequest(GET, controllingBodySameAsRepYesNoRoute)
 
         val result =
           route(application, request).value
 
         val view =
-          application.injector.instanceOf[PartnerDetailsVatRegistrationNumberYesNoView]
+          application.injector.instanceOf[ControllingBodySameAsRepYesNoView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
           view(
             form,
-            newPartnersIndex1.toString,
-            NormalMode
+            NormalMode,
+            "abc"
           )(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
+      val userAnswers =
+        baseAnswers.set(ControllingBodySameAsRepYesNoPage, true).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithVatAnswerNewPartners)).build()
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(GET, vatRegistrationNumberYesNoRouteNewPartners)
+          FakeRequest(GET, controllingBodySameAsRepYesNoRoute)
 
         val view =
-          application.injector.instanceOf[PartnerDetailsVatRegistrationNumberYesNoView]
+          application.injector.instanceOf[ControllingBodySameAsRepYesNoView]
 
         val result =
           route(application, request).value
@@ -105,8 +101,8 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         contentAsString(result) mustEqual
           view(
             form.fill(true),
-            newPartnersIndex1.toString,
-            NormalMode
+            NormalMode,
+            "abc"
           )(request, messages(application)).toString
       }
     }
@@ -120,7 +116,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -129,7 +125,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, vatRegistrationNumberYesNoRouteNewPartners)
+          FakeRequest(POST, controllingBodySameAsRepYesNoRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result =
@@ -137,13 +133,6 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
-
-        val expectedAnswers =
-          userAnswersWithoutVatAnswerNewPartners
-            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-        verify(mockSessionRepository).set(expectedAnswers)
       }
     }
 
@@ -156,7 +145,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners))
+        applicationBuilder(userAnswers = Some(baseAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -165,7 +154,7 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
 
       running(application) {
         val request =
-          FakeRequest(POST, vatRegistrationNumberYesNoRouteNewPartners)
+          FakeRequest(POST, controllingBodySameAsRepYesNoRoute)
             .withFormUrlEncodedBody(("value", "false"))
 
         val result =
@@ -173,31 +162,24 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
-
-        val expectedAnswers =
-          userAnswersWithoutVatAnswerNewPartners
-            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-        verify(mockSessionRepository).set(expectedAnswers)
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithoutVatAnswerNewPartners)).build()
+        applicationBuilder(userAnswers = Some(baseAnswers)).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, vatRegistrationNumberYesNoRouteNewPartners)
+          FakeRequest(POST, controllingBodySameAsRepYesNoRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm =
           form.bind(Map("value" -> ""))
 
         val view =
-          application.injector.instanceOf[PartnerDetailsVatRegistrationNumberYesNoView]
+          application.injector.instanceOf[ControllingBodySameAsRepYesNoView]
 
         val result =
           route(application, request).value
@@ -206,8 +188,8 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
         contentAsString(result) mustEqual
           view(
             boundForm,
-            newPartnersIndex1.toString,
-            NormalMode
+            NormalMode,
+            "abc"
           )(request, messages(application)).toString
       }
     }

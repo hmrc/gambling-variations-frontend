@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsIsBusinessIncorporatedUkPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -36,7 +37,7 @@ import scala.concurrent.Future
 class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsIsBusinessIncorporatedUkFormProvider()
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
   private val userAnswersExistingPartners =
     userAnswersPartnerDetailsExistingPartners
@@ -56,10 +57,10 @@ class PartnerDetailsIsBusinessIncorporatedUkControllerSpec extends SpecBase with
       .success
       .value
 
-  lazy val partnerDetailsIsBusinessIncorporatedUkRouteExistingPartners =
+  lazy val partnerDetailsIsBusinessIncorporatedUkRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(businessNumber1, CheckMode).url
 
-  lazy val partnerDetailsIsBusinessIncorporatedUkRouteNewPartners =
+  lazy val partnerDetailsIsBusinessIncorporatedUkRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
   "newPartners" - {
