@@ -86,7 +86,7 @@ class CheckContactDetailsViewSpec extends SpecBase {
       doc.text must include(messages("contactDetails.error.contactNumber"))
 
       val continueButton = doc.select(".govuk-button")
-      continueButton.attr("href") mustBe controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url
+      continueButton.attr("href") mustBe controllers.businesscontactdetails.routes.BusinessContactNumberController.onPageLoad().url
     }
 
     "must display ready to submit message when isFlagged is true" in new Setup {
