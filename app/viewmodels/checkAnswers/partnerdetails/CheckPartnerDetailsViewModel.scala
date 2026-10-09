@@ -263,13 +263,11 @@ case class CheckPartnerDetailsViewModel(
     )
 
   private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    if (is(Corporatebody))
-      // NOTE: routing will be done with the integration ticket
-      yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
-    else None
+    // NOTE: routing will be done with the integration ticket
+    yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
 
   private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    Option.when(is(Soleproprietor)) {
+    vatRegistrationNumber.map { vat =>
       val label = labelFor("vatRegistrationNumber")
       // NOTE: routing will be done with the integration ticket
       val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
@@ -280,7 +278,7 @@ case class CheckPartnerDetailsViewModel(
         else if (isNewPartnerSubmitted) Seq(change, remove)
         else Seq(change)
 
-      optionalRow(label, vatRegistrationNumber.map(Text(_)), actions, change)
+      optionalRow(label, Some(Text(vat)), actions, change)
     }
 
   private def isIncorporatedInUkRow(implicit messages: Messages): Option[SummaryListRow] =
