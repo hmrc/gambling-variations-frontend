@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
 import forms.BusinessTradeClassFormProvider
-
-import javax.inject.Inject
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
 import pages.tradingdetails.*
@@ -30,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
 import views.html.BusinessTradeClassView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessTradeClassController @Inject() (
@@ -85,7 +84,7 @@ class BusinessTradeClassController @Inject() (
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routes.OtherTradeClassController.onPageLoad()
+                        controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad()
 
                       case _ =>
                         navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
@@ -95,10 +94,10 @@ class BusinessTradeClassController @Inject() (
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routes.OtherTradeClassController.onPageLoad()
+                        controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad()
 
                       case _ =>
-                        routes.CheckTradingDetailsController.onPageLoad()
+                        controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
                     }
                 }
               }

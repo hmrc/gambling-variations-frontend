@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import connectors.GamblingConnector
 import controllers.actions.*
-import utils.FlagsUtil.checkFlag
-
-import javax.inject.Inject
+import controllers.routes
+import models.*
+import pages.GroupMemberPage
+import pages.tradingdetails.*
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkFlag
 import viewmodels.checkAnswers.tradingdetails.*
 import views.html.CheckTradingDetailsView
-import pages.tradingdetails.*
-import models.*
-import pages.GroupMemberPage
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CheckTradingDetailsController @Inject() (
@@ -111,11 +111,11 @@ class CheckTradingDetailsController @Inject() (
 
       isGroupMemberF.map { isGroupMember =>
         if (tradeClassIsMissing && !isGroupMember) {
-          Redirect(routes.BusinessTradeClassController.onPageLoad())
+          Redirect(controllers.tradingdetails.routes.BusinessTradeClassController.onPageLoad())
         } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
-          Redirect(routes.OtherTradeClassController.onPageLoad())
+          Redirect(controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad())
         } else if (seasonalBusIsMissing) {
-          Redirect(routes.SeasonalBusinessController.onPageLoad())
+          Redirect(controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad())
         } else {
           Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
         }

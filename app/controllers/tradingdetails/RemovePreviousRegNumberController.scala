@@ -14,34 +14,35 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
-import forms.RemoveAssociatedRegNumberFormProvider
+import controllers.routes
+import forms.RemovePreviousRegNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.tradingdetails.TradingDetailsChangesPage
-import pages.tradingdetails.associatedregnumbers.*
+import pages.tradingdetails.previousregnumbers.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.RemoveAssociatedRegNumberView
+import views.html.RemovePreviousRegNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class RemoveAssociatedRegNumberController @Inject() (
+class RemovePreviousRegNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: MgdTradeDetailsDataRequiredAction,
-  formProvider: RemoveAssociatedRegNumberFormProvider,
+  formProvider: RemovePreviousRegNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: RemoveAssociatedRegNumberView
+  view: RemovePreviousRegNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -50,19 +51,19 @@ class RemoveAssociatedRegNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(RemoveAssociatedRegNumberPage) match {
-      case Some(value) => form.fill(value)
+    val preparedForm = request.userAnswers.get(RemovePreviousRegNumberPage) match {
       case None        => form
+      case Some(value) => form.fill(value)
     }
 
-    request.userAnswers.get(ChosenAssociatedRegNumberPage) match {
+    request.userAnswers.get(ChosenPreviousRegNumberPage) match {
       case Some(number) => Ok(view(preparedForm, mode, number))
       case None         => Redirect(routes.SystemErrorController.onPageLoad().url)
     }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.get(ChosenAssociatedRegNumberPage).map { chosenRegNumber =>
+    request.userAnswers.get(ChosenPreviousRegNumberPage).map { chosenRegNumber =>
       form
         .bindFromRequest()
         .fold(
@@ -70,26 +71,25 @@ class RemoveAssociatedRegNumberController @Inject() (
           value =>
             for {
               updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-              updatedAnswers <- Future.fromTry(updatedAnswers.set(AssociatedRegNumberSubmittedPage, true))
-              updatedAnswers <- Future.fromTry(updatedAnswers.remove(ChosenAssociatedRegNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.set(PreviousRegNumbersUpdatedPage, true))
               updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(RemoveAssociatedRegNumberPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(RemovePreviousRegNumberPage, mode, updatedAnswers))
         )
-    } getOrElse Future.successful(Redirect(routes.AssociatedRegistrationNumbersListController.onPageLoad()))
+    } getOrElse Future.successful(Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()))
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
     for {
-      ua1 <- userAnswers.set(RemoveAssociatedRegNumberPage, value)
+      ua1 <- userAnswers.set(RemovePreviousRegNumberPage, value)
       ua2 <- {
         if (value) {
-          ua1.get(ChosenAssociatedRegNumberPage) match {
-            case Some(assocRegNo) =>
-              ua1.get(AssociatedRegistrationNumbersPage).match {
-                case Some(assocRegNoSeq) =>
-                  val updatedSequence = assocRegNoSeq.filterNot(_ == assocRegNo)
-                  ua1.set(AssociatedRegistrationNumbersPage, updatedSequence)
+          ua1.get(ChosenPreviousRegNumberPage) match {
+            case Some(prevRegNo) =>
+              ua1.get(UnsubmittedPreviousRegNumbersPage).match {
+                case Some(prevRegNoSeq) =>
+                  val updatedSequence = prevRegNoSeq.filterNot(_ == prevRegNo)
+                  ua1.set(UnsubmittedPreviousRegNumbersPage, updatedSequence)
                 case None => Try(ua1)
               }
             case None => Try(ua1)

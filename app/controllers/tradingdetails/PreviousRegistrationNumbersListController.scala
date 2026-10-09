@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
-
-import javax.inject.Inject
+import controllers.routes
 import forms.PreviousRegistrationNumbersFormProvider
-import models.Mode
+import models.{Mode, RegistrationNumbers}
 import models.requests.DataRequest
-import models.RegistrationNumbers
 import navigation.Navigator
 import pages.*
 import pages.tradingdetails.previousregnumbers.*
 import pages.tradingdetails.{TradingDetailsChangeFlagPage, TradingDetailsChangesPage}
-import utils.FlagsUtil.checkIfChanged
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkIfChanged
 import views.html.PreviousRegistrationNumbersView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PreviousRegistrationNumbersListController @Inject() (
@@ -112,7 +111,7 @@ class PreviousRegistrationNumbersListController @Inject() (
                 )
               )
             } else {
-              Future.successful(Redirect(routes.CheckTradingDetailsController.onPageLoad()))
+              Future.successful(Redirect(controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()))
             },
           value =>
             val isChanged: Boolean =
@@ -151,7 +150,7 @@ class PreviousRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
-        routes.PreviousRegistrationNumberController.onPageLoad()
+        controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
       )
     }
 
@@ -167,7 +166,7 @@ class PreviousRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
-        routes.RemovePreviousRegNumberController.onPageLoad()
+        controllers.tradingdetails.routes.RemovePreviousRegNumberController.onPageLoad()
       )
     }
 }

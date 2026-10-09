@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import base.SpecBase
 import controllers.actions.{OtherTradeClassDataRequiredAction, OtherTradeClassDataRequiredActionImpl}
+import controllers.routes
 import forms.OtherTradeClassFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -50,7 +51,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
     )
 
   lazy val otherTradeClassRoute =
-    routes.OtherTradeClassController.onPageLoad().url
+    controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad().url
 
   "OtherTradeClass Controller" - {
 
@@ -125,7 +126,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must redirect to the Seasonal Business page when seasonal data not provided" in {
-      val seasonalBusinessRoute = routes.SeasonalBusinessController.onPageLoad().url
+      val seasonalBusinessRoute = controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad().url
       val data = Json.obj(
         "otherTradeClassSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
         OtherTradeClassPage.toString -> "valid trade class"

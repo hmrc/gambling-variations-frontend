@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
 import forms.AssociatedRegistrationNumbersFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import utils.FlagsUtil.{checkFlag, checkIfChanged}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.{checkFlag, checkIfChanged}
 import views.html.AssociatedRegistrationNumbersView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AssociatedRegistrationNumbersListController @Inject() (
@@ -72,7 +71,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
       val showChangeMessage = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsSubmittedPage)
 
       if (associatedRegNumberCount >= 3) {
-        Future.successful(Redirect(routes.CheckTradingDetailsController.onPageLoad()))
+        Future.successful(Redirect(controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()))
       } else {
 
         form
@@ -101,7 +100,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad())
+      } yield Redirect(controllers.tradingdetails.routes.RemoveAssociatedRegNumberController.onPageLoad())
     }
 
   def onChangeRedirect(mode: Mode, assocRegNumber: String): Action[AnyContent] =
@@ -110,7 +109,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad())
+      } yield Redirect(controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad())
     }
 
 }
