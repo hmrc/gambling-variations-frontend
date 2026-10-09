@@ -158,8 +158,8 @@ case class CheckPartnerDetailsViewModel(
 
   /** Optional fields that can also be removed outside the new-partner flow. */
   private def changeOrRemove(change: ActionItem, remove: ActionItem): Seq[ActionItem] =
-    if (isNewPartnerFlow) Seq(change)
-    else if (dueToJoinOrLeave) Nil
+    if (isNewPartnerFlow && !isNewPartnerSubmitted) Seq(change)
+    else if (!isNewPartnerFlow && dueToJoinOrLeave) Nil
     else Seq(change, remove)
 
   private def is(bt: BusinessType): Boolean = typeOfBusiness.contains(bt)
@@ -219,12 +219,7 @@ case class CheckPartnerDetailsViewModel(
     val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
     val remove = removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    val actions =
-      if (isNewPartnerFlow && !isNewPartnerSubmitted) Seq(change)
-      else if (!isNewPartnerFlow && dueToJoinOrLeave) Nil
-      else Seq(change, remove)
-
-    optionalRow(label, tradingName.map(Text(_)), actions, change)
+    optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change)
   }
 
   private def dateOfJoiningRow(implicit messages: Messages): SummaryListRow =
