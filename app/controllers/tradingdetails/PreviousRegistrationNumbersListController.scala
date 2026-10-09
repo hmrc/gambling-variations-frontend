@@ -111,7 +111,7 @@ class PreviousRegistrationNumbersListController @Inject() (
                 )
               )
             } else {
-              Future.successful(Redirect(routes.CheckTradingDetailsController.onPageLoad()))
+              Future.successful(Redirect(controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()))
             },
           value =>
             val isChanged: Boolean =
@@ -150,7 +150,7 @@ class PreviousRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
-        routes.PreviousRegistrationNumberController.onPageLoad()
+        controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
       )
     }
 
@@ -166,7 +166,7 @@ class PreviousRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
       } yield Redirect(
-        routes.RemovePreviousRegNumberController.onPageLoad()
+        controllers.tradingdetails.routes.RemovePreviousRegNumberController.onPageLoad()
       )
     }
 }

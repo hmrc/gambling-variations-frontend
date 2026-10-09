@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("otherTradeClass.title"), Some("changeRegistrationDetails.caption"))){
 
-@formHelper(action = routes.OtherTradeClassController.onSubmit()) {
+@formHelper(action = controllers.tradingdetails.routes.OtherTradeClassController.onSubmit()) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

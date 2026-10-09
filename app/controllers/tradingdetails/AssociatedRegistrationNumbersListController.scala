@@ -17,7 +17,6 @@
 package controllers.tradingdetails
 
 import controllers.actions.*
-import controllers.routes
 import forms.AssociatedRegistrationNumbersFormProvider
 import models.Mode
 import navigation.Navigator
@@ -72,7 +71,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
       val showChangeMessage = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsSubmittedPage)
 
       if (associatedRegNumberCount >= 3) {
-        Future.successful(Redirect(routes.CheckTradingDetailsController.onPageLoad()))
+        Future.successful(Redirect(controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()))
       } else {
 
         form
@@ -101,7 +100,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.RemoveAssociatedRegNumberController.onPageLoad())
+      } yield Redirect(controllers.tradingdetails.routes.RemoveAssociatedRegNumberController.onPageLoad())
     }
 
   def onChangeRedirect(mode: Mode, assocRegNumber: String): Action[AnyContent] =
@@ -110,7 +109,7 @@ class AssociatedRegistrationNumbersListController @Inject() (
         updatedAnswers <- Future.fromTry(request.userAnswers.set(ChosenAssociatedRegNumberPage, assocRegNumber))
         updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
         _              <- sessionRepository.set(updatedAnswers)
-      } yield Redirect(routes.AssociatedRegNumberController.onPageLoad())
+      } yield Redirect(controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad())
     }
 
 }

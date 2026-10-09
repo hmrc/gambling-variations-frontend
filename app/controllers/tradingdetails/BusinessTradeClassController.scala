@@ -17,7 +17,6 @@
 package controllers.tradingdetails
 
 import controllers.actions.*
-import controllers.routes
 import forms.BusinessTradeClassFormProvider
 import models.{BusinessTradeClass, CheckMode, Mode, NormalMode}
 import navigation.Navigator
@@ -85,7 +84,7 @@ class BusinessTradeClassController @Inject() (
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routes.OtherTradeClassController.onPageLoad()
+                        controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad()
 
                       case _ =>
                         navigator.nextPage(BusinessTradeClassPage, mode, updatedAnswers)
@@ -95,10 +94,10 @@ class BusinessTradeClassController @Inject() (
                     value match {
 
                       case BusinessTradeClass.Other =>
-                        routes.OtherTradeClassController.onPageLoad()
+                        controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad()
 
                       case _ =>
-                        routes.CheckTradingDetailsController.onPageLoad()
+                        controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
                     }
                 }
               }
