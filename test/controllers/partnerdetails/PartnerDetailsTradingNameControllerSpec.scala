@@ -69,7 +69,7 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
       "must return OK and the correct view for a GET" in {
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsMinimalValidData)).build()
 
         running(application) {
           val request =
@@ -84,7 +84,7 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
           status(result) mustEqual OK
           contentAsString(result) mustEqual
             view(
-              form.fill("Trading Name"),
+              form,
               businessNumber1,
               CheckMode
             )(request, messages(application)).toString
@@ -201,33 +201,6 @@ class PartnerDetailsTradingNameControllerSpec extends SpecBase with MockitoSugar
           val request =
             FakeRequest(POST, partnerTradingNameRouteExistingPartners)
               .withFormUrlEncodedBody(("value", "Trading Name"))
-
-          val result =
-            route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual
-            routes.SystemErrorController.onPageLoad().url
-        }
-      }
-
-      "must redirect to SystemError for a GET when trading name is missing" in {
-
-        val userAnswers =
-          emptyUserAnswers
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
-            .success
-            .value
-            .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "123456789")
-            .success
-            .value
-
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        running(application) {
-          val request =
-            FakeRequest(GET, partnerTradingNameRouteExistingPartners)
 
           val result =
             route(application, request).value

@@ -61,7 +61,7 @@ class PartnerDetailsTradingNameController @Inject() (
             .map(_ => Ok(view(form.fill(partnerTradingName), index, mode)))
 
         case None =>
-          Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+          Future.successful(Ok(view(form, index, mode)))
       }
     }
 
