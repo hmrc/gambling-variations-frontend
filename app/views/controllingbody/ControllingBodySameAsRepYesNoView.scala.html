@@ -48,7 +48,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("controllingBodySameAsRepYesNo.text")).withCssClass("govuk-label govuk-label--m")
+                legend = LegendViewModel(messages("controllingBodySameAsRepYesNo.text")).asPageHeading(viewmodels.LegendSize.Medium)
             )
         )
 
