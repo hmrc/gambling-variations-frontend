@@ -36,7 +36,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result mustBe defined
       result.get.value.toString must include(msgs("site.notProvided"))
       result.get.actions.get.items.size mustBe 1
-      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad().url
+      result.get.actions.get.items.head.href mustBe controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad().url
     }
 
     "must display 'not provided' when an empty list is supplied" in {
@@ -52,7 +52,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       result mustBe defined
       result.get.value.toString must include(msgs("site.notProvided"))
       result.get.actions.get.items.size mustBe 1
-      result.get.actions.get.items.head.href mustBe routes.PreviousRegistrationNumberController.onPageLoad().url
+      result.get.actions.get.items.head.href mustBe controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad().url
     }
 
     "must display registration numbers separated by <br> and include action when less than 3 numbers" in {
@@ -73,7 +73,7 @@ class PreviousRegistrationNumbersSummarySpec extends SpecBase {
       html must include("<br/>")
 
       result.actions.get.items.size mustBe 1
-      result.actions.get.items.head.href mustBe routes.PreviousRegistrationNumbersListController.onPageLoad().url
+      result.actions.get.items.head.href mustBe controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad().url
     }
 
     "must display registration numbers separated by <br> and exclude change action when 3 or more  prev numbers" in {

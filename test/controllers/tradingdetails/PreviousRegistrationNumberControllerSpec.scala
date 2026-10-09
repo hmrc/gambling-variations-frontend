@@ -43,8 +43,8 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
   val fieldName = "previousRegistrationNumber"
   val requiredUserAnswers = emptyUserAnswers.set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
 
-  lazy val previousRegistrationNumberRoute = routes.PreviousRegistrationNumberController.onPageLoad().url
-  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersListController.onPageLoad().url
+  lazy val previousRegistrationNumberRoute = controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad().url
+  lazy val previousRegistrationNumbersRoute = controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad().url
 
   "PreviousRegistrationNumber Controller" - {
 

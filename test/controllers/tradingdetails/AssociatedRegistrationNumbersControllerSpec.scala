@@ -57,7 +57,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
     UserAnswers(userAnswersId, data)
 
   lazy val associatedRegistrationNumbersRoute =
-    routes.AssociatedRegistrationNumbersListController.onPageLoad().url
+    controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad().url
 
   "AssociatedRegistrationNumbers Controller" - {
 
@@ -134,7 +134,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.CheckTradingDetailsController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url
       }
     }
 
@@ -159,7 +159,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.CheckTradingDetailsController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url
       }
     }
 
@@ -273,7 +273,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.CheckTradingDetailsController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url
       }
     }
 
@@ -296,13 +296,13 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val request =
           FakeRequest(
             GET,
-            routes.AssociatedRegistrationNumbersListController.onRedirect(assocRegNumber).url
+            controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onRedirect(assocRegNumber).url
           )
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.RemoveAssociatedRegNumberController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.tradingdetails.routes.RemoveAssociatedRegNumberController.onPageLoad().url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())
@@ -330,13 +330,13 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
         val request =
           FakeRequest(
             GET,
-            routes.AssociatedRegistrationNumbersListController.onChangeRedirect(assocRegNumber).url
+            controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onChangeRedirect(assocRegNumber).url
           )
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.AssociatedRegNumberController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad().url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())
@@ -384,7 +384,7 @@ class AssociatedRegistrationNumbersControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual
-          routes.AssociatedRegNumberController.onPageLoad().url
+          controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad().url
 
         val captor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(mockSessionRepository).set(captor.capture())

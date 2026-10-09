@@ -40,8 +40,8 @@ class BusinessTradeClassControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val businessTradeClassRoute: String = routes.BusinessTradeClassController.onPageLoad().url
-  lazy val businessTradeClassSubmitRoute: String = routes.BusinessTradeClassController.onSubmit().url
+  lazy val businessTradeClassRoute: String = controllers.tradingdetails.routes.BusinessTradeClassController.onPageLoad().url
+  lazy val businessTradeClassSubmitRoute: String = controllers.tradingdetails.routes.BusinessTradeClassController.onSubmit().url
 
   val formProvider = new BusinessTradeClassFormProvider()
   val form = formProvider()
