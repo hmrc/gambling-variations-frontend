@@ -843,11 +843,11 @@ partnerDetailsAddNino.error.required = Enter the partner’s National Insurance 
 partnerDetailsAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 0 to 9 and spaces
 partnerDetailsAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character
 
-vatRegistrationNumberYesNo.title = Do you want to add a VAT registration number for the partner?
-vatRegistrationNumberYesNo.heading = Do you want to add a VAT registration number for the partner?
-vatRegistrationNumberYesNo.checkYourAnswersLabel = Do you want to add a VAT registration number for the partner?
-vatRegistrationNumberYesNo.error.required = Select yes to add a VAT registration number for the partner
-vatRegistrationNumberYesNo.change.hidden = do you want to add a VAT registration number for the partner
+partnerDetailsAddVRNYesNo.title = Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.heading = Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.checkYourAnswersLabel = Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.error.required = Select yes to add a VAT registration number for the partner
+partnerDetailsAddVRNYesNo.change.hidden = do you want to add a VAT registration number for the partner
 
 partnerDetailsRemoveVRNYesNo.title = Are you sure you want to remove this partner’s VAT registration number?
 partnerDetailsRemoveVRNYesNo.heading = Are you sure you want to remove {0} as this partner’s VAT registration number?
