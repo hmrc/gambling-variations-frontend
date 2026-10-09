@@ -91,12 +91,14 @@ case class CheckPartnerDetailsViewModel(
     val messagesToShow =
       if (isNewPartnerFlow)
         Seq(
-          Some(messages("partnerDetailsCheckYourAnswers.error.missingChanges")),
-          Option.when(isMissingMandatoryDetails)(messages("partnerDetailsCheckYourAnswers.error.missingDetails"))
-        ).flatten
+          if (isMissingMandatoryDetails) messages("partnerDetailsCheckYourAnswers.error.missingDetails")
+          else messages("partnerDetailsCheckYourAnswers.error.missingChanges")
+        )
       else {
         val submitChanges =
-          Option.when(hasChanges.contains(true))(messages("partnerDetailsCheckYourAnswers.error.missingChanges"))
+          Option.when(hasChanges.contains(true) && !dueToJoinOrLeave)(
+            messages("partnerDetailsCheckYourAnswers.error.missingChanges")
+          )
 
         val leaving =
           if (isDueToLeave) dateOfLeaving.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", d, link))
