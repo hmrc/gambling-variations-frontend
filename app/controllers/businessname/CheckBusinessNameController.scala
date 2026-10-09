@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessname
 
 import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, DataRetrievalAction}
+import controllers.routes
 import models.{BusinessType, SoleProprietorName}
-import pages.{BusinessTypePage, GroupMemberPage}
 import pages.businessname.*
 import pages.tradingdetails.TradingNamePage
-import utils.FlagsUtil.checkFlag
+import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkFlag
 import views.html.BusinessNameView
 
 import javax.inject.Inject

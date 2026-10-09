@@ -14,35 +14,36 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessname
 
 import controllers.actions.*
-import forms.BusinessTradingNameFormProvider
-import models.Mode
+import controllers.routes
+import forms.RemoveTradeNameFormProvider
+import models.{Mode, UserAnswers}
 import navigation.Navigator
+import pages.GroupMemberPage
 import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
-import pages.tradingdetails.TradingNamePage
-import pages.{BusinessTypePage, GroupMemberPage}
-import utils.FlagsUtil.checkIfChanged
+import pages.tradingdetails.{RemoveTradeNamePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.BusinessTradingNameView
+import views.html.RemoveTradeNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
-class BusinessTradingNameController @Inject() (
+class RemoveTradeNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: BusinessNameDataRequiredAction,
-  formProvider: BusinessTradingNameFormProvider,
+  formProvider: RemoveTradeNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: BusinessTradingNameView
+  view: RemoveTradeNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -57,16 +58,9 @@ class BusinessTradingNameController @Inject() (
         Redirect(routes.AccessDeniedController.onPageLoad())
 
       case Some(false) =>
-        val businessType =
-          request.userAnswers
-            .get(BusinessTypePage)
-            .getOrElse(throw new Exception())
-        val preparedForm = request.userAnswers.get(TradingNamePage) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
-
-        Ok(view(preparedForm, mode, businessType))
+        request.userAnswers.get(TradingNamePage) map { tradingName =>
+          Ok(view(form, mode, tradingName))
+        } getOrElse Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad())
 
       case None =>
         Redirect(routes.SystemErrorController.onPageLoad())
@@ -74,7 +68,7 @@ class BusinessTradingNameController @Inject() (
 
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) async { implicit request =>
 
     request.userAnswers.get(GroupMemberPage) match {
 
@@ -84,30 +78,40 @@ class BusinessTradingNameController @Inject() (
         )
 
       case Some(false) =>
-        val businessType =
-          request.userAnswers
-            .get(BusinessTypePage)
-            .getOrElse(throw new Exception())
-        form
-          .bindFromRequest()
-          .fold(
-            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, businessType))),
-            value =>
-              val isChanged: Boolean =
-                checkIfChanged(value, request.userAnswers, TradingNamePage, BusinessNameChangesPage)
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(TradingNamePage, value))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
-                updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, isChanged))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(TradingNamePage, mode, updatedAnswers))
-          )
+        request.userAnswers.get(TradingNamePage) map { tradingName =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, tradingName))),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameSubmittedPage, true))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessNameChangesPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(RemoveTradeNamePage, mode, updatedAnswers))
+            )
+        } getOrElse Future.successful(Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad()))
 
       case None =>
         Future.successful(
           Redirect(routes.SystemErrorController.onPageLoad())
         )
-
     }
+
   }
+
+  private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
+    for {
+      ua1 <- userAnswers.set(RemoveTradeNamePage, value)
+      ua2 <- {
+        if (value) {
+          ua1.remove(TradingNamePage)
+        } else {
+          Try(ua1)
+        }
+      }
+    } yield ua2
+  }
+
 }
