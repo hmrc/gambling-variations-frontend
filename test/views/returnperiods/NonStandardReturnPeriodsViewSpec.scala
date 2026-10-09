@@ -49,18 +49,18 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
     private val date = LocalDate.now()
     private val gamblingReturnPeriods = GamblingReturnPeriods(
-      mgdRegNumber = "mgd1",
-      returnPeriodsId = Some(1),
-      nstpEndDate1 = Some(date.minusMonths(9)),
-      nstpEndDate2 = Some(date.minusMonths(6)),
-      nstpEndDate3 = Some(date.minusMonths(3)),
-      nstpEndDate4 = Some(date),
-      nstpEndDate5 = Some(date.plusMonths(3)),
-      nstpEndDate6 = Some(date.plusMonths(6)),
-      nstpEndDate7 = Some(date.plusMonths(9)),
-      nstpEndDate8 = Some(date.plusMonths(12)),
-      isInLastNstp = Some(true),
-      finalPeriodWarning = Some(false),
+      mgdRegNumber          = "mgd1",
+      returnPeriodsId       = Some(1),
+      nstpEndDate1          = Some(date.minusMonths(9)),
+      nstpEndDate2          = Some(date.minusMonths(6)),
+      nstpEndDate3          = Some(date.minusMonths(3)),
+      nstpEndDate4          = Some(date),
+      nstpEndDate5          = Some(date.plusMonths(3)),
+      nstpEndDate6          = Some(date.plusMonths(6)),
+      nstpEndDate7          = Some(date.plusMonths(9)),
+      nstpEndDate8          = Some(date.plusMonths(12)),
+      isInLastNstp          = Some(true),
+      finalPeriodWarning    = Some(false),
       hasExistingNstpValues = Some(true)
     )
     private val viewModel = NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods).get
@@ -106,11 +106,9 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
       assert(pastTable.isDefined, "Non-standard return periods table should exist")
       assert(upcomingTable.isDefined, "Standard return periods table should exist")
 
-      assert(pastTable.get.select("tbody tr").size() > 0,
-        "Non-standard table should contain rows")
+      assert(pastTable.get.select("tbody tr").size() > 0, "Non-standard table should contain rows")
 
-      assert(upcomingTable.get.select("tbody tr").size() > 0,
-        "Standard table should contain rows")
+      assert(upcomingTable.get.select("tbody tr").size() > 0, "Standard table should contain rows")
 
       doc.select("button.govuk-button").text() mustBe
         messages("site.continue")

@@ -59,7 +59,6 @@ object NonStandardReturnPeriodsViewModel {
                        gamblingReturnPeriods.nstpEndDate6,
                        gamblingReturnPeriods.nstpEndDate7,
                        gamblingReturnPeriods.nstpEndDate8
-                       // TODO flattening, but if hasExistingNstpValues, they all should exist
                      ).flatten.span(_.isBefore(today.plusDays(1)))
 
                      Some(
@@ -112,10 +111,9 @@ object NonStandardReturnPeriodsViewModel {
         endDate = formatDate(returnPeriodDate, true)
       )
     case _ =>
-      // TODO error?
       NstpReturnPeriod(
-        month   = "Something went wrong",
-        endDate = "Something went wrong"
+        month   = formatDate(returnPeriodDate, false),
+        endDate = formatDate(returnPeriodDate, true)
       )
   }
 
