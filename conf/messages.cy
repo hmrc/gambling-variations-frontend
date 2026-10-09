@@ -467,3 +467,7 @@ partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {
 partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
 partnerDetailsRemovePartnerYesNo.removeNow = cy: Yes, remove this partner now
 partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to remove this partner now
+
+removeControllingBodyEmail.title = cy: Are you sure you want to remove this controlling body's email address?
+removeControllingBodyEmail.heading = cy: Are you sure you want to remove {0} as this controlling body’s email address?
+removeControllingBodyEmail.error.required = cy: Select yes if you want to remove this controlling body’s email address
