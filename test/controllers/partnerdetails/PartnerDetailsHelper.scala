@@ -28,9 +28,9 @@ import java.time.LocalDate
 
 trait PartnerDetailsHelper {
 
-  val businessNumber1: String = "12345"
-  val businessNumber2: String = "123456"
-  val businessNumber3: String = "1234567"
+  val businessNumber1: String = "0500085011"
+  val businessNumber2: String = "0500085012"
+  val businessNumber3: String = "0500085013"
   val newPartnersIndex1: Int = 0
   val newPartnersIndex2: Int = 1
 

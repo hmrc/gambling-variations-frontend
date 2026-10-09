@@ -225,4 +225,5 @@ class PartnerDetailsController @Inject() (
 
       hasPartner && !hasPastLeavingDate
     }
+    .toSeq
 }

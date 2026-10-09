@@ -16,16 +16,24 @@
 
 package utils
 
-import models.{BusinessType, Mode, NormalMode, UserAnswers}
+import models.{BusinessType, CheckMode, Mode, NormalMode, UserAnswers}
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage, PartnerDetailsSoleProprietorPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.*
 import play.api.libs.json.{JsArray, JsObject}
+
+import scala.collection.Seq
 
 object PartnerUtils {
 
   def parseIndex(index: String, mode: Mode): BusinessNumberOrIndex =
     if mode == NormalMode then index.toInt
     else index
+
+  /** Inverse of parseIndex: the mode a link must carry so the target controller parses the index correctly. */
+  def modeFor(index: BusinessNumberOrIndex): Mode = index match {
+    case _: Int    => NormalMode
+    case _: String => CheckMode
+  }
 
   def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = (userAnswers.data \ "partners")
     .asOpt[JsObject]
@@ -42,12 +50,10 @@ object PartnerUtils {
     newPartnerExistingIndex getOrElse 0
   }
 
-  def getCompletedNewPartners(userAnswers: UserAnswers): Seq[Int] = (0 to getNewPartnersSize(userAnswers))
+  def getCompletedNewPartners(userAnswers: UserAnswers): IndexedSeq[Int] = (0 to getNewPartnersSize(userAnswers))
     .map(index => userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)))
     .zipWithIndex
-    .collect { case (Some(true), i) =>
-      i
-    }
+    .collect { case (Some(true), i) => i }
 
   def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = for {
     businessType <- userAnswers.get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))

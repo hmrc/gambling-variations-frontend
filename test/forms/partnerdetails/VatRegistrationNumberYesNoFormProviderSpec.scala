@@ -21,7 +21,7 @@ import play.api.data.FormError
 
 class VatRegistrationNumberYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "vatRegistrationNumberYesNo.error.required"
+  val requiredKey = "partnerDetailsAddVRNYesNo.error.required"
   val invalidKey = "error.boolean"
 
   val form = new VatRegistrationNumberYesNoFormProvider()()

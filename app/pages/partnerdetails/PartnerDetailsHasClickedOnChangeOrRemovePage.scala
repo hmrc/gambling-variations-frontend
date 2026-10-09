@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package pages.partnerdetails
 
-import org.scalatestplus.play.PlaySpec
+import pages.QuestionPage
 import play.api.libs.json.JsPath
+case class PartnerDetailsHasClickedOnChangeOrRemovePage(key: String) extends QuestionPage[Boolean] {
 
-class ControllingBodyBusinessTypePageSpec extends PlaySpec {
+  override val path: JsPath = JsPath \ "partners" \ key \ toString
 
-  "ControllingBodyBusinessTypePage" must {
-
-    "have the correct path" in {
-      ControllingBodyBusinessTypePage.path mustEqual (JsPath \ "controllingBodyDetails" \ "typeOfControllingBody")
-    }
-
-    "have the correct toString value" in {
-      ControllingBodyBusinessTypePage.toString mustEqual "typeOfControllingBody"
-    }
-  }
+  override def toString: String = "partnerDetailsHasClickedOnChangeOrRemove"
 }

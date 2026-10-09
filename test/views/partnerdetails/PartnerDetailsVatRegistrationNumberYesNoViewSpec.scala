@@ -49,11 +49,11 @@ class PartnerDetailsVatRegistrationNumberYesNoViewSpec extends SpecBase {
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("vatRegistrationNumberYesNo.title")
+          messages(application)("partnerDetailsAddVRNYesNo.title")
         )
 
         document.select("h1").text() mustEqual
-          messages(application)("vatRegistrationNumberYesNo.heading")
+          messages(application)("partnerDetailsAddVRNYesNo.heading")
 
         document.body().text() must include(
           messages(application)("site.continue")
@@ -94,7 +94,7 @@ class PartnerDetailsVatRegistrationNumberYesNoViewSpec extends SpecBase {
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("vatRegistrationNumberYesNo.error.required")
+          messages(application)("partnerDetailsAddVRNYesNo.error.required")
         )
       }
     }

@@ -257,6 +257,12 @@ partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add
 partnerDetailsAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = cy: Do you want to add a trading name for the partner?
 
+partnerDetailsAddVRNYesNo.title = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.heading = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.checkYourAnswersLabel = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.error.required = cy: Select yes to add a VAT registration number for the partner
+partnerDetailsAddVRNYesNo.change.hidden = cy: do you want to add a VAT registration number for the partner
+
 partnerDetailsRemoveVRNYesNo.title = cy: Are you sure you want to remove this partner’ VAT registration number?
 partnerDetailsRemoveVRNYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s VAT registration number?
 partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’ VAT registration number?

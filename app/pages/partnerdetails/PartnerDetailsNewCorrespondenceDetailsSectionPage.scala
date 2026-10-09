@@ -16,19 +16,22 @@
 
 package pages.partnerdetails
 
+import models.NewCorrespondenceDetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsAdditionalAddressInfoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[String] {
+case class PartnerDetailsNewCorrespondenceDetailsSectionPage(businessNumberOrIndex: BusinessNumberOrIndex)
+    extends QuestionPage[NewCorrespondenceDetails] {
+
   override val path: JsPath = businessNumberOrIndex match {
-    case key: String => JsPath \ "partners" \ key \ "partnerDetailsCorrespondenceDetailsSection" \ toString
-    case index: Int  => JsPath \ "newPartners" \ index \ "partnerDetailsCorrespondenceDetailsSection" \ toString
+    case key: String => JsPath \ "partners" \ key \ toString
+    case index: Int  => JsPath \ "newPartners" \ index \ toString
   }
 
-  override def toString: String = "additionalInformation"
+  override def toString: String = "partnerDetailsCorrespondenceDetailsSection"
 }
 
-object PartnerDetailsAdditionalAddressInfoPage {
-  def apply(index: Int) = new PartnerDetailsAdditionalAddressInfoPage(index)
-  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsAdditionalAddressInfoPage(partnerDetailsBusinessNumber)
+object PartnerDetailsNewCorrespondenceDetailsSectionPage {
+  def apply(index: Int) = new PartnerDetailsNewCorrespondenceDetailsSectionPage(index)
+  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsNewCorrespondenceDetailsSectionPage(partnerDetailsBusinessNumber)
 }

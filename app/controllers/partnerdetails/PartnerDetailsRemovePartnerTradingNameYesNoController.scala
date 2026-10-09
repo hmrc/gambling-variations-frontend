@@ -37,6 +37,7 @@ class PartnerDetailsRemovePartnerTradingNameYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
+  changeTracker: PartnerChangeTracker,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
@@ -50,21 +51,20 @@ class PartnerDetailsRemovePartnerTradingNameYesNoController @Inject() (
   val form: Form[Boolean] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
       val newIndex = PartnerUtils.parseIndex(index, mode)
 
       request.userAnswers.get(PartnerDetailsTradingNamePage(newIndex)) match {
         case Some(partnerTradingName) =>
           val preparedForm =
-            request.userAnswers.get(PartnerDetailsRemovePartnerTradingNameYesNoPage(newIndex)) match {
-              case None        => form
-              case Some(value) => form.fill(value)
-            }
+            request.userAnswers.get(PartnerDetailsRemovePartnerTradingNameYesNoPage(newIndex)).fold(form)(form.fill)
 
-          Ok(view(preparedForm, index, mode, partnerTradingName))
+          changeTracker
+            .markClicked(request.userAnswers, newIndex)
+            .map(_ => Ok(view(preparedForm, index, mode, partnerTradingName)))
 
         case None =>
-          Redirect(routes.SystemErrorController.onPageLoad())
+          Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
       }
     }
 
