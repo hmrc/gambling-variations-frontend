@@ -425,3 +425,45 @@ previousRegistrationNumber.error.duplicate = Mae’r rhif cofrestru hwn eisoes w
 removePremisesAddress.title = cy: Are you sure you want to remove this premises address?
 removePremisesAddress.heading = cy: Are you sure you want to remove this premises address?
 removePremisesAddress.error.required = cy: Select yes if you want to remove this premises address
+
+controllingBodyBusinessType.title = cy: What type of business is the controlling body?
+controllingBodyBusinessType.heading = cy: What type of business is the controlling body?
+controllingBodyBusinessType.error.required = cy: Select the type of business for the controlling body
+
+controllingBodyChangeScreener.title = cy: What do you want to do with your controlling body?
+controllingBodyChangeScreener.heading = cy: What do you want to do with your controlling body?
+controllingBodyChangeScreener.p1 = cy: Your current controlling body is {0}.
+controllingBodyChangeScreener.editDetails = cy: Edit controlling body details
+controllingBodyChangeScreener.provideNew = cy: Provide a new controlling body
+controllingBodyChangeScreener.keepSame = cy: Keep controlling body the same
+controllingBodyChangeScreener.error.required = cy: Select what you want to do with your controlling body
+
+partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?
+partnerDetailsAddCountryOfIncorporation.error.required = cy: Enter the country the partner’s business is incorporated in
+partnerDetailsAddCountryOfIncorporation.error.invalid = cy: The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+partnerDetailsAddCountryOfIncorporation.error.length = cy: The country must be 100 characters or less
+partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the partner’s business incorporated in?
+
+controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
+controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body
+
+controllingBodyEmailAddress.title = cy: What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = cy: What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = cy: Email Address
+controllingBodyEmailAddress.error.required = cy: Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = cy: The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = cy: The email address must be 70 characters or less
+
+
+site.pagination.next = cy: Next
+site.pagination.previous = cy: Previous
+partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
+
+partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = cy: Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to remove this partner now

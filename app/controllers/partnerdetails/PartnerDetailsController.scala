@@ -19,16 +19,18 @@ package controllers.partnerdetails
 import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partnerdetails.AddAnotherPartnerFormProvider
-import models.NormalMode
-import pages.partnerdetails.{PartnerDetailsAddAnotherPartnerYesNoPage, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsChosenPartnerToRemovePage}
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages.partnerdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.{PaginationResult, PaginationService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerDetailsViewModel
 import views.html.partnerdetails.PartnerDetailsView
 
+import java.time.{LocalDate, ZoneOffset}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,20 +48,30 @@ class PartnerDetailsController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] =
+  private val paginationService: PaginationService = PaginationService(
+    recordsPerPage  = frontendAppConfig.partnersPerPage,
+    maxRecords      = frontendAppConfig.maxPartners,
+    maxVisiblePages = 5
+  )
+
+  def onPageLoad(page: Option[Int]): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
+      val selectedPage = page.getOrElse(1)
+
+      val todayDate = LocalDate.now(ZoneOffset.UTC)
+      val paginatedPartnerNumbers = fetchPaginatedPartnerDetails(request.userAnswers, todayDate, selectedPage)
 
       val viewModel =
         PartnerDetailsViewModel.from(
+          paginatedPartnerNumbers.paginatedData,
+          todayDate,
           request.userAnswers,
           frontendAppConfig
         )
 
       val errorMessage =
-        if (viewModel.showNoPartnersMessage)
-          "partnerDetails.addPartner.error.required"
-        else
-          "partnerDetails.addAnotherPartner.error.required"
+        if viewModel.showNoPartnersMessage then "partnerDetails.addPartner.error.required"
+        else "partnerDetails.addAnotherPartner.error.required"
 
       val form = formProvider(errorMessage)
 
@@ -71,16 +83,27 @@ class PartnerDetailsController @Inject() (
       Ok(
         view(
           preparedForm,
-          viewModel
+          viewModel,
+          paginatedPartnerNumbers.paginationViewModel,
+          selectedPage,
+          paginatedPartnerNumbers.from,
+          paginatedPartnerNumbers.to,
+          paginatedPartnerNumbers.totalRecords
         )
       )
     }
 
-  def onSubmit: Action[AnyContent] =
+  def onSubmit(page: Option[Int]): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+      val selectedPage = page.getOrElse(1)
+
+      val todayDate = LocalDate.now(ZoneOffset.UTC)
+      val paginatedPartnerNumbers = fetchPaginatedPartnerDetails(request.userAnswers, todayDate, selectedPage)
 
       val viewModel =
         PartnerDetailsViewModel.from(
+          paginatedPartnerNumbers.paginatedData,
+          todayDate,
           request.userAnswers,
           frontendAppConfig
         )
@@ -99,7 +122,12 @@ class PartnerDetailsController @Inject() (
               BadRequest(
                 view(
                   formWithErrors,
-                  viewModel
+                  viewModel,
+                  paginatedPartnerNumbers.paginationViewModel,
+                  selectedPage,
+                  paginatedPartnerNumbers.from,
+                  paginatedPartnerNumbers.to,
+                  paginatedPartnerNumbers.totalRecords
                 )
               )
             ),
@@ -138,30 +166,63 @@ class PartnerDetailsController @Inject() (
         )
     }
 
-  def onPartnerDetails(partnerNumber: String): Action[AnyContent] =
+  def onPartnerDetails(partnerNumber: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
       Redirect(
-        routes.PartnerDetailsController.onPageLoad
+        routes.PartnerDetailsController.onPageLoad(None)
       )
     }
 
-  def onRemove(partnerNumber: String): Action[AnyContent] =
+  def onRemove(partnerNumber: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-
-      for {
-        updatedAnswers <-
-          Future.fromTry(
-            request.userAnswers.set(
-              PartnerDetailsChosenPartnerToRemovePage,
-              partnerNumber
-            )
+      mode match {
+        case NormalMode =>
+          // TODO journey for removing newPartners
+          Future.successful(Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)))
+        case CheckMode =>
+          for {
+            updatedAnswers <-
+              Future.fromTry(
+                request.userAnswers.set(
+                  PartnerDetailsChosenPartnerToRemovePage,
+                  partnerNumber
+                )
+              )
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(
+            controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
           )
+      }
+    }
 
-        _ <- sessionRepository.set(updatedAnswers)
+  private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int): PaginationResult = {
+    val completedNewPartners = PartnerUtils.getCompletedNewPartners(userAnswers)
+    val existingPartners = getPresentExistingPartners(userAnswers, todayDate)
 
-      } yield Redirect(
-        controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
+    paginationService
+      .paginateAlphabeticallyPartnerDetails(
+        completedNewPartners,
+        existingPartners,
+        userAnswers,
+        page,
+        routes.PartnerDetailsController.onPageLoad(None).url
       )
+  }
+
+  private def getPresentExistingPartners(userAnswers: UserAnswers, todayDate: LocalDate): Seq[String] = PartnerUtils
+    .getExistingPartnersBusinessNumbers(userAnswers)
+    .filter { partnerNumber =>
+      val hasPartner =
+        userAnswers
+          .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
+          .isDefined
+
+      val hasPastLeavingDate =
+        userAnswers
+          .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
+          .exists(_.isBefore(todayDate))
+
+      hasPartner && !hasPastLeavingDate
     }
 }

@@ -61,6 +61,42 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   private lazy val connector =
     app.injector.instanceOf[GamblingConnector]
 
+  "GamblingConnector.getControlBodyDetails" should {
+    "read the I1.36 response from the controlling body endpoint" in {
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+          .willReturn(okJson(s"""{"mgdRegNumber":"$mgdRegNumber","typeOfControllingBody":4,"businessName":"Test Partnership"}"""))
+      )
+      connector.getControlBodyDetails(mgdRegNumber).map { result =>
+        result.typeOfControllingBody mustBe Some(models.BusinessType.Partnership)
+        result.businessName mustBe Some("Test Partnership")
+      }
+    }
+
+    Seq(404, 500).foreach { status =>
+      s"fail when the controlling body endpoint returns $status" in {
+        wireMockServer.stubFor(
+          get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+            .willReturn(aResponse().withStatus(status))
+        )
+        recoverToSucceededIf[UpstreamErrorResponse](connector.getControlBodyDetails(mgdRegNumber))
+      }
+    }
+
+    Seq(
+      "missing registration number" -> """{"typeOfControllingBody":4}""",
+      "invalid business type"       -> s"""{"mgdRegNumber":"$mgdRegNumber","typeOfControllingBody":99}"""
+    ).foreach { case (scenario, payload) =>
+      s"fail when the backend returns a $scenario" in {
+        wireMockServer.stubFor(
+          get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
+            .willReturn(okJson(payload))
+        )
+        recoverToSucceededIf[RuntimeException](connector.getControlBodyDetails(mgdRegNumber))
+      }
+    }
+  }
+
   "GamblingConnector.getParterDetails" should {
 
     "return partnerDetails when backend returns 200" in {

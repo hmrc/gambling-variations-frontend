@@ -24,8 +24,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsVatRegistrationNumberYesNoPage}
+import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -36,9 +36,9 @@ import scala.concurrent.Future
 class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new VatRegistrationNumberYesNoFormProvider()
-  val form = formProvider()
+  val form: Form[Boolean] = formProvider()
 
-  lazy val vatRegistrationNumberYesNoRouteNewPartners =
+  lazy val vatRegistrationNumberYesNoRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   private val userAnswersWithoutVatAnswerNewPartners =

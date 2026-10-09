@@ -102,12 +102,12 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("checkLicenceAndPremises.provideAddresses.byPost")
       }
 
-      "must use by post and show the post details when the method is not provided and there are no premises" in {
+      "must use by post and show the post details but continue to provide premises addresses when the method is not provided and there are no premises" in {
         val vm = viewModel()
 
         vm.premisesDetailsRequiredMessage mustBe None
         vm.showSendByPost mustBe true
-        vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+        vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
         keys(vm) must not contain msgs("checkLicenceAndPremises.addressesOnline")
       }
 
@@ -170,7 +170,15 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
-      "must use by post when premises are not covered, the method is not provided and there are no premises" in {
+      "must not require premises details when all premises are covered, even if online has been selected without any premises" in {
+        val vm = viewModel(isPubTenant = true, provideAddressesAnswer = Some(Online))
+
+        keys(vm) must contain noneOf (msgs("checkLicenceAndPremises.provideAddresses"), msgs("checkLicenceAndPremises.addressesOnline"))
+        vm.premisesDetailsRequiredMessage mustBe None
+        vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+      }
+
+      "must use by post but continue to provide premises addresses when premises are not covered, the method is not provided and there are no premises" in {
         val vm = viewModel(isPubTenant = true, hasPremisesNotCovered = true)
 
         keys(vm) must contain allOf (msgs("checkLicenceAndPremises.premisesNotCovered"), msgs("checkLicenceAndPremises.provideAddresses"))
@@ -178,6 +186,13 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         valueText(rowFor(vm, "checkLicenceAndPremises.provideAddresses")) mustEqual msgs("checkLicenceAndPremises.provideAddresses.byPost")
         vm.premisesDetailsRequiredMessage mustBe None
         vm.showSendByPost mustBe true
+        vm.continueUrl mustEqual routes.LicencesPremisesController.onPageLoad().url
+      }
+
+      "must not ask for the method when all premises are covered, the method is not provided and there are no premises" in {
+        val vm = viewModel(isPubTenant = true)
+
+        keys(vm) must not contain msgs("checkLicenceAndPremises.provideAddresses")
         vm.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
@@ -286,18 +301,12 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         )
       }
 
-      "must use the answers given in this session over the backend values" in {
+      "must read the yes/no answers from the backend flags" in {
         val answers = emptyUserAnswers
-          .set(LicenceHeldByLandlordPage, "1")
+          .set(LicenceHeldByLandlordPage, "0")
           .success
           .value
-          .set(LicenceDetailsLandlordLicenceYesNoPage, false)
-          .success
-          .value
-          .set(LicencePremisesNotCoveredPage, "0")
-          .success
-          .value
-          .set(PremisesNotCoveredYesNoPage, true)
+          .set(LicencePremisesNotCoveredPage, "1")
           .success
           .value
           .set(LicencesPremisesPage, ByPost)

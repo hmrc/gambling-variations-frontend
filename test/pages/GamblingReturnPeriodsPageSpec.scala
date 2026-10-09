@@ -17,6 +17,7 @@
 package pages
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import pages.returnperiods.GamblingReturnPeriodsPage
 import play.api.libs.json.JsPath
 
 class GamblingReturnPeriodsPageSpec extends AnyFreeSpec with Matchers {

@@ -17,7 +17,6 @@
 package views.licencespremises
 
 import base.SpecBase
-import controllers.licencespremises.routes
 import models.licencespremises.LicencesAndPremisesRadioOptions.{ByPost, Online}
 import models.licencespremises.OtherLicencesAndPermitsGB.clubMachine
 import org.jsoup.Jsoup
@@ -92,11 +91,12 @@ class CheckLicenceAndPremisesViewSpec extends SpecBase {
       document.select("main").text() must include(msgs("checkLicenceAndPremises.premisesNotCovered.p1"))
     }
 
-    "must render the by post section when the method is not provided and there are no premises" in {
+    "must render the by post section and link the button to provide premises addresses when the method is not provided and there are no premises" in {
       val document = render(emptyViewModel)
 
       document.select("main h2").text() mustEqual msgs("checkLicenceAndPremises.byPost.heading")
       document.select("main").text() must not include msgs("checkLicenceAndPremises.noLicences.p1")
+      document.select(".govuk-button").attr("href") mustEqual controllers.licencespremises.routes.LicencesPremisesController.onPageLoad().url
     }
 
     "must render the by post section with the download link and address, and the ready to submit message" in {
@@ -107,9 +107,10 @@ class CheckLicenceAndPremisesViewSpec extends SpecBase {
       val formLink = document.select("main a[href*=mgd5]")
       formLink.attr("href") mustEqual "https://www.tax.service.gov.uk/print-and-post/form/Customs/1.0/MGD5/mgd5.xdp"
       formLink.attr("rel") mustEqual "noreferrer noopener"
+      formLink.attr("target") mustEqual "_blank"
       formLink.text() mustEqual msgs("checkLicenceAndPremises.byPost.link")
       formLink.parents().get(0).text() mustEqual
-        s"${msgs("checkLicenceAndPremises.byPost.link")} ${msgs("checkLicenceAndPremises.byPost.p1")}"
+        s"${msgs("checkLicenceAndPremises.byPost.link")}${msgs("checkLicenceAndPremises.byPost.p1")}"
 
       val addressLines = (1 to 6).map(line => msgs(s"checkLicenceAndPremises.byPost.address.line$line"))
       addressLines.foreach(line => document.select("main").text() must include(line))
