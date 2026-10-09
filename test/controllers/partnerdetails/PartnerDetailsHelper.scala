@@ -42,6 +42,7 @@ trait PartnerDetailsHelper {
   val testVRN: String = "353868127"
   val testUtr: String = "1121766916"
   val testForeignCorpRef = "FCR-987654"
+  val testCRN: String = "SC123456"
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
@@ -129,7 +130,8 @@ trait PartnerDetailsHelper {
     nino: Option[String] = None,
     vrn: Option[String] = None,
     utr: Option[String] = None,
-    fcr: Option[String] = None
+    fcr: Option[String] = None,
+    crn: Option[String] = None
   ): JsObject = Json.obj(
     "partners" -> Json.obj(
       businessNumber1 -> Json.obj(
@@ -163,7 +165,7 @@ trait PartnerDetailsHelper {
         "partnerDetailsNino"                   -> nino,
         "partnerDetailsUtr"                    -> utr,
         "partnerDetailsVrn"                    -> vrn,
-        "partnerDetailsCrn"                    -> "09876543",
+        "partnerDetailsCrn"                    -> crn,
         "partnerDetailsForeignCorporateRef"    -> fcr,
         "partnerDetailsIsFutureLeaveDate"      -> 0,
         "partnerDetailsIsFutureJoinDate"       -> 0,
@@ -181,7 +183,8 @@ trait PartnerDetailsHelper {
     nino: Option[String] = None,
     vrn: Option[String] = None,
     utr: Option[String] = None,
-    fcr: Option[String] = None
+    fcr: Option[String] = None,
+    crn: Option[String] = None
   ): JsObject = Json.obj(
     "partners" -> Json.obj(),
     "newPartners" -> Json.arr(
@@ -216,7 +219,7 @@ trait PartnerDetailsHelper {
         "partnerDetailsNino"                   -> nino,
         "partnerDetailsUtr"                    -> utr,
         "partnerDetailsVrn"                    -> vrn,
-        "partnerDetailsCrn"                    -> "09876543",
+        "partnerDetailsCrn"                    -> crn,
         "partnerDetailsForeignCorporateRef"    -> fcr,
         "partnerDetailsIsFutureLeaveDate"      -> 0,
         "partnerDetailsIsFutureJoinDate"       -> 0,

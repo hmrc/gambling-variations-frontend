@@ -1188,3 +1188,13 @@ controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+partnerDetailsCompanyRegistrationNumber.title = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.heading = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.paragraph = What is the company registration number?
+partnerDetailsCompanyRegistrationNumber.hint = It can be up to 8 numbers, or start with 2 letters followed by up to 6 letters or numbers, for example AC123456, IPCFGEDT or 000123
+partnerDetailsCompanyRegistrationNumber.error.required = Enter the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.error.invalid.characters = The partner’s company registration number must only include letters a to z and numbers 0 to 9
+partnerDetailsCompanyRegistrationNumber.error.invalid.format = The partner’s company registration number must be in the correct format
+partnerDetailsCompanyRegistrationNumber.p1 = You can find this by
+partnerDetailsCompanyRegistrationNumber.link = searching for the company on the Companies House register (opens in new tab)
