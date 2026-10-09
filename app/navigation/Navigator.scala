@@ -190,7 +190,7 @@ class Navigator @Inject() () {
     case PartnerDetailsCountryOfIncorporationPage(index) =>
       userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
     case PartnerDetailsRemovePartnerYesNoPage(index) =>
-      userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers) // change it
+      userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
 
     // License and Premises Details
     case LicenceNumberPage =>

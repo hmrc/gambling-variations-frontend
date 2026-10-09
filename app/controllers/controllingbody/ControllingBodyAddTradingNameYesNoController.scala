@@ -37,7 +37,7 @@ class ControllingBodyAddTradingNameYesNoController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: ControllingBodyNameDataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodyAddTradingNameYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyAddTradingNameYesNoView

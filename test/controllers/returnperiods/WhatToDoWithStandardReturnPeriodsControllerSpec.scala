@@ -17,7 +17,6 @@
 package controllers.returnperiods
 
 import base.SpecBase
-import controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController
 import forms.returnperiods.WhatToDoWithStandardReturnPeriodsFormProvider
 import models.ChooseReturnPeriods.Jan
 import models.{GamblingReturnPeriods, NormalMode, UserAnswers, WhatToDoWithStandardReturnPeriods}
