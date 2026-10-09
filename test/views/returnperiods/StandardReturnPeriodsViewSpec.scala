@@ -26,7 +26,6 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import views.html.returnperiods.StandardReturnPeriodsView
 
-//TODO duplicate, create second spec for NonStandardReturnPeriods
 class StandardReturnPeriodsViewSpec extends SpecBase {
 
   trait Setup {

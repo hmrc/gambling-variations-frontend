@@ -36,9 +36,6 @@ import views.html.returnperiods.{NonStandardReturnPeriodsView, StandardReturnPer
 import java.time.LocalDate
 import scala.concurrent.Future
 
-//TODO, some tests for idenitifying which view to use
-//isStandardReturnsPeriod test that on all routes
-//getNonStandardReturnPeriodsViewModel test that on all routes
 class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
@@ -502,7 +499,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
-      "must redirect to the system error page for a GET if GamblingReturnPeriodsPage is None" in {
+      "must redirect to the system error page for a GET if HasExistingNstpValues is None" in {
 
         val application =
           applicationBuilder(
@@ -529,7 +526,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
-      "must redirect to the system error page for a POST if GamblingReturnPeriodsPage is None" in {
+      "must redirect to the system error page for a POST if HasExistingNstpValues is None" in {
 
         val application =
           applicationBuilder(
@@ -591,10 +588,10 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       .success
       .value
 
-    val userAnswersNonStandardReturnPeriodsMissingNstpValues = emptyUserAnswers
+    val userAnswersNonStandardReturnPeriodsMissingIsInLastNstp = emptyUserAnswers
       .set(
         GamblingReturnPeriodsPage,
-        gamblingReturnPeriods.copy(hasExistingNstpValues = None)
+        gamblingReturnPeriods.copy(isInLastNstp = None)
       )
       .success
       .value
@@ -722,9 +719,9 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
 
 
-    "must redirect to SystemError for a GET if GamblingReturnPeriodsPage is None" in {
+    "must redirect to SystemError for a GET if isInLastNstp is None" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingNstpValues)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingIsInLastNstp)).build()
 
       running(application) {
         val request = FakeRequest(GET, returnPeriodsRoute)
@@ -736,9 +733,9 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "redirect to SystemError for a POST if GamblingReturnPeriodsPage is None" in {
+    "redirect to SystemError for a POST if isInLastNstp is None" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingNstpValues)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingIsInLastNstp)).build()
 
       running(application) {
         val request =

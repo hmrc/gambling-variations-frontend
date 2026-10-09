@@ -26,7 +26,7 @@ import play.api.libs.json.{JsError, JsString, Json}
 
 class StandardReturnPeriodsOptionsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
-  "WhatToDoWithStandardReturnPeriods" - {
+  "StandardReturnPeriodsOptionsSpec" - {
 
     "must deserialise valid values" in {
 
