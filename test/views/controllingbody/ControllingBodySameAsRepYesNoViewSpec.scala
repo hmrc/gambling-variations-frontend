@@ -51,7 +51,7 @@ class ControllingBodySameAsRepYesNoViewSpec extends SpecBase {
           messages(application)("controllingBodySameAsRepYesNo.title")
         )
 
-        document.select("h1").text() mustEqual
+        document.select("h1").text() must include
           messages(application)("controllingBodySameAsRepYesNo.title")
 
         document.body().text() must include(

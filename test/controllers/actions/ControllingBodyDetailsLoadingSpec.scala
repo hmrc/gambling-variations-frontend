@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.{BusinessType, SoleProprietorName, UserAnswers}
-import models.controllingbody.ControllingBodyDetails
+import models.controllingbody.ControlBodyDetails
 import models.requests.OptionalDataRequest
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, verifyNoInteractions, when}
@@ -33,55 +33,54 @@ import repositories.SessionRepository
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ControllingBodyNameDataRequiredActionSpec extends SpecBase with MockitoSugar {
+class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
   private class Harness(repository: SessionRepository, connector: GamblingConnector)
-      extends ControllingBodyNameDataRequiredActionImpl(repository, connector) {
-    def run(answers: Option[UserAnswers]) = refine(OptionalDataRequest(FakeRequest(), mgdRegNum, answers))
-  }
-
-  private class DetailsHarness(repository: SessionRepository, connector: GamblingConnector)
       extends ControllingBodyDetailsDataRequiredActionImpl(repository, connector) {
     def run(answers: Option[UserAnswers]) = refine(OptionalDataRequest(FakeRequest(), mgdRegNum, answers))
   }
 
-  private val backendDetails = ControllingBodyDetails(mgdRegNum, BusinessType.Partnership, Some("Backend Partnership"))
+  private val backendDetails = Json
+    .obj(
+      "mgdRegNumber"          -> mgdRegNum,
+      "typeOfControllingBody" -> 4,
+      "businessName"          -> "Backend Partnership"
+    )
+    .as[ControlBodyDetails]
 
   private trait Setup {
     val repository = mock[SessionRepository]
     val connector = mock[GamblingConnector]
     when(repository.set(any())) thenReturn Future.successful(true)
-    when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(backendDetails)
+    when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(backendDetails)
     val action = new Harness(repository, connector)
   }
 
-  "ControllingBodyNameDataRequiredAction" - {
-    "preserve the full section and edited name when the name loader runs afterwards" in new Setup {
-      when(connector.getControlBodyDetails(any())(any())) thenReturn
-        Future.successful(ControllingBodyDetailsDataRequiredActionSpec.controlBodyDetails)
-      val full = new DetailsHarness(repository, connector).run(None).futureValue.toOption.value.userAnswers
-      val edited = full.set(ControllingBodyBusinessNamePage, "Edited name").success.value
-
-      val result = action.run(Some(edited)).futureValue.toOption.value.userAnswers
-
-      result mustBe edited.set(ControllingBodyDetailsLoadedPage, true).success.value
+  "ControllingBodyDetailsLoading" - {
+    "fetch the full section once and retain edits on subsequent visits" in new Setup {
+      val loaded = action.run(None).futureValue.toOption.value.userAnswers
+      val edited = loaded.set(ControllingBodyBusinessNamePage, "Edited name").success.value
+      action.run(Some(edited)).futureValue.toOption.value.userAnswers mustBe edited
+      verify(connector).getControlBodyDetails(any())(any())
+      verify(repository).set(loaded)
     }
 
-    "retain the name edit across loading and revisiting the full section" in new Setup {
+    "fetch full details for an old name-only cache while preserving its edits" in new Setup {
+      val answers = UserAnswers(mgdRegNum,
+                                Json.obj(
+                                  "controllingBodyDetails" -> Json.obj(
+                                    "loaded"                -> true,
+                                    "typeOfControllingBody" -> 4,
+                                    "businessName"          -> "Edited name"
+                                  )
+                                )
+                               )
       when(connector.getControlBodyDetails(any())(any())) thenReturn
         Future.successful(ControllingBodyDetailsDataRequiredActionSpec.controlBodyDetails)
-      val names = action.run(None).futureValue.toOption.value.userAnswers
-      val edited = names.set(ControllingBodyBusinessNamePage, "Edited name").success.value
-      val detailsAction = new DetailsHarness(repository, connector)
-
-      val full = detailsAction.run(Some(edited)).futureValue.toOption.value.userAnswers
-
-      full.get(ControllingBodyBusinessNamePage).value mustBe "Edited name"
-      full.get(ControllingBodyBusinessTypePage).value mustBe BusinessType.Partnership
-      full.get(pages.controllingbody.ControllingBodySectionPage).isDefined mustBe true
-      action.run(Some(full)).futureValue.toOption.value.userAnswers mustBe full
-      detailsAction.run(Some(full)).futureValue.toOption.value.userAnswers mustBe full
-      verify(connector).getControlBodyDetails(any())(any())
-      verify(connector).getControllingBodyDetails(any())(any())
+      val result = action.run(Some(answers)).futureValue.toOption.value.userAnswers
+      result.get(ControllingBodyBusinessNamePage).value mustBe "Edited name"
+      result.get(ControllingBodyBusinessTypePage).value mustBe BusinessType.Partnership
+      result.get(ControllingBodyCorrespondenceSectionPage).isDefined mustBe true
+      verify(connector).getControlBodyDetails(org.mockito.ArgumentMatchers.eq(mgdRegNum))(any())
     }
 
     "load and cache the name and business type when no session exists" in new Setup {
@@ -89,8 +88,8 @@ class ControllingBodyNameDataRequiredActionSpec extends SpecBase with MockitoSug
       result.id mustEqual mgdRegNum
       result.get(ControllingBodyBusinessNamePage).value mustEqual "Backend Partnership"
       result.get(ControllingBodyBusinessTypePage).value mustEqual BusinessType.Partnership
-      result.get(ControllingBodyDetailsLoadedPage).value mustBe true
-      verify(connector).getControllingBodyDetails(org.mockito.ArgumentMatchers.eq(mgdRegNum))(any())
+      result.get(ControllingBodySectionPage).value mustBe mgdRegNum
+      verify(connector).getControlBodyDetails(org.mockito.ArgumentMatchers.eq(mgdRegNum))(any())
       verify(repository).set(result)
     }
 
@@ -103,9 +102,9 @@ class ControllingBodyNameDataRequiredActionSpec extends SpecBase with MockitoSug
       val answers = emptyUserAnswers.set(ControllingBodyBusinessTypePage, BusinessType.Soleproprietor).success.value
       val result = action.run(Some(answers)).futureValue.toOption.value.userAnswers
       result.get(ControllingBodyBusinessTypePage).value mustBe BusinessType.Soleproprietor
-      result.get(ControllingBodyBusinessNamePage) mustBe None
+      result.get(ControllingBodyBusinessNamePage).value mustBe "Backend Partnership"
       result.get(ControllingBodySoleProprietorPage) mustBe None
-      result.get(ControllingBodyDetailsLoadedPage).value mustBe true
+      result.get(ControllingBodySectionPage).value mustBe mgdRegNum
     }
 
     "preserve existing name edits and unrelated registration data during initial loading" in new Setup {
@@ -119,29 +118,32 @@ class ControllingBodyNameDataRequiredActionSpec extends SpecBase with MockitoSug
     }
 
     "reuse a loaded session without calling the backend or saving again" in new Setup {
-      val answers = emptyUserAnswers.set(ControllingBodyDetailsLoadedPage, true).success.value
+      val answers = emptyUserAnswers.set(ControllingBodySectionPage, mgdRegNum).success.value
       action.run(Some(answers)).futureValue.toOption.value.userAnswers mustEqual answers
       verifyNoInteractions(repository, connector)
     }
 
     "allow an absent business name to be displayed as a blank input" in new Setup {
-      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(backendDetails.copy(businessName = None))
+      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(backendDetails.copy(businessName = None))
       val answers = action.run(None).futureValue.toOption.value.userAnswers
       answers.get(ControllingBodyBusinessNamePage) mustBe None
-      answers.get(ControllingBodyDetailsLoadedPage).value mustBe true
+      answers.get(ControllingBodySectionPage).value mustBe mgdRegNum
     }
 
     "load available sole proprietor fields even when some fields are absent" in new Setup {
       val details =
-        ControllingBodyDetails(mgdRegNum, BusinessType.Soleproprietor, solePropFirstName = Some("Jane"), solePropLastName = Some("Smith"))
-      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(details)
+        backendDetails.copy(typeOfControllingBody = Some(BusinessType.Soleproprietor),
+                            solePropFirstName     = Some("Jane"),
+                            solePropLastName      = Some("Smith")
+                           )
+      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(details)
       val answers = action.run(None).futureValue.toOption.value.userAnswers
       answers.get(ControllingBodySoleProprietorPage).value mustEqual SoleProprietorName("", "Jane", None, "Smith")
     }
 
     "allow a sole proprietor with no name fields" in new Setup {
-      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(
-        ControllingBodyDetails(mgdRegNum, BusinessType.Soleproprietor)
+      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(
+        backendDetails.copy(typeOfControllingBody = Some(BusinessType.Soleproprietor))
       )
       action.run(None).futureValue.toOption.value.userAnswers.get(ControllingBodySoleProprietorPage) mustBe None
     }
@@ -149,14 +151,14 @@ class ControllingBodyNameDataRequiredActionSpec extends SpecBase with MockitoSug
     "preserve an edited sole proprietor name" in new Setup {
       val name = SoleProprietorName("Ms", "Jane", None, "Jones")
       val answers = emptyUserAnswers.set(ControllingBodySoleProprietorPage, name).success.value
-      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(
-        ControllingBodyDetails(mgdRegNum, BusinessType.Soleproprietor, solePropFirstName = Some("Old"))
+      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(
+        backendDetails.copy(typeOfControllingBody = Some(BusinessType.Soleproprietor), solePropFirstName = Some("Old"))
       )
       action.run(Some(answers)).futureValue.toOption.value.userAnswers.get(ControllingBodySoleProprietorPage).value mustEqual name
     }
 
     "redirect to the service error when the backend fails" in new Setup {
-      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
+      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
       action.run(None).futureValue mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
       verifyNoInteractions(repository)
     }

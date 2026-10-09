@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessname
 
 import base.SpecBase
+import controllers.routes
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
 import models.{BusinessType, NormalMode, SoleProprietorName, UserAnswers}
@@ -64,7 +65,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
   )
 
   lazy val changeBusinessNameRoute =
-    routes.ChangeBusinessNameController.onPageLoad(Partnership).url
+    controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(Partnership).url
 
   "ChangeBusinessName Controller" - {
 
@@ -147,7 +148,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor).url)
+          FakeRequest(GET, controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor).url)
 
         val result = route(application, request).value
 
@@ -191,7 +192,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
+            redirectLocation(result).value mustEqual controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url
           }
         }
 
@@ -207,7 +208,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
             val result = route(application, request).value
 
             status(result) mustEqual SEE_OTHER
-            redirectLocation(result).value mustEqual routes.CheckBusinessNameController.onPageLoad().url
+            redirectLocation(result).value mustEqual controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url
           }
         }
       }
@@ -309,7 +310,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(
             POST,
-            routes.ChangeBusinessNameController
+            controllers.businessname.routes.ChangeBusinessNameController
               .onSubmit(BusinessType.Soleproprietor)
               .url
           )
@@ -360,7 +361,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(
             POST,
-            routes.ChangeBusinessNameController
+            controllers.businessname.routes.ChangeBusinessNameController
               .onSubmit(BusinessType.Soleproprietor)
               .url
           )
