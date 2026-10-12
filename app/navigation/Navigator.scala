@@ -70,25 +70,25 @@ class Navigator @Inject() () {
     case BusinessEmailAddressPage =>
       _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case BusinessTradeClassPage =>
-      _ => routes.CheckTradingDetailsController.onPageLoad()
+      _ => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
     case IsSeasonalBusinessPage =>
-      _ => routes.CheckTradingDetailsController.onPageLoad()
+      _ => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
     case OtherTradeClassPage =>
-      _ => routes.CheckTradingDetailsController.onPageLoad()
+      _ => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
     case AddPreviousRegistrationNumberPage =>
       userAnswers => addPreviousRegistrationNumberRoute()(userAnswers)
     case PreviousRegNumberPage =>
-      _ => routes.PreviousRegistrationNumberController.onPageLoad()
+      _ => controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
     case PreviousRegistrationNumbersListPage =>
-      _ => routes.PreviousRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad()
     case RemovePreviousRegNumberPage =>
-      _ => routes.PreviousRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad()
     case AddAssociatedRegistrationNumberPage =>
       userAnswers => navigateAddAssociatedRegistrationNumberPage()(userAnswers)
     case AssociatedRegNumberPage =>
-      _ => routes.AssociatedRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad()
     case AssociatedRegistrationNumbersPage =>
-      _ => routes.AssociatedRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad()
     case RemoveAssociatedRegNumberPage =>
       userAnswers => navigateRemoveAssociatedRegNumberPage()(userAnswers)
     case AddCorrespondingDetailsYesNoPage =>
@@ -191,6 +191,9 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
     case PartnerDetailsRemovePartnerYesNoPage(index) =>
       userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
+    // Return Periods
+//    case NonStandardReturnPeriodsPage =>
+//      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -215,8 +218,10 @@ class Navigator @Inject() () {
     // Controlling Body Details
     case ControllingBodyChangeScreenerPage =>
       userAnswers => navigateControllingBodyChangeScreenerPage(userAnswers)
-    case WhatToDoWithStandardReturnPeriodsPage =>
-      userAnswers => navigateWhatToDoWithStandardReturnPeriodsPage(userAnswers)
+    case StandardReturnPeriodsPage =>
+      userAnswers => navigateReturnPeriodsPage(userAnswers)
+    case RemoveControllingBodyTradeNamePage =>
+      _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
 
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
@@ -312,8 +317,8 @@ class Navigator @Inject() () {
     answers
       .get(AddAssociatedRegistrationNumberPage)
       .map {
-        case false => routes.CheckTradingDetailsController.onPageLoad()
-        case true  => routes.AssociatedRegNumberController.onPageLoad()
+        case false => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
+        case true  => controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -321,8 +326,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(AddPreviousRegistrationNumberPage)
       .map {
-        case false => routes.CheckTradingDetailsController.onPageLoad()
-        case true  => routes.PreviousRegistrationNumberController.onPageLoad()
+        case false => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
+        case true  => controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -499,8 +504,8 @@ class Navigator @Inject() () {
     answers
       .get(AssociatedRegistrationNumbersPage)
       .filter(_.nonEmpty)
-      .map(_ => routes.AssociatedRegistrationNumbersListController.onPageLoad())
-      .getOrElse(routes.CheckTradingDetailsController.onPageLoad())
+      .map(_ => controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad())
+      .getOrElse(controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad())
 
   private def navigateRemoveCorrespondenceDetailsYesNoPage(answers: UserAnswers): Call =
     answers
@@ -658,21 +663,21 @@ class Navigator @Inject() () {
     }
   }
 
-  private def navigateWhatToDoWithStandardReturnPeriodsPage(
+  private def navigateReturnPeriodsPage(
     userAnswers: UserAnswers
   ): Call = {
 
-    userAnswers.get(WhatToDoWithStandardReturnPeriodsPage) match {
+    userAnswers.get(StandardReturnPeriodsPage) match {
 
-      case Some(WhatToDoWithStandardReturnPeriods.Changemonthsstandardperiodcover) =>
+      case Some(StandardReturnPeriodsOptions.ChangeMonthsStandardPeriodCover) =>
         controllers.returnperiods.routes.ChooseReturnPeriodsController
           .onPageLoad(NormalMode)
 
-      case Some(WhatToDoWithStandardReturnPeriods.Switchtononstandard) =>
+      case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
         controllers.returnperiods.routes.ChooseReturnPeriodsController
           .onPageLoad(NormalMode)
 
-      case Some(WhatToDoWithStandardReturnPeriods.Keepstandardreturnperiod) =>
+      case Some(StandardReturnPeriodsOptions.KeepStandardReturnPeriod) =>
         routes.ChangeRegistrationDetailsController.onPageLoad()
 
       case None =>

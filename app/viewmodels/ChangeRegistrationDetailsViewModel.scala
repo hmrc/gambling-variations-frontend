@@ -111,7 +111,7 @@ object ChangeRegistrationDetailsViewModel {
         Some(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.tradingDetails"),
-            routes.CheckTradingDetailsController.onPageLoad().url,
+            controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url,
             status(TradingDetailsChangesPage)
           )
         ),
@@ -125,7 +125,7 @@ object ChangeRegistrationDetailsViewModel {
         Some(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.returnPeriod"),
-            controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(NormalMode).url,
+            controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode).url,
             NoDetailsChanged
           )
         )

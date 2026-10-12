@@ -18,7 +18,7 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
-import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers, WhatToDoWithStandardReturnPeriods}
+import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.returnperiods.*
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -170,9 +170,9 @@ class ChooseReturnPeriodsController @Inject() (
 
         case false =>
           userAnswers
-            .get(WhatToDoWithStandardReturnPeriodsPage) match {
+            .get(StandardReturnPeriodsPage) match {
 
-            case Some(WhatToDoWithStandardReturnPeriods.Switchtononstandard) =>
+            case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
               ReturnPeriodsVariant.NonStandard
 
             case _ =>
