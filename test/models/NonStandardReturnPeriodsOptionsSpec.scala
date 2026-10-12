@@ -24,40 +24,37 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class WhatToDoWithStandardReturnPeriodsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class NonStandardReturnPeriodsOptionsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
 
-  "WhatToDoWithStandardReturnPeriods" - {
+  "NonStandardReturnPeriods" - {
 
     "must deserialise valid values" in {
 
-      val gen = Gen.oneOf(WhatToDoWithStandardReturnPeriods.values.toSeq)
+      val gen = Gen.oneOf(NonStandardReturnPeriodsOptions.values.toSeq)
 
-      forAll(gen) { whatToDoWithStandardReturnPeriods =>
+      forAll(gen) { returnPeriods =>
 
-        JsString(whatToDoWithStandardReturnPeriods.toString)
-          .validate[WhatToDoWithStandardReturnPeriods]
-          .asOpt
-          .value mustEqual whatToDoWithStandardReturnPeriods
+        JsString(returnPeriods.toString).validate[NonStandardReturnPeriodsOptions].asOpt.value mustEqual returnPeriods
       }
     }
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!WhatToDoWithStandardReturnPeriods.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!NonStandardReturnPeriodsOptions.values.map(_.toString).contains(_))
 
       forAll(gen) { invalidValue =>
 
-        JsString(invalidValue).validate[WhatToDoWithStandardReturnPeriods] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[NonStandardReturnPeriodsOptions] mustEqual JsError("error.invalid")
       }
     }
 
     "must serialise" in {
 
-      val gen = Gen.oneOf(WhatToDoWithStandardReturnPeriods.values.toSeq)
+      val gen = Gen.oneOf(NonStandardReturnPeriodsOptions.values.toSeq)
 
-      forAll(gen) { whatToDoWithStandardReturnPeriods =>
+      forAll(gen) { returnPeriods =>
 
-        Json.toJson(whatToDoWithStandardReturnPeriods) mustEqual JsString(whatToDoWithStandardReturnPeriods.toString)
+        Json.toJson(returnPeriods) mustEqual JsString(returnPeriods.toString)
       }
     }
   }

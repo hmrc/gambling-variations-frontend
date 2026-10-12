@@ -1,0 +1,164 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.LegendSize.*
+@import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
+@import views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.hint
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukRadios: GovukRadios,
+    govukButton: GovukButton,
+    caption: Caption,
+    paragraph: Paragraph,
+    sectionBreak: SectionBreak,
+    h1: H1
+)
+
+@(form: Form[_], viewModel: NonStandardReturnPeriodsViewModel, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("returnPeriods.nonStandard.title"))) {
+
+    @formHelper(action = controllers.returnperiods.routes.ReturnPeriodsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
+        }
+
+    @caption(messages("changeRegistrationDetails.caption"))
+
+    @h1(messages("returnPeriods.nonStandard.title"))
+
+    @if(viewModel.hasFuturePeriods){
+        <table class="govuk-table">
+
+            <caption class="govuk-table__caption govuk-table__caption--m">@messages("returnPeriods.nonStandard.upcomingTable.caption")</caption>
+
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+
+                <th
+                        scope="col"
+                        class="govuk-table__header"
+                >
+                    @messages("returnPeriods.nonStandard.column1")
+                </th>
+
+                <th
+                        scope="col"
+                        class="govuk-table__header"
+                >
+                    @messages("returnPeriods.nonStandard.column2")
+                </th>
+
+            </tr>
+            </thead>
+
+            <tbody class="govuk-table__body">
+
+            @for(viewModel <- viewModel.futurePeriods) {
+
+                <tr class="govuk-table__row">
+
+                    <td class="govuk-table__cell">
+                            <span class="govuk-visually-hidden">
+                                @messages("site.viewOrChange")
+                            </span>
+                            @viewModel.month
+                    </td>
+
+                    <td class="govuk-table__cell">
+                            <span class="govuk-!-white-space-no-wrap">
+                                @viewModel.endDate
+                            </span>
+                    </td>
+
+                </tr>
+            }
+
+            </tbody>
+        </table>
+    }
+
+
+    @if(viewModel.hasPastPeriods){
+        <table class="govuk-table">
+
+            <caption class="govuk-table__caption govuk-table__caption--m">@messages("returnPeriods.nonStandard.pastTable.caption")</caption>
+
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+
+                <th
+                        scope="col"
+                        class="govuk-table__header"
+                >
+                    @messages("returnPeriods.nonStandard.column1")
+                </th>
+
+                <th
+                        scope="col"
+                        class="govuk-table__header"
+                >
+                    @messages("returnPeriods.nonStandard.column2")
+                </th>
+
+            </tr>
+            </thead>
+
+            <tbody class="govuk-table__body">
+
+            @for(viewModel <- viewModel.pastPeriods) {
+
+                <tr class="govuk-table__row">
+
+                    <td class="govuk-table__cell">
+                        <span class="govuk-visually-hidden">
+                            @messages("site.viewOrChange")
+                        </span>
+                        @viewModel.month
+                    </td>
+
+                    <td class="govuk-table__cell">
+                        <span class="govuk-!-white-space-no-wrap">
+                            @viewModel.endDate
+                        </span>
+                    </td>
+
+                </tr>
+            }
+
+            </tbody>
+        </table>
+    }
+
+
+    @govukRadios(
+       RadiosViewModel(
+           field  = form("value"),
+           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).asPageHeading(Medium),
+           items  = NonStandardReturnPeriodsOptions.options(viewModel.isInLastNonStandardReturnPeriod, viewModel.selectedMonths)
+       )
+    )
+
+    @govukButton(
+        ButtonViewModel(messages("site.continue"))
+    )
+    }
+}
