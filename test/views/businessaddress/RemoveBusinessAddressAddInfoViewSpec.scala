@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.businessaddress
 
 import base.SpecBase
 import forms.RemoveBusinessAddressAddInfoFormProvider
@@ -22,7 +22,7 @@ import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.RemoveBusinessAddressAddInfoView
+import views.html.businessaddress.RemoveBusinessAddressAddInfoView
 
 class RemoveBusinessAddressAddInfoViewSpec extends SpecBase {
 

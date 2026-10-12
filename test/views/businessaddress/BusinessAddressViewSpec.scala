@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package views
+package views.businessaddress
 
-import controllers.routes
 import base.SpecBase
+import controllers.routes
 import models.{Address, UserAnswers}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import views.html.BusinessAddressView
+import views.html.businessaddress.BusinessAddressView
 
 class BusinessAddressViewSpec extends SpecBase {
 
@@ -38,7 +38,7 @@ class BusinessAddressViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    val reroute: String = routes.CheckBusinessAddressController.onContinue().url
+    val reroute: String = controllers.businessaddress.routes.CheckBusinessAddressController.onContinue().url
 
   }
 

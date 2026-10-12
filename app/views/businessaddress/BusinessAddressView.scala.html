@@ -45,7 +45,7 @@
         @govukButton(
         ButtonViewModel(messages("site.continue"))
             .withCssClass("button.govuk-button")
-            .asLink(routes.CheckBusinessAddressController.onContinue().url)
+            .asLink(controllers.businessaddress.routes.CheckBusinessAddressController.onContinue().url)
         )
     </p>
 }

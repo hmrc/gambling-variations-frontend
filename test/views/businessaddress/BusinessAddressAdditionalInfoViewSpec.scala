@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.businessaddress
 
 import base.SpecBase
 import forms.BusinessAddressAdditionalInfoFormProvider
@@ -22,7 +22,7 @@ import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.BusinessAddressAdditionalInfoView
+import views.html.businessaddress.BusinessAddressAdditionalInfoView
 
 class BusinessAddressAdditionalInfoViewSpec extends SpecBase {
 
@@ -38,7 +38,7 @@ class BusinessAddressAdditionalInfoViewSpec extends SpecBase {
       doc.select(".govuk-hint").text mustEqual messages("businessAddressAdditionalInfo.hint")
       doc.select("h1").text mustEqual messages("businessAddressAdditionalInfo.heading")
 
-      doc.select("form").attr("action") mustEqual controllers.routes.BusinessAddressAdditionalInfoController.onSubmit().url
+      doc.select("form").attr("action") mustEqual controllers.businessaddress.routes.BusinessAddressAdditionalInfoController.onSubmit().url
 
       doc.select("button").text must include(messages("site.continue"))
     }

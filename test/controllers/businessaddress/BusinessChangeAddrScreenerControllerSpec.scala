@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessaddress
 
 import base.SpecBase
+import controllers.routes
 import forms.BusinessChangeAddrScreenerFormProvider
 import models.BusinessChangeAddrOption.EditCurrentAddress
 import models.{NormalMode, UserAnswers}
@@ -31,7 +32,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessChangeAddrScreenerView
+import views.html.businessaddress.BusinessChangeAddrScreenerView
 
 import scala.concurrent.Future
 
@@ -42,7 +43,7 @@ class BusinessChangeAddrScreenerControllerSpec extends SpecBase with MockitoSuga
   val formProvider = new BusinessChangeAddrScreenerFormProvider()
   val form = formProvider()
 
-  lazy val BusinessChangeAddrScreenerRoute = routes.BusinessChangeAddrScreenerController.onPageLoad().url
+  lazy val BusinessChangeAddrScreenerRoute = controllers.businessaddress.routes.BusinessChangeAddrScreenerController.onPageLoad().url
 
   val noAnswers =
     UserAnswers(

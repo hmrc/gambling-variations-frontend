@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.businessaddress
 
 import base.SpecBase
 import forms.BusinessChangeAddrScreenerFormProvider
@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.BusinessChangeAddrScreenerView
+import views.html.businessaddress.BusinessChangeAddrScreenerView
 
 import scala.jdk.CollectionConverters.*
 

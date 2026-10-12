@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessaddress
 
 import base.SpecBase
+import controllers.routes
 import models.{Address, UserAnswers}
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import play.api.libs.json.Json
-import views.html.BusinessAddressView
+import views.html.businessaddress.BusinessAddressView
 
 class CheckBusinessAddressControllerSpec extends SpecBase {
 
@@ -48,7 +49,7 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(addressOnlyUa)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckBusinessAddressController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -66,14 +67,14 @@ class CheckBusinessAddressControllerSpec extends SpecBase {
           "mgdRegNum" -> "XMY1000001"
         )
       )
-      val reroute = routes.BusinessUKAddrScreenerController.onPageLoad().url
+      val reroute = controllers.businessaddress.routes.BusinessUKAddrScreenerController.onPageLoad().url
 
       val basicAnswers = UserAnswers("id", regOnly)
 
       val application = applicationBuilder(userAnswers = Some(basicAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckBusinessAddressController.onPageLoad().url)
+        val request = FakeRequest(GET, controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad().url)
 
         val result = route(application, request).value
 

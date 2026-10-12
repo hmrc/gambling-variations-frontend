@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package views
+package views.businessaddress
 
 import base.SpecBase
-import forms.BusinessUKAddressFormProvider
+import forms.BusinessNonUKAddressFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.BusinessUKAddressView
+import views.html.businessaddress.BusinessNonUKAddressView
 
-class BusinessUKAddressViewSpec extends SpecBase {
+class BusinessNonUKAddressViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    private val view = app.injector.instanceOf[BusinessUKAddressView]
+    private val view = app.injector.instanceOf[BusinessNonUKAddressView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new BusinessUKAddressFormProvider()
+    private val formProvider = new BusinessNonUKAddressFormProvider()
     private val form = formProvider()
 
     private val html = view(form, NormalMode)(request, messages)
@@ -47,17 +47,17 @@ class BusinessUKAddressViewSpec extends SpecBase {
 
   }
 
-  "BusinessUKAddressView" - {
+  "BusinessNonUKAddressView" - {
 
     "must render page correctly" in new Setup {
 
-      doc.title must include(messages("businessUKAddress.title"))
+      doc.title must include(messages("businessNonUKAddress.title"))
 
       doc.title must include(messages("changeRegistrationDetails.caption"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
-      doc.select("h1").text() must include(messages("businessUKAddress.heading"))
+      doc.select("h1").text() must include(messages("businessNonUKAddress.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 

@@ -31,9 +31,9 @@ caption: Caption
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("businessNonUKAddress.title"), Some("changeRegistrationDetails.caption"))) {
+@layout(pageTitle = title(form, messages("businessUKAddress.title"), Some("changeRegistrationDetails.caption"))) {
 
-@formHelper(action = routes.BusinessNonUKAddressController.onSubmit(), Symbol("autoComplete") -> "on") {
+@formHelper(action = controllers.businessaddress.routes.BusinessUKAddressController.onSubmit(), Symbol("autoComplete") -> "on") {
 
 @if(form.errors.nonEmpty) {
 @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -41,12 +41,12 @@ caption: Caption
 
 @caption(messages("changeRegistrationDetails.caption"))
 
-@h1("businessNonUKAddress.heading", classes = "govuk-heading-l")
+@h1("businessUKAddress.heading", classes = "govuk-heading-l")
 
 @govukInput(
 InputViewModel(
 field = form("addressLine1"),
-label = LabelViewModel(messages("businessNonUKAddress.addressLine1"))
+label = LabelViewModel(messages("businessUKAddress.addressLine1"))
 )
 .withAttribute("autocomplete" -> "address-line1")
 )
@@ -54,7 +54,7 @@ label = LabelViewModel(messages("businessNonUKAddress.addressLine1"))
 @govukInput(
 InputViewModel(
 field = form("addressLine2"),
-label = LabelViewModel(messages("businessNonUKAddress.addressLine2"))
+label = LabelViewModel(messages("businessUKAddress.addressLine2"))
 )
 .withAttribute("autocomplete" -> "address-line2")
 )
@@ -62,7 +62,7 @@ label = LabelViewModel(messages("businessNonUKAddress.addressLine2"))
 @govukInput(
 InputViewModel(
 field = form("townOrCity"),
-label = LabelViewModel(messages("businessNonUKAddress.townOrCity"))
+label = LabelViewModel(messages("businessUKAddress.townOrCity"))
 )
 .withWidth(TwoThirds)
 .withAttribute("autocomplete" -> "address-level2")
@@ -70,19 +70,20 @@ label = LabelViewModel(messages("businessNonUKAddress.townOrCity"))
 
 @govukInput(
 InputViewModel(
-field = form("region"),
-label = LabelViewModel(messages("businessNonUKAddress.Region"))
+field = form("county"),
+label = LabelViewModel(messages("businessUKAddress.County"))
 )
 .withWidth(TwoThirds)
-.withAttribute("autocomplete" -> "postal-code")
+.withAttribute("autocomplete" -> "address-level1")
 )
 
 @govukInput(
 InputViewModel(
-field = form("country"),
-label = LabelViewModel(messages("businessNonUKAddress.Country"))
+field = form("postcode"),
+label = LabelViewModel(messages("businessUKAddress.Postcode"))
 )
-.withAttribute("autocomplete" -> "country-name")
+.withWidth(Fixed10)
+.withAttribute("autocomplete" -> "postal-code")
 )
 
 @govukButton(

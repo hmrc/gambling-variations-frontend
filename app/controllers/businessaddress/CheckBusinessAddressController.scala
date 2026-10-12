@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkFlag
-import views.html.BusinessAddressView
+import views.html.businessaddress.BusinessAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,7 +51,7 @@ class CheckBusinessAddressController @Inject() (
       for {
         updated <- Future.fromTry(ua.set(BusinessAddressAddFlowPage, true))
         _       <- sessionRepository.set(updated)
-      } yield Redirect(routes.BusinessUKAddrScreenerController.onPageLoad())
+      } yield Redirect(controllers.businessaddress.routes.BusinessUKAddrScreenerController.onPageLoad())
     } else {
       Future.successful(Ok(view(ua, showChangeMessage)))
     }

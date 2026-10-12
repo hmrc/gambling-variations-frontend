@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessaddress
 
 import base.SpecBase
+import controllers.routes
 import forms.RemoveBusinessAddressAddInfoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -31,7 +32,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.RemoveBusinessAddressAddInfoView
+import views.html.businessaddress.RemoveBusinessAddressAddInfoView
 
 import scala.concurrent.Future
 
@@ -42,7 +43,7 @@ class RemoveBusinessAddressAddInfoControllerSpec extends SpecBase with MockitoSu
   val formProvider = new RemoveBusinessAddressAddInfoFormProvider()
   val form = formProvider()
 
-  lazy val removeAddrAddInfoRoute: String = routes.RemoveBusinessAddressAddInfoController.onPageLoad().url
+  lazy val removeAddrAddInfoRoute: String = controllers.businessaddress.routes.RemoveBusinessAddressAddInfoController.onPageLoad().url
 
   private val baseAnswers =
     UserAnswers(userAnswersId,

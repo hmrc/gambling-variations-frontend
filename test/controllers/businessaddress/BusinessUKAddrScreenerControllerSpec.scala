@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessaddress
 
 import base.SpecBase
+import controllers.routes
 import forms.BusinessUKAddrScreenerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -29,7 +30,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessUKAddrScreenerView
+import views.html.businessaddress.BusinessUKAddrScreenerView
 
 import scala.concurrent.Future
 
@@ -40,7 +41,7 @@ class BusinessUKAddrScreenerControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new BusinessUKAddrScreenerFormProvider()
   val form = formProvider()
 
-  lazy val businessUKAddrScreenerRoute = routes.BusinessUKAddrScreenerController.onPageLoad().url
+  lazy val businessUKAddrScreenerRoute = controllers.businessaddress.routes.BusinessUKAddrScreenerController.onPageLoad().url
 
   "BusinessUKAddrScreener Controller" - {
 

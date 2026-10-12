@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessaddress
 
 import base.SpecBase
+import controllers.routes
 import forms.BusinessNonUKAddressFormProvider
 import models.{Address, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -30,7 +31,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessNonUKAddressView
+import views.html.businessaddress.BusinessNonUKAddressView
 
 import scala.concurrent.Future
 
@@ -71,7 +72,7 @@ class BusinessNonUKAddressControllerSpec extends SpecBase with MockitoSugar {
     )
 
   lazy val addressRoute: String =
-    routes.BusinessNonUKAddressController.onPageLoad().url
+    controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad().url
 
   "BusinessNonUKAddress Controller" - {
 
