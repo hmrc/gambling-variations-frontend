@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessaddress
 
 import controllers.actions.*
-import forms.BusinessChangeAddrScreenerFormProvider
-import models.BusinessChangeAddrOption
+import forms.RemoveBusinessAddressAddInfoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.businessaddress.{BusinessAddressChangeFlowPage, BusinessAddressUkPage, BusinessChangeAddrScreenerPage}
+import pages.businessaddress.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.BusinessChangeAddrScreenerView
+import views.html.RemoveBusinessAddressAddInfoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessChangeAddrScreenerController @Inject() (
+class RemoveBusinessAddressAddInfoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: BusinessAddressDataRequiredAction,
-  formProvider: BusinessChangeAddrScreenerFormProvider,
+  requireData: BusinessAddressDataRequiredActionImpl,
+  formProvider: RemoveBusinessAddressAddInfoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: BusinessChangeAddrScreenerView
+  view: RemoveBusinessAddressAddInfoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -48,34 +47,35 @@ class BusinessChangeAddrScreenerController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(BusinessChangeAddrScreenerPage) match {
+    val addressAddInfo = request.userAnswers.get(BusinessAddressAdditionalInformationPage).getOrElse("")
+    val preparedForm = request.userAnswers.get(RemoveBusinessAddressAddInfoPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    val isUkAddress =
-      request.userAnswers.get(BusinessAddressUkPage).isDefined
-
-    Ok(view(preparedForm, mode, isUkAddress))
-
+    Ok(view(preparedForm, mode, addressAddInfo))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    val isUkAddress =
-      request.userAnswers.get(BusinessAddressUkPage).isDefined
+    val addressAddInfo = request.userAnswers.get(BusinessAddressAdditionalInformationPage).getOrElse("")
 
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, isUkAddress))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, addressAddInfo))),
         value =>
+          val ua = request.userAnswers
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessChangeAddrScreenerPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangeFlowPage, true))
+            updatedAnswers <- Future.fromTry(ua.set(RemoveBusinessAddressAddInfoPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressSubmittedPage, true))
+            updatedAnswers <- if (value) {
+                                Future.fromTry(updatedAnswers.remove(BusinessAddressAdditionalInformationPage))
+                              } else {
+                                Future.successful(updatedAnswers)
+                              }
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangesPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessChangeAddrScreenerPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(RemoveBusinessAddressAddInfoPage, mode, updatedAnswers))
       )
   }
 }

@@ -52,7 +52,7 @@ class ControllingBodySameAsRepYesNoViewSpec extends SpecBase {
         )
 
         document.select("h1").text() must include
-          messages(application)("controllingBodySameAsRepYesNo.title")
+        messages(application)("controllingBodySameAsRepYesNo.title")
 
         document.body().text() must include(
           messages(application)("site.continue")

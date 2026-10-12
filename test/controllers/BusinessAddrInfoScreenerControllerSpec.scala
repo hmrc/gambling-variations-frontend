@@ -45,7 +45,7 @@ class BusinessAddrInfoScreenerControllerSpec extends SpecBase with MockitoSugar 
   )
 
   lazy val businessAddrInfoScreenerRoute =
-    routes.BusinessAddrInfoScreenerController.onPageLoad().url
+    controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad().url
 
   "BusinessAddrAdditionalInfoScreener Controller" - {
 

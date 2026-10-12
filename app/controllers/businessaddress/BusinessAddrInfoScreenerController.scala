@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessaddress
 
 import controllers.actions.*
-import forms.BusinessAddressAdditionalInfoFormProvider
+import forms.BusinessAddrInfoScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.businessaddress.*
-import javax.inject.Inject
+import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressSubmittedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.FlagsUtil.checkIfChanged
-import views.html.BusinessAddressAdditionalInfoView
+import views.html.BusinessAddrInfoScreenerView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessAddressAdditionalInfoController @Inject() (
+class BusinessAddrInfoScreenerController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  navigator: Navigator,
   requireData: BusinessAddressDataRequiredAction,
-  formProvider: BusinessAddressAdditionalInfoFormProvider,
-  sessionRepository: SessionRepository,
+  formProvider: BusinessAddrInfoScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: BusinessAddressAdditionalInfoView
+  view: BusinessAddrInfoScreenerView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -48,28 +47,26 @@ class BusinessAddressAdditionalInfoController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(BusinessAddressAdditionalInformationPage)
-      .fold(form)(form.fill)
+
+    val preparedForm = request.userAnswers.get(AddBusinessAddressAdditionalInformationPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
     Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val ua = request.userAnswers
-          val isChanged: Boolean = checkIfChanged(value, ua, BusinessAddressAdditionalInformationPage, BusinessAddressChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(ua.set(BusinessAddressAdditionalInformationPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddBusinessAddressAdditionalInformationPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(BusinessAddressChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessAddressAdditionalInformationPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddBusinessAddressAdditionalInformationPage, mode, updatedAnswers))
       )
   }
 }

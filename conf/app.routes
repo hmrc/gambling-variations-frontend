@@ -212,11 +212,11 @@ POST       /change-registration-details/licences-and-premises/permits-great-brit
 GET        /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/remove-additional-information                      controllers.businessaddress.RemoveBusinessAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/remove-additional-information                      controllers.businessaddress.RemoveBusinessAddressAddInfoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/check                               controllers.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
-GET        /change-registration-details/business-address/check-redirect                               controllers.CheckBusinessAddressController.onContinue(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/check                               controllers.businessaddress.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/check-redirect                               controllers.businessaddress.CheckBusinessAddressController.onContinue(mode: Mode = NormalMode)
 
 GET        /change-registration-details/licences-and-premises/check              controllers.licencespremises.CheckLicencesAndPremisesController.onPageLoad()
 
