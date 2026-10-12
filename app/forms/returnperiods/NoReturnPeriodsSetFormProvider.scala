@@ -20,12 +20,12 @@ import javax.inject.Inject
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.ReturnPeriodsChoice
+import models.NoReturnPeriodsSet
 
-class ReturnPeriodsChoiceFormProvider @Inject() extends Mappings {
+class NoReturnPeriodsSetFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[ReturnPeriodsChoice] =
+  def apply(): Form[NoReturnPeriodsSet] =
     Form(
-      "value" -> enumerable[ReturnPeriodsChoice]("returnPeriodsChoice.error.required")
+      "value" -> enumerable[NoReturnPeriodsSet]("noReturnPeriodsSet.error.required")
     )
 }

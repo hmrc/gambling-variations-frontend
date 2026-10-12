@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import pages.returnperiods.ReturnPeriodsChoicePage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -25,23 +25,23 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist.*
 import viewmodels.implicits.*
 
-object ReturnPeriodsChoiceSummary {
+object NoReturnPeriodsSetSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(ReturnPeriodsChoicePage).map { answer =>
 
       val value = ValueViewModel(
         HtmlContent(
-          HtmlFormat.escape(messages(s"returnPeriodsChoice.$answer"))
+          HtmlFormat.escape(messages(s"noReturnPeriodsSet.$answer"))
         )
       )
 
       SummaryListRowViewModel(
-        key   = "returnPeriodsChoice.checkYourAnswersLabel",
+        key   = "noReturnPeriodsSet.checkYourAnswersLabel",
         value = value,
         actions = Seq(
-          ActionItemViewModel("site.change", controllers.returnperiods.routes.ReturnPeriodsChoiceController.onPageLoad().url)
-            .withVisuallyHiddenText(messages("returnPeriodsChoice.change.hidden"))
+          ActionItemViewModel("site.change", controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode).url)
+            .withVisuallyHiddenText(messages("noReturnPeriodsSet.change.hidden"))
         )
       )
     }

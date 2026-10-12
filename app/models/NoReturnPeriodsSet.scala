@@ -20,26 +20,26 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
-sealed trait ReturnPeriodsChoice
+sealed trait NoReturnPeriodsSet
 
-object ReturnPeriodsChoice extends Enumerable.Implicits {
+object NoReturnPeriodsSet extends Enumerable.Implicits {
 
-  case object Standard    extends WithName("standard") with ReturnPeriodsChoice
-  case object Nonstandard extends WithName("non-standard") with ReturnPeriodsChoice
+  case object Standard    extends WithName("standard") with NoReturnPeriodsSet
+  case object Nonstandard extends WithName("non-standard") with NoReturnPeriodsSet
 
-  val values: Seq[ReturnPeriodsChoice] = Seq(
+  val values: Seq[NoReturnPeriodsSet] = Seq(
     Standard,
     Nonstandard
   )
 
   def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map { case (value, index) =>
     RadioItem(
-      content = Text(messages(s"returnPeriodsChoice.${value.toString}")),
+      content = Text(messages(s"noReturnPeriodsSet.${value.toString}")),
       value   = Some(value.toString),
       id      = Some(s"value_$index")
     )
   }
 
-  implicit val enumerable: Enumerable[ReturnPeriodsChoice] =
+  implicit val enumerable: Enumerable[NoReturnPeriodsSet] =
     Enumerable(values.map(v => v.toString -> v)*)
 }
