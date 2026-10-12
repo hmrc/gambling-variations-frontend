@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import controllers.actions.*
 import forms.OtherTradeClassFormProvider
@@ -73,7 +73,7 @@ class OtherTradeClassController @Inject() (
             if (updatedAnswers.get(IsSeasonalBusinessPage).nonEmpty) {
               Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
             } else {
-              Redirect(routes.SeasonalBusinessController.onPageLoad())
+              Redirect(controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad())
             }
           }
       )

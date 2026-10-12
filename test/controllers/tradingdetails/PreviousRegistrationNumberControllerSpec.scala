@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import base.SpecBase
 import connectors.GamblingConnector
+import controllers.routes
 import forms.PreviousRegistrationNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -42,8 +43,8 @@ class PreviousRegistrationNumberControllerSpec extends SpecBase with MockitoSuga
   val fieldName = "previousRegistrationNumber"
   val requiredUserAnswers = emptyUserAnswers.set(MgdTradeDetailsSectionPage, mgdRegNum).success.value
 
-  lazy val previousRegistrationNumberRoute = routes.PreviousRegistrationNumberController.onPageLoad().url
-  lazy val previousRegistrationNumbersRoute = routes.PreviousRegistrationNumbersListController.onPageLoad().url
+  lazy val previousRegistrationNumberRoute = controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad().url
+  lazy val previousRegistrationNumbersRoute = controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad().url
 
   "PreviousRegistrationNumber Controller" - {
 
