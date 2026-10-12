@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import base.SpecBase
 import connectors.GamblingConnector
+import controllers.routes
 import models.*
-import pages.*
-import play.api.test.FakeRequest
-import play.api.test.Helpers.*
-import org.mockito.Mockito.*
 import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
+import pages.*
 import pages.tradingdetails.associatedregnumbers.AssociatedRegistrationNumbersPage
 import pages.tradingdetails.previousregnumbers.PreviousRegistrationNumbersListPage
 import pages.tradingdetails.{BusinessTradeClassPage, IsSeasonalBusinessPage, MgdTradeDetailsSectionPage, SeasonalBusinessPage}
 import play.api.inject.bind
+import play.api.test.FakeRequest
+import play.api.test.Helpers.*
 
-import scala.concurrent.Future
 import java.time.LocalDate
+import scala.concurrent.Future
 
 class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
 
@@ -87,7 +88,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -110,7 +111,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url)
 
         val content =
           contentAsString(route(application, request).value)
@@ -135,7 +136,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url)
 
         val content =
           contentAsString(route(application, request).value)
@@ -174,7 +175,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url)
 
         val result =
           route(application, request).value
@@ -206,7 +207,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(GET, routes.CheckTradingDetailsController.onPageLoad().url)
+          FakeRequest(GET, controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url)
 
         val content =
           contentAsString(route(application, request).value)
@@ -253,11 +254,11 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
             .build()
 
         running(application) {
-          val request = FakeRequest(POST, routes.CheckTradingDetailsController.onContinue().url)
+          val request = FakeRequest(POST, controllers.tradingdetails.routes.CheckTradingDetailsController.onContinue().url)
           val result = route(application, request).value
 
           redirectLocation(result).value mustBe
-            routes.BusinessTradeClassController.onPageLoad().url
+            controllers.tradingdetails.routes.BusinessTradeClassController.onPageLoad().url
         }
       }
 
@@ -298,11 +299,11 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
             .build()
 
         running(application) {
-          val request = FakeRequest(POST, routes.CheckTradingDetailsController.onContinue().url)
+          val request = FakeRequest(POST, controllers.tradingdetails.routes.CheckTradingDetailsController.onContinue().url)
           val result = route(application, request).value
 
           redirectLocation(result).value mustBe
-            routes.OtherTradeClassController.onPageLoad().url
+            controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad().url
         }
       }
 
@@ -327,11 +328,11 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
             .build()
 
         running(application) {
-          val request = FakeRequest(POST, routes.CheckTradingDetailsController.onContinue().url)
+          val request = FakeRequest(POST, controllers.tradingdetails.routes.CheckTradingDetailsController.onContinue().url)
           val result = route(application, request).value
 
           redirectLocation(result).value mustBe
-            routes.SeasonalBusinessController.onPageLoad().url
+            controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad().url
         }
       }
 
@@ -372,7 +373,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
             .build()
 
         running(application) {
-          val request = FakeRequest(POST, routes.CheckTradingDetailsController.onContinue().url)
+          val request = FakeRequest(POST, controllers.tradingdetails.routes.CheckTradingDetailsController.onContinue().url)
           val result = route(application, request).value
 
           redirectLocation(result).value mustBe

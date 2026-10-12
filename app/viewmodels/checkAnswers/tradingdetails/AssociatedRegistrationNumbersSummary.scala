@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers.tradingdetails
 
-import controllers.routes
 import models.UserAnswers
 import pages.tradingdetails.associatedregnumbers.AssociatedRegistrationNumbersPage
 import play.api.i18n.Messages
@@ -56,9 +55,9 @@ object AssociatedRegistrationNumbersSummary {
 
       val route =
         if (hasNumbers) {
-          routes.AssociatedRegistrationNumbersListController.onPageLoad().url
+          controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad().url
         } else {
-          routes.AssociatedRegNumberController.onPageLoad().url
+          controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad().url
         }
 
       val actions = Seq(
