@@ -27,7 +27,7 @@ class NoReturnPeriodsSetFormProviderSpec extends OptionFieldBehaviours {
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "noReturnPeriodsSet.error.required"
+    val requiredKey = "returnPeriods.noneSet.error.required"
 
     behave like optionsField[NoReturnPeriodsSet](
       form,

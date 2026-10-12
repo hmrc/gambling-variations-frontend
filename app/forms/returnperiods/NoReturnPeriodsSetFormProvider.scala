@@ -26,6 +26,6 @@ class NoReturnPeriodsSetFormProvider @Inject() extends Mappings {
 
   def apply(): Form[NoReturnPeriodsSet] =
     Form(
-      "value" -> enumerable[NoReturnPeriodsSet]("noReturnPeriodsSet.error.required")
+      "value" -> enumerable[NoReturnPeriodsSet]("returnPeriods.noneSet.error.required")
     )
 }

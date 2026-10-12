@@ -32,16 +32,16 @@ object NoReturnPeriodsSetSummary {
 
       val value = ValueViewModel(
         HtmlContent(
-          HtmlFormat.escape(messages(s"noReturnPeriodsSet.$answer"))
+          HtmlFormat.escape(messages(s"returnPeriods.noneSet.$answer"))
         )
       )
 
       SummaryListRowViewModel(
-        key   = "noReturnPeriodsSet.checkYourAnswersLabel",
+        key   = "returnPeriods.noneSet.checkYourAnswersLabel",
         value = value,
         actions = Seq(
           ActionItemViewModel("site.change", controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode).url)
-            .withVisuallyHiddenText(messages("noReturnPeriodsSet.change.hidden"))
+            .withVisuallyHiddenText(messages("returnPeriods.noneSet.change.hidden"))
         )
       )
     }
