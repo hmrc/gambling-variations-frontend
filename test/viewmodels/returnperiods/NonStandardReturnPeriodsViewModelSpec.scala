@@ -181,35 +181,35 @@ class NonStandardReturnPeriodsViewModelSpec extends SpecBase {
 
         viewModel.get.pastPeriods.head mustEqual NstpReturnPeriod(
           month   = "Mar 2019",
-          endDate = "01 Apr 2019"
+          endDate = "1 Apr 2019"
         )
         viewModel.get.pastPeriods(1) mustEqual NstpReturnPeriod(
           month   = "Jun 2019",
-          endDate = "01 Jul 2019"
+          endDate = "1 Jul 2019"
         )
         viewModel.get.pastPeriods(2) mustEqual NstpReturnPeriod(
           month   = "Oct 2019",
-          endDate = "01 Oct 2019"
+          endDate = "1 Oct 2019"
         )
         viewModel.get.pastPeriods(3) mustEqual NstpReturnPeriod(
           month   = "Dec 2019",
-          endDate = "01 Jan 2020"
+          endDate = "1 Jan 2020"
         )
         viewModel.get.pastPeriods(4) mustEqual NstpReturnPeriod(
           month   = "Mar 2020",
-          endDate = "01 Apr 2020"
+          endDate = "1 Apr 2020"
         )
         viewModel.get.pastPeriods(5) mustEqual NstpReturnPeriod(
           month   = "Jun 2020",
-          endDate = "01 Jul 2020"
+          endDate = "1 Jul 2020"
         )
         viewModel.get.pastPeriods(6) mustEqual NstpReturnPeriod(
           month   = "Oct 2020",
-          endDate = "01 Oct 2020"
+          endDate = "1 Oct 2020"
         )
         viewModel.get.pastPeriods(7) mustEqual NstpReturnPeriod(
           month   = "Dec 2020",
-          endDate = "01 Jan 2021"
+          endDate = "1 Jan 2021"
         )
       }
     }

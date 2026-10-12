@@ -77,9 +77,6 @@
                 <tr class="govuk-table__row">
 
                     <td class="govuk-table__cell">
-                            <span class="govuk-visually-hidden">
-                                @messages("site.viewOrChange")
-                            </span>
                             @viewModel.month
                     </td>
 
@@ -129,9 +126,6 @@
                 <tr class="govuk-table__row">
 
                     <td class="govuk-table__cell">
-                        <span class="govuk-visually-hidden">
-                            @messages("site.viewOrChange")
-                        </span>
                         @viewModel.month
                     </td>
 
@@ -152,7 +146,7 @@
     @govukRadios(
        RadiosViewModel(
            field  = form("value"),
-           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).asPageHeading(Medium),
+           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).withCssClass("govuk-fieldset__legend--m"),
            items  = NonStandardReturnPeriodsOptions.options(viewModel.isInLastNonStandardReturnPeriod, viewModel.selectedMonths)
        )
     )
