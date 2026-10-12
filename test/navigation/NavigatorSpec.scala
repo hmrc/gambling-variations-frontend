@@ -27,13 +27,11 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.ControllingBodyChangeScreenerPage
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyChangeScreenerPage}
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
+import pages.licencespremises.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceDetailsLandlordLicenceYesNoPage, LicenceNumberPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, PremisesNotCoveredYesNoPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -56,22 +54,22 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route TradingNamePage to CheckBusinessName" in {
         navigator.nextPage(TradingNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route BusinessNamePage to CheckBusinessName" in {
         navigator.nextPage(BusinessNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route RemoveTradeNamePage to CheckBusinessName" in {
         navigator.nextPage(RemoveTradeNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route SoleProprietorPage to ChangeBusinessName" in {
         navigator.nextPage(SoleProprietorPage, NormalMode, emptyAnswers) mustBe
-          routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor)
+          controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor)
       }
 
       "should route BusinessContactNumberPage to CheckContactDetails" in {
@@ -225,8 +223,37 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
       }
 
-      "should route LicenceDetailsLandlordLicenceYesNoPage to CheckLicencesAndPremisesController" in {
-        navigator.nextPage(LicenceDetailsLandlordLicenceYesNoPage, NormalMode, emptyAnswers) mustBe
+      "should route a licence change to PremisesNotCoveredYesNoController when the premises not covered question is in scope and unanswered" in {
+        val inScope = emptyAnswers.set(LicenceHeldByLandlordPage, "1").success.value
+
+        Seq(LicenceNumberPage, LicenceHeldByLandlordPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage).foreach { page =>
+          navigator.nextPage(page, NormalMode, inScope) mustBe
+            controllers.licencespremises.routes.PremisesNotCoveredYesNoController.onPageLoad()
+        }
+      }
+
+      "should route a licence change to CheckLicencesAndPremisesController when the premises not covered question has been answered" in {
+        val answered = emptyAnswers
+          .set(LicenceHeldByLandlordPage, "1")
+          .success
+          .value
+          .set(LicencePremisesNotCoveredPage, "0")
+          .success
+          .value
+
+        navigator.nextPage(LicenceHeldByLandlordPage, NormalMode, answered) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route a licence change to CheckLicencesAndPremisesController when the premises not covered question is out of scope" in {
+        val outOfScope = emptyAnswers.set(LicenceHeldByLandlordPage, "0").success.value
+
+        navigator.nextPage(LicenceHeldByLandlordPage, NormalMode, outOfScope) mustBe
+          controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "should route LicenceHeldByLandlordPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(LicenceHeldByLandlordPage, NormalMode, emptyAnswers) mustBe
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
       }
 
@@ -240,8 +267,8 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
       }
 
-      "should route PremisesNotCoveredYesNoPage to CheckLicencesAndPremisesController" in {
-        navigator.nextPage(PremisesNotCoveredYesNoPage, NormalMode, emptyAnswers) mustBe
+      "should route LicencePremisesNotCoveredPage to CheckLicencesAndPremisesController" in {
+        navigator.nextPage(LicencePremisesNotCoveredPage, NormalMode, emptyAnswers) mustBe
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
       }
 
@@ -1208,6 +1235,44 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
 
+      "should route RemovePartnerYesNoPage to RemovePartnerYesNoPage when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an new partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+      }
+
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an existing partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+      }
+
+      "should route RemovePartnerYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
     }
 
     "normal mode controlling body details navigation" - {
@@ -1248,6 +1313,28 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       "should route ControllingBodyChangeScreenerPage to SystemError when there is no answer" in {
         navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, emptyAnswers) mustBe
           routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is Yes" in {
+        val answers =
+          emptyAnswers
+            .set(ControllingBodyAddTradingNameYesNoPage, true)
+            .success
+            .value
+
+        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+          routes.IndexController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is No" in {
+        val answers =
+          emptyAnswers
+            .set(ControllingBodyAddTradingNameYesNoPage, false)
+            .success
+            .value
+
+        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+          routes.IndexController.onPageLoad()
       }
     }
   }

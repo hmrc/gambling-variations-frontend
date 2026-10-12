@@ -27,22 +27,22 @@ class PartnerDetailsAdditionalAddressInfoPageSpec extends PlaySpec with PartnerD
     "partners" must {
       "have the correct path" in {
         PartnerDetailsAdditionalAddressInfoPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsAdditionalInfo")
+          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection" \ "additionalInformation")
       }
 
       "have the correct string representation" in {
-        PartnerDetailsAdditionalAddressInfoPage(businessNumber1).toString mustEqual "partnerDetailsAdditionalInfo"
+        PartnerDetailsAdditionalAddressInfoPage(businessNumber1).toString mustEqual "additionalInformation"
       }
     }
 
     "newPartners" must {
       "have the correct path" in {
         PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAdditionalInfo")
+          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection" \ "additionalInformation")
       }
 
       "have the correct string representation" in {
-        PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex1).toString mustEqual "partnerDetailsAdditionalInfo"
+        PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex1).toString mustEqual "additionalInformation"
       }
     }
   }

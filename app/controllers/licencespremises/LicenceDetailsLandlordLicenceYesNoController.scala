@@ -21,7 +21,7 @@ import forms.licencespremises.LicenceDetailsLandlordLicenceYesNoFormProvider
 import models.Mode
 import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
-import pages.licencespremises.LicenceDetailsLandlordLicenceYesNoPage
+import pages.licencespremises.LicenceHeldByLandlordPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -63,11 +63,11 @@ class LicenceDetailsLandlordLicenceYesNoController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            answersWithValue <- Future.fromTry(request.userAnswers.set(LicenceDetailsLandlordLicenceYesNoPage, value))
+            answersWithValue <- Future.fromTry(request.userAnswers.setBackendFlag(LicenceHeldByLandlordPage, value))
             updatedAnswers <-
               Future.fromTry(answersWithValue.withLicencesPremisesFlags(isChanged = request.userAnswers.pubTenantAnswer != value))
             _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LicenceDetailsLandlordLicenceYesNoPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(LicenceHeldByLandlordPage, mode, updatedAnswers))
       )
   }
 }

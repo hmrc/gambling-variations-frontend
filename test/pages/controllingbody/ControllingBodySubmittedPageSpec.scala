@@ -17,7 +17,6 @@
 package pages.controllingbody
 
 import org.scalatestplus.play.PlaySpec
-import pages.controllingbody.ControllingBodySubmittedPage
 import play.api.libs.json.JsPath
 
 class ControllingBodySubmittedPageSpec extends PlaySpec {
