@@ -49,4 +49,3 @@ class ControllingBodyFaxNumberFormProvider @Inject() extends Mappings {
       }
     }
 }
-
