@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessTypePage, ControllingBodyDetailsLoadedPage}
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessTypePage, ControllingBodySectionPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -38,7 +38,7 @@ class ControllingBodyAddTradingNameYesNoControllerSpec extends SpecBase with Moc
     .set(ControllingBodyBusinessTypePage, BusinessType.Partnership)
     .success
     .value
-    .set(ControllingBodyDetailsLoadedPage, true)
+    .set(ControllingBodySectionPage, mgdRegNum)
     .success
     .value
   private lazy val url = routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url

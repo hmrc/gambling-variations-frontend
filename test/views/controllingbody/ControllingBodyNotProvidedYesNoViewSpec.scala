@@ -52,7 +52,7 @@ class ControllingBodyNotProvidedYesNoViewSpec extends SpecBase {
         )
 
         document.select("p").text() must include
-          messages(application)("controllingBodyNotProvidedYesNo.p1")
+        messages(application)("controllingBodyNotProvidedYesNo.p1")
 
         document.body().text() must include(
           messages(application)("site.continue")
