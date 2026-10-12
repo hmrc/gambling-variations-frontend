@@ -33,7 +33,7 @@ import views.html.AddCorrespondingDetailsYesNoView
 
 import scala.concurrent.Future
 
-class AddCorrespondingDetailsYesNoControllerSpec extends SpecBase with MockitoSugar {
+class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   private val formProvider = new AddCorrespondingDetailsYesNoFormProvider()
   private val form = formProvider()

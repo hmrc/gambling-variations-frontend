@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
 import forms.AddCorrespondingDetailsYesNoFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, IsAddingNewCorrespondenceDetailsPage}
@@ -29,9 +27,10 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AddCorrespondingDetailsYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddCorrespondingDetailsYesNoController @Inject() (
+class AddCorrespondenceDetailsYesNoController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
