@@ -31,9 +31,9 @@
 
 @(form: Form[_], mode: Mode, returnPeriodsId: Option[String])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("whatToDoWithStandardReturnPeriods.title"), Some(messages("changeRegistrationDetails.caption")))) {
+@layout(pageTitle = title(form, messages("returnPeriods.standard.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @formHelper(action = controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.returnperiods.routes.ReturnPeriodsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
@@ -41,28 +41,28 @@
 
 
         @caption(messages("changeRegistrationDetails.caption"))
-        @h1("whatToDoWithStandardReturnPeriods.heading", classes = "govuk-heading-l")
+        @h1("returnPeriods.standard.heading", classes = "govuk-heading-l")
 
         @returnPeriodsId match {
         case Some("1") => {
-          @p("whatToDoWithStandardReturnPeriods.p1")
+          @p("returnPeriods.standard.p1")
         }
         case Some("2") => {
-            @p("whatToDoWithStandardReturnPeriods.p2")
+            @p("returnPeriods.standard.p2")
         }
         case Some("3") => {
-         @p("whatToDoWithStandardReturnPeriods.p3")
+         @p("returnPeriods.standard.p3")
         }
         case _ => {
-         @p("whatToDoWithStandardReturnPeriods.p3")
+         @p("returnPeriods.standard.p3")
         }
         }
 
         @govukRadios(
             RadiosViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("whatToDoWithStandardReturnPeriods.h2")).withCssClass("govuk-fieldset__legend--m"),
-                items  = WhatToDoWithStandardReturnPeriods.options
+                legend = LegendViewModel(messages("returnPeriods.standard.option.legend")).withCssClass("govuk-fieldset__legend--m"),
+                items  = StandardReturnPeriodsOptions.options
             )
         )
 
