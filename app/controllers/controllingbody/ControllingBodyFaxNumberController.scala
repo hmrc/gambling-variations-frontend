@@ -14,42 +14,42 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.controllingbody
 
 import controllers.actions.*
-import forms.OtherTradeClassFormProvider
+import forms.controllingbody.ControllingBodyFaxNumberFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.tradingdetails.*
+import pages.controllingbody.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
-import views.html.OtherTradeClassView
+import views.html.controllingbody.ControllingBodyFaxNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OtherTradeClassController @Inject() (
+class ControllingBodyFaxNumberController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: OtherTradeClassDataRequiredAction,
-  formProvider: OtherTradeClassFormProvider,
+  navigator: Navigator,
+  requireData: ControllingBodyDetailsDataRequiredAction,
+  formProvider: ControllingBodyFaxNumberFormProvider,
+  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
-  view: OtherTradeClassView
+  view: ControllingBodyFaxNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form = formProvider("controllingBodyFaxNumber")
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val preparedForm = request.userAnswers
-      .get(OtherTradeClassPage)
+      .get(ControllingBodyFaxNumberPage)
       .fold(form)(form.fill)
 
     Ok(view(preparedForm, mode))
@@ -62,20 +62,14 @@ class OtherTradeClassController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, OtherTradeClassPage, TradingDetailsChangesPage)
+          val ua = request.userAnswers
+          val isChanged: Boolean = checkIfChanged(value, ua, ControllingBodyFaxNumberPage, ControllingBodyChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(OtherTradeClassPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangeFlagPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(TradingDetailsChangesPage, isChanged))
+            updatedAnswers <- Future.fromTry(ua.set(ControllingBodyFaxNumberPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodyChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield {
-            if (updatedAnswers.get(IsSeasonalBusinessPage).nonEmpty) {
-              Redirect(navigator.nextPage(OtherTradeClassPage, mode, updatedAnswers))
-            } else {
-              Redirect(routes.SeasonalBusinessController.onPageLoad())
-            }
-          }
+          } yield Redirect(navigator.nextPage(ControllingBodyFaxNumberPage, mode, updatedAnswers))
       )
   }
 }

@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.tradingdetails
 
 import base.SpecBase
 import controllers.routes.*
+import controllers.tradingdetails.routes.*
 import forms.PreviousRegistrationNumbersFormProvider
 import models.{NormalMode, RegistrationNumbers, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
