@@ -36,6 +36,7 @@ class PartnerDetailsEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
+  changeTracker: PartnerChangeTracker,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
@@ -48,15 +49,21 @@ class PartnerDetailsEmailAddressController @Inject() (
 
   val form: Form[String] = formProvider("partnerEmailAddress")
 
-  def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val newIndex = PartnerUtils.parseIndex(index, mode)
+  def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val newIndex = PartnerUtils.parseIndex(index, mode)
 
-    val preparedForm = request.userAnswers
-      .get(PartnerDetailsCorrespondenceEmailAddressPage(newIndex))
-      .fold(form)(form.fill)
+      val preparedForm = request.userAnswers
+        .get(PartnerDetailsCorrespondenceEmailAddressPage(newIndex))
+        .fold(form)(form.fill)
 
-    Ok(view(preparedForm, index, mode))
-  }
+      newIndex match {
+        case businessNumber: String =>
+          changeTracker.markClicked(request.userAnswers, businessNumber).map(_ => Ok(view(preparedForm, index, mode)))
+        case _: Int =>
+          Future.successful(Ok(view(preparedForm, index, mode)))
+      }
+    }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)

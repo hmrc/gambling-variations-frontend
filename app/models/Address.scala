@@ -25,7 +25,16 @@ case class Address(
   address4: Option[String],
   postcode: Option[String],
   country: Option[String]
-)
+) {
+  def fullAddress: String = Seq(
+    Some(address1),
+    address2,
+    address3,
+    address4,
+    postcode,
+    country
+  ).flatten.mkString(" ")
+}
 
 object Address {
   val reads: Reads[Address] = Json.reads[Address]
