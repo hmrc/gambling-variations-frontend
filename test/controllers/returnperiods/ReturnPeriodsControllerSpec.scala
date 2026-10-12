@@ -24,14 +24,14 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
+import pages.returnperiods.{GamblingReturnPeriodsPage, HasSwitchedToStandardValuesPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
-import views.html.returnperiods.{NoReturnPeriodsSetView, NonStandardReturnPeriodsView, StandardReturnPeriodsView}
+import views.html.returnperiods.{LockedReturnPeriodsView, NoReturnPeriodsSetView, NonStandardReturnPeriodsView, StandardReturnPeriodsView}
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -891,6 +891,116 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+  }
+
+  ///////////////////////////////
+
+  "Locked Return Periods" - {
+
+    val gamblingReturnPeriods = GamblingReturnPeriods(
+      mgdRegNumber          = "mgd1",
+      returnPeriodsId       = Some(1),
+      nstpEndDate1          = None,
+      nstpEndDate2          = None,
+      nstpEndDate3          = None,
+      nstpEndDate4          = None,
+      nstpEndDate5          = None,
+      nstpEndDate6          = None,
+      nstpEndDate7          = None,
+      nstpEndDate8          = None,
+      isInLastNstp          = None,
+      finalPeriodWarning    = None,
+      hasExistingNstpValues = Some(false)
+    )
+
+    def lockedAnswers(periods: GamblingReturnPeriods = gamblingReturnPeriods): UserAnswers =
+      emptyUserAnswers
+        .set(GamblingReturnPeriodsPage, periods)
+        .success
+        .value
+        .set(HasSwitchedToStandardValuesPage, true)
+        .success
+        .value
+
+    "must return OK and the locked view for a GET" in {
+
+      val application = applicationBuilder(userAnswers = Some(lockedAnswers())).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[LockedReturnPeriodsView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
+      }
+    }
+
+    "must show the locked view instead of the non-standard view when the user has switched to standard" in {
+
+      val nonStandard = gamblingReturnPeriods.copy(hasExistingNstpValues = Some(true))
+      val application = applicationBuilder(userAnswers = Some(lockedAnswers(nonStandard))).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[LockedReturnPeriodsView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
+      }
+    }
+
+    "must show the no periods set view, not the locked view, when there is no return period ID" in {
+
+      val noId = gamblingReturnPeriods.copy(returnPeriodsId = None)
+      val application = applicationBuilder(userAnswers = Some(lockedAnswers(noId))).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[NoReturnPeriodsSetView]
+        val form = new NoReturnPeriodsSetFormProvider()()
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must show the standard view when the switched flag is false" in {
+
+      val answers = lockedAnswers().set(HasSwitchedToStandardValuesPage, false).success.value
+      val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[StandardReturnPeriodsView]
+        val form = new StandardReturnPeriodsFormProvider()()
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode, Some("1"))(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to change registration details on POST without saving" in {
+
+      val mockSessionRepository = mockedSessionRepository
+
+      val application =
+        applicationBuilder(userAnswers = Some(lockedAnswers()))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+      running(application) {
+        val request = FakeRequest(POST, returnPeriodsRoute).withFormUrlEncodedBody(("value", "anything"))
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+        verify(mockSessionRepository, never()).set(any())
       }
     }
   }

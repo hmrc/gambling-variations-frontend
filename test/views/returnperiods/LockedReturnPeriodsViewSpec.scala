@@ -22,17 +22,17 @@ import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.returnperiods.ReturnPeriodsView
+import views.html.returnperiods.LockedReturnPeriodsView
 
 import scala.jdk.CollectionConverters.*
 
-class ReturnPeriodsViewSpec extends SpecBase {
+class LockedReturnPeriodsViewSpec extends SpecBase {
 
   private def renderPage(): (Document, Messages) = {
     val application = applicationBuilder().build()
 
     running(application) {
-      val view = application.injector.instanceOf[ReturnPeriodsView]
+      val view = application.injector.instanceOf[LockedReturnPeriodsView]
       val request = FakeRequest(GET, "/")
       val msgs = messages(application)
 
@@ -42,10 +42,10 @@ class ReturnPeriodsViewSpec extends SpecBase {
 
   private val (doc, msgs) = renderPage()
 
-  "ReturnPeriodsView" - {
+  "LockedReturnPeriodsView" - {
 
     "must have the correct title" in {
-      doc.title() must startWith(s"${msgs("returnPeriods.title")} - ${msgs("changeRegistrationDetails.caption")}")
+      doc.title() must startWith(s"${msgs("returnPeriods.locked.title")} - ${msgs("changeRegistrationDetails.caption")}")
     }
 
     "must show the caption" in {
@@ -56,13 +56,13 @@ class ReturnPeriodsViewSpec extends SpecBase {
       val headings = doc.select("h1")
 
       headings.size() mustBe 1
-      headings.text() mustBe msgs("returnPeriods.heading")
+      headings.text() mustBe msgs("returnPeriods.locked.heading")
     }
 
     "must show both paragraphs in order" in {
       val paragraphs = doc.select("main p.govuk-body").asScala.map(_.text())
 
-      paragraphs must contain inOrder (msgs("returnPeriods.p1"), msgs("returnPeriods.p2"))
+      paragraphs must contain inOrder (msgs("returnPeriods.locked.p1"), msgs("returnPeriods.locked.p2"))
     }
 
     "must show a continue button" in {

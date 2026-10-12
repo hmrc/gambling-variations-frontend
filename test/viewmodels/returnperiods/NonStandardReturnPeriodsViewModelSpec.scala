@@ -18,9 +18,7 @@ package viewmodels.returnperiods
 
 import base.SpecBase
 import models.GamblingReturnPeriods
-import play.api.Application
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.test.FakeRequest
+import play.api.i18n.Messages
 import play.api.test.Helpers.running
 import viewmodels.checkAnswers.returnperiods.{NonStandardReturnPeriodsViewModel, NstpReturnPeriod}
 

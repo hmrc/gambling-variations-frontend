@@ -19,21 +19,21 @@
 @import views.html.components._
 
 @this(
-        layout: templates.Layout,
-        govukButton: GovukButton,
-        p: Paragraph
+    layout: templates.Layout,
+    govukButton: GovukButton,
+    p: Paragraph
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("returnPeriods.title"), Some(messages("changeRegistrationDetails.caption")))) {
+@layout(pageTitle = titleNoForm(messages("returnPeriods.locked.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    <span class="govuk-caption-l">
-        @messages("changeRegistrationDetails.caption")
-    </span>
-    <h1 class="govuk-heading-l">@messages("returnPeriods.heading")</h1>
-    @p("returnPeriods.p1")
-    @p("returnPeriods.p2")
+    <span class="govuk-caption-l">@messages("changeRegistrationDetails.caption")</span>
+
+    <h1 class="govuk-heading-l">@messages("returnPeriods.locked.heading")</h1>
+
+    @p("returnPeriods.locked.p1")
+    @p("returnPeriods.locked.p2")
 
     @govukButton(ButtonViewModel(messages("site.continue")))
 

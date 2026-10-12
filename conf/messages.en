@@ -1296,8 +1296,8 @@ returnPeriods.noneSet.change.hidden = ReturnPeriodsChoice
 returnPeriods.noneSet.change.p1 = If you want to use standard return periods, the end dates are set to the last day of the month, for example 31 March.
 returnPeriods.noneSet.change.p2 = If you want to use non‑standard return periods, you must provide end dates that cover the next 2 years.
 
-returnPeriods.title = You cannot make any further changes to your return periods
-returnPeriods.heading = You cannot make any further changes to your return periods
-returnPeriods.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
-returnPeriods.p2 = You must continue to the change registration details page to submit any changes.
+returnPeriods.locked.title = You cannot make any further changes to your return periods
+returnPeriods.locked.heading = You cannot make any further changes to your return periods
+returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
+returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
 
