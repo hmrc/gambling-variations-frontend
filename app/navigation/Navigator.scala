@@ -20,6 +20,7 @@ import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
+import models.licencespremises.LicencesPremisesAnswers.*
 import models.controllingbody.ControllingBodyChangeOption.*
 import models.licencespremises.LicencesPremisesAnswers.*
 import pages.*
@@ -52,13 +53,13 @@ class Navigator @Inject() () {
     case ControllingBodyEmailPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
     case RemoveTradeNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage =>
-      _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor)
+      _ => controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(Soleproprietor)
     case TradingNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessFaxNumberPage =>
       _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage =>
@@ -70,25 +71,25 @@ class Navigator @Inject() () {
     case BusinessEmailAddressPage =>
       _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case BusinessTradeClassPage =>
-      _ => routes.CheckTradingDetailsController.onPageLoad()
+      _ => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
     case IsSeasonalBusinessPage =>
-      _ => routes.CheckTradingDetailsController.onPageLoad()
+      _ => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
     case OtherTradeClassPage =>
-      _ => routes.CheckTradingDetailsController.onPageLoad()
+      _ => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
     case AddPreviousRegistrationNumberPage =>
       userAnswers => addPreviousRegistrationNumberRoute()(userAnswers)
     case PreviousRegNumberPage =>
-      _ => routes.PreviousRegistrationNumberController.onPageLoad()
+      _ => controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
     case PreviousRegistrationNumbersListPage =>
-      _ => routes.PreviousRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad()
     case RemovePreviousRegNumberPage =>
-      _ => routes.PreviousRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad()
     case AddAssociatedRegistrationNumberPage =>
       userAnswers => navigateAddAssociatedRegistrationNumberPage()(userAnswers)
     case AssociatedRegNumberPage =>
-      _ => routes.AssociatedRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad()
     case AssociatedRegistrationNumbersPage =>
-      _ => routes.AssociatedRegistrationNumbersListController.onPageLoad()
+      _ => controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad()
     case RemoveAssociatedRegNumberPage =>
       userAnswers => navigateRemoveAssociatedRegNumberPage()(userAnswers)
     case AddCorrespondingDetailsYesNoPage =>
@@ -217,6 +218,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyChangeScreenerPage(userAnswers)
     case WhatToDoWithStandardReturnPeriodsPage =>
       userAnswers => navigateWhatToDoWithStandardReturnPeriodsPage(userAnswers)
+    case RemoveControllingBodyTradeNamePage =>
+      _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
     case ControllingBodyAdditionalAddressInformationYesNoPage =>
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
 
@@ -290,8 +293,8 @@ class Navigator @Inject() () {
     answers
       .get(AddAssociatedRegistrationNumberPage)
       .map {
-        case false => routes.CheckTradingDetailsController.onPageLoad()
-        case true  => routes.AssociatedRegNumberController.onPageLoad()
+        case false => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
+        case true  => controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -299,8 +302,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(AddPreviousRegistrationNumberPage)
       .map {
-        case false => routes.CheckTradingDetailsController.onPageLoad()
-        case true  => routes.PreviousRegistrationNumberController.onPageLoad()
+        case false => controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
+        case true  => controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -477,8 +480,8 @@ class Navigator @Inject() () {
     answers
       .get(AssociatedRegistrationNumbersPage)
       .filter(_.nonEmpty)
-      .map(_ => routes.AssociatedRegistrationNumbersListController.onPageLoad())
-      .getOrElse(routes.CheckTradingDetailsController.onPageLoad())
+      .map(_ => controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad())
+      .getOrElse(controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad())
 
   private def navigateRemoveCorrespondenceDetailsYesNoPage(answers: UserAnswers): Call =
     answers

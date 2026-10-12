@@ -257,6 +257,12 @@ partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add
 partnerDetailsAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = cy: Do you want to add a trading name for the partner?
 
+partnerDetailsAddVRNYesNo.title = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.heading = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.checkYourAnswersLabel = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.error.required = cy: Select yes to add a VAT registration number for the partner
+partnerDetailsAddVRNYesNo.change.hidden = cy: do you want to add a VAT registration number for the partner
+
 partnerDetailsRemoveVRNYesNo.title = cy: Are you sure you want to remove this partner’ VAT registration number?
 partnerDetailsRemoveVRNYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s VAT registration number?
 partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’ VAT registration number?
@@ -462,10 +468,15 @@ site.pagination.next = cy: Next
 site.pagination.previous = cy: Previous
 partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
+removeControllingBodyTradeName.title = cy:  Are you sure you want to remove this controlling body’s trading name?
+removeControllingBodyTradeName.heading = cy: Are you sure you want to remove {0} as this controlling body’s trading name?
+removeControllingBodyTradeName.error.required = cy: Select yes if you want to remove the trading name
+
 controllingBodyAdditionalAddressInformationYesNo.title = cy: Do you want to include additional information for the controlling body’s address?
 controllingBodyAdditionalAddressInformationYesNo.heading = cy: Do you want to include additional information for the controlling body’s address?
 controllingBodyAdditionalAddressInformationYesNo.error.required = cy: Select yes to include additional information for the controlling body’s address
 controllingBodyAdditionalAddressInformationYesNo.hint = cy: For example, building name or floor number
+
 partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
 partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
 partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?

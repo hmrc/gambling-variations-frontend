@@ -76,7 +76,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.businessName"),
-            routes.CheckBusinessNameController.onPageLoad().url,
+            controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url,
             status(BusinessNameChangesPage)
           )
         ),
@@ -111,7 +111,7 @@ object ChangeRegistrationDetailsViewModel {
         Some(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.tradingDetails"),
-            routes.CheckTradingDetailsController.onPageLoad().url,
+            controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url,
             status(TradingDetailsChangesPage)
           )
         ),
