@@ -24,7 +24,7 @@ import models.{BusinessDetails, GamblingReturnPeriods, Mode, NormalMode}
 import navigation.Navigator
 import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDatePages}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.returnperiods.NstpPeriodCalculator
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -52,92 +52,22 @@ class EnterNonStandardPeriodDateController @Inject() (
     with I18nSupport {
 
   private val numberOfPeriods = 8
+  private val boundaryDays = 16
 
   def onPageLoad(
     periodNumber: Int,
     mode: Mode
   ): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-
       if (!validPeriodNumber(periodNumber)) {
-
-        Future.successful(
-          Redirect(routes.SystemErrorController.onPageLoad())
-        )
-
+        Future.successful(systemErrorRedirect)
       } else {
-
         request.userAnswers.get(ChooseReturnPeriodsPage) match {
-
           case None =>
-            Future.successful(
-              Redirect(routes.SystemErrorController.onPageLoad())
-            )
+            Future.successful(systemErrorRedirect)
 
           case Some(returnPeriodsId) =>
-            for {
-              businessDetails <-
-                gamblingConnector.getBusinessDetails(request.mgdRegNum)
-
-              gamblingReturnPeriods <-
-                gamblingConnector.getGamblingReturnPeriods(request.mgdRegNum)
-
-            } yield {
-
-              val baseDate =
-                calculateBaseDate(
-                  businessDetails,
-                  gamblingReturnPeriods
-                )
-
-              val periodEndDates =
-                nstpPeriodCalculator.calculate(
-                  baseDate,
-                  returnPeriodsId
-                )
-
-              periodEndDates.lift(periodNumber - 1) match {
-
-                case None =>
-                  Redirect(
-                    routes.SystemErrorController.onPageLoad()
-                  )
-
-                case Some(periodEnd) =>
-                  val lowerBoundary =
-                    periodEnd.minusDays(16)
-
-                  val upperBoundary =
-                    periodEnd.plusDays(16)
-
-                  val form =
-                    formProvider(
-                      lowerBoundary,
-                      upperBoundary
-                    )
-
-                  val page =
-                    NonStandardPeriodDatePages(periodNumber)
-
-                  val preparedForm =
-                    request.userAnswers
-                      .get(page)
-                      .map(form.fill)
-                      .getOrElse(form)
-
-                  Ok(
-                    view(
-                      preparedForm,
-                      mode,
-                      periodNumber,
-                      numberOfPeriods,
-                      periodEnd,
-                      lowerBoundary,
-                      upperBoundary
-                    )
-                  )
-              }
-            }
+            loadPeriod(periodNumber, mode, returnPeriodsId)
         }
       }
     }
@@ -148,148 +78,181 @@ class EnterNonStandardPeriodDateController @Inject() (
   ): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       if (!validPeriodNumber(periodNumber)) {
-
-        Future.successful(
-          Redirect(routes.SystemErrorController.onPageLoad())
-        )
-
+        Future.successful(systemErrorRedirect)
       } else {
-
-        request.userAnswers
-          .get(ChooseReturnPeriodsPage)
-          .fold {
+        request.userAnswers.get(ChooseReturnPeriodsPage) match {
+          case None =>
             Future.successful(
-              Redirect(controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode))
+              Redirect(
+                controllers.returnperiods.routes.ChooseReturnPeriodsController
+                  .onPageLoad(NormalMode)
+              )
             )
 
-          } { returnPeriodsId =>
-
-            val page =
-              NonStandardPeriodDatePages(periodNumber)
-
-            for {
-              businessDetails <-
-                gamblingConnector.getBusinessDetails(request.mgdRegNum)
-
-              gamblingReturnPeriods <-
-                gamblingConnector.getGamblingReturnPeriods(request.mgdRegNum)
-
-              result <- {
-
-                val baseDate =
-                  calculateBaseDate(
-                    businessDetails,
-                    gamblingReturnPeriods
-                  )
-
-                val periodEndDates =
-                  nstpPeriodCalculator.calculate(
-                    baseDate,
-                    returnPeriodsId
-                  )
-
-                periodEndDates.lift(periodNumber - 1) match {
-
-                  case None =>
-                    Future.successful(
-                      Redirect(
-                        routes.SystemErrorController.onPageLoad()
-                      )
-                    )
-
-                  case Some(periodEnd) =>
-                    val lowerBoundary =
-                      periodEnd.minusDays(16)
-
-                    val upperBoundary =
-                      periodEnd.plusDays(16)
-
-                    val form =
-                      formProvider(
-                        lowerBoundary,
-                        upperBoundary
-                      )
-
-                    form
-                      .bindFromRequest()
-                      .fold(
-                        formWithErrors =>
-                          Future.successful(
-                            BadRequest(
-                              view(
-                                formWithErrors,
-                                mode,
-                                periodNumber,
-                                numberOfPeriods,
-                                periodEnd,
-                                lowerBoundary,
-                                upperBoundary
-                              )
-                            )
-                          ),
-                        value =>
-                          for {
-                            updatedAnswers <-
-                              Future.fromTry(
-                                request.userAnswers.set(
-                                  page,
-                                  value
-                                )
-                              )
-
-                            _ <-
-                              sessionRepository.set(updatedAnswers)
-
-                          } yield {
-                            Redirect(
-                              navigator.nextPage(
-                                page,
-                                mode,
-                                updatedAnswers
-                              )
-                            )
-                          }
-                      )
-                }
-              }
-
-            } yield result
-          }
+          case Some(returnPeriodsId) =>
+            submitPeriod(periodNumber, mode, returnPeriodsId)
+        }
       }
     }
+
+  private def loadPeriod(
+    periodNumber: Int,
+    mode: Mode,
+    returnPeriodsId: Int
+  )(implicit request: models.requests.DataRequest[AnyContent]): Future[Result] =
+    for {
+      businessDetails <-
+        gamblingConnector.getBusinessDetails(request.mgdRegNum)
+
+      gamblingReturnPeriods <-
+        gamblingConnector.getGamblingReturnPeriods(request.mgdRegNum)
+    } yield {
+      getPeriodEndDate(
+        businessDetails,
+        gamblingReturnPeriods,
+        returnPeriodsId,
+        periodNumber
+      ) match {
+        case None =>
+          systemErrorRedirect
+
+        case Some(periodEnd) =>
+          renderPage(periodNumber, mode, periodEnd)
+      }
+    }
+
+  private def renderPage(
+    periodNumber: Int,
+    mode: Mode,
+    periodEnd: LocalDate
+  )(implicit request: models.requests.DataRequest[AnyContent]): Result = {
+    val (lowerBoundary, upperBoundary) = dateBoundaries(periodEnd)
+    val form = formProvider(lowerBoundary, upperBoundary)
+    val page = NonStandardPeriodDatePages(periodNumber)
+
+    val preparedForm =
+      request.userAnswers.get(page).map(form.fill).getOrElse(form)
+
+    Ok(
+      view(
+        preparedForm,
+        mode,
+        periodNumber,
+        numberOfPeriods,
+        periodEnd,
+        lowerBoundary,
+        upperBoundary
+      )
+    )
+  }
+
+  private def submitPeriod(
+    periodNumber: Int,
+    mode: Mode,
+    returnPeriodsId: Int
+  )(implicit request: models.requests.DataRequest[AnyContent]): Future[Result] =
+    for {
+      businessDetails <-
+        gamblingConnector.getBusinessDetails(request.mgdRegNum)
+
+      gamblingReturnPeriods <-
+        gamblingConnector.getGamblingReturnPeriods(request.mgdRegNum)
+
+      result <- getPeriodEndDate(
+                  businessDetails,
+                  gamblingReturnPeriods,
+                  returnPeriodsId,
+                  periodNumber
+                ) match {
+                  case None =>
+                    Future.successful(systemErrorRedirect)
+
+                  case Some(periodEnd) =>
+                    processSubmission(periodNumber, mode, periodEnd)
+                }
+    } yield result
+
+  private def processSubmission(
+    periodNumber: Int,
+    mode: Mode,
+    periodEnd: LocalDate
+  )(implicit request: models.requests.DataRequest[AnyContent]): Future[Result] = {
+    val (lowerBoundary, upperBoundary) = dateBoundaries(periodEnd)
+    val form = formProvider(lowerBoundary, upperBoundary)
+
+    form
+      .bindFromRequest()
+      .fold(
+        formWithErrors =>
+          Future.successful(
+            BadRequest(
+              view(
+                formWithErrors,
+                mode,
+                periodNumber,
+                numberOfPeriods,
+                periodEnd,
+                lowerBoundary,
+                upperBoundary
+              )
+            )
+          ),
+        value =>
+          saveAnswer(
+            NonStandardPeriodDatePages(periodNumber),
+            value,
+            mode
+          )
+      )
+  }
+
+  private def saveAnswer(
+    page: pages.QuestionPage[LocalDate],
+    value: LocalDate,
+    mode: Mode
+  )(implicit request: models.requests.DataRequest[AnyContent]): Future[Result] =
+    for {
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
+      _              <- sessionRepository.set(updatedAnswers)
+    } yield Redirect(navigator.nextPage(page, mode, updatedAnswers))
+
+  private def getPeriodEndDate(
+    businessDetails: BusinessDetails,
+    gamblingReturnPeriods: GamblingReturnPeriods,
+    returnPeriodsId: Int,
+    periodNumber: Int
+  ): Option[LocalDate] = {
+    val baseDate = calculateBaseDate(businessDetails, gamblingReturnPeriods)
+
+    nstpPeriodCalculator
+      .calculate(baseDate, returnPeriodsId)
+      .lift(periodNumber - 1)
+  }
+
+  private def dateBoundaries(
+    periodEnd: LocalDate
+  ): (LocalDate, LocalDate) =
+    (
+      periodEnd.minusDays(boundaryDays),
+      periodEnd.plusDays(boundaryDays)
+    )
 
   private def calculateBaseDate(
     businessDetails: BusinessDetails,
     gamblingReturnPeriods: GamblingReturnPeriods
   ): LocalDate = {
+    val registrationDate = getRegistrationDate(businessDetails)
 
-    val registrationDate =
-      getRegistrationDate(businessDetails)
+    val referenceDate =
+      gamblingReturnPeriods match {
+        case periods if periods.hasExistingNstpValues.contains(true) =>
+          periods.nstpEndDate8.getOrElse(LocalDate.now(clock))
 
-    gamblingReturnPeriods.hasExistingNstpValues match {
+        case _ =>
+          LocalDate.now(clock)
+      }
 
-      case Some(true) =>
-        gamblingReturnPeriods.nstpEndDate8 match {
-
-          case Some(lastNstpDate) =>
-            maxDate(
-              lastNstpDate,
-              registrationDate
-            )
-
-          case None =>
-            maxDate(
-              LocalDate.now(clock),
-              registrationDate
-            )
-        }
-
-      case _ =>
-        maxDate(
-          LocalDate.now(clock),
-          registrationDate
-        )
-    }
+    maxDate(referenceDate, registrationDate)
   }
 
   private def getRegistrationDate(
@@ -303,14 +266,11 @@ class EnterNonStandardPeriodDateController @Inject() (
     first: LocalDate,
     second: LocalDate
   ): LocalDate =
-    if (first.isAfter(second)) {
-      first
-    } else {
-      second
-    }
+    if (first.isAfter(second)) first else second
 
-  private def validPeriodNumber(
-    periodNumber: Int
-  ): Boolean =
+  private def validPeriodNumber(periodNumber: Int): Boolean =
     periodNumber >= 1 && periodNumber <= numberOfPeriods
+
+  private def systemErrorRedirect: Result =
+    Redirect(routes.SystemErrorController.onPageLoad())
 }
