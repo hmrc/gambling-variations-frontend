@@ -26,7 +26,7 @@ case class PartnerDetailsVatRegistrationNumberYesNoPage(businessNumberOrIndex: B
     case index: Int  => JsPath \ "newPartners" \ index \ toString
   }
 
-  override def toString: String = "vatRegistrationNumberYesNo"
+  override def toString: String = "partnerDetailsVrnYesNo"
 }
 object PartnerDetailsVatRegistrationNumberYesNoPage {
   def apply(index: Int) = new PartnerDetailsVatRegistrationNumberYesNoPage(index)

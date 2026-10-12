@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package pages.partnerdetails
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+case class PartnerDetailsHasClickedOnChangeOrRemovePage(key: String) extends QuestionPage[Boolean] {
 
-case object ControllingBodyDetailsLoadedPage extends QuestionPage[Boolean] {
-  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
-  override def toString: String = "loaded"
+  override val path: JsPath = JsPath \ "partners" \ key \ toString
+
+  override def toString: String = "partnerDetailsHasClickedOnChangeOrRemove"
 }

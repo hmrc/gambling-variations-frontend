@@ -52,13 +52,13 @@ class Navigator @Inject() () {
     case ControllingBodyEmailPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
     case RemoveTradeNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case SoleProprietorPage =>
-      _ => routes.ChangeBusinessNameController.onPageLoad(Soleproprietor)
+      _ => controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(Soleproprietor)
     case TradingNamePage =>
-      _ => routes.CheckBusinessNameController.onPageLoad()
+      _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessFaxNumberPage =>
       _ => controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad()
     case RemoveFaxNumberPage =>
@@ -189,6 +189,8 @@ class Navigator @Inject() () {
       userAnswers => controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsCountryOfIncorporationPage(index) =>
       userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
+    case PartnerDetailsRemovePartnerYesNoPage(index) =>
+      userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -570,6 +572,21 @@ class Navigator @Inject() () {
       .fold(routes.SystemErrorController.onPageLoad())(_ =>
         controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index.toString, NormalMode)
       )
+
+  private def navigatePartnerDetailsRemovePartnerPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsRemovePartnerYesNoPage(index))
+      .fold(routes.SystemErrorController.onPageLoad()) { wantToRemove =>
+        if (wantToRemove) {
+          index match {
+            case businessNumber: String =>
+              controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+            case newPartnerIndex: Int =>
+              controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+          }
+        } else
+          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(index.toString, NormalMode)
+      }
 
   private def navigatePartnerAddEmailAddressYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
     answers
