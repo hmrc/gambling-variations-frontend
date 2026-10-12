@@ -13,36 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package viewmodels.checkAnswers
-
-import models.{NormalMode, UserAnswers}
-import pages.returnperiods.ReturnPeriodsChoicePage
-import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist.*
-import viewmodels.implicits.*
-
-object NoReturnPeriodsSetSummary {
-
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(ReturnPeriodsChoicePage).map { answer =>
-
-      val value = ValueViewModel(
-        HtmlContent(
-          HtmlFormat.escape(messages(s"returnPeriods.noneSet.$answer"))
-        )
-      )
-
-      SummaryListRowViewModel(
-        key   = "returnPeriods.noneSet.checkYourAnswersLabel",
-        value = value,
-        actions = Seq(
-          ActionItemViewModel("site.change", controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode).url)
-            .withVisuallyHiddenText(messages("returnPeriods.noneSet.change.hidden"))
-        )
-      )
-    }
-}
