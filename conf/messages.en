@@ -1250,7 +1250,7 @@ controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide
 
 enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
 enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
-enterNonStandardPeriodDate.hint = The end date must be after {0}  and before  {1}. For example, 30 6 2026
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, 30 6 2026
 enterNonStandardPeriodDate.dateLabel = End date
 
 enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
