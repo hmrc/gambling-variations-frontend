@@ -1282,8 +1282,8 @@ returnPeriods.nonStandard.option.legend = What do you want to do when your last 
 
 returnPeriods.nonStandard.column1 = Return period ending
 returnPeriods.nonStandard.column2 = End date
-returnPeriods.nonStandard.pastTable.caption = Upcoming non-standard return periods
-returnPeriods.nonStandard.upcomingTable.caption = Past non-standard return periods
+returnPeriods.nonStandard.pastTable.caption = Past non-standard return periods
+returnPeriods.nonStandard.upcomingTable.caption = Upcoming non-standard return periods
 returnPeriods.nonStandard.switchToStandard.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
 
 returnPeriods.nonStandard.checkYourAnswersLabel = Your non-standard return periods

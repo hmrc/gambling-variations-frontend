@@ -152,7 +152,7 @@
     @govukRadios(
        RadiosViewModel(
            field  = form("value"),
-           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).asPageHeading(Medium),
+           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).withCssClass("govuk-fieldset__legend--m"),
            items  = NonStandardReturnPeriodsOptions.options(viewModel.isInLastNonStandardReturnPeriod, viewModel.selectedMonths)
        )
     )
