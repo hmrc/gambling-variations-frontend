@@ -27,7 +27,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyDetailsLoadedPage}
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodySectionPage}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
@@ -88,7 +88,7 @@ class ControllingBodyNameJourneySpec extends SpecBase with MockitoSugar {
             val initial = route(application, FakeRequest(GET, nameUrl)).value
             status(initial) mustBe OK
             Jsoup.parse(contentAsString(initial)).select("#value").`val`() mustBe "Original Name"
-            cached.get().value.get(ControllingBodyDetailsLoadedPage).value mustBe true
+            cached.get().value.get(ControllingBodySectionPage).value mustBe userAnswersId
 
             val invalid = route(application, FakeRequest(POST, nameUrl).withFormUrlEncodedBody("value" -> "New.Name")).value
             status(invalid) mustBe BAD_REQUEST

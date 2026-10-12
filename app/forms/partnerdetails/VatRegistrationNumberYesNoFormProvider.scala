@@ -25,6 +25,6 @@ class VatRegistrationNumberYesNoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("vatRegistrationNumberYesNo.error.required")
+      "value" -> boolean("partnerDetailsAddVRNYesNo.error.required")
     )
 }

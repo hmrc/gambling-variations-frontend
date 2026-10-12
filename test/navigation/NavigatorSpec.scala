@@ -29,11 +29,9 @@ import pages.businessname.*
 import pages.contactdetails.*
 import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyChangeScreenerPage}
 import pages.correspondencedetails.*
-import pages.licencespremises.{LicenceNumberPage, RemoveLicenceNumberPage}
+import pages.licencespremises.*
 import pages.partnerdetails.*
 import pages.tradingdetails.*
-import pages.*
-import pages.licencespremises.{LicenceHeldByLandlordPage, LicenceNumberPage, LicencePremisesNotCoveredPage, LicencesPremisesPage, OtherLicencesAndPermitsGBPage, OtherLicencesAndPermitsNIPage, RemoveLicenceNumberPage, RemovePremisesDetailsYesNoPage}
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
@@ -56,22 +54,22 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route TradingNamePage to CheckBusinessName" in {
         navigator.nextPage(TradingNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route BusinessNamePage to CheckBusinessName" in {
         navigator.nextPage(BusinessNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route RemoveTradeNamePage to CheckBusinessName" in {
         navigator.nextPage(RemoveTradeNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessNameController.onPageLoad()
+          controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
       }
 
       "should route SoleProprietorPage to ChangeBusinessName" in {
         navigator.nextPage(SoleProprietorPage, NormalMode, emptyAnswers) mustBe
-          routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor)
+          controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(BusinessType.Soleproprietor)
       }
 
       "should route BusinessContactNumberPage to CheckContactDetails" in {
@@ -101,17 +99,17 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route BusinessTradeClassPage to CheckTradingDetails" in {
         navigator.nextPage(BusinessTradeClassPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckTradingDetailsController.onPageLoad()
+          controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
       }
 
       "should route OtherTradeClassPage to CheckTradingDetails" in {
         navigator.nextPage(OtherTradeClassPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckTradingDetailsController.onPageLoad()
+          controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
       }
 
       "should route IsSeasonalBusinessPage to CheckTradingDetails" in {
         navigator.nextPage(IsSeasonalBusinessPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckTradingDetailsController.onPageLoad()
+          controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
       }
 
       "should route AddAssociatedRegistrationNumberPage to AssociatedRegNumber when answer is true" in {
@@ -122,7 +120,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddAssociatedRegistrationNumberPage, NormalMode, answers) mustBe
-          routes.AssociatedRegNumberController.onPageLoad()
+          controllers.tradingdetails.routes.AssociatedRegNumberController.onPageLoad()
       }
 
       "should route AddAssociatedRegistrationNumberPage to CheckTradingDetails when answer is false" in {
@@ -133,7 +131,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddAssociatedRegistrationNumberPage, NormalMode, answers) mustBe
-          routes.CheckTradingDetailsController.onPageLoad()
+          controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
       }
 
       "should route AddAssociatedRegistrationNumberPage to SystemError when unanswered" in {
@@ -143,12 +141,12 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route AssociatedRegNumberPage to AssociatedRegistrationNumbersList" in {
         navigator.nextPage(AssociatedRegNumberPage, NormalMode, emptyAnswers) mustBe
-          routes.AssociatedRegistrationNumbersListController.onPageLoad()
+          controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad()
       }
 
       "should route AssociatedRegistrationNumbersPage to AssociatedRegistrationNumbersList" in {
         navigator.nextPage(AssociatedRegistrationNumbersPage, NormalMode, emptyAnswers) mustBe
-          routes.AssociatedRegistrationNumbersListController.onPageLoad()
+          controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad()
       }
 
       "should route RemoveAssociatedRegNumberPage to AssociatedRegistrationNumbersList when registration numbers exist" in {
@@ -159,7 +157,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(RemoveAssociatedRegNumberPage, NormalMode, answers) mustBe
-          routes.AssociatedRegistrationNumbersListController.onPageLoad()
+          controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onPageLoad()
       }
 
       "should route RemoveAssociatedRegNumberPage to CheckTradingDetails when registration numbers are empty" in {
@@ -170,17 +168,17 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(RemoveAssociatedRegNumberPage, NormalMode, answers) mustBe
-          routes.CheckTradingDetailsController.onPageLoad()
+          controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
       }
 
       "should route RemoveAssociatedRegNumberPage to CheckTradingDetails when registration numbers are missing" in {
         navigator.nextPage(RemoveAssociatedRegNumberPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckTradingDetailsController.onPageLoad()
+          controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
       }
 
       "should route PreviousRegNumberPage to PreviousRegistrationNumber" in {
         navigator.nextPage(PreviousRegNumberPage, NormalMode, emptyAnswers) mustBe
-          routes.PreviousRegistrationNumberController.onPageLoad()
+          controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
       }
 
       "should route AddPreviousRegistrationNumberPage to PreviousRegistrationNumber when answer is true" in {
@@ -191,7 +189,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddPreviousRegistrationNumberPage, NormalMode, answers) mustBe
-          routes.PreviousRegistrationNumberController.onPageLoad()
+          controllers.tradingdetails.routes.PreviousRegistrationNumberController.onPageLoad()
       }
 
       "should route AddPreviousRegistrationNumberPage to CheckTradingDetails when answer is false" in {
@@ -202,7 +200,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddPreviousRegistrationNumberPage, NormalMode, answers) mustBe
-          routes.CheckTradingDetailsController.onPageLoad()
+          controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad()
       }
 
       "should route AddPreviousRegistrationNumberPage to SystemError when unanswered" in {
@@ -212,7 +210,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route RemovePreviousRegNumberPage to PreviousRegistrationNumbersList" in {
         navigator.nextPage(RemovePreviousRegNumberPage, NormalMode, emptyAnswers) mustBe
-          routes.PreviousRegistrationNumbersListController.onPageLoad()
+          controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onPageLoad()
       }
 
       "should route LicencesNumberPage to CheckLicencesAndPremisesController" in {
@@ -1235,6 +1233,44 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
         navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), NormalMode, answers) mustBe
           controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route RemovePartnerYesNoPage to RemovePartnerYesNoPage when answer is false" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+      }
+
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an new partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+      }
+
+      "should route RemovePartnerYesNoPage to PartnerDetailsController when answer is true and it's an existing partner" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), NormalMode, answers) mustBe
+          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+      }
+
+      "should route RemovePartnerYesNoPage to SystemError when unanswered" in {
+        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
       }
 
     }
