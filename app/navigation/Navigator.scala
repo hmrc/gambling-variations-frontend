@@ -30,7 +30,7 @@ import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
-import pages.returnperiods.{NonStandardReturnPeriodsPage, StandardReturnPeriodsPage}
+import pages.returnperiods.*
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -224,6 +224,30 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
     case ControllingBodyAdditionalAddressInformationYesNoPage =>
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
+
+    case ChooseReturnPeriodsPage =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+
+    case NonStandardPeriodDate1Page =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(2, NormalMode)
+
+    case NonStandardPeriodDate2Page =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(3, NormalMode)
+
+    case NonStandardPeriodDate3Page =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(4, NormalMode)
+
+    case NonStandardPeriodDate4Page =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(5, NormalMode)
+
+    case NonStandardPeriodDate5Page =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(6, NormalMode)
+
+    case NonStandardPeriodDate6Page =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(7, NormalMode)
+
+    case NonStandardPeriodDate7Page =>
+      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(8, NormalMode)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
