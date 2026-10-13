@@ -14,83 +14,63 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.ContactNumberFormProvider
+import forms.CorrespondenceAdditionalNameFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
-import repositories.SessionRepository
-import utils.FlagsUtil.checkIfChanged
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceContactNumberView
+import utils.FlagsUtil.checkIfChanged
+import views.html.CorrespondenceAdditionalNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceContactNumberController @Inject() (
+class CorrespondenceAdditionalNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: ContactNumberFormProvider,
+  formProvider: CorrespondenceAdditionalNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceContactNumberView
+  view: CorrespondenceAdditionalNameView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  private val form = formProvider("correspondenceContactNumber")
+  val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    val preparedForm = request.userAnswers
+      .get(CorrespondenceAdditionalNamePage)
+      .fold(form)(form.fill)
 
-      val preparedForm = request.userAnswers
-        .get(CorrespondenceContactNumberPage)
-        .map(form.fill)
-        .getOrElse(form)
+    Ok(view(preparedForm, mode))
+  }
 
-      Ok(view(preparedForm, mode))
-    }
+  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
 
-  def onSubmit(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-
-      val boundForm = form.bindFromRequest()
-
-      val validatedForm =
-        if (
-          boundForm("phoneNumber").value.forall(_.trim.isEmpty) &&
-          boundForm("mobileNumber").value.forall(_.trim.isEmpty)
-        ) {
-          boundForm.withError(
-            "phoneNumber",
-            "correspondenceContactNumber.error.phoneNumber.required"
-          )
-        } else {
-          boundForm
-        }
-
-      validatedForm.fold(
+    form
+      .bindFromRequest()
+      .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val isChanged: Boolean =
-            checkIfChanged(value, request.userAnswers, CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage)
+          val ua = request.userAnswers
+          val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAdditionalNamePage, CorrespondenceDetailsChangesPage)
+
           for {
-            updatedAnswers <- Future.fromTry(
-                                request.userAnswers.set(CorrespondenceContactNumberPage, value)
-                              )
+            updatedAnswers <- Future.fromTry(ua.set(CorrespondenceAdditionalNamePage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(
-            navigator.nextPage(CorrespondenceContactNumberPage, mode, updatedAnswers)
-          )
+          } yield Redirect(navigator.nextPage(CorrespondenceAdditionalNamePage, mode, updatedAnswers))
       )
-    }
+  }
 }

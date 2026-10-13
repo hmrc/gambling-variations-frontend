@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceChangeAddrScreenerFormProvider
-import models.{Address, Mode}
+import forms.CorrespondenceAddrInfoScreenerFormProvider
+import models.Mode
 import navigation.Navigator
-import pages.correspondencedetails.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
+import pages.correspondencedetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceChangeAddrScreenerView
+import views.html.CorrespondenceAddrInfoScreenerView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceChangeAddrScreenerController @Inject() (
+class CorrespondenceAddrInfoScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceChangeAddrScreenerFormProvider,
+  formProvider: CorrespondenceAddrInfoScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceChangeAddrScreenerView
+  view: CorrespondenceAddrInfoScreenerView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -48,34 +48,25 @@ class CorrespondenceChangeAddrScreenerController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(CorrespondenceChangeAddrScreenerPage) match {
+    val preparedForm = request.userAnswers.get(AddCorrespondenceAddressAdditionalInformationPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    val isUkAddress =
-      request.userAnswers.get(CorrespondenceAddressUkPage).isDefined
-
-    Ok(view(preparedForm, mode, isUkAddress))
-
+    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    val isUkAddress =
-      request.userAnswers
-        .get(CorrespondenceAddressUkPage)
-        .exists(_.country.isEmpty)
-
     form
       .bindFromRequest()
       .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, isUkAddress))),
+        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceChangeAddrScreenerPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddCorrespondenceAddressAdditionalInformationPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceChangeAddrScreenerPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddCorrespondenceAddressAdditionalInformationPage, mode, updatedAnswers))
       )
   }
 }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceAdditionalNameFormProvider
+import forms.ContactNumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
@@ -26,51 +26,71 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
-import views.html.CorrespondenceAdditionalNameView
+import views.html.CorrespondenceContactNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceAdditionalNameController @Inject() (
+class CorrespondenceContactNumberController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceAdditionalNameFormProvider,
+  formProvider: ContactNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceAdditionalNameView
+  view: CorrespondenceContactNumberView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  private val form = formProvider("correspondenceContactNumber")
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(CorrespondenceAdditionalNamePage)
-      .fold(form)(form.fill)
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-    Ok(view(preparedForm, mode))
-  }
+      val preparedForm = request.userAnswers
+        .get(CorrespondenceContactNumberPage)
+        .map(form.fill)
+        .getOrElse(form)
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
+      Ok(view(preparedForm, mode))
+    }
 
-    form
-      .bindFromRequest()
-      .fold(
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+
+      val boundForm = form.bindFromRequest()
+
+      val validatedForm =
+        if (
+          boundForm("phoneNumber").value.forall(_.trim.isEmpty) &&
+          boundForm("mobileNumber").value.forall(_.trim.isEmpty)
+        ) {
+          boundForm.withError(
+            "phoneNumber",
+            "correspondenceContactNumber.error.phoneNumber.required"
+          )
+        } else {
+          boundForm
+        }
+
+      validatedForm.fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val ua = request.userAnswers
-          val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAdditionalNamePage, CorrespondenceDetailsChangesPage)
-
+          val isChanged: Boolean =
+            checkIfChanged(value, request.userAnswers, CorrespondenceContactNumberPage, CorrespondenceDetailsChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(ua.set(CorrespondenceAdditionalNamePage, value))
+            updatedAnswers <- Future.fromTry(
+                                request.userAnswers.set(CorrespondenceContactNumberPage, value)
+                              )
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceAdditionalNamePage, mode, updatedAnswers))
+          } yield Redirect(
+            navigator.nextPage(CorrespondenceContactNumberPage, mode, updatedAnswers)
+          )
       )
-  }
+    }
 }

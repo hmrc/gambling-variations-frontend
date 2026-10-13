@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
+import controllers.routes
 import models.UserAnswers
 import pages.*
 import pages.correspondencedetails.*
@@ -27,9 +28,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkFlag
 import viewmodels.CheckCorrespondenceDetailsViewModel
 import views.html.CheckCorrespondenceDetailsView
-import scala.concurrent.{ExecutionContext, Future}
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckCorrespondenceDetailsController @Inject() (
   override val messagesApi: MessagesApi,
