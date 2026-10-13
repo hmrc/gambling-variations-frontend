@@ -87,9 +87,6 @@
                 <tr class="govuk-table__row">
 
                     <td class="govuk-table__cell">
-                            <span class="govuk-visually-hidden">
-                                @messages("site.viewOrChange")
-                            </span>
                             @viewModel.month
                     </td>
 
@@ -139,9 +136,6 @@
                 <tr class="govuk-table__row">
 
                     <td class="govuk-table__cell">
-                        <span class="govuk-visually-hidden">
-                            @messages("site.viewOrChange")
-                        </span>
                         @viewModel.month
                     </td>
 
@@ -168,10 +162,10 @@
         } else {
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("returnPeriods.nonStandard.switchToStandard.caption")).asPageHeading(Large)
+                legend = LegendViewModel(messages("returnPeriods.nonStandard.switchToStandard.caption")).asPageHeading(Medium)
             )
             .withHint(
-                Hint(Some(messages("returnPeriods.nonStandard.switchToStandard.hint", viewModel.selectedMonths.map(messages.apply(_))*)))
+                HintViewModel(messages("returnPeriods.nonStandard.switchToStandard.hint", viewModel.selectedMonths.map(messages.apply(_))*))
             )
         }
     )
@@ -182,5 +176,6 @@
     @govukButton(
         ButtonViewModel(messages("site.continue"))
     )
+
     }
 }

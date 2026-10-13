@@ -1264,10 +1264,6 @@ returnPeriods.standard.change.hidden = StandardReturnPeriods
 returnPeriods.nonStandard.title = Your non-standard return periods
 returnPeriods.nonStandard.heading = Your non-standard return periods
 
-returnPeriods.nonStandard.title = Your non-standard return periods
-returnPeriods.nonStandard.heading = Your non-standard return periods
-
-
 returnPeriods.nonStandard.notLastPeriod.p1 = You
 returnPeriods.nonStandard.notLastPeriod.p2 = must contact HMRC (opens in new tab)
 returnPeriods.nonStandard.notLastPeriod.p3 = to change your non-standard return periods.

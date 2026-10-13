@@ -19,7 +19,6 @@ package pages.returnperiods
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-//TODO make sure there is a test for it
 case object NonStandardNotLastReturnPeriodsYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString

@@ -16,14 +16,8 @@
 
 package viewmodels.checkAnswers.returnperiods
 
-import models.{GamblingReturnPeriods, NonStandardReturnPeriodsOptions}
-import play.api.data.Form
+import models.GamblingReturnPeriods
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.Aliases.{Hint, Radios, Text}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-import viewmodels.LegendSize.{Large, Medium}
-import viewmodels.govuk.all.CheckboxesViewModel.FluentLegend
-import viewmodels.govuk.all.{FluentRadios, LegendViewModel, RadiosViewModel}
 
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, Month}
@@ -37,7 +31,6 @@ final case class NonStandardReturnPeriodsViewModel(
   selectedMonths: Seq[String],
   pastPeriods: Seq[NstpReturnPeriod],
   futurePeriods: Seq[NstpReturnPeriod]
-//  radios: Radios
 )
 
 final case class NstpReturnPeriod(
@@ -79,26 +72,6 @@ object NonStandardReturnPeriodsViewModel {
                          selectedMonths                  = selectedMonths,
                          pastPeriods                     = nstpEndDates._1.map(formatNstpDate(returnPeriodsId, _)),
                          futurePeriods                   = nstpEndDates._2.map(formatNstpDate(returnPeriodsId, _))
-//                         radios =
-//                           if isInLastNstp then
-//                             RadiosViewModel(
-//                               field  = form("value"),
-//                               legend = LegendViewModel(Text(messages("returnPeriods.nonStandard.option.legend"))).asPageHeading(Medium),
-//                               items  = NonStandardReturnPeriodsOptions.options(selectedMonths)
-//                             )
-//                           else {
-//                             RadiosViewModel
-//                               .yesNo(
-//                                 field = form("value"),
-//                                 legend = LegendViewModel(Text(messages("returnPeriods.nonStandard.switchToStandard.caption")))
-//                                   .asPageHeading(Large)
-//                               )
-//                               .withHint(
-//                                 Hint(content =
-//                                   Text(messages("returnPeriods.nonStandard.switchToStandard.hint", selectedMonths.map(messages.apply(_))*))
-//                                 )
-//                               )
-//                           }
                        )
                      )
                    } else None
