@@ -83,7 +83,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.businessAddress"),
-            routes.CheckBusinessAddressController.onPageLoad().url,
+            controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad().url,
             status(BusinessAddressChangesPage)
           )
         ),

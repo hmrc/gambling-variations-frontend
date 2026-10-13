@@ -1310,3 +1310,18 @@ returnPeriods.locked.heading = You cannot make any further changes to your retur
 returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
 returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
 
+controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = For example, building name or floor number
+
+enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
+enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, 30 6 2026
+enterNonStandardPeriodDate.dateLabel = End date
+
+enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
+enterNonStandardPeriodDate.error.required.two = End date must include a {0} and a {1}
+enterNonStandardPeriodDate.error.required = End date must include a {0}
+enterNonStandardPeriodDate.error.invalid = End date must be a real date
+enterNonStandardPeriodDate.error.outsideBoundaries = End date must be after {0} and before {1}
