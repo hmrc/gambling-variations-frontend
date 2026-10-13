@@ -17,7 +17,7 @@
 package models
 
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.Aliases.{Content, HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.Aliases.{Content, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 
