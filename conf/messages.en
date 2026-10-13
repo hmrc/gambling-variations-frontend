@@ -1267,6 +1267,11 @@ returnPeriods.nonStandard.heading = Your non-standard return periods
 returnPeriods.nonStandard.title = Your non-standard return periods
 returnPeriods.nonStandard.heading = Your non-standard return periods
 
+
+returnPeriods.nonStandard.notLastPeriod.p1 = You
+returnPeriods.nonStandard.notLastPeriod.p2 = must contact HMRC (opens in new tab)
+returnPeriods.nonStandard.notLastPeriod.p3 = to change your non-standard return periods.
+
 returnPeriods.option1 = Switch to standard return periods and end dates
 returnPeriods.option2 = Keep non-standard return periods and add new end dates
 returnPeriods.option3 = Keep non-standard return periods and end dates the same
@@ -1282,9 +1287,11 @@ returnPeriods.nonStandard.column2 = End date
 returnPeriods.nonStandard.pastTable.caption = Upcoming non-standard return periods
 returnPeriods.nonStandard.upcomingTable.caption = Past non-standard return periods
 returnPeriods.nonStandard.switchToStandard.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
+returnPeriods.nonStandard.switchToStandard.caption = Do you want to switch to standard return periods?
 
 returnPeriods.nonStandard.checkYourAnswersLabel = Your non-standard return periods
-returnPeriods.nonStandard.error.required = Select what you want to do when your last non-standard return period ends
+returnPeriods.nonStandard.notLast.error.required = Select yes if you want to use standard return periods
+returnPeriods.nonStandard.last.error.required = Select what you want to do when your last non-standard return period ends
 returnPeriods.nonStandard.change.hidden = NonStandardReturnPeriods
 
 returnPeriods.noneSet.title = Your return periods

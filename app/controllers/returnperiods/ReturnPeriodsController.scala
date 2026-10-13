@@ -18,12 +18,12 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import controllers.routes
-import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
+import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardLastReturnPeriodsFormProvider, NonStandardNotLastReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
 import models.requests.DataRequest
-import models.{Mode, NoReturnPeriodsSet, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
+import models.{GamblingReturnPeriods, Mode, NoReturnPeriodsSet, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
-import pages.returnperiods.{GamblingReturnPeriodsPage, HasSwitchedToStandardValuesPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
+import pages.returnperiods.{GamblingReturnPeriodsPage, HasSwitchedToStandardValuesPage, NonStandardNotLastReturnPeriodsYesNoPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{Reads, Writes}
@@ -44,9 +44,10 @@ class ReturnPeriodsController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: GamblingReturnPeriodsDataRequiredAction,
-  nonStandardPeriodFormProvider: NonStandardReturnPeriodsFormProvider,
+  nonStandardNotLastPeriodFormProvider: NonStandardLastReturnPeriodsFormProvider,
   standardPeriodFormProvider: StandardReturnPeriodsFormProvider,
   noReturnPeriodsSetFormProvider: NoReturnPeriodsSetFormProvider,
+  nonStandardNotLastReturnPeriodsFormProvider: NonStandardNotLastReturnPeriodsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   nonStandardReturnPeriodsView: NonStandardReturnPeriodsView,
   standardReturnPeriodsView: StandardReturnPeriodsView,
@@ -59,7 +60,8 @@ class ReturnPeriodsController @Inject() (
   import ReturnPeriodsController.*
 
   private val standardForm: Form[StandardReturnPeriodsOptions] = standardPeriodFormProvider()
-  private val nonStandardForm: Form[NonStandardReturnPeriodsOptions] = nonStandardPeriodFormProvider()
+  private val nonStandardLastForm: Form[NonStandardReturnPeriodsOptions] = nonStandardNotLastPeriodFormProvider()
+  private val nonStandardNotLastForm: Form[Boolean] = nonStandardNotLastReturnPeriodsFormProvider()
   private val noPeriodsSetForm: Form[NoReturnPeriodsSet] = noReturnPeriodsSetFormProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
@@ -74,8 +76,10 @@ class ReturnPeriodsController @Inject() (
         Ok(standardReturnPeriodsView(prepare(standardForm, StandardReturnPeriodsPage), mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
-        Ok(nonStandardReturnPeriodsView(prepare(nonStandardForm, NonStandardReturnPeriodsPage), viewModel, mode))
+        Ok(nonStandardReturnPeriodsView(prepare(nonStandardLastForm, NonStandardReturnPeriodsPage), viewModel, mode))
 
+      case Some(NonStandardNotLast(viewModel)) =>
+        Ok(nonStandardReturnPeriodsView(prepare(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage), viewModel, mode))
       case None =>
         Redirect(routes.SystemErrorController.onPageLoad())
     }
@@ -90,7 +94,12 @@ class ReturnPeriodsController @Inject() (
         submit(standardForm, StandardReturnPeriodsPage, mode)(errors => standardReturnPeriodsView(errors, mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
-        submit(nonStandardForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
+        submit(nonStandardLastForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
+
+      case Some(NonStandardNotLast(viewModel)) =>
+        submit(nonStandardNotLastForm, NonStandardNotLastReturnPeriodsYesNoPage, mode)(errors =>
+          nonStandardReturnPeriodsView(errors, viewModel, mode)
+        )
 
       case Some(LockedPeriods) =>
         Future.successful(Redirect(controllers.routes.ChangeRegistrationDetailsController.onPageLoad()))
@@ -103,12 +112,19 @@ class ReturnPeriodsController @Inject() (
 
   private def screenFor(userAnswers: UserAnswers)(implicit messages: Messages): Option[ReturnPeriodsScreen] =
     userAnswers.get(GamblingReturnPeriodsPage).flatMap { periods =>
-      if (periods.returnPeriodsId.isEmpty) Some(NoPeriodsSet)
+      if periods.returnPeriodsId.isEmpty then Some(NoPeriodsSet)
       else if (userAnswers.get(HasSwitchedToStandardValuesPage).contains(true)) Some(LockedPeriods)
       else
         periods.hasExistingNstpValues.flatMap {
           case false => Some(Standard(periods.returnPeriodsId.map(_.toString)))
-          case true  => NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
+          case true =>
+            periods.isInLastNstp.flatMap {
+              case true =>
+                NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
+              case false =>
+                NonStandardReturnPeriodsViewModel.from(periods).map(NonStandardNotLast(_))
+            }
+
         }
     }
 
@@ -117,23 +133,23 @@ class ReturnPeriodsController @Inject() (
 
   private def submit[A: Writes](form: Form[A], page: QuestionPage[A], mode: Mode)(
     errorView: Form[A] => HtmlFormat.Appendable
-  )(implicit request: DataRequest[AnyContent]): Future[Result] =
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(errorView(formWithErrors))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(page, mode, updatedAnswers))
-      )
+  )(implicit request: DataRequest[AnyContent]): Future[Result] = form
+    .bindFromRequest()
+    .fold(
+      formWithErrors => Future.successful(BadRequest(errorView(formWithErrors))),
+      value =>
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
+          _              <- sessionRepository.set(updatedAnswers)
+        } yield Redirect(navigator.nextPage(page, mode, updatedAnswers))
+    )
 }
 
 object ReturnPeriodsController {
   private sealed trait ReturnPeriodsScreen
-  private case object NoPeriodsSet                                                   extends ReturnPeriodsScreen
-  private case object LockedPeriods                                                  extends ReturnPeriodsScreen
-  private final case class Standard(returnPeriodsId: Option[String])                 extends ReturnPeriodsScreen
-  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel) extends ReturnPeriodsScreen
+  private case object NoPeriodsSet                                                          extends ReturnPeriodsScreen
+  private case object LockedPeriods                                                         extends ReturnPeriodsScreen
+  private final case class Standard(returnPeriodsId: Option[String])                        extends ReturnPeriodsScreen
+  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel)        extends ReturnPeriodsScreen
+  private final case class NonStandardNotLast(viewModel: NonStandardReturnPeriodsViewModel) extends ReturnPeriodsScreen
 }

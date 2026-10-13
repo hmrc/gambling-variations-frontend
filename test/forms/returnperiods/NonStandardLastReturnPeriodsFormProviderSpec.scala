@@ -16,16 +16,30 @@
 
 package forms.returnperiods
 
-import forms.mappings.Mappings
+import forms.behaviours.OptionFieldBehaviours
 import models.NonStandardReturnPeriodsOptions
-import play.api.data.Form
+import play.api.data.FormError
 
-import javax.inject.Inject
+class NonStandardLastReturnPeriodsFormProviderSpec extends OptionFieldBehaviours {
 
-class NonStandardReturnPeriodsFormProvider @Inject() extends Mappings {
+  val form = new NonStandardLastReturnPeriodsFormProvider()()
 
-  def apply(): Form[NonStandardReturnPeriodsOptions] =
-    Form(
-      "value" -> enumerable[NonStandardReturnPeriodsOptions]("returnPeriods.nonStandard.error.required")
+  ".value" - {
+
+    val fieldName = "value"
+    val requiredKey = "returnPeriods.nonStandard.last.error.required"
+
+    behave like optionsField[NonStandardReturnPeriodsOptions](
+      form,
+      fieldName,
+      validValues  = NonStandardReturnPeriodsOptions.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

@@ -17,7 +17,7 @@
 package controllers.returnperiods
 
 import base.SpecBase
-import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
+import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardLastReturnPeriodsFormProvider, NonStandardNotLastReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
 import models.ChooseReturnPeriods.Jan
 import models.{GamblingReturnPeriods, NoReturnPeriodsSet, NonStandardReturnPeriodsOptions, NormalMode, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.returnperiods.{GamblingReturnPeriodsPage, HasSwitchedToStandardValuesPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -36,11 +37,15 @@ import views.html.returnperiods.{LockedReturnPeriodsView, NoReturnPeriodsSetView
 import java.time.LocalDate
 import scala.concurrent.Future
 
+//TODO additional tests to confirm swapping is right
 class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
   lazy val returnPeriodsRoute: String = routes.ReturnPeriodsController.onPageLoad(NormalMode).url
+
+//  def nonStandardLastForm: Form[NonStandardReturnPeriodsOptions] = new NonStandardLastReturnPeriodsFormProvider()()
+//  def nonStandardNotLastForm: Form[Boolean] = new NonStandardNotLastReturnPeriodsFormProvider()()
 
   private def mockedSessionRepository: SessionRepository = {
     val mockSessionRepository = mock[SessionRepository]
@@ -546,7 +551,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
   "NonStandard Return Periods" - {
 
-    val nonStandardFormProvider = new NonStandardReturnPeriodsFormProvider()
+    val nonStandardFormProvider = new NonStandardLastReturnPeriodsFormProvider()
     val nonStandardForm = nonStandardFormProvider()
 
     val date = LocalDate.of(2026, 5, 1)

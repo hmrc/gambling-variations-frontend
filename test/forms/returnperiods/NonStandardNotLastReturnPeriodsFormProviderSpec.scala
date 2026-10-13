@@ -16,24 +16,23 @@
 
 package forms.returnperiods
 
-import forms.behaviours.OptionFieldBehaviours
-import models.NonStandardReturnPeriodsOptions
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class NonStandardReturnPeriodsFormProviderSpec extends OptionFieldBehaviours {
+class NonStandardNotLastReturnPeriodsFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new NonStandardReturnPeriodsFormProvider()()
+  val form = new NonStandardNotLastReturnPeriodsFormProvider()()
+  val invalidKey = "error.boolean"
 
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "returnPeriods.nonStandard.error.required"
+    val requiredKey = "returnPeriods.nonStandard.notLast.error.required"
 
-    behave like optionsField[NonStandardReturnPeriodsOptions](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = NonStandardReturnPeriodsOptions.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

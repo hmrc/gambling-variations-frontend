@@ -27,6 +27,7 @@
     govukButton: GovukButton,
     caption: Caption,
     paragraph: Paragraph,
+    paragraphWithLink:ParagraphMessageWithLink,
     sectionBreak: SectionBreak,
     h1: H1
 )
@@ -44,6 +45,15 @@
     @caption(messages("changeRegistrationDetails.caption"))
 
     @h1(messages("returnPeriods.nonStandard.title"))
+
+    @if(!viewModel.isInLastNonStandardReturnPeriod){
+        @paragraphWithLink(
+            Some(messages("returnPeriods.nonStandard.notLastPeriod.p1")),
+            messages("returnPeriods.nonStandard.notLastPeriod.p2"),
+            Some(messages("returnPeriods.nonStandard.notLastPeriod.p3")),
+            "return-periods/see-confluence"
+        )
+    }
 
     @if(viewModel.hasFuturePeriods){
         <table class="govuk-table">
@@ -148,14 +158,26 @@
         </table>
     }
 
-
     @govukRadios(
-       RadiosViewModel(
-           field  = form("value"),
-           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).asPageHeading(Medium),
-           items  = NonStandardReturnPeriodsOptions.options(viewModel.isInLastNonStandardReturnPeriod, viewModel.selectedMonths)
-       )
+        if(viewModel.isInLastNonStandardReturnPeriod) {
+            RadiosViewModel(
+                field  = form("value"),
+                legend = LegendViewModel(Text(messages("returnPeriods.nonStandard.option.legend"))).asPageHeading(Medium),
+                items  = NonStandardReturnPeriodsOptions.options(viewModel.selectedMonths)
+            )
+        } else {
+            RadiosViewModel.yesNo(
+                field = form("value"),
+                legend = LegendViewModel(messages("returnPeriods.nonStandard.switchToStandard.caption")).asPageHeading(Large)
+            )
+            .withHint(
+                Hint(Some(messages("returnPeriods.nonStandard.switchToStandard.hint", viewModel.selectedMonths.map(messages.apply(_))*)))
+            )
+        }
     )
+
+
+
 
     @govukButton(
         ButtonViewModel(messages("site.continue"))

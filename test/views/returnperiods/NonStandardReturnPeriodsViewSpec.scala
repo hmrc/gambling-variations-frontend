@@ -17,7 +17,7 @@
 package views.returnperiods
 
 import base.SpecBase
-import forms.returnperiods.NonStandardReturnPeriodsFormProvider
+import forms.returnperiods.NonStandardLastReturnPeriodsFormProvider
 import models.{GamblingReturnPeriods, NormalMode}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -30,6 +30,8 @@ import views.html.returnperiods.NonStandardReturnPeriodsView
 import java.time.LocalDate
 import scala.jdk.CollectionConverters.*
 
+//TODO add tests:
+// for new view where nonStandard and NotLast is rendered correctly
 class NonStandardReturnPeriodsViewSpec extends SpecBase {
 
   trait Setup {
@@ -44,7 +46,7 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new NonStandardReturnPeriodsFormProvider()
+    private val formProvider = new NonStandardLastReturnPeriodsFormProvider()
     private val form = formProvider()
 
     private val date = LocalDate.now()
