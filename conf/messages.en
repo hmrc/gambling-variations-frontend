@@ -1344,3 +1344,13 @@ enterNonStandardPeriodDate.error.required.two = End date must include a {0} and 
 enterNonStandardPeriodDate.error.required = End date must include a {0}
 enterNonStandardPeriodDate.error.invalid = End date must be a real date
 enterNonStandardPeriodDate.error.outsideBoundaries = End date must be after {0} and before {1}
+
+partnerDetailsCompanyRegistrationNumber.title = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.heading = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.paragraph = What is the company registration number?
+partnerDetailsCompanyRegistrationNumber.hint = It can be up to 8 numbers, or start with 2 letters followed by up to 6 letters or numbers, for example AC123456, IPCFGEDT or 000123
+partnerDetailsCompanyRegistrationNumber.error.required = Enter the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.error.invalid.characters = The partner’s company registration number must only include letters a to z and numbers 0 to 9
+partnerDetailsCompanyRegistrationNumber.error.invalid.format = The partner’s company registration number must be in the correct format
+partnerDetailsCompanyRegistrationNumber.p1 = You can find this by
+partnerDetailsCompanyRegistrationNumber.link = searching for the company on the Companies House register (opens in new tab)
