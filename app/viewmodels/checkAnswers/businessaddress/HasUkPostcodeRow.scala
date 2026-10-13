@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import controllers.routes
 import models.UserAnswers
 import pages.businessaddress.BusinessUKAddrScreenerPage
 import play.api.i18n.Messages
@@ -33,7 +32,7 @@ case object HasUkPostcodeRow {
           key   = "checkBusinessAddress.question.ukPostcode",
           value = ValueViewModel(if (hasPostcode) "site.yes" else "site.no"),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.BusinessUKAddrScreenerController.onPageLoad().url)
+            ActionItemViewModel("site.change", controllers.businessaddress.routes.BusinessUKAddrScreenerController.onPageLoad().url)
               .withVisuallyHiddenText(messages("checkBusinessAddress.question.ukPostcode.hidden"))
           )
         )

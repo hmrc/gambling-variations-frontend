@@ -17,7 +17,6 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import controllers.routes
 import forms.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.Mode
 import models.requests.DataRequest
@@ -38,6 +37,7 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
+  changeTracker: PartnerChangeTracker,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
@@ -50,24 +50,26 @@ class PartnerDetailsRemoveEmailAddressYesNoController @Inject() (
 
   val form: Form[Boolean] = formProvider()
 
-  def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) {
-    implicit request: DataRequest[AnyContent] =>
+  def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request: DataRequest[AnyContent] =>
       val newIndex = PartnerUtils.parseIndex(index, mode)
 
-      val preparedForm = request.userAnswers.get(PartnerDetailsRemoveEmailAddressYesNoPage(newIndex)) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+      val preparedForm =
+        request.userAnswers.get(PartnerDetailsRemoveEmailAddressYesNoPage(newIndex)).fold(form)(form.fill)
 
-      request.userAnswers
-        .get(PartnerDetailsCorrespondenceEmailAddressPage(newIndex)) match {
+      request.userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(newIndex)) match {
         case Some(email) =>
-          Ok(view(preparedForm, index, mode, email))
+          newIndex match {
+            case businessNumber: String =>
+              changeTracker.markClicked(request.userAnswers, businessNumber).map(_ => Ok(view(preparedForm, index, mode, email)))
+            case _: Int =>
+              Future.successful(Ok(view(preparedForm, index, mode, email)))
+          }
 
         case None =>
-          Redirect(routes.JourneyRecoveryController.onPageLoad())
+          Future.successful(Redirect(controllers.routes.JourneyRecoveryController.onPageLoad()))
       }
-  }
+    }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)

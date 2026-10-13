@@ -12,6 +12,9 @@ site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
 site.notProvided = Not provided
+site.viewOrChange = View or change
+site.pagination.next = Next
+site.pagination.previous = Previous
 
 date.day = Day
 date.month = Month
@@ -19,6 +22,19 @@ date.year = Year
 date.error.day = day
 date.error.month = month
 date.error.year = year
+
+months.january = January
+months.february = February
+months.march = March
+months.april = April
+months.may = May
+months.june = June
+months.july = July
+months.august = August
+months.september = September
+months.october = October
+months.november = November
+months.december = December
 
 timeout.title = You’re about to be signed out
 timeout.message = For security reasons, you will be signed out of this service in
@@ -843,11 +859,11 @@ partnerDetailsAddNino.error.required = Enter the partner’s National Insurance 
 partnerDetailsAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 0 to 9 and spaces
 partnerDetailsAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character
 
-vatRegistrationNumberYesNo.title = Do you want to add a VAT registration number for the partner?
-vatRegistrationNumberYesNo.heading = Do you want to add a VAT registration number for the partner?
-vatRegistrationNumberYesNo.checkYourAnswersLabel = Do you want to add a VAT registration number for the partner?
-vatRegistrationNumberYesNo.error.required = Select yes to add a VAT registration number for the partner
-vatRegistrationNumberYesNo.change.hidden = do you want to add a VAT registration number for the partner
+partnerDetailsAddVRNYesNo.title = Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.heading = Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.checkYourAnswersLabel = Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.error.required = Select yes to add a VAT registration number for the partner
+partnerDetailsAddVRNYesNo.change.hidden = do you want to add a VAT registration number for the partner
 
 partnerDetailsRemoveVRNYesNo.title = Are you sure you want to remove this partner’s VAT registration number?
 partnerDetailsRemoveVRNYesNo.heading = Are you sure you want to remove {0} as this partner’s VAT registration number?
@@ -921,7 +937,6 @@ partnerDetails.noReturn = No, return to change registration details
 partnerDetails.partnerName = Partner name
 partnerDetails.status = Status
 partnerDetails.action = Action
-partnerDetails.viewOrChange = View or change
 partnerDetails.status.dueToLeave =  Due to leave
 partnerDetails.status.dueToJoin =  	Due to join
 partnerDetails.cannotRemove =  	Cannot remove
@@ -1042,6 +1057,65 @@ partnerDetailsForeignCorporateReference.error.required = Enter the partner’s f
 partnerDetailsForeignCorporateReference.error.invalid = The partner’s foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 partnerDetailsForeignCorporateReference.error.length = The partner’s foreign corporate reference must be 100 characters or less
 partnerDetailsForeignCorporateReference.change.hidden = What is the partner’s foreign corporate reference?
+
+partnerDetailsCheckYourAnswers.title = Check your partner details
+partnerDetailsCheckYourAnswers.heading = Check your partner details
+partnerDetailsCheckYourAnswers.error.missingChanges = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.
+partnerDetailsCheckYourAnswers.error.missingDetails = You must add missing details before you submit this partner for approval.
+partnerDetailsCheckYourAnswers.error.contactUsLinkText = you need to contact us (opens in new tab)
+partnerDetailsCheckYourAnswers.error.contactUs = To update details you cannot change online, {0}.
+partnerDetailsCheckYourAnswers.error.cannotChangeLeaving = You cannot change this partner''s details online because they are due to leave. If you want to make changes before {0}, {1}.
+partnerDetailsCheckYourAnswers.error.cannotChangeJoining = You cannot change this partner''s details online because they are due to join. If you want to make changes before they join on {0}, {1}.
+partnerDetailsCheckYourAnswers.noData = Not provided
+
+partnerDetailsCheckYourAnswers.businessDetails = Business details
+partnerDetailsCheckYourAnswers.typeOfBusiness = Type of business
+partnerDetailsCheckYourAnswers.typeOfBusiness.add = Add type of business
+partnerDetailsCheckYourAnswers.soleProprietorName = Sole proprietor’s name
+partnerDetailsCheckYourAnswers.soleProprietorName.add = Add sole proprietor’s name
+partnerDetailsCheckYourAnswers.soleProprietorDob = Sole proprietor’s date of birth
+partnerDetailsCheckYourAnswers.soleProprietorDob.add = Add sole proprietor’s date of birth
+partnerDetailsCheckYourAnswers.unincorporatedBodyName = Unincorporated body’s name
+partnerDetailsCheckYourAnswers.unincorporatedBodyName.add = Add unincorporated body’s name
+partnerDetailsCheckYourAnswers.corporateBodyName = Corporate body’s name
+partnerDetailsCheckYourAnswers.corporateBodyName.add = Add corporate body’s name
+partnerDetailsCheckYourAnswers.partnershipName = Partnership’s name
+partnerDetailsCheckYourAnswers.partnershipName.add = Add partnership’s name
+partnerDetailsCheckYourAnswers.llpName = Limited liability partnership’s name
+partnerDetailsCheckYourAnswers.llpName.add = Add limited liability partnership’s name
+partnerDetailsCheckYourAnswers.addNino = Add National Insurance number?
+partnerDetailsCheckYourAnswers.nino = National Insurance number
+partnerDetailsCheckYourAnswers.nino.add = Add National Insurance number
+partnerDetailsCheckYourAnswers.addTradingName = Add trading name?
+partnerDetailsCheckYourAnswers.tradingName = Trading name
+partnerDetailsCheckYourAnswers.isIncorporatedInUk = Is the business incorporated in the UK?
+partnerDetailsCheckYourAnswers.isIncorporatedInUk.add = Add is the business incorporated in the UK
+partnerDetailsCheckYourAnswers.countryOfIncorporation = Country of incorporation
+partnerDetailsCheckYourAnswers.countryOfIncorporation.add = Add country of incorporation
+partnerDetailsCheckYourAnswers.foreignCorporateReference = Foreign corporate reference
+partnerDetailsCheckYourAnswers.foreignCorporateReference.add = Add foreign corporate reference
+partnerDetailsCheckYourAnswers.dateOfIncorporation = Date of incorporation
+partnerDetailsCheckYourAnswers.dateOfIncorporation.add = Add date of incorporation
+partnerDetailsCheckYourAnswers.companyRegistrationNumber = Company registration number
+partnerDetailsCheckYourAnswers.companyRegistrationNumber.add = Add company registration number
+partnerDetailsCheckYourAnswers.utr = Unique Taxpayer Reference
+partnerDetailsCheckYourAnswers.utr.add = Add Unique Taxpayer Reference
+partnerDetailsCheckYourAnswers.addVatRegistrationNumber = Add VAT registration number?
+partnerDetailsCheckYourAnswers.vatRegistrationNumber = VAT registration number
+partnerDetailsCheckYourAnswers.dateOfJoining = Date of joining
+partnerDetailsCheckYourAnswers.dateOfJoining.add = Add date of joining
+
+partnerDetailsCheckYourAnswers.address = Address
+partnerDetailsCheckYourAnswers.addAdditionalInformation = Add additional information for address?
+partnerDetailsCheckYourAnswers.additionalInformation = Additional information
+
+partnerDetailsCheckYourAnswers.contactDetails = Contact details
+partnerDetailsCheckYourAnswers.contactNumbers = Contact numbers
+partnerDetailsCheckYourAnswers.contactNumbers.add = Add contact numbers
+partnerDetailsCheckYourAnswers.addFaxNumber = Add fax number?
+partnerDetailsCheckYourAnswers.faxNumber = Fax number
+partnerDetailsCheckYourAnswers.addEmailAddress = Add email address?
+partnerDetailsCheckYourAnswers.emailAddress = Email address
 
 otherLicencesAndPermitsGB.title = Do you have any other licences and permits in Great Britain?
 otherLicencesAndPermitsGB.heading = Do you have any other licences and permits in Great Britain?
@@ -1165,29 +1239,78 @@ controllingBodyEmailAddress.error.required = Enter the controlling body’s emai
 controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
 
-site.pagination.next = Next
-site.pagination.previous = Previous
-
-whatToDoWithStandardReturnPeriods.title = Your standard return periods
-whatToDoWithStandardReturnPeriods.heading = Your standard return periods
-whatToDoWithStandardReturnPeriods.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
-whatToDoWithStandardReturnPeriods.switchToNonStandard = Switch to non-standard return periods
-whatToDoWithStandardReturnPeriods.keepStandardReturnPeriod = Keep standard return periods the same
-whatToDoWithStandardReturnPeriods.h2 = What do you want to do with your return periods?
-whatToDoWithStandardReturnPeriods.p1 = Your return period end dates are the last day of January, April, July and October .
-whatToDoWithStandardReturnPeriods.p2 = Your return period end dates are the last day of February, May, August and November.
-whatToDoWithStandardReturnPeriods.p3 = Your return period end dates are the last day of March, June, September and December.
-whatToDoWithStandardReturnPeriods.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
-
-whatToDoWithStandardReturnPeriods.checkYourAnswersLabel = Your standard return periods
-whatToDoWithStandardReturnPeriods.error.required = Select what you want to do with your return periods
-whatToDoWithStandardReturnPeriods.change.hidden = WhatToDoWithStandardReturnPeriods
-
-
 controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+controllingBodyFaxNumber.title = What is the controlling body''s fax number?
+controllingBodyFaxNumber.heading = What is the controlling body''s fax number?
+controllingBodyFaxNumber.error.required = Enter the controlling body''s fax number
+controllingBodyFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
+controllingBodyFaxNumber.error.length = The fax number must be 20 characters or less
+
+returnPeriods.standard.title = Your standard return periods
+returnPeriods.standard.heading = Your standard return periods
+
+returnPeriods.standard.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
+returnPeriods.standard.switchToNonStandard = Switch to non-standard return periods
+returnPeriods.standard.keepStandardReturnPeriod = Keep standard return periods the same
+removeControllingBodyTradeName.title = Are you sure you want to remove this controlling body’s trading name?
+removeControllingBodyTradeName.heading = Are you sure you want to remove {0} as this controlling body’s trading name?
+removeControllingBodyTradeName.error.required = Select yes if you want to remove this controlling body’s trading name
+
+returnPeriods.standard.option.legend = What do you want to do with your return periods?
+returnPeriods.standard.p1 = Your return period end dates are the last day of January, April, July and October .
+returnPeriods.standard.p2 = Your return period end dates are the last day of February, May, August and November.
+returnPeriods.standard.p3 = Your return period end dates are the last day of March, June, September and December.
+returnPeriods.standard.switchToNonStandard.hint = You must provide end dates to cover the next 2 years
+
+returnPeriods.standard.checkYourAnswersLabel = Your standard return periods
+returnPeriods.standard.error.required = Select what you want to do with your return periods
+returnPeriods.standard.change.hidden = StandardReturnPeriods
+
+returnPeriods.nonStandard.title = Your non-standard return periods
+returnPeriods.nonStandard.heading = Your non-standard return periods
+
+returnPeriods.nonStandard.title = Your non-standard return periods
+returnPeriods.nonStandard.heading = Your non-standard return periods
+
+returnPeriods.option1 = Switch to standard return periods and end dates
+returnPeriods.option2 = Keep non-standard return periods and add new end dates
+returnPeriods.option3 = Keep non-standard return periods and end dates the same
+returnPeriods.option.legend = What do you want to do when your last non‑standard return period ends?
+
+returnPeriods.nonStandard.switchToStandard = Switch to standard return periods and end dates
+returnPeriods.nonStandard.keepNonStandardAndChangeDates = Keep non-standard return periods and add new end dates
+returnPeriods.nonStandard.keepNonStandard = Keep non-standard return periods and end dates the same
+returnPeriods.nonStandard.option.legend = What do you want to do when your last non‑standard return period ends?
+
+returnPeriods.nonStandard.column1 = Return period ending
+returnPeriods.nonStandard.column2 = End date
+returnPeriods.nonStandard.pastTable.caption = Past non-standard return periods
+returnPeriods.nonStandard.upcomingTable.caption = Upcoming non-standard return periods
+returnPeriods.nonStandard.switchToStandard.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
+
+returnPeriods.nonStandard.checkYourAnswersLabel = Your non-standard return periods
+returnPeriods.nonStandard.error.required = Select what you want to do when your last non-standard return period ends
+returnPeriods.nonStandard.change.hidden = NonStandardReturnPeriods
+
+controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = For example, building name or floor number
+
+enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
+enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, 30 6 2026
+enterNonStandardPeriodDate.dateLabel = End date
+
+enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
+enterNonStandardPeriodDate.error.required.two = End date must include a {0} and a {1}
+enterNonStandardPeriodDate.error.required = End date must include a {0}
+enterNonStandardPeriodDate.error.invalid = End date must be a real date
+enterNonStandardPeriodDate.error.outsideBoundaries = End date must be after {0} and before {1}
 
 partnerDetailsCompanyRegistrationNumber.title = Tell us the partner’s company registration number
 partnerDetailsCompanyRegistrationNumber.heading = Tell us the partner’s company registration number
