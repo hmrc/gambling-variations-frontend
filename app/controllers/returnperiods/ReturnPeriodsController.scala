@@ -130,10 +130,12 @@ class ReturnPeriodsController @Inject() (
       )
 }
 
-object ReturnPeriodsController {
-  private sealed trait ReturnPeriodsScreen
-  private case object NoPeriodsSet                                                   extends ReturnPeriodsScreen
-  private case object LockedPeriods                                                  extends ReturnPeriodsScreen
-  private final case class Standard(returnPeriodsId: Option[String])                 extends ReturnPeriodsScreen
-  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel) extends ReturnPeriodsScreen
+  private def isStandardReturnsPeriod(userAnswers: UserAnswers): Option[Boolean] =
+    userAnswers.get(GamblingReturnPeriodsPage).flatMap(_.hasExistingNstpValues.map(!_))
+
+  private def getNonStandardReturnPeriodsViewModel(userAnswers: UserAnswers)(implicit messages: Messages): Option[NonStandardReturnPeriodsViewModel] =
+    for {
+      gamblingReturnPeriods <- userAnswers.get(GamblingReturnPeriodsPage)
+      viewModel             <- NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods)
+    } yield viewModel
 }
