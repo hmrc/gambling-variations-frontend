@@ -421,7 +421,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
       }
 
       "should route BusinessUKAddrScreenerPage to BusinessNonUkAddressScreener when answer is false" in {
@@ -432,7 +432,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessNonUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessAddressAdditionalInformationPage to CheckBusinessAddress when answered" in {
@@ -443,7 +443,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessAddressAdditionalInformationPage, NormalMode, answers) mustBe
-          routes.CheckBusinessAddressController.onPageLoad()
+          controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
       }
 
       "should route BusinessUKAddrScreenerPage to BusinessNonUKAddress when answer is false" in {
@@ -454,7 +454,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessNonUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessUKAddrScreenerPage to SystemError when unanswered" in {
@@ -473,7 +473,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
                             )
 
         navigator.nextPage(BusinessAddressUkPage, NormalMode, ua) mustBe
-          routes.BusinessAddrInfoScreenerController.onPageLoad()
+          controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 
       "should route BusinessAddressNonUkPage to BusinessAddrInfoScreener if in Add flow" in {
@@ -487,13 +487,13 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
                             )
 
         navigator.nextPage(BusinessAddressNonUkPage, NormalMode, ua) mustBe
-          routes.BusinessAddrInfoScreenerController.onPageLoad()
+          controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad()
       }
 
       "should route BusinessAddressUk or NonUk to BusinessAddressPage if in normal flow" in {
 
         navigator.nextPage(BusinessAddressNonUkPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckBusinessAddressController.onPageLoad()
+          controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
       }
 
       "should route CorrespondenceAddressUkPage to CorrespondenceAddrInfoScreener when adding correspondence details" in {
@@ -647,7 +647,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
       }
 
       "should route BusinessChangeAddrScreenerPage to BusinessNonUkAddress when changing to a non-UK address" in {
@@ -658,7 +658,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessNonUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessChangeAddrScreenerPage to BusinessUkAddress when changing to a UK address" in {
@@ -669,7 +669,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
       }
 
       "should route BusinessChangeAddrScreenerPage to BusinessAddressUK when editing the current UK address" in {
@@ -683,7 +683,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
       }
 
       "should route BusinessChangeAddrScreenerPage to BusinessAddressNonUK when editing the current nonUK address" in {
@@ -697,7 +697,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(BusinessChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.BusinessNonUKAddressController.onPageLoad()
+          controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
       }
 
       "should route BusinessChangeAddrScreenerPage to SystemError when unanswered" in {

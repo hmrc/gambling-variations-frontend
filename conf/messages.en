@@ -1310,3 +1310,7 @@ returnPeriods.locked.heading = You cannot make any further changes to your retur
 returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
 returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
 
+controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = For example, building name or floor number
