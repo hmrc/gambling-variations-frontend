@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessname
 
 import controllers.actions.*
+import controllers.routes
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Soleproprietor
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.{BusinessTypePage, GroupMemberPage}
 import pages.businessname.*
+import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -81,7 +82,7 @@ class ChangeBusinessNameController @Inject() (
                 }
             }
           ).getOrElse(
-            Redirect(routes.CheckBusinessNameController.onPageLoad())
+            Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad())
           )
 
         case None =>
@@ -136,7 +137,7 @@ class ChangeBusinessNameController @Inject() (
                     } yield Redirect(navigator.nextPage(BusinessNamePage, mode, updatedAnswers))
                 )
             }
-          } getOrElse Future.successful(Redirect(routes.CheckBusinessNameController.onPageLoad()))
+          } getOrElse Future.successful(Redirect(controllers.businessname.routes.CheckBusinessNameController.onPageLoad()))
 
         case None =>
           Future.successful(

@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.businessname
+
 import base.SpecBase
+import controllers.routes
 import forms.BusinessTradingNameFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -23,8 +25,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.tradingdetails.TradingNamePage
 import pages.businessname.BusinessNameChangesPage
+import pages.tradingdetails.TradingNamePage
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -44,7 +46,7 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   lazy val businessTradingNameRoute =
-    routes.BusinessTradingNameController.onPageLoad().url
+    controllers.businessname.routes.BusinessTradingNameController.onPageLoad().url
 
   val data = Json.obj(
     BusinessTypePage.toString -> BusinessType.Partnership.code,
