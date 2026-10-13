@@ -20,7 +20,6 @@ import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
-import models.licencespremises.LicencesPremisesAnswers.*
 import models.controllingbody.ControllingBodyChangeOption.*
 import models.licencespremises.LicencesPremisesAnswers.*
 import pages.*
@@ -143,9 +142,9 @@ class Navigator @Inject() () {
     case BusinessAddressNonUkPage =>
       userAnswers => navigateBusinessAddressUkOrNonUkPage()(userAnswers)
     case RemoveBusinessAddressAddInfoPage =>
-      _ => routes.CheckBusinessAddressController.onPageLoad()
+      _ => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
     case BusinessAddressAdditionalInformationPage =>
-      _ => routes.CheckBusinessAddressController.onPageLoad()
+      _ => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
     case PartnerDetailsIsBusinessIncorporatedUkPage(index) =>
       userAnswers => navigatePartnerDetailsIsBusinessIncorporatedUkPage(index, userAnswers)
 
@@ -288,8 +287,8 @@ class Navigator @Inject() () {
 
   private def navigateAddBusinessAddressScreenerPage()(answers: UserAnswers): Call =
     answers.get(AddBusinessAddressAdditionalInformationPage) match {
-      case Some(true) => routes.BusinessAddressAdditionalInfoController.onPageLoad()
-      case _          => routes.CheckBusinessAddressController.onPageLoad()
+      case Some(true) => controllers.businessaddress.routes.BusinessAddressAdditionalInfoController.onPageLoad()
+      case _          => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
     }
 
   private def navigateAddAssociatedRegistrationNumberPage()(answers: UserAnswers): Call =
@@ -375,16 +374,16 @@ class Navigator @Inject() () {
 
     answers.get(BusinessUKAddrScreenerPage) match {
       case Some(true) if previouslyUk =>
-        routes.CheckBusinessAddressController.onPageLoad()
+        controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
 
       case Some(false) if previouslyNonUk =>
-        routes.CheckBusinessAddressController.onPageLoad()
+        controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
 
       case Some(true) =>
-        routes.BusinessUKAddressController.onPageLoad()
+        controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
 
       case Some(false) =>
-        routes.BusinessNonUKAddressController.onPageLoad()
+        controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
 
       case None =>
         routes.SystemErrorController.onPageLoad()
@@ -435,8 +434,8 @@ class Navigator @Inject() () {
   }
 
   private def navigateBusinessChangeAddrScreenerPage()(userAnswers: UserAnswers): Call = {
-    val ukRoute = routes.BusinessUKAddressController.onPageLoad()
-    val nonUkRoute = routes.BusinessNonUKAddressController.onPageLoad()
+    val ukRoute = controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
+    val nonUkRoute = controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
     userAnswers
       .get(BusinessChangeAddrScreenerPage)
       .map {
@@ -634,8 +633,8 @@ class Navigator @Inject() () {
   }
 
   private def navigateBusinessAddressUkOrNonUkPage()(userAnswers: UserAnswers): Call = {
-    val addFlowRoute = routes.BusinessAddrInfoScreenerController.onPageLoad()
-    val normalRoute = routes.CheckBusinessAddressController.onPageLoad()
+    val addFlowRoute = controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad()
+    val normalRoute = controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
     userAnswers.get(BusinessAddressAddFlowPage) match {
       case Some(isInAddFlow) => if (isInAddFlow) addFlowRoute else normalRoute
       case None              => normalRoute
