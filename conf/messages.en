@@ -1295,3 +1295,8 @@ returnPeriods.nonStandard.switchToStandard.hint = The end dates will be the last
 returnPeriods.nonStandard.checkYourAnswersLabel = Your non-standard return periods
 returnPeriods.nonStandard.error.required = Select what you want to do when your last non-standard return period ends
 returnPeriods.nonStandard.change.hidden = NonStandardReturnPeriods
+
+controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = For example, building name or floor number

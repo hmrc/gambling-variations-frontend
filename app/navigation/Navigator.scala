@@ -223,6 +223,8 @@ class Navigator @Inject() () {
       userAnswers => navigateReturnPeriodsPage(userAnswers)
     case RemoveControllingBodyTradeNamePage =>
       _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
+    case ControllingBodyAdditionalAddressInformationYesNoPage =>
+      userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -683,3 +685,10 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 }
+
+private def navigateControllingBodyAdditionalAddressInformationYesNoPage()(answers: UserAnswers): Call =
+  answers.get(ControllingBodyAdditionalAddressInformationYesNoPage) match {
+    case Some(true)  => routes.IndexController.onPageLoad() // TODO later -> Change it to CB-AI
+    case Some(false) => routes.IndexController.onPageLoad() // TODO later -> Redirect to CB-CN in add flow and CB-CYA in change flow
+    case None        => routes.SystemErrorController.onPageLoad()
+  }
