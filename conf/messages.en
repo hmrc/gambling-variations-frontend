@@ -1286,6 +1286,16 @@ returnPeriods.nonStandard.keepNonStandardAndChangeDates = Keep non-standard retu
 returnPeriods.nonStandard.keepNonStandard = Keep non-standard return periods and end dates the same
 returnPeriods.nonStandard.option.legend = What do you want to do when your last non‑standard return period ends?
 
+returnPeriods.nonStandardNotSub.option1 = Switch to standard return periods and end dates
+returnPeriods.nonStandardNotSub.option2 = Change non-standard return periods and end dates
+returnPeriods.nonStandardNotSub.option3 = Keep these non-standard return periods and end dates
+
+returnPeriods.nonStandardNotSub.switchToStandard = Switch to standard return periods and end dates
+returnPeriods.nonStandardNotSub.changeNonStandard = Change non-standard return periods and end dates
+returnPeriods.nonStandardNotSub.keepNonStandard = Keep these non-standard return periods and end dates
+returnPeriods.nonStandardNotSub.option.legend =  What do you want to do with your return periods?
+returnPeriods.nonStandardNotSub.switchToStandard.hint = This will remove all the end dates that you entered
+
 returnPeriods.nonStandard.column1 = Return period ending
 returnPeriods.nonStandard.column2 = End date
 returnPeriods.nonStandard.pastTable.caption = Past non-standard return periods

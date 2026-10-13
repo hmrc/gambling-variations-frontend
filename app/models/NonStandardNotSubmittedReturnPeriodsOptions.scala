@@ -38,10 +38,10 @@ object NonStandardNotSubmittedReturnPeriodsOptions extends Enumerable.Implicits 
   def options(implicit messages: Messages): Seq[RadioItem] = {
     val items = values.zipWithIndex.map { case (option, index) =>
       RadioItem(
-        content    = Text(messages(s"returnPeriods.nonStandard.$option")),
+        content    = Text(messages(s"returnPeriods.nonStandardNotSub.$option")),
         value      = Some(option.toString),
         id         = Some(s"value_$index"),
-        hint       = Option.when(option == SwitchToStandard)(Hint(content = Text(messages("returnPeriods.nonStandard.switchToStandard.hint")))),
+        hint       = Option.when(option == SwitchToStandard)(Hint(content = Text(messages("returnPeriods.nonStandardNotSub.switchToStandard.hint")))),
         attributes = Map("data-testid" -> s"return-periods-$option")
       )
     }

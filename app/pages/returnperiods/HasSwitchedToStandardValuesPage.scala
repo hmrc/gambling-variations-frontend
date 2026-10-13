@@ -21,7 +21,7 @@ import play.api.libs.json.JsPath
 
 case object HasSwitchedToStandardValuesPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "gamblingReturnPeriods" \ toString
 
   override def toString: String = "hasSwitchedToStandardReturnPeriods"
 }

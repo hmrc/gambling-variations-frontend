@@ -22,7 +22,7 @@ import play.api.libs.json.JsPath
 
 case object NonStandardNotSubmittedReturnPeriodsPage extends QuestionPage[NonStandardNotSubmittedReturnPeriodsOptions] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "gamblingReturnPeriods" \ toString
 
   override def toString: String = "nonStandardNotSubmittedReturnPeriods"
 }
