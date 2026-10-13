@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceNonUKAddressFormProvider
+import forms.CorrespondenceUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
@@ -26,33 +26,41 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceNonUKAddressView
-import utils.FlagsUtil.*
+import utils.FlagsUtil.checkIfChanged
+import views.html.CorrespondenceUKAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceNonUKAddressController @Inject() (
+class CorrespondenceUKAddressController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceNonUKAddressFormProvider,
+  formProvider: CorrespondenceUKAddressFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceNonUKAddressView
+  view: CorrespondenceUKAddressView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   private val form = formProvider()
 
+  private def isIomOrCiPostcode(postcode: String): Boolean = {
+    val normalised = postcode.trim.toUpperCase
+
+    normalised.startsWith("IM") ||
+    normalised.startsWith("JE") ||
+    normalised.startsWith("GY")
+  }
+
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
       val preparedForm = request.userAnswers
-        .get(CorrespondenceAddressNonUkPage)
+        .get(CorrespondenceAddressUkPage)
         .fold(form)(form.fill)
 
       Ok(view(preparedForm, mode))
@@ -68,27 +76,33 @@ class CorrespondenceNonUKAddressController @Inject() (
             Future.successful(
               BadRequest(view(formWithErrors, mode))
             ),
-          value =>
+          value => {
             val ua = request.userAnswers
-            val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAddressNonUkPage, CorrespondenceDetailsChangesPage)
+            val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage)
+            val iomOrCiFlag =
+              if (value.postcode.exists(isIomOrCiPostcode)) {
+                "true"
+              } else {
+                "false"
+              }
+
             for {
               updatedAnswers <- Future.fromTry(
                                   ua.set(
-                                    CorrespondenceAddressNonUkPage,
+                                    CorrespondenceAddressUkPage,
                                     value
                                   )
                                 )
 
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.remove(
-                                    CorrespondenceAddressUkPage
+                                    CorrespondenceAddressNonUkPage
                                   )
                                 )
-
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.set(
                                     isleMOrChannelFlagPage,
-                                    "false"
+                                    iomOrCiFlag
                                   )
                                 )
 
@@ -98,7 +112,6 @@ class CorrespondenceNonUKAddressController @Inject() (
                                     true
                                   )
                                 )
-
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.set(
                                     CorrespondenceDetailsChangesPage,
@@ -110,11 +123,12 @@ class CorrespondenceNonUKAddressController @Inject() (
 
             } yield Redirect(
               navigator.nextPage(
-                CorrespondenceAddressNonUkPage,
+                CorrespondenceAddressUkPage,
                 mode,
                 updatedAnswers
               )
             )
+          }
         )
     }
 }

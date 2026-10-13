@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.RemoveCorrespondenceFaxNumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator

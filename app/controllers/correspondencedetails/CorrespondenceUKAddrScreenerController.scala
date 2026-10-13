@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceNameFormProvider
+import forms.CorrespondenceUKAddrScreenerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.correspondencedetails.*
+import pages.correspondencedetails.CorrespondenceUKAddrScreenerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CorrespondenceNameView
-import utils.FlagsUtil.*
+import views.html.CorrespondenceUKAddrScreenerView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CorrespondenceNameController @Inject() (
+class CorrespondenceUKAddrScreenerController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: CorrespondenceDetailsDataRequiredAction,
-  formProvider: CorrespondenceNameFormProvider,
+  requireData: DataRequiredAction,
+  formProvider: CorrespondenceUKAddrScreenerFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CorrespondenceNameView
+  view: CorrespondenceUKAddrScreenerView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -48,9 +47,11 @@ class CorrespondenceNameController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(CorrespondenceNamePage)
-      .fold(form)(form.fill)
+
+    val preparedForm = request.userAnswers.get(CorrespondenceUKAddrScreenerPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
     Ok(view(preparedForm, mode))
   }
@@ -62,14 +63,10 @@ class CorrespondenceNameController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
-          val ua = request.userAnswers
-          val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceNamePage, CorrespondenceDetailsChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(ua.set(CorrespondenceNamePage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsSubmittedPage, true))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(CorrespondenceDetailsChangesPage, isChanged))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CorrespondenceUKAddrScreenerPage, value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CorrespondenceNamePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CorrespondenceUKAddrScreenerPage, mode, updatedAnswers))
       )
   }
 }

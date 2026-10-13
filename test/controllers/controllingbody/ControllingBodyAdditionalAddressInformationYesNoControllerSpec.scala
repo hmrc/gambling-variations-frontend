@@ -32,9 +32,7 @@ import views.html.controllingbody.ControllingBodyAdditionalAddressInformationYes
 
 import scala.concurrent.Future
 
-class ControllingBodyAdditionalAddressInformationYesNoControllerSpec
-  extends SpecBase
-    with MockitoSugar {
+class ControllingBodyAdditionalAddressInformationYesNoControllerSpec extends SpecBase with MockitoSugar {
 
   private val formProvider =
     new ControllingBodyAdditionalAddressInformationYesNoFormProvider()
@@ -77,7 +75,7 @@ class ControllingBodyAdditionalAddressInformationYesNoControllerSpec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(form,NormalMode)(
+          view(form, NormalMode)(
             request,
             messages(application)
           ).toString
@@ -105,7 +103,7 @@ class ControllingBodyAdditionalAddressInformationYesNoControllerSpec
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(filledForm,NormalMode)(
+          view(filledForm, NormalMode)(
             request,
             messages(application)
           ).toString
@@ -199,7 +197,7 @@ class ControllingBodyAdditionalAddressInformationYesNoControllerSpec
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual
-          view(boundForm,NormalMode)(
+          view(boundForm, NormalMode)(
             request,
             messages(application)
           ).toString

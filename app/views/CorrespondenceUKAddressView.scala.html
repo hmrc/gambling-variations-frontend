@@ -33,7 +33,7 @@ caption: Caption
 
 @layout(pageTitle = title(form, messages("correspondenceUKAddress.title"), Some("changeRegistrationDetails.caption"))) {
 
-@formHelper(action = routes.CorrespondenceUKAddressController.onSubmit(), Symbol("autoComplete") -> "on") {
+@formHelper(action = controllers.correspondencedetails.routes.CorrespondenceUKAddressController.onSubmit(), Symbol("autoComplete") -> "on") {
 
 @if(form.errors.nonEmpty) {
 @govukErrorSummary(ErrorSummaryViewModel(form))

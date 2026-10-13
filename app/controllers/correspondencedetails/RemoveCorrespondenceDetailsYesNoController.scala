@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
 import forms.RemoveCorrespondenceDetailsYesNoFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
@@ -30,6 +28,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveCorrespondenceDetailsYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveCorrespondenceDetailsYesNoController @Inject() (

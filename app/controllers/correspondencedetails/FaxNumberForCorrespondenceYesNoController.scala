@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
-
-import javax.inject.Inject
+import forms.FaxNumberForCorrespondenceYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, AddEmailAddressForCorrespondenceYesNoPage}
+import pages.correspondencedetails.AddCorrespondenceFaxNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.AddEmailAddressForCorrespondenceYesNoView
+import views.html.FaxNumberForCorrespondenceYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddEmailAddressForCorrespondenceYesNoController @Inject() (
+class FaxNumberForCorrespondenceYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: AddEmailAddressForCorrespondenceYesNoFormProvider,
+  formProvider: FaxNumberForCorrespondenceYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AddEmailAddressForCorrespondenceYesNoView
+  view: FaxNumberForCorrespondenceYesNoView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,7 +48,7 @@ class AddEmailAddressForCorrespondenceYesNoController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match {
+    val preparedForm = request.userAnswers.get(AddCorrespondenceFaxNumberPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
@@ -58,19 +57,15 @@ class AddEmailAddressForCorrespondenceYesNoController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddEmailAddressForCorrespondenceYesNoPage, value))
-            updatedAnswers <- Future.fromTry(
-                                updatedAnswers.remove(AddCorrespondingDetailsYesNoPage)
-                              )
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddEmailAddressForCorrespondenceYesNoPage, mode, updatedAnswers))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddCorrespondenceFaxNumberPage, value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(AddCorrespondenceFaxNumberPage, mode, updatedAnswers))
       )
   }
 }

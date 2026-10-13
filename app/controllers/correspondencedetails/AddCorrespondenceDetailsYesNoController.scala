@@ -30,7 +30,7 @@ import views.html.AddCorrespondingDetailsYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AddCorrespondenceDetailsYesNoController @Inject()(
+class AddCorrespondenceDetailsYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,

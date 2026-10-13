@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.correspondencedetails
 
 import controllers.actions.*
+import controllers.routes
 import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.Mode
 import pages.correspondencedetails.*
@@ -91,7 +92,7 @@ class RemoveAdditionalCorrespondenceNameYesNoController @Inject() (
                   .fromTry(updatedAnswers)
                   .flatMap { answers =>
                     sessionRepository.set(answers).map { _ =>
-                      Redirect(controllers.routes.CheckCorrespondenceDetailsController.onPageLoad())
+                      Redirect(controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad())
                     }
                   }
               }
