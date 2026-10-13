@@ -37,7 +37,7 @@ class ControllingBodyAddFaxNumberYesNoController @Inject()(
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: ControllingBodyNameDataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodyAddFaxNumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyAddFaxNumberYesNoView
