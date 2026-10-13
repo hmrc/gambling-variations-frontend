@@ -23,7 +23,7 @@ import models.requests.DataRequest
 import models.{Mode, NoReturnPeriodsSet, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
-import pages.returnperiods.{GamblingReturnPeriodsPage, HasSwitchedToStandardValuesPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
+import pages.returnperiods.{GamblingReturnPeriodsPage, HasSwitchedToStandardValuesPage, NonStandardNotSubmittedPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{Reads, Writes}
@@ -76,6 +76,9 @@ class ReturnPeriodsController @Inject() (
       case Some(NonStandard(viewModel)) =>
         Ok(nonStandardReturnPeriodsView(prepare(nonStandardForm, NonStandardReturnPeriodsPage), viewModel, mode))
 
+      case Some(NonStandardNotSubmitted(viewModel)) =>
+        Ok(nonStandardReturnPeriodsView(prepare(nonStandardForm, NonStandardReturnPeriodsPage), viewModel, mode))
+
       case None =>
         Redirect(routes.SystemErrorController.onPageLoad())
     }
@@ -86,14 +89,17 @@ class ReturnPeriodsController @Inject() (
       case Some(NoPeriodsSet) =>
         submit(noPeriodsSetForm, ReturnPeriodsChoicePage, mode)(errors => noReturnPeriodsSetView(errors, mode))
 
+      case Some(LockedPeriods) =>
+        Future.successful(Redirect(controllers.routes.ChangeRegistrationDetailsController.onPageLoad()))
+
       case Some(Standard(returnPeriodsId)) =>
         submit(standardForm, StandardReturnPeriodsPage, mode)(errors => standardReturnPeriodsView(errors, mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
         submit(nonStandardForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
 
-      case Some(LockedPeriods) =>
-        Future.successful(Redirect(controllers.routes.ChangeRegistrationDetailsController.onPageLoad()))
+      case Some(NonStandardNotSubmitted(viewModel)) =>
+        submit(nonStandardForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
 
       case None =>
         Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
@@ -108,7 +114,9 @@ class ReturnPeriodsController @Inject() (
       else
         periods.hasExistingNstpValues.flatMap {
           case false => Some(Standard(periods.returnPeriodsId.map(_.toString)))
-          case true  => NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
+          case true =>
+            if (userAnswers.get(NonStandardNotSubmittedPage).contains(true)) NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
+            else NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
         }
     }
 
@@ -132,8 +140,9 @@ class ReturnPeriodsController @Inject() (
 
 object ReturnPeriodsController {
   private sealed trait ReturnPeriodsScreen
-  private case object NoPeriodsSet                                                   extends ReturnPeriodsScreen
-  private case object LockedPeriods                                                  extends ReturnPeriodsScreen
-  private final case class Standard(returnPeriodsId: Option[String])                 extends ReturnPeriodsScreen
-  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel) extends ReturnPeriodsScreen
+  private case object NoPeriodsSet                                                               extends ReturnPeriodsScreen
+  private case object LockedPeriods                                                              extends ReturnPeriodsScreen
+  private final case class Standard(returnPeriodsId: Option[String])                             extends ReturnPeriodsScreen
+  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel)             extends ReturnPeriodsScreen
+  private final case class NonStandardNotSubmitted(viewModel: NonStandardReturnPeriodsViewModel) extends ReturnPeriodsScreen
 }
