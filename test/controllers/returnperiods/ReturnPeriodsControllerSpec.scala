@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{GamblingReturnPeriodsPage, HasSwitchedToStandardValuesPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
+import pages.returnperiods.*
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest

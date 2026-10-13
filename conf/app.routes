@@ -294,4 +294,3 @@ GET     /change-registration-details/return-periods/end-date-:periodNumber   con
 POST    /change-registration-details/return-periods/end-date-:periodNumber   controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit( periodNumber: Int, mode: Mode = NormalMode)
 GET     /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onPageLoad(periodNumber: Int, mode: Mode = CheckMode)
 POST    /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit(periodNumber: Int, mode: Mode = CheckMode)
-
