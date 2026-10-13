@@ -53,7 +53,7 @@
  }
 
 
-@layout(pageTitle = title(form, messages("enterNonStandardPeriodDate.title", periodMonthYear, periodNumber, numberOfPeriods))) {
+@layout(pageTitle = title(form, messages("enterNonStandardPeriodDate.title", periodMonthYear, periodNumber, numberOfPeriods), Some(messages("changeRegistrationDetails.caption")))) {
 
  @formHelper(action = controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onSubmit(periodNumber, mode),
    Symbol("autoComplete") -> "off") {
