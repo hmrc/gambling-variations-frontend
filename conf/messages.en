@@ -1307,7 +1307,7 @@ enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}.
 enterNonStandardPeriodDate.dateLabel = End date
 
 enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
-enterNonStandardPeriodDate.error.required.two = Enter the {0} and {1} for the end date
-enterNonStandardPeriodDate.error.required = Enter the {0} for the end date
+enterNonStandardPeriodDate.error.required.two = End date must include a {0} and a {1}
+enterNonStandardPeriodDate.error.required = End date must include a {0}
 enterNonStandardPeriodDate.error.invalid = End date must be a real date
-enterNonStandardPeriodDate.error.outsideBoundaries=End date must be after {0} and before {1}
+enterNonStandardPeriodDate.error.outsideBoundaries = End date must be after {0} and before {1}

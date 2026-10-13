@@ -41,7 +41,6 @@ class ControllingBodyAdditionalAddressInformationYesNoViewSpec extends SpecBase 
     private val formProvider = new ControllingBodyAdditionalAddressInformationYesNoFormProvider()
     private val form = formProvider()
 
-
     private val html = view(form, NormalMode)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
@@ -56,7 +55,7 @@ class ControllingBodyAdditionalAddressInformationYesNoViewSpec extends SpecBase 
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
       doc.select("legend.govuk-fieldset__legend").text()   must include(messages("controllingBodyAdditionalAddressInformationYesNo.heading"))
-      doc.select(".govuk-hint").text() must include(messages("controllingBodyAdditionalAddressInformationYesNo.hint"))
+      doc.select(".govuk-hint").text()                     must include(messages("controllingBodyAdditionalAddressInformationYesNo.hint"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
