@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import controllers.routes
 import models.BusinessChangeAddrOption.*
 import models.UserAnswers
 import pages.businessaddress.BusinessChangeAddrScreenerPage
@@ -41,7 +40,7 @@ case object HowToChangeBusinessAddressRow {
               }
             ),
             actions = Seq(
-              ActionItemViewModel("site.change", routes.BusinessChangeAddrScreenerController.onPageLoad().url)
+              ActionItemViewModel("site.change", controllers.businessaddress.routes.BusinessChangeAddrScreenerController.onPageLoad().url)
                 .withVisuallyHiddenText(messages("checkBusinessAddress.question.howToChange.hidden"))
             )
           )

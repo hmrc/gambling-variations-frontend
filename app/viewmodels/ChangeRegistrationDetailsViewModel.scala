@@ -83,7 +83,7 @@ object ChangeRegistrationDetailsViewModel {
         optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.businessAddress"),
-            routes.CheckBusinessAddressController.onPageLoad().url,
+            controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad().url,
             status(BusinessAddressChangesPage)
           )
         ),
@@ -125,7 +125,7 @@ object ChangeRegistrationDetailsViewModel {
         Some(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.returnPeriod"),
-            controllers.returnperiods.routes.WhatToDoWithStandardReturnPeriodsController.onPageLoad(NormalMode).url,
+            controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode).url,
             NoDetailsChanged
           )
         )
