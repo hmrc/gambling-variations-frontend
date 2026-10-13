@@ -37,7 +37,7 @@ class ControllingBodyAddEmailAddressYesNoController @Inject()(
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: ControllingBodyNameDataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodyAddEmailAddressYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyAddEmailAddressYesNoView
