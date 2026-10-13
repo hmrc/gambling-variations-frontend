@@ -112,51 +112,29 @@ class ReturnPeriodsController @Inject() (
     }
   }
 
-  private def screenFor(userAnswers: UserAnswers)(implicit messages: Messages): Option[ReturnPeriodsScreen] = {
-
-    val screen = userAnswers.get(GamblingReturnPeriodsPage).flatMap { periods =>
+  private def screenFor(userAnswers: UserAnswers)(implicit messages: Messages): Option[ReturnPeriodsScreen] =
+    userAnswers.get(GamblingReturnPeriodsPage).flatMap { periods =>
       val switchedToStandard = userAnswers.get(HasSwitchedToStandardValuesPage)
       val hasSubmitted = userAnswers.get(NonStandardHasSubmittedPage)
 
-      println()
-      println()
-      println(s"userAnswers -> $userAnswers")
-      println()
-      println(s"hasSubmitted -> $hasSubmitted")
-      println()
-      println()
-
       if (periods.returnPeriodsId.isEmpty) {
-        println("[screenFor] -> NoPeriodsSet (no returnPeriodsId)")
         Some(NoPeriodsSet)
       } else if (switchedToStandard.contains(true)) {
-        println("[screenFor] -> LockedPeriods (switched to standard)")
         Some(LockedPeriods)
       } else
         periods.hasExistingNstpValues.flatMap {
           case false =>
-            println("[screenFor] -> Standard")
             Some(Standard(periods.returnPeriodsId.map(_.toString)))
 
           case true if hasSubmitted.contains(true) =>
             val vm = NonStandardNotSubmittedReturnPeriodsViewModel.from(periods)
-            println(s"[screenFor] -> NonStandardNotSubmitted, view model = $vm")
             vm.map(NonStandardNotSubmitted(_))
 
           case true =>
             val vm = NonStandardReturnPeriodsViewModel.from(periods)
-            println(s"[screenFor] -> NonStandard, view model = $vm")
             vm.map(NonStandard(_))
         }
     }
-    println()
-    println()
-    println()
-    println()
-    println()
-    println(s"[screenFor] result = $screen")
-    screen
-  }
 
   private def prepare[A: Reads](form: Form[A], page: QuestionPage[A])(implicit request: DataRequest[?]): Form[A] =
     request.userAnswers.get(page).fold(form)(form.fill)

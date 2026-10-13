@@ -26,6 +26,6 @@ class NonStandardNotSubmittedReturnPeriodsFormProvider @Inject() extends Mapping
 
   def apply(): Form[NonStandardNotSubmittedReturnPeriodsOptions] =
     Form(
-      "value" -> enumerable[NonStandardNotSubmittedReturnPeriodsOptions]("returnPeriods.nonStandard.error.required")
+      "value" -> enumerable[NonStandardNotSubmittedReturnPeriodsOptions]("returnPeriods.standard.error.required")
     )
 }
