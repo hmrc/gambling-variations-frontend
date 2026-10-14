@@ -17,7 +17,6 @@
 package forms.controllingbody
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.controllingbody.ControllingBodySameAsRepYesNoFormProvider
 import play.api.data.FormError
 
 class ControllingBodySameAsRepYesNoFormProviderSpec extends BooleanFieldBehaviours {
