@@ -41,7 +41,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
   private val onwardRoute = Call("GET", "/foo")
 
   private lazy val addCorrespondingDetailsYesNoRoute =
-    routes.AddCorrespondingDetailsYesNoController.onPageLoad().url
+    routes.AddCorrespondenceDetailsYesNoController.onPageLoad().url
 
   private val userAnswersWithCorrespondenceDetails =
     emptyUserAnswers

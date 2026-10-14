@@ -49,7 +49,7 @@ class CheckCorrespondenceDetailsController @Inject() (
     val answers = request.userAnswers
 
     if (!hasAnyCorrespondenceDetails(answers)) {
-      Redirect(controllers.correspondencedetails.routes.AddCorrespondingDetailsYesNoController.onPageLoad())
+      Redirect(controllers.correspondencedetails.routes.AddCorrespondenceDetailsYesNoController.onPageLoad())
     } else {
       Ok(
         view(

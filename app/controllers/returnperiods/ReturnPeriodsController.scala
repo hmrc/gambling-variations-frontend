@@ -23,7 +23,7 @@ import models.requests.DataRequest
 import models.{GamblingReturnPeriods, Mode, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage, StandardReturnPeriodsPage}
-import play.api.data.{Form, FormBinding}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

@@ -30,7 +30,8 @@ import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
-import pages.returnperiods.{NonStandardReturnPeriodsPage, StandardReturnPeriodsPage}
+import pages.returnperiods.StandardReturnPeriodsPage
+import pages.returnperiods.StandardReturnPeriodsPage.*
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
