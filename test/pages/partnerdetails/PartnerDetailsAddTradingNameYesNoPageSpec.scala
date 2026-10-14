@@ -17,13 +17,55 @@
 package pages.partnerdetails
 
 import controllers.partnerdetails.PartnerDetailsHelper
+import models.UserAnswers
 import org.scalatestplus.play.PlaySpec
+import pages.BusinessNumberOrIndex
 import play.api.libs.json.JsPath
 
 class PartnerDetailsAddTradingNameYesNoPageSpec extends PlaySpec with PartnerDetailsHelper {
+
+  private def answersWithTradingName(index: BusinessNumberOrIndex): UserAnswers =
+    UserAnswers("id")
+      .set(PartnerDetailsAddTradingNameYesNoPage(index), true)
+      .flatMap(_.set(PartnerDetailsTradingNamePage(index), "Homer Simpson Inc"))
+      .get
+
+  private def cleanupBehaviour(index: BusinessNumberOrIndex, otherIndex: BusinessNumberOrIndex): Unit = {
+
+    "remove the trading name when the answer changes to No" in {
+      val result = answersWithTradingName(index).set(PartnerDetailsAddTradingNameYesNoPage(index), false).get
+
+      result.get(PartnerDetailsAddTradingNameYesNoPage(index)) mustBe Some(false)
+      result.get(PartnerDetailsTradingNamePage(index)) mustBe None
+    }
+
+    "keep the trading name when the answer is Yes" in {
+      val result = answersWithTradingName(index).set(PartnerDetailsAddTradingNameYesNoPage(index), true).get
+
+      result.get(PartnerDetailsTradingNamePage(index)) mustBe Some("Homer Simpson Inc")
+    }
+
+    "leave another partner's trading name untouched" in {
+      val answers = answersWithTradingName(index).set(PartnerDetailsTradingNamePage(otherIndex), "Other Inc").get
+
+      val result = answers.set(PartnerDetailsAddTradingNameYesNoPage(index), false).get
+
+      result.get(PartnerDetailsTradingNamePage(index)) mustBe None
+      result.get(PartnerDetailsTradingNamePage(otherIndex)) mustBe Some("Other Inc")
+    }
+
+    "succeed when there is no trading name to remove" in {
+      val result = UserAnswers("id").set(PartnerDetailsAddTradingNameYesNoPage(index), false).get
+
+      result.get(PartnerDetailsAddTradingNameYesNoPage(index)) mustBe Some(false)
+    }
+  }
   "PartnerDetailsAddTradingNameYesNoPage" must {
 
     "partners" must {
+
+      behave like cleanupBehaviour(businessNumber1, businessNumber2)
+
       "have the correct path" in {
         PartnerDetailsAddTradingNameYesNoPage(businessNumber1).path mustEqual
           (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsAddTradingNameYesNo")
@@ -35,6 +77,9 @@ class PartnerDetailsAddTradingNameYesNoPageSpec extends PlaySpec with PartnerDet
     }
 
     "newPartners" must {
+
+      behave like cleanupBehaviour(newPartnersIndex1, newPartnersIndex2)
+
       "have the correct path" in {
         PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1).path mustEqual
           (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAddTradingNameYesNo")

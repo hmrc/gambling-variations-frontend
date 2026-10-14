@@ -16,7 +16,6 @@
 
 package viewmodels
 
-import controllers.routes
 import models.Mode
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
@@ -36,13 +35,14 @@ case class AssociatedRegNumberViewModel(associatedRegNumbers: Option[Seq[String]
               Actions(
                 items = Seq(
                   ActionItem(
-                    href               = routes.AssociatedRegistrationNumbersListController.onChangeRedirect(assocRegNumber = assocReg).url,
+                    href =
+                      controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onChangeRedirect(assocRegNumber = assocReg).url,
                     content            = "site.change",
                     visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   ),
                   ActionItem(
-                    href               = routes.AssociatedRegistrationNumbersListController.onRedirect(assocRegNumber = assocReg).url,
-                    content            = "site.remove",
+                    href    = controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController.onRedirect(assocRegNumber = assocReg).url,
+                    content = "site.remove",
                     visuallyHiddenText = Some(messages("associatedRegistrationNumbers.change.hidden", assocReg))
                   )
                 ),
