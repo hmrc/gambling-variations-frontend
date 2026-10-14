@@ -1383,6 +1383,12 @@ controllingBodyAddEmailAddressYesNo.title = Do you want to add an email address 
 controllingBodyAddEmailAddressYesNo.heading = Do you want to add an email address for the controlling body?
 controllingBodyAddEmailAddressYesNo.error.required = Select yes to add an email address for the controlling body
 
+controllingBodyCountryOfIncorporation.title = Which country is the controlling body''s business incorporated in?
+controllingBodyCountryOfIncorporation.heading = Which country is the controlling body''s business incorporated in?
+controllingBodyCountryOfIncorporation.error.required = Enter the country the controlling body''s business is incorporated in
+controllingBodyCountryOfIncorporation.error.invalid = The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+controllingBodyCountryOfIncorporation.error.length = The country must be 100 characters or less
+
 controllingBodyAddFaxNumberYesNo.title = Do you want to add a fax number for the controlling body?
 controllingBodyAddFaxNumberYesNo.heading = Do you want to add a fax number for the controlling body?
 controllingBodyAddFaxNumberYesNo.error.required = Select yes to add a fax number for the controlling body
