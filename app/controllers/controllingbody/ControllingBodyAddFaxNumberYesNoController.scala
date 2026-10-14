@@ -31,7 +31,7 @@ import views.html.controllingbody.ControllingBodyAddFaxNumberYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodyAddFaxNumberYesNoController @Inject()(
+class ControllingBodyAddFaxNumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
