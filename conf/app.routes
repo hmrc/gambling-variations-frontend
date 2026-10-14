@@ -302,3 +302,7 @@ GET     /change-registration-details/return-periods/end-date-:periodNumber/chang
 POST    /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit(periodNumber: Int, mode: Mode = CheckMode)
 
 
+GET        /change-registration-details/controlling-body-details/business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onSubmit(mode: Mode = NormalMode)
+
+

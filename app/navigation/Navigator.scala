@@ -51,6 +51,8 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case ControllingBodyEmailPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
+    case ControllingBodyIsUkIncorporatedPage =>
+      userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -723,3 +725,14 @@ private def navigateControllingBodyAdditionalAddressInformationYesNoPage()(answe
     case Some(false) => routes.IndexController.onPageLoad() // TODO later -> Redirect to CB-CN in add flow and CB-CYA in change flow
     case None        => routes.SystemErrorController.onPageLoad()
   }
+
+private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call = {
+  userAnswers
+    .get(ControllingBodyIsUkIncorporatedPage)
+    .map {
+      case "1" => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
+      case "0" => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+    }
+    .getOrElse(routes.SystemErrorController.onPageLoad())
+
+}

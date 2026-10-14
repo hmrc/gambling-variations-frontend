@@ -486,3 +486,7 @@ partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to 
 removeControllingBodyEmail.title = cy: Are you sure you want to remove this controlling body's email address?
 removeControllingBodyEmail.heading = cy: Are you sure you want to remove {0} as this controlling body’s email address?
 removeControllingBodyEmail.error.required = cy: Select yes if you want to remove this controlling body’s email address
+
+controllingBodyBusinessUKIncorporated.title = cy: Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.heading = cy: Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.error.required = cy: Select yes if the controlling body’s business is incorporated in the UK
