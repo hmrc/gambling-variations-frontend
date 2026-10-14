@@ -67,7 +67,7 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
     val partnershipForm = formProvider(BusinessType.Partnership)
 
     "accept every documented character and trim surrounding spaces" in {
-      partnershipForm.bind(Map("value" -> "  A-Z 09 & '(),!/  ")).value.value mustEqual "A-Z 09 & '(),!/"
+      partnershipForm.bind(Map("value" -> "  A-Za-z 09 ',  ")).value.value mustEqual "A-Za-z 09 ',"
     }
 
     Seq("", "   ").foreach { value =>
@@ -85,7 +85,7 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
         FormError("value", "changeBusinessName.error.length.partnership", Seq(35))
     }
 
-    Seq(".", "@", ":", "_", "[", "]").foreach { character =>
+    Seq(".", "@", ":", "_", "[", "]", "&", "(", ")", "!", "/", "\\").foreach { character =>
       s"reject the undocumented character $character" in {
         partnershipForm.bind(Map("value" -> s"Name${character}Name")).errors.map(_.message) must contain only
           "changeBusinessName.error.invalid.partnership"
