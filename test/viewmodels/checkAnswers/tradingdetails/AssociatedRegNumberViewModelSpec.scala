@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
 import models.{NormalMode, UserAnswers}
 import org.scalatest.matchers.must.Matchers
 import pages.tradingdetails.associatedregnumbers.AssociatedRegistrationNumbersPage
@@ -61,7 +60,7 @@ class AssociatedRegNumberViewModelSpec extends SpecBase with Matchers {
       result.head.key.content mustEqual Text("XHM00000199")
       result(1).key.content mustEqual Text("ZIU00001218")
       result(2).key.content mustEqual Text("GTT28881666")
-      result.head.actions.get.items(1).href mustEqual routes.AssociatedRegistrationNumbersListController
+      result.head.actions.get.items(1).href mustEqual controllers.tradingdetails.routes.AssociatedRegistrationNumbersListController
         .onRedirect(assocRegNumber = "XHM00000199")
         .url
     }

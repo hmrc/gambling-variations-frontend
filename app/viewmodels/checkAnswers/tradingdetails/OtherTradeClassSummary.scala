@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers.tradingdetails
 
-import controllers.routes
 import models.{BusinessTradeClass, UserAnswers}
 import pages.tradingdetails.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.i18n.Messages
@@ -45,7 +44,7 @@ object OtherTradeClassSummary {
               actions = Seq(
                 ActionItemViewModel(
                   "site.change",
-                  routes.OtherTradeClassController.onPageLoad().url
+                  controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad().url
                 ).withVisuallyHiddenText(
                   messages("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
                 )

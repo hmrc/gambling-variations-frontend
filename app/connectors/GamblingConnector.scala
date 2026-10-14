@@ -17,7 +17,6 @@
 package connectors
 
 import models.controllingbody.ControlBodyDetails
-import models.controllingbody.ControllingBodyDetails
 import models.licencespremises.LicencesAndPremises
 import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
@@ -84,24 +83,6 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
         }
       }
   }
-
-  def getControllingBodyDetails(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[ControllingBodyDetails] =
-    http
-      .get(url"$baseUrl/controlling-body-details/mgd/$mgdRegNumber")
-      .execute[HttpResponse]
-      .map { response =>
-        response.status match {
-          case OK =>
-            response.json
-              .validate[ControllingBodyDetails]
-              .fold(
-                _ => throw new RuntimeException("Invalid JSON for controlling body details"),
-                identity
-              )
-          case status =>
-            throw UpstreamErrorResponse(s"Unexpected status while fetching controlling body details: $status", status)
-        }
-      }
 
   def getBusinessName(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[EntityName] = {
     http

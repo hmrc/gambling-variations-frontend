@@ -20,13 +20,13 @@ import base.SpecBase
 import controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController
 import forms.partnerdetails.PartnerDetailsBusinessTypeFormProvider
 import models.BusinessType.{Corporatebody, Soleproprietor}
-import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
+import models.{BusinessType, CheckMode, NormalMode, SoleProprietorName, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
-import pages.partnerdetails.PartnerDetailsBusinessTypePage
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -54,6 +54,60 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value
+
+  "going back to change a new partner's business type" - {
+
+    val soleProprietorName = SoleProprietorName("Mr", "Sam", None, "Smith")
+    val dateOfBirth = java.time.LocalDate.of(1980, 1, 31)
+
+    def soleProprietorAnswers: UserAnswers =
+      validUserAnswersNewPartners
+        .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Soleproprietor)
+        .flatMap(_.set(PartnerDetailsSoleProprietorPage(newPartnersIndex1), soleProprietorName))
+        .flatMap(_.set(PartnerDetailsDateOfBirthPage(newPartnersIndex1), dateOfBirth))
+        .success
+        .value
+
+    def savedAnswersAfterSubmitting(businessType: BusinessType): UserAnswers = {
+      val mockSessionRepository = mock[SessionRepository]
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(soleProprietorAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, PartnerDetailsBusinessTypeController.onSubmit(newPartnersIndex1.toString, NormalMode).url)
+            .withFormUrlEncodedBody(("value", businessType.toString))
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+      }
+
+      val captor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      verify(mockSessionRepository).set(captor.capture())
+      captor.getValue
+    }
+
+    "must remove the sole proprietor's name and date of birth from the saved answers when another business type is selected" in {
+      val saved = savedAnswersAfterSubmitting(Corporatebody)
+
+      saved.get(PartnerDetailsBusinessTypePage(newPartnersIndex1)) mustBe Some(Corporatebody)
+      saved.get(PartnerDetailsSoleProprietorPage(newPartnersIndex1)) mustBe None
+      saved.get(PartnerDetailsDateOfBirthPage(newPartnersIndex1)) mustBe None
+    }
+
+    "must keep the sole proprietor's name and date of birth in the saved answers when sole proprietor is selected again" in {
+      val saved = savedAnswersAfterSubmitting(Soleproprietor)
+
+      saved.get(PartnerDetailsSoleProprietorPage(newPartnersIndex1)) mustBe Some(soleProprietorName)
+      saved.get(PartnerDetailsDateOfBirthPage(newPartnersIndex1)) mustBe Some(dateOfBirth)
+    }
+  }
 
   "newPartners" - {
     "PartnerDetailsBusinessType Controller" - {

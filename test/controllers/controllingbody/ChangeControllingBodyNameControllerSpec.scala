@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, verifyNoInteractions, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyBusinessTypePage, ControllingBodyDetailsLoadedPage, ControllingBodySoleProprietorPage}
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyBusinessTypePage, ControllingBodySectionPage, ControllingBodySoleProprietorPage}
 import play.api.Application
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -52,7 +52,7 @@ class ChangeControllingBodyNameControllerSpec extends SpecBase with MockitoSugar
       .set(ControllingBodyBusinessTypePage, businessType)
       .success
       .value
-      .set(ControllingBodyDetailsLoadedPage, true)
+      .set(ControllingBodySectionPage, mgdRegNum)
       .success
       .value
 
@@ -61,7 +61,7 @@ class ChangeControllingBodyNameControllerSpec extends SpecBase with MockitoSugar
   ): Unit = {
     val repository = mock[SessionRepository]
     val connector = mock[GamblingConnector]
-    when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
+    when(connector.getControlBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
     val navigator = mock[Navigator]
     when(repository.set(any())) thenReturn Future.successful(saved)
     when(navigator.nextPage(any(), any(), any())) thenReturn onwardRoute
@@ -233,10 +233,10 @@ class ChangeControllingBodyNameControllerSpec extends SpecBase with MockitoSugar
     Seq(GET, POST).foreach { method =>
       Seq(
         "missing session"                    -> None,
-        "missing business type"              -> Some(emptyUserAnswers.set(ControllingBodyDetailsLoadedPage, true).success.value),
+        "missing business type"              -> Some(emptyUserAnswers.set(ControllingBodySectionPage, mgdRegNum).success.value),
         "different business type in the URL" -> Some(answers(BusinessType.Soleproprietor)),
         "invalid cached business type" -> Some(
-          UserAnswers(userAnswersId, Json.obj("controllingBodyDetails" -> Json.obj("loaded" -> true, "typeOfControllingBody" -> 99)))
+          UserAnswers(userAnswersId, Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> mgdRegNum, "typeOfControllingBody" -> 99)))
         )
       ).foreach { case (scenario, userAnswers) =>
         s"redirect $method to the service error without saving when there is $scenario" in {

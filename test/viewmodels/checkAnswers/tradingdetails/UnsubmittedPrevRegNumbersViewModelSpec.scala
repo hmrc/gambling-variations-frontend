@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
 import pages.tradingdetails.previousregnumbers.UnsubmittedPreviousRegNumbersPage
@@ -60,7 +59,7 @@ class UnsubmittedPrevRegNumbersViewModelSpec extends SpecBase with Matchers {
       val unsubmitted = UnsubmittedPrevRegNumbersViewModel(unsubmittedPreviousRegNumbers).summaryList
 
       unsubmitted.head.key.content mustEqual Text("GTT28881666")
-      unsubmitted.head.actions.get.items(1).href mustEqual routes.PreviousRegistrationNumbersListController
+      unsubmitted.head.actions.get.items(1).href mustEqual controllers.tradingdetails.routes.PreviousRegistrationNumbersListController
         .onRedirect(prevRegNumber = "GTT28881666")
         .url
     }
