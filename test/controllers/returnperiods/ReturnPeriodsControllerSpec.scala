@@ -17,21 +17,21 @@
 package controllers.returnperiods
 
 import base.SpecBase
-import forms.returnperiods.{NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
+import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
 import models.ChooseReturnPeriods.Jan
-import models.{GamblingReturnPeriods, NonStandardReturnPeriodsOptions, NormalMode, StandardReturnPeriodsOptions, UserAnswers}
+import models.{GamblingReturnPeriods, NoReturnPeriodsSet, NonStandardReturnPeriodsOptions, NormalMode, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage, StandardReturnPeriodsPage}
+import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
 import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
-import views.html.returnperiods.{NonStandardReturnPeriodsView, StandardReturnPeriodsView}
+import views.html.returnperiods.{NoReturnPeriodsSetView, NonStandardReturnPeriodsView, StandardReturnPeriodsView}
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -40,7 +40,13 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val returnPeriodsRoute = routes.ReturnPeriodsController.onPageLoad(NormalMode).url
+  lazy val returnPeriodsRoute: String = routes.ReturnPeriodsController.onPageLoad(NormalMode).url
+
+  private def mockedSessionRepository: SessionRepository = {
+    val mockSessionRepository = mock[SessionRepository]
+    when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+    mockSessionRepository
+  }
 
   "ReturnPeriods Controller" - {
 
@@ -186,14 +192,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
       "must save the selected answer and redirect when Switchtononstandard is submitted" in {
 
-        val mockSessionRepository =
-          mock[SessionRepository]
-
-        when(
-          mockSessionRepository.set(any())
-        ).thenReturn(
-          Future.successful(true)
-        )
+        val mockSessionRepository = mockedSessionRepository
 
         val application =
           applicationBuilder(
@@ -243,14 +242,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
       "must save the selected answer when ChangeMonthsStandardPeriodCover is submitted" in {
 
-        val mockSessionRepository =
-          mock[SessionRepository]
-
-        when(
-          mockSessionRepository.set(any())
-        ).thenReturn(
-          Future.successful(true)
-        )
+        val mockSessionRepository = mockedSessionRepository
 
         val application =
           applicationBuilder(
@@ -300,14 +292,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
       "must save the selected answer when Keepstandardreturnperiod is submitted" in {
 
-        val mockSessionRepository =
-          mock[SessionRepository]
-
-        when(
-          mockSessionRepository.set(any())
-        ).thenReturn(
-          Future.successful(true)
-        )
+        val mockSessionRepository = mockedSessionRepository
 
         val application =
           applicationBuilder(
@@ -638,11 +623,9 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must save the answer and redirect to the next page when valid data is submitted" in {
 
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      val mockSessionRepository = mockedSessionRepository
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriods))
@@ -659,8 +642,15 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
+        val expectedAnswers =
+          userAnswersNonStandardReturnPeriods
+            .set(NonStandardReturnPeriodsPage, NonStandardReturnPeriodsOptions.values.head)
+            .success
+            .value
+
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository).set(expectedAnswers)
       }
     }
 
@@ -700,7 +690,7 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "redirect to SystemError for a POST if no existing data is found" in {
+    "must redirect to SystemError for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -731,9 +721,14 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "redirect to SystemError for a POST if isInLastNstp is None" in {
+    "must redirect to SystemError for a POST if isInLastNstp is None, without saving" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingIsInLastNstp)).build()
+      val mockSessionRepository = mockedSessionRepository
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersNonStandardReturnPeriodsMissingIsInLastNstp))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
 
       running(application) {
         val request =
@@ -743,8 +738,159 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-
         redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+        verify(mockSessionRepository, never()).set(any())
+      }
+    }
+  }
+
+  ///////////////////////////////
+
+  "No Return Periods Set" - {
+
+    val noPeriodsSetFormProvider = new NoReturnPeriodsSetFormProvider()
+    val noPeriodsSetForm = noPeriodsSetFormProvider()
+
+    val validAnswer: NoReturnPeriodsSet = NoReturnPeriodsSet.values.head
+
+    val gamblingReturnPeriods = GamblingReturnPeriods(
+      mgdRegNumber          = "mgd1",
+      returnPeriodsId       = None,
+      nstpEndDate1          = None,
+      nstpEndDate2          = None,
+      nstpEndDate3          = None,
+      nstpEndDate4          = None,
+      nstpEndDate5          = None,
+      nstpEndDate6          = None,
+      nstpEndDate7          = None,
+      nstpEndDate8          = None,
+      isInLastNstp          = None,
+      finalPeriodWarning    = None,
+      hasExistingNstpValues = Some(false)
+    )
+
+    val userAnswersNoPeriodsSet = emptyUserAnswers
+      .set(GamblingReturnPeriodsPage, gamblingReturnPeriods)
+      .success
+      .value
+
+    "must return OK and the correct view for a GET" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersNoPeriodsSet)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[NoReturnPeriodsSetView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(noPeriodsSetForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = userAnswersNoPeriodsSet.set(ReturnPeriodsChoicePage, validAnswer).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[NoReturnPeriodsSetView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(noPeriodsSetForm.fill(validAnswer), NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must show the no periods set view even when HasExistingNstpValues is None" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(GamblingReturnPeriodsPage, gamblingReturnPeriods.copy(hasExistingNstpValues = None))
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, returnPeriodsRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[NoReturnPeriodsSetView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(noPeriodsSetForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must save the answer and redirect to the next page when valid data is submitted" in {
+
+      val mockSessionRepository = mockedSessionRepository
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersNoPeriodsSet))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, returnPeriodsRoute)
+            .withFormUrlEncodedBody(("value", validAnswer.toString))
+
+        val result = route(application, request).value
+
+        val expectedAnswers = userAnswersNoPeriodsSet.set(ReturnPeriodsChoicePage, validAnswer).success.value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+        verify(mockSessionRepository).set(expectedAnswers)
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersNoPeriodsSet)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, returnPeriodsRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
+
+        val boundForm = noPeriodsSetForm.bind(Map("value" -> "invalid value"))
+
+        val view = application.injector.instanceOf[NoReturnPeriodsSetView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must return a Bad Request when no answer is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersNoPeriodsSet)).build()
+
+      running(application) {
+        val request = FakeRequest(POST, returnPeriodsRoute)
+
+        val boundForm = noPeriodsSetForm.bind(Map.empty[String, String])
+
+        val view = application.injector.instanceOf[NoReturnPeriodsSetView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
   }

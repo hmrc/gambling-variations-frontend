@@ -28,6 +28,11 @@ trait ModelGenerators {
       Gen.oneOf(StandardReturnPeriodsOptions.values.toSeq)
     }
 
+  implicit lazy val arbitraryNoReturnPeriodsSet: Arbitrary[NoReturnPeriodsSet] =
+    Arbitrary {
+      Gen.oneOf(NoReturnPeriodsSet.values.toSeq)
+    }
+
   implicit lazy val arbitraryChooseReturnPeriods: Arbitrary[ChooseReturnPeriods] =
     Arbitrary {
       Gen.oneOf(ChooseReturnPeriods.values.toSeq)

@@ -18,18 +18,21 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import controllers.routes
-import forms.returnperiods.{NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
+import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
 import models.requests.DataRequest
-import models.{GamblingReturnPeriods, Mode, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
+import models.{Mode, NoReturnPeriodsSet, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
-import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage, StandardReturnPeriodsPage}
+import pages.QuestionPage
+import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.libs.json.{Reads, Writes}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.twirl.api.HtmlFormat
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
-import views.html.returnperiods.{NonStandardReturnPeriodsView, StandardReturnPeriodsView}
+import views.html.returnperiods.{NoReturnPeriodsSetView, NonStandardReturnPeriodsView, StandardReturnPeriodsView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,114 +46,84 @@ class ReturnPeriodsController @Inject() (
   requireData: GamblingReturnPeriodsDataRequiredAction,
   nonStandardPeriodFormProvider: NonStandardReturnPeriodsFormProvider,
   standardPeriodFormProvider: StandardReturnPeriodsFormProvider,
+  noReturnPeriodsSetFormProvider: NoReturnPeriodsSetFormProvider,
   val controllerComponents: MessagesControllerComponents,
   nonStandardReturnPeriodsView: NonStandardReturnPeriodsView,
-  standardReturnPeriodsView: StandardReturnPeriodsView
+  standardReturnPeriodsView: StandardReturnPeriodsView,
+  noReturnPeriodsSetView: NoReturnPeriodsSetView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  val standardPeriodsForm: Form[NonStandardReturnPeriodsOptions] = nonStandardPeriodFormProvider()
-  val nonStandardPeriodsForm: Form[StandardReturnPeriodsOptions] = standardPeriodFormProvider()
+  import ReturnPeriodsController.*
+
+  private val standardForm: Form[StandardReturnPeriodsOptions] = standardPeriodFormProvider()
+  private val nonStandardForm: Form[NonStandardReturnPeriodsOptions] = nonStandardPeriodFormProvider()
+  private val noPeriodsSetForm: Form[NoReturnPeriodsSet] = noReturnPeriodsSetFormProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    isStandardReturnsPeriod(request.userAnswers).fold(
-      Redirect(routes.SystemErrorController.onPageLoad())
-    )(isStandardReturnsPeriod =>
-      if isStandardReturnsPeriod then standardPeriodOnPageLoad(mode)
-      else nonStandardPeriodOnPageLoad(mode)
-    )
+    screenFor(request.userAnswers) match {
+      case Some(NoPeriodsSet) =>
+        Ok(noReturnPeriodsSetView(prepare(noPeriodsSetForm, ReturnPeriodsChoicePage), mode))
+
+      case Some(Standard(returnPeriodsId)) =>
+        Ok(standardReturnPeriodsView(prepare(standardForm, StandardReturnPeriodsPage), mode, returnPeriodsId))
+
+      case Some(NonStandard(viewModel)) =>
+        Ok(nonStandardReturnPeriodsView(prepare(nonStandardForm, NonStandardReturnPeriodsPage), viewModel, mode))
+
+      case None =>
+        Redirect(routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    isStandardReturnsPeriod(request.userAnswers).fold(
-      Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
-    )(isStandardReturnsPeriod =>
-      if isStandardReturnsPeriod then standardPeriodOnSubmit(mode)
-      else nonStandardPeriodOnSubmit(mode)
-    )
+    screenFor(request.userAnswers) match {
+      case Some(NoPeriodsSet) =>
+        submit(noPeriodsSetForm, ReturnPeriodsChoicePage, mode)(errors => noReturnPeriodsSetView(errors, mode))
+
+      case Some(Standard(returnPeriodsId)) =>
+        submit(standardForm, StandardReturnPeriodsPage, mode)(errors => standardReturnPeriodsView(errors, mode, returnPeriodsId))
+
+      case Some(NonStandard(viewModel)) =>
+        submit(nonStandardForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
+
+      case None =>
+        Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+    }
   }
 
-  private def standardPeriodOnPageLoad(mode: Mode)(implicit request: DataRequest[AnyContent]) = {
-    val preparedForm =
-      request.userAnswers.get(StandardReturnPeriodsPage) match {
-        case None        => nonStandardPeriodsForm
-        case Some(value) => nonStandardPeriodsForm.fill(value)
-      }
+  private def screenFor(userAnswers: UserAnswers)(implicit messages: Messages): Option[ReturnPeriodsScreen] =
+    userAnswers.get(GamblingReturnPeriodsPage).flatMap { periods =>
+      if (periods.returnPeriodsId.isEmpty) Some(NoPeriodsSet)
+      else
+        periods.hasExistingNstpValues.flatMap {
+          case false => Some(Standard(periods.returnPeriodsId.map(_.toString)))
+          case true  => NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
+        }
+    }
 
-    val returnPeriodsId =
-      request.userAnswers
-        .get(GamblingReturnPeriodsPage)
-        .flatMap(_.returnPeriodsId)
-        .map(_.toString)
+  private def prepare[A: Reads](form: Form[A], page: QuestionPage[A])(implicit request: DataRequest[?]): Form[A] =
+    request.userAnswers.get(page).fold(form)(form.fill)
 
-    Ok(standardReturnPeriodsView(preparedForm, mode, returnPeriodsId))
-  }
-
-  private def standardPeriodOnSubmit(mode: Mode)(implicit request: DataRequest[AnyContent]) = {
-    nonStandardPeriodsForm
+  private def submit[A: Writes](form: Form[A], page: QuestionPage[A], mode: Mode)(
+    errorView: Form[A] => HtmlFormat.Appendable
+  )(implicit request: DataRequest[AnyContent]): Future[Result] =
+    form
       .bindFromRequest()
       .fold(
-        formWithErrors =>
-          Future.successful {
-            val returnPeriodsId =
-              request.userAnswers
-                .get(GamblingReturnPeriodsPage)
-                .flatMap(_.returnPeriodsId)
-                .map(_.toString)
-
-            BadRequest(standardReturnPeriodsView(formWithErrors, mode, returnPeriodsId))
-          },
+        formWithErrors => Future.successful(BadRequest(errorView(formWithErrors))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(
-                                request.userAnswers.set(StandardReturnPeriodsPage, value)
-                              )
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(
-            navigator.nextPage(
-              StandardReturnPeriodsPage,
-              mode,
-              updatedAnswers
-            )
-          )
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
+            _              <- sessionRepository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(page, mode, updatedAnswers))
       )
+}
 
-  }
-
-  private def nonStandardPeriodOnPageLoad(mode: Mode)(implicit request: DataRequest[AnyContent]) =
-    getNonStandardReturnPeriodsViewModel(request.userAnswers).fold(
-      Redirect(routes.SystemErrorController.onPageLoad())
-    )(viewModel => {
-      val preparedForm = request.userAnswers.get(NonStandardReturnPeriodsPage) match {
-        case None        => standardPeriodsForm
-        case Some(value) => standardPeriodsForm.fill(value)
-      }
-      Ok(nonStandardReturnPeriodsView(preparedForm, viewModel, mode))
-    })
-
-  private def nonStandardPeriodOnSubmit(mode: Mode)(implicit request: DataRequest[AnyContent]) =
-    getNonStandardReturnPeriodsViewModel(request.userAnswers).fold(
-      Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
-    )(viewModel =>
-      standardPeriodsForm
-        .bindFromRequest()
-        .fold(
-          formWithErrors => Future.successful(BadRequest(nonStandardReturnPeriodsView(formWithErrors, viewModel, mode))),
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(NonStandardReturnPeriodsPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(NonStandardReturnPeriodsPage, mode, updatedAnswers))
-        )
-    )
-
-  private def isStandardReturnsPeriod(userAnswers: UserAnswers): Option[Boolean] =
-    userAnswers.get(GamblingReturnPeriodsPage).flatMap(_.hasExistingNstpValues.map(!_))
-
-  private def getNonStandardReturnPeriodsViewModel(userAnswers: UserAnswers)(implicit messages: Messages): Option[NonStandardReturnPeriodsViewModel] =
-    for {
-      gamblingReturnPeriods <- userAnswers.get(GamblingReturnPeriodsPage)
-      viewModel             <- NonStandardReturnPeriodsViewModel.from(gamblingReturnPeriods)
-    } yield viewModel
+object ReturnPeriodsController {
+  private sealed trait ReturnPeriodsScreen
+  private case object NoPeriodsSet                                                   extends ReturnPeriodsScreen
+  private final case class Standard(returnPeriodsId: Option[String])                 extends ReturnPeriodsScreen
+  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel) extends ReturnPeriodsScreen
 }
