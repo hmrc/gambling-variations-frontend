@@ -221,8 +221,6 @@ class ControllingBodyBusinessUKIncorporatedControllerSpec extends SpecBase with 
         val savedAnswers = savedAnswersCaptor.getValue
 
         savedAnswers.get(ControllingBodyIsUkIncorporatedPage).value mustEqual "1"
-        savedAnswers.get(ControllingBodySubmittedPage).value mustEqual true
-        savedAnswers.get(ControllingBodyChangesPage).value mustEqual true
       }
     }
 
@@ -259,8 +257,6 @@ class ControllingBodyBusinessUKIncorporatedControllerSpec extends SpecBase with 
         val savedAnswers = savedAnswersCaptor.getValue
 
         savedAnswers.get(ControllingBodyIsUkIncorporatedPage).value mustEqual "0"
-        savedAnswers.get(ControllingBodySubmittedPage).value mustEqual true
-        savedAnswers.get(ControllingBodyChangesPage).value mustEqual false
       }
     }
 

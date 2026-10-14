@@ -21,7 +21,7 @@ import controllers.routes
 import forms.controllingbody.ControllingBodyBusinessUKIncorporatedFormProvider
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyIsUkIncorporatedPage, ControllingBodySubmittedPage}
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyIsUkIncorporatedPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -69,11 +69,9 @@ class ControllingBodyBusinessUKIncorporatedController @Inject() (
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
             value =>
               for {
-                updatedAnswers              <- Future.fromTry(request.userAnswers.set(ControllingBodyIsUkIncorporatedPage, value))
-                updatedAnswersWithSubmitted <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
-                finalAnswer                 <- Future.fromTry(updatedAnswersWithSubmitted.set(ControllingBodyChangesPage, value == "1"))
-                _                           <- sessionRepository.set(finalAnswer)
-              } yield Redirect(navigator.nextPage(ControllingBodyIsUkIncorporatedPage, mode, finalAnswer))
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyIsUkIncorporatedPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(ControllingBodyIsUkIncorporatedPage, mode, updatedAnswers))
           )
           .recover { case ex =>
             Redirect(routes.SystemErrorController.onPageLoad())
