@@ -1321,3 +1321,46 @@ partnerDetailsCompanyRegistrationNumber.error.invalid.characters = The partnerâ€
 partnerDetailsCompanyRegistrationNumber.error.invalid.format = The partnerâ€™s company registration number must be in the correct format
 partnerDetailsCompanyRegistrationNumber.p1 = You can find this by
 partnerDetailsCompanyRegistrationNumber.link = searching for the company on the Companies House register (opens in new tab)
+
+testingPage.title = Enter testing page
+testingPage.heading = Enter testing page
+testingPage.checkYourAnswersLabel = testingPage
+testingPage.error.required = Select yes if testingPage
+testingPage.change.hidden = TestingPage
+
+songInformation.title = songInformation
+songInformation.heading = songInformation
+
+songInformationPage2.title = Check your song info
+songInformationPage2.heading = Check your song info
+songInformationPage2.p1 = If you typed the web address, check it is correct.
+songInformationPage2.p2 = If you pasted the web address, check you copied the entire address.
+songInformationPage2.Artist = Artist
+songInformationPage2.Title = Title
+songInformationPage2.checkYourAnswersLabel = SongInformationPage2
+songInformationPage2.error.Artist.required = Enter Artist
+songInformationPage2.error.Title.required = Enter Title
+songInformationPage2.error.Artist.length = Artist must be 100 characters or less
+songInformationPage2.error.Title.length = Title must be 100 characters or less
+songInformationPage2.Artist.change.hidden = Artist
+songInformationPage2.Title.change.hidden = Title
+
+businessLocationTest.title = BusinessLocationTest
+businessLocationTest.heading = BusinessLocationTest
+businessLocationTest.p1 = Enter the location of your business
+businessLocationTest.uK = UK
+businessLocationTest.eU = EU
+businessLocationTest.checkYourAnswersLabel = BusinessLocationTest
+businessLocationTest.error.required = Select businessLocationTest
+businessLocationTest.change.hidden = BusinessLocationTest
+
+registrationDate.title = Registration Date
+registrationDate.heading = Registration Date
+registrationDate.h1 = Test heading
+registrationDate.hint = For example, 12 11 2007.
+registrationDate.checkYourAnswersLabel = Registration Date
+registrationDate.error.required.all = Enter the registration Date
+registrationDate.error.required.two = The registration Date must include {0} and {1}
+registrationDate.error.required = The registration Date must include {0}
+registrationDate.error.invalid = Enter a real Registration Date
+registrationDate.change.hidden = Registration Date

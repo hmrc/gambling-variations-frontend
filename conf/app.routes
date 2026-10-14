@@ -296,3 +296,25 @@ GET     /change-registration-details/return-periods/end-date-:periodNumber/chang
 POST    /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit(periodNumber: Int, mode: Mode = CheckMode)
 
 
+
+GET        /testingPage                        controllers.TestingPageController.onPageLoad(mode: Mode = NormalMode)
+POST       /testingPage                        controllers.TestingPageController.onSubmit(mode: Mode = NormalMode)
+GET        /changeTestingPage                  controllers.TestingPageController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeTestingPage                  controllers.TestingPageController.onSubmit(mode: Mode = CheckMode)
+
+GET        /songInformation                       controllers.songInformationController.onPageLoad()
+
+GET        /songInformationPage2                        controllers.SongInformationPage2Controller.onPageLoad(mode: Mode = NormalMode)
+POST       /songInformationPage2                        controllers.SongInformationPage2Controller.onSubmit(mode: Mode = NormalMode)
+GET        /changeSongInformationPage2                  controllers.SongInformationPage2Controller.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSongInformationPage2                  controllers.SongInformationPage2Controller.onSubmit(mode: Mode = CheckMode)
+
+GET        /businessLocationTest                        controllers.BusinessLocationTestController.onPageLoad(mode: Mode = NormalMode)
+POST       /businessLocationTest                        controllers.BusinessLocationTestController.onSubmit(mode: Mode = NormalMode)
+GET        /changeBusinessLocationTest                  controllers.BusinessLocationTestController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeBusinessLocationTest                  controllers.BusinessLocationTestController.onSubmit(mode: Mode = CheckMode)
+
+GET        /registrationDate                  controllers.RegistrationDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /registrationDate                  controllers.RegistrationDateController.onSubmit(mode: Mode = NormalMode)
+GET        /changeRegistrationDate                        controllers.RegistrationDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeRegistrationDate                        controllers.RegistrationDateController.onSubmit(mode: Mode = CheckMode)

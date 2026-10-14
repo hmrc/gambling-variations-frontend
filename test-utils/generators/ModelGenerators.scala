@@ -23,6 +23,19 @@ import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
 
+  implicit lazy val arbitraryBusinessLocationTest: Arbitrary[BusinessLocationTest] =
+    Arbitrary {
+      Gen.oneOf(BusinessLocationTest.values.toSeq)
+    }
+
+  implicit lazy val arbitrarySongInformationPage2: Arbitrary[SongInformationPage2] =
+    Arbitrary {
+      for {
+        Artist <- arbitrary[String]
+        Title  <- arbitrary[String]
+      } yield SongInformationPage2(Artist, Title)
+    }
+
   implicit lazy val arbitraryStandardReturnPeriodsOptions: Arbitrary[StandardReturnPeriodsOptions] =
     Arbitrary {
       Gen.oneOf(StandardReturnPeriodsOptions.values.toSeq)
