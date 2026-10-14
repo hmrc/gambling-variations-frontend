@@ -31,7 +31,7 @@ import views.html.controllingbody.ControllingBodyAddEmailAddressYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodyAddEmailAddressYesNoController @Inject()(
+class ControllingBodyAddEmailAddressYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
