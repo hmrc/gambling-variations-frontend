@@ -232,6 +232,8 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
     case ControllingBodyAdditionalAddressInformationYesNoPage =>
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
+    case RemoveControllingBodyEmailPage =>
+      _ => routes.IndexController.onPageLoad() // Change it to CYA
 
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
