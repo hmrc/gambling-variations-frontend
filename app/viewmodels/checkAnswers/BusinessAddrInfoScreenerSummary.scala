@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.UserAnswers
 import pages.businessaddress.AddBusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
@@ -35,7 +34,7 @@ object BusinessAddrInfoScreenerSummary {
         key   = "businessAddrInfoScreener.checkYourAnswersLabel",
         value = ValueViewModel(value),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.BusinessAddrInfoScreenerController.onPageLoad().url)
+          ActionItemViewModel("site.change", controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad().url)
             .withVisuallyHiddenText(messages("businessAddrInfoScreener.change.hidden"))
         )
       )

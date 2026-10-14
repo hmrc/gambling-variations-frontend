@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
 import models.BusinessTradeClass
 import pages.tradingdetails.{BusinessTradeClassPage, OtherTradeClassPage}
 import play.api.Application
@@ -58,7 +57,7 @@ class OtherTradeClassSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.OtherTradeClassController.onPageLoad().url // change it
+              controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad().url // change it
             ).withVisuallyHiddenText(
               msgs("checkTradingDetails.otherBusinessTradeClassDescription.change.hidden")
             )

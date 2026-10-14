@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
 import org.scalatest.matchers.must.Matchers.*
 import pages.tradingdetails.IsSeasonalBusinessPage
 import play.api.Application
@@ -55,7 +54,7 @@ class IsSeasonalBusinessSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.SeasonalBusinessController.onPageLoad().url
+              controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad().url
             ).withVisuallyHiddenText(
               messagesApi("checkTradingDetails.seasonalBusiness.change.hidden")
             )
@@ -79,7 +78,7 @@ class IsSeasonalBusinessSummarySpec extends SpecBase {
           actions = Seq(
             ActionItemViewModel(
               "site.change",
-              routes.SeasonalBusinessController.onPageLoad().url
+              controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad().url
             ).withVisuallyHiddenText(
               messagesApi("checkTradingDetails.seasonalBusiness.change.hidden")
             )

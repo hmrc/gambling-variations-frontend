@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers.tradingdetails
 
-import controllers.routes
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Key, SummaryListRow}
@@ -34,13 +33,14 @@ case class UnsubmittedPrevRegNumbersViewModel(unsubmittedPreviousRegNumbers: Opt
                 classes = "govuk-summary-list__actions govuk-!-width-one-half",
                 items = Seq(
                   ActionItem(
-                    href               = routes.PreviousRegistrationNumbersListController.onChangeRedirect(prevRegNumber = newPrevReg).url,
+                    href =
+                      controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onChangeRedirect(prevRegNumber = newPrevReg).url,
                     content            = Text(messages("site.change")),
                     visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", newPrevReg))
                   ),
                   ActionItem(
-                    href               = routes.PreviousRegistrationNumbersListController.onRedirect(prevRegNumber = newPrevReg).url,
-                    content            = Text(messages("site.remove")),
+                    href    = controllers.tradingdetails.routes.PreviousRegistrationNumbersListController.onRedirect(prevRegNumber = newPrevReg).url,
+                    content = Text(messages("site.remove")),
                     visuallyHiddenText = Some(messages("previousRegistrationNumbers.change.hidden", newPrevReg))
                   )
                 )
