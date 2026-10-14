@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.tradingdetails
 
 import base.SpecBase
-import controllers.routes
 import models.UserAnswers
 import org.scalatest.matchers.must.Matchers
 import pages.tradingdetails.previousregnumbers.UnsubmittedPreviousRegNumbersPage
