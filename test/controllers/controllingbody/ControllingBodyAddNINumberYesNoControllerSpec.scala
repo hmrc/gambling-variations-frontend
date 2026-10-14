@@ -35,7 +35,7 @@ import scala.concurrent.Future
 
 class ControllingBodyAddNINumberYesNoControllerSpec extends SpecBase with MockitoSugar {
   private val answers = emptyUserAnswers
-    .set(ControllingBodyBusinessTypePage, BusinessType.Partnership)
+    .set(ControllingBodyBusinessTypePage, BusinessType.Soleproprietor)
     .success
     .value
     .set(ControllingBodySectionPage, mgdRegNum)

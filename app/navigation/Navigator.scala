@@ -232,6 +232,9 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
     case ControllingBodyAdditionalAddressInformationYesNoPage =>
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
+    case ControllingBodyAddNINumberYesNoPage =>
+      userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
+
 
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
@@ -692,6 +695,19 @@ class Navigator @Inject() () {
         routes.SystemErrorController.onPageLoad()
     }
   }
+
+
+  private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(ControllingBodyAddNINumberYesNoPage)
+      .map {
+        case true => routes.IndexController.onPageLoad() // TODO later
+        case false => routes.IndexController.onPageLoad() // TODO later
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  }
+
 
   private def navigatePartnerDetailsIsBusinessIncorporatedUkPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
     userAnswers
