@@ -1374,6 +1374,11 @@ partnerDetailsCompanyRegistrationNumber.error.invalid.format = The partner’s c
 partnerDetailsCompanyRegistrationNumber.p1 = You can find this by
 partnerDetailsCompanyRegistrationNumber.link = searching for the company on the Companies House register (opens in new tab)
 
+removeControllingBodyEmail.title = Are you sure you want to remove this controlling body’s email address?
+removeControllingBodyEmail.heading = Are you sure you want to remove {0} as this controlling body’s email address?
+removeControllingBodyEmail.error.required = Select yes if you want to remove this controlling body’s email address
+
+
 controllingBodyAddEmailAddressYesNo.title = Do you want to add an email address for the controlling body?
 controllingBodyAddEmailAddressYesNo.heading = Do you want to add an email address for the controlling body?
 controllingBodyAddEmailAddressYesNo.error.required = Select yes to add an email address for the controlling body
