@@ -234,7 +234,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
     case RemoveControllingBodyEmailPage =>
       _ => routes.IndexController.onPageLoad() // Change it to CYA
-
+    case ControllingBodyAddFaxNumberYesNoPage =>
+      userAnswers => navigateControllingBodyAddFaxNumberYesNoPage(userAnswers)
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
 
@@ -701,6 +702,18 @@ class Navigator @Inject() () {
       .map {
         case true  => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
         case false => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  }
+
+
+  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(ControllingBodyAddFaxNumberYesNoPage)
+      .map {
+        case true => routes.IndexController.onPageLoad() // TODO later
+        case false => routes.IndexController.onPageLoad() // TODO later
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
