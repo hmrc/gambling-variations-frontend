@@ -249,13 +249,24 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate7Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(8, NormalMode)
 
+    case NonStandardPeriodDate8Page =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
 
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
-    routes.ChangeRegistrationDetailsController.onPageLoad()
+  private val checkRouteMap: Page => UserAnswers => Call = {
+
+    case ChooseReturnPeriodsPage =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+    case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
+        NonStandardPeriodDate5Page | NonStandardPeriodDate6Page | NonStandardPeriodDate7Page | NonStandardPeriodDate8Page =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+
+    case _ =>
+      _ => routes.ChangeRegistrationDetailsController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {

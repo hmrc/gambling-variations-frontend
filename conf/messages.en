@@ -1311,3 +1311,11 @@ enterNonStandardPeriodDate.error.required.two = End date must include a {0} and 
 enterNonStandardPeriodDate.error.required = End date must include a {0}
 enterNonStandardPeriodDate.error.invalid = End date must be a real date
 enterNonStandardPeriodDate.error.outsideBoundaries = End date must be after {0} and before {1}
+
+checkNonStandardReturnPeriods.title = Check your non-standard return periods
+checkNonStandardReturnPeriods.heading = Check your non-standard return periods
+checkNonStandardReturnPeriods.intro = These changes will only apply after your current return period.
+checkNonStandardReturnPeriods.returnPeriodsEnding = Return periods ending
+checkNonStandardReturnPeriods.periodLabel = End date for {0}
+checkNonStandardReturnPeriods.addEndDate = Add end date for {0}
+checkNonStandardReturnPeriods.continueInfo = You must continue to the change registration details page to submit any changes.
