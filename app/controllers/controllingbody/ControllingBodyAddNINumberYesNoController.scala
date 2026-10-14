@@ -39,7 +39,7 @@ class ControllingBodyAddNINumberYesNoController @Inject()(
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: ControllingBodyNameDataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodyAddNINumberYesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyAddNINumberYesNoView
