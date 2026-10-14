@@ -18,9 +18,11 @@ package controllers.controllingbody
 
 import controllers.actions.*
 import forms.controllingbody.ControllingBodyAddNINumberYesNoFormProvider
+import models.BusinessType.Soleproprietor
 import models.Mode
 import navigation.Navigator
-import pages.controllingbody.ControllingBodyAddNINumberYesNoPage
+import pages.controllingbody.{ControllingBodyAddNINumberYesNoPage, ControllingBodyBusinessTypePage}
+import pages.partnerdetails.PartnerDetailsBusinessTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,9 +51,13 @@ class ControllingBodyAddNINumberYesNoController @Inject()(
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers.get(ControllingBodyAddNINumberYesNoPage).fold(form)(form.fill)
+    request.userAnswers.get(ControllingBodyBusinessTypePage) match {
+      case Some(Soleproprietor) =>
+        val preparedForm = request.userAnswers.get(ControllingBodyAddNINumberYesNoPage).fold(form)(form.fill)
 
-    Ok(view(preparedForm))
+        Ok(view(preparedForm))
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
