@@ -42,7 +42,7 @@ class ControllingBodyNameJourneySpec extends SpecBase with MockitoSugar {
 
   "The controlling body name journey" - {
     Seq(
-      Partnership                 -> "New & Partners",
+      Partnership                 -> "New, Partners",
       Corporatebody               -> "New Company",
       Unincorporatedbody          -> "New Association",
       LimitedLiabilityPartnership -> "New LLP"
