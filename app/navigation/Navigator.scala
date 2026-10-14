@@ -234,7 +234,9 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
     case RemoveControllingBodyEmailPage =>
       _ => routes.IndexController.onPageLoad() // Change it to CYA
-
+    case ControllingBodyAddEmailAddressYesNoPage =>
+      userAnswers => navigateControllingBodyAddEmailAddressYesNoPage(userAnswers)
+      
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
 
@@ -705,6 +707,18 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   }
+
+  private def navigateControllingBodyAddEmailAddressYesNoPage(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(ControllingBodyAddEmailAddressYesNoPage)
+      .map {
+        case true => routes.IndexController.onPageLoad() // TODO later
+        case false => routes.IndexController.onPageLoad() // TODO later
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  }
+
 
   private def navigateControllingBodyChangeScreenerPage(userAnswers: UserAnswers): Call =
     userAnswers
