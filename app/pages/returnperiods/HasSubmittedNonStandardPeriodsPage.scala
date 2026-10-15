@@ -19,7 +19,7 @@ package pages.returnperiods
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object NonStandardHasSubmittedPage extends QuestionPage[Boolean] {
+case object HasSubmittedNonStandardPeriodsPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ "gamblingReturnPeriods" \ toString
 

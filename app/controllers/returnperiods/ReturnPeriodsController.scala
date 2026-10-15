@@ -116,10 +116,12 @@ class ReturnPeriodsController @Inject() (
     userAnswers.get(GamblingReturnPeriodsPage).flatMap { periods =>
       val hasSwitchedToStandard = userAnswers.get(HasSwitchedToStandardValuesPage).contains(true)
       val hasSwitchedToNonStandard = userAnswers.get(HasSwitchedToNonStandardValuesPage).contains(true)
-      val hasSubmitted = userAnswers.get(NonStandardHasSubmittedPage).contains(true)
 
-      val nonStandardNonSubmitted = hasSwitchedToNonStandard && !hasSubmitted
-      val standardSubmitted = hasSwitchedToStandard && hasSubmitted
+      val hasSubmittedStandard = userAnswers.get(HasSubmittedStandardPeriodsPage).contains(true)
+      val hasSubmittedNonStandard = userAnswers.get(HasSubmittedNonStandardPeriodsPage).contains(true)
+
+      val nonStandardNonSubmitted = hasSwitchedToNonStandard && !hasSubmittedNonStandard
+      val standardSubmitted = hasSwitchedToStandard && hasSubmittedStandard
 
       if periods.returnPeriodsId.isEmpty then Some(NoPeriodsSet)
       else if standardSubmitted then Some(LockedPeriods)

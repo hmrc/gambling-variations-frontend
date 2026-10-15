@@ -925,12 +925,14 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
         periods: GamblingReturnPeriods = gamblingReturnPeriods,
         switchedToNonStandard: Option[Boolean] = Some(true),
         hasSubmitted: Option[Boolean] = Some(false),
-        switchedToStandard: Option[Boolean] = None
+        switchedToStandard: Option[Boolean] = None,
+        hasSubmittedStandard: Option[Boolean] = None
       ): UserAnswers = {
         val base = emptyUserAnswers.set(GamblingReturnPeriodsPage, periods).success.value
         val withNonStd = switchedToNonStandard.fold(base)(v => base.set(HasSwitchedToNonStandardValuesPage, v).success.value)
-        val withSubmitted = hasSubmitted.fold(withNonStd)(v => withNonStd.set(NonStandardHasSubmittedPage, v).success.value)
-        switchedToStandard.fold(withSubmitted)(v => withSubmitted.set(HasSwitchedToStandardValuesPage, v).success.value)
+        val withSubmitted = hasSubmitted.fold(withNonStd)(v => withNonStd.set(HasSubmittedNonStandardPeriodsPage, v).success.value)
+        val withStd = switchedToStandard.fold(withSubmitted)(v => withSubmitted.set(HasSwitchedToStandardValuesPage, v).success.value)
+        hasSubmittedStandard.fold(withStd)(v => withStd.set(HasSubmittedStandardPeriodsPage, v).success.value)
       }
 
       val notSubmittedAnswers = answersWith()
@@ -1088,9 +1090,9 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
         }
       }
 
-      "must show the locked view when the user has switched to standard" in {
+      "must show the locked view when the user has switched to and submitted standard" in {
 
-        val answers = answersWith(switchedToStandard = Some(true))
+        val answers = answersWith(switchedToStandard = Some(true), hasSubmittedStandard = Some(true))
         val application = applicationBuilder(userAnswers = Some(answers)).build()
 
         running(application) {
@@ -1132,6 +1134,9 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
           .success
           .value
           .set(HasSwitchedToStandardValuesPage, true)
+          .success
+          .value
+          .set(HasSubmittedStandardPeriodsPage, true)
           .success
           .value
 
@@ -1183,6 +1188,44 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
       "must show the standard view when the switched flag is false" in {
 
         val answers = lockedAnswers().set(HasSwitchedToStandardValuesPage, false).success.value
+        val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, returnPeriodsRoute)
+          val result = route(application, request).value
+          val view = application.injector.instanceOf[StandardReturnPeriodsView]
+          val form = new StandardReturnPeriodsFormProvider()()
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, NormalMode, Some("1"))(request, messages(application)).toString
+        }
+      }
+
+      "must show the standard view when the user has switched to standard but not submitted" in {
+
+        val answers = lockedAnswers().set(HasSubmittedStandardPeriodsPage, false).success.value
+        val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+        running(application) {
+          val request = FakeRequest(GET, returnPeriodsRoute)
+          val result = route(application, request).value
+          val view = application.injector.instanceOf[StandardReturnPeriodsView]
+          val form = new StandardReturnPeriodsFormProvider()()
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(form, NormalMode, Some("1"))(request, messages(application)).toString
+        }
+      }
+
+      "must show the standard view when the user has submitted standard but the switched flag is missing" in {
+
+        val answers = emptyUserAnswers
+          .set(GamblingReturnPeriodsPage, gamblingReturnPeriods)
+          .success
+          .value
+          .set(HasSubmittedStandardPeriodsPage, true)
+          .success
+          .value
         val application = applicationBuilder(userAnswers = Some(answers)).build()
 
         running(application) {
