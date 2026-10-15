@@ -20,14 +20,14 @@ import forms.behaviours.OptionFieldBehaviours
 import models.NonStandardReturnPeriodsOptions
 import play.api.data.FormError
 
-class NonStandardReturnPeriodsFormProviderSpec extends OptionFieldBehaviours {
+class NonStandardLastReturnPeriodsFormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new NonStandardReturnPeriodsFormProvider()()
+  val form = new NonStandardLastReturnPeriodsFormProvider()()
 
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "returnPeriods.nonStandard.error.required"
+    val requiredKey = "returnPeriods.nonStandard.last.error.required"
 
     behave like optionsField[NonStandardReturnPeriodsOptions](
       form,

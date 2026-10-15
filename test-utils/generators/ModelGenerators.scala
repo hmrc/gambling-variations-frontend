@@ -38,7 +38,6 @@ trait ModelGenerators {
       Gen.oneOf(ChooseReturnPeriods.values.toSeq)
     }
 
-  // TODO needed?
   implicit lazy val arbitraryNonStandardReturnPeriodsOptions: Arbitrary[NonStandardReturnPeriodsOptions] =
     Arbitrary {
       Gen.oneOf(NonStandardReturnPeriodsOptions.values.toSeq)

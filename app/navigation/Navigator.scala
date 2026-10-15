@@ -236,7 +236,7 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // Change it to CYA
     case ControllingBodyAddEmailAddressYesNoPage =>
       userAnswers => navigateControllingBodyAddEmailAddressYesNoPage(userAnswers)
-      
+
     case ControllingBodyAddFaxNumberYesNoPage =>
       userAnswers => navigateControllingBodyAddFaxNumberYesNoPage(userAnswers)
 
@@ -711,12 +711,11 @@ class Navigator @Inject() () {
 
   }
 
-
   private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call = {
     userAnswers
       .get(ControllingBodyAddFaxNumberYesNoPage)
       .map {
-        case true => routes.IndexController.onPageLoad() // TODO later
+        case true  => routes.IndexController.onPageLoad() // TODO later
         case false => routes.IndexController.onPageLoad() // TODO later
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
@@ -727,13 +726,12 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyAddEmailAddressYesNoPage)
       .map {
-        case true => routes.IndexController.onPageLoad() // TODO later
+        case true  => routes.IndexController.onPageLoad() // TODO later
         case false => routes.IndexController.onPageLoad() // TODO later
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   }
-
 
   private def navigateControllingBodyChangeScreenerPage(userAnswers: UserAnswers): Call =
     userAnswers
