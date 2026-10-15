@@ -119,9 +119,10 @@ class ReturnPeriodsController @Inject() (
       val hasSubmitted = userAnswers.get(NonStandardHasSubmittedPage).contains(true)
 
       val nonStandardNonSubmitted = hasSwitchedToNonStandard && !hasSubmitted
+      val standardSubmitted = hasSwitchedToStandard && hasSubmitted
 
       if periods.returnPeriodsId.isEmpty then Some(NoPeriodsSet)
-      else if hasSwitchedToStandard then Some(LockedPeriods)
+      else if standardSubmitted then Some(LockedPeriods)
       else
         periods.hasExistingNstpValues.flatMap {
           case false                           => Some(Standard(periods.returnPeriodsId.map(_.toString)))
