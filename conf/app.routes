@@ -27,7 +27,8 @@ GET        /change-registration-details                 controllers.ChangeRegist
 
 GET        /change-registration-details/business-name/check              controllers.businessname.CheckBusinessNameController.onPageLoad()
 
-GET        /change-registration/declaration             controllers.DeclarationController.onPageLoad()
+GET        /change-registration-details/declaration             controllers.DeclarationController.onPageLoad()
+POST       /change-registration-details/declaration             controllers.DeclarationController.onSubmit()
 
 GET        /change-registration-details/business-name/remove-trading-name           controllers.businessname.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-name/remove-trading-name           controllers.businessname.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)

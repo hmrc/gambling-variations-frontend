@@ -37,6 +37,22 @@ index.title = cy: Welcome to the filing Machine Game Duty
 index.heading = cy: Welcome to the filing Machine Game Duty
 index.guidance = cy: Welcome to your new frontend. Please see the README file for a guide to getting started.
 
+declaration.title = cy: Declaration
+declaration.heading = cy: Declaration
+declaration.p1 = cy: To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+declaration.group.p1 = cy: The conditions for setting up a Machine Games Duty group are that:
+declaration.group.bp1 = cy: all members must be companies with a UK establishment
+declaration.group.bp2 = cy: overseas‑incorporated companies must have a fixed place of business in the UK
+declaration.group.bp3 = cy: at least 1 member must be trading or intend to trade
+declaration.group.bp4 = cy: when a company joins the group, we will de-register its existing registration and register it as part of the group
+declaration.group.bp5 = cy: if an Isle of Man company joins the group, the Isle of Man authorities will de-register it
+declaration.group.bp6 = cy: all companies joining the group must operate under the same common control
+declaration.group.bp7 = cy: the controlling body can act as the representative member, but must own at least 51% of the shares or hold most of the voting rights in the group
+declaration.group.bp8 = cy: the controlling body must share the group's risks and rewards, or it must consolidate its accounts with the other companies in the group
+declaration.group.link = cy: You can view Excise Notice 452 for more information on group registration (opens in new tab).
+declaration.group.p2 = cy: I confirm that all the group members and the controlling body, if appropriate, meet the conditions for a Machine Games Duty group.
+declaration.submit = cy: Declare and submit
+
 checkYourAnswers.title = cy: Check your answers
 checkYourAnswers.heading = cy: Check your answers
 
