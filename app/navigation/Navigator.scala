@@ -199,6 +199,8 @@ class Navigator @Inject() () {
       userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
     case PartnerDetailsRemovePartnerYesNoPage(index) =>
       userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
+    case TestingPagePage =>
+      userAnswers => navigateTestingPagePage(userAnswers)
     // Return Periods
 //    case NonStandardReturnPeriodsPage =>
 //      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
@@ -256,6 +258,9 @@ class Navigator @Inject() () {
 
     case NonStandardPeriodDate7Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(8, NormalMode)
+
+    case RegistrationDatePage =>
+      _ => controllers.routes.TestingPageController.onPageLoad(NormalMode)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -721,3 +726,14 @@ private def navigateControllingBodyAdditionalAddressInformationYesNoPage()(answe
     case Some(false) => routes.IndexController.onPageLoad() // TODO later -> Redirect to CB-CN in add flow and CB-CYA in change flow
     case None        => routes.SystemErrorController.onPageLoad()
   }
+
+private def navigateTestingPagePage(userAnswers: UserAnswers): Call = {
+  userAnswers
+    .get(TestingPagePage)
+    .map {
+      case true  => routes.songInformationController.onPageLoad() // TODO later -> DateOfIncorporation Screen
+      case false => routes.SongInformationPage2Controller.onPageLoad(NormalMode) // TODO later -> CountryOfIncorporation Screen
+    }
+    .getOrElse(routes.SystemErrorController.onPageLoad())
+
+}
