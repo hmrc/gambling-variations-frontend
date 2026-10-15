@@ -492,6 +492,7 @@ controllingBodyAdditionalAddressInformationYesNo.title = cy: Do you want to incl
 controllingBodyAdditionalAddressInformationYesNo.heading = cy: Do you want to include additional information for the controlling body’s address?
 controllingBodyAdditionalAddressInformationYesNo.error.required = cy: Select yes to include additional information for the controlling body’s address
 controllingBodyAdditionalAddressInformationYesNo.hint = cy: For example, building name or floor number
+
 removeControllingBodyFaxNumber.title = cy: Are you sure you want to remove this controlling body’s fax number?
 removeControllingBodyFaxNumber.heading = cy: Are you sure you want to remove {0} as this controlling body’s fax number?
 removeControllingBodyFaxNumber.error.required = cy: Select yes if you want to remove this controlling body’s fax number
@@ -509,6 +510,15 @@ removeControllingBodyEmail.error.required = cy: Select yes if you want to remove
 controllingBodyBusinessUKIncorporated.title = cy: Is the controlling body’s business incorporated in the UK?
 controllingBodyBusinessUKIncorporated.heading = cy: Is the controlling body’s business incorporated in the UK?
 controllingBodyBusinessUKIncorporated.error.required = cy: Select yes if the controlling body’s business is incorporated in the UK
+
+controllingBodySoleProprietorDob.title = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.heading = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.hint = cy: For example, 31 3 1980
+controllingBodySoleProprietorDob.error.required.all = cy: Enter a date of birth for the sole proprietor
+controllingBodySoleProprietorDob.error.required.two = cy: Date of birth must include a {0} and a {1}
+controllingBodySoleProprietorDob.error.required = cy: Date of birth must include a {0}
+controllingBodySoleProprietorDob.error.invalid = cy: Date of birth must be a real date
+controllingBodySoleProprietorDob.error.afterLatestDate = cy: Date of birth must be the same as or before {0}
 
 dateOfIncorporation.title = cy: When was the controlling body’s date of incorporation?
 dateOfIncorporation.heading = cy: When was the controlling body’s date of incorporation?
