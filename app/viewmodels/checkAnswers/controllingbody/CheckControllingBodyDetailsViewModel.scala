@@ -32,7 +32,9 @@ import viewmodels.implicits.*
 
 import java.time.LocalDate
 
-/** CB-CYA in the add flow: screener questions are shown once answered, and missing mandatory details link to the screen that provides them. */
+/** CB-CYA in the add flow: screener questions are shown once answered, optional details read "Not provided" while they have no data, and missing
+  * mandatory details link to the screen that provides them.
+  */
 case class CheckControllingBodyDetailsViewModel(
   businessType: Option[BusinessType] = None,
   businessName: Option[String] = None,
@@ -66,9 +68,11 @@ case class CheckControllingBodyDetailsViewModel(
   private val isSoleProprietor: Boolean = businessType.contains(Soleproprietor)
   private val isCorporateBody: Boolean = businessType.contains(Corporatebody)
 
-  // A corporate body is first asked whether it is incorporated in the UK, a limited liability partnership always is
+  // A corporate body is first asked whether it is incorporated in the UK. A limited liability partnership is not asked, so it is taken
+  // as UK incorporated unless the loaded details say otherwise
   private val showUkIncorporation: Boolean =
-    (isCorporateBody && isUkIncorporated.contains(true)) || businessType.contains(LimitedLiabilityPartnership)
+    (isCorporateBody && isUkIncorporated.contains(true)) ||
+      (businessType.contains(LimitedLiabilityPartnership) && !isUkIncorporated.contains(false))
 
   private val showNonUkIncorporation: Boolean = isCorporateBody && isUkIncorporated.contains(false)
 
@@ -188,11 +192,11 @@ case class CheckControllingBodyDetailsViewModel(
   private def screenerRow(key: String, answer: Option[Boolean], href: String)(implicit messages: Messages): Option[SummaryListRow] =
     answer.map(value => changeableRow(key, Text(yesNo(value)), href))
 
-  // An optional detail is shown when its screener was answered yes, or when there is data and the screener has not been answered yet
+  // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data
   private def optionalRow(key: String, screenerAnswer: Option[Boolean], value: Option[String], href: String)(implicit
     messages: Messages
   ): Option[SummaryListRow] =
-    Option.when(screenerAnswer.contains(true) || (screenerAnswer.isEmpty && value.isDefined)) {
+    Option.unless(screenerAnswer.contains(false)) {
       changeableRow(key, Text(value.getOrElse(messages("site.notProvided"))), href)
     }
 
