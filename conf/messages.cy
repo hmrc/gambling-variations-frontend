@@ -486,3 +486,12 @@ partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to 
 removeControllingBodyEmail.title = cy: Are you sure you want to remove this controlling body's email address?
 removeControllingBodyEmail.heading = cy: Are you sure you want to remove {0} as this controlling body’s email address?
 removeControllingBodyEmail.error.required = cy: Select yes if you want to remove this controlling body’s email address
+
+controllingBodySoleProprietorDob.title = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.heading = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.hint = cy: For example, 31 3 1980
+controllingBodySoleProprietorDob.error.required.all = cy: Enter a date of birth for the sole proprietor
+controllingBodySoleProprietorDob.error.required.two = cy: Date of birth must include a {0} and a {1}
+controllingBodySoleProprietorDob.error.required = cy: Date of birth must include a {0}
+controllingBodySoleProprietorDob.error.invalid = cy: Date of birth must be a real date
+controllingBodySoleProprietorDob.error.afterLatestDate = cy: Date of birth must be the same as or before {0}
