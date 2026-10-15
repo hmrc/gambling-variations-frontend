@@ -193,7 +193,7 @@ changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated 
 changeBusinessName.error.required.llp = Enter the limited liability partnership’s name
 
 changeBusinessName.error.invalid.soleproprietor = The sole proprietor’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.partnership = The partnership’s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
+changeBusinessName.error.invalid.partnership = The partnership's name must only include letters a to z, numbers 0 to 9, apostrophes, commas, hyphens or spaces
 changeBusinessName.error.invalid.corporatebody = The corporate body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.llp = The limited liability partnership’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
