@@ -18,9 +18,9 @@ package controllers.controllingbody
 
 import controllers.actions.*
 import forms.controllingbody.ControllingBodyTradingNameFormProvider
-import models.Mode
+import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
-import pages.controllingbody.ControllingBodyTradingNamePage
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodySectionPage, ControllingBodyTradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -36,7 +36,7 @@ class ControllingBodyTradingNameController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   formProvider: ControllingBodyTradingNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ControllingBodyTradingNameView
@@ -46,27 +46,38 @@ class ControllingBodyTradingNameController @Inject() (
 
   val form = formProvider()
 
+  private def controllingBodyType(answers: UserAnswers, registration: String): Option[BusinessType] =
+    for {
+      _        <- answers.get(ControllingBodySectionPage).filter(_ == registration)
+      bodyType <- answers.get(ControllingBodyBusinessTypePage)
+    } yield bodyType
+
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-
-    val preparedForm = request.userAnswers.get(ControllingBodyTradingNamePage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+    controllingBodyType(request.userAnswers, request.mgdRegNum) match {
+      case Some(bodyType) =>
+        val preparedForm = request.userAnswers.get(ControllingBodyTradingNamePage).fold(form)(form.fill)
+        Ok(view(preparedForm, mode, bodyType))
+      case None => Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
-
-    Ok(view(preparedForm, mode))
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyTradingNamePage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ControllingBodyTradingNamePage, mode, updatedAnswers))
-      )
+    controllingBodyType(request.userAnswers, request.mgdRegNum) match {
+      case Some(bodyType) =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode, bodyType))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyTradingNamePage, value))
+                saved          <- sessionRepository.set(updatedAnswers)
+              } yield saved match {
+                case true  => Redirect(navigator.nextPage(ControllingBodyTradingNamePage, mode, updatedAnswers))
+                case false => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+              }
+          )
+      case None => Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
+    }
   }
 }
