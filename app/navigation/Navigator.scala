@@ -234,7 +234,7 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
 
     case ChooseReturnPeriodsPage =>
-      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      userAnswers => navigateChooseReturnPeriodsPage(userAnswers)
 
     case NonStandardPeriodDate1Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(2, NormalMode)
@@ -262,8 +262,11 @@ class Navigator @Inject() () {
 
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
-    routes.ChangeRegistrationDetailsController.onPageLoad()
+  private val checkRouteMap: Page => UserAnswers => Call = {
+    case ChooseReturnPeriodsPage =>
+      userAnswers => navigateChangedReturnPeriodsPage(userAnswers)
+    case _ =>
+      _ => routes.ChangeRegistrationDetailsController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {
@@ -274,6 +277,24 @@ class Navigator @Inject() () {
         checkRouteMap(page)(userAnswers)
     }
   }
+
+  /** Standard return periods go to the check page; non-standard go on to enter the first end date. */
+  private def navigateChooseReturnPeriodsPage(userAnswers: UserAnswers): Call =
+    userAnswers.get(HasExistingNstpValuesPage) match {
+      case Some(false) =>
+        controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      case _ =>
+        controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+    }
+
+  /** After changing standard return periods from the check page, go back to it. */
+
+  private def navigateChangedReturnPeriodsPage(userAnswers: UserAnswers): Call =
+    userAnswers.get(HasExistingNstpValuesPage) match {
+      case Some(false) =>
+        controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      case _ => routes.ChangeRegistrationDetailsController.onPageLoad()
+    }
 
   private def navigateCorrespondenceNamePage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {

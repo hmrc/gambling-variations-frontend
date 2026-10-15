@@ -31,6 +31,7 @@ import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, Controllin
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
+import pages.returnperiods.{ChooseReturnPeriodsPage, HasExistingNstpValuesPage, StandardReturnPeriodsPage}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -1403,6 +1404,47 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
         navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
           routes.IndexController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to CheckReturnPeriodsController for standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, answers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to the first non-standard end date for non-standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, true).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, answers) mustBe
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      }
+
+      "should route ChooseReturnPeriodsPage to the first non-standard end date when the return periods type is not known" in {
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, emptyAnswers) mustBe
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      }
+    }
+
+    "in Check mode" - {
+
+      "should route ChooseReturnPeriodsPage back to CheckReturnPeriodsController for standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, answers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to ChangeRegistrationDetailsController for non-standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, true).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, answers) mustBe
+          routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+
+      "should route any other page to ChangeRegistrationDetailsController" in {
+        navigator.nextPage(StandardReturnPeriodsPage, CheckMode, emptyAnswers) mustBe
+          routes.ChangeRegistrationDetailsController.onPageLoad()
       }
     }
   }
