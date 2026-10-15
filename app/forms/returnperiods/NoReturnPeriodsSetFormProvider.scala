@@ -16,11 +16,11 @@
 
 package forms.returnperiods
 
-import forms.mappings.Mappings
-import models.NoReturnPeriodsSet
-import play.api.data.Form
-
 import javax.inject.Inject
+
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.NoReturnPeriodsSet
 
 class NoReturnPeriodsSetFormProvider @Inject() extends Mappings {
 

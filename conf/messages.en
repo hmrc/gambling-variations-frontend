@@ -16,7 +16,6 @@ site.viewOrChange = View or change
 site.pagination.next = Next
 site.pagination.previous = Previous
 
-
 date.day = Day
 date.month = Month
 date.year = Year
@@ -1240,7 +1239,6 @@ controllingBodyEmailAddress.error.required = Enter the controlling body’s emai
 controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
 
-
 controllingBodyChangeScreener.title = What do you want to do with your controlling body?
 controllingBodyChangeScreener.heading = What do you want to do with your controlling body?
 controllingBodyChangeScreener.p1 = Your current controlling body is {0}.
@@ -1287,6 +1285,20 @@ controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also y
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
 
+returnPeriods.nonStandard.notLastPeriod.p1 = You
+returnPeriods.nonStandard.notLastPeriod.p2 = must contact HMRC (opens in new tab)
+returnPeriods.nonStandard.notLastPeriod.p3 = to change your non-standard return periods.
+
+returnPeriods.nonStandard.switchToStandard.caption = Do you want to switch to standard return periods?
+
+returnPeriods.nonStandard.notLast.error.required = Select yes if you want to use standard return periods
+returnPeriods.nonStandard.last.error.required = Select what you want to do when your last non-standard return period ends
+
+returnPeriods.locked.title = You cannot make any further changes to your return periods
+returnPeriods.locked.heading = You cannot make any further changes to your return periods
+returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
+returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
+
 controllingBodyFaxNumber.title = What is the controlling body''s fax number?
 controllingBodyFaxNumber.heading = What is the controlling body''s fax number?
 controllingBodyFaxNumber.error.required = Enter the controlling body''s fax number
@@ -1316,9 +1328,6 @@ returnPeriods.standard.change.hidden = StandardReturnPeriods
 returnPeriods.nonStandard.title = Your non-standard return periods
 returnPeriods.nonStandard.heading = Your non-standard return periods
 
-returnPeriods.nonStandard.title = Your non-standard return periods
-returnPeriods.nonStandard.heading = Your non-standard return periods
-
 returnPeriods.option1 = Switch to standard return periods and end dates
 returnPeriods.option2 = Keep non-standard return periods and add new end dates
 returnPeriods.option3 = Keep non-standard return periods and end dates the same
@@ -1328,6 +1337,16 @@ returnPeriods.nonStandard.switchToStandard = Switch to standard return periods a
 returnPeriods.nonStandard.keepNonStandardAndChangeDates = Keep non-standard return periods and add new end dates
 returnPeriods.nonStandard.keepNonStandard = Keep non-standard return periods and end dates the same
 returnPeriods.nonStandard.option.legend = What do you want to do when your last non‑standard return period ends?
+
+returnPeriods.nonStandardNotSub.option1 = Switch to standard return periods and end dates
+returnPeriods.nonStandardNotSub.option2 = Change non-standard return periods and end dates
+returnPeriods.nonStandardNotSub.option3 = Keep these non-standard return periods and end dates
+
+returnPeriods.nonStandardNotSub.switchToStandard = Switch to standard return periods and end dates
+returnPeriods.nonStandardNotSub.changeNonStandard = Change non-standard return periods and end dates
+returnPeriods.nonStandardNotSub.keepNonStandard = Keep these non-standard return periods and end dates
+returnPeriods.nonStandardNotSub.option.legend =  What do you want to do with your return periods?
+returnPeriods.nonStandardNotSub.switchToStandard.hint = This will remove all the end dates that you entered
 
 returnPeriods.nonStandard.column1 = Return period ending
 returnPeriods.nonStandard.column2 = End date
@@ -1347,6 +1366,11 @@ returnPeriods.noneSet.error.required = Select the return periods you want to use
 returnPeriods.noneSet.change.hidden = ReturnPeriodsChoice
 returnPeriods.noneSet.change.p1 = If you want to use standard return periods, the end dates are set to the last day of the month, for example 31 March.
 returnPeriods.noneSet.change.p2 = If you want to use non‑standard return periods, you must provide end dates that cover the next 2 years.
+
+returnPeriods.locked.title = You cannot make any further changes to your return periods
+returnPeriods.locked.heading = You cannot make any further changes to your return periods
+returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
+returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
 
 controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
 controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?

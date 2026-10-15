@@ -35,38 +35,30 @@ object NonStandardReturnPeriodsOptions extends Enumerable.Implicits {
     KeepNonStandard
   )
 
-  def options(isInLastNonStandardReturnPeriod: Boolean, hint: Seq[String])(implicit messages: Messages): Seq[RadioItem] = {
-    val radios =
-      if isInLastNonStandardReturnPeriod then
-        Seq(
-          RadioItem(
-            content    = Text(messages(s"returnPeriods.nonStandard.${SwitchToStandard.toString}")),
-            value      = Some(SwitchToStandard.toString),
-            id         = Some("value_0"),
-            hint       = Some(Hint(content = Text(messages("returnPeriods.nonStandard.switchToStandard.hint", hint.map(messages.apply(_))*)))),
-            attributes = Map("data-testid" -> s"return-periods-${SwitchToStandard.toString}")
-          ),
-          RadioItem(
-            content    = Text(messages(s"returnPeriods.nonStandard.${KeepNonStandardAndChangeDates.toString}")),
-            value      = Some(KeepNonStandardAndChangeDates.toString),
-            id         = Some("value_1"),
-            attributes = Map("data-testid" -> s"return-periods-${KeepNonStandardAndChangeDates.toString}")
-          ),
-          RadioItem(
-            divider = Some(messages("site.or"))
-          )
-        )
-      else Seq.empty
-
-    radios ++ Seq(
-      RadioItem(
-        content    = Text(messages(s"returnPeriods.nonStandard.${KeepNonStandard.toString}")),
-        value      = Some(KeepNonStandard.toString),
-        id         = Some("value_2"),
-        attributes = Map("-testid" -> s"return-periods-${KeepNonStandard.toString}")
-      )
+  def options(hint: Seq[String])(implicit messages: Messages): Seq[RadioItem] = Seq(
+    RadioItem(
+      content    = Text(messages(s"returnPeriods.nonStandard.${SwitchToStandard.toString}")),
+      value      = Some(SwitchToStandard.toString),
+      id         = Some("value_0"),
+      hint       = Some(Hint(content = Text(messages("returnPeriods.nonStandard.switchToStandard.hint", hint.map(messages.apply(_))*)))),
+      attributes = Map("data-testid" -> s"return-periods-${SwitchToStandard.toString}")
+    ),
+    RadioItem(
+      content    = Text(messages(s"returnPeriods.nonStandard.${KeepNonStandardAndChangeDates.toString}")),
+      value      = Some(KeepNonStandardAndChangeDates.toString),
+      id         = Some("value_1"),
+      attributes = Map("data-testid" -> s"return-periods-${KeepNonStandardAndChangeDates.toString}")
+    ),
+    RadioItem(
+      divider = Some(messages("site.or"))
+    ),
+    RadioItem(
+      content    = Text(messages(s"returnPeriods.nonStandard.${KeepNonStandard.toString}")),
+      value      = Some(KeepNonStandard.toString),
+      id         = Some("value_2"),
+      attributes = Map("-testid" -> s"return-periods-${KeepNonStandard.toString}")
     )
-  }
+  )
 
   implicit val enumerable: Enumerable[NonStandardReturnPeriodsOptions] =
     Enumerable(values.map(v => v.toString -> v)*)
