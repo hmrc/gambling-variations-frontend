@@ -20,10 +20,11 @@ import base.SpecBase
 import forms.partnerdetails.PartnerDetailsAddTradingNameYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsAddTradingNameYesNoPage}
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsAddTradingNameYesNoPage, PartnerDetailsTradingNamePage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -134,6 +135,77 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe onwardRoute.url
           verify(mockSessionRepository).set(expectedAnswers)
+        }
+      }
+
+      "must remove the trading name from the saved answers when No is submitted after a trading name was added" in {
+
+        val answersWithTradingName =
+          validUserAnswers
+            .set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true)
+            .flatMap(_.set(PartnerDetailsTradingNamePage(newPartnersIndex1), "Sams Arcade"))
+            .success
+            .value
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val application =
+          applicationBuilder(userAnswers = Some(answersWithTradingName))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAddTradingNameYesNoRoute)
+              .withFormUrlEncodedBody(("value", "false"))
+
+          val result = route(application, request).value
+
+          status(result) mustBe SEE_OTHER
+
+          val captor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(mockSessionRepository).set(captor.capture())
+
+          captor.getValue.get(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1)) mustBe Some(false)
+          captor.getValue.get(PartnerDetailsTradingNamePage(newPartnersIndex1)) mustBe None
+        }
+      }
+
+      "must keep the trading name in the saved answers when Yes is submitted again" in {
+
+        val answersWithTradingName =
+          validUserAnswers
+            .set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true)
+            .flatMap(_.set(PartnerDetailsTradingNamePage(newPartnersIndex1), "Sams Arcade"))
+            .success
+            .value
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+        val application =
+          applicationBuilder(userAnswers = Some(answersWithTradingName))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsAddTradingNameYesNoRoute)
+              .withFormUrlEncodedBody(("value", "true"))
+
+          val result = route(application, request).value
+
+          status(result) mustBe SEE_OTHER
+          verify(mockSessionRepository).set(answersWithTradingName)
         }
       }
 

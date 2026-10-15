@@ -55,7 +55,7 @@ class StandardReturnPeriodsViewSpec extends SpecBase {
     }
   }
 
-  "WhatToDoWithStandardReturnPeriodsView" - {
+  "StandardReturnPeriodsView" - {
 
     "must render page correctly" in new Setup {
 

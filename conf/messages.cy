@@ -472,8 +472,17 @@ removeControllingBodyTradeName.title = cy:  Are you sure you want to remove this
 removeControllingBodyTradeName.heading = cy: Are you sure you want to remove {0} as this controlling body’s trading name?
 removeControllingBodyTradeName.error.required = cy: Select yes if you want to remove the trading name
 
+controllingBodyAdditionalAddressInformationYesNo.title = cy: Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = cy: Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = cy: Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = cy: For example, building name or floor number
+
 partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
 partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
 partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
 partnerDetailsRemovePartnerYesNo.removeNow = cy: Yes, remove this partner now
 partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to remove this partner now
+
+removeControllingBodyEmail.title = cy: Are you sure you want to remove this controlling body's email address?
+removeControllingBodyEmail.heading = cy: Are you sure you want to remove {0} as this controlling body’s email address?
+removeControllingBodyEmail.error.required = cy: Select yes if you want to remove this controlling body’s email address

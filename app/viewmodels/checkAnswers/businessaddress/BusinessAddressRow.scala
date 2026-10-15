@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.businessaddress
 
 import models.{Address, UserAnswers}
-import controllers.routes
 import play.api.i18n.Messages
 import pages.businessaddress.{BusinessAddressNonUkPage, BusinessAddressUkPage}
 import play.twirl.api.Html
@@ -72,7 +71,7 @@ case class BusinessAddressRow(ua: UserAnswers)(implicit messages: Messages) {
       key   = "checkBusinessAddress.label.address",
       value = addressRowValue,
       actions = Seq(
-        ActionItemViewModel("site.change", routes.BusinessChangeAddrScreenerController.onPageLoad().url)
+        ActionItemViewModel("site.change", controllers.businessaddress.routes.BusinessChangeAddrScreenerController.onPageLoad().url)
           .withVisuallyHiddenText(messages("checkBusinessAddress.label.address.hidden"))
       )
     )

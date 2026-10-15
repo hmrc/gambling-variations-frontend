@@ -136,7 +136,7 @@ object NonStandardReturnPeriodsViewModel {
   private def formatDate(date: LocalDate, fullDate: Boolean)(implicit messages: Messages): String = {
     val locale = Locale.forLanguageTag(messages.lang.code)
     val formatter =
-      if fullDate then DateTimeFormatter.ofPattern("dd MMM yyyy", locale)
+      if fullDate then DateTimeFormatter.ofPattern("d MMM yyyy", locale)
       else DateTimeFormatter.ofPattern("MMM yyyy", locale)
 
     date.format(formatter)

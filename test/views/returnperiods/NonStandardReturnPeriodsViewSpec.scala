@@ -199,13 +199,12 @@ class NonStandardReturnPeriodsViewSpec extends SpecBase {
       }
 
       "must render an error summary when the form has errors" in new Setup(false) {
-
         renderWithErrors
           .select(".govuk-error-summary")
           .size mustBe 1
       }
 
     }
-
   }
+
 }

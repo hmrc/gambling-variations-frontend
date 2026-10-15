@@ -1239,10 +1239,71 @@ controllingBodyEmailAddress.error.required = Enter the controlling body’s emai
 controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
 controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
 
+controllingBodyChangeScreener.title = What do you want to do with your controlling body?
+controllingBodyChangeScreener.heading = What do you want to do with your controlling body?
+controllingBodyChangeScreener.p1 = Your current controlling body is {0}.
+controllingBodyChangeScreener.editDetails = Edit controlling body details
+controllingBodyChangeScreener.provideNew = Provide a new controlling body
+controllingBodyChangeScreener.keepSame = Keep controlling body the same
+controllingBodyChangeScreener.error.required = Select what you want to do with your controlling body
+
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
 controllingBodySameAsRepYesNo.title = Controlling body details
 controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
 controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
 controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+controllingBodyTradingName.title = What is the controlling body’s trading name?
+controllingBodyTradingName.heading = What is the controlling body’s trading name?
+controllingBodyTradingName.checkYourAnswersLabel = What is the controlling body’s trading name?
+controllingBodyTradingName.hint = The controlling body’s trading name should not include ’Ltd’, ’Limited’, ’PLC’ or ’LLP’. These terms are legally protected, which could cause investigation and delays.
+controllingBodyTradingName.error.required = Enter the controlling body’s trading name
+controllingBodyTradingName.error.length = The controlling body’s trading name must be 100 characters or less
+controllingBodyTradingName.error.invalid = The controlling body’s trading name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens, slashes or spaces
+controllingBodyTradingName.change.hidden = What is the controlling body’s trading name?
+
+controllingBodyEmailAddress.title = What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = Email Address
+controllingBodyEmailAddress.error.required = Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = The email address must be 70 characters or less
+
+
+removeControllingBodyTradeName.title = Are you sure you want to remove this controlling body’s trading name?
+removeControllingBodyTradeName.heading = Are you sure you want to remove {0} as this controlling body’s trading name?
+removeControllingBodyTradeName.error.required = Select yes if you want to remove this controlling body’s trading name
+
+controllingBodySameAsRepYesNo.title = Controlling body details
+controllingBodySameAsRepYesNo.p1 = Your current controlling body, {0}, is also your group''s representative member.
+controllingBodySameAsRepYesNo.text = Do you want to provide a new controlling body?
+controllingBodySameAsRepYesNo.error.required = Select yes if you want to provide a new controlling body
+
+returnPeriods.nonStandard.notLastPeriod.p1 = You
+returnPeriods.nonStandard.notLastPeriod.p2 = must contact HMRC (opens in new tab)
+returnPeriods.nonStandard.notLastPeriod.p3 = to change your non-standard return periods.
+
+returnPeriods.nonStandard.switchToStandard.caption = Do you want to switch to standard return periods?
+
+returnPeriods.nonStandard.notLast.error.required = Select yes if you want to use standard return periods
+returnPeriods.nonStandard.last.error.required = Select what you want to do when your last non-standard return period ends
+
+returnPeriods.locked.title = You cannot make any further changes to your return periods
+returnPeriods.locked.heading = You cannot make any further changes to your return periods
+returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
+returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
+
+controllingBodyFaxNumber.title = What is the controlling body''s fax number?
+controllingBodyFaxNumber.heading = What is the controlling body''s fax number?
+controllingBodyFaxNumber.error.required = Enter the controlling body''s fax number
+controllingBodyFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
+controllingBodyFaxNumber.error.length = The fax number must be 20 characters or less
 
 returnPeriods.standard.title = Your standard return periods
 returnPeriods.standard.heading = Your standard return periods
@@ -1250,6 +1311,9 @@ returnPeriods.standard.heading = Your standard return periods
 returnPeriods.standard.changeMonthsStandardPeriodCover = Change the months your standard return periods cover
 returnPeriods.standard.switchToNonStandard = Switch to non-standard return periods
 returnPeriods.standard.keepStandardReturnPeriod = Keep standard return periods the same
+removeControllingBodyTradeName.title = Are you sure you want to remove this controlling body’s trading name?
+removeControllingBodyTradeName.heading = Are you sure you want to remove {0} as this controlling body’s trading name?
+removeControllingBodyTradeName.error.required = Select yes if you want to remove this controlling body’s trading name
 
 returnPeriods.standard.option.legend = What do you want to do with your return periods?
 returnPeriods.standard.p1 = Your return period end dates are the last day of January, April, July and October .
@@ -1264,10 +1328,6 @@ returnPeriods.standard.change.hidden = StandardReturnPeriods
 returnPeriods.nonStandard.title = Your non-standard return periods
 returnPeriods.nonStandard.heading = Your non-standard return periods
 
-returnPeriods.nonStandard.notLastPeriod.p1 = You
-returnPeriods.nonStandard.notLastPeriod.p2 = must contact HMRC (opens in new tab)
-returnPeriods.nonStandard.notLastPeriod.p3 = to change your non-standard return periods.
-
 returnPeriods.option1 = Switch to standard return periods and end dates
 returnPeriods.option2 = Keep non-standard return periods and add new end dates
 returnPeriods.option3 = Keep non-standard return periods and end dates the same
@@ -1280,14 +1340,12 @@ returnPeriods.nonStandard.option.legend = What do you want to do when your last 
 
 returnPeriods.nonStandard.column1 = Return period ending
 returnPeriods.nonStandard.column2 = End date
-returnPeriods.nonStandard.pastTable.caption = Upcoming non-standard return periods
-returnPeriods.nonStandard.upcomingTable.caption = Past non-standard return periods
+returnPeriods.nonStandard.pastTable.caption = Past non-standard return periods
+returnPeriods.nonStandard.upcomingTable.caption = Upcoming non-standard return periods
 returnPeriods.nonStandard.switchToStandard.hint = The end dates will be the last day of {0}, {1}, {2} and {3}
-returnPeriods.nonStandard.switchToStandard.caption = Do you want to switch to standard return periods?
 
 returnPeriods.nonStandard.checkYourAnswersLabel = Your non-standard return periods
-returnPeriods.nonStandard.notLast.error.required = Select yes if you want to use standard return periods
-returnPeriods.nonStandard.last.error.required = Select what you want to do when your last non-standard return period ends
+returnPeriods.nonStandard.error.required = Select what you want to do when your last non-standard return period ends
 returnPeriods.nonStandard.change.hidden = NonStandardReturnPeriods
 
 returnPeriods.noneSet.title = Your return periods
@@ -1299,8 +1357,41 @@ returnPeriods.noneSet.change.hidden = ReturnPeriodsChoice
 returnPeriods.noneSet.change.p1 = If you want to use standard return periods, the end dates are set to the last day of the month, for example 31 March.
 returnPeriods.noneSet.change.p2 = If you want to use non‑standard return periods, you must provide end dates that cover the next 2 years.
 
-returnPeriods.locked.title = You cannot make any further changes to your return periods
-returnPeriods.locked.heading = You cannot make any further changes to your return periods
-returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
-returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
+controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = For example, building name or floor number
 
+enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
+enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, 30 6 2026
+enterNonStandardPeriodDate.dateLabel = End date
+
+enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
+enterNonStandardPeriodDate.error.required.two = End date must include a {0} and a {1}
+enterNonStandardPeriodDate.error.required = End date must include a {0}
+enterNonStandardPeriodDate.error.invalid = End date must be a real date
+enterNonStandardPeriodDate.error.outsideBoundaries = End date must be after {0} and before {1}
+
+partnerDetailsCompanyRegistrationNumber.title = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.heading = Tell us the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.paragraph = What is the company registration number?
+partnerDetailsCompanyRegistrationNumber.hint = It can be up to 8 numbers, or start with 2 letters followed by up to 6 letters or numbers, for example AC123456, IPCFGEDT or 000123
+partnerDetailsCompanyRegistrationNumber.error.required = Enter the partner’s company registration number
+partnerDetailsCompanyRegistrationNumber.error.invalid.characters = The partner’s company registration number must only include letters a to z and numbers 0 to 9
+partnerDetailsCompanyRegistrationNumber.error.invalid.format = The partner’s company registration number must be in the correct format
+partnerDetailsCompanyRegistrationNumber.p1 = You can find this by
+partnerDetailsCompanyRegistrationNumber.link = searching for the company on the Companies House register (opens in new tab)
+
+removeControllingBodyEmail.title = Are you sure you want to remove this controlling body’s email address?
+removeControllingBodyEmail.heading = Are you sure you want to remove {0} as this controlling body’s email address?
+removeControllingBodyEmail.error.required = Select yes if you want to remove this controlling body’s email address
+
+
+controllingBodyAddEmailAddressYesNo.title = Do you want to add an email address for the controlling body?
+controllingBodyAddEmailAddressYesNo.heading = Do you want to add an email address for the controlling body?
+controllingBodyAddEmailAddressYesNo.error.required = Select yes to add an email address for the controlling body
+
+controllingBodyAddFaxNumberYesNo.title = Do you want to add a fax number for the controlling body?
+controllingBodyAddFaxNumberYesNo.heading = Do you want to add a fax number for the controlling body?
+controllingBodyAddFaxNumberYesNo.error.required = Select yes to add a fax number for the controlling body
