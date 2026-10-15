@@ -1303,7 +1303,7 @@ controllingBodyAdditionalAddressInformationYesNo.hint = For example, building na
 
 enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
 enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
-enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, 30 6 2026
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, {2}
 enterNonStandardPeriodDate.dateLabel = End date
 
 enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
@@ -1316,6 +1316,7 @@ checkNonStandardReturnPeriods.title = Check your non-standard return periods
 checkNonStandardReturnPeriods.heading = Check your non-standard return periods
 checkNonStandardReturnPeriods.intro = These changes will only apply after your current return period.
 checkNonStandardReturnPeriods.returnPeriodsEnding = Return periods ending
+checkNonStandardReturnPeriods.returnPeriodsEnding.hidden = return periods ending
 checkNonStandardReturnPeriods.periodLabel = End date for {0}
 checkNonStandardReturnPeriods.addEndDate = Add end date for {0}
 checkNonStandardReturnPeriods.continueInfo = You must continue to the change registration details page to submit any changes.
