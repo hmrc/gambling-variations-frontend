@@ -18,12 +18,12 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import controllers.routes
-import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
+import forms.returnperiods.{NoReturnPeriodsSetFormProvider, NonStandardNotSubmittedReturnPeriodsFormProvider, NonStandardReturnPeriodsFormProvider, StandardReturnPeriodsFormProvider}
 import models.requests.DataRequest
-import models.{Mode, NoReturnPeriodsSet, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
+import models.{Mode, NoReturnPeriodsSet, NonStandardNotSubmittedReturnPeriodsOptions, NonStandardReturnPeriodsOptions, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
-import pages.returnperiods.{GamblingReturnPeriodsPage, NonStandardReturnPeriodsPage, ReturnPeriodsChoicePage, StandardReturnPeriodsPage}
+import pages.returnperiods.*
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{Reads, Writes}
@@ -31,8 +31,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import play.twirl.api.HtmlFormat
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.returnperiods.NonStandardReturnPeriodsViewModel
-import views.html.returnperiods.{NoReturnPeriodsSetView, NonStandardReturnPeriodsView, StandardReturnPeriodsView}
+import viewmodels.checkAnswers.returnperiods.{NonStandardNotSubmittedReturnPeriodsViewModel, NonStandardReturnPeriodsViewModel}
+import views.html.returnperiods.*
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,12 +45,15 @@ class ReturnPeriodsController @Inject() (
   getData: DataRetrievalAction,
   requireData: GamblingReturnPeriodsDataRequiredAction,
   nonStandardPeriodFormProvider: NonStandardReturnPeriodsFormProvider,
+  nonStandardNonSubmittedPeriodFormProvider: NonStandardNotSubmittedReturnPeriodsFormProvider,
   standardPeriodFormProvider: StandardReturnPeriodsFormProvider,
   noReturnPeriodsSetFormProvider: NoReturnPeriodsSetFormProvider,
   val controllerComponents: MessagesControllerComponents,
   nonStandardReturnPeriodsView: NonStandardReturnPeriodsView,
+  nonStandardNotSubmittedReturnPeriodsView: NonStandardNotSubmittedReturnPeriodsView,
   standardReturnPeriodsView: StandardReturnPeriodsView,
-  noReturnPeriodsSetView: NoReturnPeriodsSetView
+  noReturnPeriodsSetView: NoReturnPeriodsSetView,
+  lockedReturnPeriodsSetView: LockedReturnPeriodsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -59,6 +62,7 @@ class ReturnPeriodsController @Inject() (
 
   private val standardForm: Form[StandardReturnPeriodsOptions] = standardPeriodFormProvider()
   private val nonStandardForm: Form[NonStandardReturnPeriodsOptions] = nonStandardPeriodFormProvider()
+  private val nonStandardNotSubmittedForm: Form[NonStandardNotSubmittedReturnPeriodsOptions] = nonStandardNonSubmittedPeriodFormProvider()
   private val noPeriodsSetForm: Form[NoReturnPeriodsSet] = noReturnPeriodsSetFormProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
@@ -66,11 +70,17 @@ class ReturnPeriodsController @Inject() (
       case Some(NoPeriodsSet) =>
         Ok(noReturnPeriodsSetView(prepare(noPeriodsSetForm, ReturnPeriodsChoicePage), mode))
 
+      case Some(LockedPeriods) =>
+        Ok(lockedReturnPeriodsSetView())
+
       case Some(Standard(returnPeriodsId)) =>
         Ok(standardReturnPeriodsView(prepare(standardForm, StandardReturnPeriodsPage), mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
         Ok(nonStandardReturnPeriodsView(prepare(nonStandardForm, NonStandardReturnPeriodsPage), viewModel, mode))
+
+      case Some(NonStandardNotSubmitted(viewModel)) =>
+        Ok(nonStandardNotSubmittedReturnPeriodsView(prepare(nonStandardNotSubmittedForm, NonStandardNotSubmittedReturnPeriodsPage), viewModel, mode))
 
       case None =>
         Redirect(routes.SystemErrorController.onPageLoad())
@@ -82,24 +92,45 @@ class ReturnPeriodsController @Inject() (
       case Some(NoPeriodsSet) =>
         submit(noPeriodsSetForm, ReturnPeriodsChoicePage, mode)(errors => noReturnPeriodsSetView(errors, mode))
 
+      case Some(LockedPeriods) =>
+        Future.successful(Redirect(controllers.routes.ChangeRegistrationDetailsController.onPageLoad()))
+
       case Some(Standard(returnPeriodsId)) =>
         submit(standardForm, StandardReturnPeriodsPage, mode)(errors => standardReturnPeriodsView(errors, mode, returnPeriodsId))
 
       case Some(NonStandard(viewModel)) =>
         submit(nonStandardForm, NonStandardReturnPeriodsPage, mode)(errors => nonStandardReturnPeriodsView(errors, viewModel, mode))
 
+      case Some(NonStandardNotSubmitted(viewModel)) =>
+        submit(nonStandardNotSubmittedForm, NonStandardNotSubmittedReturnPeriodsPage, mode)(errors =>
+          nonStandardNotSubmittedReturnPeriodsView(errors, viewModel, mode)
+        )
+
       case None =>
         Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+
     }
   }
 
   private def screenFor(userAnswers: UserAnswers)(implicit messages: Messages): Option[ReturnPeriodsScreen] =
     userAnswers.get(GamblingReturnPeriodsPage).flatMap { periods =>
-      if (periods.returnPeriodsId.isEmpty) Some(NoPeriodsSet)
+      val hasSwitchedToStandard = userAnswers.get(HasSwitchedToStandardValuesPage).contains(true)
+      val hasSwitchedToNonStandard = userAnswers.get(HasSwitchedToNonStandardValuesPage).contains(true)
+
+      val hasSubmittedStandard = userAnswers.get(HasSubmittedStandardPeriodsPage).contains(true)
+      val hasSubmittedNonStandard = userAnswers.get(HasSubmittedNonStandardPeriodsPage).contains(true)
+
+      val switchedToNonStandardButNonSubmitted = hasSwitchedToNonStandard && !hasSubmittedNonStandard
+      val switchedToStandardAndSubmitted = hasSwitchedToStandard && hasSubmittedStandard
+
+      if periods.returnPeriodsId.isEmpty then Some(NoPeriodsSet)
+      else if switchedToStandardAndSubmitted then Some(LockedPeriods)
       else
         periods.hasExistingNstpValues.flatMap {
           case false => Some(Standard(periods.returnPeriodsId.map(_.toString)))
-          case true  => NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
+          case true if switchedToNonStandardButNonSubmitted =>
+            NonStandardNotSubmittedReturnPeriodsViewModel.from(periods).map(NonStandardNotSubmitted(_))
+          case true => NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
         }
     }
 
@@ -123,7 +154,9 @@ class ReturnPeriodsController @Inject() (
 
 object ReturnPeriodsController {
   private sealed trait ReturnPeriodsScreen
-  private case object NoPeriodsSet                                                   extends ReturnPeriodsScreen
-  private final case class Standard(returnPeriodsId: Option[String])                 extends ReturnPeriodsScreen
-  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel) extends ReturnPeriodsScreen
+  private case object NoPeriodsSet                                                                           extends ReturnPeriodsScreen
+  private case object LockedPeriods                                                                          extends ReturnPeriodsScreen
+  private final case class Standard(returnPeriodsId: Option[String])                                         extends ReturnPeriodsScreen
+  private final case class NonStandard(viewModel: NonStandardReturnPeriodsViewModel)                         extends ReturnPeriodsScreen
+  private final case class NonStandardNotSubmitted(viewModel: NonStandardNotSubmittedReturnPeriodsViewModel) extends ReturnPeriodsScreen
 }
