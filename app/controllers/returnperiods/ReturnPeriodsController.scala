@@ -114,25 +114,19 @@ class ReturnPeriodsController @Inject() (
 
   private def screenFor(userAnswers: UserAnswers)(implicit messages: Messages): Option[ReturnPeriodsScreen] =
     userAnswers.get(GamblingReturnPeriodsPage).flatMap { periods =>
-      val switchedToStandard = userAnswers.get(HasSwitchedToStandardValuesPage)
-      val hasSubmitted = userAnswers.get(NonStandardHasSubmittedPage)
+      val hasSwitchedToStandard = userAnswers.get(HasSwitchedToStandardValuesPage).contains(true)
+      val hasSwitchedToNonStandard = userAnswers.get(HasSwitchedToNonStandardValuesPage).contains(true)
+      val hasSubmitted = userAnswers.get(NonStandardHasSubmittedPage).contains(true)
 
-      if (periods.returnPeriodsId.isEmpty) {
-        Some(NoPeriodsSet)
-      } else if (switchedToStandard.contains(true)) {
-        Some(LockedPeriods)
-      } else
+      val nonStandardNonSubmitted = hasSwitchedToNonStandard && !hasSubmitted
+
+      if periods.returnPeriodsId.isEmpty then Some(NoPeriodsSet)
+      else if hasSwitchedToStandard then Some(LockedPeriods)
+      else
         periods.hasExistingNstpValues.flatMap {
-          case false =>
-            Some(Standard(periods.returnPeriodsId.map(_.toString)))
-
-          case true if hasSubmitted.contains(true) =>
-            val vm = NonStandardNotSubmittedReturnPeriodsViewModel.from(periods)
-            vm.map(NonStandardNotSubmitted(_))
-
-          case true =>
-            val vm = NonStandardReturnPeriodsViewModel.from(periods)
-            vm.map(NonStandard(_))
+          case false                           => Some(Standard(periods.returnPeriodsId.map(_.toString)))
+          case true if nonStandardNonSubmitted => NonStandardNotSubmittedReturnPeriodsViewModel.from(periods).map(NonStandardNotSubmitted(_))
+          case true                            => NonStandardReturnPeriodsViewModel.from(periods).map(NonStandard(_))
         }
     }
 
