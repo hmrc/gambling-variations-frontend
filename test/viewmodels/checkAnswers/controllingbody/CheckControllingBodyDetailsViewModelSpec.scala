@@ -251,7 +251,20 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         val business = corporateBody.copy(businessType = Some(LimitedLiabilityPartnership), isUkIncorporated = None).businessDetails
 
         keys(business) must contain allOf (key("dateOfInc"), key("companyRegNumber"))
-        keys(business) must not contain key("isIncorporated")
+        keys(business) must contain noneOf (key("isIncorporated"), key("countryOfIncorporation"), key("foreignCorporateRef"))
+      }
+
+      "must hide the incorporation details for a limited liability partnership whose loaded details say it is not UK incorporated" in {
+        val viewModel = corporateBody.copy(businessType = Some(LimitedLiabilityPartnership), isUkIncorporated = Some(false))
+
+        keys(viewModel.businessDetails) must contain noneOf (
+          key("isIncorporated"),
+          key("dateOfInc"),
+          key("companyRegNumber"),
+          key("countryOfIncorporation"),
+          key("foreignCorporateRef")
+        )
+        viewModel.isMissingMandatoryDetails mustBe false
       }
 
       "must show neither the incorporation details nor the National Insurance rows for an unincorporated body" in {
@@ -315,7 +328,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
 
     "screener questions" - {
 
-      "must be hidden until answered, while a detail with data is still shown" in {
+      "must be hidden until answered, while the details are shown with not provided in place of missing data" in {
         val viewModel = corporateBody.copy(
           addTradingName    = None,
           addVrn            = None,
@@ -326,10 +339,22 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           emailAddress      = None
         )
 
-        keys(viewModel.businessDetails) must contain(key("tradingName"))
-        keys(viewModel.businessDetails) must contain noneOf (key("addTradingName"), key("addVat"), key("vat"))
+        keys(viewModel.businessDetails) must contain allOf (key("tradingName"), key("vat"))
+        keys(viewModel.businessDetails) must contain noneOf (key("addTradingName"), key("addVat"))
         keys(viewModel.addressDetails) mustEqual Seq(key("address"), key("addAdditionalInfo"))
-        keys(viewModel.contactDetails) mustEqual Seq(key("contactNumbers"), key("faxNumber"))
+        keys(viewModel.contactDetails) mustEqual Seq(key("contactNumbers"), key("faxNumber"), key("emailAddress"))
+        valueText(rowFor(viewModel.businessDetails, "tradingName")) mustEqual "Controlling Traders"
+        valueText(rowFor(viewModel.businessDetails, "vat")) mustEqual msgs("site.notProvided")
+        valueText(rowFor(viewModel.contactDetails, "emailAddress")) mustEqual msgs("site.notProvided")
+        hrefs(rowFor(viewModel.businessDetails, "vat")) mustEqual Seq("#")
+      }
+
+      "must show the National Insurance number as not provided for a sole proprietor who has not answered its screener" in {
+        val business = soleProprietor.copy(addNino = None, nino = None).businessDetails
+
+        keys(business) must contain(key("nino"))
+        keys(business) must not contain key("addNino")
+        valueText(rowFor(business, "nino")) mustEqual msgs("site.notProvided")
       }
 
       "must hide the detail when answered no" in {
