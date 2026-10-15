@@ -47,9 +47,6 @@ class EnterNonStandardPeriodDateControllerSpec extends SpecBase with MockitoSuga
   private val lowerBoundary =
     periodEnd.minusDays(16)
 
-  private val upperBoundary =
-    periodEnd.plusDays(16)
-
   private val validAnswer =
     LocalDate.of(2026, 1, 15)
 

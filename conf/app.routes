@@ -241,7 +241,6 @@ POST       /change-registration-details/controlling-body-details/business-type  
 GET        /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onSubmit(mode: Mode = NormalMode)
 
-
 GET        /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
 
@@ -282,6 +281,7 @@ GET        /change-registration-details/controlling-body-details/groups-represen
 POST       /change-registration-details/controlling-body-details/groups-representative-member             controllers.controllingbody.ControllingBodyNotProvidedYesNoController.onSubmit(mode: Mode = NormalMode)
 
 # return-periods
+
 GET        /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
 

@@ -18,128 +18,37 @@ package viewmodels.checkAnswers.returnperiods
 
 import models.GamblingReturnPeriods
 import play.api.i18n.Messages
+import viewmodels.checkAnswers.returnperiods.NstpReturnPeriod.*
 
-import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, Month}
-import java.util.Locale
+import java.time.LocalDate
 
 final case class NonStandardReturnPeriodsViewModel(
-  hasNonStandardReturnPeriods: Boolean,
   isInLastNonStandardReturnPeriod: Boolean,
-  hasPastPeriods: Boolean,
-  hasFuturePeriods: Boolean,
   selectedMonths: Seq[String],
   pastPeriods: Seq[NstpReturnPeriod],
   futurePeriods: Seq[NstpReturnPeriod]
-)
-
-final case class NstpReturnPeriod(
-  month: String,
-  endDate: String
-)
+) {
+  def hasPastPeriods: Boolean = pastPeriods.nonEmpty
+  def hasFuturePeriods: Boolean = futurePeriods.nonEmpty
+}
 
 object NonStandardReturnPeriodsViewModel {
 
-  def from(gamblingReturnPeriods: GamblingReturnPeriods)(implicit messages: Messages): Option[NonStandardReturnPeriodsViewModel] = {
-    val today = LocalDate.now()
-
-    val hasExistingNstpValues = gamblingReturnPeriods.hasExistingNstpValues.getOrElse(false)
-
+  def from(periods: GamblingReturnPeriods, today: LocalDate = LocalDate.now())(implicit
+    messages: Messages
+  ): Option[NonStandardReturnPeriodsViewModel] =
     for {
-      isInLastNstp    <- gamblingReturnPeriods.isInLastNstp
-      returnPeriodsId <- validateReturnPeriodId(gamblingReturnPeriods.returnPeriodsId)
+      _            <- periods.hasExistingNstpValues.filter(identity)
+      isInLastNstp <- periods.isInLastNstp
+      id           <- NstpReturnPeriod.validateReturnPeriodId(periods.returnPeriodsId)
+    } yield {
+      val (past, future) = NstpReturnPeriod.pastAndFuture(periods, today)
 
-      viewModel <- if hasExistingNstpValues then {
-                     val nstpEndDates = Seq(
-                       gamblingReturnPeriods.nstpEndDate1,
-                       gamblingReturnPeriods.nstpEndDate2,
-                       gamblingReturnPeriods.nstpEndDate3,
-                       gamblingReturnPeriods.nstpEndDate4,
-                       gamblingReturnPeriods.nstpEndDate5,
-                       gamblingReturnPeriods.nstpEndDate6,
-                       gamblingReturnPeriods.nstpEndDate7,
-                       gamblingReturnPeriods.nstpEndDate8
-                     ).flatten.span(_.isBefore(today.plusDays(1)))
-
-                     val selectedMonths = parseSelectedMonth(returnPeriodsId)
-
-                     Some(
-                       NonStandardReturnPeriodsViewModel(
-                         hasNonStandardReturnPeriods     = hasExistingNstpValues,
-                         isInLastNonStandardReturnPeriod = isInLastNstp,
-                         hasPastPeriods                  = nstpEndDates._1.nonEmpty,
-                         hasFuturePeriods                = nstpEndDates._2.nonEmpty,
-                         selectedMonths                  = selectedMonths,
-                         pastPeriods                     = nstpEndDates._1.map(formatNstpDate(returnPeriodsId, _)),
-                         futurePeriods                   = nstpEndDates._2.map(formatNstpDate(returnPeriodsId, _))
-                       )
-                     )
-                   } else None
-    } yield viewModel
-  }
-
-  private def formatNstpDate(returnPeriodId: Int, returnPeriodDate: LocalDate)(implicit messages: Messages): NstpReturnPeriod = returnPeriodId match {
-    case 1 =>
-      val monthAdjusted = returnPeriodDate.getMonth match {
-        case Month.FEBRUARY | Month.MAY | Month.AUGUST | Month.NOVEMBER =>
-          returnPeriodDate.minusMonths(1)
-        case _ =>
-          returnPeriodDate
-      }
-      NstpReturnPeriod(
-        month   = formatDate(monthAdjusted, false),
-        endDate = formatDate(returnPeriodDate, true)
+      NonStandardReturnPeriodsViewModel(
+        isInLastNonStandardReturnPeriod = isInLastNstp,
+        selectedMonths                  = NstpReturnPeriod.parseSelectedMonth(id),
+        pastPeriods                     = past.map(NstpReturnPeriod.formatNstpDate(id, _)),
+        futurePeriods                   = future.map(NstpReturnPeriod.formatNstpDate(id, _))
       )
-    case 2 =>
-      val monthAdjusted = returnPeriodDate.getMonth match {
-        case Month.MARCH | Month.JUNE | Month.SEPTEMBER | Month.DECEMBER =>
-          returnPeriodDate.minusMonths(1)
-        case _ =>
-          returnPeriodDate
-      }
-      NstpReturnPeriod(
-        month   = formatDate(monthAdjusted, false),
-        endDate = formatDate(returnPeriodDate, true)
-      )
-    case 3 =>
-      val monthAdjusted = returnPeriodDate.getMonth match {
-        case Month.APRIL | Month.JULY | Month.NOVEMBER | Month.JANUARY =>
-          returnPeriodDate.minusMonths(1)
-        case _ =>
-          returnPeriodDate
-      }
-      NstpReturnPeriod(
-        month   = formatDate(monthAdjusted, false),
-        endDate = formatDate(returnPeriodDate, true)
-      )
-    case _ =>
-      NstpReturnPeriod(
-        month   = formatDate(returnPeriodDate, false),
-        endDate = formatDate(returnPeriodDate, true)
-      )
-  }
-
-  private def validateReturnPeriodId(returnPeriodId: Option[Int]): Option[Int] = returnPeriodId.flatMap(id =>
-    if id > 0 && id <= 3 then Some(id)
-    else None
-  )
-
-  private def parseSelectedMonth(returnPeriodId: Int): Seq[String] = {
-    returnPeriodId match {
-      case 1 => Seq("months.january", "months.april", "months.july", "months.october")
-      case 2 => Seq("months.february", "months.may", "months.august", "months.november")
-      case 3 => Seq("months.march", "months.june", "months.september", "months.december")
-      case _ => Seq.empty
     }
-  }
-
-  private def formatDate(date: LocalDate, fullDate: Boolean)(implicit messages: Messages): String = {
-    val locale = Locale.forLanguageTag(messages.lang.code)
-    val formatter =
-      if fullDate then DateTimeFormatter.ofPattern("d MMM yyyy", locale)
-      else DateTimeFormatter.ofPattern("MMM yyyy", locale)
-
-    date.format(formatter)
-  }
-
 }

@@ -13,3 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package pages.returnperiods
+
+import models.NonStandardNotSubmittedReturnPeriodsOptions
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+
+case object NonStandardNotSubmittedReturnPeriodsPage extends QuestionPage[NonStandardNotSubmittedReturnPeriodsOptions] {
+
+  override def path: JsPath = JsPath \ "gamblingReturnPeriods" \ toString
+
+  override def toString: String = "nonStandardNotSubmittedReturnPeriods"
+}
