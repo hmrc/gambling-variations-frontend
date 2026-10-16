@@ -22,7 +22,6 @@ import models.BusinessType.Soleproprietor
 import models.Mode
 import navigation.Navigator
 import pages.controllingbody.{ControllingBodyAddNINumberYesNoPage, ControllingBodyBusinessTypePage}
-import pages.partnerdetails.PartnerDetailsBusinessTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -33,7 +32,7 @@ import views.html.controllingbody.ControllingBodyAddNINumberYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodyAddNINumberYesNoController @Inject()(
+class ControllingBodyAddNINumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
