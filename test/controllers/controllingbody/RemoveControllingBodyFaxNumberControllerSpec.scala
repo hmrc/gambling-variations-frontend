@@ -84,6 +84,29 @@ class RemoveControllingBodyFaxNumberControllerSpec extends SpecBase with Mockito
       }
     }
 
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers =
+        userAnswersWithFaxNumber
+          .set(RemoveControllingBodyFaxNumberPage, false)
+          .success
+          .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, removeControllingBodyFaxNumberRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[RemoveControllingBodyFaxNumberView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(form.fill(false), NormalMode, faxNumber)(request, messages(application)).toString
+      }
+    }
+
     "must show the fax number as stored by the controlling body details loader" in {
 
       // The loader stores the whole correspondence section as one object, and the page must find the fax number in it

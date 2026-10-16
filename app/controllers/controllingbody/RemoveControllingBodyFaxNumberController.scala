@@ -51,8 +51,14 @@ class RemoveControllingBodyFaxNumberController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     request.userAnswers.get(ControllingBodyFaxNumberPage) match {
-      case Some(faxNumber) => Ok(view(form, mode, faxNumber))
-      case None            => Redirect(routes.SystemErrorController.onPageLoad())
+      case Some(faxNumber) =>
+        val preparedForm = request.userAnswers.get(RemoveControllingBodyFaxNumberPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
+
+        Ok(view(preparedForm, mode, faxNumber))
+      case None => Redirect(routes.SystemErrorController.onPageLoad())
     }
   }
 
