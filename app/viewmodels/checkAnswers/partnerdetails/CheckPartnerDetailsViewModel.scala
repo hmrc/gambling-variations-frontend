@@ -120,7 +120,7 @@ case class CheckPartnerDetailsViewModel(
   // --- Summary lists ---
 
   def businessDetailsSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
-    Some(typeOfBusinessRow),
+    typeOfBusinessRow,
     businessNameRow,
     soleProprietorDobRow,
     addTradingNameRow,
@@ -170,14 +170,19 @@ case class CheckPartnerDetailsViewModel(
 
   // --- Business details rows ---
 
-  private def typeOfBusinessRow(implicit messages: Messages): SummaryListRow =
-    requiredRow(
-      "typeOfBusiness",
-      typeOfBusiness.map(bt => messages(s"businessType.$bt")),
-      // NOTE: routing will be done with the integration ticket
-      routes.PartnerDetailsBusinessTypeController.onPageLoad(index, mode(businessNumberOrIndex)).url,
-      isNewPartnerFlow
-    )
+  private def typeOfBusinessRow(implicit messages: Messages): Option[SummaryListRow] = {
+    if isNewPartnerSubmitted || !isNewPartnerFlow then None
+    else
+      Some(
+        requiredRow(
+          "typeOfBusiness",
+          typeOfBusiness.map(bt => messages(s"businessType.$bt")),
+          // NOTE: routing will be done with the integration ticket
+          routes.PartnerDetailsBusinessTypeController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+          isNewPartnerFlow
+        )
+      )
+  }
 
   private def businessNameRow(implicit messages: Messages): Option[SummaryListRow] =
     typeOfBusiness.map { bt =>
