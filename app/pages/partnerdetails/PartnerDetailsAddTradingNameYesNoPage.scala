@@ -16,8 +16,11 @@
 
 package pages.partnerdetails
 
+import models.UserAnswers
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case class PartnerDetailsAddTradingNameYesNoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
 
@@ -27,6 +30,17 @@ case class PartnerDetailsAddTradingNameYesNoPage(businessNumberOrIndex: Business
   }
 
   override def toString: String = "partnerDetailsAddTradingNameYesNo"
+
+  override def cleanup(
+    value: Option[Boolean],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    value match {
+      case Some(false) =>
+        userAnswers.remove(PartnerDetailsTradingNamePage(businessNumberOrIndex))
+      case _ =>
+        Try(userAnswers)
+    }
 }
 object PartnerDetailsAddTradingNameYesNoPage {
   def apply(index: Int) = new PartnerDetailsAddTradingNameYesNoPage(index)

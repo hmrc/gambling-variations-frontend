@@ -13,3 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package forms.controllingbody
+
+import forms.mappings.Mappings
+import play.api.data.Form
+
+import javax.inject.Inject
+
+class ControllingBodyAddNINumberYesNoFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("controllingBodyAddNINumberYesNo.error.required")
+    )
+}

@@ -17,7 +17,6 @@
 package controllers.partnerdetails
 
 import controllers.actions.*
-import controllers.routes
 import forms.partnerdetails.PartnerTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
@@ -69,37 +68,29 @@ class PartnerDetailsTradingNameController @Inject() (
     (authorise andThen getData andThen requireData).async { implicit request =>
       val newIndex = PartnerUtils.parseIndex(index, mode)
 
-      request.userAnswers.get(PartnerDetailsTradingNamePage(newIndex)) match {
-        case Some(_) =>
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors =>
-                Future.successful(
-                  BadRequest(view(formWithErrors, index, mode))
-                ),
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(
-                                      request.userAnswers.set(
-                                        PartnerDetailsTradingNamePage(newIndex),
-                                        value
-                                      )
-                                    )
-                  _ <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(
-                  navigator.nextPage(
-                    PartnerDetailsTradingNamePage(newIndex),
-                    mode,
-                    updatedAnswers
-                  )
-                )
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(view(formWithErrors, index, mode))
+            ),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(
+                                  request.userAnswers.set(
+                                    PartnerDetailsTradingNamePage(newIndex),
+                                    value
+                                  )
+                                )
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(
+              navigator.nextPage(
+                PartnerDetailsTradingNamePage(newIndex),
+                mode,
+                updatedAnswers
+              )
             )
-
-        case None =>
-          Future.successful(
-            Redirect(routes.SystemErrorController.onPageLoad())
-          )
-      }
+        )
     }
 }

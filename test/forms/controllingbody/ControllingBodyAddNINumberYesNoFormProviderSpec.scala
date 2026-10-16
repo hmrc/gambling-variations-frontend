@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 
-package forms.returnperiods
+package forms.controllingbody
 
-import forms.behaviours.OptionFieldBehaviours
-import models.NonStandardReturnPeriodsOptions
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class NonStandardReturnPeriodsFormProviderSpec extends OptionFieldBehaviours {
+class ControllingBodyAddNINumberYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new NonStandardReturnPeriodsFormProvider()()
+  val requiredKey = "controllingBodyAddNINumberYesNo.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new ControllingBodyAddNINumberYesNoFormProvider()()
 
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "returnPeriods.nonStandard.error.required"
 
-    behave like optionsField[NonStandardReturnPeriodsOptions](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = NonStandardReturnPeriodsOptions.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

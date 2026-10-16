@@ -20,7 +20,6 @@ import base.SpecBase
 import models.GamblingReturnPeriods
 import play.api.i18n.Messages
 import play.api.test.Helpers.running
-import viewmodels.checkAnswers.returnperiods.{NonStandardReturnPeriodsViewModel, NstpReturnPeriod}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -30,236 +29,168 @@ class NonStandardReturnPeriodsViewModelSpec extends SpecBase {
 
   private val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
+  private implicit lazy val msgs: Messages = messages(application)
+
   private val todayDate = LocalDate.now()
 
-  private def createViewModel(
-    returnPeriodsId: Option[Int],
-    includeDates: Boolean,
-    isInLastNtsp: Option[Boolean],
-    finalPeriodWarning: Option[Boolean],
-    hasExistingNtspValues: Option[Boolean]
-  )(messages: Messages): Option[NonStandardReturnPeriodsViewModel] =
-    NonStandardReturnPeriodsViewModel.from(
-      GamblingReturnPeriods(
-        mgdRegNumber          = "mgd1",
-        returnPeriodsId       = returnPeriodsId,
-        nstpEndDate1          = if includeDates then Some(todayDate.minusMonths(9)) else None,
-        nstpEndDate2          = if includeDates then Some(todayDate.minusMonths(6)) else None,
-        nstpEndDate3          = if includeDates then Some(todayDate.minusMonths(3)) else None,
-        nstpEndDate4          = if includeDates then Some(todayDate) else None,
-        nstpEndDate5          = if includeDates then Some(todayDate.plusMonths(3)) else None,
-        nstpEndDate6          = if includeDates then Some(todayDate.plusMonths(6)) else None,
-        nstpEndDate7          = if includeDates then Some(todayDate.plusMonths(9)) else None,
-        nstpEndDate8          = if includeDates then Some(todayDate.plusMonths(12)) else None,
-        isInLastNstp          = isInLastNtsp,
-        finalPeriodWarning    = finalPeriodWarning,
-        hasExistingNstpValues = hasExistingNtspValues
-      )
-    )(messages)
+  // Must match the view model's output format ("1 Apr 2019", not "01 Apr 2019")
+  private val endDateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH)
 
-  "ViewModel" - {
+  private def periods(
+    returnPeriodsId: Option[Int] = Some(1),
+    endDates: Seq[LocalDate] = Nil,
+    hasExistingNstpValues: Option[Boolean] = Some(true)
+  ): GamblingReturnPeriods = {
+    val dates = endDates.map(Some(_)).padTo(8, None)
 
-    "is present when returnPeriodsId is correct and hasExistingNstpValues is true" in {
-
-      running(application) {
-        val viewModel1 = createViewModel(
-          returnPeriodsId       = Some(1),
-          includeDates          = false,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        val viewModel2 = createViewModel(
-          returnPeriodsId       = Some(2),
-          includeDates          = false,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        val viewModel3 = createViewModel(
-          returnPeriodsId       = Some(3),
-          includeDates          = false,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        viewModel1.isDefined mustEqual true
-        viewModel2.isDefined mustEqual true
-        viewModel3.isDefined mustEqual true
-      }
-    }
-
-    "correctly splits dates from past to future" in {
-
-      running(application) {
-        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
-
-        val viewModel = createViewModel(
-          returnPeriodsId       = Some(1),
-          includeDates          = true,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        viewModel.isDefined mustEqual true
-
-        viewModel.get.pastPeriods.length mustEqual 4
-        viewModel.get.futurePeriods.length mustEqual 4
-
-        viewModel.get.hasPastPeriods mustEqual true
-        viewModel.get.hasFuturePeriods mustEqual true
-
-        viewModel.get.pastPeriods.forall(e => LocalDate.parse(e.endDate, formatter).isBefore(todayDate))
-        viewModel.get.futurePeriods.forall(e => LocalDate.parse(e.endDate, formatter).isAfter(todayDate))
-      }
-    }
-
-    "correctly parses selected months" in {
-
-      running(application) {
-
-        val viewModel1 = createViewModel(
-          returnPeriodsId       = Some(1),
-          includeDates          = true,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        val viewModel2 = createViewModel(
-          returnPeriodsId       = Some(2),
-          includeDates          = true,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        val viewModel3 = createViewModel(
-          returnPeriodsId       = Some(3),
-          includeDates          = true,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        viewModel1.isDefined mustEqual true
-        viewModel2.isDefined mustEqual true
-        viewModel3.isDefined mustEqual true
-
-        viewModel1.get.selectedMonths mustEqual Seq("months.january", "months.april", "months.july", "months.october")
-        viewModel2.get.selectedMonths mustEqual Seq("months.february", "months.may", "months.august", "months.november")
-        viewModel3.get.selectedMonths mustEqual Seq("months.march", "months.june", "months.september", "months.december")
-      }
-    }
-
-    "correctly adjust date" in {
-      running(application) {
-        val date = LocalDate.of(2020, 1, 1)
-        val viewModel = NonStandardReturnPeriodsViewModel.from(
-          GamblingReturnPeriods(
-            mgdRegNumber          = "mgd1",
-            returnPeriodsId       = Some(3),
-            nstpEndDate1          = Some(date.minusMonths(9)),
-            nstpEndDate2          = Some(date.minusMonths(6)),
-            nstpEndDate3          = Some(date.minusMonths(3)),
-            nstpEndDate4          = Some(date),
-            nstpEndDate5          = Some(date.plusMonths(3)),
-            nstpEndDate6          = Some(date.plusMonths(6)),
-            nstpEndDate7          = Some(date.plusMonths(9)),
-            nstpEndDate8          = Some(date.plusMonths(12)),
-            isInLastNstp          = Some(true),
-            finalPeriodWarning    = Some(true),
-            hasExistingNstpValues = Some(true)
-          )
-        )(messages(application))
-
-        viewModel.get.pastPeriods.head mustEqual NstpReturnPeriod(
-          month   = "Mar 2019",
-          endDate = "1 Apr 2019"
-        )
-        viewModel.get.pastPeriods(1) mustEqual NstpReturnPeriod(
-          month   = "Jun 2019",
-          endDate = "1 Jul 2019"
-        )
-        viewModel.get.pastPeriods(2) mustEqual NstpReturnPeriod(
-          month   = "Oct 2019",
-          endDate = "1 Oct 2019"
-        )
-        viewModel.get.pastPeriods(3) mustEqual NstpReturnPeriod(
-          month   = "Dec 2019",
-          endDate = "1 Jan 2020"
-        )
-        viewModel.get.pastPeriods(4) mustEqual NstpReturnPeriod(
-          month   = "Mar 2020",
-          endDate = "1 Apr 2020"
-        )
-        viewModel.get.pastPeriods(5) mustEqual NstpReturnPeriod(
-          month   = "Jun 2020",
-          endDate = "1 Jul 2020"
-        )
-        viewModel.get.pastPeriods(6) mustEqual NstpReturnPeriod(
-          month   = "Oct 2020",
-          endDate = "1 Oct 2020"
-        )
-        viewModel.get.pastPeriods(7) mustEqual NstpReturnPeriod(
-          month   = "Dec 2020",
-          endDate = "1 Jan 2021"
-        )
-      }
-    }
-
-    "failed to build when returnPeriodsId is below 0 and above 3" in {
-
-      running(application) {
-        val viewModel1 = createViewModel(
-          returnPeriodsId       = Some(4),
-          includeDates          = false,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        val viewModel2 = createViewModel(
-          returnPeriodsId       = Some(0),
-          includeDates          = false,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(true)
-        )(messages(application))
-
-        viewModel1.isEmpty mustEqual true
-        viewModel2.isEmpty mustEqual true
-      }
-    }
-
-    "failed to build when hasExistingNstpValues is None or false" in {
-
-      running(application) {
-        val viewModel1 = createViewModel(
-          returnPeriodsId       = Some(1),
-          includeDates          = false,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = Some(false)
-        )(messages(application))
-
-        val viewModel2 = createViewModel(
-          returnPeriodsId       = Some(1),
-          includeDates          = false,
-          isInLastNtsp          = Some(false),
-          finalPeriodWarning    = Some(false),
-          hasExistingNtspValues = None
-        )(messages(application))
-
-        viewModel1.isEmpty mustEqual true
-        viewModel2.isEmpty mustEqual true
-      }
-    }
-
+    GamblingReturnPeriods(
+      mgdRegNumber          = "mgd1",
+      returnPeriodsId       = returnPeriodsId,
+      nstpEndDate1          = dates.head,
+      nstpEndDate2          = dates(1),
+      nstpEndDate3          = dates(2),
+      nstpEndDate4          = dates(3),
+      nstpEndDate5          = dates(4),
+      nstpEndDate6          = dates(5),
+      nstpEndDate7          = dates(6),
+      nstpEndDate8          = dates(7),
+      isInLastNstp          = Some(false),
+      finalPeriodWarning    = Some(false),
+      hasExistingNstpValues = hasExistingNstpValues
+    )
   }
 
+  private def viewModelFor(p: GamblingReturnPeriods): Option[NonStandardReturnPeriodsViewModel] =
+    NonStandardReturnPeriodsViewModel.from(p)
+
+  /** Eight quarterly end dates: today, three in the past and four in the future. */
+  private val datesAroundToday: Seq[LocalDate] =
+    Seq(-9, -6, -3, 0, 3, 6, 9, 12).map(m => todayDate.plusMonths(m.toLong))
+
+  "NonStandardReturnPeriodsViewModel" - {
+
+    "must build for every valid return period ID when hasExistingNstpValues is true" in {
+
+      running(application) {
+        Seq(1, 2, 3).foreach { id =>
+          viewModelFor(periods(returnPeriodsId = Some(id))) mustBe defined
+        }
+      }
+    }
+
+    "must split end dates into past (including today) and future" in {
+
+      running(application) {
+        val viewModel = viewModelFor(periods(endDates = datesAroundToday)).value
+
+        def parsed(p: NstpReturnPeriod): LocalDate = LocalDate.parse(p.endDate, endDateFormatter)
+
+        viewModel.pastPeriods.length mustEqual 4
+        viewModel.futurePeriods.length mustEqual 4
+
+        viewModel.hasPastPeriods mustEqual true
+        viewModel.hasFuturePeriods mustEqual true
+
+        all(viewModel.pastPeriods.map(parsed)) must not be after(todayDate)
+        all(viewModel.futurePeriods.map(parsed)) mustBe after(todayDate)
+      }
+    }
+
+    "must return the selected months for each return period ID" in {
+
+      running(application) {
+        viewModelFor(periods(returnPeriodsId = Some(1))).value.selectedMonths mustEqual
+          Seq("months.january", "months.april", "months.july", "months.october")
+
+        viewModelFor(periods(returnPeriodsId = Some(2))).value.selectedMonths mustEqual
+          Seq("months.february", "months.may", "months.august", "months.november")
+
+        viewModelFor(periods(returnPeriodsId = Some(3))).value.selectedMonths mustEqual
+          Seq("months.march", "months.june", "months.september", "months.december")
+      }
+    }
+
+    "must roll end dates in the month after a quarter end back to that quarter" - {
+
+      "for return period ID 1 (Jan, Apr, Jul, Oct)" in {
+
+        running(application) {
+          val dates = Seq(LocalDate.of(2019, 2, 3), LocalDate.of(2019, 5, 3), LocalDate.of(2019, 8, 3), LocalDate.of(2019, 11, 3))
+
+          viewModelFor(periods(returnPeriodsId = Some(1), endDates = dates)).value.pastPeriods mustEqual Seq(
+            NstpReturnPeriod(month = "Jan 2019", endDate = "3 Feb 2019"),
+            NstpReturnPeriod(month = "Apr 2019", endDate = "3 May 2019"),
+            NstpReturnPeriod(month = "Jul 2019", endDate = "3 Aug 2019"),
+            NstpReturnPeriod(month = "Oct 2019", endDate = "3 Nov 2019")
+          )
+        }
+      }
+
+      "for return period ID 2 (Feb, May, Aug, Nov)" in {
+
+        running(application) {
+          val dates = Seq(LocalDate.of(2019, 3, 2), LocalDate.of(2019, 6, 2), LocalDate.of(2019, 9, 2), LocalDate.of(2019, 12, 2))
+
+          viewModelFor(periods(returnPeriodsId = Some(2), endDates = dates)).value.pastPeriods mustEqual Seq(
+            NstpReturnPeriod(month = "Feb 2019", endDate = "2 Mar 2019"),
+            NstpReturnPeriod(month = "May 2019", endDate = "2 Jun 2019"),
+            NstpReturnPeriod(month = "Aug 2019", endDate = "2 Sep 2019"),
+            NstpReturnPeriod(month = "Nov 2019", endDate = "2 Dec 2019")
+          )
+        }
+      }
+
+      "for return period ID 3 (Mar, Jun, Sep, Dec), including across a year end" in {
+
+        running(application) {
+          val date = LocalDate.of(2020, 1, 1)
+          val dates = Seq(-9, -6, -3, 0, 3, 6, 9, 12).map(m => date.plusMonths(m.toLong))
+
+          viewModelFor(periods(returnPeriodsId = Some(3), endDates = dates)).value.pastPeriods mustEqual Seq(
+            NstpReturnPeriod(month = "Mar 2019", endDate = "1 Apr 2019"),
+            NstpReturnPeriod(month = "Jun 2019", endDate = "1 Jul 2019"),
+            NstpReturnPeriod(month = "Sep 2019", endDate = "1 Oct 2019"),
+            NstpReturnPeriod(month = "Dec 2019", endDate = "1 Jan 2020"),
+            NstpReturnPeriod(month = "Mar 2020", endDate = "1 Apr 2020"),
+            NstpReturnPeriod(month = "Jun 2020", endDate = "1 Jul 2020"),
+            NstpReturnPeriod(month = "Sep 2020", endDate = "1 Oct 2020"),
+            NstpReturnPeriod(month = "Dec 2020", endDate = "1 Jan 2021")
+          )
+        }
+      }
+
+      "but must leave end dates already in a quarter-end month unchanged" in {
+
+        running(application) {
+          val dates = Seq(LocalDate.of(2019, 3, 28), LocalDate.of(2019, 6, 28))
+
+          viewModelFor(periods(returnPeriodsId = Some(3), endDates = dates)).value.pastPeriods mustEqual Seq(
+            NstpReturnPeriod(month = "Mar 2019", endDate = "28 Mar 2019"),
+            NstpReturnPeriod(month = "Jun 2019", endDate = "28 Jun 2019")
+          )
+        }
+      }
+    }
+
+    "must not build when the return period ID is below 1 or above 3" in {
+
+      running(application) {
+        viewModelFor(periods(returnPeriodsId = Some(0))) mustBe empty
+        viewModelFor(periods(returnPeriodsId = Some(4))) mustBe empty
+      }
+    }
+
+    "must not build when hasExistingNstpValues is false or None" in {
+
+      running(application) {
+        viewModelFor(periods(hasExistingNstpValues = Some(false))) mustBe empty
+        viewModelFor(periods(hasExistingNstpValues = None)) mustBe empty
+      }
+    }
+  }
+
+  private def after(date: LocalDate) =
+    org.scalatest.matchers.BeMatcher[LocalDate] { left =>
+      org.scalatest.matchers.MatchResult(left.isAfter(date), s"$left was not after $date", s"$left was after $date")
+    }
 }

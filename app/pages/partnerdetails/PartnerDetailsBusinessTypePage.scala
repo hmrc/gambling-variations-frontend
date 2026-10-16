@@ -16,9 +16,11 @@
 
 package pages.partnerdetails
 
-import models.BusinessType
+import models.{BusinessType, UserAnswers}
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case class PartnerDetailsBusinessTypePage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[BusinessType] {
 
@@ -28,6 +30,20 @@ case class PartnerDetailsBusinessTypePage(businessNumberOrIndex: BusinessNumberO
   }
 
   override def toString: String = "partnerDetailsBusinessType"
+
+  /** The sole proprietor's name and dob only apply to a sole proprietor, remove when any other business type is chosen. */
+  override def cleanup(
+    value: Option[BusinessType],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    value match {
+      case Some(BusinessType.Soleproprietor) | None =>
+        Try(userAnswers)
+      case Some(_) =>
+        userAnswers
+          .remove(PartnerDetailsSoleProprietorPage(businessNumberOrIndex))
+          .flatMap(_.remove(PartnerDetailsDateOfBirthPage(businessNumberOrIndex)))
+    }
 }
 
 object PartnerDetailsBusinessTypePage {
