@@ -164,17 +164,23 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         hrefs(rowFor(business, "typeOfBusiness")) mustEqual Seq(routes.ControllingBodyBusinessTypeController.onPageLoad().url)
         hrefs(rowFor(business, "corporateBodyName")) mustEqual Seq(routes.ChangeControllingBodyNameController.onPageLoad(Corporatebody).url)
         hrefs(rowFor(business, "addTradingName")) mustEqual Seq(routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url)
+        hrefs(rowFor(business, "tradingName")) mustEqual Seq(routes.ControllingBodyTradingNameController.onPageLoad().url)
+        hrefs(rowFor(business, "isIncorporated")) mustEqual Seq(routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad().url)
+        hrefs(rowFor(corporateBody.addressDetails, "addAddrInfo")) mustEqual
+          Seq(routes.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad().url)
+        hrefs(rowFor(corporateBody.contactDetails, "addFaxNumber")) mustEqual Seq(routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url)
+        hrefs(rowFor(corporateBody.contactDetails, "faxNumber")) mustEqual Seq(routes.ControllingBodyFaxNumberController.onPageLoad().url)
+        hrefs(rowFor(corporateBody.contactDetails, "addEmailAddress")) mustEqual
+          Seq(routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad().url)
         hrefs(rowFor(corporateBody.contactDetails, "emailAddress")) mustEqual Seq(routes.ControllingBodyEmailAddressController.onPageLoad().url)
 
-        Seq("tradingName", "isIncorporated", "dateOfInc", "companyRegNumber", "utr", "addVat", "vat").foreach { name =>
+        Seq("dateOfInc", "companyRegNumber", "utr", "addVat", "vat").foreach { name =>
           hrefs(rowFor(business, name)) mustEqual Seq("#")
         }
-        Seq("address", "addAddrInfo", "addAdditionalInfo").foreach { name =>
+        Seq("address", "addAdditionalInfo").foreach { name =>
           hrefs(rowFor(corporateBody.addressDetails, name)) mustEqual Seq("#")
         }
-        Seq("contactNumbers", "addFaxNumber", "faxNumber", "addEmailAddress").foreach { name =>
-          hrefs(rowFor(corporateBody.contactDetails, name)) mustEqual Seq("#")
-        }
+        hrefs(rowFor(corporateBody.contactDetails, "contactNumbers")) mustEqual Seq("#")
       }
 
       "must give every change link the visually hidden text of its row" in {
@@ -223,7 +229,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         valueText(rowFor(business, "nino")) mustEqual "QQ 12 34 66 C"
         hrefs(rowFor(business, "soleProprietorName")) mustEqual Seq(routes.ChangeControllingBodyNameController.onPageLoad(Soleproprietor).url)
         hrefs(rowFor(business, "soleProprietorDOB")) mustEqual Seq("#")
-        hrefs(rowFor(business, "addNino")) mustEqual Seq("#")
+        hrefs(rowFor(business, "addNino")) mustEqual Seq(routes.ControllingBodyAddNINumberYesNoController.onPageLoad().url)
         hrefs(rowFor(business, "nino")) mustEqual Seq("#")
         keys(soleProprietor.addressDetails) mustEqual Seq(key("address"), key("addAddrInfo"))
         soleProprietor.isMissingMandatoryDetails mustBe false
@@ -322,7 +328,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         )
         valueText(rowFor(viewModel.businessDetails, "isIncorporated")) mustEqual key("isIncorporated.add")
         viewModel.isMissingMandatoryDetails mustBe true
-        viewModel.continueUrl mustEqual "#"
+        viewModel.continueUrl mustEqual routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad().url
       }
     }
 
