@@ -305,6 +305,9 @@ POST       /change-registration-details/return-periods/end-date-:periodNumber/ch
 GET        /change-registration-details/controlling-body-details/email-address-yes-no        controllers.controllingbody.ControllingBodyAddEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/email-address-yes-no        controllers.controllingbody.ControllingBodyAddEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/controlling-body-details/business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)
 
