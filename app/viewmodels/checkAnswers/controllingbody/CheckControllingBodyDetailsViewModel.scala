@@ -289,7 +289,7 @@ object CheckControllingBodyDetailsViewModel {
       dateOfBirth        = answers.get(ControllingBodyDateOfBirthPage),
       addTradingName     = answers.get(ControllingBodyAddTradingNameYesNoPage),
       tradingName        = text(ControllingBodyTradingNamePage),
-      addNino            = answers.get(ControllingBodyAddNinoYesNoPage),
+      addNino            = answers.get(ControllingBodyAddNINumberYesNoPage),
       nino               = text(ControllingBodyNinoPage),
       // The backend holds this flag as "1" or "0"
       isUkIncorporated = answers.get(ControllingBodyIsUkIncorporatedPage).collect {
@@ -304,7 +304,7 @@ object CheckControllingBodyDetailsViewModel {
       addVrn                 = answers.get(ControllingBodyAddVrnYesNoPage),
       vrn                    = text(ControllingBodyVrnPage),
       address                = answers.get(ControllingBodyAddressPage).filter(_.address1.trim.nonEmpty),
-      addAdditionalInfo      = answers.get(ControllingBodyAddAdditionalInfoYesNoPage),
+      addAdditionalInfo      = answers.get(ControllingBodyAdditionalAddressInformationYesNoPage),
       additionalInfo         = text(ControllingBodyAdditionalInfoPage),
       phoneNumber            = contactNumber.flatMap(_.phoneNumber).map(_.trim).filter(_.nonEmpty),
       mobilePhoneNumber      = contactNumber.flatMap(_.mobilePhoneNumber).map(_.trim).filter(_.nonEmpty),
