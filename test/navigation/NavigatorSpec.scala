@@ -31,6 +31,7 @@ import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, Controllin
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
+import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDate1Page, NonStandardPeriodDate2Page, NonStandardPeriodDate3Page, NonStandardPeriodDate4Page, NonStandardPeriodDate5Page, NonStandardPeriodDate6Page, NonStandardPeriodDate7Page, NonStandardPeriodDate8Page}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -280,6 +281,63 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       "should route RemovePremisesDetailsYesNoPage to CheckLicencesAndPremisesController" in {
         navigator.nextPage(RemovePremisesDetailsYesNoPage, NormalMode, emptyAnswers) mustBe
           controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad()
+      }
+
+      "return period navigation" - {
+
+        "should route ChooseReturnPeriodsPage to the first non-standard period date page" in {
+          navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(1, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate1Page to the second non-standard period date page" in {
+          navigator.nextPage(NonStandardPeriodDate1Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(2, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate2Page to the third non-standard period date page" in {
+          navigator.nextPage(NonStandardPeriodDate2Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(3, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate3Page to the fourth non-standard period date page" in {
+          navigator.nextPage(NonStandardPeriodDate3Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(4, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate4Page to the fifth non-standard period date page" in {
+          navigator.nextPage(NonStandardPeriodDate4Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(5, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate5Page to the sixth non-standard period date page" in {
+          navigator.nextPage(NonStandardPeriodDate5Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(6, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate6Page to the seventh non-standard period date page" in {
+          navigator.nextPage(NonStandardPeriodDate6Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(7, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate7Page to the eighth non-standard period date page" in {
+          navigator.nextPage(NonStandardPeriodDate7Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(8, NormalMode)
+        }
+
+        "should route NonStandardPeriodDate8Page to CheckNonStandardReturnPeriods" in {
+          navigator.nextPage(NonStandardPeriodDate8Page, NormalMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+              .onPageLoad()
+        }
       }
 
     }
@@ -1403,6 +1461,37 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
         navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
           routes.IndexController.onPageLoad()
+      }
+    }
+
+    "in Check mode" - {
+
+      "should route ChooseReturnPeriodsPage to CheckNonStandardReturnPeriods" in {
+        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, emptyAnswers) mustBe
+          controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+            .onPageLoad()
+      }
+
+      Seq(
+        NonStandardPeriodDate1Page,
+        NonStandardPeriodDate2Page,
+        NonStandardPeriodDate3Page,
+        NonStandardPeriodDate4Page,
+        NonStandardPeriodDate5Page,
+        NonStandardPeriodDate6Page,
+        NonStandardPeriodDate7Page,
+        NonStandardPeriodDate8Page
+      ).zipWithIndex.foreach { case (page, index) =>
+        s"should route NonStandardPeriodDate${index + 1}Page to CheckNonStandardReturnPeriods" in {
+          navigator.nextPage(page, CheckMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+              .onPageLoad()
+        }
+      }
+
+      "should route any other page to ChangeRegistrationDetails" in {
+        navigator.nextPage(BusinessNamePage, CheckMode, emptyAnswers) mustBe
+          routes.ChangeRegistrationDetailsController.onPageLoad()
       }
     }
   }

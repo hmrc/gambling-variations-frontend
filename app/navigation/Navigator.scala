@@ -243,7 +243,6 @@ class Navigator @Inject() () {
     case ControllingBodyAddNINumberYesNoPage =>
       userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
 
-
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
 
@@ -268,13 +267,24 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate7Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(8, NormalMode)
 
+    case NonStandardPeriodDate8Page =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
 
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
-    routes.ChangeRegistrationDetailsController.onPageLoad()
+  private val checkRouteMap: Page => UserAnswers => Call = {
+
+    case ChooseReturnPeriodsPage =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+    case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
+        NonStandardPeriodDate5Page | NonStandardPeriodDate6Page | NonStandardPeriodDate7Page | NonStandardPeriodDate8Page =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+
+    case _ =>
+      _ => routes.ChangeRegistrationDetailsController.onPageLoad()
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {
@@ -704,18 +714,16 @@ class Navigator @Inject() () {
     }
   }
 
-
   private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call = {
     userAnswers
       .get(ControllingBodyAddNINumberYesNoPage)
       .map {
-        case true => routes.IndexController.onPageLoad() // TODO later
+        case true  => routes.IndexController.onPageLoad() // TODO later
         case false => routes.IndexController.onPageLoad() // TODO later
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   }
-
 
   private def navigatePartnerDetailsIsBusinessIncorporatedUkPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
     userAnswers
