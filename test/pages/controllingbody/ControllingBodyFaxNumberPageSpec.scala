@@ -25,12 +25,12 @@ class ControllingBodyFaxNumberPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      ControllingBodyFaxNumberPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "controllingBodyFaxNumber")
+      ControllingBodyFaxNumberPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ "faxNumber")
     }
 
     "have the correct toString value" in {
 
-      ControllingBodyFaxNumberPage.toString mustEqual "controllingBodyFaxNumber"
+      ControllingBodyFaxNumberPage.toString mustEqual "faxNumber"
     }
   }
 }

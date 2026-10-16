@@ -479,7 +479,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyDateOfBirthPage, LocalDate.of(1980, 4, 1))
           answers <- answers.set(ControllingBodyAddTradingNameYesNoPage, true)
           answers <- answers.set(ControllingBodyTradingNamePage, "Controlling Traders")
-          answers <- answers.set(ControllingBodyAddNinoYesNoPage, true)
+          answers <- answers.set(ControllingBodyAddNINumberYesNoPage, true)
           answers <- answers.set(ControllingBodyNinoPage, "QQ123456C")
           answers <- answers.set(ControllingBodyIsUkIncorporatedPage, "0")
           answers <- answers.set(ControllingBodyCountryOfIncorporationPage, "Spain")
@@ -490,7 +490,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyAddVrnYesNoPage, true)
           answers <- answers.set(ControllingBodyVrnPage, "123456789")
           answers <- answers.set(ControllingBodyCorrespondenceSectionPage, correspondence)
-          answers <- answers.set(ControllingBodyAddAdditionalInfoYesNoPage, true)
+          answers <- answers.set(ControllingBodyAdditionalAddressInformationYesNoPage, true)
           answers <- answers.set(ControllingBodyAddFaxNumberYesNoPage, false)
           answers <- answers.set(ControllingBodyAddEmailAddressYesNoPage, true)
         } yield answers).success.value

@@ -25,9 +25,7 @@ class CheckControllingBodyDetailsPagesSpec extends SpecBase {
   "the controlling body screener pages" - {
 
     "must be held with the controlling body details" in {
-      ControllingBodyAddNinoYesNoPage.path mustEqual JsPath \ "controllingBodyDetails" \ "addNino"
       ControllingBodyAddVrnYesNoPage.path mustEqual JsPath \ "controllingBodyDetails" \ "addVrn"
-      ControllingBodyAddAdditionalInfoYesNoPage.path mustEqual JsPath \ "controllingBodyDetails" \ "addAdditionalInfo"
       ControllingBodyAddFaxNumberYesNoPage.path mustEqual JsPath \ "controllingBodyDetails" \ "addFaxNumber"
       ControllingBodyAddEmailAddressYesNoPage.path mustEqual JsPath \ "controllingBodyDetails" \ "addEmailAddress"
     }
