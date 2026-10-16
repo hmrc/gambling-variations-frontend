@@ -27,7 +27,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyChangeScreenerPage}
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyChangeScreenerPage, RemoveControllingBodyFaxNumberPage}
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
@@ -1402,6 +1402,11 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+          routes.IndexController.onPageLoad()
+      }
+
+      "should route RemoveControllingBodyFaxNumberPage to Index until CB-CYA is built" in {
+        navigator.nextPage(RemoveControllingBodyFaxNumberPage, NormalMode, emptyAnswers) mustBe
           routes.IndexController.onPageLoad()
       }
     }

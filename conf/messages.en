@@ -1326,6 +1326,10 @@ removeControllingBodyTradeName.title = Are you sure you want to remove this cont
 removeControllingBodyTradeName.heading = Are you sure you want to remove {0} as this controlling body’s trading name?
 removeControllingBodyTradeName.error.required = Select yes if you want to remove this controlling body’s trading name
 
+removeControllingBodyFaxNumber.title = Are you sure you want to remove this controlling body’s fax number?
+removeControllingBodyFaxNumber.heading = Are you sure you want to remove {0} as this controlling body’s fax number?
+removeControllingBodyFaxNumber.error.required = Select yes if you want to remove this controlling body’s fax number
+
 returnPeriods.standard.option.legend = What do you want to do with your return periods?
 returnPeriods.standard.p1 = Your return period end dates are the last day of January, April, July and October .
 returnPeriods.standard.p2 = Your return period end dates are the last day of February, May, August and November.
