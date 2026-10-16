@@ -310,3 +310,6 @@ POST       /change-registration-details/controlling-body-details/business-incorp
 
 GET        /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/national-insurance-number-yes-no        controllers.controllingbody.ControllingBodyAddNINumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/national-insurance-number-yes-no        controllers.controllingbody.ControllingBodyAddNINumberYesNoController.onSubmit(mode: Mode = NormalMode)
