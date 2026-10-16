@@ -217,13 +217,17 @@ object CheckControllingBodyDetailsViewModel {
   private def nameUrl(businessType: BusinessType): String = routes.ChangeControllingBodyNameController.onPageLoad(businessType).url
 
   private def addTradingNameUrl: String = routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url
+  private def tradingNameUrl: String = routes.ControllingBodyTradingNameController.onPageLoad().url
+  private def addNinoUrl: String = routes.ControllingBodyAddNINumberYesNoController.onPageLoad().url
+  private def isUkIncorporatedUrl: String = routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad().url
+  private def addAdditionalInfoUrl: String = routes.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad().url
+  private def addFaxNumberUrl: String = routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url
+  private def faxNumberUrl: String = routes.ControllingBodyFaxNumberController.onPageLoad().url
+  private def addEmailAddressUrl: String = routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad().url
 
   // Screens that are not built yet, named by their codes in the specification
   private val dateOfBirthUrl = "#" // CB-DOB
-  private val tradingNameUrl = "#" // CB-TN
-  private val addNinoUrl = "#" // CB-NI-SC
   private val ninoUrl = "#" // CB-NI
-  private val isUkIncorporatedUrl = "#" // CB-IN
   private val countryOfIncorporationUrl = "#" // CB-COU
   private val foreignCorporateRefUrl = "#" // CB-FOR
   private val dateOfIncorporationUrl = "#" // CB-DIN
@@ -232,12 +236,8 @@ object CheckControllingBodyDetailsViewModel {
   private val addVrnUrl = "#" // CB-VAT-SC
   private val vrnUrl = "#" // CB-VAT
   private val addressUrl = "#" // CB-ADLK-S
-  private val addAdditionalInfoUrl = "#" // CB-AI-SC
   private val additionalInfoUrl = "#" // CB-AI
   private val contactNumbersUrl = "#" // CB-CN
-  private val addFaxNumberUrl = "#" // CB-FX-SC
-  private val faxNumberUrl = "#" // CB-FX
-  private val addEmailAddressUrl = "#" // CB-EA-SC
 
   // A detail that must be provided before the controlling body can be submitted, shown as a link to add it while it is missing
   private final case class MandatoryDetail(key: String, value: Option[Messages => Content], href: String) {
