@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodels.returnperiods
+package viewmodels.checkAnswers.returnperiods
 
 import base.SpecBase
 import models.GamblingReturnPeriods
