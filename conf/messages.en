@@ -1402,6 +1402,10 @@ removeControllingBodyEmail.title = Are you sure you want to remove this controll
 removeControllingBodyEmail.heading = Are you sure you want to remove {0} as this controlling body’s email address?
 removeControllingBodyEmail.error.required = Select yes if you want to remove this controlling body’s email address
 
+controllingBodyBusinessUKIncorporated.title = Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.heading = Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.error.required = Select yes if the controlling body’s business is incorporated in the UK
+
 controllingBodyAddEmailAddressYesNo.title = Do you want to add an email address for the controlling body?
 controllingBodyAddEmailAddressYesNo.heading = Do you want to add an email address for the controlling body?
 controllingBodyAddEmailAddressYesNo.error.required = Select yes to add an email address for the controlling body
@@ -1413,6 +1417,7 @@ controllingBodyAddFaxNumberYesNo.error.required = Select yes to add a fax number
 controllingBodyAddNINumberYesNo.title = Do you want to add a National Insurance number for the controlling body?
 controllingBodyAddNINumberYesNo.heading = Do you want to add a National Insurance number for the controlling body?
 controllingBodyAddNINumberYesNo.error.required = Select yes to add a National Insurance number for the controlling body
+
 checkNonStandardReturnPeriods.title = Check your non-standard return periods
 checkNonStandardReturnPeriods.heading = Check your non-standard return periods
 checkNonStandardReturnPeriods.intro = These changes will only apply after your current return period.
