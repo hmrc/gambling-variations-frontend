@@ -307,3 +307,6 @@ POST       /change-registration-details/controlling-body-details/email-address-y
 
 GET        /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
