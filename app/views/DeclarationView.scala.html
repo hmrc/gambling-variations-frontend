@@ -29,7 +29,7 @@
 
 @(form: Form[_], isGroupMember: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("declaration.title"))) {
+@layout(pageTitle = titleNoForm(messages("declaration.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = routes.DeclarationController.onSubmit()) {
         @caption(messages("changeRegistrationDetails.caption"))
