@@ -1289,7 +1289,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route PartnerDetailsCrnPage in CheckMode to ChangeRegistrationDetails until PT-CYA exists" in {
         navigator.nextPage(PartnerDetailsCrnPage(businessNumber1), CheckMode, emptyAnswers) mustBe
-          routes.ChangeRegistrationDetailsController.onPageLoad()
+          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(businessNumber1, NormalMode)
       }
 
       "should route PartnerDetailsForeignCorporateReferencePage to PartnerDetailsForeignCorporateReferenceController regardless of the stored answer" in {
