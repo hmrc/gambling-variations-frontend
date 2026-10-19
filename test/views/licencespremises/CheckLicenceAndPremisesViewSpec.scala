@@ -40,6 +40,7 @@ class CheckLicenceAndPremisesViewSpec extends SpecBase {
     hasPremisesNotCovered  = false,
     provideAddressesAnswer = None,
     premisesCount          = 0,
+    isNotCoveredMissing    = false,
     isSubmitted            = false
   )
 
