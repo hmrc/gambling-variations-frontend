@@ -17,7 +17,7 @@
 package navigation
 
 import controllers.routes
-import models.{NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import pages.partnerdetails.*
 import pages.{BusinessNumberOrIndex, Page}
 import play.api.mvc.Call
@@ -79,6 +79,10 @@ object PartnerDetailsNavigator {
       userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage(index)(userAnswers)
     case PartnerDetailsIsBusinessIncorporatedUkPage(index) =>
       userAnswers => navigatePartnerDetailsIsBusinessIncorporatedUkPage(index, userAnswers)
+    case PartnerDetailsDateOfIncorporationPage(index) =>
+      userAnswers => navigatePartnerDetailsIsDateOfIncorporationPage(index, userAnswers)
+    case PartnerDetailsDateOfJoiningPage(index) =>
+      userAnswers => navigatePartnerDetailsIsDateOfIncorporationPage(index, userAnswers)
   }
 
   /** The partner type comes from the index, so both modes share the same routes. */
@@ -102,11 +106,9 @@ object PartnerDetailsNavigator {
       .get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index))
       .map {
         case false =>
-          // Should go to Add Nino
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index.toString)
+          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(index.toString, NormalMode)
         case true =>
-          // Should go to Trading name
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index.toString)
+          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index.toString, NormalMode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -135,14 +137,6 @@ object PartnerDetailsNavigator {
         controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
       )
 
-  private def navigatePartnerDetailCrnPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsCrnPage(index))
-      .fold(routes.SystemErrorController.onPageLoad()) { _ =>
-        println(index)
-        controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(index.toString, NormalMode)
-      }
-
   /** If user is in the add partner flow, go to PT-FOR. Otherwise, if user has directly come from PT-CYA and hasn't changed answer to PT-IN, then
     * return to PT-CYA.
     */
@@ -150,7 +144,7 @@ object PartnerDetailsNavigator {
     answers
       .get(PartnerDetailsUtrPage(index))
       .fold(routes.SystemErrorController.onPageLoad())(_ =>
-        controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index.toString, NormalMode)
+        controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index.toString, NormalMode)
       )
 
   private def navigatePartnerDetailsRemovePartnerPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
@@ -224,7 +218,8 @@ object PartnerDetailsNavigator {
       .map {
         case false =>
           controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
-        case true => controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
+        case true =>
+          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
@@ -233,10 +228,29 @@ object PartnerDetailsNavigator {
     userAnswers
       .get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
       .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
-        case false => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+        case true =>
+          controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index.toString, NormalMode)
+        case false =>
+          controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index.toString, NormalMode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
 
+  private def navigatePartnerDetailsIsDateOfIncorporationPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(PartnerDetailsBusinessTypePage(index))
+      .map {
+        case BusinessType.Soleproprietor =>
+          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index.toString, NormalMode)
+        case BusinessType.Corporatebody =>
+          controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index.toString, NormalMode)
+        case BusinessType.Unincorporatedbody =>
+          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(index.toString, NormalMode)
+        case BusinessType.Partnership =>
+          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
+        case BusinessType.LimitedLiabilityPartnership =>
+          controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index.toString, NormalMode)
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 }
