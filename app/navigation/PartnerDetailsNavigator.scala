@@ -98,8 +98,12 @@ object PartnerDetailsNavigator {
 
     // --- Value pages: carry on ---
 
+    case PartnerDetailsBusinessNamePage(index)               => carryOn(index)
+    case PartnerDetailsSoleProprietorPage(index)             => carryOn(index)
+    case PartnerDetailsDateOfBirthPage(index)                => carryOn(index)
     case PartnerDetailsTradingNamePage(index)                => carryOn(index)
     case PartnerDetailsNinoPage(index)                       => carryOn(index)
+    case PartnerDetailsCrnPage(index)                        => carryOn(index)
     case PartnerDetailsUtrPage(index)                        => carryOn(index)
     case PartnerDetailsVrnPage(index)                        => carryOn(index)
     case PartnerDetailsCountryOfIncorporationPage(index)     => carryOn(index)
@@ -116,6 +120,14 @@ object PartnerDetailsNavigator {
     case PartnerDetailsRemoveEmailAddressYesNoPage(index)                    => _ => checkYourAnswers(index)
     case PartnerDetailsRemoveFaxNumberYesNoPage(index)                       => _ => checkYourAnswers(index)
     case PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(index) => _ => checkYourAnswers(index)
+
+    // --- Remove partner: reached from the partner list, so either answer returns there ---
+
+    case PartnerDetailsRemovePartnerYesNoPage(index) =>
+      answers =>
+        answers
+          .get(PartnerDetailsRemovePartnerYesNoPage(index))
+          .fold(systemError)(_ => partnerList)
   }
 
   /** The partner type comes from the index, so both modes share the same routes. */
@@ -155,6 +167,8 @@ object PartnerDetailsNavigator {
 
   private def checkYourAnswers(index: BusinessNumberOrIndex): Call =
     partnerRoutes.PartnerDetailsCheckYourAnswersController.onPageLoad(key(index))
+
+  private val partnerList: Call = partnerRoutes.PartnerDetailsController.onPageLoad(None)
 
   private val systemError: Call = routes.SystemErrorController.onPageLoad()
 }
