@@ -509,3 +509,13 @@ removeControllingBodyEmail.error.required = cy: Select yes if you want to remove
 controllingBodyBusinessUKIncorporated.title = cy: Is the controlling body’s business incorporated in the UK?
 controllingBodyBusinessUKIncorporated.heading = cy: Is the controlling body’s business incorporated in the UK?
 controllingBodyBusinessUKIncorporated.error.required = cy: Select yes if the controlling body’s business is incorporated in the UK
+
+dateOfIncorporation.title = cy: When was the controlling body’s date of incorporation?
+dateOfIncorporation.heading = cy: When was the controlling body’s date of incorporation?
+dateOfIncorporation.hint = cy: For example, 27 3 2007
+dateOfIncorporation.checkYourAnswersLabel = cy: DateOfIncorporation
+dateOfIncorporation.error.required.all = cy: Enter a date of incorporation for the controlling body
+dateOfIncorporation.error.required.two = cy: Date of incorporation must include a {0} and a {1}
+dateOfIncorporation.error.required = cy: Date of incorporation must include a {0}
+dateOfIncorporation.error.invalid = cy: Date of incorporation must be a real date
+dateOfIncorporation.change.hidden = cy: DateOfIncorporation

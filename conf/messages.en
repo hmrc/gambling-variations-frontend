@@ -1441,3 +1441,13 @@ checkNonStandardReturnPeriods.returnPeriods = Return periods
 checkNonStandardReturnPeriods.standard = Standard
 checkNonStandardReturnPeriods.nonStandard = Non-standard
 checkNonStandardReturnPeriods.returnPeriods.hidden = return periods
+
+dateOfIncorporation.title = When was the controlling body’s date of incorporation?
+dateOfIncorporation.heading = When was the controlling body’s date of incorporation?
+dateOfIncorporation.hint = For example, 27 3 2007
+dateOfIncorporation.checkYourAnswersLabel = DateOfIncorporation
+dateOfIncorporation.error.required.all = Enter a date of incorporation for the controlling body
+dateOfIncorporation.error.required.two = Date of incorporation must include a {0} and a {1}
+dateOfIncorporation.error.required = Date of incorporation must include a {0}
+dateOfIncorporation.error.invalid = Date of incorporation must be a real date
+dateOfIncorporation.change.hidden = DateOfIncorporation
