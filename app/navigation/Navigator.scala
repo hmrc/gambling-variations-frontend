@@ -29,7 +29,6 @@ import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
-import pages.partnerdetails.*
 import pages.returnperiods.*
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
@@ -41,7 +40,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class Navigator @Inject() () {
 
-  private val normalRoutes: Page => UserAnswers => Call = {
+  private val normalRoutes: PartialFunction[Page, UserAnswers => Call] = {
     case ControllingBodyBusinessNamePage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyAddTradingNameYesNoPage =>
@@ -133,8 +132,6 @@ class Navigator @Inject() () {
       userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage =>
       userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
-    case PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(index) =>
-      userAnswers => navigateRemoveAdditionalInfoForPartnerAddressYesNoPage(index)(userAnswers)
     case BusinessChangeAddrScreenerPage =>
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
     case BusinessUKAddrScreenerPage =>
@@ -147,63 +144,6 @@ class Navigator @Inject() () {
       _ => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
     case BusinessAddressAdditionalInformationPage =>
       _ => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
-    case PartnerDetailsIsBusinessIncorporatedUkPage(index) =>
-      userAnswers => navigatePartnerDetailsIsBusinessIncorporatedUkPage(index, userAnswers)
-
-    // Partner Details
-    case PartnerDetailsAdditionalAddressInfoPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsAdditionalAddressInfoYesNoPage(index) =>
-      userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage(index)(userAnswers)
-    case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
-      userAnswers => navigatePartnerRemoveEmailYesNoPage(index)(userAnswers)
-    case PartnerDetailsRemoveFaxNumberYesNoPage(index) =>
-      userAnswers => navigatePartnerRemoveFaxNumberYesNoPage(index)(userAnswers)
-    case PartnerDetailsAddFaxNumberYesNoPage(index) =>
-      userAnswers => navigatePartnerAddFaxNumberYesNoPage(index)(userAnswers)
-    case PartnerDetailsAddEmailAddressYesNoPage(index) =>
-      userAnswers => navigatePartnerAddEmailAddressYesNoPage(index)(userAnswers)
-    case PartnerDetailsRemovePartnerTradingNameYesNoPage(index) =>
-      userAnswers => navigateRemovePartnerTradingNameYesNoPage(index)(userAnswers)
-    case PartnerDetailsContactNumberPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsNinoPage(index) =>
-      userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
-    case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
-      userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
-    case PartnerDetailsVrnPage(index) =>
-      userAnswers => controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsVatRegistrationNumberYesNoPage(index) =>
-      userAnswers => navigateVatRegistrationNumberYesNoPage(index)(userAnswers)
-    case PartnerDetailsBusinessNamePage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index.toString)
-    case PartnerDetailsSoleProprietorPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsDateOfBirthPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index.toString)
-    case PartnerDetailsTradingNamePage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsAddTradingNameYesNoPage(index) =>
-      userAnswers => navigatePartnerAddTradingNameYesNoPage(index)(userAnswers)
-    case PartnerDetailsRemoveVatRegNumberYesNoPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsBusinessTypePage(index) =>
-      userAnswers => navigatePartnerDetailsBusinessTypePage(index)(userAnswers)
-    case PartnerDetailsUtrPage(index) =>
-      userAnswers => navigatePartnerDetailsUTRPage(index)(userAnswers)
-    case PartnerDetailsCrnPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsForeignCorporateReferencePage(index) =>
-      userAnswers => controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsCorrespondenceEmailAddressPage(index) =>
-      userAnswers => controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(index.toString, NormalMode)
-    case PartnerDetailsCountryOfIncorporationPage(index) =>
-      userAnswers => navigatePartnerDetailsCountryOfIncorporationPage(index)(userAnswers) // change it
-    case PartnerDetailsRemovePartnerYesNoPage(index) =>
-      userAnswers => navigatePartnerDetailsRemovePartnerPage(index)(userAnswers)
-    // Return Periods
-//    case NonStandardReturnPeriodsPage =>
-//      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -245,47 +185,44 @@ class Navigator @Inject() () {
     case ControllingBodyAddNINumberYesNoPage =>
       userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
 
+    // Return Periods
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
-
     case NonStandardPeriodDate1Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(2, NormalMode)
-
     case NonStandardPeriodDate2Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(3, NormalMode)
-
     case NonStandardPeriodDate3Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(4, NormalMode)
-
     case NonStandardPeriodDate4Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(5, NormalMode)
-
     case NonStandardPeriodDate5Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(6, NormalMode)
-
     case NonStandardPeriodDate6Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(7, NormalMode)
-
     case NonStandardPeriodDate7Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(8, NormalMode)
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
-
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = { _ => _ =>
-    routes.ChangeRegistrationDetailsController.onPageLoad()
+  private val checkRoutes: PartialFunction[Page, UserAnswers => Call] = { case _ =>
+    _ => routes.ChangeRegistrationDetailsController.onPageLoad()
   }
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = {
+  // Partner details routes are tried first, so partner pages never fall through to the catch-alls above
+  private val allNormalRoutes: Page => UserAnswers => Call =
+    PartnerDetailsNavigator.normalRoutes orElse normalRoutes
+
+  private val allCheckRoutes: Page => UserAnswers => Call =
+    PartnerDetailsNavigator.checkRoutes orElse checkRoutes
+
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     mode match {
-      case NormalMode =>
-        normalRoutes(page)(userAnswers)
-      case CheckMode =>
-        checkRouteMap(page)(userAnswers)
+      case NormalMode => allNormalRoutes(page)(userAnswers)
+      case CheckMode  => allCheckRoutes(page)(userAnswers)
     }
-  }
 
   private def navigateCorrespondenceNamePage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
@@ -371,7 +308,6 @@ class Navigator @Inject() () {
     answers.get(AddCorrespondenceAddressAdditionalInformationPage) match {
       case Some(true) =>
         routes.CorrespondenceAdditionalInfoController.onPageLoad()
-
       case Some(false) =>
         if (answers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
           routes.CorrespondenceContactNumberController.onPageLoad()
@@ -383,54 +319,28 @@ class Navigator @Inject() () {
     }
 
   private def navigateCorrespondenceUKAddrScreenerPage()(answers: UserAnswers): Call = {
-
-    val previouslyUk =
-      answers.get(CorrespondenceAddressUkPage).isDefined
-
-    val previouslyNonUk =
-      answers.get(CorrespondenceAddressNonUkPage).isDefined
+    val previouslyUk = answers.get(CorrespondenceAddressUkPage).isDefined
+    val previouslyNonUk = answers.get(CorrespondenceAddressNonUkPage).isDefined
 
     answers.get(CorrespondenceUKAddrScreenerPage) match {
-      case Some(true) if previouslyUk =>
-        routes.CheckCorrespondenceDetailsController.onPageLoad()
-
-      case Some(false) if previouslyNonUk =>
-        routes.CheckCorrespondenceDetailsController.onPageLoad()
-
-      case Some(true) =>
-        routes.AddressLookupController.initialise()
-
-      case Some(false) =>
-        routes.CorrespondenceNonUKAddressController.onPageLoad()
-
-      case None =>
-        routes.SystemErrorController.onPageLoad()
+      case Some(true) if previouslyUk     => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(false) if previouslyNonUk => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true)                     => routes.AddressLookupController.initialise()
+      case Some(false)                    => routes.CorrespondenceNonUKAddressController.onPageLoad()
+      case None                           => routes.SystemErrorController.onPageLoad()
     }
   }
 
   private def navigateBusinessUKAddrScreenerPage()(answers: UserAnswers): Call = {
-
-    val previouslyUk =
-      answers.get(BusinessAddressUkPage).isDefined
-
-    val previouslyNonUk =
-      answers.get(BusinessAddressNonUkPage).isDefined
+    val previouslyUk = answers.get(BusinessAddressUkPage).isDefined
+    val previouslyNonUk = answers.get(BusinessAddressNonUkPage).isDefined
 
     answers.get(BusinessUKAddrScreenerPage) match {
-      case Some(true) if previouslyUk =>
-        controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
-
-      case Some(false) if previouslyNonUk =>
-        controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
-
-      case Some(true) =>
-        controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
-
-      case Some(false) =>
-        controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
-
-      case None =>
-        routes.SystemErrorController.onPageLoad()
+      case Some(true) if previouslyUk     => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
+      case Some(false) if previouslyNonUk => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
+      case Some(true)                     => controllers.businessaddress.routes.BusinessUKAddressController.onPageLoad()
+      case Some(false)                    => controllers.businessaddress.routes.BusinessNonUKAddressController.onPageLoad()
+      case None                           => routes.SystemErrorController.onPageLoad()
     }
   }
 
@@ -452,27 +362,16 @@ class Navigator @Inject() () {
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigateCorrespondenceChangeAddrScreenerPage()(userAnswers: UserAnswers): Call = {
-
-    val isUkAddress =
-      userAnswers.get(CorrespondenceAddressUkPage).isDefined
+    val isUkAddress = userAnswers.get(CorrespondenceAddressUkPage).isDefined
 
     userAnswers
       .get(CorrespondenceChangeAddrScreenerPage)
       .map {
-        case DifferentUkAddress =>
-          routes.AddressLookupController.initialise()
-
-        case ChangeToNonUkAddress =>
-          routes.CorrespondenceNonUKAddressController.onPageLoad()
-
-        case ChangeToUkAddress =>
-          routes.AddressLookupController.initialise()
-
-        case EditCurrentAddress if isUkAddress =>
-          routes.CorrespondenceUKAddressController.onPageLoad()
-
-        case EditCurrentAddress =>
-          routes.CorrespondenceNonUKAddressController.onPageLoad()
+        case DifferentUkAddress                => routes.AddressLookupController.initialise()
+        case ChangeToNonUkAddress              => routes.CorrespondenceNonUKAddressController.onPageLoad()
+        case ChangeToUkAddress                 => routes.AddressLookupController.initialise()
+        case EditCurrentAddress if isUkAddress => routes.CorrespondenceUKAddressController.onPageLoad()
+        case EditCurrentAddress                => routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
@@ -496,30 +395,20 @@ class Navigator @Inject() () {
     userAnswers.get(AddCorrespondenceFaxNumberPage) match {
       case Some(true) =>
         routes.CorrespondenceFaxNumberController.onPageLoad()
-
       case Some(false) =>
         if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
           routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
         else
           routes.CheckCorrespondenceDetailsController.onPageLoad()
-
       case None =>
         routes.SystemErrorController.onPageLoad()
     }
 
   private def navigateAddEmailAddressForCorrespondenceYesNoPage()(userAnswers: UserAnswers): Call =
     userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match {
-      case Some(true) =>
-        routes.CorrespondenceEmailAddressController.onPageLoad()
-
-      case Some(false) =>
-        if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
-        else
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
-
-      case None =>
-        routes.SystemErrorController.onPageLoad()
+      case Some(true)  => routes.CorrespondenceEmailAddressController.onPageLoad()
+      case Some(false) => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case None        => routes.SystemErrorController.onPageLoad()
     }
 
   private def navigateRemoveAssociatedRegNumberPage()(answers: UserAnswers): Call =
@@ -538,174 +427,25 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigatePartnerAddFaxNumberYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsAddFaxNumberYesNoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index.toString))
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+  private def navigateBusinessAddressUkOrNonUkPage()(userAnswers: UserAnswers): Call =
+    if (userAnswers.get(BusinessAddressAddFlowPage).contains(true))
+      controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad()
+    else
+      controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
 
-  private def navigatePartnerRemoveNinoYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index.toString, NormalMode))
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  private def navigatePartnerAddNinoYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index))
-      .map {
-        case false =>
-          // Should go to Add Nino
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index.toString)
-        case true =>
-          // Should go to Trading name
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index.toString)
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  private def navigatePartnerAddTradingNameYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsAddTradingNameYesNoPage(index))
-      .map {
-        case false =>
-          controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(index.toString, NormalMode)
-        case true =>
-          controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(index.toString, NormalMode)
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  private def navigatePartnerDetailsBusinessTypePage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsBusinessTypePage(index))
-      .fold(routes.SystemErrorController.onPageLoad())(businessType =>
-        controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(index.toString, businessType, NormalMode)
-      )
-
-  private def navigatePartnerDetailsUTRPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsUtrPage(index))
-      .fold(routes.SystemErrorController.onPageLoad())(_ =>
-        controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
-      )
-
-  /** If user is in the add partner flow, go to PT-FOR. Otherwise, if user has directly come from PT-CYA and hasn't changed answer to PT-IN, then
-    * return to PT-CYA.
-    */
-  private def navigatePartnerDetailsCountryOfIncorporationPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsUtrPage(index))
-      .fold(routes.SystemErrorController.onPageLoad())(_ =>
-        controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(index.toString, NormalMode)
-      )
-
-  private def navigatePartnerDetailsRemovePartnerPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsRemovePartnerYesNoPage(index))
-      .fold(routes.SystemErrorController.onPageLoad()) { wantToRemove =>
-        if (wantToRemove) {
-          index match {
-            case businessNumber: String =>
-              controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
-            case newPartnerIndex: Int =>
-              controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
-          }
-        } else
-          controllers.partnerdetails.routes.PartnerDetailsRemovePartnerYesNoController.onPageLoad(index.toString, NormalMode)
-      }
-
-  private def navigatePartnerAddEmailAddressYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsAddEmailAddressYesNoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index.toString))
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  private def navigatePartnerRemoveEmailYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsRemoveEmailAddressYesNoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index.toString, NormalMode))
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  private def navigatePartnerRemoveFaxNumberYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
-    answers
-      .get(PartnerDetailsRemoveFaxNumberYesNoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index.toString, NormalMode))
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  private def navigatePartnerDetailsAdditionalAddressInfoYesNoPage(index: BusinessNumberOrIndex)(userAnswers: UserAnswers): Call = {
-    userAnswers
-      .get(PartnerDetailsAdditionalAddressInfoYesNoPage(index))
-      .map {
-        case false => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index.toString)
-        case true  => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index.toString)
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-  }
-
-  private def navigateRemoveAdditionalInfoForPartnerAddressYesNoPage(index: BusinessNumberOrIndex)(userAnswers: UserAnswers): Call = {
-    userAnswers
-      .get(PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(index))
-      .map {
-        case false =>
-          controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index.toString, NormalMode)
-        case true =>
-          controllers.partnerdetails.routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index.toString, NormalMode)
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-  }
-
-  private def navigateRemovePartnerTradingNameYesNoPage(index: BusinessNumberOrIndex)(userAnswers: UserAnswers): Call = {
-    userAnswers
-      .get(PartnerDetailsRemovePartnerTradingNameYesNoPage(index))
-      .map {
-        case false => controllers.partnerdetails.routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index.toString, NormalMode)
-        case true  => controllers.routes.IndexController.onPageLoad()
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-  }
-
-  private def navigateVatRegistrationNumberYesNoPage(index: BusinessNumberOrIndex)(userAnswers: UserAnswers): Call = {
-    userAnswers
-      .get(PartnerDetailsVatRegistrationNumberYesNoPage(index))
-      .map {
-        case false =>
-          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
-        case true => controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-  }
-
-  private def navigateBusinessAddressUkOrNonUkPage()(userAnswers: UserAnswers): Call = {
-    val addFlowRoute = controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad()
-    val normalRoute = controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
-    userAnswers.get(BusinessAddressAddFlowPage) match {
-      case Some(isInAddFlow) => if (isInAddFlow) addFlowRoute else normalRoute
-      case None              => normalRoute
-    }
-  }
-
-  private def navigateReturnPeriodsPage(
-    userAnswers: UserAnswers
-  ): Call = {
-
+  private def navigateReturnPeriodsPage(userAnswers: UserAnswers): Call =
     userAnswers.get(StandardReturnPeriodsPage) match {
-
       case Some(StandardReturnPeriodsOptions.ChangeMonthsStandardPeriodCover) =>
-        controllers.returnperiods.routes.ChooseReturnPeriodsController
-          .onPageLoad(NormalMode)
-
+        controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
       case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
-        controllers.returnperiods.routes.ChooseReturnPeriodsController
-          .onPageLoad(NormalMode)
-
+        controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
       case Some(StandardReturnPeriodsOptions.KeepStandardReturnPeriod) =>
         routes.ChangeRegistrationDetailsController.onPageLoad()
-
       case None =>
         routes.SystemErrorController.onPageLoad()
     }
-  }
 
-  private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call = {
+  private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
       .get(ControllingBodyAddNINumberYesNoPage)
       .map {
@@ -714,20 +454,7 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  }
-
-  private def navigatePartnerDetailsIsBusinessIncorporatedUkPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
-    userAnswers
-      .get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
-      .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
-        case false => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  }
-
-  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call = {
+  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
       .get(ControllingBodyAddFaxNumberYesNoPage)
       .map {
@@ -736,9 +463,7 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  }
-
-  private def navigateControllingBodyAddEmailAddressYesNoPage(userAnswers: UserAnswers): Call = {
+  private def navigateControllingBodyAddEmailAddressYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
       .get(ControllingBodyAddEmailAddressYesNoPage)
       .map {
@@ -746,8 +471,6 @@ class Navigator @Inject() () {
         case false => routes.IndexController.onPageLoad() // TODO later
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
-
-  }
 
   private def navigateControllingBodyChangeScreenerPage(userAnswers: UserAnswers): Call =
     userAnswers
@@ -758,22 +481,21 @@ class Navigator @Inject() () {
         case KeepSame    => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
-}
 
-private def navigateControllingBodyAdditionalAddressInformationYesNoPage()(answers: UserAnswers): Call =
-  answers.get(ControllingBodyAdditionalAddressInformationYesNoPage) match {
-    case Some(true)  => routes.IndexController.onPageLoad() // TODO later -> Change it to CB-AI
-    case Some(false) => routes.IndexController.onPageLoad() // TODO later -> Redirect to CB-CN in add flow and CB-CYA in change flow
-    case None        => routes.SystemErrorController.onPageLoad()
-  }
-
-private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call = {
-  userAnswers
-    .get(ControllingBodyIsUkIncorporatedPage)
-    .map {
-      case "1" => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
-      case "0" => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+  private def navigateControllingBodyAdditionalAddressInformationYesNoPage()(answers: UserAnswers): Call =
+    answers.get(ControllingBodyAdditionalAddressInformationYesNoPage) match {
+      case Some(true)  => routes.IndexController.onPageLoad() // TODO later -> Change it to CB-AI
+      case Some(false) => routes.IndexController.onPageLoad() // TODO later -> Redirect to CB-CN in add flow and CB-CYA in change flow
+      case None        => routes.SystemErrorController.onPageLoad()
     }
-    .getOrElse(routes.SystemErrorController.onPageLoad())
 
+  private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(ControllingBodyIsUkIncorporatedPage)
+      .map {
+        case "1" => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
+        case "0" => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+        case _   => routes.SystemErrorController.onPageLoad()
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
 }

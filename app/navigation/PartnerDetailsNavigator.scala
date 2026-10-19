@@ -126,26 +126,25 @@ object PartnerDetailsNavigator {
   private def returnsToCheckYourAnswers(index: BusinessNumberOrIndex, answers: UserAnswers): Boolean =
     index match {
       case _: String => true // existing partner
-      case i: Int => answers.get(PartnerDetailsAddPartnerCompletedPage(i)).contains(true) // saved new partner
+      case i: Int    => answers.get(PartnerDetailsAddPartnerCompletedPage(i)).contains(true) // saved new partner
     }
 
   private def carryOn(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
     if (returnsToCheckYourAnswers(index, answers)) checkYourAnswers(index)
     else nextInAddJourney(index, answers)
 
-  /** TODO: replace with the designed journey order.
-   * For now: the first unanswered mandatory page, or check your answers when there is none.
-   * Skips optional "add X?" questions the user hasn't reached yet.
-   */
+  /** TODO: replace with the designed journey order. For now: the first unanswered mandatory page, or check your answers when there is none. Skips
+    * optional "add X?" questions the user hasn't reached yet.
+    */
   private def nextInAddJourney(index: BusinessNumberOrIndex, answers: UserAnswers): Call =
     PartnerMandatoryDetails.firstMissing(answers, index).map(_.call).getOrElse(checkYourAnswers(index))
 
   private def addYesNo(index: BusinessNumberOrIndex, page: QuestionPage[Boolean], ifYes: => Call): UserAnswers => Call =
     answers =>
       answers.get(page) match {
-        case Some(true) => ifYes
+        case Some(true)  => ifYes
         case Some(false) => carryOn(index)(answers)
-        case None => systemError
+        case None        => systemError
       }
 
   // --- Helpers ---
