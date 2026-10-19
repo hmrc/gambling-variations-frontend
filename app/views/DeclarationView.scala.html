@@ -18,23 +18,47 @@
 
 @this(
         layout: templates.Layout,
+        formHelper: FormWithCSRF,
         govukButton: GovukButton,
         h1:H1,
         p:Paragraph,
         caption: Caption,
+        bulletList: BulletList,
+        paragraphMessageWithLink: ParagraphMessageWithLink
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(form: Form[_], isGroupMember: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("declaration.title"))) {
+@layout(pageTitle = titleNoForm(messages("declaration.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-   @caption(messages("changeRegistrationDetails.caption"))
-   @h1("declaration.heading", classes = "govuk-heading-l")
-   @p("declaration.p1")
+    @formHelper(action = routes.DeclarationController.onSubmit()) {
+        @caption(messages("changeRegistrationDetails.caption"))
+        @h1("declaration.heading", classes = "govuk-heading-l")
 
-    @govukButton(
-    ButtonViewModel(messages("declaration.submit"))
-    .withCssClass("govuk-!-margin-bottom-8")
-    )
-    <br>
+        @if(!isGroupMember) {
+             @p("declaration.p1")
+         } else {
+             @p("declaration.group.p1")
+             @bulletList(
+                 Seq(
+                     messages("declaration.group.bp1"),
+                     messages("declaration.group.bp2"),
+                     messages("declaration.group.bp3"),
+                     messages("declaration.group.bp4"),
+                     messages("declaration.group.bp5"),
+                     messages("declaration.group.bp6"),
+                     messages("declaration.group.bp7"),
+                     messages("declaration.group.bp8")
+                 )
+             )
+             @paragraphMessageWithLink(None, messages("declaration.group.link"), None, "https://www.gov.uk/guidance/machine-games-duty-excise-notice-452#group-registration")
+             @p("declaration.group.p2")
+         }
+
+         @govukButton(
+             ButtonViewModel(messages("declaration.submit"))
+                 .withCssClass("govuk-!-margin-bottom-8")
+             )
+         <br>
+    }
 }

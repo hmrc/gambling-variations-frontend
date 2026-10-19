@@ -49,8 +49,8 @@ class ControllingBodyFaxNumberControllerSpec extends SpecBase with MockitoSugar 
 
   val data: JsObject = Json.obj(
     "controllingBodyDetails" -> Json.obj(
-      "mgdRegNum"                           -> userAnswersId,
-      ControllingBodyFaxNumberPage.toString -> "1234"
+      "mgdRegNum"             -> userAnswersId,
+      "correspondenceSection" -> Json.obj(ControllingBodyFaxNumberPage.toString -> "1234")
     )
   )
 

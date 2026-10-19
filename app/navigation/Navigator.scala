@@ -232,6 +232,8 @@ class Navigator @Inject() () {
       userAnswers => navigateReturnPeriodsPage(userAnswers)
     case RemoveControllingBodyTradeNamePage =>
       _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
+    case RemoveControllingBodyFaxNumberPage =>
+      _ => routes.IndexController.onPageLoad() // Change it to CB-CYA
     case ControllingBodyAdditionalAddressInformationYesNoPage =>
       userAnswers => navigateControllingBodyAdditionalAddressInformationYesNoPage()(userAnswers)
     case RemoveControllingBodyEmailPage =>

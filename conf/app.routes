@@ -27,7 +27,8 @@ GET        /change-registration-details                 controllers.ChangeRegist
 
 GET        /change-registration-details/business-name/check              controllers.businessname.CheckBusinessNameController.onPageLoad()
 
-GET        /change-registration/declaration             controllers.DeclarationController.onPageLoad()
+GET        /change-registration-details/declaration             controllers.DeclarationController.onPageLoad()
+POST       /change-registration-details/declaration             controllers.DeclarationController.onSubmit()
 
 GET        /change-registration-details/business-name/remove-trading-name           controllers.businessname.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-name/remove-trading-name           controllers.businessname.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
@@ -264,6 +265,8 @@ POST       /change-registration-details/controlling-body-details/remove-trading-
 
 GET        /change-registration-details/controlling-body-details/additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/controlling-body-details/remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/controlling-body-details/remove-email-address           controllers.controllingbody.RemoveControllingBodyEmailController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/remove-email-address           controllers.controllingbody.RemoveControllingBodyEmailController.onSubmit(mode: Mode = NormalMode)

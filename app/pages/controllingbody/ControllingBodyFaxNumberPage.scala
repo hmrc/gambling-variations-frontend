@@ -19,9 +19,10 @@ package pages.controllingbody
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
+// The fax number is held in the correspondence section, as stored by ControllingBodyDetailsDataRequiredAction
 case object ControllingBodyFaxNumberPage extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ toString
 
-  override def toString: String = "controllingBodyFaxNumber"
+  override def toString: String = "faxNumber"
 }
