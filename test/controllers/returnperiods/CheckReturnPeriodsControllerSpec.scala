@@ -106,7 +106,7 @@ class CheckReturnPeriodsControllerSpec extends SpecBase {
       }
     }
 
-    "must return OK with an add return periods link for a GET when no return periods have been set" in {
+    "must return OK with a return periods row and add return periods link for a GET when no return periods have been set" in {
 
       val application =
         applicationBuilder(userAnswers = Some(answersWith(standardReturnPeriods.copy(returnPeriodsId = None)))).build()
@@ -120,7 +120,9 @@ class CheckReturnPeriodsControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
-          view(CheckReturnPeriodsViewModel(None, showAppliesAfterCurrentPeriod = true))(request, messages(application)).toString
+          view(CheckReturnPeriodsViewModel(None, showAppliesAfterCurrentPeriod = true, showReturnPeriodsType = true))(request,
+                                                                                                                      messages(application)
+                                                                                                                     ).toString
         contentAsString(result) must include("Add return periods ending")
       }
     }

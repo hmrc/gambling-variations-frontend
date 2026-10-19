@@ -113,6 +113,40 @@ class CheckReturnPeriodsViewModelSpec extends SpecBase {
     "must be empty when there are no return periods in the user answers" in {
       CheckReturnPeriodsViewModel.from(emptyUserAnswers) mustBe None
     }
+
+    "must show the Return periods row when no return periods are set for the registration" in {
+      val notSet = standardReturnPeriods.copy(returnPeriodsId = None)
+
+      CheckReturnPeriodsViewModel.from(answersWith(notSet)).value.showReturnPeriodsType mustBe true
+    }
+
+    "must not show the Return periods row when return periods are set for the registration" in {
+      CheckReturnPeriodsViewModel.from(answersWith(standardReturnPeriods)).value.showReturnPeriodsType mustBe false
+    }
+
+    "must be standard when no return periods are set and the user has chosen periods, even without hasExistingNstpValues" in {
+      val notSet = standardReturnPeriods.copy(returnPeriodsId = None, hasExistingNstpValues = None)
+      val answers = answersWith(notSet).set(ChooseReturnPeriodsPage, Feb.returnPeriodsId).success.value
+
+      val viewModel = CheckReturnPeriodsViewModel.from(answers).value
+      viewModel.returnPeriods mustBe Some(Feb)
+      viewModel.showReturnPeriodsType mustBe true
+    }
+
+    "must be empty when no return periods are set, the user has not chosen periods and hasExistingNstpValues is missing" in {
+      val notSet = standardReturnPeriods.copy(returnPeriodsId = None, hasExistingNstpValues = None)
+
+      CheckReturnPeriodsViewModel.from(answersWith(notSet)) mustBe None
+    }
+
+    "must be empty when the registration has non-standard return periods, even if the user has chosen periods" in {
+      val answers = answersWith(standardReturnPeriods.copy(hasExistingNstpValues = Some(true)))
+        .set(ChooseReturnPeriodsPage, Feb.returnPeriodsId)
+        .success
+        .value
+
+      CheckReturnPeriodsViewModel.from(answers) mustBe None
+    }
   }
 
   "CheckReturnPeriodsViewModel.summaryList" - {
@@ -142,6 +176,26 @@ class CheckReturnPeriodsViewModelSpec extends SpecBase {
       actions.head.href mustBe controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url
       actions.head.content mustBe Text("Change")
       actions.head.visuallyHiddenText mustBe Some("return periods")
+    }
+
+    "must put a Return periods row showing Standard above Return periods ending when shown" in {
+      val rows = CheckReturnPeriodsViewModel(Some(Feb), showAppliesAfterCurrentPeriod = true, showReturnPeriodsType = true).summaryList.rows
+
+      rows.map(_.key.content) mustBe Seq(Text("Return periods"), Text("Return periods ending"))
+      rows.head.value.content mustBe Text("Standard")
+    }
+
+    "must give the Return periods row a change link to the return periods page in CheckMode" in {
+      val actions =
+        CheckReturnPeriodsViewModel(Some(Feb),
+                                    showAppliesAfterCurrentPeriod = true,
+                                    showReturnPeriodsType         = true
+                                   ).summaryList.rows.head.actions.value.items
+
+      actions.size mustBe 1
+      actions.head.href mustBe controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(CheckMode).url
+      actions.head.content mustBe Text("Change")
+      actions.head.visuallyHiddenText mustBe Some("return period type")
     }
 
     "must show an add link with no change action when no return periods have been set" in {

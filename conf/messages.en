@@ -1232,6 +1232,11 @@ chooseStandardReturnPeriods.mar = Last day of March, June, September and Decembe
 checkReturnPeriods.standard.title = Check your standard return periods
 checkReturnPeriods.standard.heading = Check your standard return periods
 checkReturnPeriods.appliesAfterCurrentPeriod = These changes will only apply after your current return period.
+
+checkReturnPeriods.returnPeriods = Return periods
+checkReturnPeriods.returnPeriods.standard = Standard
+checkReturnPeriods.returnPeriods.change.hidden = return period type
+
 checkReturnPeriods.returnPeriodsEnding = Return periods ending
 checkReturnPeriods.returnPeriodsEnding.add = Add return periods ending
 checkReturnPeriods.returnPeriodsEnding.change.hidden = return periods

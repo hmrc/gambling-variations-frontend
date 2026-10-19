@@ -41,8 +41,15 @@ class CheckReturnPeriodsViewSpec extends SpecBase {
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    def render(returnPeriods: Option[ChooseReturnPeriods] = Some(Feb), showAppliesAfterCurrentPeriod: Boolean = true): Document =
-      Jsoup.parse(view(CheckReturnPeriodsViewModel(returnPeriods, showAppliesAfterCurrentPeriod))(request, messages).body)
+    def render(
+      returnPeriods: Option[ChooseReturnPeriods] = Some(Feb),
+      showAppliesAfterCurrentPeriod: Boolean = true,
+      showReturnPeriodsType: Boolean = false
+    ): Document =
+      Jsoup.parse(
+        view(CheckReturnPeriodsViewModel(returnPeriods, showAppliesAfterCurrentPeriod, showReturnPeriodsType))(request, messages).body
+      )
+
   }
 
   "CheckReturnPeriodsView" - {
@@ -91,6 +98,25 @@ class CheckReturnPeriodsViewSpec extends SpecBase {
       addLink.attr("href") mustBe controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url
 
       doc.select(".govuk-summary-list__actions a").size() mustBe 0
+    }
+
+    "must show a Return periods row with Standard above Return periods ending when return periods were not set" in new Setup {
+
+      val doc = render(showReturnPeriodsType = true)
+      val rows = doc.select(".govuk-summary-list__row")
+
+      rows.size() mustBe 2
+      doc.select(".govuk-summary-list__key").eachText() mustBe java.util.List.of("Return periods", "Return periods ending")
+      rows.first().select(".govuk-summary-list__value").text() mustBe "Standard"
+    }
+
+    "must link the Return periods row to the return periods page in CheckMode" in new Setup {
+
+      val link = render(showReturnPeriodsType = true).select(".govuk-summary-list__row").first().select(".govuk-summary-list__actions a")
+
+      link.size() mustBe 1
+      link.attr("href") mustBe controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(CheckMode).url
+      link.select(".govuk-visually-hidden").text() mustBe "return period type"
     }
 
     "must render the applies after current period message when it applies" in new Setup {
