@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers.businessaddress
 
-import controllers.routes
 import models.UserAnswers
 import pages.businessaddress.AddBusinessAddressAdditionalInformationPage
 import play.api.i18n.Messages
@@ -34,7 +33,7 @@ case object AddAddressAdditionalInfoRow {
             key   = "checkBusinessAddress.question.addInfo",
             value = ValueViewModel(if (hasAddInfo) "site.yes" else "site.no"),
             actions = Seq(
-              ActionItemViewModel("site.change", routes.BusinessAddrInfoScreenerController.onPageLoad().url)
+              ActionItemViewModel("site.change", controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad().url)
                 .withVisuallyHiddenText(messages("checkBusinessAddress.question.addInfo.hidden"))
             )
           )

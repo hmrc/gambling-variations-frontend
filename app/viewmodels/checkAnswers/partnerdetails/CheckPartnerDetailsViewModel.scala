@@ -28,7 +28,7 @@ import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
-import utils.DateTimeFormats.shortDateDisplay
+import utils.DateTimeFormats.{longDateDisplay, shortDateDisplay}
 import utils.PartnerUtils
 import viewmodels.govuk.all.FluentValue
 
@@ -65,7 +65,8 @@ case class CheckPartnerDetailsViewModel(
   maybeSubmitted: Option[Boolean],
   isDueToLeave: Boolean,
   isDueToJoin: Boolean,
-  isMissingMandatoryDetails: Boolean
+  isMissingMandatoryDetails: Boolean,
+  hasChanges: Option[Boolean]
 ) {
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
@@ -90,10 +91,15 @@ case class CheckPartnerDetailsViewModel(
     val messagesToShow =
       if (isNewPartnerFlow)
         Seq(
-          Some(messages("partnerDetailsCheckYourAnswers.error.missingChanges")),
-          Option.when(isMissingMandatoryDetails)(messages("partnerDetailsCheckYourAnswers.error.missingDetails"))
-        ).flatten
+          if (isMissingMandatoryDetails) messages("partnerDetailsCheckYourAnswers.error.missingDetails")
+          else messages("partnerDetailsCheckYourAnswers.error.missingChanges")
+        )
       else {
+        val submitChanges =
+          Option.when(hasChanges.contains(true) && !dueToJoinOrLeave)(
+            messages("partnerDetailsCheckYourAnswers.error.missingChanges")
+          )
+
         val leaving =
           if (isDueToLeave) dateOfLeaving.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", d, link))
           else None
@@ -103,19 +109,18 @@ case class CheckPartnerDetailsViewModel(
           else None
 
         // If due to both join and leave, show only the leaving notice (per design spec)
-        leaving.orElse(joining) match {
-          case Some(lockedNotice) => Seq(lockedNotice)
-          case None               => Seq(messages("partnerDetailsCheckYourAnswers.error.contactUs", link))
-        }
-      }
+        val lockedOrContactUs =
+          leaving.orElse(joining).getOrElse(messages("partnerDetailsCheckYourAnswers.error.contactUs", link))
 
+        submitChanges.toSeq :+ lockedOrContactUs
+      }
     messagesToShow.map(Html(_))
   }
 
   // --- Summary lists ---
 
   def businessDetailsSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
-    Some(typeOfBusinessRow),
+    typeOfBusinessRow,
     businessNameRow,
     soleProprietorDobRow,
     addTradingNameRow,
@@ -153,8 +158,8 @@ case class CheckPartnerDetailsViewModel(
 
   /** Optional fields that can also be removed outside the new-partner flow. */
   private def changeOrRemove(change: ActionItem, remove: ActionItem): Seq[ActionItem] =
-    if (isNewPartnerFlow) Seq(change)
-    else if (dueToJoinOrLeave) Nil
+    if (isNewPartnerFlow && !isNewPartnerSubmitted) Seq(change)
+    else if (!isNewPartnerFlow && dueToJoinOrLeave) Nil
     else Seq(change, remove)
 
   private def is(bt: BusinessType): Boolean = typeOfBusiness.contains(bt)
@@ -165,14 +170,19 @@ case class CheckPartnerDetailsViewModel(
 
   // --- Business details rows ---
 
-  private def typeOfBusinessRow(implicit messages: Messages): SummaryListRow =
-    requiredRow(
-      "typeOfBusiness",
-      typeOfBusiness.map(bt => messages(s"businessType.$bt")),
-      // NOTE: routing will be done with the integration ticket
-      routes.PartnerDetailsBusinessTypeController.onPageLoad(index, mode(businessNumberOrIndex)).url,
-      isNewPartnerFlow
-    )
+  private def typeOfBusinessRow(implicit messages: Messages): Option[SummaryListRow] = {
+    if isNewPartnerSubmitted || !isNewPartnerFlow then None
+    else
+      Some(
+        requiredRow(
+          "typeOfBusiness",
+          typeOfBusiness.map(bt => messages(s"businessType.$bt")),
+          // NOTE: routing will be done with the integration ticket
+          routes.PartnerDetailsBusinessTypeController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+          isNewPartnerFlow
+        )
+      )
+  }
 
   private def businessNameRow(implicit messages: Messages): Option[SummaryListRow] =
     typeOfBusiness.map { bt =>
@@ -214,12 +224,7 @@ case class CheckPartnerDetailsViewModel(
     val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
     val remove = removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    val actions =
-      if (isNewPartnerFlow && !isNewPartnerSubmitted) Seq(change)
-      else if (!isNewPartnerFlow && dueToJoinOrLeave) Nil
-      else Seq(change, remove)
-
-    optionalRow(label, tradingName.map(Text(_)), actions, change)
+    optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change)
   }
 
   private def dateOfJoiningRow(implicit messages: Messages): SummaryListRow =
@@ -260,13 +265,11 @@ case class CheckPartnerDetailsViewModel(
     )
 
   private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    if (is(Corporatebody))
-      // NOTE: routing will be done with the integration ticket
-      yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
-    else None
+    // NOTE: routing will be done with the integration ticket
+    yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
 
   private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    Option.when(is(Soleproprietor)) {
+    vatRegistrationNumber.map { vat =>
       val label = labelFor("vatRegistrationNumber")
       // NOTE: routing will be done with the integration ticket
       val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
@@ -277,7 +280,7 @@ case class CheckPartnerDetailsViewModel(
         else if (isNewPartnerSubmitted) Seq(change, remove)
         else Seq(change)
 
-      optionalRow(label, vatRegistrationNumber.map(Text(_)), actions, change)
+      optionalRow(label, Some(Text(vat)), actions, change)
     }
 
   private def isIncorporatedInUkRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -420,6 +423,11 @@ case class CheckPartnerDetailsViewModel(
     value match {
       case Some(v) =>
         createSummaryListRow(label, Text(v), if (canChange) Seq(changeAction(url, label)) else Nil)
+
+      // Due to join or leave: details can't be changed online, so no add link
+      case None if dueToJoinOrLeave =>
+        createSummaryListRow(label, Text(messages("partnerDetailsCheckYourAnswers.noData")), Nil)
+
       case None =>
         val addText = messages(s"partnerDetailsCheckYourAnswers.$key.add")
         createSummaryListRow(label, HtmlContent(s"""<a href="$url">$addText</a>"""), Nil)
@@ -520,8 +528,8 @@ object CheckPartnerDetailsViewModel {
       soleProprietorDob         = userAnswers.get(PartnerDetailsDateOfBirthPage(index)).map(shortDateDisplay),
       addTradingName            = userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)),
       tradingName               = userAnswers.get(PartnerDetailsTradingNamePage(index)),
-      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(shortDateDisplay),
-      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(shortDateDisplay),
+      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(longDateDisplay),
+      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(longDateDisplay),
       addNino                   = userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)),
       nino                      = userAnswers.get(PartnerDetailsNinoPage(index)).map(formatNino),
       utr                       = userAnswers.get(PartnerDetailsUtrPage(index)),
@@ -544,7 +552,8 @@ object CheckPartnerDetailsViewModel {
       maybeSubmitted            = isSubmitted,
       isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
       isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
-      isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index)
+      isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index),
+      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)) // exisisting partners only
     )
   }
 

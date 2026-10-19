@@ -32,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages(s"${variant.messagePrefix}.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @caption(messages("changeRegistrationDetails.caption"))
+
     @formHelper(action = controllers.returnperiods.routes.ChooseReturnPeriodsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
@@ -45,6 +45,7 @@
             )
         }
 
+        @caption(messages("changeRegistrationDetails.caption"))
         @govukRadios(
             RadiosViewModel(
                 field = form("value"),

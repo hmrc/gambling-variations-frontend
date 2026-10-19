@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
-import controllers.routes
 import models.Address
 import pages.*
 import pages.businessaddress.*
@@ -57,7 +56,7 @@ class HasUkPostcodeRowSpec extends SpecBase {
         .value
 
       private val result: SummaryListRow = HasUkPostcodeRow.from(ua).getOrElse(emptySummaryList)
-      private val route: String = routes.BusinessUKAddrScreenerController.onPageLoad().url
+      private val route: String = controllers.businessaddress.routes.BusinessUKAddrScreenerController.onPageLoad().url
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.ukPostcode"))
       result.value.content mustEqual Text(messages("site.yes"))

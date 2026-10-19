@@ -1,0 +1,126 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package controllers.tradingdetails
+
+import connectors.GamblingConnector
+import controllers.actions.*
+import controllers.routes
+import models.*
+import pages.GroupMemberPage
+import pages.tradingdetails.*
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FlagsUtil.checkFlag
+import viewmodels.checkAnswers.tradingdetails.*
+import views.html.CheckTradingDetailsView
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
+class CheckTradingDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  authorise: AuthorisedAction,
+  getData: DataRetrievalAction,
+  checkTradingDetailsDataRequired: MgdTradeDetailsDataRequiredAction,
+  gamblingConnector: GamblingConnector,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckTradingDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
+
+  def onPageLoad: Action[AnyContent] =
+    (authorise andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
+
+      val showChangeMessage: Boolean = checkFlag(request.userAnswers, TradingDetailsChangesPage, TradingDetailsChangeFlagPage)
+
+      val isGroupMemberF: Future[Boolean] =
+        request.userAnswers.get(GroupMemberPage) match {
+          case Some(value) => Future.successful(value)
+          case None =>
+            gamblingConnector
+              .getBusinessDetails(request.mgdRegNum)
+              .map(_.groupReg)
+        }
+
+      isGroupMemberF.map { isGroupMember =>
+
+        val vm =
+          CheckTradingDetailsViewModel.from(
+            request.userAnswers,
+            isGroupMember
+          )
+        Ok(
+          view(
+            vm.list,
+            vm.previousMgd,
+            vm.associatedMgd,
+            showChangeMessage
+          )
+        )
+      }
+    }
+
+  def onContinue: Action[AnyContent] =
+    (authorise andThen getData andThen checkTradingDetailsDataRequired).async { implicit request =>
+
+      val tradeClassOpt = request.userAnswers.get(BusinessTradeClassPage)
+      val seasonalOpt = request.userAnswers.get(IsSeasonalBusinessPage)
+      val otherDescOpt = request.userAnswers.get(OtherTradeClassPage)
+
+      def stringMissing(opt: Option[String]): Boolean =
+        opt.forall(s => s.trim.isEmpty || s.trim.equalsIgnoreCase(Messages("site.notProvided")))
+
+      def tradeClassIsMissing: Boolean = tradeClassOpt match {
+        case Some(tc: BusinessTradeClass) => false
+        case _                            => true
+      }
+
+      def seasonalBusIsMissing: Boolean = seasonalOpt.isEmpty
+
+      def tradeClassIsOther: Boolean = tradeClassOpt match {
+        case Some(BusinessTradeClass.Other) => true
+        case _                              => false
+      }
+
+      def otherDescIsMissing: Boolean = stringMissing(otherDescOpt)
+
+      val isGroupMemberF: Future[Boolean] =
+        request.userAnswers.get(GroupMemberPage) match {
+          case Some(value) => Future.successful(value)
+          case None =>
+            gamblingConnector
+              .getBusinessDetails(request.mgdRegNum)
+              .map(_.groupReg)
+        }
+
+      isGroupMemberF.map { isGroupMember =>
+        if (tradeClassIsMissing && !isGroupMember) {
+          Redirect(controllers.tradingdetails.routes.BusinessTradeClassController.onPageLoad())
+        } else if (tradeClassIsOther && otherDescIsMissing && !isGroupMember) {
+          Redirect(controllers.tradingdetails.routes.OtherTradeClassController.onPageLoad())
+        } else if (seasonalBusIsMissing) {
+          Redirect(controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad())
+        } else {
+          Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+        }
+      }
+
+    }
+
+}

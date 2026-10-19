@@ -71,6 +71,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val maxPartners: Int =
     configuration.get[Int]("partner-details.max-partners")
 
+  lazy val partnersPerPage: Int =
+    configuration.get[Int]("partner-details.partners-per-page")
+
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
     "cy" -> Lang("cy")

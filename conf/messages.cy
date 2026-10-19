@@ -37,6 +37,22 @@ index.title = cy: Welcome to the filing Machine Game Duty
 index.heading = cy: Welcome to the filing Machine Game Duty
 index.guidance = cy: Welcome to your new frontend. Please see the README file for a guide to getting started.
 
+declaration.title = cy: Declaration
+declaration.heading = cy: Declaration
+declaration.p1 = cy: To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+declaration.group.p1 = cy: The conditions for setting up a Machine Games Duty group are that:
+declaration.group.bp1 = cy: all members must be companies with a UK establishment
+declaration.group.bp2 = cy: overseas‑incorporated companies must have a fixed place of business in the UK
+declaration.group.bp3 = cy: at least 1 member must be trading or intend to trade
+declaration.group.bp4 = cy: when a company joins the group, we will de-register its existing registration and register it as part of the group
+declaration.group.bp5 = cy: if an Isle of Man company joins the group, the Isle of Man authorities will de-register it
+declaration.group.bp6 = cy: all companies joining the group must operate under the same common control
+declaration.group.bp7 = cy: the controlling body can act as the representative member, but must own at least 51% of the shares or hold most of the voting rights in the group
+declaration.group.bp8 = cy: the controlling body must share the group''s risks and rewards, or it must consolidate its accounts with the other companies in the group
+declaration.group.link = cy: You can view Excise Notice 452 for more information on group registration (opens in new tab).
+declaration.group.p2 = cy: I confirm that all the group members and the controlling body, if appropriate, meet the conditions for a Machine Games Duty group.
+declaration.submit = cy: Declare and submit
+
 checkYourAnswers.title = cy: Check your answers
 checkYourAnswers.heading = cy: Check your answers
 
@@ -257,6 +273,12 @@ partnerDetailsAddTradingNameYesNo.checkYourAnswersLabel = cy: Do you want to add
 partnerDetailsAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the partner
 partnerDetailsAddTradingNameYesNo.change.hidden = cy: Do you want to add a trading name for the partner?
 
+partnerDetailsAddVRNYesNo.title = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.heading = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.checkYourAnswersLabel = cy: Do you want to add a VAT registration number for the partner?
+partnerDetailsAddVRNYesNo.error.required = cy: Select yes to add a VAT registration number for the partner
+partnerDetailsAddVRNYesNo.change.hidden = cy: do you want to add a VAT registration number for the partner
+
 partnerDetailsRemoveVRNYesNo.title = cy: Are you sure you want to remove this partner’ VAT registration number?
 partnerDetailsRemoveVRNYesNo.heading = cy: Are you sure you want to remove {0} as this partner’s VAT registration number?
 partnerDetailsRemoveVRNYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner’ VAT registration number?
@@ -430,6 +452,14 @@ controllingBodyBusinessType.title = cy: What type of business is the controlling
 controllingBodyBusinessType.heading = cy: What type of business is the controlling body?
 controllingBodyBusinessType.error.required = cy: Select the type of business for the controlling body
 
+controllingBodyChangeScreener.title = cy: What do you want to do with your controlling body?
+controllingBodyChangeScreener.heading = cy: What do you want to do with your controlling body?
+controllingBodyChangeScreener.p1 = cy: Your current controlling body is {0}.
+controllingBodyChangeScreener.editDetails = cy: Edit controlling body details
+controllingBodyChangeScreener.provideNew = cy: Provide a new controlling body
+controllingBodyChangeScreener.keepSame = cy: Keep controlling body the same
+controllingBodyChangeScreener.error.required = cy: Select what you want to do with your controlling body
+
 partnerDetailsAddCountryOfIncorporation.title = cy: Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.heading = cy: Which country is the partner’s business incorporated in?
 partnerDetailsAddCountryOfIncorporation.checkYourAnswersLabel = cy: Which country is the partner’s business incorporated in?
@@ -441,3 +471,41 @@ partnerDetailsAddCountryOfIncorporation.change.hidden = cy: Which country is the
 controllingBodyAddTradingNameYesNo.title = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.heading = cy: Do you want to add a trading name for the controlling body?
 controllingBodyAddTradingNameYesNo.error.required = cy: Select yes if you want to add a trading name for the controlling body
+
+controllingBodyEmailAddress.title = cy: What is the controlling body’s email address?
+controllingBodyEmailAddress.heading = cy: What is the controlling body’s email address?
+controllingBodyEmailAddress.checkYourAnswersLabel = cy: Email Address
+controllingBodyEmailAddress.error.required = cy: Enter the controlling body’s email address
+controllingBodyEmailAddress.error.invalid = cy: The email address must only include letters a to z, numbers 0 to 9, dots, hyphens or underscores, with one @ symbol in the middle, like name@example.com
+controllingBodyEmailAddress.error.length = cy: The email address must be 70 characters or less
+
+
+site.pagination.next = cy: Next
+site.pagination.previous = cy: Previous
+partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
+
+removeControllingBodyTradeName.title = cy:  Are you sure you want to remove this controlling body’s trading name?
+removeControllingBodyTradeName.heading = cy: Are you sure you want to remove {0} as this controlling body’s trading name?
+removeControllingBodyTradeName.error.required = cy: Select yes if you want to remove the trading name
+
+controllingBodyAdditionalAddressInformationYesNo.title = cy: Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.heading = cy: Do you want to include additional information for the controlling body’s address?
+controllingBodyAdditionalAddressInformationYesNo.error.required = cy: Select yes to include additional information for the controlling body’s address
+controllingBodyAdditionalAddressInformationYesNo.hint = cy: For example, building name or floor number
+removeControllingBodyFaxNumber.title = cy: Are you sure you want to remove this controlling body’s fax number?
+removeControllingBodyFaxNumber.heading = cy: Are you sure you want to remove {0} as this controlling body’s fax number?
+removeControllingBodyFaxNumber.error.required = cy: Select yes if you want to remove this controlling body’s fax number
+
+partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
+partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
+partnerDetailsRemovePartnerYesNo.removeNow = cy: Yes, remove this partner now
+partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to remove this partner now
+
+removeControllingBodyEmail.title = cy: Are you sure you want to remove this controlling body's email address?
+removeControllingBodyEmail.heading = cy: Are you sure you want to remove {0} as this controlling body’s email address?
+removeControllingBodyEmail.error.required = cy: Select yes if you want to remove this controlling body’s email address
+
+controllingBodyBusinessUKIncorporated.title = cy: Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.heading = cy: Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.error.required = cy: Select yes if the controlling body’s business is incorporated in the UK

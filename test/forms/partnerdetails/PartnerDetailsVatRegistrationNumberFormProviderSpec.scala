@@ -69,9 +69,53 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
       }
     }
 
-    "fail to bind a value with spaces between the digits" in {
-      val result = form.bind(Map(fieldName -> "353 868 127")).apply(fieldName)
+    "bind a checksum-valid VAT number ignoring spaces between the digits" in {
+      Seq("353 868 127", "3 5 3 8 6 8 1 2 7", " 353 868 127 ").foreach { input =>
+        val bound = form.bind(Map(fieldName -> input))
+        bound.value.value mustBe "353868127"
+        bound.errors mustBe empty
+      }
+    }
+
+    "bind a checksum-valid VAT number ignoring tabs, newlines and other whitespace" in {
+      Seq("353\t868\t127", "353868127\n", "\r\n353868127", "353\u2003868127").foreach { input =>
+        val bound = form.bind(Map(fieldName -> input))
+        bound.value.value mustBe "353868127"
+        bound.errors mustBe empty
+      }
+    }
+
+    "fail to bind fewer than 9 digits once whitespace is removed, reporting the length error but not the characters error" in {
+      val result = form.bind(Map(fieldName -> "35 38 68 12")).apply(fieldName)
+      result.errors mustEqual Seq(FormError(fieldName, lengthKey, Seq(vrnLength)), FormError(fieldName, realKey))
+    }
+
+    "fail to bind 9 digits non-checksum VAT number containing spaces, reporting only the real-VAT number error" in {
+      val result = form.bind(Map(fieldName -> "353 868 128")).apply(fieldName)
+      result.errors mustEqual Seq(FormError(fieldName, realKey))
+    }
+
+    "fail to bind non-digit chars in a value containing whitespace" in {
+      Seq("GB 353 868 127", "3538 X8127").foreach { input =>
+        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
+        result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
+      }
+    }
+
+    "fail to bind a value containing a non-breaking space" in {
+      val result = form.bind(Map(fieldName -> "353\u00A0868127")).apply(fieldName)
       result.errors must contain(FormError(fieldName, digitsOnly, Seq(zeroToNineRegex)))
+    }
+
+    "fail to bind a whitespace-only value, reporting only the required error" in {
+      Seq("   ", "\t\n").foreach { input =>
+        val result = form.bind(Map(fieldName -> input)).apply(fieldName)
+        result.errors mustEqual Seq(FormError(fieldName, requiredKey))
+      }
+    }
+
+    "unbind a VAT registration number unchanged" in {
+      form.fill("353868127").data mustBe Map(fieldName -> "353868127")
     }
 
     "fail to bind a non-digit char in a 9 chars number" in {

@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
-import controllers.routes
 import models.BusinessChangeAddrOption.*
 import models.{Address, UserAnswers}
 import pages.*
@@ -59,7 +58,7 @@ class HowToChangeBusinessAddressRowSpec extends SpecBase {
         .value
 
       private val result: SummaryListRow = HowToChangeBusinessAddressRow.from(ua).getOrElse(emptySummaryList)
-      private val route: String = routes.BusinessChangeAddrScreenerController.onPageLoad().url
+      private val route: String = controllers.businessaddress.routes.BusinessChangeAddrScreenerController.onPageLoad().url
 
       result.key.content mustEqual Text(messages("checkBusinessAddress.question.howToChange"))
       result.value.content mustEqual Text(messages("checkBusinessAddress.changeOption.difUk"))

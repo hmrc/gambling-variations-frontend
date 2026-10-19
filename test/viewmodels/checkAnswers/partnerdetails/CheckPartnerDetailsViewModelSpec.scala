@@ -39,10 +39,9 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
   private val remove: Content = Text(messages("site.remove"))
 
   private val contactLink: String =
-    s"""<a href="https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries" class="govuk-link">${messages(
+    s"""<a href="https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries" class="govuk-link" target="_blank" rel="noopener noreferrer">${messages(
         "partnerDetailsCheckYourAnswers.error.contactUsLinkText"
       )}</a>"""
-
   private val joiningDate = "1 Oct 2026"
   private val leavingDate = "31 Dec 2026"
 
@@ -79,7 +78,8 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       maybeSubmitted            = None,
       isDueToLeave              = false,
       isDueToJoin               = false,
-      isMissingMandatoryDetails = false
+      isMissingMandatoryDetails = false,
+      hasChanges                = None
     )
 
   private val newPartnerNotSaved: CheckPartnerDetailsViewModel =
@@ -133,7 +133,9 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
     "notices" - {
 
-      "show missing details for a new partner with missing mandatory fields" in {
+      // --- New partners ---
+
+      "show only missing details for a new partner with missing mandatory fields" in {
 
         val viewModel =
           newPartnerNotSaved.copy(
@@ -143,33 +145,61 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         noticeBodies(viewModel) mustBe Seq(missingDetails)
       }
 
-      "show nothing for a complete new partner that has not been saved" in {
+      "show only missing details for a saved new partner with missing mandatory fields" in {
 
-        noticeBodies(newPartnerNotSaved) mustBe empty
+        val viewModel =
+          newPartnerSaved.copy(
+            isMissingMandatoryDetails = true
+          )
+
+        noticeBodies(viewModel) mustBe Seq(missingDetails)
       }
 
-      "show the submit changes notice for a saved new partner" in {
+      "show only submit changes for a complete new partner" in {
 
+        noticeBodies(newPartnerNotSaved) mustBe Seq(missingChanges)
         noticeBodies(newPartnerSaved) mustBe Seq(missingChanges)
       }
 
-      "show contact us and submit changes for an existing partner not due to join or leave" in {
+      "ignore the changes flag for a new partner" in {
 
-        noticeBodies(existingPartner) mustBe Seq(missingChanges, contactUs)
+        val viewModel =
+          newPartnerNotSaved.copy(
+            hasChanges = Some(true)
+          )
+
+        noticeBodies(viewModel) mustBe Seq(missingChanges)
       }
 
-      "show the joining notice for an existing partner due to join" in {
+      // --- Existing partners ---
+
+      "show only contact us for an existing partner with no changes" in {
+
+        noticeBodies(existingPartner) mustBe Seq(contactUs)
+        noticeBodies(existingPartner.copy(hasChanges = Some(false))) mustBe Seq(contactUs)
+      }
+
+      "show submit changes then contact us for an existing partner who has made changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges = Some(true)
+          )
+
+        noticeBodies(viewModel) mustBe Seq(missingChanges, contactUs)
+      }
+
+      "show only the joining notice for an existing partner due to join" in {
 
         val viewModel =
           existingPartner.copy(
             isDueToJoin = true
           )
 
-        noticeBodies(viewModel) must contain(cannotChangeJoining)
-        noticeBodies(viewModel) must not contain contactUs
+        noticeBodies(viewModel) mustBe Seq(cannotChangeJoining)
       }
 
-      "show the leaving notice for an existing partner due to leave" in {
+      "show only the leaving notice for an existing partner due to leave" in {
 
         val viewModel =
           existingPartner.copy(
@@ -177,11 +207,10 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
             dateOfLeaving = Some(leavingDate)
           )
 
-        noticeBodies(viewModel) must contain(cannotChangeLeaving)
-        noticeBodies(viewModel) must not contain contactUs
+        noticeBodies(viewModel) mustBe Seq(cannotChangeLeaving)
       }
 
-      "show only the joining notice when the partner is due to both join and leave" in {
+      "show only the leaving notice when the partner is due to both join and leave" in {
 
         val viewModel =
           existingPartner.copy(
@@ -190,8 +219,30 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
             dateOfLeaving = Some(leavingDate)
           )
 
-        noticeBodies(viewModel) must contain(cannotChangeJoining)
-        noticeBodies(viewModel) must not contain cannotChangeLeaving
+        noticeBodies(viewModel) mustBe Seq(cannotChangeLeaving)
+      }
+
+      "not show submit changes when due to leave, even if the partner has changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges    = Some(true),
+            isDueToLeave  = true,
+            dateOfLeaving = Some(leavingDate)
+          )
+
+        noticeBodies(viewModel) mustBe Seq(cannotChangeLeaving)
+      }
+
+      "not show submit changes when due to join, even if the partner has changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges  = Some(true),
+            isDueToJoin = true
+          )
+
+        noticeBodies(viewModel) mustBe Seq(cannotChangeJoining)
       }
 
       "fall back to contact us when due to join but the joining date is missing" in {
@@ -202,7 +253,19 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
             dateOfJoining = None
           )
 
-        noticeBodies(viewModel) must contain(contactUs)
+        noticeBodies(viewModel) mustBe Seq(contactUs)
+      }
+
+      "not show submit changes when the join flag is set without a date, even if the partner has changes" in {
+
+        val viewModel =
+          existingPartner.copy(
+            hasChanges    = Some(true),
+            isDueToJoin   = true,
+            dateOfJoining = None
+          )
+
+        noticeBodies(viewModel) mustBe Seq(contactUs)
       }
 
       "never show missing details for an existing partner" in {
@@ -297,6 +360,63 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "utr").value) mustBe Seq(change)
         actionsOf(rowFor(existingPartner.businessDetailsSummaryList, "utr").value) mustBe empty
+      }
+
+      "show Not provided, with no add link, for a missing mandatory answer when due to join or leave" in {
+
+        val viewModel =
+          existingPartner.copy(
+            utr         = None,
+            isDueToJoin = true
+          )
+
+        val utrRow = rowFor(viewModel.businessDetailsSummaryList, "utr").value
+
+        utrRow.value.content mustBe Text(messages("partnerDetailsCheckYourAnswers.noData"))
+        utrRow.actions mustBe None
+      }
+    }
+
+    "type of business row" - {
+
+      "be shown in the new partner flow before the partner is submitted" in {
+
+        keys(newPartnerNotSaved.businessDetailsSummaryList) must contain(label("typeOfBusiness"))
+      }
+
+      "show the translated business type as its value" in {
+
+        val bt = newPartnerNotSaved.typeOfBusiness.value
+        val row = rowFor(newPartnerNotSaved.businessDetailsSummaryList, "typeOfBusiness").value
+
+        row.value.content.asHtml.body must include(messages(s"businessType.$bt"))
+      }
+
+      "be changeable in the new partner flow" in {
+
+        actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "typeOfBusiness").value) mustBe Seq(change)
+      }
+
+      "show an add link with no actions when the business type is missing" in {
+
+        val viewModel = newPartnerNotSaved.copy(typeOfBusiness = None)
+
+        val row = rowFor(viewModel.businessDetailsSummaryList, "typeOfBusiness").value
+
+        row.value.content.asHtml.body must include(messages("partnerDetailsCheckYourAnswers.typeOfBusiness.add"))
+        row.actions mustBe None
+      }
+
+      "not be shown once the new partner has been submitted" in {
+
+        val viewModel = newPartnerNotSaved.copy(maybeSubmitted = Some(true))
+
+        keys(viewModel.businessDetailsSummaryList) must not contain label("typeOfBusiness")
+      }
+
+      "not be shown for an existing partner" in {
+
+        keys(existingPartner.businessDetailsSummaryList) must not contain label("typeOfBusiness")
       }
     }
 

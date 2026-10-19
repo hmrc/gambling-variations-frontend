@@ -21,6 +21,7 @@ import forms.licencespremises.LicencesPremisesFormProvider
 import javax.inject.Inject
 import models.NormalMode
 import models.licencespremises.LicencesAndPremisesRadioOptions
+import models.licencespremises.LicencesAndPremisesRadioOptions.ByPost
 import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.Navigator
 import pages.licencespremises.LicencesPremisesPage
@@ -51,9 +52,7 @@ class LicencesPremisesController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
-    val preparedForm = request.userAnswers
-      .get(LicencesPremisesPage)
-      .fold(form)(form.fill)
+    val preparedForm = form.fill(request.userAnswers.provideAddressesAnswer)
 
     Ok(view(preparedForm))
   }
@@ -65,11 +64,16 @@ class LicencesPremisesController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
         value =>
-          for {
-            answersWithValue <- Future.fromTry(request.userAnswers.set(LicencesPremisesPage, value))
-            updatedAnswers   <- Future.fromTry(answersWithValue.withLicencesPremisesFlags(isChanged = false))
-            _                <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LicencesPremisesPage, NormalMode, updatedAnswers))
+          // Choosing by post would remove the premises already provided, so the user must confirm that first and nothing is saved until then
+          if (value == ByPost && request.userAnswers.premisesCount > 0) {
+            Future.successful(Redirect(routes.RemovePremisesDetailsYesNoController.onPageLoad()))
+          } else {
+            for {
+              answersWithValue <- Future.fromTry(request.userAnswers.set(LicencesPremisesPage, value))
+              updatedAnswers   <- Future.fromTry(answersWithValue.withLicencesPremisesFlags(isChanged = false))
+              _                <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(LicencesPremisesPage, NormalMode, updatedAnswers))
+          }
       )
   }
 }

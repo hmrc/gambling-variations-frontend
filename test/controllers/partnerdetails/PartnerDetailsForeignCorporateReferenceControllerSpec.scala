@@ -26,6 +26,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsForeignCorporateReferencePage, PartnerDetailsIsBusinessIncorporatedUkPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -37,14 +38,14 @@ import scala.concurrent.Future
 class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   val formProvider = new PartnerDetailsForeignCorporateReferenceFormProvider()
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
-  lazy val partnerDetailsForeignCorporateReferenceRouteNewPartners =
+  lazy val partnerDetailsForeignCorporateReferenceRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController
       .onPageLoad(newPartnersIndex1.toString, NormalMode)
       .url
 
-  lazy val partnerDetailsForeignCorporateReferenceRouteExistingPartners =
+  lazy val partnerDetailsForeignCorporateReferenceRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController
       .onPageLoad(businessNumber1, CheckMode)
       .url

@@ -34,6 +34,9 @@ object LicencesAndPremisesRadioOptions extends Enumerable.Implicits {
     ByPost
   )
 
+  def derivedFrom(premisesCount: Int): LicencesAndPremisesRadioOptions =
+    if (premisesCount > 0) Online else ByPost
+
   def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map { case (value, index) =>
     RadioItem(
       content    = Text(messages(s"licencesPremises.${value.toString}")),

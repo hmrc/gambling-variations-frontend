@@ -27,21 +27,45 @@ object LicencesPremisesAnswers {
   extension (answers: UserAnswers) {
 
     // The backend holds booleans as "1" or "0", an oracle implementation detail that has been propagated through 3 layers of microservices.
-    // A missing flag is treated as indicating false.
-    def backendFlag(page: QuestionPage[String]): Boolean =
-      answers.get(page).fold(false) {
+    def backendFlagOption(page: QuestionPage[String]): Option[Boolean] =
+      answers.get(page).map {
         case "1"   => true
         case "0"   => false
         case value => throw new IllegalArgumentException(s"Unexpected value '$value' for $page, expected 1 or 0")
       }
 
-    // The yes/no pages hold the answers given in this session, otherwise the flags from the backend apply.
-    // As with the backend flags, an unanswered question means "No".
-    def pubTenantAnswer: Boolean =
-      answers.get(LicenceDetailsLandlordLicenceYesNoPage).getOrElse(backendFlag(LicenceHeldByLandlordPage))
+    // A missing flag is treated as indicating false.
+    def backendFlag(page: QuestionPage[String]): Boolean =
+      backendFlagOption(page).getOrElse(false)
 
-    def premisesNotCoveredAnswer: Boolean =
-      answers.get(PremisesNotCoveredYesNoPage).getOrElse(backendFlag(LicencePremisesNotCoveredPage))
+    // Answers given in this session are written back in the backend format, so the backend key always holds the current answer
+    def setBackendFlag(page: QuestionPage[String], value: Boolean): Try[UserAnswers] =
+      answers.set(page, if (value) "1" else "0")
+
+    def pubTenantAnswer: Boolean = backendFlag(LicenceHeldByLandlordPage)
+
+    def premisesNotCoveredAnswer: Boolean = backendFlag(LicencePremisesNotCoveredPage)
+
+    def licenceNumberAnswer: Option[String] =
+      answers.get(LicenceNumberPage).map(_.trim).filter(_.nonEmpty)
+
+    def licencesAndPermitsGB: Seq[OtherLicencesAndPermitsGB] =
+      OtherLicencesAndPermitsGB.positiveValues.filter(value => backendFlag(OtherLicencesAndPermitsGB.mappedValuesWithPages(value)))
+
+    def licencesAndPermitsNI: Seq[OtherLicencesAndPermitsNI] =
+      OtherLicencesAndPermitsNI.positiveValues.filter(value => backendFlag(OtherLicencesAndPermitsNI.mappedValuesWithPages(value)))
+
+    // The premises not covered question is only in scope when some kind of licence or permit has been provided
+    def hasLicencesOrPermits: Boolean =
+      licenceNumberAnswer.isDefined || pubTenantAnswer || licencesAndPermitsGB.nonEmpty || licencesAndPermitsNI.nonEmpty
+
+    // The premises are counted rather than using totalRows, so that the count agrees with the premises addresses list, also after removals
+    def premisesCount: Int =
+      answers.get(PremisesDetailsPage).map(_.premises.size).getOrElse(0)
+
+    // The check page and the provide premises addresses question show the same method, derived when it has not been answered
+    def provideAddressesAnswer: LicencesAndPremisesRadioOptions =
+      answers.get(LicencesPremisesPage).getOrElse(LicencesAndPremisesRadioOptions.derivedFrom(premisesCount))
 
     // The section is flagged as submitted once a change screen has been continued from, and as changed once any answer differs
     def withLicencesPremisesFlags(isChanged: Boolean): Try[UserAnswers] = {
