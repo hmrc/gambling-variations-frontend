@@ -325,3 +325,6 @@ GET        /change-registration-details/return-periods/check                    
 
 GET        /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onSubmit(mode: Mode = NormalMode)

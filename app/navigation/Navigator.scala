@@ -57,6 +57,8 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // TODO: Connect the next controlling body screen when the journey is built.
     case ControllingBodyIsUkIncorporatedPage =>
       userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
+    case ControllingBodyCrnPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-UTR when the controlling body journey is built.
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
