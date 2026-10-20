@@ -70,7 +70,7 @@ object PartnerDetailsNavigator {
     case PartnerDetailsCrnPage(index) =>
       _ => controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsForeignCorporateReferencePage(index) =>
-      userAnswers => controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index.toString, NormalMode)
+      userAnswers => controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsCorrespondenceEmailAddressPage(index) =>
       userAnswers => controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsCountryOfIncorporationPage(index) =>
@@ -106,7 +106,7 @@ object PartnerDetailsNavigator {
   private def navigatePartnerAddNinoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsNinoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index.toString, NormalMode))
+      .map(_ => controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(index.toString, NormalMode))
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerAddNinoYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
@@ -249,7 +249,7 @@ object PartnerDetailsNavigator {
       .get(PartnerDetailsBusinessTypePage(index))
       .map {
         case BusinessType.Soleproprietor =>
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index.toString, NormalMode)
+          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(index.toString)
         case BusinessType.Corporatebody =>
           controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(index.toString, NormalMode)
         case BusinessType.Unincorporatedbody =>
@@ -264,11 +264,11 @@ object PartnerDetailsNavigator {
 
   private def navigatePartnerDetailsDateOfIncorporationPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
     lazy val incorporatedInUk = userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)).contains(true)
-    val dateOfIncorporation = controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index.toString, NormalMode)
+    val crn = controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(index.toString, NormalMode)
 
     userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
-      case Some(BusinessType.Corporatebody) if incorporatedInUk => dateOfIncorporation
-      case Some(BusinessType.LimitedLiabilityPartnership)       => dateOfIncorporation
+      case Some(BusinessType.Corporatebody) if incorporatedInUk => crn
+      case Some(BusinessType.LimitedLiabilityPartnership)       => crn
       case _                                                    => routes.SystemErrorController.onPageLoad()
     }
   }
