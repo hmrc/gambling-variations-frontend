@@ -24,7 +24,7 @@ import play.api.mvc.Call
 
 object PartnerDetailsNavigator {
 
-  val partnerDetailsRoutes: PartialFunction[Page, UserAnswers => Call] = {
+  private val partnerDetailsRoutes: PartialFunction[Page, UserAnswers => Call] = {
     case PartnerDetailsAdditionalAddressInfoPage(index) =>
       _ => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsAdditionalAddressInfoYesNoPage(index) =>
@@ -80,9 +80,9 @@ object PartnerDetailsNavigator {
     case PartnerDetailsIsBusinessIncorporatedUkPage(index) =>
       userAnswers => navigatePartnerDetailsIsBusinessIncorporatedUkPage(index, userAnswers)
     case PartnerDetailsDateOfIncorporationPage(index) =>
-      userAnswers => navigatePartnerDetailsIsDateOfIncorporationPage(index, userAnswers)
+      userAnswers => navigatePartnerDetailsDateOfIncorporationPage(index, userAnswers)
     case PartnerDetailsDateOfJoiningPage(index) =>
-      userAnswers => navigatePartnerDetailsIsDateOfIncorporationPage(index, userAnswers)
+      userAnswers => navigatePartnerDetailsDateOfJoiningPage(index, userAnswers)
   }
 
   /** The partner type comes from the index, so both modes share the same routes. */
@@ -236,7 +236,7 @@ object PartnerDetailsNavigator {
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
 
-  private def navigatePartnerDetailsIsDateOfIncorporationPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
+  private def navigatePartnerDetailsDateOfJoiningPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
     userAnswers
       .get(PartnerDetailsBusinessTypePage(index))
       .map {
@@ -252,5 +252,16 @@ object PartnerDetailsNavigator {
           controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index.toString, NormalMode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+  }
+
+  private def navigatePartnerDetailsDateOfIncorporationPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
+    lazy val incorporatedInUk = userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)).contains(true)
+    val dateOfIncorporation = controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(index.toString, NormalMode)
+
+    userAnswers.get(PartnerDetailsBusinessTypePage(index)) match {
+      case Some(BusinessType.Corporatebody) if incorporatedInUk => dateOfIncorporation
+      case Some(BusinessType.LimitedLiabilityPartnership)       => dateOfIncorporation
+      case _                                                    => routes.SystemErrorController.onPageLoad()
+    }
   }
 }
