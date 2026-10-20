@@ -96,8 +96,27 @@ class ReturnPeriodsController @Inject() (
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     screenFor(request.userAnswers) match {
       case Some(NoPeriodsSet) =>
-        submit(noPeriodsSetForm, ReturnPeriodsChoicePage, mode)(errors => noReturnPeriodsSetView(errors, mode))
+        noPeriodsSetForm
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(noReturnPeriodsSetView(formWithErrors, mode))),
+            value =>
+              for {
+                answersWithChoice <- Future.fromTry(
+                                       request.userAnswers.set(ReturnPeriodsChoicePage, value)
+                                     )
 
+                updatedAnswers <- value match {
+                                    case models.NoReturnPeriodsSet.Standard =>
+                                      Future.fromTry(clearNonStandardDates(answersWithChoice))
+
+                                    case models.NoReturnPeriodsSet.Nonstandard =>
+                                      Future.successful(answersWithChoice)
+                                  }
+
+                _ <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(ReturnPeriodsChoicePage, mode, updatedAnswers))
+          )
       case Some(LockedPeriods) =>
         Future.successful(Redirect(controllers.routes.ChangeRegistrationDetailsController.onPageLoad()))
 
@@ -151,6 +170,19 @@ class ReturnPeriodsController @Inject() (
 
   private def prepare[A: Reads](form: Form[A], page: QuestionPage[A])(implicit request: DataRequest[?]): Form[A] =
     request.userAnswers.get(page).fold(form)(form.fill)
+
+  private def clearNonStandardDates(
+    userAnswers: UserAnswers
+  ): scala.util.Try[UserAnswers] =
+    userAnswers
+      .remove(NonStandardPeriodDate1Page)
+      .flatMap(_.remove(NonStandardPeriodDate2Page))
+      .flatMap(_.remove(NonStandardPeriodDate3Page))
+      .flatMap(_.remove(NonStandardPeriodDate4Page))
+      .flatMap(_.remove(NonStandardPeriodDate5Page))
+      .flatMap(_.remove(NonStandardPeriodDate6Page))
+      .flatMap(_.remove(NonStandardPeriodDate7Page))
+      .flatMap(_.remove(NonStandardPeriodDate8Page))
 
   private def submit[A: Writes](form: Form[A], page: QuestionPage[A], mode: Mode)(
     errorView: Form[A] => HtmlFormat.Appendable
