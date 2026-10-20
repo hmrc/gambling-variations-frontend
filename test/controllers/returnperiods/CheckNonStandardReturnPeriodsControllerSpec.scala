@@ -18,12 +18,12 @@ package controllers.returnperiods
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.{BusinessDetails, GamblingReturnPeriods, NormalMode, UserAnswers}
+import models.{BusinessDetails, GamblingReturnPeriods, NoReturnPeriodsSet, NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, verifyNoInteractions, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, NonStandardPeriodDatePages}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, NonStandardPeriodDatePages, ReturnPeriodsChoicePage}
 import play.api.Application
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -115,6 +115,12 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
       .set(
         GamblingReturnPeriodsPage,
         gamblingReturnPeriods()
+      )
+      .success
+      .value
+      .set(
+        ReturnPeriodsChoicePage,
+        NoReturnPeriodsSet.Standard
       )
       .success
       .value
