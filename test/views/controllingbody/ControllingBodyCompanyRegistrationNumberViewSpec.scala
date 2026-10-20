@@ -29,7 +29,6 @@ import views.html.controllingbody.ControllingBodyCompanyRegistrationNumberView
 
 class ControllingBodyCompanyRegistrationNumberViewSpec extends SpecBase {
 
-
   trait Setup {
     private val app = applicationBuilder().build()
 
@@ -44,7 +43,7 @@ class ControllingBodyCompanyRegistrationNumberViewSpec extends SpecBase {
       app.injector.instanceOf[MessagesApi].preferred(request)
 
     def render(f: Form[String]): Document =
-      Jsoup.parse(view(f,NormalMode)(request, messages).body)
+      Jsoup.parse(view(f, NormalMode)(request, messages).body)
   }
 
   private val fieldName = "value"
@@ -56,16 +55,16 @@ class ControllingBodyCompanyRegistrationNumberViewSpec extends SpecBase {
 
       val doc: Document = render(form)
 
-      doc.title must include(messages("controllingBodyCompanyRegistrationNumber.title"))
+      doc.title must include(messages("controllingBodyCompanyRegNumber.title"))
 
       doc.select(".govuk-caption-l").text mustEqual messages("changeRegistrationDetails.caption")
 
-      doc.select("h1.govuk-heading-l").text mustBe messages("controllingBodyCompanyRegistrationNumber.heading")
+      doc.select("h1.govuk-heading-l").text mustBe messages("controllingBodyCompanyRegNumber.heading")
 
       doc.select(s"label[for=$fieldName].govuk-label--m").text mustBe
-        messages("controllingBodyCompanyRegistrationNumber.paragraph")
+        messages("controllingBodyCompanyRegNumber.paragraph")
 
-      doc.select(".govuk-hint").text mustBe messages("controllingBodyCompanyRegistrationNumber.hint")
+      doc.select(".govuk-hint").text mustBe messages("controllingBodyCompanyRegNumber.hint")
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
@@ -77,10 +76,10 @@ class ControllingBodyCompanyRegistrationNumberViewSpec extends SpecBase {
       val link = render(form).select(s"p.govuk-body a.govuk-link[href=$companiesHouseUrl]")
 
       link.size() mustEqual 1
-      link.text mustBe messages("controllingBodyCompanyRegistrationNumber.link")
+      link.text mustBe messages("controllingBodyCompanyRegNumber.link")
       link.attr("target") mustBe "_blank"
       link.attr("rel") mustBe "noreferrer noopener"
-      link.parents().first().text must startWith(messages("controllingBodyCompanyRegistrationNumber.p1"))
+      link.parents().first().text must startWith(messages("controllingBodyCompanyRegNumber.p1"))
       link.parents().first().text must endWith(").")
     }
 
@@ -110,22 +109,22 @@ class ControllingBodyCompanyRegistrationNumberViewSpec extends SpecBase {
 
       doc.title must startWith(messages("error.title.prefix"))
       doc.select(".govuk-error-summary").text must
-        include(messages("controllingBodyCompanyRegistrationNumber.error.required"))
+        include(messages("controllingBodyCompanyRegNumber.error.required"))
       doc.select(".govuk-error-message").text must
-        include(messages("controllingBodyCompanyRegistrationNumber.error.required"))
+        include(messages("controllingBodyCompanyRegNumber.error.required"))
       doc.select(s".govuk-error-summary a[href=#$fieldName]").size() mustEqual 1
     }
     "must render the invalid characters error" in new Setup {
 
       render(form.bind(Map(fieldName -> "C@345678"))).select(".govuk-error-message").text must include(
-        messages("controllingBodyCompanyRegistrationNumber.error.invalid.characters")
+        messages("controllingBodyCompanyRegNumber.error.invalid.characters")
       )
     }
 
     "must render the incorrect format error" in new Setup {
 
       render(form.bind(Map(fieldName -> "ZZ345678"))).select(".govuk-error-message").text must include(
-        messages("controllingBodyCompanyRegistrationNumber.error.invalid.format")
+        messages("controllingBodyCompanyRegNumber.error.invalid.format")
       )
     }
   }

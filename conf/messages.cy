@@ -520,6 +520,16 @@ controllingBodySoleProprietorDob.error.required = cy: Date of birth must include
 controllingBodySoleProprietorDob.error.invalid = cy: Date of birth must be a real date
 controllingBodySoleProprietorDob.error.afterLatestDate = cy: Date of birth must be the same as or before {0}
 
+controllingBodyCompanyRegNumber.title = cy: Tell us the controlling body’s company registration number
+controllingBodyCompanyRegNumber.heading = cy: Tell us the controlling body’s company registration number
+controllingBodyCompanyRegNumber.paragraph = cy: What is the company registration number?
+controllingBodyCompanyRegNumber.hint = cy: It can be up to 8 numbers, or start with 2 letters followed by up to 6 letters or numbers, for example AC123456, IPCFGEDT or 000123
+controllingBodyCompanyRegNumber.error.required = cy: Enter the controlling body’s company registration number
+controllingBodyCompanyRegNumber.error.invalid.characters = cy: The controlling body’s company registration number must only include letters a to z and numbers 0 to 9
+controllingBodyCompanyRegNumber.error.invalid.format = cy: The controlling body’s company registration number must be in the correct format
+controllingBodyCompanyRegNumber.p1 = cy: You can find this by
+controllingBodyCompanyRegNumber.link = cy: searching for the company on the Companies House register (opens in new tab)
+
 dateOfIncorporation.title = cy: When was the controlling body’s date of incorporation?
 dateOfIncorporation.heading = cy: When was the controlling body’s date of incorporation?
 dateOfIncorporation.hint = cy: For example, 27 3 2007

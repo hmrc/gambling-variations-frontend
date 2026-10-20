@@ -42,7 +42,7 @@ object ControllingBodyCompanyRegistrationNumberFormProvider {
   private[forms] val crnRegex =
     "^(\\d{1,8}|([AaFfIiOoRrSsZz][Cc]|[Cc][Uu]|[Ss][AaEeFfIiRrZz]|[Ee][Ss])\\d{1,6}|([IiSs][Pp]|[Nn][AaFfIiOoPpRrVvZz]|[Rr][Oo])[\\da-zA-Z]{1,6})$"
 
-  private[forms] val requiredKey = "controllingBodyCompanyRegistrationNumber.error.required"
-  private[forms] val invalidCharactersKey = "controllingBodyCompanyRegistrationNumber.error.invalid.characters"
-  private[forms] val invalidFormatKey = "controllingBodyCompanyRegistrationNumber.error.invalid.format"
+  private[forms] val requiredKey = "controllingBodyCompanyRegNumber.error.required"
+  private[forms] val invalidCharactersKey = "controllingBodyCompanyRegNumber.error.invalid.characters"
+  private[forms] val invalidFormatKey = "controllingBodyCompanyRegNumber.error.invalid.format"
 }

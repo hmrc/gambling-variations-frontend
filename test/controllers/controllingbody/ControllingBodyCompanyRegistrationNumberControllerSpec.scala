@@ -40,10 +40,10 @@ class ControllingBodyCompanyRegistrationNumberControllerSpec extends SpecBase wi
 
   private val crn = "12345678"
 
-  private lazy val companyRegistrationNumberRoute : String =
+  private lazy val companyRegistrationNumberRoute: String =
     ControllingBodyCompanyRegistrationNumberController.onPageLoad().url
 
-  private lazy val companyRegistrationNumberSubmitRoute : String =
+  private lazy val companyRegistrationNumberSubmitRoute: String =
     ControllingBodyCompanyRegistrationNumberController.onSubmit().url
 
   private val corporateBodyAnswers: UserAnswers =
