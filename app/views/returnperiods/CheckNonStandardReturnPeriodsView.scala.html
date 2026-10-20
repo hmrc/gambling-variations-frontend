@@ -17,7 +17,7 @@
 @import play.twirl.api.{Html, HtmlFormat}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.*
-@import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant}
+@import models.{CheckMode, NoReturnPeriodsSet}
 @import viewmodels.LegendSize.Large
 @import views.html.components._
 
@@ -29,96 +29,102 @@
  govukSummaryList: GovukSummaryList,
  govukButton: GovukButton,
  p: Paragraph,
- h1:H1,
+ h1: H1,
  caption: Caption
 )
 
-
 @(viewModel: viewmodels.checkAnswers.returnperiods.CheckNonStandardReturnPeriodsViewModel)(implicit request: Request[_], messages: Messages)
 
-@returnPeriodsChoiceText = @{
-    viewModel.returnPeriodsChoice match {
-        case NoReturnPeriodsSet.Standard =>
-        messages("checkNonStandardReturnPeriods.standard")
+ @returnPeriodsChoiceRows = @{
+  viewModel.returnPeriodsChoice.toSeq.map { choice =>
+  val choiceText = choice match {
+  case NoReturnPeriodsSet.Standard =>
+  messages("checkNonStandardReturnPeriods.standard")
 
-        case NoReturnPeriodsSet.Nonstandard =>
-        messages("checkNonStandardReturnPeriods.nonStandard")
-    }
-}
+  case NoReturnPeriodsSet.Nonstandard =>
+  messages("checkNonStandardReturnPeriods.nonStandard")
+ }
 
-@layout(pageTitle = titleNoForm(messages("checkNonStandardReturnPeriods.title"),Some(messages("changeRegistrationDetails.caption")))) {
-
-
-@caption(messages("changeRegistrationDetails.caption"))
-@h1(messages("checkNonStandardReturnPeriods.heading"), classes = "govuk-heading-l")
-
-@p("checkNonStandardReturnPeriods.intro")
-
-
-@govukSummaryList(
-   SummaryList(
-    rows = Seq(
-        SummaryListRow(
-            key = Key(
-                content = Text(messages("checkNonStandardReturnPeriods.returnPeriods"))
-            ),
-            value = Value(
-             content = Text(returnPeriodsChoiceText)
-            ),
-            actions = Some(
-                Actions(
-                    items = Seq(
-                        ActionItem(
-                            href = controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(CheckMode).url,
-                            content = Text(messages("site.change")),
-                            visuallyHiddenText = Some(messages("checkNonStandardReturnPeriods.returnPeriods.hidden"))
-                        )
-                    )
-                )
-            )
-        ),
-     SummaryListRow(
-      key = Key(
-        content = Text(
-        messages("checkNonStandardReturnPeriods.returnPeriodsEnding")
-        )
-     ),
-     value = Value(content = HtmlContent(
-       Html(
-       "<ul class=\"govuk-list govuk-list--bullet\">" +
-       viewModel.selectedMonths
-       .map(month =>
-       s"<li>${HtmlFormat.escape(month).body}</li>"
-       )
-       .mkString +
-       "</ul>"
-       )
-       )
-     ),
-     actions = Some(
-      Actions(
-         items = Seq(
-             ActionItem(
-                 href = controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(models.CheckMode).url,
-                 content = Text(messages("site.change")),
-                 visuallyHiddenText = Some(
-                 messages("checkNonStandardReturnPeriods.returnPeriodsEnding.hidden")
-                 )
-             )
-         )
-       )
+ SummaryListRow(
+  key = Key(
+  content = Text(messages("checkNonStandardReturnPeriods.returnPeriods"))
+  ),
+  value = Value(content = Text(choiceText)),
+  actions = Some(
+   Actions(
+     items = Seq(
+      ActionItem(
+       href = controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(CheckMode).url,
+       content = Text(messages("site.change")),
+       visuallyHiddenText = Some(messages("checkNonStandardReturnPeriods.returnPeriods.hidden"))
       )
-     )
-    ) ++ viewModel.rows
+    )
    )
-)
-
-<p class="govuk-body">@messages("checkNonStandardReturnPeriods.continueInfo")</p>
-
-@govukButton(
- ButtonViewModel(messages("site.continue"))
-  .asLink(controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
   )
  )
-}
+ }
+ }
 
+@layout(
+ pageTitle = titleNoForm(
+ messages("checkNonStandardReturnPeriods.title"),
+ Some(messages("changeRegistrationDetails.caption"))
+ )
+ ) {
+
+@caption(messages("changeRegistrationDetails.caption"))
+
+@h1(messages("checkNonStandardReturnPeriods.heading"), classes = "govuk-heading-l")
+
+ @if(viewModel.showFinalPeriodWarning) {
+  @p("checkNonStandardReturnPeriods.warning2")
+ } else {
+  @p("checkNonStandardReturnPeriods.warning1")
+ }
+
+ @govukSummaryList(
+ SummaryList(
+ rows =
+ returnPeriodsChoiceRows ++
+ Seq(
+ SummaryListRow(
+ key = Key(
+ content = Text(messages("checkNonStandardReturnPeriods.returnPeriodsEnding"))
+ ),
+ value = Value(
+ content = HtmlContent(
+ Html(
+ "<ul class=\"govuk-list govuk-list--bullet\">" +
+ viewModel.selectedMonths
+ .map(month =>
+ s"<li>${HtmlFormat.escape(month).body}</li>"
+ )
+ .mkString +
+ "</ul>"
+ )
+ )
+ ),
+ actions = Some(
+  Actions(
+   items = Seq(
+    ActionItem(href = controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url,
+    content = Text(messages("site.change")),
+    visuallyHiddenText = Some(messages("checkNonStandardReturnPeriods.returnPeriodsEnding.hidden"))
+   )
+  )
+ )
+ )
+ )
+ ) ++
+ viewModel.rows
+ )
+ )
+
+    @p("checkNonStandardReturnPeriods.continueInfo")
+
+ @govukButton(
+  ButtonViewModel(messages("site.continue"))
+   .asLink(controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+   )
+ )
+}

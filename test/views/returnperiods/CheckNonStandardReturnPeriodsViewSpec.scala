@@ -23,7 +23,6 @@ import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers.*
 import play.twirl.api.Html
 import scala.jdk.CollectionConverters.*
 import viewmodels.checkAnswers.returnperiods.CheckNonStandardReturnPeriodsViewModel
@@ -71,16 +70,18 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
     DateTimeFormatter.ofPattern("d MMM yyyy")
 
   private def viewModel(
-    returnPeriodsChoice: NoReturnPeriodsSet = NoReturnPeriodsSet.Standard,
+    returnPeriodsChoice: Option[NoReturnPeriodsSet] = Some(NoReturnPeriodsSet.Standard),
     returnPeriodsId: Int = 1,
     periodEnds: Seq[LocalDate] = calculatedPeriodEnds,
-    dates: Seq[Option[LocalDate]] = enteredDates
+    dates: Seq[Option[LocalDate]] = enteredDates,
+    showFinalPeriodWarning: Boolean = false
   ): CheckNonStandardReturnPeriodsViewModel =
     CheckNonStandardReturnPeriodsViewModel(
-      returnPeriodsChoice  = returnPeriodsChoice,
-      returnPeriodsId      = returnPeriodsId,
-      calculatedPeriodEnds = periodEnds,
-      enteredDates         = dates
+      returnPeriodsChoice    = returnPeriodsChoice,
+      returnPeriodsId        = returnPeriodsId,
+      calculatedPeriodEnds   = periodEnds,
+      enteredDates           = dates,
+      showFinalPeriodWarning = showFinalPeriodWarning
     )
 
   private def createView(
@@ -106,15 +107,13 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
   "CheckNonStandardReturnPeriodsView" - {
 
     "render the page heading" in {
-      val doc = document()
-
-      doc.select("h1").text() mustEqual
-        msgs("checkNonStandardReturnPeriods.heading")
+      document()
+        .select("h1")
+        .text() mustEqual msgs("checkNonStandardReturnPeriods.heading")
     }
 
     "render the standard return periods choice" in {
-      val rows = summaryRows()
-      val choiceRow = rows.head
+      val choiceRow = summaryRows().head
 
       choiceRow.select(".govuk-summary-list__key").text() mustEqual
         msgs("checkNonStandardReturnPeriods.returnPeriods")
@@ -125,16 +124,31 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
 
     "render the non-standard return periods choice" in {
       val rows = summaryRows(
-        viewModel(returnPeriodsChoice = NoReturnPeriodsSet.Nonstandard)
+        viewModel(returnPeriodsChoice = Some(NoReturnPeriodsSet.Nonstandard))
       )
 
       rows.head.select(".govuk-summary-list__value").text() mustEqual
         msgs("checkNonStandardReturnPeriods.nonStandard")
     }
 
+    "omit the return periods choice row when the choice is missing" in {
+      val rows = summaryRows(
+        viewModel(returnPeriodsChoice = None)
+      )
+
+      rows.size mustEqual 9
+
+      rows.head.select(".govuk-summary-list__key").text() mustEqual
+        msgs("checkNonStandardReturnPeriods.returnPeriodsEnding")
+
+      rows.exists(
+        _.select(".govuk-summary-list__key").text() ==
+          msgs("checkNonStandardReturnPeriods.returnPeriods")
+      ) mustBe false
+    }
+
     "render the selected return period months as a bullet list" in {
-      val rows = summaryRows()
-      val monthsRow = rows(1)
+      val monthsRow = summaryRows()(1)
 
       monthsRow.select(".govuk-summary-list__key").text() mustEqual
         msgs("checkNonStandardReturnPeriods.returnPeriodsEnding")
@@ -190,20 +204,31 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
     }
 
     "render the return periods choice change link" in {
-      val rows = summaryRows()
       val changeLink =
-        rows.head.select(".govuk-summary-list__actions a")
+        summaryRows().head.select(".govuk-summary-list__actions a")
 
       changeLink.attr("href") mustEqual
         controllers.returnperiods.routes.ReturnPeriodsController
           .onPageLoad(CheckMode)
           .url
+
+      changeLink.text() must include(msgs("site.change"))
+    }
+
+    "not render a return periods choice change link when the choice is missing" in {
+      val choiceRows = summaryRows(
+        viewModel(returnPeriodsChoice = None)
+      ).filter(
+        _.select(".govuk-summary-list__key").text() ==
+          msgs("checkNonStandardReturnPeriods.returnPeriods")
+      )
+
+      choiceRows mustBe empty
     }
 
     "render the selected months change link" in {
-      val rows = summaryRows()
       val changeLink =
-        rows(1).select(".govuk-summary-list__actions a")
+        summaryRows()(1).select(".govuk-summary-list__actions a")
 
       changeLink.attr("href") mustEqual
         controllers.returnperiods.routes.ChooseReturnPeriodsController
@@ -214,17 +239,16 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
     "render all eight entered period dates" in {
       val rows = summaryRows()
 
-      // Two fixed rows followed by eight period-date rows.
+      // One return-period choice row, one selected-months row,
+      // followed by eight period-date rows.
       rows.size mustEqual 10
 
-      val periodRows = rows.drop(2)
-
-      periodRows.size mustEqual 8
-
       val actualDates =
-        periodRows.map(
-          _.select(".govuk-summary-list__value").text()
-        )
+        rows
+          .drop(2)
+          .map(
+            _.select(".govuk-summary-list__value").text()
+          )
 
       val expectedDates =
         enteredDates.flatten.map(_.format(dateFormatter))
@@ -233,10 +257,8 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
     }
 
     "render the continue link" in {
-      val doc = document()
-
       val continueLink =
-        doc.select("a.govuk-button")
+        document().select("a.govuk-button")
 
       continueLink.size() mustEqual 1
 
@@ -246,12 +268,58 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
           .url
     }
 
-    "render the page introduction" in {
-      val doc = document()
+    "render the standard warning when the final period warning is false" in {
+      val doc = document(
+        viewModel(showFinalPeriodWarning = false)
+      )
 
       doc.select("main").text() must include(
-        msgs("checkNonStandardReturnPeriods.intro")
+        msgs("checkNonStandardReturnPeriods.warning1")
       )
+    }
+
+    "render the final period warning when the final period warning is true" in {
+      val doc = document(
+        viewModel(showFinalPeriodWarning = true)
+      )
+
+      doc.select("main").text() must include(
+        msgs("checkNonStandardReturnPeriods.warning2")
+      )
+    }
+
+    "render the period-date change links in CheckMode" in {
+      val periodRows = summaryRows().drop(2)
+
+      periodRows.zipWithIndex.foreach { case (row, index) =>
+        val periodNumber = index + 1
+
+        row.select(".govuk-summary-list__actions a").attr("href") mustEqual
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+            .onPageLoad(periodNumber, models.CheckMode)
+            .url
+      }
+    }
+
+    "render NormalMode add links for missing period dates" in {
+      val dates =
+        enteredDates.updated(2, None).updated(7, None)
+
+      val rows =
+        summaryRows(viewModel(dates = dates))
+
+      val periodRows = rows.drop(2)
+
+      Seq(2, 7).foreach { index =>
+        val row = periodRows(index)
+
+        row.select(".govuk-summary-list__actions").isEmpty mustBe true
+
+        row.select(".govuk-summary-list__value a").attr("href") mustEqual
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+            .onPageLoad(index + 1, models.NormalMode)
+            .url
+      }
     }
   }
 }

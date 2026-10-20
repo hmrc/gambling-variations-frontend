@@ -61,23 +61,22 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
   private def viewModel(
     returnPeriodsId: Int = 1,
     periodEnds: Seq[LocalDate] = calculatedPeriodEnds,
-    dates: Seq[Option[LocalDate]] = enteredDates
+    dates: Seq[Option[LocalDate]] = enteredDates,
+    returnPeriodsChoice: Option[NoReturnPeriodsSet] = Some(NoReturnPeriodsSet.Standard),
+    showFinalPeriodWarning: Boolean = false
   ): CheckNonStandardReturnPeriodsViewModel =
     CheckNonStandardReturnPeriodsViewModel(
-      returnPeriodsChoice  = NoReturnPeriodsSet.Standard,
-      returnPeriodsId      = returnPeriodsId,
-      calculatedPeriodEnds = periodEnds,
-      enteredDates         = dates
+      returnPeriodsChoice    = returnPeriodsChoice,
+      returnPeriodsId        = returnPeriodsId,
+      calculatedPeriodEnds   = periodEnds,
+      enteredDates           = dates,
+      showFinalPeriodWarning = showFinalPeriodWarning
     )
 
   "CheckNonStandardReturnPeriodsViewModel.apply" - {
 
     "must return the selected months for return periods ID 1" in {
-
-      val result =
-        viewModel(returnPeriodsId = 1)
-
-      result.selectedMonths mustEqual Seq(
+      viewModel(returnPeriodsId = 1).selectedMonths mustEqual Seq(
         msgs("months.january"),
         msgs("months.april"),
         msgs("months.july"),
@@ -86,11 +85,7 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must return the selected months for return periods ID 2" in {
-
-      val result =
-        viewModel(returnPeriodsId = 2)
-
-      result.selectedMonths mustEqual Seq(
+      viewModel(returnPeriodsId = 2).selectedMonths mustEqual Seq(
         msgs("months.february"),
         msgs("months.may"),
         msgs("months.august"),
@@ -99,11 +94,7 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must return the selected months for return periods ID 3" in {
-
-      val result =
-        viewModel(returnPeriodsId = 3)
-
-      result.selectedMonths mustEqual Seq(
+      viewModel(returnPeriodsId = 3).selectedMonths mustEqual Seq(
         msgs("months.march"),
         msgs("months.june"),
         msgs("months.september"),
@@ -112,84 +103,42 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must return no selected months for an unknown return periods ID" in {
+      viewModel(returnPeriodsId = 4).selectedMonths mustBe empty
+    }
 
-      val result =
-        viewModel(returnPeriodsId = 4)
+    "must preserve the return periods choice when it is present" in {
+      viewModel(returnPeriodsChoice = Some(NoReturnPeriodsSet.Standard)).returnPeriodsChoice mustEqual Some(NoReturnPeriodsSet.Standard)
+    }
 
-      result.selectedMonths mustBe empty
+    "must support a missing return periods choice" in {
+      viewModel(returnPeriodsChoice = None).returnPeriodsChoice mustBe None
+    }
+
+    "must preserve the final period warning flag" in {
+      viewModel(showFinalPeriodWarning = true).showFinalPeriodWarning mustBe true
+
+      viewModel(showFinalPeriodWarning = false).showFinalPeriodWarning mustBe false
     }
 
     "must create 8 rows for the 8 calculated period ends" in {
-
-      val result =
-        viewModel()
-
-      result.rows.size mustEqual 8
+      viewModel().rows.size mustEqual 8
     }
 
     "must create the correct period labels for all 8 periods" in {
-
-      val result =
-        viewModel()
-
-      result.rows.map(_.key.content) mustEqual Seq(
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jan 2026"
-          )
-        ),
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Apr 2026"
-          )
-        ),
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jul 2026"
-          )
-        ),
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Oct 2026"
-          )
-        ),
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jan 2027"
-          )
-        ),
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Apr 2027"
-          )
-        ),
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jul 2027"
-          )
-        ),
-        Text(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Oct 2027"
-          )
-        )
+      viewModel().rows.map(_.key.content) mustEqual Seq(
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Jan 2026")),
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Apr 2026")),
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Jul 2026")),
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Oct 2026")),
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Jan 2027")),
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Apr 2027")),
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Jul 2027")),
+        Text(msgs("checkNonStandardReturnPeriods.periodLabel", "Oct 2027"))
       )
     }
 
     "must display all 8 entered dates" in {
-
-      val result =
-        viewModel()
-
-      result.rows.map(_.value.content) mustEqual Seq(
+      viewModel().rows.map(_.value.content) mustEqual Seq(
         Text("30 Jan 2026"),
         Text("29 Apr 2026"),
         Text("30 Jul 2026"),
@@ -202,16 +151,9 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must create the correct CheckMode change link for all 8 periods" in {
-
-      val result =
-        viewModel()
-
-      result.rows.zipWithIndex.foreach { case (row, index) =>
-        val periodNumber =
-          index + 1
-
-        val action =
-          row.actions.value.items.head
+      viewModel().rows.zipWithIndex.foreach { case (row, index) =>
+        val periodNumber = index + 1
+        val action = row.actions.value.items.head
 
         action.href mustEqual
           routes.EnterNonStandardPeriodDateController
@@ -223,49 +165,32 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must not apply the missing row class when all 8 dates are present" in {
-
-      val result =
-        viewModel()
-
-      result.rows.foreach { row =>
+      viewModel().rows.foreach { row =>
         row.classes mustEqual ""
-        row.actions.isDefined mustEqual true
+        row.actions.isDefined mustBe true
       }
     }
 
     "must set the visually hidden text on a change action" in {
-
-      val result =
-        viewModel()
+      val result = viewModel()
 
       val periodLabel =
-        msgs(
-          "checkNonStandardReturnPeriods.periodLabel",
-          "Jan 2026"
-        )
+        msgs("checkNonStandardReturnPeriods.periodLabel", "Jan 2026")
 
       val expectedHiddenText =
         periodLabel.headOption
           .map(first => s"${first.toLower}${periodLabel.tail}")
           .getOrElse(periodLabel)
 
-      val action =
-        result.rows.head.actions.value.items.head
-
-      action.visuallyHiddenText mustEqual
+      result.rows.head.actions.value.items.head.visuallyHiddenText mustEqual
         Some(expectedHiddenText)
     }
 
     "must create a NormalMode add link when a date is missing" in {
-
-      val dates =
-        enteredDates.updated(2, None)
-
       val result =
-        viewModel(dates = dates)
+        viewModel(dates = enteredDates.updated(2, None))
 
-      val row =
-        result.rows(2)
+      val row = result.rows(2)
 
       row.value.content match {
         case HtmlContent(html) =>
@@ -276,32 +201,22 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
           )
 
           html.body must include(
-            msgs(
-              "checkNonStandardReturnPeriods.addEndDate",
-              "Jul 2026"
-            )
+            msgs("checkNonStandardReturnPeriods.addEndDate", "Jul 2026")
           )
 
         case content =>
           fail(s"Expected HtmlContent but got $content")
       }
 
-      row.actions mustEqual None
-
-      row.classes mustEqual
-        "govuk-summary-list__row--no-actions"
+      row.actions mustBe None
+      row.classes mustEqual "govuk-summary-list__row--no-actions"
     }
 
     "must use the correct NormalMode period number for a missing eighth date" in {
-
-      val dates =
-        enteredDates.updated(7, None)
-
       val result =
-        viewModel(dates = dates)
+        viewModel(dates = enteredDates.updated(7, None))
 
-      val row =
-        result.rows(7)
+      val row = result.rows(7)
 
       row.value.content match {
         case HtmlContent(html) =>
@@ -312,24 +227,18 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
           )
 
           html.body must include(
-            msgs(
-              "checkNonStandardReturnPeriods.addEndDate",
-              "Oct 2027"
-            )
+            msgs("checkNonStandardReturnPeriods.addEndDate", "Oct 2027")
           )
 
         case content =>
           fail(s"Expected HtmlContent but got $content")
       }
 
-      row.actions mustEqual None
-
-      row.classes mustEqual
-        "govuk-summary-list__row--no-actions"
+      row.actions mustBe None
+      row.classes mustEqual "govuk-summary-list__row--no-actions"
     }
 
     "must correctly create populated and missing rows across all 8 periods" in {
-
       val result =
         viewModel(
           dates = Seq(
@@ -346,59 +255,27 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
 
       result.rows.size mustEqual 8
 
-      result.rows(0).value.content mustEqual
-        Text("30 Jan 2026")
-      result.rows(0).actions.isDefined mustEqual true
-      result.rows(0).classes mustEqual ""
+      Seq(0, 1, 3, 5, 6).foreach { index =>
+        result.rows(index).actions.isDefined mustBe true
+        result.rows(index).classes mustEqual ""
+      }
 
-      result.rows(1).value.content mustEqual
-        Text("29 Apr 2026")
-      result.rows(1).actions.isDefined mustEqual true
-      result.rows(1).classes mustEqual ""
-
-      result.rows(2).value.content.isInstanceOf[HtmlContent] mustEqual true
-      result.rows(2).actions mustEqual None
-      result.rows(2).classes mustEqual
-        "govuk-summary-list__row--no-actions"
-
-      result.rows(3).value.content mustEqual
-        Text("30 Oct 2026")
-      result.rows(3).actions.isDefined mustEqual true
-      result.rows(3).classes mustEqual ""
-
-      result.rows(4).value.content.isInstanceOf[HtmlContent] mustEqual true
-      result.rows(4).actions mustEqual None
-      result.rows(4).classes mustEqual
-        "govuk-summary-list__row--no-actions"
-
-      result.rows(5).value.content mustEqual
-        Text("29 Apr 2027")
-      result.rows(5).actions.isDefined mustEqual true
-      result.rows(5).classes mustEqual ""
-
-      result.rows(6).value.content mustEqual
-        Text("30 Jul 2027")
-      result.rows(6).actions.isDefined mustEqual true
-      result.rows(6).classes mustEqual ""
-
-      result.rows(7).value.content.isInstanceOf[HtmlContent] mustEqual true
-      result.rows(7).actions mustEqual None
-      result.rows(7).classes mustEqual
-        "govuk-summary-list__row--no-actions"
+      Seq(2, 4, 7).foreach { index =>
+        result.rows(index).value.content.isInstanceOf[HtmlContent] mustBe true
+        result.rows(index).actions mustBe None
+        result.rows(index).classes mustEqual
+          "govuk-summary-list__row--no-actions"
+      }
     }
 
     "must use the correct NormalMode link for every missing date" in {
-
       val result =
-        viewModel(
-          dates = Seq.fill(8)(None)
-        )
+        viewModel(dates = Seq.fill(8)(None))
 
       result.rows.size mustEqual 8
 
       result.rows.zipWithIndex.foreach { case (row, index) =>
-        val periodNumber =
-          index + 1
+        val periodNumber = index + 1
 
         row.value.content match {
           case HtmlContent(html) =>
@@ -412,43 +289,33 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
             fail(s"Expected HtmlContent but got $content")
         }
 
-        row.actions mustEqual None
-
-        row.classes mustEqual
-          "govuk-summary-list__row--no-actions"
+        row.actions mustBe None
+        row.classes mustEqual "govuk-summary-list__row--no-actions"
       }
     }
 
     "must treat a missing enteredDates position as a missing date" in {
-
       val result =
-        viewModel(
-          dates = enteredDates.take(4)
-        )
+        viewModel(dates = enteredDates.take(4))
 
       result.rows.size mustEqual 8
 
       result.rows.take(4).foreach { row =>
-        row.actions.isDefined mustEqual true
+        row.actions.isDefined mustBe true
         row.classes mustEqual ""
       }
 
       result.rows.drop(4).foreach { row =>
-        row.value.content.isInstanceOf[HtmlContent] mustEqual true
-        row.actions mustEqual None
-        row.classes mustEqual
-          "govuk-summary-list__row--no-actions"
+        row.value.content.isInstanceOf[HtmlContent] mustBe true
+        row.actions mustBe None
+        row.classes mustEqual "govuk-summary-list__row--no-actions"
       }
     }
 
     "must ignore entered dates that do not have a corresponding calculated period end" in {
-
-      val additionalDate =
-        Some(LocalDate.of(2028, 1, 30))
-
       val result =
         viewModel(
-          dates = enteredDates :+ additionalDate
+          dates = enteredDates :+ Some(LocalDate.of(2028, 1, 30))
         )
 
       result.rows.size mustEqual 8
@@ -466,21 +333,16 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must return no rows when there are no calculated period ends" in {
-
-      val result =
-        viewModel(
-          periodEnds = Seq.empty,
-          dates      = Seq.empty
-        )
-
-      result.rows mustBe empty
+      viewModel(
+        periodEnds = Seq.empty,
+        dates      = Seq.empty
+      ).rows mustBe empty
     }
   }
 
   "CheckNonStandardReturnPeriodsViewModel.formatMonth" - {
 
     "must format January correctly" in {
-
       CheckNonStandardReturnPeriodsViewModel.formatMonth(
         LocalDate.of(2026, 1, 31),
         Locale.ENGLISH
@@ -488,7 +350,6 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must format December correctly" in {
-
       CheckNonStandardReturnPeriodsViewModel.formatMonth(
         LocalDate.of(2027, 12, 31),
         Locale.ENGLISH
@@ -499,7 +360,6 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
   "CheckNonStandardReturnPeriodsViewModel.formatDate" - {
 
     "must format a single digit day without a leading zero" in {
-
       CheckNonStandardReturnPeriodsViewModel.formatDate(
         LocalDate.of(2026, 1, 5),
         Locale.ENGLISH
@@ -507,7 +367,6 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
 
     "must format a two digit day correctly" in {
-
       CheckNonStandardReturnPeriodsViewModel.formatDate(
         LocalDate.of(2026, 10, 30),
         Locale.ENGLISH

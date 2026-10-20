@@ -92,7 +92,8 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
 
   private def gamblingReturnPeriods(
     hasExistingNstpValues: Option[Boolean] = Some(false),
-    nstpEndDate8: Option[LocalDate] = None
+    nstpEndDate8: Option[LocalDate] = None,
+    finalPeriodWarning: Option[Boolean] = Some(false)
   ): GamblingReturnPeriods =
     GamblingReturnPeriods(
       mgdRegNumber          = mgdRegNum,
@@ -106,7 +107,7 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
       nstpEndDate7          = None,
       nstpEndDate8          = nstpEndDate8,
       isInLastNstp          = Some(false),
-      finalPeriodWarning    = Some(false),
+      finalPeriodWarning    = finalPeriodWarning,
       hasExistingNstpValues = hasExistingNstpValues
     )
 
@@ -129,6 +130,23 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
     returnPeriodsId: Int
   ): UserAnswers =
     answersWithoutReturnPeriodsId
+      .set(
+        ChooseReturnPeriodsPage,
+        returnPeriodsId
+      )
+      .success
+      .value
+
+  private def answersWithoutReturnPeriodsChoice(
+    returnPeriodsId: Int = 1
+  ): UserAnswers =
+    emptyUserAnswers
+      .set(
+        GamblingReturnPeriodsPage,
+        gamblingReturnPeriods()
+      )
+      .success
+      .value
       .set(
         ChooseReturnPeriodsPage,
         returnPeriodsId
@@ -200,25 +218,6 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
       Future.successful(details)
     )
 
-  private def stubGamblingReturnPeriods(
-    returnPeriods: GamblingReturnPeriods
-  ): Unit =
-    when(
-      mockGamblingConnector
-        .getGamblingReturnPeriods(any[String])(
-          any[HeaderCarrier]
-        )
-    ).thenReturn(
-      Future.successful(returnPeriods)
-    )
-
-  private def stubConnectorResponses(
-    returnPeriods: GamblingReturnPeriods
-  ): Unit = {
-    stubBusinessDetails()
-    stubGamblingReturnPeriods(returnPeriods)
-  }
-
   private def stubCalculatedPeriods(
     baseDate: LocalDate,
     returnPeriodsId: Int
@@ -230,10 +229,18 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
       )
     ).thenReturn(calculatedPeriodEnds)
 
+  private def stubControllerDependencies(
+    baseDate: LocalDate = fixedDate,
+    returnPeriodsId: Int = 1,
+    details: BusinessDetails = businessDetails()
+  ): Unit = {
+    stubBusinessDetails(details)
+    stubCalculatedPeriods(baseDate, returnPeriodsId)
+  }
+
   "CheckNonStandardReturnPeriodsController.onPageLoad" - {
 
     "must redirect to Choose Return Periods when the return periods ID is missing" in {
-
       val app =
         application(answersWithoutReturnPeriodsId)
 
@@ -257,14 +264,8 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
 
     Seq(0, 4).foreach { invalidReturnPeriodsId =>
       s"must redirect to the system error page when the return periods ID is $invalidReturnPeriodsId" in {
-
-        val userAnswers =
-          answersWithReturnPeriodsId(
-            invalidReturnPeriodsId
-          )
-
         val app =
-          application(userAnswers)
+          application(answersWithReturnPeriodsId(invalidReturnPeriodsId))
 
         running(app) {
           val result =
@@ -287,18 +288,10 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
 
     Seq(1, 2, 3).foreach { returnPeriodsId =>
       s"must return OK for return periods ID $returnPeriodsId" in {
-
         val userAnswers =
           answersWithAllDates(returnPeriodsId)
 
-        val returnPeriods =
-          gamblingReturnPeriods(
-            hasExistingNstpValues = Some(false)
-          )
-
-        stubConnectorResponses(returnPeriods)
-
-        stubCalculatedPeriods(
+        stubControllerDependencies(
           baseDate        = fixedDate,
           returnPeriodsId = returnPeriodsId
         )
@@ -317,11 +310,6 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
               any[HeaderCarrier]
             )
 
-          verify(mockGamblingConnector)
-            .getGamblingReturnPeriods(any[String])(
-              any[HeaderCarrier]
-            )
-
           verify(mockNstpPeriodCalculator)
             .calculate(
               fixedDate,
@@ -332,21 +320,10 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
     }
 
     "must render all 8 entered dates" in {
-
       val userAnswers =
         answersWithAllDates()
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(false)
-        )
-
-      stubConnectorResponses(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = fixedDate,
-        returnPeriodsId = 1
-      )
+      stubControllerDependencies()
 
       val app =
         application(userAnswers)
@@ -384,21 +361,10 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
     }
 
     "must render NormalMode add links for all 8 missing dates" in {
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(false)
-        )
-
-      stubConnectorResponses(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = fixedDate,
-        returnPeriodsId = 1
-      )
+      stubControllerDependencies()
 
       val app =
         application(userAnswers)
@@ -415,18 +381,61 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         (1 to 8).foreach { periodNumber =>
           content must include(
             controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-              .onPageLoad(
-                periodNumber,
-                NormalMode
-              )
+              .onPageLoad(periodNumber, NormalMode)
               .url
           )
         }
       }
     }
 
-    "must render CheckMode links for entered dates and NormalMode links for missing dates" in {
+    "must omit the return periods choice row when ReturnPeriodsChoicePage is missing" in {
+      val userAnswers =
+        answersWithoutReturnPeriodsChoice()
 
+      stubControllerDependencies()
+
+      val app =
+        application(userAnswers)
+
+      running(app) {
+        val result =
+          route(app, request).value
+
+        status(result) mustEqual OK
+
+        val content =
+          contentAsString(result)
+
+        content must include("Return periods ending")
+        content must not include "checkNonStandardReturnPeriods.returnPeriods.hidden"
+        content must not include "Non-standard"
+      }
+    }
+
+    "must display the return periods choice row when ReturnPeriodsChoicePage is present" in {
+      val userAnswers =
+        answersWithReturnPeriodsId(1)
+
+      stubControllerDependencies()
+
+      val app =
+        application(userAnswers)
+
+      running(app) {
+        val result =
+          route(app, request).value
+
+        status(result) mustEqual OK
+
+        val content =
+          contentAsString(result)
+
+        content must include("Return periods")
+        content must include("Standard")
+      }
+    }
+
+    "must render CheckMode links for entered dates and NormalMode links for missing dates" in {
       val userAnswers =
         answersWithReturnPeriodsId(1)
           .set(
@@ -448,17 +457,7 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
           .success
           .value
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(false)
-        )
-
-      stubConnectorResponses(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = fixedDate,
-        returnPeriodsId = 1
-      )
+      stubControllerDependencies()
 
       val app =
         application(userAnswers)
@@ -472,31 +471,18 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         val content =
           contentAsString(result)
 
-        content must include(
-          controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-            .onPageLoad(1, models.CheckMode)
-            .url
-        )
-
-        content must include(
-          controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-            .onPageLoad(4, models.CheckMode)
-            .url
-        )
-
-        content must include(
-          controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-            .onPageLoad(8, models.CheckMode)
-            .url
-        )
+        Seq(1, 4, 8).foreach { periodNumber =>
+          content must include(
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(periodNumber, models.CheckMode)
+              .url
+          )
+        }
 
         Seq(2, 3, 5, 6, 7).foreach { periodNumber =>
           content must include(
             controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-              .onPageLoad(
-                periodNumber,
-                NormalMode
-              )
+              .onPageLoad(periodNumber, NormalMode)
               .url
           )
         }
@@ -504,7 +490,6 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
     }
 
     "must use the current date when there are no existing NSTP values" in {
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
 
@@ -514,15 +499,16 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
           nstpEndDate8          = Some(existingNstpEndDate8)
         )
 
-      stubConnectorResponses(returnPeriods)
+      val answers =
+        userAnswers
+          .set(GamblingReturnPeriodsPage, returnPeriods)
+          .success
+          .value
 
-      stubCalculatedPeriods(
-        baseDate        = fixedDate,
-        returnPeriodsId = 1
-      )
+      stubControllerDependencies()
 
       val app =
-        application(userAnswers)
+        application(answers)
 
       running(app) {
         val result =
@@ -531,30 +517,24 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         status(result) mustEqual OK
 
         verify(mockNstpPeriodCalculator)
-          .calculate(
-            fixedDate,
-            1
-          )
+          .calculate(fixedDate, 1)
       }
     }
 
     "must use the current date when hasExistingNstpValues is missing" in {
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods(
+              hasExistingNstpValues = None,
+              nstpEndDate8          = Some(existingNstpEndDate8)
+            )
+          )
+          .success
+          .value
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = None,
-          nstpEndDate8          = Some(existingNstpEndDate8)
-        )
-
-      stubConnectorResponses(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = fixedDate,
-        returnPeriodsId = 1
-      )
+      stubControllerDependencies()
 
       val app =
         application(userAnswers)
@@ -566,29 +546,25 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         status(result) mustEqual OK
 
         verify(mockNstpPeriodCalculator)
-          .calculate(
-            fixedDate,
-            1
-          )
+          .calculate(fixedDate, 1)
       }
     }
 
     "must use NSTP end date 8 when existing NSTP values are present" in {
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods(
+              hasExistingNstpValues = Some(true),
+              nstpEndDate8          = Some(existingNstpEndDate8)
+            )
+          )
+          .success
+          .value
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(true),
-          nstpEndDate8          = Some(existingNstpEndDate8)
-        )
-
-      stubConnectorResponses(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = existingNstpEndDate8,
-        returnPeriodsId = 1
+      stubControllerDependencies(
+        baseDate = existingNstpEndDate8
       )
 
       val app =
@@ -601,30 +577,24 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         status(result) mustEqual OK
 
         verify(mockNstpPeriodCalculator)
-          .calculate(
-            existingNstpEndDate8,
-            1
-          )
+          .calculate(existingNstpEndDate8, 1)
       }
     }
 
     "must use the current date when existing NSTP values are present but NSTP end date 8 is missing" in {
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods(
+              hasExistingNstpValues = Some(true),
+              nstpEndDate8          = None
+            )
+          )
+          .success
+          .value
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(true),
-          nstpEndDate8          = None
-        )
-
-      stubConnectorResponses(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = fixedDate,
-        returnPeriodsId = 1
-      )
+      stubControllerDependencies()
 
       val app =
         application(userAnswers)
@@ -636,33 +606,20 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         status(result) mustEqual OK
 
         verify(mockNstpPeriodCalculator)
-          .calculate(
-            fixedDate,
-            1
-          )
+          .calculate(fixedDate, 1)
       }
     }
 
     "must use the registration date when it is after the current date" in {
-
       val laterRegistrationDate =
         LocalDate.of(2027, 1, 1)
-
-      stubBusinessDetails(businessDetails(Some(laterRegistrationDate)))
 
       val userAnswers =
         answersWithReturnPeriodsId(1)
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(false)
-        )
-
-      stubGamblingReturnPeriods(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = laterRegistrationDate,
-        returnPeriodsId = 1
+      stubControllerDependencies(
+        baseDate = laterRegistrationDate,
+        details  = businessDetails(Some(laterRegistrationDate))
       )
 
       val app =
@@ -675,34 +632,29 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         status(result) mustEqual OK
 
         verify(mockNstpPeriodCalculator)
-          .calculate(
-            laterRegistrationDate,
-            1
-          )
+          .calculate(laterRegistrationDate, 1)
       }
     }
 
     "must use the registration date when it is after existing NSTP end date 8" in {
-
       val laterRegistrationDate =
         LocalDate.of(2027, 1, 1)
 
-      stubBusinessDetails(businessDetails(Some(laterRegistrationDate)))
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods(
+              hasExistingNstpValues = Some(true),
+              nstpEndDate8          = Some(existingNstpEndDate8)
+            )
+          )
+          .success
+          .value
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(true),
-          nstpEndDate8          = Some(existingNstpEndDate8)
-        )
-
-      stubGamblingReturnPeriods(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = laterRegistrationDate,
-        returnPeriodsId = 1
+      stubControllerDependencies(
+        baseDate = laterRegistrationDate,
+        details  = businessDetails(Some(laterRegistrationDate))
       )
 
       val app =
@@ -715,30 +667,17 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         status(result) mustEqual OK
 
         verify(mockNstpPeriodCalculator)
-          .calculate(
-            laterRegistrationDate,
-            1
-          )
+          .calculate(laterRegistrationDate, 1)
       }
     }
 
     "must use the registration date when it equals the reference date" in {
-
-      stubBusinessDetails(businessDetails(Some(fixedDate)))
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(false)
-        )
-
-      stubGamblingReturnPeriods(returnPeriods)
-
-      stubCalculatedPeriods(
-        baseDate        = fixedDate,
-        returnPeriodsId = 1
+      stubControllerDependencies(
+        baseDate = fixedDate,
+        details  = businessDetails(Some(fixedDate))
       )
 
       val app =
@@ -751,26 +690,15 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         status(result) mustEqual OK
 
         verify(mockNstpPeriodCalculator)
-          .calculate(
-            fixedDate,
-            1
-          )
+          .calculate(fixedDate, 1)
       }
     }
 
     "must fail when the registration date is missing" in {
-
-      stubBusinessDetails(businessDetails(None))
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
 
-      val returnPeriods =
-        gamblingReturnPeriods(
-          hasExistingNstpValues = Some(false)
-        )
-
-      stubGamblingReturnPeriods(returnPeriods)
+      stubBusinessDetails(businessDetails(None))
 
       val app =
         application(userAnswers)
@@ -784,24 +712,18 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
             await(result)
           }
 
-        exception.getMessage mustEqual
-          "No registration date found"
+        exception.getMessage mustEqual "No registration date found"
 
-        verifyNoInteractions(
-          mockNstpPeriodCalculator
-        )
+        verifyNoInteractions(mockNstpPeriodCalculator)
       }
     }
 
     "must fail when getting business details fails" in {
-
       val userAnswers =
         answersWithReturnPeriodsId(1)
 
       val expectedException =
-        new RuntimeException(
-          "Unable to get business details"
-        )
+        new RuntimeException("Unable to get business details")
 
       when(
         mockGamblingConnector
@@ -826,32 +748,21 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
 
         exception mustEqual expectedException
 
-        verifyNoInteractions(
-          mockNstpPeriodCalculator
-        )
+        verifyNoInteractions(mockNstpPeriodCalculator)
       }
     }
 
-    "must fail when getting gambling return periods fails" in {
-
+    "must show the final period warning when finalPeriodWarning is true" in {
       val userAnswers =
         answersWithReturnPeriodsId(1)
-
-      val expectedException =
-        new RuntimeException(
-          "Unable to get gambling return periods"
-        )
-
-      stubBusinessDetails()
-
-      when(
-        mockGamblingConnector
-          .getGamblingReturnPeriods(any[String])(
-            any[HeaderCarrier]
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods(finalPeriodWarning = Some(true))
           )
-      ).thenReturn(
-        Future.failed(expectedException)
-      )
+          .success
+          .value
+
+      stubControllerDependencies()
 
       val app =
         application(userAnswers)
@@ -860,17 +771,40 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
         val result =
           route(app, request).value
 
-        val exception =
-          intercept[RuntimeException] {
-            await(result)
-          }
+        status(result) mustEqual OK
 
-        exception mustEqual expectedException
-
-        verifyNoInteractions(
-          mockNstpPeriodCalculator
+        contentAsString(result) must include(
+          "We can take up to 48 hours to approve extensions"
         )
       }
     }
+
+    "must show the standard warning when finalPeriodWarning is false" in {
+      val userAnswers =
+        answersWithReturnPeriodsId(1)
+          .set(
+            GamblingReturnPeriodsPage,
+            gamblingReturnPeriods(finalPeriodWarning = Some(false))
+          )
+          .success
+          .value
+
+      stubControllerDependencies()
+
+      val app =
+        application(userAnswers)
+
+      running(app) {
+        val result =
+          route(app, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result) must include(
+          "These changes will only apply after your current return period."
+        )
+      }
+    }
+
   }
 }

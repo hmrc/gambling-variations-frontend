@@ -19,7 +19,7 @@ package controllers.returnperiods
 import connectors.GamblingConnector
 import controllers.actions.*
 import models.{BusinessDetails, GamblingReturnPeriods, NormalMode}
-import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDatePages, ReturnPeriodsChoicePage}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, NonStandardPeriodDatePages, ReturnPeriodsChoicePage}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.returnperiods.NstpPeriodCalculator
@@ -50,7 +50,6 @@ class CheckNonStandardReturnPeriodsController @Inject() (
 
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-
       request.userAnswers.get(ChooseReturnPeriodsPage) match {
         case None =>
           Future.successful(
@@ -62,44 +61,28 @@ class CheckNonStandardReturnPeriodsController @Inject() (
 
         case Some(returnPeriodsId) if !validReturnPeriodIds.contains(returnPeriodsId) =>
           Future.successful(
-            Redirect(
-              controllers.routes.SystemErrorController.onPageLoad()
-            )
+            Redirect(controllers.routes.SystemErrorController.onPageLoad())
           )
 
         case Some(returnPeriodsId) =>
-          request.userAnswers.get(ReturnPeriodsChoicePage) match {
+          val returnPeriodsChoice =
+            request.userAnswers.get(ReturnPeriodsChoicePage)
+
+          request.userAnswers.get(GamblingReturnPeriodsPage) match {
             case None =>
               Future.successful(
-                Redirect(
-                  controllers.routes.SystemErrorController.onPageLoad()
-                )
+                Redirect(controllers.routes.SystemErrorController.onPageLoad())
               )
 
-            case Some(returnPeriodsChoice) =>
-              for {
-                businessDetails <-
-                  gamblingConnector.getBusinessDetails(request.mgdRegNum)
-
-                gamblingReturnPeriods <-
-                  gamblingConnector.getGamblingReturnPeriods(
-                    request.mgdRegNum
-                  )
-              } yield {
-                implicit val messages: Messages =
-                  messagesApi.preferred(request)
+            case Some(gamblingReturnPeriods) =>
+              gamblingConnector.getBusinessDetails(request.mgdRegNum).map { businessDetails =>
+                implicit val messages: Messages = messagesApi.preferred(request)
 
                 val baseDate =
-                  calculateBaseDate(
-                    businessDetails,
-                    gamblingReturnPeriods
-                  )
+                  calculateBaseDate(businessDetails, gamblingReturnPeriods)
 
                 val calculatedPeriodEnds =
-                  nstpPeriodCalculator.calculate(
-                    baseDate,
-                    returnPeriodsId
-                  )
+                  nstpPeriodCalculator.calculate(baseDate, returnPeriodsId)
 
                 val enteredDates =
                   (1 to numberOfPeriods).map { periodNumber =>
@@ -108,12 +91,16 @@ class CheckNonStandardReturnPeriodsController @Inject() (
                     )
                   }
 
+                val showFinalPeriodWarning =
+                  gamblingReturnPeriods.finalPeriodWarning.contains(true)
+
                 val viewModel =
                   CheckNonStandardReturnPeriodsViewModel(
-                    returnPeriodsChoice  = returnPeriodsChoice,
-                    returnPeriodsId      = returnPeriodsId,
-                    calculatedPeriodEnds = calculatedPeriodEnds,
-                    enteredDates         = enteredDates
+                    returnPeriodsChoice    = returnPeriodsChoice,
+                    returnPeriodsId        = returnPeriodsId,
+                    calculatedPeriodEnds   = calculatedPeriodEnds,
+                    enteredDates           = enteredDates,
+                    showFinalPeriodWarning = showFinalPeriodWarning
                   )
 
                 Ok(view(viewModel))

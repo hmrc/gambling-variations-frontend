@@ -28,18 +28,20 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 final case class CheckNonStandardReturnPeriodsViewModel(
-  returnPeriodsChoice: NoReturnPeriodsSet,
+  returnPeriodsChoice: Option[NoReturnPeriodsSet],
   selectedMonths: Seq[String],
-  rows: Seq[SummaryListRow]
+  rows: Seq[SummaryListRow],
+  showFinalPeriodWarning: Boolean
 )
 
 object CheckNonStandardReturnPeriodsViewModel {
 
   def apply(
-    returnPeriodsChoice: NoReturnPeriodsSet,
+    returnPeriodsChoice: Option[NoReturnPeriodsSet],
     returnPeriodsId: Int,
     calculatedPeriodEnds: Seq[LocalDate],
-    enteredDates: Seq[Option[LocalDate]]
+    enteredDates: Seq[Option[LocalDate]],
+    showFinalPeriodWarning: Boolean
   )(implicit messages: Messages): CheckNonStandardReturnPeriodsViewModel = {
 
     val selectedMonths =
@@ -99,9 +101,10 @@ object CheckNonStandardReturnPeriodsViewModel {
       }
 
     CheckNonStandardReturnPeriodsViewModel(
-      returnPeriodsChoice: NoReturnPeriodsSet,
-      selectedMonths = selectedMonths,
-      rows           = rows
+      returnPeriodsChoice    = returnPeriodsChoice,
+      selectedMonths         = selectedMonths,
+      rows                   = rows,
+      showFinalPeriodWarning = showFinalPeriodWarning
     )
   }
 
