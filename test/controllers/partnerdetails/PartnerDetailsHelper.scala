@@ -229,7 +229,7 @@ trait PartnerDetailsHelper {
   )
 
   def cleanedDataNewPartnersRouting(
-    businessType: Int = 2,
+    businessType: Int,
     isIncorporatedInTheUK: Boolean = true
   ): JsObject = Json.obj(
     "partners" -> Json.obj(),
