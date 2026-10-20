@@ -42,6 +42,8 @@ object PartnerDetailsNavigator {
     case PartnerDetailsContactNumberPage(index) =>
       _ => controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsNinoPage(index) =>
+      userAnswers => navigatePartnerAddNinoPage(index)(userAnswers)
+    case PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index) =>
       userAnswers => navigatePartnerRemoveNinoYesNoPage(index)(userAnswers)
     case PartnerDetailsAddNationalInsuranceNumberYesNoPage(index) =>
       userAnswers => navigatePartnerAddNinoYesNoPage(index)(userAnswers)
@@ -99,6 +101,12 @@ object PartnerDetailsNavigator {
     answers
       .get(PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index))
       .map(_ => controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(index.toString, NormalMode))
+      .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def navigatePartnerAddNinoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
+    answers
+      .get(PartnerDetailsNinoPage(index))
+      .map(_ => controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index.toString, NormalMode))
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerAddNinoYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
