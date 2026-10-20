@@ -40,6 +40,7 @@ class EnterNonStandardPeriodDateViewSpec extends SpecBase {
   private val periodMonthYear = "January 2026"
   private val formattedLowerBoundary = "31 December 2025"
   private val formattedUpperBoundary = "1 February 2026"
+  private val formattedExampleDate = "31 1 2026"
 
   "EnterNonStandardPeriodDateView" - {
 
@@ -90,16 +91,9 @@ class EnterNonStandardPeriodDateViewSpec extends SpecBase {
           msgs("changeRegistrationDetails.caption")
         )
 
-        document.body().text() must include(
-          msgs(
-            "enterNonStandardPeriodDate.hint",
-            formattedLowerBoundary,
-            formattedUpperBoundary
-          )
-        )
-
         document.body().text() must include(formattedLowerBoundary)
         document.body().text() must include(formattedUpperBoundary)
+        document.body().text() must include(formattedExampleDate)
 
         document.body().text() must include(msgs("site.continue"))
 
@@ -125,14 +119,16 @@ class EnterNonStandardPeriodDateViewSpec extends SpecBase {
         val expectedHint = msgs(
           "enterNonStandardPeriodDate.hint",
           formattedLowerBoundary,
-          formattedUpperBoundary
+          formattedUpperBoundary,
+          formattedExampleDate
         ).replaceAll("\\s+", " ").trim
 
-        val actualHint = document
-          .getElementById("value-hint")
-          .text()
-          .replaceAll("\\s+", " ")
-          .trim
+        val actualHint =
+          document
+            .getElementById("value-hint")
+            .text()
+            .replaceAll("\\s+", " ")
+            .trim
 
         actualHint mustEqual expectedHint
 
