@@ -33,6 +33,7 @@ import utils.PartnerUtils
 import viewmodels.govuk.all.FluentValue
 
 import java.time.LocalDate
+import scala.util.Try
 
 case class CheckPartnerDetailsViewModel(
   businessNumberOrIndex: BusinessNumberOrIndex,
@@ -41,7 +42,7 @@ case class CheckPartnerDetailsViewModel(
   soleProprietorDob: Option[String],
   addTradingName: Option[Boolean],
   tradingName: Option[String],
-  dateOfJoining: Option[String],
+  dateOfJoining: Option[String], // TODO maybe change to LocalDate
   dateOfLeaving: Option[String],
   addNino: Option[Boolean],
   nino: Option[String],
@@ -77,9 +78,13 @@ case class CheckPartnerDetailsViewModel(
   // --- Update this ---
   // NOTE: routing will be done with the integration ticket.
   def continueCall: Call = if (isMissingMandatoryDetails) {
+    println("ON SUBMIT")
+    // TODO double check logic here
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
+//    routes.PartnerDetailsCheckYourAnswersController.onSubmit(index)
   } else {
-    routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
+    println("ON SUBMIT")
+    routes.PartnerDetailsCheckYourAnswersController.onSubmit(index)
   }
 
   def notices(implicit messages: Messages): Seq[Html] = {
@@ -155,6 +160,12 @@ case class CheckPartnerDetailsViewModel(
   // --- Access rules ---
 
   private def dueToJoinOrLeave: Boolean = isDueToJoin || isDueToLeave
+
+//  private def dueToJoinOrLeaveToday: Boolean = {
+//    val a = dateOfJoining.map(e => Try(LocalDate.parse(e)))
+//    val b = dateOfLeaving.map(e => Try(LocalDate.parse(e)))
+//
+//  }
 
   /** Optional fields that can also be removed outside the new-partner flow. */
   private def changeOrRemove(change: ActionItem, remove: ActionItem): Seq[ActionItem] =
@@ -333,7 +344,9 @@ case class CheckPartnerDetailsViewModel(
         "companyRegistrationNumber",
         companyRegistrationNumber,
         // NOTE: routing will be done with the integration ticket (currently points at the foreign corporate reference page placeholder)
-        routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+        // TODO done?
+//        routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+        routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url,
         isNewPartnerFlow
       )
     )

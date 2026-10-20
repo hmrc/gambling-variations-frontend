@@ -11,6 +11,9 @@ site.start = Dechrau nawr
 site.startAgain = Dechreuwch eto
 site.signIn = Mewngofnodi
 site.govuk = GOV.UK
+site.pagination.next = cy: Next
+site.pagination.previous = cy: Previous
+site.pagination.page = Page {0}
 
 date.day = Diwrnod
 date.month = Mis
@@ -480,8 +483,7 @@ controllingBodyEmailAddress.error.invalid = cy: The email address must only incl
 controllingBodyEmailAddress.error.length = cy: The email address must be 70 characters or less
 
 
-site.pagination.next = cy: Next
-site.pagination.previous = cy: Previous
+
 partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
 removeControllingBodyTradeName.title = cy:  Are you sure you want to remove this controlling body’s trading name?

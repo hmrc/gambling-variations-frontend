@@ -18,28 +18,38 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import controllers.routes
-import models.{Mode, UserAnswers}
+import forms.NewPartnerAddedFormProvider
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.partnerdetails.CheckPartnerDetailsViewModel.from
 import viewmodels.checkAnswers.partnerdetails.Partner.indexParser
 import views.html.partnerdetails.PartnerDetailsCheckYourAnswersView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerDetailsCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
+  formProvider: NewPartnerAddedFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsCheckYourAnswersView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport
     with Logging {
+
+  private val form: Form[Boolean] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -50,8 +60,23 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
             logger.warn(error)
             Redirect(routes.SystemErrorController.onPageLoad())
           },
-          partner => Ok(view(from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
+          partner => Ok(view(form, from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
         )
+    }
+
+  def onSubmit(index: String, mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      mode match {
+        case CheckMode =>
+          for {
+            // TODO use of `toInt` which is throwing
+            // This will set completed to true
+            userAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddPartnerCompletedPage(index.toInt), true))
+            _           <- sessionRepository.set(userAnswers)
+          } yield Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None))
+
+        case NormalMode => Future.successful(Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)))
+      }
     }
 
 }

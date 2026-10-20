@@ -124,9 +124,22 @@ object PartnerDetailsViewModel {
                     }
                 }
 
+              // TODO not sure if I actually need it, might be for different stuff
+              // TODO 90% sure I don't need it
+//              val canRemove = (dateOfJoining, dateOfLeaving) match {
+//                case (_, None) if activePartnerCount > 2                                                                                    => true
+//                case (Some(joining), None) if activePartnerCount > 2 && joining.isBefore(todayDate)                                         => true
+//                case (None, Some(leaving)) if activePartnerCount > 2 && leaving.isBefore(todayDate)                                         => true
+//                case (Some(joining), Some(leaving)) if activePartnerCount > 2 && joining.isBefore(todayDate) && leaving.isBefore(todayDate) => true
+//                case _                                                                                                                      => false
+//              }
               val canRemove =
                 dateOfLeaving.isEmpty &&
-                  activePartnerCount > 2
+                  activePartnerCount > 2 // &&
+//                //TODO added these two
+//                //TODO use of get
+//                  dateOfLeaving.get.isBefore(todayDate) &&
+//                  dateOfJoining.get.isBefore(todayDate)
 
               val removeUrl =
                 if (canRemove) {
@@ -168,12 +181,12 @@ object PartnerDetailsViewModel {
 
   private def onPartnerDetailsRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
     case _: Int =>
-      routes.PartnerDetailsController
-        .onPartnerDetails(partnerNumber.toString, NormalMode)
+      routes.PartnerDetailsCheckYourAnswersController
+        .onPageLoad(partnerNumber.toString)
         .url
     case _: String =>
-      routes.PartnerDetailsController
-        .onPartnerDetails(partnerNumber.toString, CheckMode)
+      routes.PartnerDetailsCheckYourAnswersController
+        .onPageLoad(partnerNumber.toString)
         .url
   }
 
