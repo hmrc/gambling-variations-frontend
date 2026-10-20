@@ -1436,3 +1436,7 @@ checkNonStandardReturnPeriods.returnPeriodsEnding.hidden = return periods
 checkNonStandardReturnPeriods.periodLabel = End date for {0}
 checkNonStandardReturnPeriods.addEndDate = Add end date for {0}
 checkNonStandardReturnPeriods.continueInfo = You must continue to the change registration details page to submit any changes.
+checkNonStandardReturnPeriods.returnPeriods = Return periods
+checkNonStandardReturnPeriods.standard = Standard
+checkNonStandardReturnPeriods.nonStandard = Non-standard
+checkNonStandardReturnPeriods.returnPeriods.hidden = return periods

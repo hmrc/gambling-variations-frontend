@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.returnperiods
 
 import base.SpecBase
 import controllers.returnperiods.routes
-import models.{CheckMode, NormalMode}
+import models.{CheckMode, NoReturnPeriodsSet, NormalMode}
 import play.api.Application
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
@@ -64,6 +64,7 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     dates: Seq[Option[LocalDate]] = enteredDates
   ): CheckNonStandardReturnPeriodsViewModel =
     CheckNonStandardReturnPeriodsViewModel(
+      returnPeriodsChoice  = NoReturnPeriodsSet.Standard,
       returnPeriodsId      = returnPeriodsId,
       calculatedPeriodEnds = periodEnds,
       enteredDates         = dates

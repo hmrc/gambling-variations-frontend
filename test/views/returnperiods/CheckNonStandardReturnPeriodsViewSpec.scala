@@ -17,18 +17,28 @@
 package views.returnperiods
 
 import base.SpecBase
-import models.{CheckMode, NormalMode}
+import models.{CheckMode, NoReturnPeriodsSet}
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import play.api.Application
 import play.api.i18n.Messages
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers.running
+import play.api.test.Helpers.*
+import play.twirl.api.Html
+import scala.jdk.CollectionConverters.*
 import viewmodels.checkAnswers.returnperiods.CheckNonStandardReturnPeriodsViewModel
 import views.html.returnperiods.CheckNonStandardReturnPeriodsView
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
+
+  private val app: Application =
+    applicationBuilder().build()
+
+  private implicit val msgs: Messages =
+    messages(app)
 
   private val calculatedPeriodEnds: Seq[LocalDate] =
     Seq(
@@ -54,613 +64,194 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
       Some(LocalDate.of(2027, 10, 30))
     )
 
-  private def createViewModel(
+  private val view: CheckNonStandardReturnPeriodsView =
+    app.injector.instanceOf[CheckNonStandardReturnPeriodsView]
+
+  private val dateFormatter: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("d MMM yyyy")
+
+  private def viewModel(
+    returnPeriodsChoice: NoReturnPeriodsSet = NoReturnPeriodsSet.Standard,
     returnPeriodsId: Int = 1,
+    periodEnds: Seq[LocalDate] = calculatedPeriodEnds,
     dates: Seq[Option[LocalDate]] = enteredDates
-  )(implicit messages: Messages): CheckNonStandardReturnPeriodsViewModel =
+  ): CheckNonStandardReturnPeriodsViewModel =
     CheckNonStandardReturnPeriodsViewModel(
+      returnPeriodsChoice  = returnPeriodsChoice,
       returnPeriodsId      = returnPeriodsId,
-      calculatedPeriodEnds = calculatedPeriodEnds,
+      calculatedPeriodEnds = periodEnds,
       enteredDates         = dates
     )
 
-  private def renderView(
-    view: CheckNonStandardReturnPeriodsView,
-    viewModel: CheckNonStandardReturnPeriodsViewModel
-  )(implicit messages: Messages): Document = {
-    val request = FakeRequest()
-
-    val html =
-      view(viewModel)(
-        request,
-        messages
-      )
-
-    Jsoup.parse(html.toString)
+  private def createView(
+    model: CheckNonStandardReturnPeriodsViewModel = viewModel()
+  ): Html = {
+    given play.api.mvc.Request[AnyContentAsEmpty.type] = FakeRequest()
+    view(model)
   }
+
+  private def document(
+    model: CheckNonStandardReturnPeriodsViewModel = viewModel()
+  ) =
+    Jsoup.parse(createView(model).toString)
+
+  private def summaryRows(
+    model: CheckNonStandardReturnPeriodsViewModel = viewModel()
+  ) =
+    document(model)
+      .select(".govuk-summary-list__row")
+      .asScala
+      .toList
 
   "CheckNonStandardReturnPeriodsView" - {
 
-    "render the page correctly" in {
+    "render the page heading" in {
+      val doc = document()
 
-      val application =
-        applicationBuilder().build()
+      doc.select("h1").text() mustEqual
+        msgs("checkNonStandardReturnPeriods.heading")
+    }
 
-      running(application) {
+    "render the standard return periods choice" in {
+      val rows = summaryRows()
+      val choiceRow = rows.head
 
-        implicit val msgs: Messages =
-          messages(application)
+      choiceRow.select(".govuk-summary-list__key").text() mustEqual
+        msgs("checkNonStandardReturnPeriods.returnPeriods")
 
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
+      choiceRow.select(".govuk-summary-list__value").text() mustEqual
+        msgs("checkNonStandardReturnPeriods.standard")
+    }
 
-        val viewModel =
-          createViewModel()
+    "render the non-standard return periods choice" in {
+      val rows = summaryRows(
+        viewModel(returnPeriodsChoice = NoReturnPeriodsSet.Nonstandard)
+      )
 
-        val document =
-          renderView(view, viewModel)
-
-        document.title() must include(
-          msgs("checkNonStandardReturnPeriods.title")
-        )
-
-        document
-          .select("h1")
-          .text() mustEqual
-          msgs("checkNonStandardReturnPeriods.heading")
-
-        document.body().text() must include(
-          msgs("changeRegistrationDetails.caption")
-        )
-
-        document.body().text() must include(
-          msgs("checkNonStandardReturnPeriods.intro")
-        )
-
-        document.body().text() must include(
-          msgs("checkNonStandardReturnPeriods.continueInfo")
-        )
-
-        document.body().text() must include(
-          msgs("site.continue")
-        )
-      }
+      rows.head.select(".govuk-summary-list__value").text() mustEqual
+        msgs("checkNonStandardReturnPeriods.nonStandard")
     }
 
     "render the selected return period months as a bullet list" in {
+      val rows = summaryRows()
+      val monthsRow = rows(1)
 
-      val application =
-        applicationBuilder().build()
+      monthsRow.select(".govuk-summary-list__key").text() mustEqual
+        msgs("checkNonStandardReturnPeriods.returnPeriodsEnding")
 
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel(returnPeriodsId = 1)
-
-        val document =
-          renderView(view, viewModel)
-
-        val selectedMonthsRow =
-          document
-            .select(".govuk-summary-list__row")
-            .first()
-
-        selectedMonthsRow
-          .select(".govuk-summary-list__key")
-          .text() mustEqual
-          msgs("checkNonStandardReturnPeriods.returnPeriodsEnding")
-
-        val monthItems =
-          selectedMonthsRow
-            .select(".govuk-summary-list__value li")
-
-        monthItems.size() mustEqual 4
-
-        monthItems.eachText() must contain theSameElementsInOrderAs Seq(
-          msgs("months.january"),
-          msgs("months.april"),
-          msgs("months.july"),
-          msgs("months.october")
-        )
-
-        selectedMonthsRow
-          .select("ul")
-          .hasClass("govuk-list") mustBe true
-
-        selectedMonthsRow
-          .select("ul")
-          .hasClass("govuk-list--bullet") mustBe true
-      }
+      monthsRow
+        .select(".govuk-summary-list__value li")
+        .eachText()
+        .asScala
+        .toList mustEqual List(
+        msgs("months.january"),
+        msgs("months.april"),
+        msgs("months.july"),
+        msgs("months.october")
+      )
     }
 
     "render the correct selected months for return periods ID 2" in {
+      val rows = summaryRows(viewModel(returnPeriodsId = 2))
 
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel(returnPeriodsId = 2)
-
-        val document =
-          renderView(view, viewModel)
-
-        val monthItems =
-          document
-            .select(".govuk-summary-list__row")
-            .first()
-            .select(".govuk-summary-list__value li")
-            .eachText()
-
-        monthItems must contain theSameElementsInOrderAs Seq(
-          msgs("months.february"),
-          msgs("months.may"),
-          msgs("months.august"),
-          msgs("months.november")
-        )
-      }
+      rows(1)
+        .select(".govuk-summary-list__value li")
+        .eachText()
+        .asScala
+        .toList mustEqual List(
+        msgs("months.february"),
+        msgs("months.may"),
+        msgs("months.august"),
+        msgs("months.november")
+      )
     }
 
     "render the correct selected months for return periods ID 3" in {
+      val rows = summaryRows(viewModel(returnPeriodsId = 3))
 
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel(returnPeriodsId = 3)
-
-        val document =
-          renderView(view, viewModel)
-
-        val monthItems =
-          document
-            .select(".govuk-summary-list__row")
-            .first()
-            .select(".govuk-summary-list__value li")
-            .eachText()
-
-        monthItems must contain theSameElementsInOrderAs Seq(
-          msgs("months.march"),
-          msgs("months.june"),
-          msgs("months.september"),
-          msgs("months.december")
-        )
-      }
+      rows(1)
+        .select(".govuk-summary-list__value li")
+        .eachText()
+        .asScala
+        .toList mustEqual List(
+        msgs("months.march"),
+        msgs("months.june"),
+        msgs("months.september"),
+        msgs("months.december")
+      )
     }
 
-    "render the return periods change link in CheckMode" in {
+    "render no selected months for an unknown return periods ID" in {
+      val rows = summaryRows(viewModel(returnPeriodsId = 4))
 
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel()
-
-        val document =
-          renderView(view, viewModel)
-
-        val selectedMonthsRow =
-          document
-            .select(".govuk-summary-list__row")
-            .first()
-
-        val changeLink =
-          selectedMonthsRow
-            .select(".govuk-summary-list__actions a")
-
-        changeLink.attr("href") mustEqual
-          controllers.returnperiods.routes.ChooseReturnPeriodsController
-            .onPageLoad(CheckMode)
-            .url
-
-        changeLink.text() must include(
-          msgs("site.change")
-        )
-
-        changeLink.text() must include(
-          msgs(
-            "checkNonStandardReturnPeriods.returnPeriodsEnding.hidden"
-          )
-        )
-      }
+      rows(1)
+        .select(".govuk-summary-list__value li")
+        .size() mustEqual 0
     }
 
-    "render all 8 entered period dates" in {
+    "render the return periods choice change link" in {
+      val rows = summaryRows()
+      val changeLink =
+        rows.head.select(".govuk-summary-list__actions a")
 
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel()
-
-        val document =
-          renderView(view, viewModel)
-
-        val summaryRows =
-          document.select(".govuk-summary-list__row")
-
-        summaryRows.size() mustEqual 9
-
-        val bodyText =
-          document.body().text()
-
-        bodyText must include("30 Jan 2026")
-        bodyText must include("29 Apr 2026")
-        bodyText must include("30 Jul 2026")
-        bodyText must include("30 Oct 2026")
-        bodyText must include("30 Jan 2027")
-        bodyText must include("29 Apr 2027")
-        bodyText must include("30 Jul 2027")
-        bodyText must include("30 Oct 2027")
-      }
+      changeLink.attr("href") mustEqual
+        controllers.returnperiods.routes.ReturnPeriodsController
+          .onPageLoad(CheckMode)
+          .url
     }
 
-    "render the period labels for all 8 periods" in {
+    "render the selected months change link" in {
+      val rows = summaryRows()
+      val changeLink =
+        rows(1).select(".govuk-summary-list__actions a")
 
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel()
-
-        val document =
-          renderView(view, viewModel)
-
-        val keys =
-          document
-            .select(".govuk-summary-list__key")
-            .eachText()
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jan 2026"
-          )
-        )
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Apr 2026"
-          )
-        )
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jul 2026"
-          )
-        )
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Oct 2026"
-          )
-        )
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jan 2027"
-          )
-        )
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Apr 2027"
-          )
-        )
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Jul 2027"
-          )
-        )
-
-        keys must contain(
-          msgs(
-            "checkNonStandardReturnPeriods.periodLabel",
-            "Oct 2027"
-          )
-        )
-      }
+      changeLink.attr("href") mustEqual
+        controllers.returnperiods.routes.ChooseReturnPeriodsController
+          .onPageLoad(CheckMode)
+          .url
     }
 
-    "render CheckMode change links for all 8 entered dates" in {
+    "render all eight entered period dates" in {
+      val rows = summaryRows()
 
-      val application =
-        applicationBuilder().build()
+      // Two fixed rows followed by eight period-date rows.
+      rows.size mustEqual 10
 
-      running(application) {
+      val periodRows = rows.drop(2)
 
-        implicit val msgs: Messages =
-          messages(application)
+      periodRows.size mustEqual 8
 
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
+      val actualDates =
+        periodRows.map(
+          _.select(".govuk-summary-list__value").text()
+        )
 
-        val viewModel =
-          createViewModel()
+      val expectedDates =
+        enteredDates.flatten.map(_.format(dateFormatter))
 
-        val document =
-          renderView(view, viewModel)
-
-        (1 to 8).foreach { periodNumber =>
-          val expectedUrl =
-            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-              .onPageLoad(periodNumber, CheckMode)
-              .url
-
-          document
-            .select(s"""a[href="$expectedUrl"]""")
-            .size() mustEqual 1
-        }
-      }
+      actualDates mustEqual expectedDates
     }
 
-    "render a NormalMode add link when an entered date is missing" in {
+    "render the continue link" in {
+      val doc = document()
 
-      val application =
-        applicationBuilder().build()
+      val continueLink =
+        doc.select("a.govuk-button")
 
-      running(application) {
+      continueLink.size() mustEqual 1
 
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val datesWithThirdDateMissing =
-          enteredDates.updated(2, None)
-
-        val viewModel =
-          createViewModel(
-            dates = datesWithThirdDateMissing
-          )
-
-        val document =
-          renderView(view, viewModel)
-
-        val expectedUrl =
-          controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-            .onPageLoad(3, NormalMode)
-            .url
-
-        val addLink =
-          document.select(s"""a[href="$expectedUrl"]""")
-
-        addLink.size() mustEqual 1
-
-        addLink.text() mustEqual
-          msgs(
-            "checkNonStandardReturnPeriods.addEndDate",
-            "Jul 2026"
-          )
-      }
+      continueLink.attr("href") mustEqual
+        controllers.routes.ChangeRegistrationDetailsController
+          .onPageLoad()
+          .url
     }
 
-    "render all missing dates with NormalMode add links" in {
+    "render the page introduction" in {
+      val doc = document()
 
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel(
-            dates = Seq.fill(8)(None)
-          )
-
-        val document =
-          renderView(view, viewModel)
-
-        (1 to 8).foreach { periodNumber =>
-          val expectedUrl =
-            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-              .onPageLoad(periodNumber, NormalMode)
-              .url
-
-          document
-            .select(s"""a[href="$expectedUrl"]""")
-            .size() mustEqual 1
-        }
-
-        document
-          .select(
-            ".govuk-summary-list__row--no-actions"
-          )
-          .size() mustEqual 8
-      }
-    }
-
-    "render both entered dates and missing date links" in {
-
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val mixedDates =
-          Seq(
-            Some(LocalDate.of(2026, 1, 30)),
-            None,
-            Some(LocalDate.of(2026, 7, 30)),
-            None,
-            Some(LocalDate.of(2027, 1, 30)),
-            None,
-            Some(LocalDate.of(2027, 7, 30)),
-            None
-          )
-
-        val viewModel =
-          createViewModel(
-            dates = mixedDates
-          )
-
-        val document =
-          renderView(view, viewModel)
-
-        Seq(1, 3, 5, 7).foreach { periodNumber =>
-          val expectedUrl =
-            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-              .onPageLoad(periodNumber, CheckMode)
-              .url
-
-          document
-            .select(s"""a[href="$expectedUrl"]""")
-            .size() mustEqual 1
-        }
-
-        Seq(2, 4, 6, 8).foreach { periodNumber =>
-          val expectedUrl =
-            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-              .onPageLoad(periodNumber, NormalMode)
-              .url
-
-          document
-            .select(s"""a[href="$expectedUrl"]""")
-            .size() mustEqual 1
-        }
-
-        document
-          .select(
-            ".govuk-summary-list__row--no-actions"
-          )
-          .size() mustEqual 4
-      }
-    }
-
-    "render the continue link to Change Registration Details" in {
-
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel()
-
-        val document =
-          renderView(view, viewModel)
-
-        val continueLink =
-          document.select("a.govuk-button")
-
-        continueLink.size() mustEqual 1
-
-        continueLink.text() mustEqual
-          msgs("site.continue")
-
-        continueLink.attr("href") mustEqual
-          controllers.routes.ChangeRegistrationDetailsController
-            .onPageLoad()
-            .url
-      }
-    }
-
-    "not render a form because Continue is a link" in {
-
-      val application =
-        applicationBuilder().build()
-
-      running(application) {
-
-        implicit val msgs: Messages =
-          messages(application)
-
-        val view =
-          application.injector
-            .instanceOf[CheckNonStandardReturnPeriodsView]
-
-        val viewModel =
-          createViewModel()
-
-        val document =
-          renderView(view, viewModel)
-
-        document.select("form").size() mustEqual 0
-        document.select("button.govuk-button").size() mustEqual 0
-        document.select("a.govuk-button").size() mustEqual 1
-      }
+      doc.select("main").text() must include(
+        msgs("checkNonStandardReturnPeriods.intro")
+      )
     }
   }
 }

@@ -36,7 +36,15 @@
 
 @(viewModel: viewmodels.checkAnswers.returnperiods.CheckNonStandardReturnPeriodsViewModel)(implicit request: Request[_], messages: Messages)
 
+@returnPeriodsChoiceText = @{
+viewModel.returnPeriodsChoice match {
+case NoReturnPeriodsSet.Standard =>
+messages("checkNonStandardReturnPeriods.standard")
 
+case NoReturnPeriodsSet.Nonstandard =>
+messages("checkNonStandardReturnPeriods.nonStandard")
+}
+}
 
 @layout(pageTitle = titleNoForm(messages("checkNonStandardReturnPeriods.title"),Some(messages("changeRegistrationDetails.caption")))) {
 
@@ -50,6 +58,34 @@
 @govukSummaryList(
    SummaryList(
     rows = Seq(
+        SummaryListRow(
+        key = Key(
+        content = Text(
+        messages("checkNonStandardReturnPeriods.returnPeriods")
+        )
+        ),
+        value = Value(
+        content = Text(returnPeriodsChoiceText)
+        ),
+        actions = Some(
+        Actions(
+        items = Seq(
+        ActionItem(
+        href = controllers.returnperiods.routes
+        .ReturnPeriodsController
+        .onPageLoad(CheckMode)
+        .url,
+        content = Text(messages("site.change")),
+        visuallyHiddenText = Some(
+        messages(
+        "checkNonStandardReturnPeriods.returnPeriods.hidden"
+        )
+        )
+        )
+        )
+        )
+        )
+        ),
      SummaryListRow(
       key = Key(
         content = Text(

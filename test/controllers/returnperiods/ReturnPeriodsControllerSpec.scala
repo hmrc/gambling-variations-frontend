@@ -975,6 +975,125 @@ class ReturnPeriodsControllerSpec extends SpecBase with MockitoSugar {
         .success
         .value
 
+      val nonStandardDate = LocalDate.of(2026, 5, 1)
+
+      val userAnswersWithNonStandardDates =
+        userAnswersNoPeriodsSet
+          .set(NonStandardPeriodDate1Page, nonStandardDate)
+          .success
+          .value
+          .set(NonStandardPeriodDate2Page, nonStandardDate.plusMonths(1))
+          .success
+          .value
+          .set(NonStandardPeriodDate3Page, nonStandardDate.plusMonths(2))
+          .success
+          .value
+          .set(NonStandardPeriodDate4Page, nonStandardDate.plusMonths(3))
+          .success
+          .value
+          .set(NonStandardPeriodDate5Page, nonStandardDate.plusMonths(4))
+          .success
+          .value
+          .set(NonStandardPeriodDate6Page, nonStandardDate.plusMonths(5))
+          .success
+          .value
+          .set(NonStandardPeriodDate7Page, nonStandardDate.plusMonths(6))
+          .success
+          .value
+          .set(NonStandardPeriodDate8Page, nonStandardDate.plusMonths(7))
+          .success
+          .value
+
+      "must clear all non-standard dates when Standard is submitted" in {
+
+        val mockSessionRepository = mockedSessionRepository
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersWithNonStandardDates))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, returnPeriodsRoute)
+              .withFormUrlEncodedBody(
+                "value" -> NoReturnPeriodsSet.Standard.toString
+              )
+
+          val result = route(application, request).value
+
+          val expectedAnswers =
+            userAnswersWithNonStandardDates
+              .set(ReturnPeriodsChoicePage, NoReturnPeriodsSet.Standard)
+              .success
+              .value
+              .remove(NonStandardPeriodDate1Page)
+              .success
+              .value
+              .remove(NonStandardPeriodDate2Page)
+              .success
+              .value
+              .remove(NonStandardPeriodDate3Page)
+              .success
+              .value
+              .remove(NonStandardPeriodDate4Page)
+              .success
+              .value
+              .remove(NonStandardPeriodDate5Page)
+              .success
+              .value
+              .remove(NonStandardPeriodDate6Page)
+              .success
+              .value
+              .remove(NonStandardPeriodDate7Page)
+              .success
+              .value
+              .remove(NonStandardPeriodDate8Page)
+              .success
+              .value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+          verify(mockSessionRepository).set(expectedAnswers)
+        }
+      }
+
+      "must preserve non-standard dates when Nonstandard is submitted" in {
+
+        val mockSessionRepository = mockedSessionRepository
+
+        val application =
+          applicationBuilder(userAnswers = Some(userAnswersWithNonStandardDates))
+            .overrides(
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[SessionRepository].toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, returnPeriodsRoute)
+              .withFormUrlEncodedBody(
+                "value" -> NoReturnPeriodsSet.Nonstandard.toString
+              )
+
+          val result = route(application, request).value
+
+          val expectedAnswers =
+            userAnswersWithNonStandardDates
+              .set(ReturnPeriodsChoicePage, NoReturnPeriodsSet.Nonstandard)
+              .success
+              .value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+          verify(mockSessionRepository).set(expectedAnswers)
+        }
+      }
+
       "must return OK and the correct view for a GET" in {
 
         val application = applicationBuilder(userAnswers = Some(userAnswersNoPeriodsSet)).build()

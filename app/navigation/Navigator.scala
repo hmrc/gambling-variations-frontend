@@ -205,6 +205,9 @@ class Navigator @Inject() () {
 //    case NonStandardReturnPeriodsPage =>
 //      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
 
+    case ReturnPeriodsChoicePage =>
+      userAnswers => controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
+
     // License and Premises Details
     case LicenceNumberPage =>
       userAnswers => navigateLicenceChange(userAnswers)
@@ -246,7 +249,7 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
 
     case ChooseReturnPeriodsPage =>
-      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      userAnswers => navigateChooseReturnPeriodsPage(userAnswers)
 
     case NonStandardPeriodDate1Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(2, NormalMode)
@@ -279,6 +282,8 @@ class Navigator @Inject() () {
 
   private val checkRouteMap: Page => UserAnswers => Call = {
 
+    case ReturnPeriodsChoicePage =>
+      userAnswers => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
     case ChooseReturnPeriodsPage =>
       _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
     case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
@@ -297,6 +302,17 @@ class Navigator @Inject() () {
         checkRouteMap(page)(userAnswers)
     }
   }
+
+  private def navigateChooseReturnPeriodsPage(userAnswers: UserAnswers): Call =
+    userAnswers.get(ReturnPeriodsChoicePage) match {
+      case Some(NoReturnPeriodsSet.Standard) =>
+        routes.ChangeRegistrationDetailsController.onPageLoad() // check where to send
+
+      case _ =>
+        controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+          .onPageLoad(1, NormalMode)
+
+    }
 
   private def navigateCorrespondenceNamePage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {

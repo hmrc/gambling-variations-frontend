@@ -19,7 +19,7 @@ package controllers.returnperiods
 import connectors.GamblingConnector
 import controllers.actions.*
 import models.{BusinessDetails, GamblingReturnPeriods, NormalMode}
-import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDatePages}
+import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDatePages, ReturnPeriodsChoicePage}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.returnperiods.NstpPeriodCalculator
@@ -46,6 +46,7 @@ class CheckNonStandardReturnPeriodsController @Inject() (
     with I18nSupport {
 
   private val numberOfPeriods = 8
+  private val validReturnPeriodIds = Set(1, 2, 3)
 
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
@@ -59,42 +60,64 @@ class CheckNonStandardReturnPeriodsController @Inject() (
             )
           )
 
-        case Some(returnPeriodsId) if !Set(1, 2, 3).contains(returnPeriodsId) =>
+        case Some(returnPeriodsId) if !validReturnPeriodIds.contains(returnPeriodsId) =>
           Future.successful(
-            Redirect(controllers.routes.SystemErrorController.onPageLoad())
+            Redirect(
+              controllers.routes.SystemErrorController.onPageLoad()
+            )
           )
 
         case Some(returnPeriodsId) =>
-          for {
-            businessDetails <-
-              gamblingConnector.getBusinessDetails(request.mgdRegNum)
-
-            gamblingReturnPeriods <-
-              gamblingConnector.getGamblingReturnPeriods(request.mgdRegNum)
-          } yield {
-            implicit val messages: Messages = messagesApi.preferred(request)
-
-            val baseDate =
-              calculateBaseDate(businessDetails, gamblingReturnPeriods)
-
-            val calculatedPeriodEnds =
-              nstpPeriodCalculator.calculate(baseDate, returnPeriodsId)
-
-            val enteredDates =
-              (1 to numberOfPeriods).map { periodNumber =>
-                request.userAnswers.get(
-                  NonStandardPeriodDatePages(periodNumber)
+          request.userAnswers.get(ReturnPeriodsChoicePage) match {
+            case None =>
+              Future.successful(
+                Redirect(
+                  controllers.routes.SystemErrorController.onPageLoad()
                 )
-              }
-
-            val viewModel =
-              CheckNonStandardReturnPeriodsViewModel(
-                returnPeriodsId      = returnPeriodsId,
-                calculatedPeriodEnds = calculatedPeriodEnds,
-                enteredDates         = enteredDates
               )
 
-            Ok(view(viewModel))
+            case Some(returnPeriodsChoice) =>
+              for {
+                businessDetails <-
+                  gamblingConnector.getBusinessDetails(request.mgdRegNum)
+
+                gamblingReturnPeriods <-
+                  gamblingConnector.getGamblingReturnPeriods(
+                    request.mgdRegNum
+                  )
+              } yield {
+                implicit val messages: Messages =
+                  messagesApi.preferred(request)
+
+                val baseDate =
+                  calculateBaseDate(
+                    businessDetails,
+                    gamblingReturnPeriods
+                  )
+
+                val calculatedPeriodEnds =
+                  nstpPeriodCalculator.calculate(
+                    baseDate,
+                    returnPeriodsId
+                  )
+
+                val enteredDates =
+                  (1 to numberOfPeriods).map { periodNumber =>
+                    request.userAnswers.get(
+                      NonStandardPeriodDatePages(periodNumber)
+                    )
+                  }
+
+                val viewModel =
+                  CheckNonStandardReturnPeriodsViewModel(
+                    returnPeriodsChoice  = returnPeriodsChoice,
+                    returnPeriodsId      = returnPeriodsId,
+                    calculatedPeriodEnds = calculatedPeriodEnds,
+                    enteredDates         = enteredDates
+                  )
+
+                Ok(view(viewModel))
+              }
           }
       }
     }
@@ -111,7 +134,8 @@ class CheckNonStandardReturnPeriodsController @Inject() (
 
     val referenceDate =
       if (gamblingReturnPeriods.hasExistingNstpValues.contains(true)) {
-        gamblingReturnPeriods.nstpEndDate8.getOrElse(LocalDate.now(clock))
+        gamblingReturnPeriods.nstpEndDate8
+          .getOrElse(LocalDate.now(clock))
       } else {
         LocalDate.now(clock)
       }

@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers.returnperiods
 
 import controllers.returnperiods.routes
-import models.{CheckMode, NormalMode}
+import models.{CheckMode, NoReturnPeriodsSet, NormalMode}
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
@@ -28,6 +28,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 final case class CheckNonStandardReturnPeriodsViewModel(
+  returnPeriodsChoice: NoReturnPeriodsSet,
   selectedMonths: Seq[String],
   rows: Seq[SummaryListRow]
 )
@@ -35,6 +36,7 @@ final case class CheckNonStandardReturnPeriodsViewModel(
 object CheckNonStandardReturnPeriodsViewModel {
 
   def apply(
+    returnPeriodsChoice: NoReturnPeriodsSet,
     returnPeriodsId: Int,
     calculatedPeriodEnds: Seq[LocalDate],
     enteredDates: Seq[Option[LocalDate]]
@@ -97,6 +99,7 @@ object CheckNonStandardReturnPeriodsViewModel {
       }
 
     CheckNonStandardReturnPeriodsViewModel(
+      returnPeriodsChoice: NoReturnPeriodsSet,
       selectedMonths = selectedMonths,
       rows           = rows
     )
