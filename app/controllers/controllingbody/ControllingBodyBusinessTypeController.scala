@@ -64,7 +64,6 @@ class ControllingBodyBusinessTypeController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         businessType =>
           val ua = request.userAnswers
-
           val isChanged = checkIfChanged(businessType, ua, ControllingBodyBusinessTypePage, ControllingBodyChangesPage)
           for {
             updatedAnswers              <- Future.fromTry(ua.set(ControllingBodyBusinessTypePage, businessType))
