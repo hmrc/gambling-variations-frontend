@@ -752,13 +752,13 @@ class Navigator @Inject() () {
   private def navigateControllingBodyBusinessTypePage(userAnswers: UserAnswers): Call = {
     userAnswers
       .get(ControllingBodyBusinessTypePage) match {
-      case Some(Soleproprietor) => 
+      case Some(Soleproprietor) =>
         controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Soleproprietor)
-      case Some(Corporatebody)  => 
+      case Some(Corporatebody) =>
         controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Corporatebody)
       case Some(Unincorporatedbody) =>
         controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Unincorporatedbody)
-      case Some(Partnership) => 
+      case Some(Partnership) =>
         controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Partnership)
       case Some(LimitedLiabilityPartnership) =>
         controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.LimitedLiabilityPartnership)

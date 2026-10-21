@@ -27,7 +27,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyChangeScreenerPage, ControllingBodyDateOfIncorporationPage, RemoveControllingBodyFaxNumberPage}
+import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessTypePage, ControllingBodyChangeScreenerPage, ControllingBodyDateOfIncorporationPage, RemoveControllingBodyFaxNumberPage}
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
@@ -1471,6 +1471,66 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       "should route RemoveControllingBodyFaxNumberPage to Index until CB-CYA is built" in {
         navigator.nextPage(RemoveControllingBodyFaxNumberPage, NormalMode, emptyAnswers) mustBe
           routes.IndexController.onPageLoad()
+      }
+
+      "should route ControllingBodyBusinessTypePage to Change Proprietor Name" in {
+        val answers =
+          UserAnswers("id", Json.obj(
+            "controllingBodyDetails" -> Json.obj(
+              "mgdRegNumber" -> "XGM00000001761",
+              "typeOfControllingBody" -> 1
+            )
+          ))
+        navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Soleproprietor)
+      }
+
+      "should route ControllingBodyBusinessTypePage to Change Corporate Body Name" in {
+        val answers =
+          UserAnswers("id", Json.obj(
+            "controllingBodyDetails" -> Json.obj(
+              "mgdRegNumber" -> "XGM00000001761",
+              "typeOfControllingBody" -> 2
+            )
+          ))
+        navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Corporatebody)
+      }
+
+      "should route ControllingBodyBusinessTypePage to Change Unincorporated Body Name" in {
+        val answers =
+          UserAnswers("id", Json.obj(
+            "controllingBodyDetails" -> Json.obj(
+              "mgdRegNumber" -> "XGM00000001761",
+              "typeOfControllingBody" -> 3
+            )
+          ))
+        navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Unincorporatedbody)
+      }
+
+      "should route ControllingBodyBusinessTypePage to Change Partnership Name" in {
+        val answers =
+          UserAnswers("id", Json.obj(
+            "controllingBodyDetails" -> Json.obj(
+              "mgdRegNumber" -> "XGM00000001761",
+              "typeOfControllingBody" -> 4
+            )
+          ))
+        navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Partnership)
+      }
+
+      "should route ControllingBodyBusinessTypePage to Change Limited Liability Partnership" in {
+        val answers =
+          UserAnswers("id", Json.obj(
+            "controllingBodyDetails" -> Json.obj(
+              "mgdRegNumber" -> "XGM00000001761",
+              "typeOfControllingBody" -> 5
+            )
+          ))
+        navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.LimitedLiabilityPartnership)
       }
     }
 
