@@ -33,7 +33,7 @@ import views.html.controllingbody.ControllingBodyAddNINumberYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodyAddNINumberYesNoController @Inject()(
+class ControllingBodyAddNINumberYesNoController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
