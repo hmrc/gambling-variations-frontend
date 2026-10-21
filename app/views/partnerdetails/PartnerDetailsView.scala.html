@@ -31,13 +31,13 @@
     pageNavigator: PageNavigator
 )
 
-@(form: Form[Boolean], viewModel: PartnerDetailsViewModel, paginatedViewModel: PaginationViewModel, page:Int, from: Int, to: Int, totalRecords: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], viewModel: PartnerDetailsViewModel, paginatedViewModel: PaginationViewModel, page: Int, totalPages: Int, from: Int, to: Int, totalRecords: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = title(
         form,
         messages("partnerDetails.title"),
-        Some(messages("changeRegistrationDetails.caption") + " - " + messages("site.pagination.page", page))
+        if(totalPages > 0) then Some(messages("site.pagination.page", page, totalPages) + " " + messages("changeRegistrationDetails.caption")) else None
     ),
     isFullWidth = true
 ) {

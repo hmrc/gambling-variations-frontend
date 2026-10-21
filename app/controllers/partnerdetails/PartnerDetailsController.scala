@@ -85,7 +85,8 @@ class PartnerDetailsController @Inject() (
           preparedForm,
           viewModel,
           paginatedPartnerNumbers.paginationViewModel,
-          selectedPage,
+          paginatedPartnerNumbers.currentPage,
+          paginatedPartnerNumbers.totalPages,
           paginatedPartnerNumbers.from,
           paginatedPartnerNumbers.to,
           paginatedPartnerNumbers.totalRecords
@@ -124,7 +125,8 @@ class PartnerDetailsController @Inject() (
                   formWithErrors,
                   viewModel,
                   paginatedPartnerNumbers.paginationViewModel,
-                  selectedPage,
+                  paginatedPartnerNumbers.currentPage,
+                  paginatedPartnerNumbers.totalPages,
                   paginatedPartnerNumbers.from,
                   paginatedPartnerNumbers.to,
                   paginatedPartnerNumbers.totalRecords

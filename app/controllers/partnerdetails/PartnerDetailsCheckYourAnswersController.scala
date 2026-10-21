@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import controllers.actions.*
 import controllers.routes
 import forms.NewPartnerAddedFormProvider
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{Mode, UserAnswers}
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
 import play.api.data.Form
@@ -30,6 +30,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.partnerdetails.CheckPartnerDetailsViewModel.from
 import viewmodels.checkAnswers.partnerdetails.Partner.indexParser
+import viewmodels.checkAnswers.partnerdetails.{ExistingPartner, NewPartner}
 import views.html.partnerdetails.PartnerDetailsCheckYourAnswersView
 
 import javax.inject.Inject
@@ -66,16 +67,16 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      mode match {
-        case CheckMode =>
+      indexParser(index, request.userAnswers) match {
+        case Right(NewPartner(i, _)) =>
           for {
-            // TODO use of `toInt` which is throwing
-            // This will set completed to true
-            userAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddPartnerCompletedPage(index.toInt), true))
+            userAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddPartnerCompletedPage(i), true))
             _           <- sessionRepository.set(userAnswers)
           } yield Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None))
-
-        case NormalMode => Future.successful(Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)))
+        case Right(ExistingPartner(_)) =>
+          Future.successful(Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)))
+        case Left(_) =>
+          Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
       }
     }
 

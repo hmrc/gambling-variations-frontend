@@ -13,7 +13,7 @@ site.signIn = Mewngofnodi
 site.govuk = GOV.UK
 site.pagination.next = cy: Next
 site.pagination.previous = cy: Previous
-site.pagination.page = Page {0}
+site.pagination.page = cy" (page {0} of {1})
 
 date.day = Diwrnod
 date.month = Mis
