@@ -68,7 +68,10 @@ class DateOfIncorporationViewSpec extends SpecBase {
           ("", "", "2007", "Date of incorporation must include a day and a month"),
           ("27", "", "", "Date of incorporation must include a month and a year"),
           ("", "3", "", "Date of incorporation must include a day and a year"),
-          ("31", "4", "2007", "Date of incorporation must be a real date")
+          ("31", "4", "2007", "Date of incorporation must be a real date"),
+          ("27", "3", "20077", "Date of incorporation must be a real date"),
+          ("001", "3", "2007", "Date of incorporation must be a real date"),
+          ("27", "003", "2007", "Date of incorporation must be a real date")
         )
         cases.foreach { case (day, month, year, expected) =>
           val boundForm = form.bind(Map("dateOfIncorporation.day" -> day, "dateOfIncorporation.month" -> month, "dateOfIncorporation.year" -> year))

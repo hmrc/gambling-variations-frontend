@@ -28,7 +28,8 @@ private[mappings] class LocalDateFormatter(
   allRequiredKey: String,
   twoRequiredKey: String,
   requiredKey: String,
-  args: Seq[String] = Seq.empty
+  args: Seq[String] = Seq.empty,
+  requireNumericDateFormat: Boolean = false
 )(implicit messages: Messages)
     extends Formatter[LocalDate]
     with Formatters {
@@ -54,7 +55,12 @@ private[mappings] class LocalDateFormatter(
 
     val month = new MonthFormatter(invalidKey, args)
 
+    val validFormat = !requireNumericDateFormat || Seq("day" -> "[0-9]{1,2}", "month" -> "[0-9]{1,2}", "year" -> "[0-9]{4}").forall {
+      case (part, pattern) => data.get(s"$key.$part").exists(_.trim.matches(pattern))
+    }
+
     for {
+      _     <- Either.cond(validFormat, (), Seq(FormError(key, invalidKey, args)))
       day   <- int.bind(s"$key.day", data)
       month <- month.bind(s"$key.month", data)
       year  <- int.bind(s"$key.year", data)
