@@ -16,21 +16,49 @@
 
 package forms.partnerdetails
 
+import javax.inject.Inject
+
 import forms.mappings.Mappings
 import play.api.data.Form
-
-import javax.inject.Inject
+import play.api.data.validation.Constraint
+import play.api.data.validation.Invalid
+import play.api.data.validation.Valid
 
 class PartnerEmailAddressFormProvider @Inject() extends Mappings {
 
   private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
+    """^[A-Za-z0-9._-]{1,64}@[A-Za-z0-9._-]{1,64}$"""
+
+  private def emailFormatConstraint(errorMessage: String): Constraint[String] =
+    Constraint("constraints.emailFormat") { email =>
+      val parts = email.split("@", -1)
+
+      val valid =
+        parts.length == 2 &&
+          parts(0).nonEmpty &&
+          parts(1).nonEmpty &&
+          parts(0).length <= 64 &&
+          parts(1).length <= 64 &&
+          !parts(0).startsWith(".") &&
+          !parts(0).endsWith(".") &&
+          !parts(0).contains("..") &&
+          parts(1).split("\\.", -1).forall { label =>
+            label.nonEmpty &&
+            label.head.isLetterOrDigit &&
+            label.last.isLetterOrDigit &&
+            label.forall(c => c.isLetterOrDigit || c == '-')
+          } &&
+          email.matches(emailRegex)
+
+      if (valid) Valid
+      else Invalid(errorMessage)
+    }
 
   def apply(prefix: String): Form[String] =
     Form(
       "partnerEmailAddress" -> text(s"$prefix.error.required")
         .transform[String](_.trim, identity)
         .verifying(maxLength(70, s"$prefix.error.length"))
-        .verifying(regexp(emailRegex, s"$prefix.error.invalid"))
+        .verifying(emailFormatConstraint(s"$prefix.error.invalid"))
     )
 }
