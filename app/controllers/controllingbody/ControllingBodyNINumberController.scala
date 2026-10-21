@@ -18,6 +18,7 @@ package controllers.controllingbody
 
 import controllers.actions.*
 import forms.controllingbody.ControllingBodyNINumberFormProvider
+import models.BusinessType.Soleproprietor
 import models.Mode
 import navigation.Navigator
 import pages.controllingbody.*
@@ -48,11 +49,15 @@ class ControllingBodyNINumberController @Inject()(
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(ControllingBodyNINumberPage)
-      .fold(form)(form.fill)
+    request.userAnswers.get(ControllingBodyBusinessTypePage) match {
+      case Some(Soleproprietor) =>
+        val preparedForm = request.userAnswers
+          .get(ControllingBodyNINumberPage)
+          .fold(form)(form.fill)
 
-    Ok(view(preparedForm, mode))
+        Ok(view(preparedForm, mode))
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>

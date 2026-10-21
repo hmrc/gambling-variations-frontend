@@ -18,12 +18,12 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.ControllingBodyNINumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.ControllingBodyNINumberPage
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyNINumberPage}
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -45,14 +45,8 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
     UserAnswers(
       userAnswersId,
       Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+    ).set(ControllingBodyBusinessTypePage, BusinessType.Soleproprietor).success.value
 
-  val data: JsObject = Json.obj(
-    "controllingBodyDetails" -> Json.obj(
-      "mgdRegNum"                                       -> userAnswersId,
-      ControllingBodyNINumberPage.toString -> "1234"
-    )
-  )
 
   lazy val busAddRoute: String =
     controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad().url
@@ -78,7 +72,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers = noAnswers.set(ControllingBodyNINumberPage, "1234").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -114,7 +108,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
 
         val request =
           FakeRequest(POST, busAddRoute)
-            .withFormUrlEncodedBody("controllingBodyNINumber" -> "123")
+            .withFormUrlEncodedBody("value" -> "QQ 12 34 56 C")
 
         val result = route(application, request).value
 

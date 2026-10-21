@@ -58,7 +58,7 @@ class ControllingBodyNINumberViewSpec extends SpecBase {
 
       val errorForm = form.bind(
         Map(
-          "controllingBodyNINumber" -> ""
+          "value" -> ""
         )
       )
 
@@ -72,7 +72,7 @@ class ControllingBodyNINumberViewSpec extends SpecBase {
 
       val errorForm = form.bind(
         Map(
-          "controllingBodyNINumber" -> "//@:~#"
+          "value" -> "//@:~#"
         )
       )
 
@@ -93,7 +93,7 @@ class ControllingBodyNINumberViewSpec extends SpecBase {
       val longString: String = sb.toString()
       val errorForm = form.bind(
         Map(
-          "controllingBodyNINumber" -> longString
+          "value" -> longString
         )
       )
 

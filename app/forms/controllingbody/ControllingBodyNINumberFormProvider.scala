@@ -27,7 +27,7 @@ class ControllingBodyNINumberFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] = {
     Form(
-      "controllingBodyNINumber" ->
+      "value" ->
         text(requiredKey)
           .transform[String](_.filterNot(_.isWhitespace).toUpperCase, identity)
           .verifying(
