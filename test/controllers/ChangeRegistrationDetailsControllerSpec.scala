@@ -68,6 +68,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
         status(result) mustEqual OK
 
         sectionNames(contentAsString(result)) mustEqual Seq(
+          "Controlling body details",
           "Business name",
           "Business address",
           "Business contact details",
@@ -93,7 +94,6 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
         status(result) mustEqual OK
 
         sectionNames(contentAsString(result)) mustEqual Seq(
-          "Controlling body details",
           "Group member details",
           "Correspondence details",
           "Partner details",
@@ -143,7 +143,13 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
 
         status(result) mustEqual OK
 
-        statuses(content).head mustEqual "Changes ready to submit"
+        val rows = Jsoup.parse(content).select("table.govuk-table tbody tr")
+
+        val businessNameRow = rows.asScala.find { row =>
+          row.select("td").first().text() == "Business name"
+        }.value
+
+        businessNameRow.select("td:last-child").text() mustEqual "Changes ready to submit"
 
         val button = Jsoup.parse(content).select(".govuk-button")
 
