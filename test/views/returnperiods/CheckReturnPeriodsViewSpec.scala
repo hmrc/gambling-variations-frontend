@@ -17,133 +17,422 @@
 package views.returnperiods
 
 import base.SpecBase
-import models.{CheckMode, ChooseReturnPeriods}
 import models.ChooseReturnPeriods.Feb
+import models.{CheckMode, ChooseReturnPeriods, NoReturnPeriodsSet}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.scalatest.matchers.must.Matchers.*
+import play.api.Application
 import play.api.i18n.Messages
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import scala.jdk.CollectionConverters.*
 import viewmodels.checkAnswers.returnperiods.CheckReturnPeriodsViewModel
 import views.html.returnperiods.CheckReturnPeriodsView
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 class CheckReturnPeriodsViewSpec extends SpecBase {
 
-  trait Setup {
+  private val app: Application =
+    applicationBuilder().build()
 
-    private val app = applicationBuilder().build()
+  private implicit val msgs: Messages =
+    messages(app)
 
-    private val view =
-      app.injector.instanceOf[CheckReturnPeriodsView]
+  private implicit val request: play.api.mvc.Request[AnyContentAsEmpty.type] = FakeRequest()
 
-    implicit private val request: play.api.mvc.Request[?] = FakeRequest()
+  private val view: CheckReturnPeriodsView =
+    app.injector.instanceOf[CheckReturnPeriodsView]
 
-    implicit val messages: Messages =
-      app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
+  private val calculatedPeriodEnds: Seq[LocalDate] =
+    Seq(
+      LocalDate.of(2026, 1, 31),
+      LocalDate.of(2026, 4, 30),
+      LocalDate.of(2026, 7, 31),
+      LocalDate.of(2026, 10, 31),
+      LocalDate.of(2027, 1, 31),
+      LocalDate.of(2027, 4, 30),
+      LocalDate.of(2027, 7, 31),
+      LocalDate.of(2027, 10, 31)
+    )
 
-    def render(
-      returnPeriods: Option[ChooseReturnPeriods] = Some(Feb),
-      showAppliesAfterCurrentPeriod: Boolean = true,
-      showReturnPeriodsType: Boolean = false
-    ): Document =
-      Jsoup.parse(
-        view(CheckReturnPeriodsViewModel.Standard(returnPeriods, showAppliesAfterCurrentPeriod, showReturnPeriodsType))(request, messages).body
-      )
+  private val enteredDates: Seq[Option[LocalDate]] =
+    Seq(
+      Some(LocalDate.of(2026, 1, 30)),
+      Some(LocalDate.of(2026, 4, 29)),
+      Some(LocalDate.of(2026, 7, 30)),
+      Some(LocalDate.of(2026, 10, 30)),
+      Some(LocalDate.of(2027, 1, 30)),
+      Some(LocalDate.of(2027, 4, 29)),
+      Some(LocalDate.of(2027, 7, 30)),
+      Some(LocalDate.of(2027, 10, 30))
+    )
 
-  }
+  private val dateFormatter: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("d MMM yyyy")
+
+  private def standardDocument(
+    returnPeriods: Option[ChooseReturnPeriods] = Some(Feb),
+    showAppliesAfterCurrentPeriod: Boolean = true,
+    showReturnPeriodsType: Boolean = false
+  ): Document =
+    Jsoup.parse(
+      view(CheckReturnPeriodsViewModel.Standard(returnPeriods, showAppliesAfterCurrentPeriod, showReturnPeriodsType)).body
+    )
+
+  private def nonStandardViewModel(
+    returnPeriodsChoice: Option[NoReturnPeriodsSet] = Some(NoReturnPeriodsSet.Standard),
+    returnPeriodsId: Int = 1,
+    periodEnds: Seq[LocalDate] = calculatedPeriodEnds,
+    dates: Seq[Option[LocalDate]] = enteredDates,
+    showFinalPeriodWarning: Boolean = false
+  ): CheckReturnPeriodsViewModel.NonStandard =
+    CheckReturnPeriodsViewModel.nonStandard(
+      returnPeriodsChoice    = returnPeriodsChoice,
+      returnPeriodsId        = returnPeriodsId,
+      calculatedPeriodEnds   = periodEnds,
+      enteredDates           = dates,
+      showFinalPeriodWarning = showFinalPeriodWarning
+    )
+
+  private def nonStandardDocument(
+    model: CheckReturnPeriodsViewModel.NonStandard = nonStandardViewModel()
+  ): Document =
+    Jsoup.parse(view(model).body)
+
+  private def nonStandardRows(
+    model: CheckReturnPeriodsViewModel.NonStandard = nonStandardViewModel()
+  ) =
+    nonStandardDocument(model)
+      .select(".govuk-summary-list__row")
+      .asScala
+      .toList
+
+  private val versions: Seq[(String, () => Document, String)] =
+    Seq(
+      ("standard", () => standardDocument(), "Check your standard return periods"),
+      ("non-standard", () => nonStandardDocument(), "Check your non-standard return periods")
+    )
 
   "CheckReturnPeriodsView" - {
 
-    "must render the title, caption and heading for standard return periods" in new Setup {
+    "both versions" - {
 
-      val doc: Document = render()
+      versions.foreach { case (version, document, heading) =>
+        s"must render the title, caption and heading for the $version version" in {
 
-      doc.title must startWith("Check your standard return periods - Change registration details")
+          val doc = document()
 
-      doc.select(".govuk-caption-l").text() mustBe "Change registration details"
+          doc.title must startWith(s"$heading - Change registration details")
 
-      doc.select("h1.govuk-heading-l").text() mustBe "Check your standard return periods"
+          doc.select(".govuk-caption-l").text() mustBe "Change registration details"
+
+          doc.select("h1.govuk-heading-l").text() mustBe heading
+        }
+
+        s"must tell the user to continue to the change registration details page in the $version version" in {
+
+          document().select("p.govuk-body").text() must include(
+            "You must continue to the change registration details page to submit any changes."
+          )
+        }
+
+        s"must render a Continue button in the $version version" in {
+
+          document().select(".govuk-button").text() mustBe "Continue"
+        }
+      }
     }
 
-    "must render the Return periods ending row with the four months" in new Setup {
+    "standard version" - {
 
-      val doc: Document = render()
+      "must render the Return periods ending row with the four months" in {
 
-      doc.select(".govuk-summary-list__row").size() mustBe 1
+        val doc: Document = standardDocument()
 
-      doc.select(".govuk-summary-list__key").text() mustBe "Return periods ending"
+        doc.select(".govuk-summary-list__row").size() mustBe 1
 
-      val months = doc.select(".govuk-summary-list__value ul.govuk-list li")
+        doc.select(".govuk-summary-list__key").text() mustBe "Return periods ending"
 
-      months.eachText().toArray mustBe Array("February", "May", "August", "November")
+        val months = doc.select(".govuk-summary-list__value ul.govuk-list li")
+
+        months.eachText().toArray mustBe Array("February", "May", "August", "November")
+      }
+
+      "must render a change link to the choose return periods page" in {
+
+        val link = standardDocument().select(".govuk-summary-list__actions a")
+
+        link.size() mustBe 1
+        link.attr("href") mustBe controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url
+        link.text() mustBe "Change return periods"
+        link.select(".govuk-visually-hidden").text() mustBe "return periods"
+      }
+
+      "must render an add link, and no change link, when no return periods have been set" in {
+
+        val doc: Document = standardDocument(returnPeriods = None)
+
+        val addLink = doc.select(".govuk-summary-list__value a.govuk-link")
+
+        addLink.text() mustBe "Add return periods ending"
+        addLink.attr("href") mustBe controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url
+
+        doc.select(".govuk-summary-list__actions a").size() mustBe 0
+      }
+
+      "must show a Return periods row with Standard above Return periods ending when return periods were not set" in {
+
+        val doc = standardDocument(showReturnPeriodsType = true)
+        val rows = doc.select(".govuk-summary-list__row")
+
+        rows.size() mustBe 2
+        doc.select(".govuk-summary-list__key").eachText() mustBe java.util.List.of("Return periods", "Return periods ending")
+        rows.first().select(".govuk-summary-list__value").text() mustBe "Standard"
+      }
+
+      "must link the Return periods row to the return periods page in CheckMode" in {
+
+        val link = standardDocument(showReturnPeriodsType = true).select(".govuk-summary-list__row").first().select(".govuk-summary-list__actions a")
+
+        link.size() mustBe 1
+        link.attr("href") mustBe controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(CheckMode).url
+        link.select(".govuk-visually-hidden").text() mustBe "return period type"
+      }
+
+      "must render the applies after current period message when it applies" in {
+
+        standardDocument().select("p.govuk-body").text() must include("These changes will only apply after your current return period.")
+      }
+
+      "must not render the applies after current period message when it does not apply" in {
+
+        standardDocument(showAppliesAfterCurrentPeriod = false).select("p.govuk-body").text() must not include
+          "These changes will only apply after your current return period."
+      }
+
+      "must render a Continue button in a form that posts to the controller's onContinue action" in {
+
+        val doc: Document = standardDocument()
+
+        doc.select("form").attr("action") mustBe controllers.returnperiods.routes.CheckReturnPeriodsController.onContinue().url
+
+        doc.select("button.govuk-button").text() mustBe "Continue"
+      }
     }
 
-    "must render a change link to the choose return periods page" in new Setup {
+    "non-standard version" - {
 
-      val link = render().select(".govuk-summary-list__actions a")
+      "render the standard return periods choice" in {
+        val choiceRow = nonStandardRows().head
 
-      link.size() mustBe 1
-      link.attr("href") mustBe controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url
-      link.text() mustBe "Change return periods"
-      link.select(".govuk-visually-hidden").text() mustBe "return periods"
-    }
+        choiceRow.select(".govuk-summary-list__key").text() mustEqual
+          msgs("checkNonStandardReturnPeriods.returnPeriods")
 
-    "must render an add link, and no change link, when no return periods have been set" in new Setup {
+        choiceRow.select(".govuk-summary-list__value").text() mustEqual
+          msgs("checkNonStandardReturnPeriods.standard")
+      }
 
-      val doc: Document = render(returnPeriods = None)
+      "render the non-standard return periods choice" in {
+        val rows = nonStandardRows(
+          nonStandardViewModel(returnPeriodsChoice = Some(NoReturnPeriodsSet.Nonstandard))
+        )
 
-      val addLink = doc.select(".govuk-summary-list__value a.govuk-link")
+        rows.head.select(".govuk-summary-list__value").text() mustEqual
+          msgs("checkNonStandardReturnPeriods.nonStandard")
+      }
 
-      addLink.text() mustBe "Add return periods ending"
-      addLink.attr("href") mustBe controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(CheckMode).url
+      "omit the return periods choice row when the choice is missing" in {
+        val rows = nonStandardRows(
+          nonStandardViewModel(returnPeriodsChoice = None)
+        )
 
-      doc.select(".govuk-summary-list__actions a").size() mustBe 0
-    }
+        rows.size mustEqual 9
 
-    "must show a Return periods row with Standard above Return periods ending when return periods were not set" in new Setup {
+        rows.head.select(".govuk-summary-list__key").text() mustEqual
+          msgs("checkNonStandardReturnPeriods.returnPeriodsEnding")
 
-      val doc = render(showReturnPeriodsType = true)
-      val rows = doc.select(".govuk-summary-list__row")
+        rows.exists(
+          _.select(".govuk-summary-list__key").text() ==
+            msgs("checkNonStandardReturnPeriods.returnPeriods")
+        ) mustBe false
+      }
 
-      rows.size() mustBe 2
-      doc.select(".govuk-summary-list__key").eachText() mustBe java.util.List.of("Return periods", "Return periods ending")
-      rows.first().select(".govuk-summary-list__value").text() mustBe "Standard"
-    }
+      "render the selected return period months as a bullet list" in {
+        val monthsRow = nonStandardRows()(1)
 
-    "must link the Return periods row to the return periods page in CheckMode" in new Setup {
+        monthsRow.select(".govuk-summary-list__key").text() mustEqual
+          msgs("checkNonStandardReturnPeriods.returnPeriodsEnding")
 
-      val link = render(showReturnPeriodsType = true).select(".govuk-summary-list__row").first().select(".govuk-summary-list__actions a")
+        monthsRow
+          .select(".govuk-summary-list__value li")
+          .eachText()
+          .asScala
+          .toList mustEqual List(
+          msgs("months.january"),
+          msgs("months.april"),
+          msgs("months.july"),
+          msgs("months.october")
+        )
+      }
 
-      link.size() mustBe 1
-      link.attr("href") mustBe controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(CheckMode).url
-      link.select(".govuk-visually-hidden").text() mustBe "return period type"
-    }
+      "render the correct selected months for return periods ID 2" in {
+        val rows = nonStandardRows(nonStandardViewModel(returnPeriodsId = 2))
 
-    "must render the applies after current period message when it applies" in new Setup {
+        rows(1)
+          .select(".govuk-summary-list__value li")
+          .eachText()
+          .asScala
+          .toList mustEqual List(
+          msgs("months.february"),
+          msgs("months.may"),
+          msgs("months.august"),
+          msgs("months.november")
+        )
+      }
 
-      render().select("p.govuk-body").text() must include("These changes will only apply after your current return period.")
-    }
+      "render the correct selected months for return periods ID 3" in {
+        val rows = nonStandardRows(nonStandardViewModel(returnPeriodsId = 3))
 
-    "must not render the applies after current period message when it does not apply" in new Setup {
+        rows(1)
+          .select(".govuk-summary-list__value li")
+          .eachText()
+          .asScala
+          .toList mustEqual List(
+          msgs("months.march"),
+          msgs("months.june"),
+          msgs("months.september"),
+          msgs("months.december")
+        )
+      }
 
-      render(showAppliesAfterCurrentPeriod = false).select("p.govuk-body").text() must not include
-        "These changes will only apply after your current return period."
-    }
+      "render no selected months for an unknown return periods ID" in {
+        val rows = nonStandardRows(nonStandardViewModel(returnPeriodsId = 4))
 
-    "must tell the user to continue to the change registration details page" in new Setup {
+        rows(1)
+          .select(".govuk-summary-list__value li")
+          .size() mustEqual 0
+      }
 
-      render().select("p.govuk-body").text() must include(
-        "You must continue to the change registration details page to submit any changes."
-      )
-    }
+      "render the return periods choice change link" in {
+        val changeLink =
+          nonStandardRows().head.select(".govuk-summary-list__actions a")
 
-    "must render a Continue button that posts to the controller's onContinue action" in new Setup {
+        changeLink.attr("href") mustEqual
+          controllers.returnperiods.routes.ReturnPeriodsController
+            .onPageLoad(CheckMode)
+            .url
 
-      val doc: Document = render()
+        changeLink.text() must include(msgs("site.change"))
+      }
 
-      doc.select("form").attr("action") mustBe controllers.returnperiods.routes.CheckReturnPeriodsController.onContinue().url
+      "not render a return periods choice change link when the choice is missing" in {
+        val choiceRows = nonStandardRows(
+          nonStandardViewModel(returnPeriodsChoice = None)
+        ).filter(
+          _.select(".govuk-summary-list__key").text() ==
+            msgs("checkNonStandardReturnPeriods.returnPeriods")
+        )
 
-      doc.select("button.govuk-button").text() mustBe "Continue"
+        choiceRows mustBe empty
+      }
+
+      "render the selected months change link" in {
+        val changeLink =
+          nonStandardRows()(1).select(".govuk-summary-list__actions a")
+
+        changeLink.attr("href") mustEqual
+          controllers.returnperiods.routes.ChooseReturnPeriodsController
+            .onPageLoad(CheckMode)
+            .url
+      }
+
+      "render all eight entered period dates" in {
+        val rows = nonStandardRows()
+
+        // One return-period choice row, one selected-months row,
+        // followed by eight period-date rows.
+        rows.size mustEqual 10
+
+        val actualDates =
+          rows
+            .drop(2)
+            .map(
+              _.select(".govuk-summary-list__value").text()
+            )
+
+        val expectedDates =
+          enteredDates.flatten.map(_.format(dateFormatter))
+
+        actualDates mustEqual expectedDates
+      }
+
+      "render the continue link" in {
+        val continueLink =
+          nonStandardDocument().select("a.govuk-button")
+
+        continueLink.size() mustEqual 1
+
+        continueLink.attr("href") mustEqual
+          controllers.routes.ChangeRegistrationDetailsController
+            .onPageLoad()
+            .url
+      }
+
+      "render the standard warning when the final period warning is false" in {
+        val doc = nonStandardDocument(
+          nonStandardViewModel(showFinalPeriodWarning = false)
+        )
+
+        doc.select("main").text() must include(
+          msgs("checkNonStandardReturnPeriods.warning1")
+        )
+      }
+
+      "render the final period warning when the final period warning is true" in {
+        val doc = nonStandardDocument(
+          nonStandardViewModel(showFinalPeriodWarning = true)
+        )
+
+        doc.select("main").text() must include(
+          msgs("checkNonStandardReturnPeriods.warning2")
+        )
+      }
+
+      "render the period-date change links in CheckMode" in {
+        val periodRows = nonStandardRows().drop(2)
+
+        periodRows.zipWithIndex.foreach { case (row, index) =>
+          val periodNumber = index + 1
+
+          row.select(".govuk-summary-list__actions a").attr("href") mustEqual
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(periodNumber, models.CheckMode)
+              .url
+        }
+      }
+
+      "render NormalMode add links for missing period dates" in {
+        val dates =
+          enteredDates.updated(2, None).updated(7, None)
+
+        val rows =
+          nonStandardRows(nonStandardViewModel(dates = dates))
+
+        val periodRows = rows.drop(2)
+
+        Seq(2, 7).foreach { index =>
+          val row = periodRows(index)
+
+          row.select(".govuk-summary-list__actions").isEmpty mustBe true
+
+          row.select(".govuk-summary-list__value a").attr("href") mustEqual
+            controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+              .onPageLoad(index + 1, models.NormalMode)
+              .url
+        }
+      }
     }
   }
 }
