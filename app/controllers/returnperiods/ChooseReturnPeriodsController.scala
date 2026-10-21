@@ -18,9 +18,9 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
-import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, UserAnswers, WhatToDoWithStandardReturnPeriods}
+import models.{CheckMode, ChooseReturnPeriods, Mode, NormalMode, ReturnPeriodsVariant, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage, WhatToDoWithStandardReturnPeriodsPage}
+import pages.returnperiods.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,6 +29,7 @@ import views.html.returnperiods.ChooseReturnPeriodsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class ChooseReturnPeriodsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -94,11 +95,33 @@ class ChooseReturnPeriodsController @Inject() (
                     view(formWithErrors, mode, variant)
                   )
                 ),
-              value =>
+              value => {
+
+                val currentReturnPeriodsId =
+                  request.userAnswers
+                    .get(ChooseReturnPeriodsPage)
+                    .orElse(
+                      request.userAnswers
+                        .get(GamblingReturnPeriodsPage)
+                        .flatMap(_.returnPeriodsId)
+                    )
+
+                val hasChanged =
+                  currentReturnPeriodsId.forall(_ != value.returnPeriodsId)
+
+                val answers =
+                  if (hasChanged) {
+                    clearNstpDates(request.userAnswers)
+                  } else {
+                    Try(request.userAnswers)
+                  }
+
                 for {
+                  answersAfterClear <- Future.fromTry(answers)
+
                   updatedAnswers <-
                     Future.fromTry(
-                      request.userAnswers
+                      answersAfterClear
                         .set(
                           ChooseReturnPeriodsPage,
                           value.returnPeriodsId
@@ -113,13 +136,23 @@ class ChooseReturnPeriodsController @Inject() (
 
                   _ <- sessionRepository.set(updatedAnswers)
 
-                } yield Redirect(
-                  navigator.nextPage(
-                    ChooseReturnPeriodsPage,
-                    mode,
-                    updatedAnswers
-                  )
-                )
+                } yield {
+                  if (mode == CheckMode && !hasChanged) {
+                    Redirect(
+                      controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+                        .onPageLoad()
+                    )
+                  } else {
+                    Redirect(
+                      navigator.nextPage(
+                        ChooseReturnPeriodsPage,
+                        NormalMode,
+                        updatedAnswers
+                      )
+                    )
+                  }
+                }
+              }
             )
 
         case None =>
@@ -128,6 +161,19 @@ class ChooseReturnPeriodsController @Inject() (
           )
       }
     }
+
+  private def clearNstpDates(
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    userAnswers
+      .remove(NonStandardPeriodDate1Page)
+      .flatMap(_.remove(NonStandardPeriodDate2Page))
+      .flatMap(_.remove(NonStandardPeriodDate3Page))
+      .flatMap(_.remove(NonStandardPeriodDate4Page))
+      .flatMap(_.remove(NonStandardPeriodDate5Page))
+      .flatMap(_.remove(NonStandardPeriodDate6Page))
+      .flatMap(_.remove(NonStandardPeriodDate7Page))
+      .flatMap(_.remove(NonStandardPeriodDate8Page))
 
   private def variantFrom(
     userAnswers: UserAnswers
@@ -142,9 +188,9 @@ class ChooseReturnPeriodsController @Inject() (
 
         case false =>
           userAnswers
-            .get(WhatToDoWithStandardReturnPeriodsPage) match {
+            .get(StandardReturnPeriodsPage) match {
 
-            case Some(WhatToDoWithStandardReturnPeriods.Switchtononstandard) =>
+            case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
               ReturnPeriodsVariant.NonStandard
 
             case _ =>

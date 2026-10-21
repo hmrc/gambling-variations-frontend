@@ -38,7 +38,7 @@ class ChangeControllingBodyNameController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: ControllingBodyNameDataRequiredAction,
+  requireData: ControllingBodyDetailsDataRequiredAction,
   businessNameFormProvider: ChangeBusinessNameFormProvider,
   soleProprietorFormProvider: SoleProprietorNameFormProvider,
   val controllerComponents: MessagesControllerComponents,

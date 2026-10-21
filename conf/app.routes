@@ -25,33 +25,34 @@ GET        /page-not-found                              controllers.PageNotFound
 
 GET        /change-registration-details                 controllers.ChangeRegistrationDetailsController.onPageLoad()
 
-GET        /change-registration-details/business-name/check              controllers.CheckBusinessNameController.onPageLoad()
+GET        /change-registration-details/business-name/check              controllers.businessname.CheckBusinessNameController.onPageLoad()
 
-GET        /change-registration/declaration             controllers.DeclarationController.onPageLoad()
+GET        /change-registration-details/declaration             controllers.DeclarationController.onPageLoad()
+POST       /change-registration-details/declaration             controllers.DeclarationController.onSubmit()
 
-GET        /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-name/remove-trading-name           controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/remove-trading-name           controllers.businessname.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/remove-trading-name           controllers.businessname.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-name/sole-proprietor                        controllers.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
-POST       /change-registration-details/business-name/sole-proprietor                        controllers.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/sole-proprietor                        controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/sole-proprietor                        controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-name/corporate-body                         controllers.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
-POST       /change-registration-details/business-name/corporate-body                         controllers.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/corporate-body                         controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/corporate-body                         controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Corporatebody, mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-name/partnership                            controllers.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
-POST       /change-registration-details/business-name/partnership                            controllers.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/partnership                            controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/partnership                            controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Partnership, mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-name/unincorporated-body                      controllers.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
-POST       /change-registration-details/business-name/unincorporated-body                      controllers.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/unincorporated-body                      controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/unincorporated-body                      controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.Unincorporatedbody, mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-name/limited-liability-partnership            controllers.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
-POST       /change-registration-details/business-name/limited-liability-partnership            controllers.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/limited-liability-partnership            controllers.businessname.ChangeBusinessNameController.onPageLoad(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/limited-liability-partnership            controllers.businessname.ChangeBusinessNameController.onSubmit(businessType: BusinessType = BusinessType.LimitedLiabilityPartnership, mode: Mode = NormalMode)
 
-GET        /change-registration-details/remove-trading-name                                    controllers.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/remove-trading-name                                    controllers.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/remove-trading-name                                    controllers.businessname.RemoveTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/remove-trading-name                                    controllers.businessname.RemoveTradeNameController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-name/change-trading-name                      controllers.BusinessTradingNameController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-name/change-trading-name                      controllers.BusinessTradingNameController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-name/change-trading-name                      controllers.businessname.BusinessTradingNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-name/change-trading-name                      controllers.businessname.BusinessTradingNameController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/business-contact-details/remove-fax-number             controllers.businesscontactdetails.RemoveFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-contact-details/remove-fax-number             controllers.businesscontactdetails.RemoveFaxNumberController.onSubmit(mode: Mode = NormalMode)
@@ -73,25 +74,25 @@ POST       /change-registration-details/business-contact-details/email-address  
 GET        /change-registration-details/business-contact-details/contact-numbers                   controllers.businesscontactdetails.BusinessContactNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/business-contact-details/contact-numbers                   controllers.businesscontactdetails.BusinessContactNumberController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/change-associated-registration-numbers-redirect        controllers.AssociatedRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, assocRegNumber: String)
-GET        /change-registration-details/trading-details/associated-registration-numbers-redirect               controllers.AssociatedRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)
-GET        /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/associated-registration-numbers                        controllers.AssociatedRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-associated-registration-numbers-redirect        controllers.tradingdetails.AssociatedRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, assocRegNumber: String)
+GET        /change-registration-details/trading-details/associated-registration-numbers-redirect               controllers.tradingdetails.AssociatedRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, assocRegNumber: String)
+GET        /change-registration-details/trading-details/associated-registration-numbers                        controllers.tradingdetails.AssociatedRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/associated-registration-numbers                        controllers.tradingdetails.AssociatedRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/business-trade-class                        controllers.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/business-trade-class                        controllers.tradingdetails.BusinessTradeClassController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/business-trade-class                        controllers.tradingdetails.BusinessTradeClassController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/seasonal-business                        controllers.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/seasonal-business                        controllers.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/seasonal-business                        controllers.tradingdetails.SeasonalBusinessController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/seasonal-business                        controllers.tradingdetails.SeasonalBusinessController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/fax-number                        controllers.CorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/remove-previous-registration-number                      controllers.RemovePreviousRegNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/remove-previous-registration-number                      controllers.tradingdetails.RemovePreviousRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/remove-previous-registration-number                      controllers.tradingdetails.RemovePreviousRegNumberController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/remove-associated-registration-number                      controllers.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/remove-associated-registration-number                      controllers.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/remove-associated-registration-number                      controllers.tradingdetails.RemoveAssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/remove-associated-registration-number                      controllers.tradingdetails.RemoveAssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/correspondence-details/email-address                                    controllers.CorrespondenceEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/email-address                                    controllers.CorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
@@ -111,15 +112,15 @@ POST       /change-registration-details/correspondence-details/additional-addres
 GET        /change-registration-details/correspondence-details/contact-numbers                        controllers.CorrespondenceContactNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/contact-numbers                        controllers.CorrespondenceContactNumberController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onPageLoad()
-POST       /change-registration-details/trading-details/check                       controllers.CheckTradingDetailsController.onContinue()
+GET        /change-registration-details/trading-details/check                       controllers.tradingdetails.CheckTradingDetailsController.onPageLoad()
+POST       /change-registration-details/trading-details/check                       controllers.tradingdetails.CheckTradingDetailsController.onContinue()
 
 
-GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/other-business-trade-class                         controllers.tradingdetails.OtherTradeClassController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/other-business-trade-class                         controllers.tradingdetails.OtherTradeClassController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/associated-registration-number                  controllers.AssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/associated-registration-number                  controllers.AssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/associated-registration-number                  controllers.tradingdetails.AssociatedRegNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/associated-registration-number                  controllers.tradingdetails.AssociatedRegNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/correspondence-details/remove-fax-number                        controllers.RemoveCorrespondenceFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/remove-fax-number                        controllers.RemoveCorrespondenceFaxNumberController.onSubmit(mode: Mode = NormalMode)
@@ -129,13 +130,13 @@ POST       /change-registration-details/correspondence-details/remove-fax-number
 GET        /change-registration-details/correspondence-details/remove-email-address                        controllers.RemoveCorrespondenceEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/remove-email-address                        controllers.RemoveCorrespondenceEmailAddressController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/change-previous-registration-numbers-redirect         controllers.PreviousRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, prevRegNumber: String)
-GET        /change-registration-details/trading-details/previous-registration-numbers-redirect                controllers.PreviousRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, prevRegNumber: String)
-GET        /change-registration-details/trading-details/previous-registration-numbers                         controllers.PreviousRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/previous-registration-numbers                         controllers.PreviousRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/change-previous-registration-numbers-redirect         controllers.tradingdetails.PreviousRegistrationNumbersListController.onChangeRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /change-registration-details/trading-details/previous-registration-numbers-redirect                controllers.tradingdetails.PreviousRegistrationNumbersListController.onRedirect(mode: Mode = NormalMode, prevRegNumber: String)
+GET        /change-registration-details/trading-details/previous-registration-numbers                         controllers.tradingdetails.PreviousRegistrationNumbersListController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/previous-registration-numbers                         controllers.tradingdetails.PreviousRegistrationNumbersListController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/trading-details/previous-registration-number                 controllers.PreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/trading-details/previous-registration-number                 controllers.PreviousRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/trading-details/previous-registration-number                 controllers.tradingdetails.PreviousRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/trading-details/previous-registration-number                 controllers.tradingdetails.PreviousRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/include-additional-address-information                         controllers.CorrespondenceAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
@@ -176,23 +177,23 @@ POST       /change-registration-details/correspondence-details/change-address   
 GET        /change-registration-details/correspondence-details/uk-postcode-yes-no                   controllers.CorrespondenceUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/correspondence-details/uk-postcode-yes-no                      controllers.CorrespondenceUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/change                          controllers.BusinessChangeAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/change                          controllers.BusinessChangeAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/change                          controllers.businessaddress.BusinessChangeAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/change                          controllers.businessaddress.BusinessChangeAddrScreenerController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/additional-information                       controllers.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/additional-information                       controllers.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/additional-information                       controllers.businessaddress.BusinessAddressAdditionalInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/additional-information                       controllers.businessaddress.BusinessAddressAdditionalInfoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/uk-postcode-yes-no                   controllers.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/uk-postcode-yes-no                      controllers.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/uk-postcode-yes-no                   controllers.businessaddress.BusinessUKAddrScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/uk-postcode-yes-no                      controllers.businessaddress.BusinessUKAddrScreenerController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/enter-uk-address                     controllers.BusinessUKAddressController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/enter-uk-address                     controllers.BusinessUKAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/enter-uk-address                     controllers.businessaddress.BusinessUKAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/enter-uk-address                     controllers.businessaddress.BusinessUKAddressController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/enter-non-uk-address                     controllers.BusinessNonUKAddressController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/enter-non-uk-address                     controllers.BusinessNonUKAddressController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/enter-non-uk-address                     controllers.businessaddress.BusinessNonUKAddressController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/enter-non-uk-address                     controllers.businessaddress.BusinessNonUKAddressController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/additional-information-yes-no                      controllers.BusinessAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/additional-information-yes-no                      controllers.businessaddress.BusinessAddrInfoScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/additional-information-yes-no                      controllers.businessaddress.BusinessAddrInfoScreenerController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/gambling-commission-number                         controllers.licencespremises.LicenceNumberController.onSubmit(mode: Mode = NormalMode)
@@ -212,11 +213,11 @@ POST       /change-registration-details/licences-and-premises/permits-great-brit
 GET        /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/pub-tenant                      controllers.licencespremises.LicenceDetailsLandlordLicenceYesNoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/business-address/remove-additional-information                      controllers.RemoveBusinessAddressAddInfoController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/remove-additional-information                      controllers.businessaddress.RemoveBusinessAddressAddInfoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/business-address/remove-additional-information                      controllers.businessaddress.RemoveBusinessAddressAddInfoController.onSubmit(mode: Mode = NormalMode)
 
-GET        /change-registration-details/business-address/check                               controllers.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
-GET        /change-registration-details/business-address/check-redirect                               controllers.CheckBusinessAddressController.onContinue(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/check                               controllers.businessaddress.CheckBusinessAddressController.onPageLoad(mode: Mode = NormalMode)
+GET        /change-registration-details/business-address/check-redirect                               controllers.businessaddress.CheckBusinessAddressController.onContinue(mode: Mode = NormalMode)
 
 GET        /change-registration-details/licences-and-premises/check              controllers.licencespremises.CheckLicencesAndPremisesController.onPageLoad()
 
@@ -225,7 +226,6 @@ POST       /change-registration-details/licences-and-premises/add-licence-number
 
 GET        /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/remove-licence-number                        controllers.licencespremises.RemoveLicenceNumberController.onSubmit(mode: Mode = NormalMode)
-
 
 GET        /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/licences-and-premises/premises-not-covered                  controllers.licencespremises.PremisesNotCoveredYesNoController.onSubmit(mode: Mode = NormalMode)
@@ -241,11 +241,6 @@ POST       /change-registration-details/controlling-body-details/business-type  
 
 GET        /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/what-do-you-want-to-do               controllers.controllingbody.ControllingBodyChangeScreenerController.onSubmit(mode: Mode = NormalMode)
-
-GET        /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onPageLoad(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/sole-proprietor                 controllers.controllingbody.ChangeControllingBodyNameController.onSubmit(businessType: BusinessType = BusinessType.Soleproprietor, mode: Mode = NormalMode)
@@ -265,19 +260,71 @@ POST       /change-registration-details/controlling-body-details/limited-liabili
 GET        /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/trading-name-yes-no              controllers.controllingbody.ControllingBodyAddTradingNameYesNoController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/controlling-body-details/remove-trading-name           controllers.controllingbody.RemoveControllingBodyTradeNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/remove-trading-name           controllers.controllingbody.RemoveControllingBodyTradeNameController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/remove-email-address           controllers.controllingbody.RemoveControllingBodyEmailController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/remove-email-address           controllers.controllingbody.RemoveControllingBodyEmailController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/trading-name                     controllers.controllingbody.ControllingBodyTradingNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/trading-name                     controllers.controllingbody.ControllingBodyTradingNameController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/controlling-body-details/email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/email-address                    controllers.controllingbody.ControllingBodyEmailAddressController.onSubmit(mode: Mode = NormalMode)
-
-GET        /change-registration-details/return-periods                       controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
-POST       /change-registration-details/return-periods                       controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
-GET        /change-registration-details/change-return-periods                 controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-registration-details/change-return-periods                 controllers.returnperiods.WhatToDoWithStandardReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
 
 GET        /change-registration-details/controlling-body-details             controllers.controllingbody.ControllingBodySameAsRepYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details             controllers.controllingbody.ControllingBodySameAsRepYesNoController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/controlling-body-details/groups-representative-member             controllers.controllingbody.ControllingBodyNotProvidedYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/groups-representative-member             controllers.controllingbody.ControllingBodyNotProvidedYesNoController.onSubmit(mode: Mode = NormalMode)
+
+# return-periods
+
+GET        /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/fax-number                        controllers.controllingbody.ControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods/select         controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
+GET        /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/return-periods/change-select  controllers.returnperiods.ChooseReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/return-periods                       controllers.returnperiods.ReturnPeriodsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods                       controllers.returnperiods.ReturnPeriodsController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/change-return-periods                 controllers.returnperiods.ReturnPeriodsController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-registration-details/change-return-periods                 controllers.returnperiods.ReturnPeriodsController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/return-periods/end-date-:periodNumber   controllers.returnperiods.EnterNonStandardPeriodDateController.onPageLoad(periodNumber: Int, mode: Mode = NormalMode)
+POST       /change-registration-details/return-periods/end-date-:periodNumber   controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit( periodNumber: Int, mode: Mode = NormalMode)
+
+GET        /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onPageLoad(periodNumber: Int, mode: Mode = CheckMode)
+POST       /change-registration-details/return-periods/end-date-:periodNumber/change  controllers.returnperiods.EnterNonStandardPeriodDateController.onSubmit(periodNumber: Int, mode: Mode = CheckMode)
+
+GET        /change-registration-details/controlling-body-details/email-address-yes-no        controllers.controllingbody.ControllingBodyAddEmailAddressYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/email-address-yes-no        controllers.controllingbody.ControllingBodyAddEmailAddressYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/business-incorporated-uk           controllers.controllingbody.ControllingBodyBusinessUKIncorporatedController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/fax-number-yes-no       controllers.controllingbody.ControllingBodyAddFaxNumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/national-insurance-number-yes-no        controllers.controllingbody.ControllingBodyAddNINumberYesNoController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/national-insurance-number-yes-no        controllers.controllingbody.ControllingBodyAddNINumberYesNoController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/date-of-incorporation                   controllers.controllingbody.DateOfIncorporationController.onPageLoad()
+POST       /change-registration-details/controlling-body-details/date-of-incorporation                   controllers.controllingbody.DateOfIncorporationController.onSubmit()
+
+GET        /change-registration-details/return-periods/check                       controllers.returnperiods.CheckNonStandardReturnPeriodsController.onPageLoad()
+
+GET        /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
 
 GET        /change-registration-details/controlling-body-details/national-insurance-number                      controllers.controllingbody.ControllingBodyNINumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/national-insurance-number                      controllers.controllingbody.ControllingBodyNINumberController.onSubmit(mode: Mode = NormalMode)

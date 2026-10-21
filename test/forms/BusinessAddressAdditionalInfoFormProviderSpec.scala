@@ -53,7 +53,6 @@ class BusinessAddressAdditionalInfoFormProviderSpec extends StringFieldBehaviour
       val result = form.bind(
         Map(
           "businessAddressAdditionalInfo" -> Seq.fill(101)('A').mkString
-
         )
       )
       result.errors.map(_.message) must contain(lengthKey)
@@ -63,7 +62,6 @@ class BusinessAddressAdditionalInfoFormProviderSpec extends StringFieldBehaviour
       val result = form.bind(
         Map(
           "businessAddressAdditionalInfo" -> ">>>><<<<<"
-
         )
       )
       result.errors.map(_.message) must contain(invalidKey)

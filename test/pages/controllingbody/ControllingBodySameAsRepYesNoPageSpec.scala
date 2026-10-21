@@ -18,7 +18,6 @@ package pages.controllingbody
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import pages.controllingbody.ControllingBodySameAsRepYesNoPage
 import play.api.libs.json.JsPath
 
 class ControllingBodySameAsRepYesNoPageSpec extends AnyFreeSpec with Matchers {

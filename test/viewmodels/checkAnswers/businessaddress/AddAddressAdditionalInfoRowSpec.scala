@@ -17,7 +17,6 @@
 package viewmodels.checkAnswers.businessaddress
 
 import base.SpecBase
-import controllers.routes
 import models.Address
 import pages.*
 import pages.businessaddress.{AddBusinessAddressAdditionalInformationPage, BusinessAddressUkPage}
@@ -48,7 +47,7 @@ class AddAddressAdditionalInfoRowSpec extends SpecBase {
 
     "must render summary list row with correct data" in new Setup {
       private val addressUa: Address = Address("address1", Some("address2"), Some("address3"), Some("address4"), Some("postcode"), Some("country"))
-      private val route: String = routes.BusinessAddrInfoScreenerController.onPageLoad().url
+      private val route: String = controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad().url
       private val ua = emptyUserAnswers
         .set(BusinessAddressUkPage, addressUa)
         .success

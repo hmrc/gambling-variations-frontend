@@ -22,6 +22,7 @@ import models.UserAnswers
 import config.FrontendAppConfig
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
+import org.mockito.{ArgumentMatchers, Mockito}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
@@ -32,6 +33,9 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
+import repositories.SessionRepository
+
+import scala.concurrent.Future
 
 trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValues with ScalaFutures with IntegrationPatience with MockFactory {
 
@@ -45,8 +49,20 @@ trait SpecBase extends AnyFreeSpec with Matchers with TryValues with OptionValue
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
 
+  private def defaultSessionRepository: SessionRepository = {
+    val repository = Mockito.mock(classOf[SessionRepository])
+    Mockito.when(repository.get(ArgumentMatchers.any())).thenReturn(Future.successful(None))
+    Mockito.when(repository.set(ArgumentMatchers.any())).thenReturn(Future.successful(true))
+    Mockito.when(repository.clear(ArgumentMatchers.any())).thenReturn(Future.successful(true))
+    Mockito.when(repository.keepAlive(ArgumentMatchers.any())).thenReturn(Future.successful(true))
+    repository
+  }
+
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
+      // The data required actions are eager singletons depending on SessionRepository, so without
+      // this default every application would need a running Mongo. Specs may still override it.
+      .bindings(bind[SessionRepository].toInstance(defaultSessionRepository))
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[BusinessNameDataRequiredAction].to[BusinessNameDataRequiredActionImpl],

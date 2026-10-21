@@ -48,7 +48,7 @@
                 actions = Some(Actions(
                     items = Seq(
                         ActionItem(
-                            href = controllers.routes.ChangeBusinessNameController.onPageLoad(businessType).url(),
+                            href = controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(businessType).url(),
                             content = "site.change",
                             visuallyHiddenText = Some(messages("businessName.name", messages("businessType." + businessType.toString).toLowerCase))
                             )
@@ -74,7 +74,7 @@
                     Some(Actions(
                         items = Seq(
                             ActionItem(
-                                href = controllers.routes.BusinessTradingNameController.onPageLoad().url(),
+                                href = controllers.businessname.routes.BusinessTradingNameController.onPageLoad().url(),
                                 content = "site.change",
                                 visuallyHiddenText = Some(messages("businessName.tradingName.hidden"))
                                 )
@@ -84,12 +84,12 @@
                 Some(Actions(
                     items = Seq(
                         ActionItem(
-                            href = controllers.routes.BusinessTradingNameController.onPageLoad().url(),
+                            href = controllers.businessname.routes.BusinessTradingNameController.onPageLoad().url(),
                             content = "site.change",
                             visuallyHiddenText = Some(messages("businessName.tradingName.hidden"))
                                 ),
                             ActionItem(
-                                href = controllers.routes.RemoveTradeNameController.onPageLoad().url(),
+                                href = controllers.businessname.routes.RemoveTradeNameController.onPageLoad().url(),
                                 content = "site.remove",
                                 visuallyHiddenText = Some(messages("businessName.tradingName.hidden"))
                                 )
