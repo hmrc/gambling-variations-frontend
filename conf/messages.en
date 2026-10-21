@@ -1382,6 +1382,11 @@ returnPeriods.noneSet.change.hidden = ReturnPeriodsChoice
 returnPeriods.noneSet.change.p1 = If you want to use standard return periods, the end dates are set to the last day of the month, for example 31 March.
 returnPeriods.noneSet.change.p2 = If you want to use non‑standard return periods, you must provide end dates that cover the next 2 years.
 
+returnPeriods.locked.title = You cannot make any further changes to your return periods
+returnPeriods.locked.heading = You cannot make any further changes to your return periods
+returnPeriods.locked.p1 = You are choosing to switch to standard return periods, so you are unable to make any more changes at this time.
+returnPeriods.locked.p2 = You must continue to the change registration details page to submit any changes.
+
 controllingBodyAdditionalAddressInformationYesNo.title = Do you want to include additional information for the controlling body’s address?
 controllingBodyAdditionalAddressInformationYesNo.heading = Do you want to include additional information for the controlling body’s address?
 controllingBodyAdditionalAddressInformationYesNo.error.required = Select yes to include additional information for the controlling body’s address
@@ -1441,6 +1446,15 @@ checkNonStandardReturnPeriods.returnPeriods = Return periods
 checkNonStandardReturnPeriods.standard = Standard
 checkNonStandardReturnPeriods.nonStandard = Non-standard
 checkNonStandardReturnPeriods.returnPeriods.hidden = return periods
+
+controllingBodySoleProprietorDob.title = What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.heading = What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.hint = For example, 31 3 1980
+controllingBodySoleProprietorDob.error.required.all = Enter a date of birth for the sole proprietor
+controllingBodySoleProprietorDob.error.required.two = Date of birth must include a {0} and a {1}
+controllingBodySoleProprietorDob.error.required = Date of birth must include a {0}
+controllingBodySoleProprietorDob.error.invalid = Date of birth must be a real date
+controllingBodySoleProprietorDob.error.afterLatestDate = Date of birth must be the same as or before {0}
 
 dateOfIncorporation.title = When was the controlling body’s date of incorporation?
 dateOfIncorporation.heading = When was the controlling body’s date of incorporation?
