@@ -25,8 +25,8 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import scala.jdk.CollectionConverters.*
-import viewmodels.checkAnswers.returnperiods.CheckNonStandardReturnPeriodsViewModel
-import views.html.returnperiods.CheckNonStandardReturnPeriodsView
+import viewmodels.checkAnswers.returnperiods.CheckReturnPeriodsViewModel
+import views.html.returnperiods.CheckReturnPeriodsView
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -63,8 +63,8 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
       Some(LocalDate.of(2027, 10, 30))
     )
 
-  private val view: CheckNonStandardReturnPeriodsView =
-    app.injector.instanceOf[CheckNonStandardReturnPeriodsView]
+  private val view: CheckReturnPeriodsView =
+    app.injector.instanceOf[CheckReturnPeriodsView]
 
   private val dateFormatter: DateTimeFormatter =
     DateTimeFormatter.ofPattern("d MMM yyyy")
@@ -75,8 +75,8 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
     periodEnds: Seq[LocalDate] = calculatedPeriodEnds,
     dates: Seq[Option[LocalDate]] = enteredDates,
     showFinalPeriodWarning: Boolean = false
-  ): CheckNonStandardReturnPeriodsViewModel =
-    CheckNonStandardReturnPeriodsViewModel(
+  ): CheckReturnPeriodsViewModel.NonStandard =
+    CheckReturnPeriodsViewModel.nonStandard(
       returnPeriodsChoice    = returnPeriodsChoice,
       returnPeriodsId        = returnPeriodsId,
       calculatedPeriodEnds   = periodEnds,
@@ -85,26 +85,26 @@ class CheckNonStandardReturnPeriodsViewSpec extends SpecBase {
     )
 
   private def createView(
-    model: CheckNonStandardReturnPeriodsViewModel = viewModel()
+    model: CheckReturnPeriodsViewModel.NonStandard = viewModel()
   ): Html = {
     given play.api.mvc.Request[AnyContentAsEmpty.type] = FakeRequest()
     view(model)
   }
 
   private def document(
-    model: CheckNonStandardReturnPeriodsViewModel = viewModel()
+    model: CheckReturnPeriodsViewModel.NonStandard = viewModel()
   ) =
     Jsoup.parse(createView(model).toString)
 
   private def summaryRows(
-    model: CheckNonStandardReturnPeriodsViewModel = viewModel()
+    model: CheckReturnPeriodsViewModel.NonStandard = viewModel()
   ) =
     document(model)
       .select(".govuk-summary-list__row")
       .asScala
       .toList
 
-  "CheckNonStandardReturnPeriodsView" - {
+  "CheckReturnPeriodsView, non-standard version" - {
 
     "render the page heading" in {
       document()

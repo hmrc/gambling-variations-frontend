@@ -23,7 +23,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, verifyNoInteractions, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
-import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, NonStandardPeriodDatePages, ReturnPeriodsChoicePage}
+import pages.returnperiods.{ChooseReturnPeriodsPage, GamblingReturnPeriodsPage, HasExistingNstpValuesPage, NonStandardPeriodDatePages, ReturnPeriodsChoicePage}
 import play.api.Application
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -121,7 +121,7 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
       .value
       .set(
         ReturnPeriodsChoicePage,
-        NoReturnPeriodsSet.Standard
+        NoReturnPeriodsSet.Nonstandard
       )
       .success
       .value
@@ -144,6 +144,12 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
       .set(
         GamblingReturnPeriodsPage,
         gamblingReturnPeriods()
+      )
+      .success
+      .value
+      .set(
+        HasExistingNstpValuesPage,
+        true
       )
       .success
       .value
@@ -188,7 +194,7 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
   private def request =
     FakeRequest(
       GET,
-      controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+      controllers.returnperiods.routes.CheckReturnPeriodsController
         .onPageLoad()
         .url
     )
@@ -238,7 +244,7 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
     stubCalculatedPeriods(baseDate, returnPeriodsId)
   }
 
-  "CheckNonStandardReturnPeriodsController.onPageLoad" - {
+  "CheckReturnPeriodsController.onPageLoad, non-standard return periods" - {
 
     "must redirect to Choose Return Periods when the return periods ID is missing" in {
       val app =
@@ -431,7 +437,7 @@ class CheckNonStandardReturnPeriodsControllerSpec extends SpecBase with MockitoS
           contentAsString(result)
 
         content must include("Return periods")
-        content must include("Standard")
+        content must include("Non-standard")
       }
     }
 

@@ -31,7 +31,7 @@ import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, Controllin
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
-import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDate1Page, NonStandardPeriodDate2Page, NonStandardPeriodDate3Page, NonStandardPeriodDate4Page, NonStandardPeriodDate5Page, NonStandardPeriodDate6Page, NonStandardPeriodDate7Page, NonStandardPeriodDate8Page}
+import pages.returnperiods.{ChooseReturnPeriodsPage, HasExistingNstpValuesPage, NonStandardPeriodDate1Page, NonStandardPeriodDate2Page, NonStandardPeriodDate3Page, NonStandardPeriodDate4Page, NonStandardPeriodDate5Page, NonStandardPeriodDate6Page, NonStandardPeriodDate7Page, NonStandardPeriodDate8Page, ReturnPeriodsChoicePage}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -333,9 +333,9 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
               .onPageLoad(8, NormalMode)
         }
 
-        "should route NonStandardPeriodDate8Page to CheckNonStandardReturnPeriods" in {
+        "should route NonStandardPeriodDate8Page to CheckReturnPeriods" in {
           navigator.nextPage(NonStandardPeriodDate8Page, NormalMode, emptyAnswers) mustBe
-            controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+            controllers.returnperiods.routes.CheckReturnPeriodsController
               .onPageLoad()
         }
       }
@@ -1472,13 +1472,39 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
         navigator.nextPage(RemoveControllingBodyFaxNumberPage, NormalMode, emptyAnswers) mustBe
           routes.IndexController.onPageLoad()
       }
+
+      "should route ChooseReturnPeriodsPage to CheckReturnPeriodsController for standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, answers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to the first non-standard end date for non-standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, true).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, answers) mustBe
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      }
+
+      "should route ChooseReturnPeriodsPage to the first non-standard end date when the return periods type is not known" in {
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, emptyAnswers) mustBe
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      }
     }
 
     "in Check mode" - {
 
-      "should route ChooseReturnPeriodsPage to CheckNonStandardReturnPeriods" in {
+      "should route ChooseReturnPeriodsPage back to CheckReturnPeriodsController for standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, answers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to CheckReturnPeriods" in {
         navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, emptyAnswers) mustBe
-          controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+          controllers.returnperiods.routes.CheckReturnPeriodsController
             .onPageLoad()
       }
 
@@ -1492,9 +1518,9 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
         NonStandardPeriodDate7Page,
         NonStandardPeriodDate8Page
       ).zipWithIndex.foreach { case (page, index) =>
-        s"should route NonStandardPeriodDate${index + 1}Page to CheckNonStandardReturnPeriods" in {
+        s"should route NonStandardPeriodDate${index + 1}Page to CheckReturnPeriods" in {
           navigator.nextPage(page, CheckMode, emptyAnswers) mustBe
-            controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+            controllers.returnperiods.routes.CheckReturnPeriodsController
               .onPageLoad()
         }
       }

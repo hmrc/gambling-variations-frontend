@@ -139,7 +139,7 @@ class ChooseReturnPeriodsController @Inject() (
                 } yield {
                   if (mode == CheckMode && !hasChanged) {
                     Redirect(
-                      controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+                      controllers.returnperiods.routes.CheckReturnPeriodsController
                         .onPageLoad()
                     )
                   } else {

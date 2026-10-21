@@ -64,8 +64,8 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     dates: Seq[Option[LocalDate]] = enteredDates,
     returnPeriodsChoice: Option[NoReturnPeriodsSet] = Some(NoReturnPeriodsSet.Standard),
     showFinalPeriodWarning: Boolean = false
-  ): CheckNonStandardReturnPeriodsViewModel =
-    CheckNonStandardReturnPeriodsViewModel(
+  ): CheckReturnPeriodsViewModel.NonStandard =
+    CheckReturnPeriodsViewModel.nonStandard(
       returnPeriodsChoice    = returnPeriodsChoice,
       returnPeriodsId        = returnPeriodsId,
       calculatedPeriodEnds   = periodEnds,
@@ -73,7 +73,7 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
       showFinalPeriodWarning = showFinalPeriodWarning
     )
 
-  "CheckNonStandardReturnPeriodsViewModel.apply" - {
+  "CheckReturnPeriodsViewModel.nonStandard" - {
 
     "must return the selected months for return periods ID 1" in {
       viewModel(returnPeriodsId = 1).selectedMonths mustEqual Seq(
@@ -340,34 +340,34 @@ class CheckNonStandardReturnPeriodsViewModelSpec extends SpecBase {
     }
   }
 
-  "CheckNonStandardReturnPeriodsViewModel.formatMonth" - {
+  "CheckReturnPeriodsViewModel.formatMonth" - {
 
     "must format January correctly" in {
-      CheckNonStandardReturnPeriodsViewModel.formatMonth(
+      CheckReturnPeriodsViewModel.formatMonth(
         LocalDate.of(2026, 1, 31),
         Locale.ENGLISH
       ) mustEqual "Jan 2026"
     }
 
     "must format December correctly" in {
-      CheckNonStandardReturnPeriodsViewModel.formatMonth(
+      CheckReturnPeriodsViewModel.formatMonth(
         LocalDate.of(2027, 12, 31),
         Locale.ENGLISH
       ) mustEqual "Dec 2027"
     }
   }
 
-  "CheckNonStandardReturnPeriodsViewModel.formatDate" - {
+  "CheckReturnPeriodsViewModel.formatDate" - {
 
     "must format a single digit day without a leading zero" in {
-      CheckNonStandardReturnPeriodsViewModel.formatDate(
+      CheckReturnPeriodsViewModel.formatDate(
         LocalDate.of(2026, 1, 5),
         Locale.ENGLISH
       ) mustEqual "5 Jan 2026"
     }
 
     "must format a two digit day correctly" in {
-      CheckNonStandardReturnPeriodsViewModel.formatDate(
+      CheckReturnPeriodsViewModel.formatDate(
         LocalDate.of(2026, 10, 30),
         Locale.ENGLISH
       ) mustEqual "30 Oct 2026"
