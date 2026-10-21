@@ -22,6 +22,7 @@ import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
 import models.controllingbody.ControllingBodyChangeOption.*
 import models.licencespremises.LicencesPremisesAnswers.*
+import navigation.PartnerDetailsNavigator.{partnerDetailsCheckRoutes, partnerDetailsNormalRoutes}
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
@@ -50,6 +51,8 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case ControllingBodyEmailPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
+    case ControllingBodyDateOfIncorporationPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Connect the next controlling body screen when the journey is built.
     case ControllingBodyIsUkIncorporatedPage =>
       userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
     case RemoveTradeNamePage =>
@@ -132,6 +135,7 @@ class Navigator @Inject() () {
       userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage =>
       userAnswers => navigateCorrespondenceAddressNonUkPage()(userAnswers)
+
     case BusinessChangeAddrScreenerPage =>
       userAnswers => navigateBusinessChangeAddrScreenerPage()(userAnswers)
     case BusinessUKAddrScreenerPage =>
@@ -144,6 +148,13 @@ class Navigator @Inject() () {
       _ => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
     case BusinessAddressAdditionalInformationPage =>
       _ => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
+
+    // Return Periods
+//    case NonStandardReturnPeriodsPage =>
+//      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
+
+    case ReturnPeriodsChoicePage =>
+      userAnswers => controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
 
     // License and Premises Details
     case LicenceNumberPage =>
@@ -187,7 +198,7 @@ class Navigator @Inject() () {
 
     // Return Periods
     case ChooseReturnPeriodsPage =>
-      _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      userAnswers => navigateChooseReturnPeriodsPage(userAnswers)
     case NonStandardPeriodDate1Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(2, NormalMode)
     case NonStandardPeriodDate2Page =>
@@ -203,6 +214,9 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate7Page =>
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(8, NormalMode)
 
+    case NonStandardPeriodDate8Page =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -211,17 +225,44 @@ class Navigator @Inject() () {
     _ => routes.ChangeRegistrationDetailsController.onPageLoad()
   }
 
-  // Partner details routes are tried first, so partner pages never fall through to the catch-alls above
-  private val allNormalRoutes: Page => UserAnswers => Call =
-    PartnerDetailsNavigator.normalRoutes orElse normalRoutes
+  private val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
 
-  private val allCheckRoutes: Page => UserAnswers => Call =
-    PartnerDetailsNavigator.checkRoutes orElse checkRoutes
+    case ReturnPeriodsChoicePage =>
+      userAnswers => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+    case ChooseReturnPeriodsPage =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+    case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
+        NonStandardPeriodDate5Page | NonStandardPeriodDate6Page | NonStandardPeriodDate7Page | NonStandardPeriodDate8Page =>
+      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+
+    case _ =>
+      _ => routes.ChangeRegistrationDetailsController.onPageLoad()
+  }
+
+  private val combinedNormalRoutes: Page => UserAnswers => Call =
+    partnerDetailsNormalRoutes orElse normalRoutes
+
+  private val combinedCheckRouteMap: Page => UserAnswers => Call =
+    partnerDetailsCheckRoutes orElse checkRouteMap
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     mode match {
-      case NormalMode => allNormalRoutes(page)(userAnswers)
-      case CheckMode  => allCheckRoutes(page)(userAnswers)
+      case NormalMode =>
+        combinedNormalRoutes(page)(userAnswers)
+      case CheckMode =>
+        combinedCheckRouteMap(page)(userAnswers)
+    }
+  }
+
+  private def navigateChooseReturnPeriodsPage(userAnswers: UserAnswers): Call =
+    userAnswers.get(ReturnPeriodsChoicePage) match {
+      case Some(NoReturnPeriodsSet.Standard) =>
+        routes.ChangeRegistrationDetailsController.onPageLoad() // check where to send
+
+      case _ =>
+        controllers.returnperiods.routes.EnterNonStandardPeriodDateController
+          .onPageLoad(1, NormalMode)
+
     }
 
   private def navigateCorrespondenceNamePage()(answers: UserAnswers): Call =
@@ -427,13 +468,19 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigateBusinessAddressUkOrNonUkPage()(userAnswers: UserAnswers): Call =
-    if (userAnswers.get(BusinessAddressAddFlowPage).contains(true))
-      controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad()
-    else
-      controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
+  private def navigateBusinessAddressUkOrNonUkPage()(userAnswers: UserAnswers): Call = {
+    val addFlowRoute = controllers.businessaddress.routes.BusinessAddrInfoScreenerController.onPageLoad()
+    val normalRoute = controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
+    userAnswers.get(BusinessAddressAddFlowPage) match {
+      case Some(isInAddFlow) => if (isInAddFlow) addFlowRoute else normalRoute
+      case None              => normalRoute
+    }
+  }
 
-  private def navigateReturnPeriodsPage(userAnswers: UserAnswers): Call =
+  private def navigateReturnPeriodsPage(
+    userAnswers: UserAnswers
+  ): Call = {
+
     userAnswers.get(StandardReturnPeriodsPage) match {
       case Some(StandardReturnPeriodsOptions.ChangeMonthsStandardPeriodCover) =>
         controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
@@ -454,7 +501,9 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call =
+  }
+
+  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call = {
     userAnswers
       .get(ControllingBodyAddFaxNumberYesNoPage)
       .map {

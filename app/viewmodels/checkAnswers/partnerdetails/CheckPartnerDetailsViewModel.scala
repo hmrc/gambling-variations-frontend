@@ -537,7 +537,7 @@ object CheckPartnerDetailsViewModel {
       vatRegistrationNumber     = userAnswers.get(PartnerDetailsVrnPage(index)),
       isIncorporatedInUk        = userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)),
       countryOfIncorporation    = userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)),
-      dateOfIncorporation       = userAnswers.get(PartnerDetailsDateOfIncorporation(index)).map(shortDateDisplay),
+      dateOfIncorporation       = userAnswers.get(PartnerDetailsDateOfIncorporationPage(index)).map(shortDateDisplay),
       foreignCorporateReference = userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)),
       companyRegistrationNumber = userAnswers.get(PartnerDetailsCrnPage(index)),
       address                   = correspondenceAddress(userAnswers, index),

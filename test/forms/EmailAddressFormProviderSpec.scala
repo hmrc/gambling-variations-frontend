@@ -27,9 +27,7 @@ class EmailAddressFormProviderSpec extends StringFieldBehaviours {
   private val invalidKey = "emailAddress.error.invalid"
 
   private val maxLength = 70
-
-  private val emailRegex =
-    """^[A-Za-z0-9._-]+@[A-Za-z0-9._-]+$"""
+  private val maxPartLength = 64
 
   private val form = new EmailAddressFormProvider()("emailAddress")
 
@@ -49,18 +47,71 @@ class EmailAddressFormProviderSpec extends StringFieldBehaviours {
     )
 
     "trim surrounding whitespace" in {
-      val result = form.bind(Map(fieldName -> "   name@example.com   ")).value
-      result.value mustBe "name@example.com"
+      val result = form.bind(Map(fieldName -> "   name@example.com   "))
+
+      result.value mustBe Some("name@example.com")
     }
 
-    s"not bind strings longer than $maxLength characters" in {
-      val tooLong = ("a" * (maxLength - 8)) + "@test.com"
-      val result = form.bind(Map(fieldName -> tooLong)).apply(fieldName)
+    "accept an email address with a total length of 70 characters" in {
+      val email = ("a" * maxPartLength) + "@b.com"
 
-      result.errors must contain(FormError(fieldName, lengthKey, Seq(maxLength)))
+      email.length mustBe maxLength
+
+      val result = form.bind(Map(fieldName -> email))
+
+      result.errors mustBe empty
+      result.value mustBe Some(email)
     }
 
-    "not bind invalid email formats" in {
+    "reject an email address with a total length greater than 70 characters" in {
+      val email = ("a" * (maxPartLength + 1)) + "@b.com"
+
+      email.length mustBe maxLength + 1
+
+      val result = form.bind(Map(fieldName -> email))
+
+      result.errors must contain(
+        FormError(fieldName, lengthKey, Seq(maxLength))
+      )
+    }
+
+    "reject a local part longer than 64 characters" in {
+
+      val email = ("a" * (maxPartLength + 1)) + "@b.c"
+
+      email.length mustBe 69
+
+      val result = form.bind(Map(fieldName -> email))
+
+      result.errors must contain(
+        FormError(fieldName, invalidKey)
+      )
+    }
+
+    "reject a domain part longer than 64 characters" in {
+      val email = "a@" + ("b" * 65)
+
+      email.length mustBe 67
+
+      val result = form.bind(Map(fieldName -> email))
+
+      result.errors must contain(
+        FormError(fieldName, invalidKey)
+      )
+    }
+
+    "accept an email address with a domain part of 64 characters" in {
+      val email = "a@" + ("b" * 64)
+
+      email.length mustBe 66
+
+      val result = form.bind(Map(fieldName -> email))
+
+      result.errors mustBe empty
+      result.value mustBe Some(email)
+    }
+
+    "reject invalid email formats" in {
       val invalids = Seq(
         "plainaddress",
         "missingatsign.com",
@@ -68,12 +119,27 @@ class EmailAddressFormProviderSpec extends StringFieldBehaviours {
         "@missinglocal.com",
         "bad!chars@test.com",
         "two@@ats.com",
-        "spaces are not allowed@test.com"
+        "spaces are not allowed@test.com",
+        ".john@gmail.com",
+        "john.@gmail.com",
+        "..john@gmail.com",
+        "john..smith@gmail.com",
+        "john@.gmail.com",
+        "john@gmail.",
+        "john@-gmail.com",
+        "john@gmail..com",
+        "john@_",
+        "john@---"
       )
 
       invalids.foreach { email =>
-        val result = form.bind(Map(fieldName -> email)).apply(fieldName)
-        result.errors must contain only FormError(fieldName, invalidKey, Seq(emailRegex))
+        withClue(s"Email: '$email'") {
+          val result = form.bind(Map(fieldName -> email))
+
+          result.errors must contain(
+            FormError(fieldName, invalidKey)
+          )
+        }
       }
     }
 

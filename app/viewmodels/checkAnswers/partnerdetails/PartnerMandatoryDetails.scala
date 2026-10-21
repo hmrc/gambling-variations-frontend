@@ -85,7 +85,7 @@ object PartnerMandatoryDetails {
     val utr = Field.of(PartnerDetailsUtrPage(index), routes.PartnerDetailsAddUTRController.onPageLoad(key, mode))
 
     val ukIncorporation = Seq(
-      Field.of(PartnerDetailsDateOfIncorporation(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(key, mode)),
+      Field.of(PartnerDetailsDateOfIncorporationPage(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(key, mode)),
       Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key, mode)) // TODO: CRN page
     )
 
@@ -157,7 +157,7 @@ object PartnerMandatoryDetails {
     PartnerDetailsBusinessNamePage(index),
     PartnerDetailsUtrPage(index),
     PartnerDetailsIsBusinessIncorporatedUkPage(index),
-    PartnerDetailsDateOfIncorporation(index),
+    PartnerDetailsDateOfIncorporationPage(index),
     PartnerDetailsCrnPage(index),
     PartnerDetailsCountryOfIncorporationPage(index),
     PartnerDetailsForeignCorporateReferencePage(index)

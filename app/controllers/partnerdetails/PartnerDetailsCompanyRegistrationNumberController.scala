@@ -19,15 +19,17 @@ package controllers.partnerdetails
 import controllers.actions.*
 import forms.partnerdetails.PartnerDetailsCompanyRegistrationNumberFormProvider
 import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership}
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
+import pages.BusinessNumberOrIndex
 import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCrnPage, PartnerDetailsIsBusinessIncorporatedUkPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.partnerdetails.PartnerDetailsCompanyRegistrationNumberView
 import utils.PartnerUtils
+import views.html.partnerdetails.PartnerDetailsCompanyRegistrationNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,38 +48,42 @@ class PartnerDetailsCompanyRegistrationNumberController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
 
-    val incorporatedInUK = request.userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(newIndex))
-    val businessType = request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex))
-
-    (businessType, incorporatedInUK) match {
-      case (Some(Corporatebody), Some(true)) | (Some(LimitedLiabilityPartnership), _) =>
-        val preparedForm = request.userAnswers.get(PartnerDetailsCrnPage(newIndex)) match {
-          case None        => form
-          case Some(value) => form.fill(value)
-        }
-        Ok(view(preparedForm, index, mode))
-
-      case _ =>
-        Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    if (crnApplies(request.userAnswers, newIndex)) {
+      val preparedForm = request.userAnswers.get(PartnerDetailsCrnPage(newIndex)).fold(form)(form.fill)
+      Ok(view(preparedForm, index, mode))
+    } else {
+      Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
   }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCrnPage(newIndex), value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsCrnPage(newIndex), mode, updatedAnswers))
-      )
+
+    if (!crnApplies(request.userAnswers, newIndex)) {
+      Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
+    } else {
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCrnPage(newIndex), value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(PartnerDetailsCrnPage(newIndex), mode, updatedAnswers))
+        )
+    }
   }
+
+  /** CRN applies to UK-incorporated corporate bodies and to LLPs. */
+  private def crnApplies(answers: UserAnswers, index: BusinessNumberOrIndex): Boolean =
+    (answers.get(PartnerDetailsBusinessTypePage(index)), answers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index))) match {
+      case (Some(Corporatebody), Some(true)) | (Some(LimitedLiabilityPartnership), _) => true
+      case _                                                                          => false
+    }
 }

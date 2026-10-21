@@ -18,7 +18,7 @@ package controllers.returnperiods
 
 import controllers.actions.*
 import forms.returnperiods.ChooseReturnPeriodsFormProvider
-import models.{ChooseReturnPeriods, Mode, ReturnPeriodsVariant, StandardReturnPeriodsOptions, UserAnswers}
+import models.{CheckMode, ChooseReturnPeriods, Mode, NormalMode, ReturnPeriodsVariant, StandardReturnPeriodsOptions, UserAnswers}
 import navigation.Navigator
 import pages.returnperiods.*
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -97,11 +97,20 @@ class ChooseReturnPeriodsController @Inject() (
                 ),
               value => {
 
-                val previousReturnPeriodsId =
-                  request.userAnswers.get(ChooseReturnPeriodsPage)
+                val currentReturnPeriodsId =
+                  request.userAnswers
+                    .get(ChooseReturnPeriodsPage)
+                    .orElse(
+                      request.userAnswers
+                        .get(GamblingReturnPeriodsPage)
+                        .flatMap(_.returnPeriodsId)
+                    )
+
+                val hasChanged =
+                  currentReturnPeriodsId.forall(_ != value.returnPeriodsId)
 
                 val answers =
-                  if (previousReturnPeriodsId.exists(_ != value.returnPeriodsId)) {
+                  if (hasChanged) {
                     clearNstpDates(request.userAnswers)
                   } else {
                     Try(request.userAnswers)
@@ -127,13 +136,22 @@ class ChooseReturnPeriodsController @Inject() (
 
                   _ <- sessionRepository.set(updatedAnswers)
 
-                } yield Redirect(
-                  navigator.nextPage(
-                    ChooseReturnPeriodsPage,
-                    mode,
-                    updatedAnswers
-                  )
-                )
+                } yield {
+                  if (mode == CheckMode && !hasChanged) {
+                    Redirect(
+                      controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+                        .onPageLoad()
+                    )
+                  } else {
+                    Redirect(
+                      navigator.nextPage(
+                        ChooseReturnPeriodsPage,
+                        NormalMode,
+                        updatedAnswers
+                      )
+                    )
+                  }
+                }
               }
             )
 
