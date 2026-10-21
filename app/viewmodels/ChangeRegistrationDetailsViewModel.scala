@@ -25,6 +25,7 @@ import pages.contactdetails.ContactDetailsChangesPage
 import pages.correspondencedetails.CorrespondenceDetailsChangesPage
 import pages.licencespremises.LicencesPremisesDetailsChangesPage
 import pages.tradingdetails.TradingDetailsChangesPage
+import pages.controllingbody.*
 import play.api.i18n.Messages
 
 final case class ChangeRegistrationDetailsViewModel(
@@ -59,11 +60,11 @@ object ChangeRegistrationDetailsViewModel {
 
     val sections: Seq[RegistrationSectionRow] =
       Seq(
-        optional(isGroupMember)(
+        optional(!isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.controllingBodyDetails"),
-            routes.PageNotFoundController.onPageLoad().url,
-            NoDetailsChanged
+            controllingBodyDetailsUrl(userAnswers),
+            status(ControllingBodyChangesPage)
           )
         ),
         optional(isGroupMember)(
@@ -141,4 +142,24 @@ object ChangeRegistrationDetailsViewModel {
 
   private def optional(condition: Boolean)(row: => RegistrationSectionRow): Option[RegistrationSectionRow] =
     if (condition) Some(row) else None
+
+  private def controllingBodyDetailsUrl(userAnswers: UserAnswers): String = {
+
+    userAnswers.get(ControllingBodySectionPage) match {
+      case None =>
+        controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad().url
+
+      case Some(_) =>
+        userAnswers.get(ControllingBodyIsRepMemSameAsCbPage) match {
+          case Some("1") =>
+            controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
+
+          case Some("0") =>
+            controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
+
+          case _ =>
+            routes.PageNotFoundController.onPageLoad().url
+        }
+    }
+  }
 }
