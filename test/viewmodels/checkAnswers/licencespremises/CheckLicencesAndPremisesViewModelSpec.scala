@@ -48,6 +48,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
     hasPremisesNotCovered: Boolean = false,
     provideAddressesAnswer: Option[LicencesAndPremisesRadioOptions] = None,
     premisesCount: Int = 0,
+    isNotCoveredMissing: Boolean = false,
     isSubmitted: Boolean = false
   ): CheckLicencesAndPremisesViewModel =
     CheckLicencesAndPremisesViewModel(
@@ -58,6 +59,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
       hasPremisesNotCovered  = hasPremisesNotCovered,
       provideAddressesAnswer = provideAddressesAnswer,
       premisesCount          = premisesCount,
+      isNotCoveredMissing    = isNotCoveredMissing,
       isSubmitted            = isSubmitted
     )
 
@@ -218,6 +220,10 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
         vm.showSendByPost mustBe true
         keys(vm) must not contain msgs("checkLicenceAndPremises.addressesOnline")
       }
+
+      "must continue to premises not covered when it has not been answered after a change" in {
+        viewModel(isPubTenant = true, isNotCoveredMissing = true).continueUrl mustEqual routes.PremisesNotCoveredYesNoController.onPageLoad().url
+      }
     }
 
     "must show the licence number with change and remove links" in {
@@ -297,6 +303,7 @@ class CheckLicencesAndPremisesViewModelSpec extends SpecBase {
           hasPremisesNotCovered  = true,
           provideAddressesAnswer = None,
           premisesCount          = 2,
+          isNotCoveredMissing    = false,
           isSubmitted            = false
         )
       }

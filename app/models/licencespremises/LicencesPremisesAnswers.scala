@@ -59,6 +59,12 @@ object LicencesPremisesAnswers {
     def hasLicencesOrPermits: Boolean =
       licenceNumberAnswer.isDefined || pubTenantAnswer || licencesAndPermitsGB.nonEmpty || licencesAndPermitsNI.nonEmpty
 
+    // Once the section has been changed, the premises not covered question must be answered when it is in scope
+    def isPremisesNotCoveredMissing: Boolean =
+      answers.get(LicencesPremisesDetailsChangesPage).contains(true) &&
+        hasLicencesOrPermits &&
+        backendFlagOption(LicencePremisesNotCoveredPage).isEmpty
+
     // The premises are counted rather than using totalRows, so that the count agrees with the premises addresses list, also after removals
     def premisesCount: Int =
       answers.get(PremisesDetailsPage).map(_.premises.size).getOrElse(0)
