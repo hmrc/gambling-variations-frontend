@@ -26,7 +26,7 @@ object PartnerDetailsNavigator {
 
   private val partnerDetailsRoutes: PartialFunction[Page, UserAnswers => Call] = {
     case PartnerDetailsAdditionalAddressInfoPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index.toString, NormalMode)
+      _ => controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(index.toString, NormalMode)
     case PartnerDetailsAdditionalAddressInfoYesNoPage(index) =>
       userAnswers => navigatePartnerDetailsAdditionalAddressInfoYesNoPage(index)(userAnswers)
     case PartnerDetailsRemoveEmailAddressYesNoPage(index) =>
@@ -35,12 +35,14 @@ object PartnerDetailsNavigator {
       userAnswers => navigatePartnerRemoveFaxNumberYesNoPage(index)(userAnswers)
     case PartnerDetailsAddFaxNumberYesNoPage(index) =>
       userAnswers => navigatePartnerAddFaxNumberYesNoPage(index)(userAnswers)
+    case PartnerDetailsCorrespondenceFaxNumberPage(index) =>
+      _ => controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index.toString)
     case PartnerDetailsAddEmailAddressYesNoPage(index) =>
       userAnswers => navigatePartnerAddEmailAddressYesNoPage(index)(userAnswers)
     case PartnerDetailsRemovePartnerTradingNameYesNoPage(index) =>
       userAnswers => navigateRemovePartnerTradingNameYesNoPage(index)(userAnswers)
     case PartnerDetailsContactNumberPage(index) =>
-      _ => controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(index.toString, NormalMode)
+      _ => controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index.toString)
     case PartnerDetailsNinoPage(index) =>
       userAnswers => navigatePartnerAddNinoPage(index)(userAnswers)
     case PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index) =>
@@ -94,7 +96,12 @@ object PartnerDetailsNavigator {
   private def navigatePartnerAddFaxNumberYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsAddFaxNumberYesNoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index.toString))
+      .map {
+        case false =>
+          controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index.toString)
+        case true =>
+          controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index.toString, NormalMode)
+      }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerRemoveNinoYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
@@ -173,7 +180,10 @@ object PartnerDetailsNavigator {
   private def navigatePartnerAddEmailAddressYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsAddEmailAddressYesNoPage(index))
-      .map(_ => controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index.toString))
+      .map {
+        case true  => controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(index.toString, NormalMode)
+        case false => controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString)
+      }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigatePartnerRemoveEmailYesNoPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
@@ -192,8 +202,8 @@ object PartnerDetailsNavigator {
     userAnswers
       .get(PartnerDetailsAdditionalAddressInfoYesNoPage(index))
       .map {
-        case false => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index.toString)
-        case true  => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index.toString)
+        case true  => controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index.toString, NormalMode)
+        case false => controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(index.toString, NormalMode)
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
