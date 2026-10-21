@@ -110,9 +110,9 @@ trait PartnerDetailsHelper {
     val to: Int = (page * elementsPerPage).min(totalRecords)
   }
 
-  def emptyData = Json.obj()
+  def emptyData: JsObject = Json.obj()
 
-  def minimalValidData = Json.obj(
+  def minimalValidData: JsObject = Json.obj(
     "partners" -> Json.obj()
   )
 

@@ -16,14 +16,11 @@
 
 package navigation
 
-import controllers.partnerdetails.routes as partnerRoutes
 import controllers.routes
 import models.{BusinessType, NormalMode, UserAnswers}
 import pages.partnerdetails.*
 import pages.{BusinessNumberOrIndex, Page}
 import play.api.mvc.Call
-import utils.PartnerUtils
-import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
 
 /** Partner details routing.
   *
@@ -165,9 +162,6 @@ object PartnerDetailsNavigator {
         controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index.toString)
       )
 
-  /** If user is in the add partner flow, go to PT-FOR. Otherwise, if user has directly come from PT-CYA and hasn't changed answer to PT-IN, then
-    * return to PT-CYA.
-    */
   private def navigatePartnerDetailsCountryOfIncorporationPage(index: BusinessNumberOrIndex)(answers: UserAnswers): Call =
     answers
       .get(PartnerDetailsUtrPage(index))

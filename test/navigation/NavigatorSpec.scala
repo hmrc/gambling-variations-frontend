@@ -17,8 +17,10 @@
 package navigation
 
 import base.SpecBase
+import controllers.partnerdetails.PartnerDetailsHelper
 import controllers.routes
 import models.*
+import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
 import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
@@ -35,7 +37,7 @@ import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
 
-class NavigatorSpec extends SpecBase {
+class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
   private val navigator = new Navigator
   private val emptyAnswers = UserAnswers("id")

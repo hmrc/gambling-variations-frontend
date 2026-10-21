@@ -221,10 +221,6 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad()
   }
 
-  private val checkRoutes: PartialFunction[Page, UserAnswers => Call] = { case _ =>
-    _ => routes.ChangeRegistrationDetailsController.onPageLoad()
-  }
-
   private val checkRouteMap: PartialFunction[Page, UserAnswers => Call] = {
 
     case ReturnPeriodsChoicePage =>
@@ -252,7 +248,6 @@ class Navigator @Inject() () {
       case CheckMode =>
         combinedCheckRouteMap(page)(userAnswers)
     }
-  }
 
   private def navigateChooseReturnPeriodsPage(userAnswers: UserAnswers): Call =
     userAnswers.get(ReturnPeriodsChoicePage) match {
@@ -479,18 +474,16 @@ class Navigator @Inject() () {
 
   private def navigateReturnPeriodsPage(
     userAnswers: UserAnswers
-  ): Call = {
-
-    userAnswers.get(StandardReturnPeriodsPage) match {
-      case Some(StandardReturnPeriodsOptions.ChangeMonthsStandardPeriodCover) =>
-        controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
-      case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
-        controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
-      case Some(StandardReturnPeriodsOptions.KeepStandardReturnPeriod) =>
-        routes.ChangeRegistrationDetailsController.onPageLoad()
-      case None =>
-        routes.SystemErrorController.onPageLoad()
-    }
+  ): Call = userAnswers.get(StandardReturnPeriodsPage) match {
+    case Some(StandardReturnPeriodsOptions.ChangeMonthsStandardPeriodCover) =>
+      controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
+    case Some(StandardReturnPeriodsOptions.SwitchToNonStandard) =>
+      controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
+    case Some(StandardReturnPeriodsOptions.KeepStandardReturnPeriod) =>
+      routes.ChangeRegistrationDetailsController.onPageLoad()
+    case None =>
+      routes.SystemErrorController.onPageLoad()
+  }
 
   private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
@@ -501,16 +494,13 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  }
-
-  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call = {
-    userAnswers
-      .get(ControllingBodyAddFaxNumberYesNoPage)
-      .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later
-        case false => routes.IndexController.onPageLoad() // TODO later
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
+  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call = userAnswers
+    .get(ControllingBodyAddFaxNumberYesNoPage)
+    .map {
+      case true  => routes.IndexController.onPageLoad() // TODO later
+      case false => routes.IndexController.onPageLoad() // TODO later
+    }
+    .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigateControllingBodyAddEmailAddressYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
