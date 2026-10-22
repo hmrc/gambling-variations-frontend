@@ -222,7 +222,7 @@ object PartnerDetailsNavigator {
   private def to(call: => Call): UserAnswers => Call = _ => call
 
   /** Fallback where the journey order isn't defined yet: first unanswered mandatory page, or check your answers. */
-  private def nextMissing(index: BusinessNumberOrIndex): UserAnswers => Call =
+  def nextMissing(index: BusinessNumberOrIndex): UserAnswers => Call =
     answers => PartnerMandatoryDetails.firstMissing(answers, index).map(_.call).getOrElse(checkYourAnswers(index))
 
   // --- Helpers ---

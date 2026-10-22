@@ -18,16 +18,18 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import controllers.routes
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
+import navigation.PartnerDetailsNavigator
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.CheckPartnerDetailsViewModel.from
 import viewmodels.checkAnswers.partnerdetails.Partner.indexParser
-import viewmodels.checkAnswers.partnerdetails.{ExistingPartner, NewPartner}
+import viewmodels.checkAnswers.partnerdetails.{CheckPartnerDetailsViewModel, ExistingPartner, NewPartner, PartnerMandatoryDetails}
 import views.html.partnerdetails.PartnerDetailsCheckYourAnswersView
 
 import javax.inject.Inject
@@ -49,21 +51,22 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   def onPageLoad(index: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
       val answers: UserAnswers = request.userAnswers
-      indexParser(index, answers)
+      createPartner(index, answers)
         .fold(
           error => {
             logger.warn(error)
             Redirect(routes.SystemErrorController.onPageLoad())
           },
-          partner => Ok(view(from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
+          partner => Ok(view(partner))
         )
     }
 
   def onContinue(index: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+      val answers = request.userAnswers
       val changeRegistrationDetails = Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
 
-      indexParser(index, request.userAnswers)
+      indexParser(index, answers)
         .fold(
           error => {
             logger.warn(error)
@@ -71,15 +74,23 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
           },
           {
             case NewPartner(partnerIndex, _) =>
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddPartnerCompletedPage(partnerIndex), true))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield changeRegistrationDetails
+              PartnerMandatoryDetails.firstMissing(answers, partnerIndex) match {
+                case Some(missing) =>
+                  Future.successful(Redirect(missing.call))
+                case None =>
+                  for {
+                    updatedAnswers <- Future.fromTry(answers.set(PartnerDetailsAddPartnerCompletedPage(partnerIndex), true))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield changeRegistrationDetails
+              }
 
             case ExistingPartner(_) =>
               Future.successful(changeRegistrationDetails)
           }
         )
     }
+
+  private def createPartner(index: String, answers: UserAnswers): Either[String, CheckPartnerDetailsViewModel] =
+    indexParser(index, answers).map(partner => from(answers, partner.ref, partner.isNew, partner.isSubmitted))
 
 }
