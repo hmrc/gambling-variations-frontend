@@ -24,6 +24,7 @@ import pages.{BusinessNumberOrIndex, Page, QuestionPage}
 import play.api.mvc.Call
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
+import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.firstMissing
 
 /** Partner details routing.
   *
@@ -222,8 +223,8 @@ object PartnerDetailsNavigator {
   private def to(call: => Call): UserAnswers => Call = _ => call
 
   /** Fallback where the journey order isn't defined yet: first unanswered mandatory page, or check your answers. */
-  def nextMissing(index: BusinessNumberOrIndex): UserAnswers => Call =
-    answers => PartnerMandatoryDetails.firstMissing(answers, index).map(_.call).getOrElse(checkYourAnswers(index))
+  private def nextMissing(index: BusinessNumberOrIndex): UserAnswers => Call =
+    answers => firstMissing(answers, index).map(_.call).getOrElse(checkYourAnswers(index))
 
   // --- Helpers ---
 

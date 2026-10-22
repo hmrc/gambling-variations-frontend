@@ -18,15 +18,13 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import controllers.routes
-import models.{NormalMode, UserAnswers}
-import navigation.PartnerDetailsNavigator
+import models.UserAnswers
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.CheckPartnerDetailsViewModel.from
 import viewmodels.checkAnswers.partnerdetails.Partner.indexParser
 import viewmodels.checkAnswers.partnerdetails.{CheckPartnerDetailsViewModel, ExistingPartner, NewPartner, PartnerMandatoryDetails}

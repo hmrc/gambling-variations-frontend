@@ -18,10 +18,9 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import forms.partnerdetails.PartnerEmailAddressFormProvider
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
-import pages.BusinessNumberOrIndex
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceEmailAddressPage}
+import pages.partnerdetails.PartnerDetailsCorrespondenceEmailAddressPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -32,7 +31,6 @@ import views.html.partnerdetails.PartnerDetailsEmailAddressView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
 
 class PartnerDetailsEmailAddressController @Inject() (
   override val messagesApi: MessagesApi,

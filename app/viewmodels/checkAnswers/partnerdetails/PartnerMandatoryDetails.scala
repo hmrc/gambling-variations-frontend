@@ -41,7 +41,7 @@ object PartnerMandatoryDetails {
   // --- Public API ---
 
   /** Mandatory fields for the partner's current answers, in journey order. */
-  def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
+  private def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
     val mode = PartnerUtils.modeFor(index)
 
     val businessTypeField =

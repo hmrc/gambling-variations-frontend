@@ -16,7 +16,6 @@
 
 package navigation
 
-import controllers.partnerdetails.routes as partnerRoutes
 import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
 import controllers.routes
