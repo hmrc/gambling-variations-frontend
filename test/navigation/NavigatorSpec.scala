@@ -31,7 +31,7 @@ import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, Controllin
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
-import pages.returnperiods.{ChooseReturnPeriodsPage, NonStandardPeriodDate1Page, NonStandardPeriodDate2Page, NonStandardPeriodDate3Page, NonStandardPeriodDate4Page, NonStandardPeriodDate5Page, NonStandardPeriodDate6Page, NonStandardPeriodDate7Page, NonStandardPeriodDate8Page}
+import pages.returnperiods.{ChooseReturnPeriodsPage, HasExistingNstpValuesPage, NonStandardPeriodDate1Page, NonStandardPeriodDate2Page, NonStandardPeriodDate3Page, NonStandardPeriodDate4Page, NonStandardPeriodDate5Page, NonStandardPeriodDate6Page, NonStandardPeriodDate7Page, NonStandardPeriodDate8Page, ReturnPeriodsChoicePage}
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
@@ -333,9 +333,9 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
               .onPageLoad(8, NormalMode)
         }
 
-        "should route NonStandardPeriodDate8Page to CheckNonStandardReturnPeriods" in {
+        "should route NonStandardPeriodDate8Page to CheckReturnPeriods" in {
           navigator.nextPage(NonStandardPeriodDate8Page, NormalMode, emptyAnswers) mustBe
-            controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+            controllers.returnperiods.routes.CheckReturnPeriodsController
               .onPageLoad()
         }
       }
@@ -1473,62 +1473,91 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           routes.IndexController.onPageLoad()
       }
 
+      "should route ChooseReturnPeriodsPage to CheckReturnPeriodsController for standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, answers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to the first non-standard end date for non-standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, true).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, answers) mustBe
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      }
+
+      "should route ChooseReturnPeriodsPage to the first non-standard end date when the return periods type is not known" in {
+        navigator.nextPage(ChooseReturnPeriodsPage, NormalMode, emptyAnswers) mustBe
+          controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
+      }
+
       "should route ControllingBodyBusinessTypePage to Change Proprietor Name" in {
         val answers =
-          UserAnswers("id", Json.obj(
-            "controllingBodyDetails" -> Json.obj(
-              "mgdRegNumber" -> "XGM00000001761",
-              "typeOfControllingBody" -> 1
-            )
-          ))
+          UserAnswers("id",
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber"          -> "XGM00000001761",
+                          "typeOfControllingBody" -> 1
+                        )
+                      )
+                     )
         navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Soleproprietor)
       }
 
       "should route ControllingBodyBusinessTypePage to Change Corporate Body Name" in {
         val answers =
-          UserAnswers("id", Json.obj(
-            "controllingBodyDetails" -> Json.obj(
-              "mgdRegNumber" -> "XGM00000001761",
-              "typeOfControllingBody" -> 2
-            )
-          ))
+          UserAnswers("id",
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber"          -> "XGM00000001761",
+                          "typeOfControllingBody" -> 2
+                        )
+                      )
+                     )
         navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Corporatebody)
       }
 
       "should route ControllingBodyBusinessTypePage to Change Unincorporated Body Name" in {
         val answers =
-          UserAnswers("id", Json.obj(
-            "controllingBodyDetails" -> Json.obj(
-              "mgdRegNumber" -> "XGM00000001761",
-              "typeOfControllingBody" -> 3
-            )
-          ))
+          UserAnswers("id",
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber"          -> "XGM00000001761",
+                          "typeOfControllingBody" -> 3
+                        )
+                      )
+                     )
         navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Unincorporatedbody)
       }
 
       "should route ControllingBodyBusinessTypePage to Change Partnership Name" in {
         val answers =
-          UserAnswers("id", Json.obj(
-            "controllingBodyDetails" -> Json.obj(
-              "mgdRegNumber" -> "XGM00000001761",
-              "typeOfControllingBody" -> 4
-            )
-          ))
+          UserAnswers("id",
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber"          -> "XGM00000001761",
+                          "typeOfControllingBody" -> 4
+                        )
+                      )
+                     )
         navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Partnership)
       }
 
       "should route ControllingBodyBusinessTypePage to Change Limited Liability Partnership" in {
         val answers =
-          UserAnswers("id", Json.obj(
-            "controllingBodyDetails" -> Json.obj(
-              "mgdRegNumber" -> "XGM00000001761",
-              "typeOfControllingBody" -> 5
-            )
-          ))
+          UserAnswers("id",
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber"          -> "XGM00000001761",
+                          "typeOfControllingBody" -> 5
+                        )
+                      )
+                     )
         navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.LimitedLiabilityPartnership)
       }
@@ -1536,9 +1565,16 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
     "in Check mode" - {
 
-      "should route ChooseReturnPeriodsPage to CheckNonStandardReturnPeriods" in {
+      "should route ChooseReturnPeriodsPage back to CheckReturnPeriodsController for standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, answers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to CheckReturnPeriods" in {
         navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, emptyAnswers) mustBe
-          controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+          controllers.returnperiods.routes.CheckReturnPeriodsController
             .onPageLoad()
       }
 
@@ -1552,9 +1588,9 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
         NonStandardPeriodDate7Page,
         NonStandardPeriodDate8Page
       ).zipWithIndex.foreach { case (page, index) =>
-        s"should route NonStandardPeriodDate${index + 1}Page to CheckNonStandardReturnPeriods" in {
+        s"should route NonStandardPeriodDate${index + 1}Page to CheckReturnPeriods" in {
           navigator.nextPage(page, CheckMode, emptyAnswers) mustBe
-            controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController
+            controllers.returnperiods.routes.CheckReturnPeriodsController
               .onPageLoad()
         }
       }

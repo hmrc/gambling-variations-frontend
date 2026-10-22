@@ -35,6 +35,7 @@ import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.mvc.Call
+import utils.ReturnPeriodsUtils
 
 import javax.inject.{Inject, Singleton}
 
@@ -281,7 +282,7 @@ class Navigator @Inject() () {
       _ => controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(8, NormalMode)
 
     case NonStandardPeriodDate8Page =>
-      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+      _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
@@ -291,12 +292,12 @@ class Navigator @Inject() () {
   private val checkRouteMap: Page => UserAnswers => Call = {
 
     case ReturnPeriodsChoicePage =>
-      userAnswers => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+      userAnswers => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
     case ChooseReturnPeriodsPage =>
-      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+      _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
     case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
         NonStandardPeriodDate5Page | NonStandardPeriodDate6Page | NonStandardPeriodDate7Page | NonStandardPeriodDate8Page =>
-      _ => controllers.returnperiods.routes.CheckNonStandardReturnPeriodsController.onPageLoad()
+      _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
 
     case _ =>
       _ => routes.ChangeRegistrationDetailsController.onPageLoad()
@@ -312,14 +313,10 @@ class Navigator @Inject() () {
   }
 
   private def navigateChooseReturnPeriodsPage(userAnswers: UserAnswers): Call =
-    userAnswers.get(ReturnPeriodsChoicePage) match {
-      case Some(NoReturnPeriodsSet.Standard) =>
-        routes.ChangeRegistrationDetailsController.onPageLoad() // check where to send
-
-      case _ =>
-        controllers.returnperiods.routes.EnterNonStandardPeriodDateController
-          .onPageLoad(1, NormalMode)
-
+    if (ReturnPeriodsUtils.isStandard(userAnswers)) {
+      controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+    } else {
+      controllers.returnperiods.routes.EnterNonStandardPeriodDateController.onPageLoad(1, NormalMode)
     }
 
   private def navigateCorrespondenceNamePage()(answers: UserAnswers): Call =
