@@ -20,6 +20,7 @@
 
 @this(
     layout: templates.Layout,
+    formHelper: FormWithCSRF,
     govukButton: GovukButton,
     caption: Caption,
     h1:H1,
@@ -52,7 +53,7 @@
         @paragraph(messages("changeRegistrationDetails.readyToSubmit"))
     }
 
-    @govukButton(
-        ButtonViewModel(messages("site.continue")).asLink(vm.continueCall.url)
-    )
+    @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onContinue(vm.businessNumberOrIndex.toString)) {
+        @govukButton(ButtonViewModel(messages("site.continue")))
+    }
 }

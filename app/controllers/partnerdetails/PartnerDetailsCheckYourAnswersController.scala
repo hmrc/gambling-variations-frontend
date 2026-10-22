@@ -18,30 +18,35 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import controllers.routes
-import models.{Mode, UserAnswers}
+import models.UserAnswers
+import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Results.Redirect
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.partnerdetails.CheckPartnerDetailsViewModel.from
 import viewmodels.checkAnswers.partnerdetails.Partner.indexParser
+import viewmodels.checkAnswers.partnerdetails.{ExistingPartner, NewPartner}
 import views.html.partnerdetails.PartnerDetailsCheckYourAnswersView
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerDetailsCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
+  sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsCheckYourAnswersView
-) extends FrontendBaseController
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
+  def onPageLoad(index: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
       val answers: UserAnswers = request.userAnswers
       indexParser(index, answers)
@@ -51,6 +56,29 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
             Redirect(routes.SystemErrorController.onPageLoad())
           },
           partner => Ok(view(from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
+        )
+    }
+
+  def onContinue(index: String): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val changeRegistrationDetails = Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+
+      indexParser(index, request.userAnswers)
+        .fold(
+          error => {
+            logger.warn(error)
+            Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+          },
+          {
+            case NewPartner(partnerIndex, _) =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddPartnerCompletedPage(partnerIndex), true))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield changeRegistrationDetails
+
+            case ExistingPartner(_) =>
+              Future.successful(changeRegistrationDetails)
+          }
         )
     }
 

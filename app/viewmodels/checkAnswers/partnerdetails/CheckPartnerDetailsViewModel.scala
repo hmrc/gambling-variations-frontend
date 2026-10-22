@@ -74,14 +74,6 @@ case class CheckPartnerDetailsViewModel(
   private def mode(index: BusinessNumberOrIndex): Mode = PartnerUtils.modeFor(index)
   val isNewPartnerSubmitted: Boolean = maybeSubmitted.exists(identity) // NEW PARTNERS ONLY
 
-  // --- Update this ---
-  // NOTE: routing will be done with the integration ticket.
-  def continueCall: Call = if (isMissingMandatoryDetails) {
-    routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
-  } else {
-    routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
-  }
-
   def notices(implicit messages: Messages): Seq[Html] = {
     val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
     val contactUsLink = messages("partnerDetailsCheckYourAnswers.error.contactUsLinkText")
