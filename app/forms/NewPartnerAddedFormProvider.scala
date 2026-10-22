@@ -21,6 +21,7 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
+//TODO I have to do something about this name, its not even a real form
 class NewPartnerAddedFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] = Form(

@@ -18,6 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import controllers.routes
+import forms.NewPartnerAddedFormProvider
 import models.UserAnswers
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
@@ -39,6 +40,9 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
   val userAnswersExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
   val userAnswersNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
 
+  val formProvider = new NewPartnerAddedFormProvider()
+  val form = formProvider()
+
   "partners" - {
     "PartnerDetailsCheckYourAnswers Controller" - {
 
@@ -57,7 +61,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
             CheckPartnerDetailsViewModel.from(userAnswersExistingPartners, businessNumber1, isNewPartnerFlow = false, isSubmitted = None)
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(expectedViewModel)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, expectedViewModel)(request, messages(application)).toString
         }
       }
 
@@ -101,7 +105,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
             CheckPartnerDetailsViewModel.from(userAnswersForGet, newPartnersIndex1, isNewPartnerFlow = true, isSubmitted = Some(false))
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(expectedViewModel)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, expectedViewModel)(request, messages(application)).toString
         }
       }
 
@@ -126,7 +130,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
             CheckPartnerDetailsViewModel.from(userAnswersForGet, newPartnersIndex1, isNewPartnerFlow = true, isSubmitted = Some(true))
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(expectedViewModel)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(form, expectedViewModel)(request, messages(application)).toString
         }
       }
 
