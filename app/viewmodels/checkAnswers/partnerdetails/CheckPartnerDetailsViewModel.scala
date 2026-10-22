@@ -77,7 +77,6 @@ case class CheckPartnerDetailsViewModel(
   // --- Update this ---
   // NOTE: routing will be done with the integration ticket.
   def continueCall: Call = if (isMissingMandatoryDetails) {
-    // TODO double check logic here
     routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
   } else {
     routes.PartnerDetailsCheckYourAnswersController.onSubmit(index)

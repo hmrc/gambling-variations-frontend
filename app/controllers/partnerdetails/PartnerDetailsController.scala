@@ -149,6 +149,7 @@ class PartnerDetailsController @Inject() (
                 val newPartnerIndex = PartnerUtils.findIndexForNewPartner(updatedAnswers)
                 for {
                   updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsMgdRegNumberPage(newPartnerIndex), updatedAnswers.id))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield ()
 

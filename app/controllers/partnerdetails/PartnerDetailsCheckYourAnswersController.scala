@@ -18,7 +18,6 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.NewPartnerAddedFormProvider
 import models.{Mode, UserAnswers}
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
@@ -42,15 +41,12 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
-  formProvider: NewPartnerAddedFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PartnerDetailsCheckYourAnswersView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
-
-  private val form: Form[Boolean] = formProvider()
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
@@ -61,7 +57,7 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
             logger.warn(error)
             Redirect(routes.SystemErrorController.onPageLoad())
           },
-          partner => Ok(view(form, from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
+          partner => Ok(view(from(answers, partner.ref, partner.isNew, partner.isSubmitted)))
         )
     }
 
