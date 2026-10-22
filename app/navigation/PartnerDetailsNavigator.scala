@@ -129,8 +129,8 @@ object PartnerDetailsNavigator {
       carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
     case PartnerDetailsUtrPage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(key(index))))
-    case PartnerDetailsVrnPage(index) =>
-      carryOn(index, nextMissing(index))
+    case PartnerDetailsVrnPage(index) => // TODO -> this should go to address lookup
+      carryOn(index, to(partnerRoutes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(key(index))))
     case PartnerDetailsAdditionalAddressInfoPage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDetailsContactDetailsController.onPageLoad(key(index), mode(index))))
     case PartnerDetailsContactNumberPage(index) =>
