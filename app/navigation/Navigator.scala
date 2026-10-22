@@ -58,6 +58,8 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // TODO: Connect the next controlling body screen when the journey is built.
     case ControllingBodyIsUkIncorporatedPage =>
       userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
+    case ControllingBodyCrnPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-UTR when the controlling body journey is built.
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -252,6 +254,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAddFaxNumberYesNoPage(userAnswers)
     case ControllingBodyAddNINumberYesNoPage =>
       userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
+    case ControllingBodyBusinessTypePage =>
+      userAnswers => navigateControllingBodyBusinessTypePage(userAnswers)
 
     case ChooseReturnPeriodsPage =>
       userAnswers => navigateChooseReturnPeriodsPage(userAnswers)
@@ -742,6 +746,23 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
+  }
+
+  private def navigateControllingBodyBusinessTypePage(userAnswers: UserAnswers): Call = {
+    userAnswers
+      .get(ControllingBodyBusinessTypePage) match {
+      case Some(Soleproprietor) =>
+        controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Soleproprietor)
+      case Some(Corporatebody) =>
+        controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Corporatebody)
+      case Some(Unincorporatedbody) =>
+        controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Unincorporatedbody)
+      case Some(Partnership) =>
+        controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.Partnership)
+      case Some(LimitedLiabilityPartnership) =>
+        controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.LimitedLiabilityPartnership)
+      case _ => routes.SystemErrorController.onPageLoad()
+    }
   }
 
   private def navigatePartnerDetailsIsBusinessIncorporatedUkPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
