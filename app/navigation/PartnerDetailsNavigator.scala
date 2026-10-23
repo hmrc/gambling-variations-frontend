@@ -79,7 +79,8 @@ object PartnerDetailsNavigator {
         index,
         PartnerDetailsVatRegistrationNumberYesNoPage(index),
         ifYes = partnerRoutes.PartnerDetailsVatRegistrationNumberController.onPageLoad(key(index), mode(index)),
-        ifNo  = nextMissing(index)
+        // TODO -> this should go to address lookup
+        ifNo = to(partnerRoutes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(key(index), mode(index)))
       )
 
     case PartnerDetailsAdditionalAddressInfoYesNoPage(index) =>
