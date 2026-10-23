@@ -140,7 +140,7 @@ class ControllingBodyCacheMigrationSpec extends SpecBase {
         "partners"               -> (original.data \ "partners").as[JsObject]
       )
 
-      migrated mustBe original.copy(data = expectedData)
+      migrated mustBe UserAnswers(original.id, expectedData, original.lastUpdated)
       Json.toJson(migrated).as[UserAnswers] mustBe migrated
     }
 

@@ -1033,7 +1033,7 @@ class NavigatorSpec extends SpecBase {
           )
         )
 
-        navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, emptyAnswers.copy(data = businessData)) mustBe
+        navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, UserAnswers(emptyAnswers.id, businessData)) mustBe
           controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(newPartnersIndex1.toString,
                                                                                                   Corporatebody,
                                                                                                   NormalMode
