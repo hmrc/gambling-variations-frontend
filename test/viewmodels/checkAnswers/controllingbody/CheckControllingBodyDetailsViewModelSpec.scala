@@ -260,16 +260,13 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         keys(business) must contain noneOf (key("isIncorporated"), key("countryOfIncorporation"), key("foreignCorporateRef"))
       }
 
-      "must hide the incorporation details for a limited liability partnership whose loaded details say it is not UK incorporated" in {
+      "must show the incorporation details for a limited liability partnership even when the loaded details say it is not UK incorporated" in {
         val viewModel = corporateBody.copy(businessType = Some(LimitedLiabilityPartnership), isUkIncorporated = Some(false))
 
-        keys(viewModel.businessDetails) must contain noneOf (
-          key("isIncorporated"),
-          key("dateOfInc"),
-          key("companyRegNumber"),
-          key("countryOfIncorporation"),
-          key("foreignCorporateRef")
-        )
+        keys(viewModel.businessDetails) must contain allOf (key("dateOfInc"), key("companyRegNumber"))
+        keys(viewModel.businessDetails) must contain noneOf (key("isIncorporated"), key("countryOfIncorporation"), key("foreignCorporateRef"))
+        valueText(rowFor(viewModel.businessDetails, "dateOfInc")) mustEqual "1 Jan 2000"
+        valueText(rowFor(viewModel.businessDetails, "companyRegNumber")) mustEqual "CR345678"
         viewModel.isMissingMandatoryDetails mustBe false
       }
 
@@ -391,26 +388,37 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
       }
     }
 
-    "missing mandatory details" - {
+    "missing details" - {
 
       "must show an add link in place of the value and the change link" in {
-        val viewModel = corporateBody.copy(businessName = None, utr = None, address = None, phoneNumber = None, mobilePhoneNumber = None)
+        val viewModel = corporateBody.copy(businessName = None, crn = None)
 
         val nameRow = rowFor(viewModel.businessDetails, "corporateBodyName")
         valueText(nameRow) mustEqual key("corporateBodyName.add")
         valueLink(nameRow) mustEqual Some(routes.ChangeControllingBodyNameController.onPageLoad(Corporatebody).url)
         nameRow.actions mustBe None
 
-        valueText(rowFor(viewModel.businessDetails, "utr")) mustEqual key("utr.add")
-        valueText(rowFor(viewModel.addressDetails, "address")) mustEqual key("address.add")
-        valueText(rowFor(viewModel.contactDetails, "contactNumbers")) mustEqual key("contactNumbers.add")
+        valueText(rowFor(viewModel.businessDetails, "companyRegNumber")) mustEqual key("companyRegNumber.add")
         viewModel.isMissingMandatoryDetails mustBe true
       }
 
       "must continue to the first missing detail" in {
-        corporateBody.copy(businessName = None, utr = None).continueUrl mustEqual
+        corporateBody.copy(businessName = None, crn = None).continueUrl mustEqual
           routes.ChangeControllingBodyNameController.onPageLoad(Corporatebody).url
-        corporateBody.copy(utr = None, address = None).continueUrl mustEqual "#"
+        corporateBody.copy(crn = None).continueUrl mustEqual "#"
+      }
+
+      "must offer to add the Unique Taxpayer Reference, address and contact numbers without holding up the submission" in {
+        val viewModel = corporateBody.copy(utr = None, address = None, phoneNumber = None, mobilePhoneNumber = None)
+
+        val utrRow = rowFor(viewModel.businessDetails, "utr")
+        valueText(utrRow) mustEqual key("utr.add")
+        utrRow.actions mustBe None
+        valueText(rowFor(viewModel.addressDetails, "address")) mustEqual key("address.add")
+        valueText(rowFor(viewModel.contactDetails, "contactNumbers")) mustEqual key("contactNumbers.add")
+
+        viewModel.isMissingMandatoryDetails mustBe false
+        viewModel.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
       }
 
       "must only ask for the type of business while it is not known" in {
@@ -440,6 +448,9 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         corporateBody.copy(isUkIncorporated = Some(false), countryOfIncorporation = Some("Spain")).isMissingMandatoryDetails mustBe true
         corporateBody.copy(isUkIncorporated = Some(false), foreignCorporateRef = Some("ES123")).isMissingMandatoryDetails mustBe true
         corporateBody.copy(businessType = Some(LimitedLiabilityPartnership), crn = None).isMissingMandatoryDetails mustBe true
+        corporateBody
+          .copy(businessType = Some(LimitedLiabilityPartnership), isUkIncorporated = Some(false), dateOfIncorporation = None)
+          .isMissingMandatoryDetails mustBe true
       }
 
       "must accept a single contact number and show the other as not provided" in {

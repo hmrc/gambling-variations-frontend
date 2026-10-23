@@ -68,15 +68,14 @@ case class CheckControllingBodyDetailsViewModel(
   private val isSoleProprietor: Boolean = businessType.contains(Soleproprietor)
   private val isCorporateBody: Boolean = businessType.contains(Corporatebody)
 
-  // A corporate body is first asked whether it is incorporated in the UK. A limited liability partnership is not asked, so it is taken
-  // as UK incorporated unless the loaded details say otherwise
+  // A corporate body is first asked whether it is incorporated in the UK. A limited liability partnership is not asked, since it is always
+  // incorporated in the UK, so its incorporation details are shown whatever the loaded flag says
   private val showUkIncorporation: Boolean =
-    (isCorporateBody && isUkIncorporated.contains(true)) ||
-      (businessType.contains(LimitedLiabilityPartnership) && !isUkIncorporated.contains(false))
+    (isCorporateBody && isUkIncorporated.contains(true)) || businessType.contains(LimitedLiabilityPartnership)
 
   private val showNonUkIncorporation: Boolean = isCorporateBody && isUkIncorporated.contains(false)
 
-  // The mandatory details, each with the screen that provides it. The name row depends on the type of business, so it waits for the type.
+  // The details without a screener question, each with the screen that provides it. The name row waits for the type of business.
   private val typeOfBusinessDetail: MandatoryDetail =
     MandatoryDetail("typeOfBusiness", businessType.map(value => messages => Text(messages(s"businessType.$value"))), businessTypeUrl)
 
@@ -108,7 +107,8 @@ case class CheckControllingBodyDetailsViewModel(
   private val crnDetail: Option[MandatoryDetail] =
     Option.when(showUkIncorporation)(MandatoryDetail.text("companyRegNumber", crn, crnUrl))
 
-  // A partnership is not asked for a Unique Taxpayer Reference
+  // The Unique Taxpayer Reference, address and contact numbers are optional, but they have no screener question, so a missing one is
+  // offered as a link to add it. A partnership is not asked for a Unique Taxpayer Reference
   private val utrDetail: Option[MandatoryDetail] =
     Option.when(!businessType.contains(Partnership))(MandatoryDetail.text("utr", utr, utrUrl))
 
@@ -135,10 +135,7 @@ case class CheckControllingBodyDetailsViewModel(
       countryOfIncorporationDetail,
       foreignCorporateRefDetail,
       dateOfIncorporationDetail,
-      crnDetail,
-      utrDetail,
-      Some(addressDetail),
-      Some(contactNumbersDetail)
+      crnDetail
     ).flatten
 
   val isMissingMandatoryDetails: Boolean = mandatoryDetails.exists(_.isMissing)
@@ -239,7 +236,8 @@ object CheckControllingBodyDetailsViewModel {
   private val additionalInfoUrl = "#" // CB-AI
   private val contactNumbersUrl = "#" // CB-CN
 
-  // A detail that must be provided before the controlling body can be submitted, shown as a link to add it while it is missing
+  // A detail without a screener question, shown as a link to add it while it is missing. Only those in mandatoryDetails must be provided
+  // before the controlling body can be submitted
   private final case class MandatoryDetail(key: String, value: Option[Messages => Content], href: String) {
 
     val isMissing: Boolean = value.isEmpty
