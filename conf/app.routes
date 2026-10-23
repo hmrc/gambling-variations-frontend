@@ -329,3 +329,6 @@ POST       /change-registration-details/controlling-body-details/date-of-birth  
 
 GET        /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /cancel-registration/why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-registration/why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
