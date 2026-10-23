@@ -16,7 +16,6 @@
 
 package navigation
 
-import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
@@ -36,6 +35,8 @@ import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.mvc.Call
 import utils.ReturnPeriodsUtils
+import controllers.routes
+import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage
 
 import javax.inject.{Inject, Singleton}
 
@@ -155,8 +156,8 @@ class Navigator @Inject() () {
       _ => controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad()
 
     // Return Periods
-//    case NonStandardReturnPeriodsPage =>
-//      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
+    //    case NonStandardReturnPeriodsPage =>
+    //      userAnswers => controllers.returnperiods.routes.ReturnPeriodsController.onPageLoad(NormalMode) // change it
 
     case ReturnPeriodsChoicePage =>
       userAnswers => controllers.returnperiods.routes.ChooseReturnPeriodsController.onPageLoad(NormalMode)
@@ -497,8 +498,6 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
-  }
-
   private def navigateControllingBodyBusinessTypePage(userAnswers: UserAnswers): Call = {
     userAnswers
       .get(ControllingBodyBusinessTypePage) match {
@@ -527,7 +526,7 @@ class Navigator @Inject() () {
 
   }
 
-  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call = {
+  private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
       .get(ControllingBodyAddFaxNumberYesNoPage)
       .map {
