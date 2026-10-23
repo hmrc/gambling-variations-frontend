@@ -17,11 +17,17 @@
 package generators
 
 import models.*
+import models.cancellation.ReasonForCancellation
 import models.licencespremises.LicencesAndPremisesRadioOptions
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Arbitrary.arbitrary
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryReasonForCancellation: Arbitrary[ReasonForCancellation] =
+    Arbitrary {
+      Gen.oneOf(ReasonForCancellation.values.toSeq)
+    }
 
   implicit lazy val arbitraryStandardReturnPeriodsOptions: Arbitrary[StandardReturnPeriodsOptions] =
     Arbitrary {

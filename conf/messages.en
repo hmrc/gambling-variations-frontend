@@ -1489,3 +1489,25 @@ dateOfIncorporation.error.required.two = Date of incorporation must include a {0
 dateOfIncorporation.error.required = Date of incorporation must include a {0}
 dateOfIncorporation.error.invalid = Date of incorporation must be a real date
 dateOfIncorporation.change.hidden = DateOfIncorporation
+
+reasonForCancellation.title = Why are you cancelling this registration?
+reasonForCancellation.heading = Why are you cancelling this registration?
+reasonForCancellation.caption = Cancel registration
+
+reasonForCancellation.allMachineGamesAreExcluded = All machine games are excluded
+reasonForCancellation.allMachineGamesAreExcluded.hint = For example, the prizes are worth less than the cost of play
+
+reasonForCancellation.allTakingsFromMGDAreExcluded = All takings from machine games are excluded
+reasonForCancellation.allTakingsFromMGDAreExcluded.hint = For example, they are donated to charity
+
+reasonForCancellation.noMachineGamesAreAvailableToPlay = No machine games are available to play
+reasonForCancellation.noMachineGamesAreAvailableToPlay.hint = For example, they are all out of service
+
+reasonForCancellation.noLongerNeedToBeRegistered = No longer need to be registered
+reasonForCancellation.noLongerNeedToBeRegistered.hint = For example, you have removed all machine games
+
+reasonForCancellation.businessIsPartOfTheGroup = Business is now part of a group
+
+reasonForCancellation.error.required = Select why you are cancelling this registration
+reasonForCancellation.checkYourAnswersLabel = reasonForCancellation
+reasonForCancellation.change.hidden = ReasonForCancellation
