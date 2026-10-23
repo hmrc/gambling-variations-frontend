@@ -213,24 +213,24 @@ object CheckControllingBodyDetailsViewModel {
 
   private def nameUrl(businessType: BusinessType): String = routes.ChangeControllingBodyNameController.onPageLoad(businessType).url
 
+  private def dateOfBirthUrl: String = routes.ControllingBodySoleProprietorDobController.onPageLoad().url
   private def addTradingNameUrl: String = routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url
   private def tradingNameUrl: String = routes.ControllingBodyTradingNameController.onPageLoad().url
   private def addNinoUrl: String = routes.ControllingBodyAddNINumberYesNoController.onPageLoad().url
   private def isUkIncorporatedUrl: String = routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad().url
+  private def dateOfIncorporationUrl: String = routes.DateOfIncorporationController.onPageLoad().url
+  private def crnUrl: String = routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url
+  private def addVrnUrl: String = routes.ControllingBodyVATScreenerController.onPageLoad().url
   private def addAdditionalInfoUrl: String = routes.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad().url
   private def addFaxNumberUrl: String = routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url
   private def faxNumberUrl: String = routes.ControllingBodyFaxNumberController.onPageLoad().url
   private def addEmailAddressUrl: String = routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad().url
 
   // Screens that are not built yet, named by their codes in the specification
-  private val dateOfBirthUrl = "#" // CB-DOB
   private val ninoUrl = "#" // CB-NI
   private val countryOfIncorporationUrl = "#" // CB-COU
   private val foreignCorporateRefUrl = "#" // CB-FOR
-  private val dateOfIncorporationUrl = "#" // CB-DIN
-  private val crnUrl = "#" // CB-CR
   private val utrUrl = "#" // CB-UTR
-  private val addVrnUrl = "#" // CB-VAT-SC
   private val vrnUrl = "#" // CB-VAT
   private val addressUrl = "#" // CB-ADLK-S
   private val additionalInfoUrl = "#" // CB-AI

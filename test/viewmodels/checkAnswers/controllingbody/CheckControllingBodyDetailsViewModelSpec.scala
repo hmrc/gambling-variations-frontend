@@ -167,6 +167,9 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         hrefs(rowFor(business, "addTradingName")) mustEqual Seq(routes.ControllingBodyAddTradingNameYesNoController.onPageLoad().url)
         hrefs(rowFor(business, "tradingName")) mustEqual Seq(routes.ControllingBodyTradingNameController.onPageLoad().url)
         hrefs(rowFor(business, "isIncorporated")) mustEqual Seq(routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad().url)
+        hrefs(rowFor(business, "dateOfInc")) mustEqual Seq(routes.DateOfIncorporationController.onPageLoad().url)
+        hrefs(rowFor(business, "companyRegNumber")) mustEqual Seq(routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url)
+        hrefs(rowFor(business, "addVat")) mustEqual Seq(routes.ControllingBodyVATScreenerController.onPageLoad().url)
         hrefs(rowFor(corporateBody.addressDetails, "addAddrInfo")) mustEqual
           Seq(routes.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad().url)
         hrefs(rowFor(corporateBody.contactDetails, "addFaxNumber")) mustEqual Seq(routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url)
@@ -175,7 +178,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           Seq(routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad().url)
         hrefs(rowFor(corporateBody.contactDetails, "emailAddress")) mustEqual Seq(routes.ControllingBodyEmailAddressController.onPageLoad().url)
 
-        Seq("dateOfInc", "companyRegNumber", "utr", "addVat", "vat").foreach { name =>
+        Seq("utr", "vat").foreach { name =>
           hrefs(rowFor(business, name)) mustEqual Seq("#")
         }
         Seq("address", "addAdditionalInfo").foreach { name =>
@@ -229,7 +232,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         valueText(rowFor(business, "addNino")) mustEqual msgs("site.yes")
         valueText(rowFor(business, "nino")) mustEqual "QQ 12 34 66 C"
         hrefs(rowFor(business, "soleProprietorName")) mustEqual Seq(routes.ChangeControllingBodyNameController.onPageLoad(Soleproprietor).url)
-        hrefs(rowFor(business, "soleProprietorDOB")) mustEqual Seq("#")
+        hrefs(rowFor(business, "soleProprietorDOB")) mustEqual Seq(routes.ControllingBodySoleProprietorDobController.onPageLoad().url)
         hrefs(rowFor(business, "addNino")) mustEqual Seq(routes.ControllingBodyAddNINumberYesNoController.onPageLoad().url)
         hrefs(rowFor(business, "nino")) mustEqual Seq("#")
         keys(soleProprietor.addressDetails) mustEqual Seq(key("address"), key("addAddrInfo"))
@@ -406,7 +409,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
       "must continue to the first missing detail" in {
         corporateBody.copy(businessName = None, crn = None).continueUrl mustEqual
           routes.ChangeControllingBodyNameController.onPageLoad(Corporatebody).url
-        corporateBody.copy(crn = None).continueUrl mustEqual "#"
+        corporateBody.copy(crn = None).continueUrl mustEqual routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url
       }
 
       "must offer to add the Unique Taxpayer Reference, address and contact numbers without holding up the submission" in {
