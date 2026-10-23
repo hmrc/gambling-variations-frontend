@@ -15,6 +15,7 @@ site.notProvided = Not provided
 site.viewOrChange = View or change
 site.pagination.next = Next
 site.pagination.previous = Previous
+site.pagination.page = (page {0} of {1})
 
 date.day = Day
 date.month = Month

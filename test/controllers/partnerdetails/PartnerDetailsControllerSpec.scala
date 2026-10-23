@@ -37,7 +37,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
 
   private val existingPartners = (0 to 100).map(e => (e.toString, f"XYZ Consulting-$e%03d"))
 
-  private val paginationHelper = PaginationHelper(1)
+  private val paginationHelper = PaginationHelper(1, businessNumbers = Seq((businessNumber1, businessNumber1)).toIndexedSeq)
   private val paginationHelperMaxSizePage1 = PaginationHelper(100, 1, existingPartners)
   private val paginationHelperMaxSizePage2 = PaginationHelper(100, 2, existingPartners)
 
@@ -132,6 +132,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               ),
               paginationHelper.paginatedViewModel,
               paginationHelper.page,
+              paginationHelper.totalPages,
               paginationHelper.from,
               paginationHelper.to,
               paginationHelper.totalRecords
@@ -185,6 +186,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               ),
               paginationHelper.paginatedViewModel,
               paginationHelper.page,
+              paginationHelper.totalPages,
               paginationHelper.from,
               paginationHelper.to,
               paginationHelper.totalRecords
@@ -229,6 +231,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               ),
               paginationHelperMaxSizePage2.paginatedViewModel,
               paginationHelperMaxSizePage2.page,
+              paginationHelperMaxSizePage2.totalPages,
               paginationHelperMaxSizePage2.from,
               paginationHelperMaxSizePage2.to,
               paginationHelperMaxSizePage2.totalRecords
@@ -273,6 +276,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               ),
               paginationHelperMaxSizePage1.paginatedViewModel,
               paginationHelperMaxSizePage1.page,
+              paginationHelperMaxSizePage1.totalPages,
               paginationHelperMaxSizePage1.from,
               paginationHelperMaxSizePage1.to,
               paginationHelperMaxSizePage1.totalRecords
@@ -413,6 +417,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               ),
               paginationHelper.paginatedViewModel,
               paginationHelper.page,
+              paginationHelper.totalPages,
               paginationHelper.from,
               paginationHelper.to,
               paginationHelper.totalRecords
@@ -465,6 +470,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               ),
               paginationHelperMaxSizePage2.paginatedViewModel,
               paginationHelperMaxSizePage2.page,
+              paginationHelperMaxSizePage2.totalPages,
               paginationHelperMaxSizePage2.from,
               paginationHelperMaxSizePage2.to,
               paginationHelperMaxSizePage2.totalRecords

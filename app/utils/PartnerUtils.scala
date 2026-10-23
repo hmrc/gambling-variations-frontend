@@ -47,7 +47,7 @@ object PartnerUtils {
       case index: Int if userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)).contains(false) =>
         index
     }
-    newPartnerExistingIndex getOrElse 0
+    newPartnerExistingIndex getOrElse newPartnersSize
   }
 
   def getCompletedNewPartners(userAnswers: UserAnswers): IndexedSeq[Int] = (0 to getNewPartnersSize(userAnswers))
