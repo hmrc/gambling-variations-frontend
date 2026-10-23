@@ -1493,3 +1493,11 @@ dateOfIncorporation.change.hidden = DateOfIncorporation
 controllingBodyVATScreener.title = Do you want to add a VAT registration number for the controlling body?
 controllingBodyVATScreener.heading = Do you want to add a VAT registration number for the controlling body?
 controllingBodyVATScreener.error.required = Select yes to add a VAT registration number for the controlling body
+
+controllingBodyForeignCorpRef.title = What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.heading = What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.checkYourAnswersLabel =What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.error.required = Enter the controlling body’s foreign corporate reference
+controllingBodyForeignCorpRef.error.invalid = The controlling body’s foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+controllingBodyForeignCorpRef.error.length = The controlling body’s foreign corporate reference must be 100 characters or less
+controllingBodyForeignCorpRef.change.hidden = What is the controlling body’s foreign corporate reference?
