@@ -76,6 +76,35 @@ class DateOfIncorporationFormProviderSpec extends DateBehaviours {
       }
     }
 
+    Seq("1", "99", "999", "10000", "999999999", "00002007", "+2007", "-2007").foreach { year =>
+      s"reject year $year because it does not contain exactly four digits" in {
+        form.bind(validDate.updated("dateOfIncorporation.year", year)).errors must
+          contain only FormError("dateOfIncorporation", "dateOfIncorporation.error.invalid")
+      }
+    }
+
+    Seq("1000", "2007", "9999").foreach { year =>
+      s"accept four-digit year $year" in {
+        form.bind(validDate.updated("dateOfIncorporation.year", year)).value.value mustEqual LocalDate.of(year.toInt, 3, 27)
+      }
+    }
+
+    Seq("day", "month").foreach { part =>
+      Seq("001", "000000001", "123", "+1", "-1").foreach { value =>
+        s"reject $part $value because it does not contain one or two digits" in {
+          form.bind(validDate.updated(s"dateOfIncorporation.$part", value)).errors must
+            contain only FormError("dateOfIncorporation", "dateOfIncorporation.error.invalid")
+        }
+      }
+    }
+
+    Seq(("1", "3"), ("01", "03"), ("27", "12")).foreach { case (day, month) =>
+      s"accept day $day and month $month" in {
+        form.bind(validDate ++ Map("dateOfIncorporation.day" -> day, "dateOfIncorporation.month" -> month)).value.value mustEqual
+          LocalDate.of(2007, month.toInt, day.toInt)
+      }
+    }
+
     "accept a valid leap day" in {
       form
         .bind(Map("dateOfIncorporation.day" -> "29", "dateOfIncorporation.month" -> "2", "dateOfIncorporation.year" -> "2008"))

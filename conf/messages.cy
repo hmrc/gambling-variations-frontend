@@ -11,6 +11,9 @@ site.start = Dechrau nawr
 site.startAgain = Dechreuwch eto
 site.signIn = Mewngofnodi
 site.govuk = GOV.UK
+site.pagination.next = cy: Next
+site.pagination.previous = cy: Previous
+site.pagination.page = cy" (page {0} of {1})
 
 date.day = Diwrnod
 date.month = Mis
@@ -480,8 +483,7 @@ controllingBodyEmailAddress.error.invalid = cy: The email address must only incl
 controllingBodyEmailAddress.error.length = cy: The email address must be 70 characters or less
 
 
-site.pagination.next = cy: Next
-site.pagination.previous = cy: Previous
+
 partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
 removeControllingBodyTradeName.title = cy:  Are you sure you want to remove this controlling body’s trading name?
@@ -492,6 +494,7 @@ controllingBodyAdditionalAddressInformationYesNo.title = cy: Do you want to incl
 controllingBodyAdditionalAddressInformationYesNo.heading = cy: Do you want to include additional information for the controlling body’s address?
 controllingBodyAdditionalAddressInformationYesNo.error.required = cy: Select yes to include additional information for the controlling body’s address
 controllingBodyAdditionalAddressInformationYesNo.hint = cy: For example, building name or floor number
+
 removeControllingBodyFaxNumber.title = cy: Are you sure you want to remove this controlling body’s fax number?
 removeControllingBodyFaxNumber.heading = cy: Are you sure you want to remove {0} as this controlling body’s fax number?
 removeControllingBodyFaxNumber.error.required = cy: Select yes if you want to remove this controlling body’s fax number
@@ -509,6 +512,25 @@ removeControllingBodyEmail.error.required = cy: Select yes if you want to remove
 controllingBodyBusinessUKIncorporated.title = cy: Is the controlling body’s business incorporated in the UK?
 controllingBodyBusinessUKIncorporated.heading = cy: Is the controlling body’s business incorporated in the UK?
 controllingBodyBusinessUKIncorporated.error.required = cy: Select yes if the controlling body’s business is incorporated in the UK
+
+controllingBodySoleProprietorDob.title = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.heading = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.hint = cy: For example, 31 3 1980
+controllingBodySoleProprietorDob.error.required.all = cy: Enter a date of birth for the sole proprietor
+controllingBodySoleProprietorDob.error.required.two = cy: Date of birth must include a {0} and a {1}
+controllingBodySoleProprietorDob.error.required = cy: Date of birth must include a {0}
+controllingBodySoleProprietorDob.error.invalid = cy: Date of birth must be a real date
+controllingBodySoleProprietorDob.error.afterLatestDate = cy: Date of birth must be the same as or before {0}
+
+controllingBodyCompanyRegNumber.title = cy: Tell us the controlling body’s company registration number
+controllingBodyCompanyRegNumber.heading = cy: Tell us the controlling body’s company registration number
+controllingBodyCompanyRegNumber.paragraph = cy: What is the company registration number?
+controllingBodyCompanyRegNumber.hint = cy: It can be up to 8 numbers, or start with 2 letters followed by up to 6 letters or numbers, for example AC123456, IPCFGEDT or 000123
+controllingBodyCompanyRegNumber.error.required = cy: Enter the controlling body’s company registration number
+controllingBodyCompanyRegNumber.error.invalid.characters = cy: The controlling body’s company registration number must only include letters a to z and numbers 0 to 9
+controllingBodyCompanyRegNumber.error.invalid.format = cy: The controlling body’s company registration number must be in the correct format
+controllingBodyCompanyRegNumber.p1 = cy: You can find this by
+controllingBodyCompanyRegNumber.link = cy: searching for the company on the Companies House register (opens in new tab)
 
 dateOfIncorporation.title = cy: When was the controlling body’s date of incorporation?
 dateOfIncorporation.heading = cy: When was the controlling body’s date of incorporation?

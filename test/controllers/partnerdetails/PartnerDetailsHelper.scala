@@ -69,6 +69,7 @@ trait PartnerDetailsHelper {
             .success
             .value
         )
+
       newPartnersIndexes
         .foldLeft(userAnswersExistingUsers)((answers, indexAndBusinessName) =>
           answers
@@ -93,7 +94,7 @@ trait PartnerDetailsHelper {
     }
 
     val paginationService = new PaginationService(10, 100, 5)
-    def paginationResult: PaginationResult = paginationService.paginateAlphabeticallyPartnerDetails(
+    val paginationResult: PaginationResult = paginationService.paginateAlphabeticallyPartnerDetails(
       completedNewPartners   = Seq.empty,
       existingPartnerDetails = partnerDetailsBusinessNumberList,
       userAnswers            = createValidUserAnswers(businessNumbers, newPartnersIndexes),
@@ -103,7 +104,8 @@ trait PartnerDetailsHelper {
     )
     val elementsPerPage = 10
     val paginatedViewModel: PaginationViewModel = paginationResult.paginationViewModel
-    val page: Int = currentPage
+    val page: Int = paginationResult.currentPage
+    val totalPages: Int = paginationResult.totalPages
     val totalRecords: Int = size
 
     val from: Int = page * elementsPerPage - elementsPerPage + 1

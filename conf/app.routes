@@ -265,6 +265,7 @@ POST       /change-registration-details/controlling-body-details/remove-trading-
 
 GET        /change-registration-details/controlling-body-details/additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/additional-address-information-yes-no           controllers.controllingbody.ControllingBodyAdditionalAddressInformationYesNoController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/controlling-body-details/remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/remove-fax-number             controllers.controllingbody.RemoveControllingBodyFaxNumberController.onSubmit(mode: Mode = NormalMode)
 
@@ -320,4 +321,11 @@ POST       /change-registration-details/controlling-body-details/national-insura
 GET        /change-registration-details/controlling-body-details/date-of-incorporation                   controllers.controllingbody.DateOfIncorporationController.onPageLoad()
 POST       /change-registration-details/controlling-body-details/date-of-incorporation                   controllers.controllingbody.DateOfIncorporationController.onSubmit()
 
-GET        /change-registration-details/return-periods/check                       controllers.returnperiods.CheckNonStandardReturnPeriodsController.onPageLoad()
+GET        /change-registration-details/return-periods/check                       controllers.returnperiods.CheckReturnPeriodsController.onPageLoad()
+POST       /change-registration-details/return-periods/check                       controllers.returnperiods.CheckReturnPeriodsController.onContinue()
+
+GET        /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/date-of-birth       controllers.controllingbody.ControllingBodySoleProprietorDobController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onSubmit(mode: Mode = NormalMode)

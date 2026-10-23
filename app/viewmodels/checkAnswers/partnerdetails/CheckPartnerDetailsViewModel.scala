@@ -324,7 +324,7 @@ case class CheckPartnerDetailsViewModel(
         "companyRegistrationNumber",
         companyRegistrationNumber,
         // NOTE: routing will be done with the integration ticket (currently points at the foreign corporate reference page placeholder)
-        routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+        routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url,
         isNewPartnerFlow
       )
     )

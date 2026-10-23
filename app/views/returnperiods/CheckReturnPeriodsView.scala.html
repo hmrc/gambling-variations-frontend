@@ -1,0 +1,83 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.checkAnswers.returnperiods.CheckReturnPeriodsViewModel
+@import viewmodels.checkAnswers.returnperiods.CheckReturnPeriodsViewModel.{NonStandard, Standard}
+@import views.html.components._
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukSummaryList: GovukSummaryList,
+    govukButton: GovukButton,
+    caption: Caption,
+    h1: H1,
+    p: Paragraph
+)
+
+@(viewModel: CheckReturnPeriodsViewModel)(implicit request: Request[_], messages: Messages)
+
+@heading = @{
+    viewModel match {
+        case _: Standard    => "checkReturnPeriods.standard.heading"
+        case _: NonStandard => "checkNonStandardReturnPeriods.heading"
+    }
+}
+
+@title = @{
+    viewModel match {
+        case _: Standard    => "checkReturnPeriods.standard.title"
+        case _: NonStandard => "checkNonStandardReturnPeriods.title"
+    }
+}
+
+@layout(pageTitle = titleNoForm(messages(title), Some(messages("changeRegistrationDetails.caption")))) {
+
+    @caption(messages("changeRegistrationDetails.caption"))
+    @h1(heading, classes = "govuk-heading-l")
+
+    @viewModel match {
+        case standard: Standard => {
+            @if(standard.showAppliesAfterCurrentPeriod) {
+                @p("checkReturnPeriods.appliesAfterCurrentPeriod")
+            }
+        }
+        case nonStandard: NonStandard => {
+            @if(nonStandard.showFinalPeriodWarning) {
+                @p("checkNonStandardReturnPeriods.warning2")
+            } else {
+                @p("checkNonStandardReturnPeriods.warning1")
+            }
+        }
+    }
+
+    @govukSummaryList(viewModel.summaryList)
+
+    @viewModel match {
+        case _: Standard => {
+            @p("changeRegistrationDetails.readyToSubmit")
+
+            @formHelper(action = controllers.returnperiods.routes.CheckReturnPeriodsController.onContinue()){
+                @govukButton(ButtonViewModel(messages("site.continue")))
+            }
+        }
+        case _: NonStandard => {
+            @p("checkNonStandardReturnPeriods.continueInfo")
+
+            @govukButton(ButtonViewModel(messages("site.continue")).asLink(controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url))
+        }
+    }
+}

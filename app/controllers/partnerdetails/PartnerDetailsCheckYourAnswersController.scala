@@ -21,6 +21,7 @@ import controllers.routes
 import models.UserAnswers
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -35,6 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PartnerDetailsCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: PartnerDetailsDataRequiredAction,
@@ -90,5 +92,20 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
 
   private def createPartner(index: String, answers: UserAnswers): Either[String, CheckPartnerDetailsViewModel] =
     indexParser(index, answers).map(partner => from(answers, partner.ref, partner.isNew, partner.isSubmitted))
+
+  def onSubmit(index: String, mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      indexParser(index, request.userAnswers) match {
+        case Right(NewPartner(i, _)) =>
+          for {
+            userAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsAddPartnerCompletedPage(i), true))
+            _           <- sessionRepository.set(userAnswers)
+          } yield Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None))
+        case Right(ExistingPartner(_)) =>
+          Future.successful(Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)))
+        case Left(_) =>
+          Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
+      }
+    }
 
 }

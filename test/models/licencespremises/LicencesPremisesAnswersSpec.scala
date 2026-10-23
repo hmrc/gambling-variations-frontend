@@ -127,6 +127,33 @@ class LicencesPremisesAnswersSpec extends SpecBase {
     }
   }
 
+  "isPremisesNotCoveredMissing" - {
+
+    val changedWithLicence = emptyUserAnswers
+      .set(LicencesPremisesDetailsChangesPage, true)
+      .success
+      .value
+      .set(LicenceNumberPage, "123")
+      .success
+      .value
+
+    "must be true when the section has been changed, a licence is held and premises not covered has not been answered" in {
+      changedWithLicence.isPremisesNotCoveredMissing mustBe true
+    }
+
+    "must be false when premises not covered has been answered" in {
+      changedWithLicence.set(LicencePremisesNotCoveredPage, "0").success.value.isPremisesNotCoveredMissing mustBe false
+    }
+
+    "must be false when the section has not been changed" in {
+      emptyUserAnswers.set(LicenceNumberPage, "123").success.value.isPremisesNotCoveredMissing mustBe false
+    }
+
+    "must be false when no licence or permit is held, since the question is then not asked" in {
+      emptyUserAnswers.set(LicencesPremisesDetailsChangesPage, true).success.value.isPremisesNotCoveredMissing mustBe false
+    }
+  }
+
   "premisesCount" - {
 
     "must count the premises rather than use the total" in {
