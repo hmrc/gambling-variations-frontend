@@ -44,7 +44,6 @@ class ReturnPeriodsController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   requireData: GamblingReturnPeriodsDataRequiredAction,
-  nonStandardPeriodFormProvider: NonStandardReturnPeriodsFormProvider,
   nonStandardNonSubmittedPeriodFormProvider: NonStandardNotSubmittedReturnPeriodsFormProvider,
   nonStandardNotLastPeriodFormProvider: NonStandardLastReturnPeriodsFormProvider,
   standardPeriodFormProvider: StandardReturnPeriodsFormProvider,
