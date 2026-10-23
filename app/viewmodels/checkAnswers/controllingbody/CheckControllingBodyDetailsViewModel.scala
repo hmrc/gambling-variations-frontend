@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.controllingbody
 import controllers.controllingbody.routes
 import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partnership, Soleproprietor, Unincorporatedbody}
 import models.{Address, BusinessType, SoleProprietorName, UserAnswers}
-import pages.QuestionPage
+import pages.{ControllingBodyVATScreenerPage, QuestionPage}
 import pages.controllingbody.*
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -299,7 +299,7 @@ object CheckControllingBodyDetailsViewModel {
       dateOfIncorporation    = answers.get(ControllingBodyDateOfIncorporationPage),
       crn                    = text(ControllingBodyCrnPage),
       utr                    = text(ControllingBodyUtrPage),
-      addVrn                 = answers.get(ControllingBodyAddVrnYesNoPage),
+      addVrn                 = answers.get(ControllingBodyVATScreenerPage),
       vrn                    = text(ControllingBodyVrnPage),
       address                = answers.get(ControllingBodyAddressPage).filter(_.address1.trim.nonEmpty),
       addAdditionalInfo      = answers.get(ControllingBodyAdditionalAddressInformationYesNoPage),

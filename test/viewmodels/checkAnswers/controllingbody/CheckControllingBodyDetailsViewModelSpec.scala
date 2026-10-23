@@ -21,6 +21,7 @@ import controllers.controllingbody.routes
 import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partnership, Soleproprietor, Unincorporatedbody}
 import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName}
 import org.jsoup.Jsoup
+import pages.ControllingBodyVATScreenerPage
 import pages.controllingbody.*
 import play.api.Application
 import play.api.i18n.Messages
@@ -504,7 +505,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyDateOfIncorporationPage, LocalDate.of(2000, 1, 1))
           answers <- answers.set(ControllingBodyCrnPage, "CR345678")
           answers <- answers.set(ControllingBodyUtrPage, "1234567890")
-          answers <- answers.set(ControllingBodyAddVrnYesNoPage, true)
+          answers <- answers.set(ControllingBodyVATScreenerPage, true)
           answers <- answers.set(ControllingBodyVrnPage, "123456789")
           answers <- answers.set(ControllingBodyCorrespondenceSectionPage, correspondence)
           answers <- answers.set(ControllingBodyAdditionalAddressInformationYesNoPage, true)
