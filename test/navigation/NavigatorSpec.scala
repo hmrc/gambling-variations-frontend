@@ -27,7 +27,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessTypePage, ControllingBodyChangeScreenerPage, ControllingBodyDateOfIncorporationPage, RemoveControllingBodyFaxNumberPage}
+import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
@@ -1561,6 +1561,62 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
         navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.LimitedLiabilityPartnership)
       }
+
+      "should route ControllingBodySameAsRepYesNoPage to ChangeRegistrationDetails Controller" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "controllingBodySameAsRepYesNo" -> false
+                          )
+                        )
+                       )
+          navigator.nextPage(ControllingBodySameAsRepYesNoPage, NormalMode, answers) mustBe
+            controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
+        }
+
+      "should route ControllingBodySameAsRepYesNoPage to ControllingBodyBusinessType Controller" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "controllingBodySameAsRepYesNo" -> true
+              )
+            )
+          )
+        navigator.nextPage(ControllingBodySameAsRepYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+      }
+      "should route ControllingBodyNotProvidedYesNoPage to ChangeRegistrationDetails Controller" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "controllingBodyNotProvidedYesNo" -> true
+              )
+            )
+          )
+        navigator.nextPage(ControllingBodyNotProvidedYesNoPage, NormalMode, answers) mustBe
+          controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+
+      "should route ControllingBodyNotProvidedYesNoPage to ControllingBodyBusinessType Controller" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "controllingBodyNotProvidedYesNo" -> false
+              )
+            )
+          )
+        navigator.nextPage(ControllingBodyNotProvidedYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+      }
+
     }
 
     "in Check mode" - {
