@@ -1,7 +1,8 @@
-package controllers
+package controllers.controllingbody
 
 import base.SpecBase
-import forms.RemoveControllingBodyNINumberFormProvider
+import controllers.routes
+import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -11,7 +12,7 @@ import pages.RemoveControllingBodyNINumberPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import views.html.RemoveControllingBodyNINumberView
 

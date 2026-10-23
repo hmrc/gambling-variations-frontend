@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.controllingbody
 
-import controllers.actions._
-import forms.RemoveControllingBodyNINumberFormProvider
-import javax.inject.Inject
+import controllers.actions.*
+import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.RemoveControllingBodyNINumberPage
@@ -28,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.RemoveControllingBodyNINumberView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveControllingBodyNINumberController @Inject()(

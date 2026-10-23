@@ -1,7 +1,7 @@
 package views
 
 import base.SpecBase
-import forms.RemoveControllingBodyNINumberFormProvider
+import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

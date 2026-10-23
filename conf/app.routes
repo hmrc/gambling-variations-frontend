@@ -330,7 +330,7 @@ POST       /change-registration-details/controlling-body-details/date-of-birth  
 GET        /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
-GET        /removeControllingBodyNINumber                        controllers.RemoveControllingBodyNINumberController.onPageLoad(mode: Mode = NormalMode)
-POST       /removeControllingBodyNINumber                        controllers.RemoveControllingBodyNINumberController.onSubmit(mode: Mode = NormalMode)
-GET        /changeRemoveControllingBodyNINumber                  controllers.RemoveControllingBodyNINumberController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeRemoveControllingBodyNINumber                  controllers.RemoveControllingBodyNINumberController.onSubmit(mode: Mode = CheckMode)
+GET        /removeControllingBodyNINumber                        controllers.controllingbody.RemoveControllingBodyNINumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /removeControllingBodyNINumber                        controllers.controllingbody.RemoveControllingBodyNINumberController.onSubmit(mode: Mode = NormalMode)
+GET        /changeRemoveControllingBodyNINumber                  controllers.controllingbody.RemoveControllingBodyNINumberController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeRemoveControllingBodyNINumber                  controllers.controllingbody.RemoveControllingBodyNINumberController.onSubmit(mode: Mode = CheckMode)
