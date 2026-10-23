@@ -24,8 +24,9 @@ import pages.BusinessNumberOrIndex
 import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.JsArray
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import queries.NewPartnersQuery
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.PartnerUtils
@@ -33,7 +34,7 @@ import views.html.partnerdetails.PartnerDetailsRemovePartnerYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 
 class PartnerDetailsRemovePartnerYesNoController @Inject() (
   override val messagesApi: MessagesApi,
@@ -102,11 +103,11 @@ class PartnerDetailsRemovePartnerYesNoController @Inject() (
   }
 
   private def removeNewPartner(userAnswers: UserAnswers, index: Int): Try[UserAnswers] = {
-    val newPartners = (userAnswers.data \ "newPartners").asOpt[JsArray].getOrElse(JsArray())
+    val newPartners = userAnswers.get(NewPartnersQuery).getOrElse(JsArray())
 
     if (index < 0 || index >= newPartners.value.size)
       Failure(new IndexOutOfBoundsException(s"No new partner at index $index"))
     else
-      Success(userAnswers.copy(data = userAnswers.data ++ Json.obj("newPartners" -> JsArray(newPartners.value.patch(index, Nil, 1)))))
+      userAnswers.set(NewPartnersQuery, JsArray(newPartners.value.patch(index, Nil, 1)))
   }
 }
