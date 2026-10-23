@@ -329,3 +329,6 @@ POST       /change-registration-details/controlling-body-details/date-of-birth  
 
 GET        /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/company-registration-number     controllers.controllingbody.ControllingBodyCompanyRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/vat-registration-number-yes-no                        controllers.controllingbody.ControllingBodyVATScreenerController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/vat-registration-number-yes-no                        controllers.controllingbody.ControllingBodyVATScreenerController.onSubmit(mode: Mode = NormalMode)
