@@ -1,4 +1,4 @@
-package views
+package views.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.RemoveControllingBodyNINumberFormProvider

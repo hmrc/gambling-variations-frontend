@@ -1490,8 +1490,6 @@ dateOfIncorporation.error.required = Date of incorporation must include a {0}
 dateOfIncorporation.error.invalid = Date of incorporation must be a real date
 dateOfIncorporation.change.hidden = DateOfIncorporation
 
-removeControllingBodyNINumber.title = removeControllingBodyNINumber
-removeControllingBodyNINumber.heading = removeControllingBodyNINumber
-removeControllingBodyNINumber.checkYourAnswersLabel = removeControllingBodyNINumber
-removeControllingBodyNINumber.error.required = Select yes if removeControllingBodyNINumber
-removeControllingBodyNINumber.change.hidden = RemoveControllingBodyNINumber
+removeControllingBodyNINumber.title = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
+removeControllingBodyNINumber.heading = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
+removeControllingBodyNINumber.error.required = Select yes if you want to remove this controlling body’s National Insurance number
