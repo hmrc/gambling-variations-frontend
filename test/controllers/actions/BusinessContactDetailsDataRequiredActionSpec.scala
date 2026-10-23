@@ -19,19 +19,20 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessContactDetails, UserAnswers}
+import models.{BusinessContactDetails, OriginalAnswers, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
+import pages.contactdetails.BusinessContactDetailsSection
 import play.api.http.Status.INTERNAL_SERVER_ERROR
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Results.*
 import play.api.mvc.{AnyContent, Result}
 import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
-import java.time.LocalDate
+import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -40,7 +41,7 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
   import BusinessContactDetailsDataRequiredActionSpec.*
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
-      extends BusinessContactDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
+      extends BusinessContactDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector, clock) {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
@@ -57,24 +58,16 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
         when(gamblingConnector.getBusinessContactDetails(any())(any())) thenReturn Future(businessContactDetailsModel)
         val action = new Harness(sessionRepository, gamblingConnector)
 
-        val data = Json.obj(
-          "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> "ABC12345678901"),
-          "businessFaxNumber"             -> "+_+_ hdj39783",
-          "businessContactNumber" -> Json.obj(
-            "phoneNumber"       -> "+44 8903928171",
-            "mobilePhoneNumber" -> "+44 8903928171"
-          ),
-          "businessEmailAddress" -> "a@b.com"
-        )
-
         val result: Either[Result, DataRequest[AnyContent]] =
           action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
 
-        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, loadedSectionData))
 
         result.map { req =>
           req.request mustBe expected.request
-          req.userAnswers.data mustBe expected.userAnswers.data
+          req.userAnswers.original.data mustBe expected.userAnswers.data
+          req.userAnswers.original.loaded mustBe Map(BusinessContactDetailsSection.key -> now)
+          req.userAnswers.modified.assertions mustBe empty
           req.userAnswers.id mustBe expected.userAnswers.id
         }
         verify(sessionRepository, times(1)).set(any())
@@ -129,16 +122,12 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
           val action = new Harness(sessionRepository, gamblingConnector)
 
-          val data = Json.obj(
-            "businessContactDetailsSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            )
-          )
+          val loadedAnswers = UserAnswers(mgdRegNum, OriginalAnswers(loadedSectionData, Map(BusinessContactDetailsSection.key -> now)))
 
           val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(UserAnswers(mgdRegNum, data)))).futureValue
+            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(loadedAnswers))).futureValue
 
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+          val expected = DataRequest(request, mgdRegNum, loadedAnswers)
 
           result.map { req =>
             req.request mustBe expected.request
@@ -161,17 +150,8 @@ class BusinessContactDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val updatedSessionData = Json.obj(
             "businessNameSection" -> Json.obj(
               "mgdRegNum" -> "ABC12345678901"
-            ),
-            "businessContactDetailsSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            ),
-            "businessFaxNumber" -> "+_+_ hdj39783",
-            "businessContactNumber" -> Json.obj(
-              "phoneNumber"       -> "+44 8903928171",
-              "mobilePhoneNumber" -> "+44 8903928171"
-            ),
-            "businessEmailAddress" -> "a@b.com"
-          )
+            )
+          ) ++ loadedSectionData
 
           val existingUserAnswers = UserAnswers(mgdRegNum,
                                                 Json.obj(
@@ -210,5 +190,19 @@ object BusinessContactDetailsDataRequiredActionSpec {
     faxNumber         = Some("+_+_ hdj39783"),
     emailAddr         = Some("a@b.com"),
     systemDate        = Some(LocalDate.of(1991, 1, 1))
+  )
+
+  val now: Instant = Instant.parse("2026-10-20T09:00:00Z")
+  val clock: Clock = Clock.fixed(now, ZoneOffset.UTC)
+
+  val loadedSectionData: JsObject = Json.obj(
+    "businessContactDetailsSection" -> Json.obj(
+      "businessFaxNumber" -> "+_+_ hdj39783",
+      "businessContactNumber" -> Json.obj(
+        "phoneNumber"       -> "+44 8903928171",
+        "mobilePhoneNumber" -> "+44 8903928171"
+      ),
+      "businessEmailAddress" -> "a@b.com"
+    )
   )
 }

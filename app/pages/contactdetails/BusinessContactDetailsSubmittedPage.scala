@@ -16,10 +16,10 @@
 
 package pages.contactdetails
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object BusinessContactDetailsSubmittedPage extends QuestionPage[Boolean] {
-  override def path: JsPath = JsPath \ "businessContactDetailsSection" \ toString
+case object BusinessContactDetailsSubmittedPage extends FlagPage[Boolean] {
+  override def path: JsPath = BusinessContactDetailsSection.path \ toString
   override def toString: String = "submitted"
 }

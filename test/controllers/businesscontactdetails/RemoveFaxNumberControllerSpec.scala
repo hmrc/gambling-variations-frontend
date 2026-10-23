@@ -19,16 +19,16 @@ package controllers.businesscontactdetails
 import base.SpecBase
 import controllers.routes
 import forms.RemoveFaxNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{Assertion, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.GroupMemberPage
-import pages.contactdetails.{BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
+import pages.contactdetails.{BusinessContactDetailsSection, BusinessContactDetailsSubmittedPage, BusinessFaxNumberPage, ContactDetailsChangesPage, RemoveFaxNumberPage}
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -44,32 +44,16 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   private val faxNumber = "123456789"
 
   private val baseAnswers =
-    UserAnswers(
+    LoadedContactDetails(
       userAnswersId,
-      Json.obj(
-        GroupMemberPage.toString        -> false,
-        BusinessFaxNumberPage.toString  -> faxNumber,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
+      Json.obj(GroupMemberPage.toString -> false, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
     )
 
   private val answersWithoutFaxNumber =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        GroupMemberPage.toString        -> false,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
-    )
+    LoadedContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
 
   private val answersWithoutGroupMember =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        BusinessFaxNumberPage.toString  -> faxNumber,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
-    )
+    LoadedContactDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
 
   val formProvider = new RemoveFaxNumberFormProvider()
   val form = formProvider()
@@ -122,13 +106,9 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on GET" in {
 
       val userAnswers =
-        UserAnswers(
+        LoadedContactDetails(
           userAnswersId,
-          Json.obj(
-            GroupMemberPage.toString        -> true,
-            BusinessFaxNumberPage.toString  -> faxNumber,
-            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-          )
+          Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
         )
 
       val application =
@@ -314,6 +294,39 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must assert the removal, so that the fax number loaded from the backend does not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+
+        val request =
+          FakeRequest(POST, removeFaxNumberRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers = savedAnswersCaptor.getValue
+        savedAnswers.get(BusinessFaxNumberPage) mustBe None
+        savedAnswers.original.get[String](BusinessFaxNumberPage.path).value mustEqual faxNumber
+        savedAnswers.changes(BusinessContactDetailsSection) mustBe Seq(Assertion(BusinessFaxNumberPage.path, JsNull))
+      }
+    }
+
     "must flag ContactDetailsChangesPage when data changed in" in {
 
       val mockSessionRepository = mock[SessionRepository]
@@ -346,13 +359,9 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on POST" in {
 
       val userAnswers =
-        UserAnswers(
+        LoadedContactDetails(
           userAnswersId,
-          Json.obj(
-            GroupMemberPage.toString        -> true,
-            BusinessFaxNumberPage.toString  -> faxNumber,
-            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-          )
+          Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
         )
 
       val application =
@@ -376,13 +385,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to system error when GroupMemberPage is missing on POST" in {
 
       val userAnswers =
-        UserAnswers(
-          userAnswersId,
-          Json.obj(
-            BusinessFaxNumberPage.toString  -> faxNumber,
-            "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-          )
-        )
+        LoadedContactDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
