@@ -65,7 +65,8 @@ case class CheckPartnerDetailsViewModel(
   isDueToLeave: Boolean,
   isDueToJoin: Boolean,
   isMissingMandatoryDetails: Boolean,
-  hasChanges: Option[Boolean]
+  hasChanges: Option[Boolean],
+  hasAnsweredAllQuestions: Boolean
 ) {
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
@@ -544,7 +545,8 @@ object CheckPartnerDetailsViewModel {
       isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
       isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
       isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index),
-      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)) // exisisting partners only
+      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)), // exisisting partners only
+      hasAnsweredAllQuestions   = userAnswers.get(PartnerDetailsHasAnsweredAllQuestionsPage(index.toString.toInt)).contains(true)
     )
   }
 

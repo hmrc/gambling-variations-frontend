@@ -200,7 +200,7 @@ object PartnerDetailsNavigator {
   private def returnsToCheckYourAnswers(index: BusinessNumberOrIndex, answers: UserAnswers): Boolean =
     index match {
       case _: String => true // existing partner
-      case i: Int    => answers.get(PartnerDetailsAddPartnerCompletedPage(i)).contains(true) // saved new partner
+      case i: Int    => answers.get(PartnerDetailsHasAnsweredAllQuestionsPage(i)).contains(true) // new partner that has reached CYA
     }
 
   private def carryOn(index: BusinessNumberOrIndex, next: UserAnswers => Call): UserAnswers => Call =

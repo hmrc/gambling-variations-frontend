@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import controllers.actions.*
 import controllers.routes
 import models.UserAnswers
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsHasAnsweredAllQuestionsPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,15 +47,22 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
     with Logging {
 
   def onPageLoad(index: String): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+    (authorise andThen getData andThen requireData).async { implicit request =>
       val answers: UserAnswers = request.userAnswers
       createPartner(index, answers)
         .fold(
           error => {
             logger.warn(error)
-            Redirect(routes.SystemErrorController.onPageLoad())
+            Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
           },
-          partner => Ok(view(partner))
+          partner =>
+            if (partner.isNewPartnerFlow)
+              for {
+                updatedAnswers <- Future.fromTry(answers.set(PartnerDetailsHasAnsweredAllQuestionsPage(index.toInt), true))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Ok(view(partner))
+            else
+              Future.successful(Ok(view(partner)))
         )
     }
 
