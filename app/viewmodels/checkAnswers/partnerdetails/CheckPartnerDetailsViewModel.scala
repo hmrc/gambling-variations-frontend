@@ -23,7 +23,6 @@ import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
-import play.api.mvc.Call
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent}
@@ -66,21 +65,14 @@ case class CheckPartnerDetailsViewModel(
   isDueToLeave: Boolean,
   isDueToJoin: Boolean,
   isMissingMandatoryDetails: Boolean,
-  hasChanges: Option[Boolean]
+  hasChanges: Option[Boolean],
+  hasAnsweredAllQuestions: Boolean
 ) {
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
   private val index = businessNumberOrIndex.toString
   private def mode(index: BusinessNumberOrIndex): Mode = PartnerUtils.modeFor(index)
   val isNewPartnerSubmitted: Boolean = maybeSubmitted.exists(identity) // NEW PARTNERS ONLY
-
-  // --- Update this ---
-  // NOTE: routing will be done with the integration ticket.
-  def continueCall: Call = if (isMissingMandatoryDetails) {
-    routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index)
-  } else {
-    routes.PartnerDetailsCheckYourAnswersController.onSubmit(index)
-  }
 
   def notices(implicit messages: Messages): Seq[Html] = {
     val url = "https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries"
@@ -537,7 +529,7 @@ object CheckPartnerDetailsViewModel {
       vatRegistrationNumber     = userAnswers.get(PartnerDetailsVrnPage(index)),
       isIncorporatedInUk        = userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(index)),
       countryOfIncorporation    = userAnswers.get(PartnerDetailsCountryOfIncorporationPage(index)),
-      dateOfIncorporation       = userAnswers.get(PartnerDetailsDateOfIncorporation(index)).map(shortDateDisplay),
+      dateOfIncorporation       = userAnswers.get(PartnerDetailsDateOfIncorporationPage(index)).map(shortDateDisplay),
       foreignCorporateReference = userAnswers.get(PartnerDetailsForeignCorporateReferencePage(index)),
       companyRegistrationNumber = userAnswers.get(PartnerDetailsCrnPage(index)),
       address                   = correspondenceAddress(userAnswers, index),
@@ -553,7 +545,8 @@ object CheckPartnerDetailsViewModel {
       isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
       isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
       isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index),
-      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)) // exisisting partners only
+      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)), // exisisting partners only
+      hasAnsweredAllQuestions   = userAnswers.get(PartnerDetailsHasAnsweredAllQuestionsPage(index.toString.toInt)).contains(true)
     )
   }
 

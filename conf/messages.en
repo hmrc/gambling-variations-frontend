@@ -701,8 +701,6 @@ partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an em
 partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
 partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
 
-
-
 partnerEmailAddress.title = What is the partner’s email address?
 partnerEmailAddress.heading = What is the partner’s email address?
 partnerEmailAddress.error.required = Enter the partner’s email address

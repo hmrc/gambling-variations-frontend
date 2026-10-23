@@ -21,7 +21,7 @@ import play.api.libs.json.JsPath
 
 import java.time.LocalDate
 
-case class PartnerDetailsDateOfIncorporation(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[LocalDate] {
+case class PartnerDetailsDateOfIncorporationPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[LocalDate] {
 
   override val path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ toString
@@ -30,7 +30,7 @@ case class PartnerDetailsDateOfIncorporation(businessNumberOrIndex: BusinessNumb
 
   override def toString: String = "partnerDetailsDateOfIncorporation"
 }
-object PartnerDetailsDateOfIncorporation {
-  def apply(index: Int) = new PartnerDetailsDateOfIncorporation(index)
-  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsDateOfIncorporation(partnerDetailsBusinessNumber)
+object PartnerDetailsDateOfIncorporationPage {
+  def apply(index: Int) = new PartnerDetailsDateOfIncorporationPage(index)
+  def apply(partnerDetailsBusinessNumber: String) = new PartnerDetailsDateOfIncorporationPage(partnerDetailsBusinessNumber)
 }

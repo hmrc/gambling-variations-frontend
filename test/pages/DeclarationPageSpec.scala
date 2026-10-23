@@ -17,7 +17,6 @@
 package pages
 
 import org.scalatestplus.play.PlaySpec
-import pages.businessaddress.BusinessAddressNonUkPage
 import play.api.libs.json.JsPath
 
 class DeclarationPageSpec extends PlaySpec {
