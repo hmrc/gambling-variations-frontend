@@ -20,8 +20,7 @@ import controllers.actions.*
 import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.RemoveControllingBodyNINumberPage
-import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyNinoPage, ControllingBodySubmittedPage}
+import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyNinoPage, ControllingBodySubmittedPage, RemoveControllingBodyNINumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -62,32 +61,29 @@ class RemoveControllingBodyNINumberController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val nino = request.userAnswers.get(ControllingBodyNinoPage).getOrElse("")
+    request.userAnswers.get(ControllingBodyNinoPage)
+      .fold(
+        Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad().url)))(nino =>
     form
       .bindFromRequest()
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, nino))),
-        value =>
+        remove =>
           for {
-            updatedAnswers              <- Future.fromTry(updateUserAnswers(request.userAnswers, value))
-            updatedAnswersWithSubmitted <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
-            finalAnswer                 <- Future.fromTry(updatedAnswersWithSubmitted.set(ControllingBodyChangesPage, value))
+            updatedAnswers              <- Future.fromTry(updateUserAnswers(request.userAnswers, remove))
             _                           <- sessionRepository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(RemoveControllingBodyNINumberPage, mode, updatedAnswers))
-      )
+      ))
   }
 
-  private def updateUserAnswers(userAnswers: UserAnswers, value: Boolean): Try[UserAnswers] = {
+  private def updateUserAnswers(userAnswers: UserAnswers, remove: Boolean): Try[UserAnswers] = {
+    val isChanged = remove || userAnswers.get(ControllingBodyChangesPage).contains(true)
+
     for {
-      ua1 <- userAnswers.set(RemoveControllingBodyNINumberPage, value)
-      ua2 <- {
-        if (value) {
-          ua1.set(ControllingBodyNinoPage, null) /*tombstone to track removal*/
-        } else {
-          Try(ua1)
-        }
-      }
-    } yield ua2
+      updatedAnswers <- userAnswers.set(RemoveControllingBodyNINumberPage, remove)
+      updatedAnswers <- if (remove) updatedAnswers.remove(ControllingBodyNinoPage) else Try(updatedAnswers)
+      updatedAnswers <- updatedAnswers.set(ControllingBodySubmittedPage, true)
+      updatedAnswers <- updatedAnswers.set(ControllingBodyChangesPage, isChanged)
+    } yield updatedAnswers
   }
-
 }

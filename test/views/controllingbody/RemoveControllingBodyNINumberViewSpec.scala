@@ -7,11 +7,13 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.RemoveControllingBodyNINumberView
+import views.html.controllingbody.RemoveControllingBodyNINumberView
 
 class RemoveControllingBodyNINumberViewSpec extends SpecBase {
 
   private val form = new RemoveControllingBodyNINumberFormProvider()()
+  private val nino = "AB 12 34 56 C"
+
 
   "RemoveControllingBodyNINumberView" - {
 
@@ -23,7 +25,7 @@ class RemoveControllingBodyNINumberViewSpec extends SpecBase {
 
         val view = application.injector.instanceOf[RemoveControllingBodyNINumberView]
 
-        val html = view(form, NormalMode)(FakeRequest(), messages(application))
+        val html = view(form, nino)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
@@ -56,7 +58,7 @@ class RemoveControllingBodyNINumberViewSpec extends SpecBase {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val html = view(boundForm, NormalMode)(FakeRequest(), messages(application))
+        val html = view(boundForm, nino)(FakeRequest(), messages(application))
 
         val document: Document = Jsoup.parse(html.toString)
 
