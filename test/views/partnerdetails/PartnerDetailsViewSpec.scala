@@ -98,6 +98,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
           model,
           paginationHelper.paginatedViewModel,
           paginationHelper.page,
+          paginationHelper.totalPages,
           paginationHelper.from,
           paginationHelper.to,
           paginationHelper.totalRecords
@@ -612,6 +613,7 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
           ),
           paginationHelper.paginatedViewModel,
           paginationHelper.page,
+          paginationHelper.totalPages,
           paginationHelper.from,
           paginationHelper.to,
           paginationHelper.totalRecords
