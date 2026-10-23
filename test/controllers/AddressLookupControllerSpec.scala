@@ -96,7 +96,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.CheckCorrespondenceDetailsController.onPageLoad().url
+        redirectLocation(result).value mustEqual controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad().url
 
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(CorrespondenceAddressUkPage).value mustBe address

@@ -123,11 +123,11 @@ class Navigator @Inject() () {
     case CorrespondenceUKAddrScreenerPage =>
       userAnswers => navigateCorrespondenceUKAddrScreenerPage()(userAnswers)
     case CorrespondenceEmailPage =>
-      _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      _ => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceFaxNumberPage =>
-      _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      _ => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     case RemoveCorrespondenceEmailAddressPage =>
-      _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      _ => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceNamePage =>
       userAnswers => navigateCorrespondenceNamePage()(userAnswers)
     case CorrespondenceAdditionalNamePage =>
@@ -135,7 +135,7 @@ class Navigator @Inject() () {
     case CorrespondenceAdditionalInformationPage =>
       userAnswers => navigateCorrespondenceAdditionalInformationPage()(userAnswers)
     case RemoveCorrAddressAddInfoPage =>
-      _ => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      _ => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     case CorrespondenceAddressUkPage =>
       userAnswers => navigateCorrespondenceAddressUkPage()(userAnswers)
     case CorrespondenceAddressNonUkPage =>
@@ -321,44 +321,44 @@ class Navigator @Inject() () {
 
   private def navigateCorrespondenceNamePage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.CorrespondenceAdditionalNameYesNoController.onPageLoad()
-      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true) => controllers.correspondencedetails.routes.CorrespondenceAdditionalNameYesNoController.onPageLoad()
+      case _          => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateCorrespondenceAdditionalNamePage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.CorrespondenceUKAddrScreenerController.onPageLoad()
-      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true) => controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+      case _          => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateCorrespondenceAddressUkPage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
-      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true) => controllers.correspondencedetails.routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
+      case _          => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateCorrespondenceAddressNonUkPage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
-      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true) => controllers.correspondencedetails.routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
+      case _          => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateCorrespondenceAdditionalInformationPage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.CorrespondenceContactNumberController.onPageLoad()
-      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true) => controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad()
+      case _          => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateCorrespondenceContactNumberPage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.FaxNumberForCorrespondenceYesNoController.onPageLoad()
-      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true) => controllers.correspondencedetails.routes.FaxNumberForCorrespondenceYesNoController.onPageLoad()
+      case _          => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateCorrespondenceFaxNumberPage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondingDetailsYesNoPage) match {
-      case Some(true) => routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
-      case _          => routes.CheckCorrespondenceDetailsController.onPageLoad()
+      case Some(true) => controllers.correspondencedetails.routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
+      case _          => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
     }
 
   private def navigateAddBusinessAddressScreenerPage()(answers: UserAnswers): Call =
@@ -388,12 +388,12 @@ class Navigator @Inject() () {
   private def navigateCorrespondenceAdditionalNameYesNoPage()(userAnswers: UserAnswers): Call =
     userAnswers.get(CorrespondenceAdditionalNameYesNoPage) match {
       case Some(true) =>
-        routes.CorrespondenceAdditionalNameController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceAdditionalNameController.onPageLoad()
       case Some(false) =>
         if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
-          routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
         } else {
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
         }
       case None =>
         routes.SystemErrorController.onPageLoad()
@@ -402,13 +402,13 @@ class Navigator @Inject() () {
   private def navigateAddCorrespondenceAddressAdditionalInformationPage()(answers: UserAnswers): Call =
     answers.get(AddCorrespondenceAddressAdditionalInformationPage) match {
       case Some(true) =>
-        routes.CorrespondenceAdditionalInfoController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceAdditionalInfoController.onPageLoad()
 
       case Some(false) =>
         if (answers.get(AddCorrespondingDetailsYesNoPage).contains(true)) {
-          routes.CorrespondenceContactNumberController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad()
         } else {
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
         }
       case None =>
         routes.SystemErrorController.onPageLoad()
@@ -424,16 +424,16 @@ class Navigator @Inject() () {
 
     answers.get(CorrespondenceUKAddrScreenerPage) match {
       case Some(true) if previouslyUk =>
-        routes.CheckCorrespondenceDetailsController.onPageLoad()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
 
       case Some(false) if previouslyNonUk =>
-        routes.CheckCorrespondenceDetailsController.onPageLoad()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
 
       case Some(true) =>
         routes.AddressLookupController.initialise()
 
       case Some(false) =>
-        routes.CorrespondenceNonUKAddressController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceNonUKAddressController.onPageLoad()
 
       case None =>
         routes.SystemErrorController.onPageLoad()
@@ -478,7 +478,7 @@ class Navigator @Inject() () {
     userAnswers
       .get(AddCorrespondingDetailsYesNoPage)
       .map {
-        case true  => routes.CorrespondenceNameController.onPageLoad()
+        case true  => controllers.correspondencedetails.routes.CorrespondenceNameController.onPageLoad()
         case false => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
@@ -495,16 +495,16 @@ class Navigator @Inject() () {
           routes.AddressLookupController.initialise()
 
         case ChangeToNonUkAddress =>
-          routes.CorrespondenceNonUKAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceNonUKAddressController.onPageLoad()
 
         case ChangeToUkAddress =>
           routes.AddressLookupController.initialise()
 
         case EditCurrentAddress if isUkAddress =>
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceUKAddressController.onPageLoad()
 
         case EditCurrentAddress =>
-          routes.CorrespondenceNonUKAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
   }
@@ -527,13 +527,13 @@ class Navigator @Inject() () {
   private def navigateAddCorrespondenceFaxNumberPage()(userAnswers: UserAnswers): Call =
     userAnswers.get(AddCorrespondenceFaxNumberPage) match {
       case Some(true) =>
-        routes.CorrespondenceFaxNumberController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceFaxNumberController.onPageLoad()
 
       case Some(false) =>
         if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
-          routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
+          controllers.correspondencedetails.routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
         else
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
 
       case None =>
         routes.SystemErrorController.onPageLoad()
@@ -542,13 +542,13 @@ class Navigator @Inject() () {
   private def navigateAddEmailAddressForCorrespondenceYesNoPage()(userAnswers: UserAnswers): Call =
     userAnswers.get(AddEmailAddressForCorrespondenceYesNoPage) match {
       case Some(true) =>
-        routes.CorrespondenceEmailAddressController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceEmailAddressController.onPageLoad()
 
       case Some(false) =>
         if (userAnswers.get(AddCorrespondingDetailsYesNoPage).contains(true))
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
         else
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
 
       case None =>
         routes.SystemErrorController.onPageLoad()
@@ -565,7 +565,7 @@ class Navigator @Inject() () {
     answers
       .get(RemoveCorrespondenceDetailsYesNoPage)
       .map {
-        case false => routes.CheckCorrespondenceDetailsController.onPageLoad()
+        case false => controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
         case true  => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
