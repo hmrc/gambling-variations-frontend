@@ -45,34 +45,29 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider("businessContactNumber")
 
   val data = Json.obj(
-    BusinessContactNumberPage.toString -> Json.obj(
-      "phoneNumber"       -> "01632 960 001",
-      "mobilePhoneNumber" -> "07700900000"
-    ),
-    GroupMemberPage.toString        -> false,
-    "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
+    GroupMemberPage.toString -> false,
+    "businessContactDetailsSection" -> Json.obj(
+      BusinessContactNumberPage.toString -> Json.obj(
+        "phoneNumber"       -> "01632 960 001",
+        "mobilePhoneNumber" -> "07700900000"
+      )
+    )
   )
 
-  val noAnswers = Json.obj(
-    GroupMemberPage.toString        -> false,
-    "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-  )
+  val noAnswers = Json.obj(GroupMemberPage.toString -> false)
 
   lazy val businessContactNumberRoute =
     controllers.businesscontactdetails.routes.BusinessContactNumberController.onPageLoad().url
 
   val userAnswers =
-    UserAnswers(
-      userAnswersId,
-      data
-    )
+    LoadedContactDetails(userAnswersId, data)
 
   "BusinessContactNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, noAnswers))).build()
 
       running(application) {
 
@@ -91,13 +86,10 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to access denied when group member is true on GET" in {
 
-      val data = Json.obj(
-        GroupMemberPage.toString        -> true,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+      val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -114,12 +106,10 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to system error when GroupMemberPage is missing on GET" in {
 
-      val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+      val data = Json.obj()
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -169,7 +159,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers)))
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, noAnswers)))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -227,13 +217,10 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to access denied when group member is true on POST" in {
 
-      val data = Json.obj(
-        GroupMemberPage.toString        -> true,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+      val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -255,12 +242,10 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to system error when GroupMemberPage is missing on POST" in {
 
-      val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+      val data = Json.obj()
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -317,7 +302,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
     "must return Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, noAnswers))).build()
 
       running(application) {
 

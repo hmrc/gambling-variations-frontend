@@ -28,7 +28,7 @@ class BusinessContactNumberPageSpec extends PlaySpec {
 
     "have the correct path" in {
 
-      BusinessContactNumberPage.path mustEqual (JsPath \ "businessContactNumber")
+      BusinessContactNumberPage.path mustEqual (JsPath \ "businessContactDetailsSection" \ "businessContactNumber")
     }
 
     "have the correct toString value" in {
@@ -44,7 +44,7 @@ class BusinessContactNumberPageSpec extends PlaySpec {
       )
 
       val json = Json.obj(
-        BusinessContactNumberPage.toString -> Json.toJson(value)
+        "businessContactDetailsSection" -> Json.obj(BusinessContactNumberPage.toString -> Json.toJson(value))
       )
 
       BusinessContactNumberPage.path
