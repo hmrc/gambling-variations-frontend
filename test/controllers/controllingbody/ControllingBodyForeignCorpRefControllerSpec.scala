@@ -120,7 +120,6 @@ class ControllingBodyForeignCorpRefControllerSpec extends SpecBase with MockitoS
           ).toString
       }
     }
-    
 
     "must redirect to System Error for a corporate body incorporated in the UK" in {
 

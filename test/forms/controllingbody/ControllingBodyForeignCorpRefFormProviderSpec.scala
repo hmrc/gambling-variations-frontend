@@ -113,9 +113,9 @@ class ControllingBodyForeignCorpRefFormProviderSpec extends StringFieldBehaviour
 
     "replace multiple consecutive spaces between digits with a single space" in {
       Seq(
-        "12  34" -> "12 34",
-        "12   34" -> "12 34",
-        "123    456" -> "123 456",
+        "12  34"      -> "12 34",
+        "12   34"     -> "12 34",
+        "123    456"  -> "123 456",
         "  12   34  " -> "12 34"
       ).foreach { case (input, expected) =>
         val bound = form.bind(Map(fieldName -> input))

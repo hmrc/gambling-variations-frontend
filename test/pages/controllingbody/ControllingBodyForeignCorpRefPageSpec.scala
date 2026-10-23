@@ -26,7 +26,7 @@ class ControllingBodyForeignCorpRefPageSpec extends PlaySpec with PartnerDetails
 
     "have the correct path" in {
 
-      ControllingBodyForeignCorpRefPage.path mustEqual (JsPath \ "controllingBodyDetails"  \ "foreignCorporateRef")
+      ControllingBodyForeignCorpRefPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "foreignCorporateRef")
     }
 
     "have the correct toString value" in {

@@ -18,7 +18,6 @@ package views.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.ControllingBodyForeignCorpRefFormProvider
-import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -48,7 +47,7 @@ class ControllingBodyForeignCorpRefViewSpec extends SpecBase {
       app.injector.instanceOf[MessagesApi].preferred(request)
 
     def render(f: Form[String]): Document =
-      Jsoup.parse(view(f,NormalMode)(request, messages).body)
+      Jsoup.parse(view(f, NormalMode)(request, messages).body)
   }
 
   "ControllingBodyForeignCorpRefView" - {
