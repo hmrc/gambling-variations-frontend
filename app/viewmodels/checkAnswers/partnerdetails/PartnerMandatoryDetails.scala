@@ -141,11 +141,10 @@ object PartnerMandatoryDetails {
         PartnerDetailsDateOfJoiningPage(index),
         routes.PartnerDateOfJoiningController.onPageLoad(key, mode)
       ),
-      Field(
-        PartnerDetailsNewCorrespondenceDetailsSectionPage(index),
-        routes.PartnerDetailsBusinessTypeController.onPageLoad(key, mode), // TODO: no address page controller yet
-        ua => correspondenceAddress(ua, index).isDefined
-      ),
+      // TODO: no address page controller yet
+      /** Field( PartnerDetailsNewCorrespondenceDetailsSectionPage(index), routes.PartnerDetailsBusinessTypeController.onPageLoad(key, mode), ua =>
+        * correspondenceAddress(ua, index).isDefined ),
+        */
       Field.of(PartnerDetailsContactNumberPage(index), routes.PartnerDetailsContactDetailsController.onPageLoad(key, mode))
     )
   }
@@ -163,6 +162,7 @@ object PartnerMandatoryDetails {
     PartnerDetailsForeignCorporateReferencePage(index)
   )
 
+  // TODO: no address page controller yet
   private def correspondenceAddress(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Option[Address] =
     userAnswers.get(PartnerDetailsNewCorrespondenceDetailsSectionPage(index)).flatMap(_.correspondenceAddress)
 }

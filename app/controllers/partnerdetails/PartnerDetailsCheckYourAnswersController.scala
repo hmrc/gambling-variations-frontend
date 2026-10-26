@@ -69,7 +69,7 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
   def onContinue(index: String): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
       val answers = request.userAnswers
-      val changeRegistrationDetails = Redirect(routes.ChangeRegistrationDetailsController.onPageLoad())
+      val partnerDetailsList = Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None))
 
       indexParser(index, answers)
         .fold(
@@ -86,11 +86,11 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
                   for {
                     updatedAnswers <- Future.fromTry(answers.set(PartnerDetailsAddPartnerCompletedPage(partnerIndex), true))
                     _              <- sessionRepository.set(updatedAnswers)
-                  } yield changeRegistrationDetails
+                  } yield partnerDetailsList
               }
 
             case ExistingPartner(_) =>
-              Future.successful(changeRegistrationDetails)
+              Future.successful(partnerDetailsList)
           }
         )
     }

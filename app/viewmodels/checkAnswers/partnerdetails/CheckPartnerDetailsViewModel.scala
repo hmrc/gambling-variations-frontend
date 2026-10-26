@@ -224,7 +224,7 @@ case class CheckPartnerDetailsViewModel(
       "dateOfJoining",
       dateOfJoining,
       // NOTE: routing will be done with the integration ticket (currently points at the DOB page placeholder)
-      routes.PartnerDetailsSoleProprietorDobController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+      routes.PartnerDateOfJoiningController.onPageLoad(index, mode(businessNumberOrIndex)).url,
       isNewPartnerFlow
     )
 
