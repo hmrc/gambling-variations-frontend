@@ -16,6 +16,7 @@
 
 package navigation
 
+import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
@@ -35,8 +36,6 @@ import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
 import play.api.mvc.Call
 import utils.ReturnPeriodsUtils
-import controllers.routes
-import pages.partnerdetails.PartnerDetailsIsBusinessIncorporatedUkPage
 
 import javax.inject.{Inject, Singleton}
 
@@ -521,17 +520,6 @@ class Navigator @Inject() () {
         controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.LimitedLiabilityPartnership)
       case _ => routes.SystemErrorController.onPageLoad()
     }
-  }
-
-  private def navigatePartnerDetailsIsBusinessIncorporatedUkPage(index: BusinessNumberOrIndex, userAnswers: UserAnswers): Call = {
-    userAnswers
-      .get(PartnerDetailsIsBusinessIncorporatedUkPage(index))
-      .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
-        case false => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
-      }
-      .getOrElse(routes.SystemErrorController.onPageLoad())
-
   }
 
   private def navigateControllingBodyAddFaxNumberYesNoPage(userAnswers: UserAnswers): Call =
