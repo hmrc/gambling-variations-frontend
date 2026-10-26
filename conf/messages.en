@@ -1490,6 +1490,10 @@ dateOfIncorporation.error.required = Date of incorporation must include a {0}
 dateOfIncorporation.error.invalid = Date of incorporation must be a real date
 dateOfIncorporation.change.hidden = DateOfIncorporation
 
+controllingBodyVATScreener.title = Do you want to add a VAT registration number for the controlling body?
+controllingBodyVATScreener.heading = Do you want to add a VAT registration number for the controlling body?
+controllingBodyVATScreener.error.required = Select yes to add a VAT registration number for the controlling body
+
 removeControllingBodyNINumber.title = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
 removeControllingBodyNINumber.heading = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
 removeControllingBodyNINumber.error.required = Select yes if you want to remove this controlling body’s National Insurance number
