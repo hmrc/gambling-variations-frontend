@@ -79,4 +79,5 @@ class PartnerDetailsEmailAddressController @Inject() (
           } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(newIndex), mode, updatedAnswers))
       )
   }
+
 }
