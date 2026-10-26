@@ -392,37 +392,32 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
       }
     }
 
-    "missing details" - {
+    "missing mandatory details" - {
 
       "must show an add link in place of the value and the change link" in {
-        val viewModel = corporateBody.copy(businessName = None, crn = None)
+        val viewModel = corporateBody.copy(businessName = None, utr = None, address = None, phoneNumber = None, mobilePhoneNumber = None)
 
         val nameRow = rowFor(viewModel.businessDetails, "corporateBodyName")
         valueText(nameRow) mustEqual key("corporateBodyName.add")
         valueLink(nameRow) mustEqual Some(routes.ChangeControllingBodyNameController.onPageLoad(Corporatebody).url)
         nameRow.actions mustBe None
 
-        valueText(rowFor(viewModel.businessDetails, "companyRegNumber")) mustEqual key("companyRegNumber.add")
+        valueText(rowFor(viewModel.businessDetails, "utr")) mustEqual key("utr.add")
+        valueText(rowFor(viewModel.addressDetails, "address")) mustEqual key("address.add")
+        valueText(rowFor(viewModel.contactDetails, "contactNumbers")) mustEqual key("contactNumbers.add")
         viewModel.isMissingMandatoryDetails mustBe true
       }
 
       "must continue to the first missing detail" in {
-        corporateBody.copy(businessName = None, crn = None).continueUrl mustEqual
+        corporateBody.copy(businessName = None, utr = None).continueUrl mustEqual
           routes.ChangeControllingBodyNameController.onPageLoad(Corporatebody).url
-        corporateBody.copy(crn = None).continueUrl mustEqual routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url
+        corporateBody.copy(utr = None, address = None).continueUrl mustEqual "#"
       }
 
-      "must offer to add the Unique Taxpayer Reference, address and contact numbers without holding up the submission" in {
-        val viewModel = corporateBody.copy(utr = None, address = None, phoneNumber = None, mobilePhoneNumber = None)
-
-        val utrRow = rowFor(viewModel.businessDetails, "utr")
-        valueText(utrRow) mustEqual key("utr.add")
-        utrRow.actions mustBe None
-        valueText(rowFor(viewModel.addressDetails, "address")) mustEqual key("address.add")
-        valueText(rowFor(viewModel.contactDetails, "contactNumbers")) mustEqual key("contactNumbers.add")
-
-        viewModel.isMissingMandatoryDetails mustBe false
-        viewModel.continueUrl mustEqual controllers.routes.ChangeRegistrationDetailsController.onPageLoad().url
+      "must require the Unique Taxpayer Reference, the address and a contact number" in {
+        corporateBody.copy(utr = None).isMissingMandatoryDetails mustBe true
+        corporateBody.copy(address = None).isMissingMandatoryDetails mustBe true
+        corporateBody.copy(phoneNumber = None, mobilePhoneNumber = None).isMissingMandatoryDetails mustBe true
       }
 
       "must only ask for the type of business while it is not known" in {
