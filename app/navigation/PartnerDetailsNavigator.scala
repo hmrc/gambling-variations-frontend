@@ -236,7 +236,7 @@ object PartnerDetailsNavigator {
   private def checkYourAnswers(index: BusinessNumberOrIndex): Call =
     partnerRoutes.PartnerDetailsCheckYourAnswersController.onPageLoad(key(index))
 
-  private val partnerList: Call = partnerRoutes.PartnerDetailsController.onPageLoad(None)
+  private def partnerList: Call = partnerRoutes.PartnerDetailsController.onPageLoad(None)
 
-  private val systemError: Call = routes.SystemErrorController.onPageLoad()
+  private def systemError: Call = routes.SystemErrorController.onPageLoad()
 }

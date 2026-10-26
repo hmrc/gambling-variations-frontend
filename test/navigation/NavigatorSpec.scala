@@ -27,7 +27,7 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
 import pages.contactdetails.*
-import pages.controllingbody.{ControllingBodyAddTradingNameYesNoPage, ControllingBodyBusinessTypePage, ControllingBodyChangeScreenerPage, ControllingBodyDateOfIncorporationPage, RemoveControllingBodyFaxNumberPage}
+import pages.controllingbody.*
 import pages.correspondencedetails.*
 import pages.licencespremises.*
 import pages.partnerdetails.*
@@ -40,15 +40,10 @@ import play.api.mvc.Call
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
 
-class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
+class NavigatorSpec extends SpecBase {
 
   private val navigator = new Navigator
   private val emptyAnswers = UserAnswers("id")
-
-  private def firstMissingOrCheckYourAnswers(answers: UserAnswers, index: BusinessNumberOrIndex): Call = PartnerMandatoryDetails
-    .firstMissing(answers, index)
-    .map(_.call)
-    .getOrElse(controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString))
 
   "Navigator" - {
 
@@ -1023,7 +1018,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
     }
 
-    "check mode / new partner details navigation" ignore {
+    "check mode / new partner details navigation" - new PartnerDetailsHelper {
 
       // New, unsaved partners: the add journey. The navigator takes the mode from the index, not the mode argument.
 
@@ -1312,28 +1307,6 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
       }
 
-      "should route PartnerDetailsVatRegistrationNumberYesNoPage to the first missing mandatory page when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          firstMissingOrCheckYourAnswers(answers, newPartnersIndex1)
-      }
-
-      "should route PartnerDetailsVrnPage to the first missing mandatory page" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsVrnPage(newPartnersIndex1), "GB123456789")
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsVrnPage(newPartnersIndex1), NormalMode, answers) mustBe
-          firstMissingOrCheckYourAnswers(answers, newPartnersIndex1)
-      }
-
       // --- Address and contact details ---
 
       "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoController when the answer is Yes" in {
@@ -1432,11 +1405,6 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
           routes.SystemErrorController.onPageLoad()
       }
 
-      "should route PartnerDetailsCorrespondenceEmailAddressPage to the first missing mandatory page" in {
-        navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          firstMissingOrCheckYourAnswers(emptyAnswers, newPartnersIndex1)
-      }
-
       // --- Remove partner: reached from the partner list ---
 
       "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is No" in {
@@ -1478,7 +1446,8 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       }
     }
 
-    "normal mode / existing partner details navigation" ignore {
+    // TODO: This test block will be fixed with the CYA routing tickets
+    "normal mode / existing partner details navigation" ignore new PartnerDetailsHelper {
 
       // Existing partners and saved new partners return to check your answers.
 
@@ -1646,6 +1615,41 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
         s"should route $page to check your answers for a new partner" in {
           navigator.nextPage(page, CheckMode, emptyAnswers) mustBe checkYourAnswers(newPartnersIndex1)
         }
+      }
+    }
+
+    // TODO: This test block will be fixed with the CYA routing tickets
+    "CYA page first missing field routing" ignore new PartnerDetailsHelper {
+      def firstMissingOrCheckYourAnswers(answers: UserAnswers, index: BusinessNumberOrIndex): Call = PartnerMandatoryDetails
+        .firstMissing(answers, index)
+        .map(_.call)
+        .getOrElse(controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString))
+
+      "should route PartnerDetailsVatRegistrationNumberYesNoPage to the first missing mandatory page when the answer is No" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
+          firstMissingOrCheckYourAnswers(answers, newPartnersIndex1)
+      }
+
+      "should route PartnerDetailsVrnPage to the first missing mandatory page" in {
+        val answers =
+          emptyAnswers
+            .set(PartnerDetailsVrnPage(newPartnersIndex1), "GB123456789")
+            .success
+            .value
+
+        navigator.nextPage(PartnerDetailsVrnPage(newPartnersIndex1), NormalMode, answers) mustBe
+          firstMissingOrCheckYourAnswers(answers, newPartnersIndex1)
+      }
+
+      "should route PartnerDetailsCorrespondenceEmailAddressPage to the first missing mandatory page" in {
+        navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+          firstMissingOrCheckYourAnswers(emptyAnswers, newPartnersIndex1)
       }
     }
 
@@ -1849,4 +1853,5 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       }
     }
   }
+
 }
