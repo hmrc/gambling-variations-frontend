@@ -351,7 +351,7 @@ case class CheckPartnerDetailsViewModel(
   private def additionalInformationRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("additionalInformation")
     // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index).url, label)
+    val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
     val remove = removeAction(
       routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url,
       label
