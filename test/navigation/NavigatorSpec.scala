@@ -808,7 +808,10 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "should route CorrespondenceAdditionalInformationPage to CheckCorrespondenceDetails outside the add correspondence journey" in {
-        navigator.nextPage(CorrespondenceAdditionalInformationPage, NormalMode, emptyAnswers) mustBe controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
+        navigator.nextPage(CorrespondenceAdditionalInformationPage,
+                           NormalMode,
+                           emptyAnswers
+                          ) mustBe controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalInformationPage to CorrespondenceContactNumber when adding correspondence details" in {
