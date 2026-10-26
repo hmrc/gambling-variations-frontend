@@ -61,19 +61,20 @@ class RemoveControllingBodyNINumberController @Inject() (
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    request.userAnswers.get(ControllingBodyNinoPage)
-      .fold(
-        Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad().url)))(nino =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, nino))),
-        remove =>
-          for {
-            updatedAnswers              <- Future.fromTry(updateUserAnswers(request.userAnswers, remove))
-            _                           <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(RemoveControllingBodyNINumberPage, mode, updatedAnswers))
-      ))
+    request.userAnswers
+      .get(ControllingBodyNinoPage)
+      .fold(Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad().url)))(nino =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, nino))),
+            remove =>
+              for {
+                updatedAnswers <- Future.fromTry(updateUserAnswers(request.userAnswers, remove))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(RemoveControllingBodyNINumberPage, mode, updatedAnswers))
+          )
+      )
   }
 
   private def updateUserAnswers(userAnswers: UserAnswers, remove: Boolean): Try[UserAnswers] = {

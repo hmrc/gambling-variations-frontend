@@ -14,7 +14,6 @@ class RemoveControllingBodyNINumberViewSpec extends SpecBase {
   private val form = new RemoveControllingBodyNINumberFormProvider()()
   private val nino = "AB 12 34 56 C"
 
-
   "RemoveControllingBodyNINumberView" - {
 
     "render the page correctly" in {
@@ -29,12 +28,12 @@ class RemoveControllingBodyNINumberViewSpec extends SpecBase {
 
         val document: Document = Jsoup.parse(html.toString)
 
+        document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
+          messages(application)("removeControllingBodyNINumber.heading", nino)
+
         document.title() must include(
           messages(application)("removeControllingBodyNINumber.title")
         )
-
-        document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("removeControllingBodyNINumber.heading")
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
           messages(application)("changeRegistrationDetails.caption")
