@@ -352,7 +352,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddCorrespondingDetailsYesNoPage, NormalMode, answers) mustBe
-          routes.CorrespondenceNameController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceNameController.onPageLoad()
       }
 
       "should route AddCorrespondingDetailsYesNoPage to ChangeRegistrationDetails when answer is false" in {
@@ -373,7 +373,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route CorrespondenceNamePage to CheckCorrespondenceDetails outside the add correspondence journey" in {
         navigator.nextPage(CorrespondenceNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceNamePage to CorrespondenceAdditionalNameYesNo when adding correspondence details" in {
@@ -384,7 +384,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceNamePage, NormalMode, answers) mustBe
-          routes.CorrespondenceAdditionalNameYesNoController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceAdditionalNameYesNoController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalNameYesNoPage to CorrespondenceAdditionalName when answer is true" in {
@@ -395,7 +395,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-          routes.CorrespondenceAdditionalNameController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceAdditionalNameController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalNameYesNoPage to CheckCorrespondenceDetails when answer is false outside the add correspondence journey" in {
@@ -406,7 +406,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalNameYesNoPage to CorrespondenceUKAddrScreener when answer is false and adding correspondence details" in {
@@ -420,17 +420,17 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalNameYesNoPage to SystemError when unanswered" in {
         navigator.nextPage(CorrespondenceAdditionalNameYesNoPage, NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
+          controllers.routes.SystemErrorController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalNamePage to CheckCorrespondenceDetails outside the add correspondence journey" in {
         navigator.nextPage(CorrespondenceAdditionalNamePage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalNamePage to CorrespondenceUKAddrScreener when adding correspondence details" in {
@@ -441,7 +441,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalNamePage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
       }
 
       "should route CorrespondenceUKAddrScreenerPage to Address Lookup when answer is true" in {
@@ -463,7 +463,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CorrespondenceNonUKAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
 
       "should route CorrespondenceUKAddrScreenerPage to SystemError when unanswered" in {
@@ -562,7 +562,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAddressUkPage, NormalMode, answers) mustBe
-          routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
       }
 
       "should route CorrespondenceAddressUkPage to CheckCorrespondenceDetails outside the add correspondence journey" in {
@@ -573,7 +573,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAddressUkPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceAddressNonUkPage to CorrespondenceAddrInfoScreener when adding correspondence details" in {
@@ -584,7 +584,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAddressNonUkPage, NormalMode, answers) mustBe
-          routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceAddrInfoScreenerController.onPageLoad()
       }
 
       "should route CorrespondenceAddressNonUkPage to CheckCorrespondenceDetails outside the add correspondence journey" in {
@@ -595,7 +595,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAddressNonUkPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to CorrespondenceNonUKAddress when changing from a UK address to a non-UK address" in {
@@ -619,7 +619,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CorrespondenceNonUKAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to Address Lookup when changing to a different UK address" in {
@@ -667,7 +667,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CorrespondenceUKAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceUKAddressController.onPageLoad()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to Address Lookup when changing from a non-UK address" in {
@@ -689,7 +689,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceChangeAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CorrespondenceNonUKAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceNonUKAddressController.onPageLoad()
       }
 
       "should route CorrespondenceChangeAddrScreenerPage to SystemError when unanswered" in {
@@ -771,7 +771,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddCorrespondenceAddressAdditionalInformationPage, NormalMode, answers) mustBe
-          routes.CorrespondenceAdditionalInfoController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceAdditionalInfoController.onPageLoad()
       }
 
       "should route AddCorrespondenceAddressAdditionalInformationPage to CorrespondenceContactNumber when answer is false and adding correspondence details" in {
@@ -785,7 +785,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddCorrespondenceAddressAdditionalInformationPage, NormalMode, answers) mustBe
-          routes.CorrespondenceContactNumberController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad()
       }
 
       "should route AddCorrespondenceAddressAdditionalInformationPage to CheckCorrespondenceDetails when answer is false outside the add correspondence journey" in {
@@ -799,7 +799,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddCorrespondenceAddressAdditionalInformationPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route AddCorrespondenceAddressAdditionalInformationPage to SystemError when unanswered" in {
@@ -808,8 +808,10 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "should route CorrespondenceAdditionalInformationPage to CheckCorrespondenceDetails outside the add correspondence journey" in {
-        navigator.nextPage(CorrespondenceAdditionalInformationPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+        navigator.nextPage(CorrespondenceAdditionalInformationPage,
+                           NormalMode,
+                           emptyAnswers
+                          ) mustBe controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceAdditionalInformationPage to CorrespondenceContactNumber when adding correspondence details" in {
@@ -820,12 +822,12 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceAdditionalInformationPage, NormalMode, answers) mustBe
-          routes.CorrespondenceContactNumberController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad()
       }
 
       "should route CorrespondenceContactNumberPage to CheckCorrespondenceDetails outside the add correspondence journey" in {
         navigator.nextPage(CorrespondenceContactNumberPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceContactNumberPage to FaxNumberForCorrespondenceYesNo when adding correspondence details" in {
@@ -836,7 +838,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceContactNumberPage, NormalMode, answers) mustBe
-          routes.FaxNumberForCorrespondenceYesNoController.onPageLoad()
+          controllers.correspondencedetails.routes.FaxNumberForCorrespondenceYesNoController.onPageLoad()
       }
 
       "should route AddCorrespondenceFaxNumberPage to CorrespondenceFaxNumber when answer is true" in {
@@ -847,7 +849,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddCorrespondenceFaxNumberPage, NormalMode, answers) mustBe
-          routes.CorrespondenceFaxNumberController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceFaxNumberController.onPageLoad()
       }
 
       "should route AddCorrespondenceFaxNumberPage to CheckCorrespondenceDetails when answer is false" in {
@@ -858,7 +860,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddCorrespondenceFaxNumberPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route AddCorrespondenceFaxNumberPage to SystemError when unanswered" in {
@@ -868,7 +870,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route CorrespondenceFaxNumberPage to CheckCorrespondenceDetails outside the add correspondence journey" in {
         navigator.nextPage(CorrespondenceFaxNumberPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceFaxNumberPage to AddEmailAddressForCorrespondenceYesNo when adding correspondence details" in {
@@ -879,12 +881,12 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceFaxNumberPage, NormalMode, answers) mustBe
-          routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
+          controllers.correspondencedetails.routes.AddEmailAddressForCorrespondenceYesNoController.onPageLoad()
       }
 
       "should route RemoveCorrespondenceFaxNumberPage to CheckCorrespondenceDetails" in {
         navigator.nextPage(RemoveCorrespondenceFaxNumberPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route AddEmailAddressForCorrespondenceYesNoPage to CorrespondenceEmailAddress when answer is true" in {
@@ -895,7 +897,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddEmailAddressForCorrespondenceYesNoPage, NormalMode, answers) mustBe
-          routes.CorrespondenceEmailAddressController.onPageLoad()
+          controllers.correspondencedetails.routes.CorrespondenceEmailAddressController.onPageLoad()
       }
 
       "should route AddEmailAddressForCorrespondenceYesNoPage to CheckCorrespondenceDetails when answer is false and adding correspondence details" in {
@@ -909,7 +911,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddEmailAddressForCorrespondenceYesNoPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route AddEmailAddressForCorrespondenceYesNoPage to CheckCorrespondenceDetails when answer is false outside the add correspondence journey" in {
@@ -923,7 +925,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(AddEmailAddressForCorrespondenceYesNoPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route AddEmailAddressForCorrespondenceYesNoPage to SystemError when unanswered" in {
@@ -933,12 +935,12 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
       "should route CorrespondenceEmailPage to CheckCorrespondenceDetails" in {
         navigator.nextPage(CorrespondenceEmailPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route RemoveCorrespondenceEmailAddressPage to CheckCorrespondenceDetails" in {
         navigator.nextPage(RemoveCorrespondenceEmailAddressPage, NormalMode, emptyAnswers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route RemoveCorrespondenceDetailsYesNoPage to ChangeRegistrationDetails when answer is true" in {
@@ -960,7 +962,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(RemoveCorrespondenceDetailsYesNoPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceUKAddrScreenerPage to CheckCorrespondenceDetails when the answer remains UK" in {
@@ -984,7 +986,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route CorrespondenceUKAddrScreenerPage to CheckCorrespondenceDetails when the answer remains non-UK" in {
@@ -1008,7 +1010,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
             .value
 
         navigator.nextPage(CorrespondenceUKAddrScreenerPage, NormalMode, answers) mustBe
-          routes.CheckCorrespondenceDetailsController.onPageLoad()
+          controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad()
       }
 
       "should route PartnerAddFaxNumberYesNoPage to PartnerAddFaxNumberYesNoController when answered" in {

@@ -21,7 +21,6 @@ import controllers.routes
 import models.{Mode, UserAnswers}
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.Logging
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
