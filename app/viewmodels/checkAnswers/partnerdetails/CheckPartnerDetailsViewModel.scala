@@ -545,7 +545,7 @@ object CheckPartnerDetailsViewModel {
       isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
       isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
       isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index),
-      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)), // exisisting partners only
+      hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)), // existing partners only
       hasAnsweredAllQuestions   = userAnswers.get(PartnerDetailsHasAnsweredAllQuestionsPage(index.toString.toInt)).contains(true)
     )
   }

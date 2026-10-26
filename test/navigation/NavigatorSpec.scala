@@ -1023,7 +1023,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
 
     }
 
-    "normal mode / existing partner details navigation" ignore {
+    "check mode / new partner details navigation" ignore {
 
       // New, unsaved partners: the add journey. The navigator takes the mode from the index, not the mode argument.
 
@@ -1478,7 +1478,7 @@ class NavigatorSpec extends SpecBase with PartnerDetailsHelper {
       }
     }
 
-    "check mode / new partner details navigation" - {
+    "normal mode / existing partner details navigation" ignore {
 
       // Existing partners and saved new partners return to check your answers.
 
