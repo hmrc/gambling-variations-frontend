@@ -43,6 +43,8 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: PartialFunction[Page, UserAnswers => Call] = {
+    case ControllingBodyRemoveVATRegistrationNumberPage =>
+      _ => Call("GET", "#") // TODO: Connect CB-CYA when the controlling body check your answers page is built.
     case ControllingBodyBusinessNamePage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyAddTradingNameYesNoPage =>
