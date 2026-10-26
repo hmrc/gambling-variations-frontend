@@ -50,24 +50,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoController @Inject() (
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
     val newIndex = PartnerUtils.parseIndex(index, mode)
-
-    println()
-    println()
-    println()
-    println("index")
-    println(index)
-    println()
-    println()
-    println("mode")
-    println(mode)
-    println()
-    println()
-    println("parsed Index")
-    println(newIndex)
-    println()
-    println()
-    println()
-
+    
     val preparedForm = request.userAnswers.get(PartnerDetailsAdditionalAddressInfoYesNoPage(newIndex)) match {
       case None        => form
       case Some(value) => form.fill(value)
