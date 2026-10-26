@@ -17,25 +17,22 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.ReasonForCancellationFormProvider
+import forms.cancellation.{ChangeGroupRegistrationNumberFormProvider, ReasonForCancellationFormProvider}
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.cancellation.ReasonForCancellationView
-import views.html.partnerdetails.PartnerDetailsEmailAddressView
-
-import scala.jdk.CollectionConverters.*
+import views.html.cancellation.ChangeGroupRegistrationNumberView
 
 class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    val view = app.injector.instanceOf[ReasonForCancellationView]
+    val view = app.injector.instanceOf[ChangeGroupRegistrationNumberView]
 
-    val formProvider = new ReasonForCancellationFormProvider()
+    val formProvider = new ChangeGroupRegistrationNumberFormProvider()
 
     val form = formProvider()
 
@@ -47,50 +44,27 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
         .preferred(request)
   }
 
-  "ReasonForCancellationView" - {
+  "ChangeGroupRegistrationNumberView" - {
 
     "must render page correctly" in new Setup {
 
       val html = view(form, NormalMode)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
-      print(doc.toString)
 
       doc.title must include(
-        messages("reasonForCancellation.title")
+        messages("changeGroupRegistrationNumber.title")
       )
 
       doc
         .select(".govuk-caption-l")
         .text() must include(
-        messages("reasonForCancellation.caption")
+        messages("changeGroupRegistrationNumber.caption")
       )
 
       doc
-        .select(".govuk-fieldset__heading")
-        .text mustBe messages("reasonForCancellation.heading")
+        .select(".govuk-label")
+        .text mustBe messages("changeGroupRegistrationNumber.heading")
 
-      doc
-        .select("input[type=radio] + label")
-        .eachText()
-        .asScala
-        .toList must contain theSameElementsAs List(
-        messages("reasonForCancellation.allMachineGamesAreExcluded"),
-        messages("reasonForCancellation.allTakingsFromMGDAreExcluded"),
-        messages("reasonForCancellation.noMachineGamesAreAvailableToPlay"),
-        messages("reasonForCancellation.noLongerNeedToBeRegistered"),
-        messages("reasonForCancellation.businessIsPartOfTheGroup")
-      )
-
-      doc
-        .select("input[type=radio] ~ .govuk-radios__hint")
-        .eachText()
-        .asScala
-        .toList must contain theSameElementsAs List(
-        messages("reasonForCancellation.allMachineGamesAreExcluded.hint"),
-        messages("reasonForCancellation.allTakingsFromMGDAreExcluded.hint"),
-        messages("reasonForCancellation.noMachineGamesAreAvailableToPlay.hint"),
-        messages("reasonForCancellation.noLongerNeedToBeRegistered.hint")
-      )
 
       doc
         .select("button.govuk-button")
@@ -106,7 +80,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
     "must render error summary when form has errors" in new Setup {
 
       val boundForm =
-        form.bind(Map("reasonForCancellation" -> ""))
+        form.bind(Map("changeGroupRegistrationNumber" -> ""))
 
       val html = view(boundForm, NormalMode)(request, messages)
       val doc: Document = Jsoup.parse(html.body)
@@ -118,7 +92,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
       doc
         .select(".govuk-error-summary")
         .text must include(
-        messages("reasonForCancellation.error.required")
+        messages("changeGroupRegistrationNumber.error.required")
       )
     }
 

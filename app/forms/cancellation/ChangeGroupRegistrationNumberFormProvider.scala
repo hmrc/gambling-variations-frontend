@@ -22,7 +22,6 @@ import utils.ChecksumValidator
 
 import javax.inject.Inject
 
-//TODO I think I need to add tests, it just slightly different from the original
 class ChangeGroupRegistrationNumberFormProvider @Inject() extends Mappings with ChecksumConstraints {
 
   def apply(): Form[String] =

@@ -24,7 +24,6 @@ import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import views.html.cancellation.ReasonForCancellationView
-import views.html.partnerdetails.PartnerDetailsEmailAddressView
 
 import scala.jdk.CollectionConverters.*
 
