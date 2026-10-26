@@ -23,7 +23,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.AddCorrespondingDetailsYesNoView
+import views.html.correspondencedetails.AddCorrespondingDetailsYesNoView
 
 class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
 
