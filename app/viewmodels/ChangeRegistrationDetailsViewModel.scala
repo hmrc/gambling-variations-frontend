@@ -49,7 +49,8 @@ object ChangeRegistrationDetailsViewModel {
     userAnswers: UserAnswers,
     mgdRegNumber: String,
     managementHomeUrl: String,
-    isGroupMember: Boolean
+    isGroupMember: Boolean,
+    controllingBodyUrl: String
   )(implicit messages: Messages): ChangeRegistrationDetailsViewModel = {
 
     val isPartnership =
@@ -60,10 +61,10 @@ object ChangeRegistrationDetailsViewModel {
 
     val sections: Seq[RegistrationSectionRow] =
       Seq(
-        optional(!isGroupMember)(
+        optional(isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.controllingBodyDetails"),
-            controllingBodyDetailsUrl(userAnswers),
+            controllingBodyUrl,
             status(ControllingBodyChangesPage)
           )
         ),
@@ -142,24 +143,4 @@ object ChangeRegistrationDetailsViewModel {
 
   private def optional(condition: Boolean)(row: => RegistrationSectionRow): Option[RegistrationSectionRow] =
     if (condition) Some(row) else None
-
-  private def controllingBodyDetailsUrl(userAnswers: UserAnswers): String = {
-
-    userAnswers.get(ControllingBodySectionPage) match {
-      case None =>
-        controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad().url
-
-      case Some(_) =>
-        userAnswers.get(ControllingBodyIsRepMemSameAsCbPage) match {
-          case Some("1") =>
-            controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
-
-          case Some("0") =>
-            controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
-
-          case _ =>
-            routes.PageNotFoundController.onPageLoad().url
-        }
-    }
-  }
 }

@@ -23,7 +23,6 @@ import pages.*
 import pages.businessaddress.*
 import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
 import pages.contactdetails.{BusinessContactDetailsSubmittedPage, ContactDetailsChangesPage}
-import pages.controllingbody.{ControllingBodyIsRepMemSameAsCbPage, ControllingBodySectionPage}
 import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
 import pages.licencespremises.LicencesPremisesDetailsChangesPage
 import pages.tradingdetails.{TradingDetailsChangesPage, TradingDetailsSubmittedPage}
@@ -38,12 +37,18 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
 
   private val managementHomeUrl = "http://foo.com/home"
 
-  private def viewModel(userAnswers: UserAnswers, isGroupMember: Boolean): ChangeRegistrationDetailsViewModel =
+  private val controllingBodyUrl = "http://foo.com/home"
+
+  private def viewModel(userAnswers: UserAnswers,
+                        isGroupMember: Boolean,
+                        controllingBodyUrl: String = controllingBodyUrl
+                       ): ChangeRegistrationDetailsViewModel =
     ChangeRegistrationDetailsViewModel.from(
-      userAnswers       = userAnswers,
-      mgdRegNumber      = mgdRegNum,
-      managementHomeUrl = managementHomeUrl,
-      isGroupMember     = isGroupMember
+      userAnswers        = userAnswers,
+      mgdRegNumber       = mgdRegNum,
+      managementHomeUrl  = managementHomeUrl,
+      isGroupMember      = isGroupMember,
+      controllingBodyUrl = controllingBodyUrl
     )
 
   private def answersFor(businessType: BusinessType): UserAnswers =
@@ -59,7 +64,6 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       val vm = viewModel(nonPartnershipAnswers, isGroupMember = false)
 
       vm.sections.map(_.name) mustEqual Seq(
-        "Controlling body details",
         "Business name",
         "Business address",
         "Business contact details",
@@ -75,7 +79,6 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       val vm = viewModel(partnershipAnswers, isGroupMember = false)
 
       vm.sections.map(_.name) mustEqual Seq(
-        "Controlling body details",
         "Business name",
         "Business address",
         "Business contact details",
@@ -92,6 +95,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       val vm = viewModel(nonPartnershipAnswers, isGroupMember = true)
 
       vm.sections.map(_.name) mustEqual Seq(
+        "Controlling body details",
         "Group member details",
         "Correspondence details",
         "Trading details",
@@ -104,6 +108,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       val vm = viewModel(partnershipAnswers, isGroupMember = true)
 
       vm.sections.map(_.name) mustEqual Seq(
+        "Controlling body details",
         "Group member details",
         "Correspondence details",
         "Partner details",
@@ -141,17 +146,11 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
         "Group member details"
       )
 
-      val allSections =
-        viewModel(partnershipAnswers, isGroupMember = false).sections ++
-          viewModel(partnershipAnswers, isGroupMember = true).sections
+      val vm = viewModel(partnershipAnswers, isGroupMember = true)
 
-      val placeholderUrls =
-        allSections
-          .filter(section => notBuiltYet.contains(section.name))
-          .map(_.url)
-          .distinct
-
-      placeholderUrls mustEqual Seq(
+      vm.sections
+        .filter(_.name == "Group member details")
+        .map(_.url) mustEqual Seq(
         routes.PageNotFoundController.onPageLoad().url
       )
     }
@@ -233,6 +232,29 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       vm.sections.map(_.status).distinct mustEqual Seq(NoDetailsChanged)
       vm.hasChanges mustEqual false
     }
+    "must use the supplied controlling body URL for a group member" in {
+
+      val expectedUrl =
+        controllers.controllingbody.routes.ControllingBodyChangeScreenerController
+          .onPageLoad()
+          .url
+
+      val vm = viewModel(
+        nonPartnershipAnswers,
+        isGroupMember      = true,
+        controllingBodyUrl = expectedUrl
+      )
+
+      vm.sections.find(_.name == "Controlling body details").value.url mustEqual expectedUrl
+    }
+
+    "must link the group member details section to page not found" in {
+
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = true)
+
+      vm.sections.find(_.name == "Group member details").value.url mustEqual
+        routes.PageNotFoundController.onPageLoad().url
+    }
   }
 
   "ChangeRegistrationDetailsViewModel" - {
@@ -272,53 +294,6 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
 
       vm.hasChanges mustEqual false
       vm.showSubmit mustEqual false
-    }
-
-    "must link controlling body details to the not provided page when the section is missing" in {
-
-      val vm = viewModel(nonPartnershipAnswers, isGroupMember = false)
-
-      vm.sections.find(_.name == "Controlling body details").value.url mustEqual
-        controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad().url
-    }
-
-    "must link controlling body details to the same representative page when the answer is 1" in {
-
-      val userAnswers =
-        nonPartnershipAnswers
-          .set(ControllingBodySectionPage, "XGM00000001761").success.value
-          .set(ControllingBodyIsRepMemSameAsCbPage, "1").success.value
-
-      val vm = viewModel(userAnswers, isGroupMember = false)
-
-      vm.sections.find(_.name == "Controlling body details").value.url mustEqual
-        controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
-    }
-
-    "must link controlling body details to the change screener page when the answer is 0" in {
-
-      val userAnswers =
-        nonPartnershipAnswers
-          .set(ControllingBodySectionPage, "XGM00000001761").success.value
-          .set(ControllingBodyIsRepMemSameAsCbPage, "0").success.value
-
-      val vm = viewModel(userAnswers, isGroupMember = false)
-
-      vm.sections.find(_.name == "Controlling body details").value.url mustEqual
-        controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
-    }
-
-    "must link controlling body details to page not found when the representative answer is invalid" in {
-
-      val userAnswers =
-        nonPartnershipAnswers
-          .set(ControllingBodySectionPage, "XGM00000001761").success.value
-          .set(ControllingBodyIsRepMemSameAsCbPage, "invalid").success.value
-
-      val vm = viewModel(userAnswers, isGroupMember = false)
-
-      vm.sections.find(_.name == "Controlling body details").value.url mustEqual
-        routes.PageNotFoundController.onPageLoad().url
     }
   }
 }
