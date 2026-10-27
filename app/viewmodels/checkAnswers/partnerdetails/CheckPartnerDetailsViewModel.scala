@@ -133,15 +133,15 @@ case class CheckPartnerDetailsViewModel(
   def addressSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     Some(addressRow),
     addAdditionalInformationRow,
-    Some(additionalInformationRow)
+    additionalInformationRow
   ).flatten
 
   def contactDetailsSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     Some(contactNumbersRow),
     addFaxNumberRow,
-    Some(faxNumberRow),
+    faxNumberRow,
     addEmailAddressRow,
-    Some(emailAddressRow)
+    emailAddressRow
   ).flatten
 
   // --- Access rules ---
@@ -159,6 +159,10 @@ case class CheckPartnerDetailsViewModel(
   private def isUkCorporateBody: Boolean = is(Corporatebody) && isIncorporatedInUk.contains(true)
 
   private def isNonUkCorporateBody: Boolean = is(Corporatebody) && isIncorporatedInUk.contains(false)
+
+  private def postScreenerDisplayCondition(screener: Option[Boolean]): Boolean = if (isNewPartnerFlow && !isNewPartnerSubmitted) {
+    screener.contains(true)
+  } else true
 
   // --- Business details rows ---
 
@@ -235,7 +239,7 @@ case class CheckPartnerDetailsViewModel(
     else None
 
   private def ninoRow(implicit messages: Messages): Option[SummaryListRow] =
-    Option.when(is(Soleproprietor)) {
+    if (postScreenerDisplayCondition(addNino)) Option.when(is(Soleproprietor)) {
       val label = labelFor("nino")
       // NOTE: routing will be done with the integration ticket
       val change = changeAction(routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
@@ -249,6 +253,7 @@ case class CheckPartnerDetailsViewModel(
 
       optionalRow(label, nino.map(Text(_)), actions, change)
     }
+    else None
 
   private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(!is(Partnership))(
@@ -261,7 +266,7 @@ case class CheckPartnerDetailsViewModel(
     yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
 
   private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    vatRegistrationNumber.map { vat =>
+    if (postScreenerDisplayCondition(addVatRegistrationNumber)) {
       val label = labelFor("vatRegistrationNumber")
       // NOTE: routing will be done with the integration ticket
       val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
@@ -272,8 +277,8 @@ case class CheckPartnerDetailsViewModel(
         else if (isNewPartnerSubmitted) Seq(change, remove)
         else Seq(change)
 
-      optionalRow(label, Some(Text(vat)), actions, change)
-    }
+      Some(optionalRow(label, vatRegistrationNumber.map(vat => Text(vat)), actions, change))
+    } else None
 
   private def isIncorporatedInUkRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(is(Corporatebody))(
@@ -348,17 +353,20 @@ case class CheckPartnerDetailsViewModel(
       routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index).url
     )
 
-  private def additionalInformationRow(implicit messages: Messages): SummaryListRow = {
-    val label = labelFor("additionalInformation")
-    // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-    val remove = removeAction(
-      routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url,
-      label
-    )
+  private def additionalInformationRow(implicit messages: Messages): Option[SummaryListRow] =
+    if (postScreenerDisplayCondition(addAdditionalInformation)) {
 
-    optionalRow(label, additionalInformation.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+      val label = labelFor("additionalInformation")
+      // NOTE: routing will be done with the integration ticket
+      val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val remove = removeAction(
+        routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+        label
+      )
+
+      Some(optionalRow(label, additionalInformation.map(Text(_)), changeOrRemove(change, remove), change))
+
+    } else None
 
   // --- Contact details rows ---
 
@@ -376,27 +384,28 @@ case class CheckPartnerDetailsViewModel(
     // NOTE: routing will be done with the integration ticket
     yesNoRow("addFaxNumber", addFaxNumber, routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index).url)
 
-  private def faxNumberRow(implicit messages: Messages): SummaryListRow = {
+  private def faxNumberRow(implicit messages: Messages): Option[SummaryListRow] = if (postScreenerDisplayCondition(addFaxNumber)) {
+
     val label = labelFor("faxNumber")
     // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
     val remove = removeAction(routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    optionalRow(label, faxNumber.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+    Some(optionalRow(label, faxNumber.map(Text(_)), changeOrRemove(change, remove), change))
+  } else None
 
   private def addEmailAddressRow(implicit messages: Messages): Option[SummaryListRow] =
     // NOTE: routing will be done with the integration ticket
     yesNoRow("addEmailAddress", addEmailAddress, routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index).url)
 
-  private def emailAddressRow(implicit messages: Messages): SummaryListRow = {
+  private def emailAddressRow(implicit messages: Messages): Option[SummaryListRow] = if (postScreenerDisplayCondition(addEmailAddress)) {
     val label = labelFor("emailAddress")
     // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsEmailAddressController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
     val remove = removeAction(routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    optionalRow(label, emailAddress.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+    Some(optionalRow(label, emailAddress.map(Text(_)), changeOrRemove(change, remove), change))
+  } else None
 
   // --- Row builders ---
 
