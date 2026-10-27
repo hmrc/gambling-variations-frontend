@@ -120,14 +120,14 @@ case class CheckPartnerDetailsViewModel(
     Some(dateOfJoiningRow),
     addNinoRow,
     ninoRow,
+    isIncorporatedInUkRow,
+    dateOfIncorporationRow,
+    companyRegistrationNumberRow,
+    countryOfIncorporationRow,
+    foreignCorporateReferenceRow,
     utrRow,
     addVatRegistrationNumberRow,
-    vatRegistrationNumberRow,
-    isIncorporatedInUkRow,
-    countryOfIncorporationRow,
-    dateOfIncorporationRow,
-    foreignCorporateReferenceRow,
-    companyRegistrationNumberRow
+    vatRegistrationNumberRow
   ).flatten
 
   def addressSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
