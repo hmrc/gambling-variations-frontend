@@ -100,7 +100,9 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       typeOfBusiness            = Some(Soleproprietor),
       businessName              = Some("Ms PartnerFirst1 PartnerLast1"),
       soleProprietorDob         = Some("2 Jan 1985"),
+      addNino                   = Some(true),
       nino                      = Some("AA-000001-A"),
+      addVatRegistrationNumber  = Some(true),
       vatRegistrationNumber     = Some("123450002"),
       isIncorporatedInUk        = None,
       dateOfIncorporation       = None,
@@ -466,8 +468,9 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
     "NINO actions" - {
 
       "change only for a new partner that has not been saved" in {
+        val viewModel = soleProprietor.copy(addNino = Some(true))
 
-        actionsOf(rowFor(soleProprietor.businessDetailsSummaryList, "nino").value) mustBe Seq(change)
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "nino").value) mustBe Seq(change)
       }
 
       "change and remove for a new partner that has been saved" in {
