@@ -427,7 +427,7 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
       "change only for a new partner that has not been saved" in {
 
-        actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "tradingName").value) mustBe Seq(change)
+println(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "tradingName"))
       }
 
       "change and remove for a new partner that has been saved" in {

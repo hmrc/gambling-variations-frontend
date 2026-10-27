@@ -116,7 +116,7 @@ case class CheckPartnerDetailsViewModel(
     businessNameRow,
     soleProprietorDobRow,
     addTradingNameRow,
-    Some(tradingNameRow),
+    tradingNameRow,
     Some(dateOfJoiningRow),
     addNinoRow,
     ninoRow,
@@ -214,14 +214,16 @@ case class CheckPartnerDetailsViewModel(
     // NOTE: routing will be done with the integration ticket
     yesNoRow("addTradingName", addTradingName, routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index).url)
 
-  private def tradingNameRow(implicit messages: Messages): SummaryListRow = {
-    val label = labelFor("tradingName")
-    // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-    val remove = removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+  private def tradingNameRow(implicit messages: Messages): Option[SummaryListRow] =
+    if (postScreenerDisplayCondition(addTradingName)) {
+      val label = labelFor("tradingName")
+      // NOTE: routing will be done with the integration ticket
+      val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val remove =
+        removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+      Some(optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change))
+    } else None
 
   private def dateOfJoiningRow(implicit messages: Messages): SummaryListRow =
     requiredRow(
