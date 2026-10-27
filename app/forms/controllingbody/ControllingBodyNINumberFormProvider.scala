@@ -47,7 +47,7 @@ object ControllingBodyNINumberFormProvider {
   private[forms] val requiredKey = "controllingBodyAddNino.error.required"
 
   private[forms] val invalidCharsKey = "controllingBodyAddNino.error.invalidChars"
-  private[forms] val ninoCharsRegex = """^[A-Z0-9]+$"""
+  private[forms] val ninoCharsRegex = """^[A-Za-z0-9]+$"""
 
   private[forms] val invalidFormatKey = "controllingBodyAddNino.error.invalidFormat"
   private[forms] val ninoValidRegex = """^[ABCE-Z]{2}[0-9]{6}[A-D]$"""
