@@ -1515,3 +1515,9 @@ reasonForCancellation.businessIsPartOfTheGroup = Business is now part of a group
 reasonForCancellation.error.required = Select why you are cancelling this registration
 reasonForCancellation.checkYourAnswersLabel = reasonForCancellation
 reasonForCancellation.change.hidden = ReasonForCancellation
+
+registrationCancellationDeclaration.title = Declaration
+registrationCancellationDeclaration.heading = Declaration
+registrationCancellationDeclaration.caption = Cancel registration
+registrationCancellationDeclaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+registrationCancellationDeclaration.submit = Declare and submit
