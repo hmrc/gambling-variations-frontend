@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.FaxNumberForCorrespondenceYesNoView
+import views.html.correspondencedetails.FaxNumberForCorrespondenceYesNoView
 
 class FaxNumberForCorrespondenceYesNoViewSpec extends SpecBase {
 

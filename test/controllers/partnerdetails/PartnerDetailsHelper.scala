@@ -46,7 +46,7 @@ trait PartnerDetailsHelper {
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
-  val todayDate = LocalDate.of(2026, 1, 1)
+  val todayDate: LocalDate = LocalDate.of(2026, 1, 1)
 
   class PaginationHelper(
     size: 1 | 2 | 3 | 10 | 100,
@@ -112,9 +112,9 @@ trait PartnerDetailsHelper {
     val to: Int = (page * elementsPerPage).min(totalRecords)
   }
 
-  def emptyData = Json.obj()
+  def emptyData: JsObject = Json.obj()
 
-  def minimalValidData = Json.obj(
+  def minimalValidData: JsObject = Json.obj(
     "partners" -> Json.obj()
   )
 
@@ -226,6 +226,22 @@ trait PartnerDetailsHelper {
         "partnerDetailsIsFutureLeaveDate"      -> 0,
         "partnerDetailsIsFutureJoinDate"       -> 0,
         "partnerDetailsBusinessType"           -> 1
+      )
+    )
+  )
+
+  def cleanedDataNewPartnersRouting(
+    businessType: Int,
+    isIncorporatedInTheUK: Boolean = true
+  ): JsObject = Json.obj(
+    "partners" -> Json.obj(),
+    "newPartners" -> Json.arr(
+      Json.obj(
+        "partnerDetailsMgdRegNumber"             -> mgdRegNumber,
+        "partnerDetailsDateOfIncorporation"      -> "2020-03-01",
+        "partnerDetailsCountryOfIncorporation"   -> null,
+        "partnerDetailsIsBusinessIncorporatedUk" -> isIncorporatedInTheUK,
+        "partnerDetailsBusinessType"             -> businessType
       )
     )
   )

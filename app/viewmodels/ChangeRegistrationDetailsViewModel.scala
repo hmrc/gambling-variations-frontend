@@ -97,7 +97,7 @@ object ChangeRegistrationDetailsViewModel {
         Some(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.correspondenceDetails"),
-            routes.CheckCorrespondenceDetailsController.onPageLoad().url,
+            controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad().url,
             status(CorrespondenceDetailsChangesPage)
           )
         ),

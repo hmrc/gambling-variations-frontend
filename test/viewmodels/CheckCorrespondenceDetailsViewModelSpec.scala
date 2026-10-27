@@ -75,14 +75,14 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       val vm = viewModel(correspondenceName = None)
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceNameController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceNameController.onPageLoad()
     }
 
     "navigate to CorrespondenceUKAddrScreenerController when correspondence address is missing" in {
       val vm = viewModel(correspondenceAddress = None)
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
     }
 
     "navigate to CorrespondenceUKAddrScreenerController when address line 1 is empty" in {
@@ -100,7 +100,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
     }
 
     "navigate to CorrespondenceContactNumberController when both phone numbers are missing" in {
@@ -110,14 +110,14 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceContactNumberController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad()
     }
 
     "navigate to CheckCorrespondenceDetailsController when mandatory details are present" in {
       val vm = viewModel()
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
   }
 
@@ -130,7 +130,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceNameController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceNameController.onPageLoad()
     }
 
     "navigate to CorrespondenceUKAddrScreenerController when address is missing" in {
@@ -140,7 +140,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
     }
 
     "navigate to CorrespondenceUKAddrScreenerController when address line 1 is empty" in {
@@ -159,7 +159,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceUKAddrScreenerController.onPageLoad()
     }
 
     "navigate to CorrespondenceContactNumberController when contact numbers are missing" in {
@@ -170,7 +170,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CorrespondenceContactNumberController.onPageLoad()
+        controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad()
     }
 
     "navigate to CheckCorrespondenceDetailsController when all required details are present" in {
@@ -179,7 +179,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
     "navigate to CheckCorrespondenceDetailsController when additional name is missing" in {
@@ -189,7 +189,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
     "navigate to CheckCorrespondenceDetailsController when fax number is missing" in {
@@ -199,7 +199,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
     "navigate to CheckCorrespondenceDetailsController when email address is missing" in {
@@ -209,7 +209,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
   }
 
@@ -223,7 +223,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
     "not require the additional address information yes/no answer" in {
@@ -234,7 +234,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
     "not require the fax yes/no answer" in {
@@ -245,7 +245,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
 
     "not require the email yes/no answer" in {
@@ -256,7 +256,7 @@ class CheckCorrespondenceDetailsViewModelSpec extends AnyWordSpec with Matchers 
       )
 
       vm.continueCall shouldBe
-        controllers.routes.CheckCorrespondenceDetailsController.onContinue()
+        controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onContinue()
     }
   }
 
