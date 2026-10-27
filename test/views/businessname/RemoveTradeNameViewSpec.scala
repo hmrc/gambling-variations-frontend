@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.businessname
 
 import base.SpecBase
 import forms.RemoveTradeNameFormProvider
