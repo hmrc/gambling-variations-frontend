@@ -16,24 +16,48 @@
 
 package controllers
 
+import controllers.Execution.trampoline
 import controllers.actions.*
-import javax.inject.Inject
+import forms.DeclarationSubmittedFormProvider
+import models.NormalMode
+import navigation.Navigator
+import pages.{DeclarationPage, GroupMemberPage}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DeclarationView
 
+import javax.inject.Inject
+import scala.concurrent.Future
+
 class DeclarationController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessDetailsDataRequiredAction,
+  formProvider: DeclarationSubmittedFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: DeclarationView
 ) extends FrontendBaseController
     with I18nSupport {
 
+  val form: Form[Boolean] = formProvider()
+
   def onPageLoad: Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    Ok(view())
+    request.userAnswers
+      .get(GroupMemberPage)
+      .fold(Redirect(routes.SystemErrorController.onPageLoad()))(isGroupMember => Ok(view(form, isGroupMember)))
   }
+
+  def onSubmit: Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarationPage, true))
+        _              <- sessionRepository.set(updatedAnswers)
+      } yield Redirect(navigator.nextPage(DeclarationPage, NormalMode, updatedAnswers))
+    }
 }

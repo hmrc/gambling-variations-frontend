@@ -21,12 +21,15 @@ import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
 import models.controllingbody.ControlBodyDetails
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
-import models.{Address, BusinessAddress, BusinessContactDetails, BusinessDetails, BusinessNameDetails, BusinessTradeClass, BusinessType, ContactNumber, CorrespondenceDetails, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnerDetails, PartnersDetails}
+import models.*
+import org.mockito.Mockito
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import repositories.SessionRepository
 import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 
 import java.time.LocalDate
@@ -56,6 +59,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         "microservice.services.gambling.host"     -> "localhost",
         "microservice.services.gambling.port"     -> wireMockServer.port()
       )
+      .overrides(bind[SessionRepository].toInstance(Mockito.mock(classOf[SessionRepository])))
       .build()
 
   private lazy val connector =

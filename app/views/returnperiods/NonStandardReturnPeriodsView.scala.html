@@ -27,13 +27,14 @@
     govukButton: GovukButton,
     caption: Caption,
     paragraph: Paragraph,
+    paragraphWithLink:ParagraphMessageWithLink,
     sectionBreak: SectionBreak,
     h1: H1
 )
 
 @(form: Form[_], viewModel: NonStandardReturnPeriodsViewModel, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("returnPeriods.nonStandard.title"))) {
+@layout(pageTitle = title(form, messages("returnPeriods.nonStandard.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(action = controllers.returnperiods.routes.ReturnPeriodsController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
@@ -44,6 +45,20 @@
     @caption(messages("changeRegistrationDetails.caption"))
 
     @h1(messages("returnPeriods.nonStandard.title"))
+
+
+    @if(!viewModel.hasFuturePeriods) {
+        @paragraph("You do not have any upcoming non-standard return periods.")
+    }
+
+    @if(!viewModel.isInLastNonStandardReturnPeriod){
+        @paragraphWithLink(
+            Some(messages("returnPeriods.nonStandard.notLastPeriod.p1")),
+            messages("returnPeriods.nonStandard.notLastPeriod.p2"),
+            Some(messages("returnPeriods.nonStandard.notLastPeriod.p3")),
+            "return-periods/see-confluence"
+        )
+    }
 
     @if(viewModel.hasFuturePeriods){
         <table class="govuk-table">
@@ -142,17 +157,30 @@
         </table>
     }
 
-
     @govukRadios(
-       RadiosViewModel(
-           field  = form("value"),
-           legend = LegendViewModel(messages("returnPeriods.nonStandard.option.legend")).withCssClass("govuk-fieldset__legend--m"),
-           items  = NonStandardReturnPeriodsOptions.options(viewModel.isInLastNonStandardReturnPeriod, viewModel.selectedMonths)
-       )
+        if(viewModel.isInLastNonStandardReturnPeriod) {
+            RadiosViewModel(
+                field  = form("value"),
+                legend = LegendViewModel(Text(messages("returnPeriods.nonStandard.option.legend"))).withCssClass("govuk-fieldset__legend--m"),
+                items  = NonStandardReturnPeriodsOptions.options(viewModel.selectedMonths)
+            )
+        } else {
+            RadiosViewModel.yesNo(
+                field = form("value"),
+                legend = LegendViewModel(messages("returnPeriods.nonStandard.switchToStandard.caption")).withCssClass("govuk-fieldset__legend--m")
+            )
+            .withHint(
+                HintViewModel(messages("returnPeriods.nonStandard.switchToStandard.hint", viewModel.selectedMonths.map(messages.apply(_))*))
+            )
+        }
     )
+
+
+
 
     @govukButton(
         ButtonViewModel(messages("site.continue"))
     )
+
     }
 }

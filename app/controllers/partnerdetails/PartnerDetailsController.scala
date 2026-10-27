@@ -85,7 +85,8 @@ class PartnerDetailsController @Inject() (
           preparedForm,
           viewModel,
           paginatedPartnerNumbers.paginationViewModel,
-          selectedPage,
+          paginatedPartnerNumbers.currentPage,
+          paginatedPartnerNumbers.totalPages,
           paginatedPartnerNumbers.from,
           paginatedPartnerNumbers.to,
           paginatedPartnerNumbers.totalRecords
@@ -124,7 +125,8 @@ class PartnerDetailsController @Inject() (
                   formWithErrors,
                   viewModel,
                   paginatedPartnerNumbers.paginationViewModel,
-                  selectedPage,
+                  paginatedPartnerNumbers.currentPage,
+                  paginatedPartnerNumbers.totalPages,
                   paginatedPartnerNumbers.from,
                   paginatedPartnerNumbers.to,
                   paginatedPartnerNumbers.totalRecords
@@ -147,6 +149,7 @@ class PartnerDetailsController @Inject() (
                 val newPartnerIndex = PartnerUtils.findIndexForNewPartner(updatedAnswers)
                 for {
                   updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
+                  updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsMgdRegNumberPage(newPartnerIndex), updatedAnswers.id))
                   _              <- sessionRepository.set(updatedAnswers)
                 } yield ()
 

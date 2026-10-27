@@ -168,12 +168,12 @@ object PartnerDetailsViewModel {
 
   private def onPartnerDetailsRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
     case _: Int =>
-      routes.PartnerDetailsController
-        .onPartnerDetails(partnerNumber.toString, NormalMode)
+      routes.PartnerDetailsCheckYourAnswersController
+        .onPageLoad(partnerNumber.toString)
         .url
     case _: String =>
-      routes.PartnerDetailsController
-        .onPartnerDetails(partnerNumber.toString, CheckMode)
+      routes.PartnerDetailsCheckYourAnswersController
+        .onPageLoad(partnerNumber.toString)
         .url
   }
 

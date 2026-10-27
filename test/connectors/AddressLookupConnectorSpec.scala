@@ -21,6 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.Address
 import models.addresslookup.*
+import org.mockito.Mockito
 import org.scalactic.Prettifier.default
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -28,8 +29,10 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
 import play.api.http.HeaderNames
 import play.api.http.Status.*
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
+import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -56,6 +59,7 @@ class AddressLookupConnectorSpec extends AsyncWordSpec with Matchers with Before
         "microservice.services.address-lookup-frontend.host"     -> "localhost",
         "microservice.services.address-lookup-frontend.port"     -> wireMockServer.port()
       )
+      .overrides(bind[SessionRepository].toInstance(Mockito.mock(classOf[SessionRepository])))
       .build()
 
   private lazy val connector =

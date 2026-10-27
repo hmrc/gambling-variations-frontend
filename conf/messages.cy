@@ -11,6 +11,9 @@ site.start = Dechrau nawr
 site.startAgain = Dechreuwch eto
 site.signIn = Mewngofnodi
 site.govuk = GOV.UK
+site.pagination.next = cy: Next
+site.pagination.previous = cy: Previous
+site.pagination.page = cy" (page {0} of {1})
 
 date.day = Diwrnod
 date.month = Mis
@@ -36,6 +39,22 @@ error.summary.title = Mae problem
 index.title = cy: Welcome to the filing Machine Game Duty
 index.heading = cy: Welcome to the filing Machine Game Duty
 index.guidance = cy: Welcome to your new frontend. Please see the README file for a guide to getting started.
+
+declaration.title = cy: Declaration
+declaration.heading = cy: Declaration
+declaration.p1 = cy: To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+declaration.group.p1 = cy: The conditions for setting up a Machine Games Duty group are that:
+declaration.group.bp1 = cy: all members must be companies with a UK establishment
+declaration.group.bp2 = cy: overseas‑incorporated companies must have a fixed place of business in the UK
+declaration.group.bp3 = cy: at least 1 member must be trading or intend to trade
+declaration.group.bp4 = cy: when a company joins the group, we will de-register its existing registration and register it as part of the group
+declaration.group.bp5 = cy: if an Isle of Man company joins the group, the Isle of Man authorities will de-register it
+declaration.group.bp6 = cy: all companies joining the group must operate under the same common control
+declaration.group.bp7 = cy: the controlling body can act as the representative member, but must own at least 51% of the shares or hold most of the voting rights in the group
+declaration.group.bp8 = cy: the controlling body must share the group''s risks and rewards, or it must consolidate its accounts with the other companies in the group
+declaration.group.link = cy: You can view Excise Notice 452 for more information on group registration (opens in new tab).
+declaration.group.p2 = cy: I confirm that all the group members and the controlling body, if appropriate, meet the conditions for a Machine Games Duty group.
+declaration.submit = cy: Declare and submit
 
 checkYourAnswers.title = cy: Check your answers
 checkYourAnswers.heading = cy: Check your answers
@@ -464,8 +483,7 @@ controllingBodyEmailAddress.error.invalid = cy: The email address must only incl
 controllingBodyEmailAddress.error.length = cy: The email address must be 70 characters or less
 
 
-site.pagination.next = cy: Next
-site.pagination.previous = cy: Previous
+
 partnerDetails.partner.count = cy: Showing <strong>{0}</strong> to <strong>{1}</strong> of <strong>{2}</strong> records
 
 removeControllingBodyTradeName.title = cy:  Are you sure you want to remove this controlling body’s trading name?
@@ -477,6 +495,10 @@ controllingBodyAdditionalAddressInformationYesNo.heading = cy: Do you want to in
 controllingBodyAdditionalAddressInformationYesNo.error.required = cy: Select yes to include additional information for the controlling body’s address
 controllingBodyAdditionalAddressInformationYesNo.hint = cy: For example, building name or floor number
 
+removeControllingBodyFaxNumber.title = cy: Are you sure you want to remove this controlling body’s fax number?
+removeControllingBodyFaxNumber.heading = cy: Are you sure you want to remove {0} as this controlling body’s fax number?
+removeControllingBodyFaxNumber.error.required = cy: Select yes if you want to remove this controlling body’s fax number
+
 partnerDetailsRemovePartnerYesNo.title = cy: Are you sure you want to remove this partner?
 partnerDetailsRemovePartnerYesNo.heading = cy: Are you sure you want to remove {0}?
 partnerDetailsRemovePartnerYesNo.checkYourAnswersLabel = cy: Are you sure you want to remove this partner?
@@ -486,3 +508,36 @@ partnerDetailsRemovePartnerYesNo.error.required = cy: Select yes if you want to 
 removeControllingBodyEmail.title = cy: Are you sure you want to remove this controlling body's email address?
 removeControllingBodyEmail.heading = cy: Are you sure you want to remove {0} as this controlling body’s email address?
 removeControllingBodyEmail.error.required = cy: Select yes if you want to remove this controlling body’s email address
+
+controllingBodyBusinessUKIncorporated.title = cy: Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.heading = cy: Is the controlling body’s business incorporated in the UK?
+controllingBodyBusinessUKIncorporated.error.required = cy: Select yes if the controlling body’s business is incorporated in the UK
+
+controllingBodySoleProprietorDob.title = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.heading = cy: What is the sole proprietor’s date of birth?
+controllingBodySoleProprietorDob.hint = cy: For example, 31 3 1980
+controllingBodySoleProprietorDob.error.required.all = cy: Enter a date of birth for the sole proprietor
+controllingBodySoleProprietorDob.error.required.two = cy: Date of birth must include a {0} and a {1}
+controllingBodySoleProprietorDob.error.required = cy: Date of birth must include a {0}
+controllingBodySoleProprietorDob.error.invalid = cy: Date of birth must be a real date
+controllingBodySoleProprietorDob.error.afterLatestDate = cy: Date of birth must be the same as or before {0}
+
+controllingBodyCompanyRegNumber.title = cy: Tell us the controlling body’s company registration number
+controllingBodyCompanyRegNumber.heading = cy: Tell us the controlling body’s company registration number
+controllingBodyCompanyRegNumber.paragraph = cy: What is the company registration number?
+controllingBodyCompanyRegNumber.hint = cy: It can be up to 8 numbers, or start with 2 letters followed by up to 6 letters or numbers, for example AC123456, IPCFGEDT or 000123
+controllingBodyCompanyRegNumber.error.required = cy: Enter the controlling body’s company registration number
+controllingBodyCompanyRegNumber.error.invalid.characters = cy: The controlling body’s company registration number must only include letters a to z and numbers 0 to 9
+controllingBodyCompanyRegNumber.error.invalid.format = cy: The controlling body’s company registration number must be in the correct format
+controllingBodyCompanyRegNumber.p1 = cy: You can find this by
+controllingBodyCompanyRegNumber.link = cy: searching for the company on the Companies House register (opens in new tab)
+
+dateOfIncorporation.title = cy: When was the controlling body’s date of incorporation?
+dateOfIncorporation.heading = cy: When was the controlling body’s date of incorporation?
+dateOfIncorporation.hint = cy: For example, 27 3 2007
+dateOfIncorporation.checkYourAnswersLabel = cy: DateOfIncorporation
+dateOfIncorporation.error.required.all = cy: Enter a date of incorporation for the controlling body
+dateOfIncorporation.error.required.two = cy: Date of incorporation must include a {0} and a {1}
+dateOfIncorporation.error.required = cy: Date of incorporation must include a {0}
+dateOfIncorporation.error.invalid = cy: Date of incorporation must be a real date
+dateOfIncorporation.change.hidden = cy: DateOfIncorporation

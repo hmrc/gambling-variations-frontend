@@ -46,7 +46,7 @@ trait PartnerDetailsHelper {
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
-  val todayDate = LocalDate.of(2026, 1, 1)
+  val todayDate: LocalDate = LocalDate.of(2026, 1, 1)
 
   class PaginationHelper(
     size: 1 | 2 | 3 | 10 | 100,
@@ -69,6 +69,7 @@ trait PartnerDetailsHelper {
             .success
             .value
         )
+
       newPartnersIndexes
         .foldLeft(userAnswersExistingUsers)((answers, indexAndBusinessName) =>
           answers
@@ -93,7 +94,7 @@ trait PartnerDetailsHelper {
     }
 
     val paginationService = new PaginationService(10, 100, 5)
-    def paginationResult: PaginationResult = paginationService.paginateAlphabeticallyPartnerDetails(
+    val paginationResult: PaginationResult = paginationService.paginateAlphabeticallyPartnerDetails(
       completedNewPartners   = Seq.empty,
       existingPartnerDetails = partnerDetailsBusinessNumberList,
       userAnswers            = createValidUserAnswers(businessNumbers, newPartnersIndexes),
@@ -103,16 +104,17 @@ trait PartnerDetailsHelper {
     )
     val elementsPerPage = 10
     val paginatedViewModel: PaginationViewModel = paginationResult.paginationViewModel
-    val page: Int = currentPage
+    val page: Int = paginationResult.currentPage
+    val totalPages: Int = paginationResult.totalPages
     val totalRecords: Int = size
 
     val from: Int = page * elementsPerPage - elementsPerPage + 1
     val to: Int = (page * elementsPerPage).min(totalRecords)
   }
 
-  def emptyData = Json.obj()
+  def emptyData: JsObject = Json.obj()
 
-  def minimalValidData = Json.obj(
+  def minimalValidData: JsObject = Json.obj(
     "partners" -> Json.obj()
   )
 
@@ -224,6 +226,22 @@ trait PartnerDetailsHelper {
         "partnerDetailsIsFutureLeaveDate"      -> 0,
         "partnerDetailsIsFutureJoinDate"       -> 0,
         "partnerDetailsBusinessType"           -> 1
+      )
+    )
+  )
+
+  def cleanedDataNewPartnersRouting(
+    businessType: Int,
+    isIncorporatedInTheUK: Boolean = true
+  ): JsObject = Json.obj(
+    "partners" -> Json.obj(),
+    "newPartners" -> Json.arr(
+      Json.obj(
+        "partnerDetailsMgdRegNumber"             -> mgdRegNumber,
+        "partnerDetailsDateOfIncorporation"      -> "2020-03-01",
+        "partnerDetailsCountryOfIncorporation"   -> null,
+        "partnerDetailsIsBusinessIncorporatedUk" -> isIncorporatedInTheUK,
+        "partnerDetailsBusinessType"             -> businessType
       )
     )
   )

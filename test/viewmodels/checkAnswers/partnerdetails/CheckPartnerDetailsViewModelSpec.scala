@@ -79,7 +79,8 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       isDueToLeave              = false,
       isDueToJoin               = false,
       isMissingMandatoryDetails = false,
-      hasChanges                = None
+      hasChanges                = None,
+      hasAnsweredAllQuestions   = true
     )
 
   private val newPartnerNotSaved: CheckPartnerDetailsViewModel =
@@ -374,6 +375,49 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         utrRow.value.content mustBe Text(messages("partnerDetailsCheckYourAnswers.noData"))
         utrRow.actions mustBe None
+      }
+    }
+
+    "type of business row" - {
+
+      "be shown in the new partner flow before the partner is submitted" in {
+
+        keys(newPartnerNotSaved.businessDetailsSummaryList) must contain(label("typeOfBusiness"))
+      }
+
+      "show the translated business type as its value" in {
+
+        val bt = newPartnerNotSaved.typeOfBusiness.value
+        val row = rowFor(newPartnerNotSaved.businessDetailsSummaryList, "typeOfBusiness").value
+
+        row.value.content.asHtml.body must include(messages(s"businessType.$bt"))
+      }
+
+      "be changeable in the new partner flow" in {
+
+        actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "typeOfBusiness").value) mustBe Seq(change)
+      }
+
+      "show an add link with no actions when the business type is missing" in {
+
+        val viewModel = newPartnerNotSaved.copy(typeOfBusiness = None)
+
+        val row = rowFor(viewModel.businessDetailsSummaryList, "typeOfBusiness").value
+
+        row.value.content.asHtml.body must include(messages("partnerDetailsCheckYourAnswers.typeOfBusiness.add"))
+        row.actions mustBe None
+      }
+
+      "not be shown once the new partner has been submitted" in {
+
+        val viewModel = newPartnerNotSaved.copy(maybeSubmitted = Some(true))
+
+        keys(viewModel.businessDetailsSummaryList) must not contain label("typeOfBusiness")
+      }
+
+      "not be shown for an existing partner" in {
+
+        keys(existingPartner.businessDetailsSummaryList) must not contain label("typeOfBusiness")
       }
     }
 

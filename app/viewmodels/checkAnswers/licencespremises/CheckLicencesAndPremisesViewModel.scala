@@ -38,6 +38,7 @@ case class CheckLicencesAndPremisesViewModel(
   hasPremisesNotCovered: Boolean,
   provideAddressesAnswer: Option[LicencesAndPremisesRadioOptions],
   premisesCount: Int,
+  isNotCoveredMissing: Boolean,
   isSubmitted: Boolean
 ) {
 
@@ -71,7 +72,9 @@ case class CheckLicencesAndPremisesViewModel(
     isPremisesDetailsRequired && provideAddresses == ByPost
 
   val continueUrl: String =
-    if (isMissingProvideAddresses) {
+    if (isNotCoveredMissing) {
+      routes.PremisesNotCoveredYesNoController.onPageLoad().url
+    } else if (isMissingProvideAddresses) {
       routes.LicencesPremisesController.onPageLoad().url
     } else if (isMissingOnlinePremises) {
       findPremisesAddressUrl
@@ -190,6 +193,7 @@ object CheckLicencesAndPremisesViewModel {
       hasPremisesNotCovered  = answers.premisesNotCoveredAnswer,
       provideAddressesAnswer = answers.get(LicencesPremisesPage),
       premisesCount          = answers.premisesCount,
+      isNotCoveredMissing    = answers.isPremisesNotCoveredMissing,
       isSubmitted            = checkFlag(answers, LicencesPremisesDetailsChangesPage, LicencesPremisesDetailsSubmittedPage)
     )
 }

@@ -52,6 +52,21 @@
   upperBoundary.format(longDateFormatter)
  }
 
+ @exampleDateFormatter = @{
+  DateTimeFormatter.ofPattern("d M yyyy", Locale.ENGLISH)
+ }
+
+ @middleDate = @{
+  val daysBetween = java.time.temporal.ChronoUnit.DAYS.between(lowerBoundary, upperBoundary)
+  lowerBoundary.plusDays(daysBetween / 2)
+ }
+
+ @exampleDate = @{
+  middleDate
+  .withDayOfMonth(middleDate.lengthOfMonth())
+  .format(exampleDateFormatter)
+ }
+
 
 @layout(pageTitle = title(form, messages("enterNonStandardPeriodDate.title", periodMonthYear, periodNumber, numberOfPeriods), Some(messages("changeRegistrationDetails.caption")))) {
 
@@ -76,7 +91,7 @@
      messages("enterNonStandardPeriodDate.heading", periodMonthYear, periodNumber, numberOfPeriods)
      ).asPageHeading(Large)
      ).withHint(
-         HintViewModel(messages("enterNonStandardPeriodDate.hint", lowerBoundaryText, upperBoundaryText))
+         HintViewModel(messages("enterNonStandardPeriodDate.hint", lowerBoundaryText, upperBoundaryText, exampleDate))
      )
    )
 

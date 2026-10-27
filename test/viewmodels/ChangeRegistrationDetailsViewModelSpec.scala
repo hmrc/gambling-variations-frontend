@@ -127,7 +127,7 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       urlOf("Business name") mustEqual controllers.businessname.routes.CheckBusinessNameController.onPageLoad().url
       urlOf("Business address") mustEqual controllers.businessaddress.routes.CheckBusinessAddressController.onPageLoad().url
       urlOf("Business contact details") mustEqual controllers.businesscontactdetails.routes.CheckContactDetailsController.onPageLoad().url
-      urlOf("Correspondence details") mustEqual routes.CheckCorrespondenceDetailsController.onPageLoad().url
+      urlOf("Correspondence details") mustEqual controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad().url
       urlOf("Trading details") mustEqual controllers.tradingdetails.routes.CheckTradingDetailsController.onPageLoad().url
       urlOf("Licences and premises") mustEqual controllers.licencespremises.routes.CheckLicencesAndPremisesController.onPageLoad().url
     }
