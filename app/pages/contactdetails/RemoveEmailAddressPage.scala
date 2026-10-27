@@ -16,12 +16,12 @@
 
 package pages.contactdetails
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object RemoveEmailAddressPage extends QuestionPage[Boolean] {
+case object RemoveEmailAddressPage extends FlagPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = BusinessContactDetailsSection.path \ toString
 
   override def toString: String = "removeEmailAddress"
 }

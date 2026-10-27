@@ -43,13 +43,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new FaxNumberFormProvider()
   val form = formProvider("faxNumber")
-  val noAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      GroupMemberPage.toString        -> false,
-      "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-    )
-  )
+  val noAnswers = LoadedContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
   lazy val faxNumberRoute = controllers.businesscontactdetails.routes.FaxNumberController.onPageLoad().url
 
   "FaxNumber Controller" - {
@@ -72,13 +66,10 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to access denied when group member is true on GET" in {
 
-      val data = Json.obj(
-        GroupMemberPage.toString        -> true,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+      val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
 
       running(application) {
         val request = FakeRequest(GET, faxNumberRoute)
@@ -95,11 +86,10 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
       val data = Json.obj(
         GroupMemberPage.toString        -> false,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId),
-        BusinessFaxNumberPage.toString  -> "07700900999"
+        "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> "07700900999")
       )
 
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers = LoadedContactDetails(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -171,13 +161,10 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to access denied when group member is true on POST" in {
 
-      val data = Json.obj(
-        GroupMemberPage.toString        -> true,
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId)
-      )
+      val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
 
       running(application) {
         val request =
