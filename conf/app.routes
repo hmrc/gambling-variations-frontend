@@ -369,6 +369,7 @@ POST       /cancel-registration/declaration                      controllers.can
 
 GET        /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+
 GET        /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)
 
