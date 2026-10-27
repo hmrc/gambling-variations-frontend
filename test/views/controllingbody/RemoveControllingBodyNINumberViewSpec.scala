@@ -32,7 +32,7 @@ class RemoveControllingBodyNINumberViewSpec extends SpecBase {
           messages(application)("removeControllingBodyNINumber.heading", nino)
 
         document.title() must include(
-          messages(application)("removeControllingBodyNINumber.title")
+          messages(application)("removeControllingBodyNINumber.title", nino)
         )
 
         document.select("span").select(".govuk-caption-l").text() mustEqual
