@@ -31,7 +31,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.PreviousRegistrationNumbersView
+import views.html.tradingdetails.PreviousRegistrationNumbersView
 
 import scala.concurrent.Future
 

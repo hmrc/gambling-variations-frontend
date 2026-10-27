@@ -23,13 +23,13 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.correspondencedetails.AddCorrespondingDetailsYesNoView
+import views.html.correspondencedetails.AddCorrespondenceDetailsYesNoView
 
 class AddCorrespondenceDetailsYesNoViewSpec extends SpecBase {
 
   private val form = new AddCorrespondingDetailsYesNoFormProvider()()
 
-  "AddCorrespondingDetailsYesNoView" - {
+  "AddCorrespondenceDetailsYesNoView" - {
 
     "render the page correctly" in {
 
@@ -37,7 +37,7 @@ class AddCorrespondenceDetailsYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[AddCorrespondingDetailsYesNoView]
+        val view = application.injector.instanceOf[AddCorrespondenceDetailsYesNoView]
 
         val html = view(
           form,
@@ -77,7 +77,7 @@ class AddCorrespondenceDetailsYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[AddCorrespondingDetailsYesNoView]
+        val view = application.injector.instanceOf[AddCorrespondenceDetailsYesNoView]
 
         val boundForm = form.bind(Map("value" -> ""))
 

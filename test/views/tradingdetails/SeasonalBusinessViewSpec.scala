@@ -22,7 +22,7 @@ import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.SeasonalBusinessView
+import views.html.tradingdetails.SeasonalBusinessView
 
 class SeasonalBusinessViewSpec extends SpecBase {
 

@@ -33,7 +33,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.OtherTradeClassView
+import views.html.tradingdetails.OtherTradeClassView
 
 import scala.concurrent.Future
 

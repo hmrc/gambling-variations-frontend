@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tradingdetails
 
 import base.SpecBase
 import forms.OtherTradeClassFormProvider
@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.OtherTradeClassView
+import views.html.tradingdetails.OtherTradeClassView
 
 class OtherTradeClassViewSpec extends SpecBase {
 

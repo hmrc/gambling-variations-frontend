@@ -23,7 +23,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.RemoveAssociatedRegNumberView
+import views.html.tradingdetails.RemoveAssociatedRegNumberView
 
 class RemoveAssociatedRegNumberViewSpec extends SpecBase {
 

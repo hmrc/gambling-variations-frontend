@@ -23,7 +23,7 @@ import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.PreviousRegistrationNumbersView
+import views.html.tradingdetails.PreviousRegistrationNumbersView
 
 class PreviousRegistrationNumbersViewSpec extends SpecBase {
 

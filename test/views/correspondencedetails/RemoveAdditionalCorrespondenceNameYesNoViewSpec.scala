@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.RemoveAdditionalCorrespondenceNameYesNoView
+import views.html.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoView
 
 class RemoveAdditionalCorrespondenceNameYesNoViewSpec extends SpecBase {
 

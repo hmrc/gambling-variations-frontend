@@ -31,7 +31,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.AssociatedRegNumberView
+import views.html.tradingdetails.AssociatedRegNumberView
 
 import scala.concurrent.Future
 

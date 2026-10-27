@@ -30,7 +30,7 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.AssociatedRegistrationNumbersView
+import views.html.tradingdetails.AssociatedRegistrationNumbersView
 
 import scala.concurrent.Future
 

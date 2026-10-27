@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.RemovePreviousRegNumberView
+import views.html.tradingdetails.RemovePreviousRegNumberView
 
 class RemovePreviousRegNumberViewSpec extends SpecBase {
 
