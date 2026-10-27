@@ -491,12 +491,17 @@ case class CheckPartnerDetailsViewModel(
   )
 
   private def contactNumbersContent(numbers: ContactNumber)(implicit messages: Messages): Content = {
-    val phoneBlock = numbers.phoneNumber.map(p => s"${messages("contactDetails.label.phoneNumber")}<br>${escape(p)}")
-    val mobileBlock = numbers.mobilePhoneNumber.map(m => s"${messages("contactDetails.label.mobilePhoneNumber")}<br>${escape(m)}")
-    val blocks = Seq(phoneBlock, mobileBlock).flatten
+    def numberBlock(labelKey: String, value: Option[String]): String = {
+      val shown = value.fold(messages("site.notProvided"))(escape)
+      s"${messages(labelKey)}<br>$shown"
+    }
 
-    if (blocks.isEmpty) Text(messages("site.notProvided"))
-    else HtmlContent(Html(blocks.mkString("<br><br>")))
+    val blocks = Seq(
+      numberBlock("contactDetails.label.phoneNumber", numbers.phoneNumber),
+      numberBlock("contactDetails.label.mobilePhoneNumber", numbers.mobilePhoneNumber)
+    )
+
+    HtmlContent(Html(blocks.mkString("<br><br>")))
   }
 }
 
