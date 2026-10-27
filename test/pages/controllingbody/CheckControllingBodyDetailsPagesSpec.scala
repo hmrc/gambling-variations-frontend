@@ -40,7 +40,7 @@ class CheckControllingBodyDetailsPagesSpec extends SpecBase {
         nameLine2             = None,
         correspondenceAddress = Some(address),
         additionalInformation = Some("adi"),
-        iomOrCiFlag           = Some("0"),
+        iomOrCiFlag           = Some(false),
         contactNumber         = Some(ContactNumber(Some("phoneNumber"), Some("mobilePhoneNumber"))),
         faxNumber             = Some("faxNumber"),
         emailAddr             = Some("emailAddr")

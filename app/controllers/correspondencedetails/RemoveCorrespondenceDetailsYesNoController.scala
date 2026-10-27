@@ -21,7 +21,7 @@ import forms.RemoveCorrespondenceDetailsYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
-import pages.isleMOrChannelFlagPage
+import pages.IsleMOrChannelFlagPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -77,7 +77,7 @@ class RemoveCorrespondenceDetailsYesNoController @Inject() (
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceAddressUkPage)
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceAddressNonUkPage)
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceAdditionalInformationPage)
-                  updatedAnswers <- updatedAnswers.remove(isleMOrChannelFlagPage)
+                  updatedAnswers <- updatedAnswers.remove(IsleMOrChannelFlagPage)
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceContactNumberPage)
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceFaxNumberPage)
                   updatedAnswers <- updatedAnswers.remove(CorrespondenceEmailPage)

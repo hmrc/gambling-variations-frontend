@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{PartnerDetails, PartnersDetails, UserAnswers}
+import models.{Address, BusinessPartnerDetails, BusinessType, ContactNumber, CorrespondenceDetails, PartnersDetails, SoleProprietorName, SoleProprietorPartnerDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
@@ -34,6 +34,7 @@ import uk.gov.hmrc.http.UpstreamErrorResponse
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.language.postfixOps
 
 class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
@@ -94,8 +95,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
                 "partnerDetailsVrn"                    -> "GB123456789",
                 "partnerDetailsCrn"                    -> "09876543",
                 "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-                "partnerDetailsIsFutureLeaveDate"      -> 0,
-                "partnerDetailsIsFutureJoinDate"       -> 0,
+                "partnerDetailsIsFutureLeaveDate"      -> false,
+                "partnerDetailsIsFutureJoinDate"       -> false,
                 "partnerDetailsBusinessType"           -> 2
               )
             )
@@ -237,8 +238,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
                 "partnerDetailsVrn"                    -> "GB123456789",
                 "partnerDetailsCrn"                    -> "09876543",
                 "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-                "partnerDetailsIsFutureLeaveDate"      -> 0,
-                "partnerDetailsIsFutureJoinDate"       -> 0,
+                "partnerDetailsIsFutureLeaveDate"      -> false,
+                "partnerDetailsIsFutureJoinDate"       -> false,
                 "partnerDetailsBusinessType"           -> 2
               )
             ),
@@ -315,8 +316,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
               "partnerDetailsVrn"                    -> "GB123456789",
               "partnerDetailsCrn"                    -> "09876543",
               "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-              "partnerDetailsIsFutureLeaveDate"      -> 0,
-              "partnerDetailsIsFutureJoinDate"       -> 0,
+              "partnerDetailsIsFutureLeaveDate"      -> false,
+              "partnerDetailsIsFutureJoinDate"       -> false,
               "partnerDetailsBusinessType"           -> 1
             )
           )
@@ -343,7 +344,12 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         when(sessionRepository.set(any())) thenReturn Future(true)
         when(gamblingConnector.getPartnersDetails(any())(any())) thenReturn Future(
           partnersDetailsSoleProprietor.copy(
-            partners = partnersDetailsSoleProprietor.partners.map(e => e.copy(solePropMiddleName = None))
+            partners = partnersDetailsSoleProprietor.partners.map(e =>
+              e.asInstanceOf[SoleProprietorPartnerDetails]
+                .copy(
+                  soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(middleName = None))
+                )
+            )
           )
         )
         val action = new Harness(sessionRepository, gamblingConnector)
@@ -388,8 +394,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
               "partnerDetailsVrn"                    -> "GB123456789",
               "partnerDetailsCrn"                    -> "09876543",
               "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-              "partnerDetailsIsFutureLeaveDate"      -> 0,
-              "partnerDetailsIsFutureJoinDate"       -> 0,
+              "partnerDetailsIsFutureLeaveDate"      -> false,
+              "partnerDetailsIsFutureJoinDate"       -> false,
               "partnerDetailsBusinessType"           -> 1
             )
           )
@@ -453,8 +459,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
               "partnerDetailsVrn"                    -> "GB123456789",
               "partnerDetailsCrn"                    -> "09876543",
               "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-              "partnerDetailsIsFutureLeaveDate"      -> 0,
-              "partnerDetailsIsFutureJoinDate"       -> 0,
+              "partnerDetailsIsFutureLeaveDate"      -> false,
+              "partnerDetailsIsFutureJoinDate"       -> false,
               "partnerDetailsBusinessType"           -> 2
             )
           )
@@ -509,6 +515,12 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
                   "faxNumber" -> "02071234568",
                   "emailAddr" -> "john.doe@example.com"
                 ),
+                "partnerDetailsSoleProprietor" -> Json.obj(
+                  "title"      -> (if propName != "title" then "Mr" else ""),
+                  "firstName"  -> (if propName != "firstName" then "John" else ""),
+                  "middleName" -> "Michael",
+                  "lastName"   -> (if propName != "lastName" then "Doe" else "")
+                ),
                 "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
                 "partnerDetailsCountryOfIncorporation" -> "GB",
                 "partnerDetailsTradingName"            -> "XYZ Consulting",
@@ -518,8 +530,8 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
                 "partnerDetailsVrn"                    -> "GB123456789",
                 "partnerDetailsCrn"                    -> "09876543",
                 "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-                "partnerDetailsIsFutureLeaveDate"      -> 0,
-                "partnerDetailsIsFutureJoinDate"       -> 0,
+                "partnerDetailsIsFutureLeaveDate"      -> false,
+                "partnerDetailsIsFutureJoinDate"       -> false,
                 "partnerDetailsBusinessType"           -> 1
               )
             )
@@ -539,137 +551,6 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           verify(gamblingConnector, times(1)).getPartnersDetails(any())(any())
         }
       }
-
-      "return User Answers WITHOUT SoleProprietor details where BusinessType is None" in {
-        val request = FakeRequest()
-        val sessionRepository = mock[SessionRepository]
-        val gamblingConnector = mock[GamblingConnector]
-        when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getPartnersDetails(any())(any())) thenReturn Future(
-          partnersDetailsSoleProprietor.copy(partners = partnersDetailsSoleProprietor.partners.map(e => e.copy(businessType = None)))
-        )
-        val action = new Harness(sessionRepository, gamblingConnector)
-
-        val data = Json.obj(
-          "partners" -> Json.obj(
-            "0100049899" -> Json.obj(
-              "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
-              "partnerDetailsBusinessPartnerNumber" -> "0100049899",
-              "partnerDetailsDateOfJoining"         -> "2022-01-15",
-              "partnerDetailsDateOfLeaving"         -> "2028-12-31",
-              "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-                "mgdRegNumber" -> "XWM00000001762",
-                "correspondenceAddress" -> Json.obj(
-                  "address1" -> "123 High Street",
-                  "address2" -> "Suite 4",
-                  "address3" -> "Business Park",
-                  "address4" -> "London",
-                  "postcode" -> "SW1A 1AA",
-                  "country"  -> "GB"
-                ),
-                "additionalInformation" -> "ADI123456",
-                "iomOrCiFlag"           -> "N",
-                "contactNumber" -> Json.obj(
-                  "phoneNumber"       -> "02071234567",
-                  "mobilePhoneNumber" -> "07700123456"
-                ),
-                "faxNumber" -> "02071234568",
-                "emailAddr" -> "john.doe@example.com"
-              ),
-              "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-              "partnerDetailsCountryOfIncorporation" -> "GB",
-              "partnerDetailsTradingName"            -> "XYZ Consulting",
-              "partnerDetailsDateOfBirth"            -> "1985-06-20",
-              "partnerDetailsNino"                   -> "AB123456C",
-              "partnerDetailsUtr"                    -> "1234567890",
-              "partnerDetailsVrn"                    -> "GB123456789",
-              "partnerDetailsCrn"                    -> "09876543",
-              "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-              "partnerDetailsIsFutureLeaveDate"      -> 0,
-              "partnerDetailsIsFutureJoinDate"       -> 0
-            )
-          )
-        )
-
-        val result: Either[Result, DataRequest[AnyContent]] =
-          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
-
-        result.map { req =>
-          req.request mustBe expected.request
-          req.userAnswers.data mustBe expected.userAnswers.data
-          req.userAnswers.id mustBe expected.userAnswers.id
-        }
-        verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getPartnersDetails(any())(any())
-      }
-
-      "return User Answers WITHOUT Business Name details where BusinessType is None" in {
-        val request = FakeRequest()
-        val sessionRepository = mock[SessionRepository]
-        val gamblingConnector = mock[GamblingConnector]
-        when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getPartnersDetails(any())(any())) thenReturn Future(
-          partnersDetailsBusinessName.copy(partners = partnersDetailsBusinessName.partners.map(e => e.copy(businessType = None)))
-        )
-        val action = new Harness(sessionRepository, gamblingConnector)
-
-        val data = Json.obj(
-          "partners" -> Json.obj(
-            "0100049899" -> Json.obj(
-              "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
-              "partnerDetailsBusinessPartnerNumber" -> "0100049899",
-              "partnerDetailsDateOfJoining"         -> "2022-01-15",
-              "partnerDetailsDateOfLeaving"         -> "2028-12-31",
-              "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
-                "mgdRegNumber" -> "XWM00000001762",
-                "correspondenceAddress" -> Json.obj(
-                  "address1" -> "123 High Street",
-                  "address2" -> "Suite 4",
-                  "address3" -> "Business Park",
-                  "address4" -> "London",
-                  "postcode" -> "SW1A 1AA",
-                  "country"  -> "GB"
-                ),
-                "additionalInformation" -> "ADI123456",
-                "iomOrCiFlag"           -> "N",
-                "contactNumber" -> Json.obj(
-                  "phoneNumber"       -> "02071234567",
-                  "mobilePhoneNumber" -> "07700123456"
-                ),
-                "faxNumber" -> "02071234568",
-                "emailAddr" -> "john.doe@example.com"
-              ),
-              "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-              "partnerDetailsCountryOfIncorporation" -> "GB",
-              "partnerDetailsTradingName"            -> "XYZ Consulting",
-              "partnerDetailsDateOfBirth"            -> "1985-06-20",
-              "partnerDetailsNino"                   -> "AB123456C",
-              "partnerDetailsUtr"                    -> "1234567890",
-              "partnerDetailsVrn"                    -> "GB123456789",
-              "partnerDetailsCrn"                    -> "09876543",
-              "partnerDetailsForeignCorporateRef"    -> "FCR-987654",
-              "partnerDetailsIsFutureLeaveDate"      -> 0,
-              "partnerDetailsIsFutureJoinDate"       -> 0
-            )
-          )
-        )
-
-        val result: Either[Result, DataRequest[AnyContent]] =
-          action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
-
-        val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
-
-        result.map { req =>
-          req.request mustBe expected.request
-          req.userAnswers.data mustBe expected.userAnswers.data
-          req.userAnswers.id mustBe expected.userAnswers.id
-        }
-        verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getPartnersDetails(any())(any())
-      }
-
     }
 
   }
@@ -677,15 +558,11 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 
 object PartnerDetailsDataRequiredActionSpec {
 
-  val partnerDetailsBusiness = PartnerDetails(
+  val partnerDetailsBusiness = BusinessPartnerDetails(
     mgdRegNumber           = "XWM00000001762",
-    businessPartnerNumber  = Some("0100049899"),
+    businessPartnerNumber  = "0100049899",
     dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
     dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
-    solePropTitle          = None,
-    solePropFirstName      = None,
-    solePropMiddleName     = None,
-    solePropLastName       = None,
     businessName           = Some("XYZ Consulting Ltd"),
     tradingName            = Some("XYZ Consulting"),
     dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
@@ -696,33 +573,51 @@ object PartnerDetailsDataRequiredActionSpec {
     dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
     countryOfIncorporation = Some("GB"),
     foreignCorporateRef    = Some("FCR-987654"),
-    address1               = Some("123 High Street"),
-    address2               = Some("Suite 4"),
-    address3               = Some("Business Park"),
-    address4               = Some("London"),
-    postcode               = Some("SW1A 1AA"),
-    country                = Some("GB"),
-    adi                    = Some("ADI123456"),
-    iomOrCiFlag            = Some("N"),
-    phoneNumber            = Some("02071234567"),
-    mobilePhoneNumber      = Some("07700123456"),
-    faxNumber              = Some("02071234568"),
-    emailAddr              = Some("john.doe@example.com"),
-    isFutureLeaveDate      = Some(0),
-    isFutureJoinDate       = Some(0),
-    businessType           = Some(2) // NOT 1
+    correspondenceDetails = Some(
+      CorrespondenceDetails(
+        mgdRegNumber = "XWM00000001762",
+        nameLine1    = None,
+        nameLine2    = None,
+        correspondenceAddress = Some(
+          Address(
+            address1 = "123 High Street",
+            address2 = Some("Suite 4"),
+            address3 = Some("Business Park"),
+            address4 = Some("London"),
+            postcode = Some("SW1A 1AA"),
+            country  = Some("GB")
+          )
+        ),
+        additionalInformation = Some("ADI123456"),
+        iomOrCiFlag           = Some(false),
+        contactNumber = Some(
+          ContactNumber(
+            phoneNumber       = Some("02071234567"),
+            mobilePhoneNumber = Some("07700123456")
+          )
+        ),
+        faxNumber = Some("02071234568"),
+        emailAddr = Some("john.doe@example.com")
+      )
+    ),
+    isFutureLeaveDate = Some(false),
+    isFutureJoinDate  = Some(false),
+    businessType      = BusinessType.Corporatebody // NOT 1
   )
 
-  val partnerDetailsSoleProprietor = PartnerDetails(
-    mgdRegNumber           = "XWM00000001762",
-    businessPartnerNumber  = Some("0100049899"),
-    dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
-    dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
-    solePropTitle          = Some("Mr"),
-    solePropFirstName      = Some("John"),
-    solePropMiddleName     = Some("Michael"),
-    solePropLastName       = Some("Doe"),
-    businessName           = None,
+  val partnerDetailsSoleProprietor = SoleProprietorPartnerDetails(
+    mgdRegNumber          = "XWM00000001762",
+    businessPartnerNumber = "0100049899",
+    dateOfJoining         = Some(LocalDate.parse("2022-01-15")),
+    dateOfLeaving         = Some(LocalDate.parse("2028-12-31")),
+    soleProprietorName = Some(
+      SoleProprietorName(
+        title      = "Mr",
+        firstName  = "John",
+        middleName = Some("Michael"),
+        lastName   = "Doe"
+      )
+    ),
     tradingName            = Some("XYZ Consulting"),
     dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
     nino                   = Some("AB123456C"),
@@ -732,21 +627,36 @@ object PartnerDetailsDataRequiredActionSpec {
     dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
     countryOfIncorporation = Some("GB"),
     foreignCorporateRef    = Some("FCR-987654"),
-    address1               = Some("123 High Street"),
-    address2               = Some("Suite 4"),
-    address3               = Some("Business Park"),
-    address4               = Some("London"),
-    postcode               = Some("SW1A 1AA"),
-    country                = Some("GB"),
-    adi                    = Some("ADI123456"),
-    iomOrCiFlag            = Some("N"),
-    phoneNumber            = Some("02071234567"),
-    mobilePhoneNumber      = Some("07700123456"),
-    faxNumber              = Some("02071234568"),
-    emailAddr              = Some("john.doe@example.com"),
-    isFutureLeaveDate      = Some(0),
-    isFutureJoinDate       = Some(0),
-    businessType           = Some(1) // Explicitly 1
+    correspondenceDetails = Some(
+      CorrespondenceDetails(
+        mgdRegNumber = "XWM00000001762",
+        nameLine1    = None,
+        nameLine2    = None,
+        correspondenceAddress = Some(
+          Address(
+            address1 = "123 High Street",
+            address2 = Some("Suite 4"),
+            address3 = Some("Business Park"),
+            address4 = Some("London"),
+            postcode = Some("SW1A 1AA"),
+            country  = Some("GB")
+          )
+        ),
+        additionalInformation = Some("ADI123456"),
+        iomOrCiFlag           = Some(false),
+        contactNumber = Some(
+          ContactNumber(
+            phoneNumber       = Some("02071234567"),
+            mobilePhoneNumber = Some("07700123456")
+          )
+        ),
+        faxNumber = Some("02071234568"),
+        emailAddr = Some("john.doe@example.com")
+      )
+    ),
+    isFutureLeaveDate = Some(false),
+    isFutureJoinDate  = Some(false),
+    businessType      = BusinessType.Soleproprietor // Explicitly 1
   )
 
   val partnersDetailsBusinessName = PartnersDetails(
@@ -760,9 +670,36 @@ object PartnerDetailsDataRequiredActionSpec {
   )
 
   val partnersDetailsSoleProprietorMissingData: Seq[(String, PartnersDetails)] = Seq(
-    ("title", partnersDetailsSoleProprietor.copy(partners = partnersDetailsSoleProprietor.partners.map(e => e.copy(solePropTitle = None)))),
-    ("firstName", partnersDetailsSoleProprietor.copy(partners = partnersDetailsSoleProprietor.partners.map(e => e.copy(solePropFirstName = None)))),
-    ("lastName", partnersDetailsSoleProprietor.copy(partners = partnersDetailsSoleProprietor.partners.map(e => e.copy(solePropLastName = None))))
+    ("title",
+     partnersDetailsSoleProprietor.copy(partners =
+       partnersDetailsSoleProprietor.partners.map(e =>
+         e.asInstanceOf[SoleProprietorPartnerDetails]
+           .copy(
+             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(title = ""))
+           )
+       )
+     )
+    ),
+    ("firstName",
+     partnersDetailsSoleProprietor.copy(partners =
+       partnersDetailsSoleProprietor.partners.map(e =>
+         e.asInstanceOf[SoleProprietorPartnerDetails]
+           .copy(
+             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(firstName = ""))
+           )
+       )
+     )
+    ),
+    ("lastName",
+     partnersDetailsSoleProprietor.copy(partners =
+       partnersDetailsSoleProprietor.partners.map(e =>
+         e.asInstanceOf[SoleProprietorPartnerDetails]
+           .copy(
+             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(lastName = ""))
+           )
+       )
+     )
+    )
   )
 
 }

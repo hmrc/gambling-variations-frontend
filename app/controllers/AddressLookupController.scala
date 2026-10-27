@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.*
 import models.Address
 import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage}
-import pages.isleMOrChannelFlagPage
+import pages.IsleMOrChannelFlagPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -61,7 +61,7 @@ class AddressLookupController @Inject() (
                                     request.userAnswers
                                       .set(CorrespondenceAddressUkPage, address)
                                       .flatMap(_.remove(CorrespondenceAddressNonUkPage))
-                                      .flatMap(_.set(isleMOrChannelFlagPage, isIomOrCiAddress(address).toString))
+                                      .flatMap(_.set(IsleMOrChannelFlagPage, isIomOrCiAddress(address)))
                                       .flatMap(_.set(CorrespondenceDetailsSubmittedPage, true))
                                       .flatMap(_.set(CorrespondenceDetailsChangesPage, isChanged))
                                   )

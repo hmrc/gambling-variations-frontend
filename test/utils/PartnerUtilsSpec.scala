@@ -108,7 +108,7 @@ class PartnerUtilsSpec extends SpecBase {
 
     "getPartnerDetailsName" - {
 
-      "correctly retrieves data in order for sole proprietor" in {
+      "correctly retrieves sole proprietor full name or null if missing" in {
         val userAnswers = UserAnswers("id")
           .set(PartnerDetailsBusinessTypePage(0), BusinessType.Soleproprietor)
           .success
@@ -141,12 +141,12 @@ class PartnerUtilsSpec extends SpecBase {
 
         partnerUtils.getNewPartnersSize(userAnswers) mustBe 4
         result1 mustBe Some("Mr Tom John Smith")
-        result2 mustBe Some("mgd1")
+        result2 mustBe None
         result3 mustBe None
         result4 mustBe None
       }
 
-      "correctly retrieves data in order for business type" in {
+      "correctly retrieves data for any business type or null if missing" in {
         val userAnswers = UserAnswers("id")
           .set(PartnerDetailsBusinessTypePage("0"), BusinessType.Partnership)
           .success
@@ -190,8 +190,8 @@ class PartnerUtilsSpec extends SpecBase {
 
         partnerUtils.getExistingPartnersBusinessNumbers(userAnswers).size mustBe 5
         result1 mustBe Some("business0")
-        result2 mustBe Some("tradingName1")
-        result3 mustBe Some("mgd2")
+        result2 mustBe None
+        result3 mustBe None
         result4 mustBe None
         result5 mustBe None
       }

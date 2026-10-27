@@ -18,54 +18,124 @@ package models
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.{JsSuccess, Json}
+import play.api.libs.json.{JsError, JsSuccess, Json, __}
 
 import java.time.LocalDate
 
 class PartnerDetailsSpec extends AnyWordSpec with Matchers {
 
-  private val partnerModel = PartnerDetails(
+  val partnerDetailsBusiness = BusinessPartnerDetails(
     mgdRegNumber           = "XWM00000001762",
-    businessPartnerNumber  = Some("0100049899"),
-    dateOfJoining          = Some(LocalDate.of(2022, 1, 15)),
-    dateOfLeaving          = Some(LocalDate.of(2028, 12, 31)),
-    solePropTitle          = Some("Mr"),
-    solePropFirstName      = Some("John"),
-    solePropMiddleName     = Some("Michael"),
-    solePropLastName       = Some("Doe"),
+    businessPartnerNumber  = "0100049899",
+    dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
+    dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
     businessName           = Some("XYZ Consulting Ltd"),
     tradingName            = Some("XYZ Consulting"),
-    dateOfBirth            = Some(LocalDate.of(1985, 6, 20)),
+    dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
     nino                   = Some("AB123456C"),
     utr                    = Some("1234567890"),
     vrn                    = Some("GB123456789"),
     crn                    = Some("09876543"),
-    dateOfIncorporation    = Some(LocalDate.of(2020, 3, 1)),
+    dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
     countryOfIncorporation = Some("GB"),
     foreignCorporateRef    = Some("FCR-987654"),
-    address1               = Some("123 High Street"),
-    address2               = Some("Suite 4"),
-    address3               = Some("Business Park"),
-    address4               = Some("London"),
-    postcode               = Some("SW1A 1AA"),
-    country                = Some("GB"),
-    adi                    = Some("ADI123456"),
-    iomOrCiFlag            = Some("N"),
-    phoneNumber            = Some("02071234567"),
-    mobilePhoneNumber      = Some("07700123456"),
-    faxNumber              = Some("02071234568"),
-    emailAddr              = Some("john.doe@example.com"),
-    isFutureLeaveDate      = Some(0),
-    isFutureJoinDate       = Some(0),
-    businessType           = Some(2)
+    correspondenceDetails = Some(
+      CorrespondenceDetails(
+        mgdRegNumber = "XWM00000001762",
+        nameLine1    = None,
+        nameLine2    = None,
+        correspondenceAddress = Some(
+          Address(
+            address1 = "123 High Street",
+            address2 = Some("Suite 4"),
+            address3 = Some("Business Park"),
+            address4 = Some("London"),
+            postcode = Some("SW1A 1AA"),
+            country  = Some("GB")
+          )
+        ),
+        additionalInformation = Some("ADI123456"),
+        iomOrCiFlag           = Some(false),
+        contactNumber = Some(
+          ContactNumber(
+            phoneNumber       = Some("02071234567"),
+            mobilePhoneNumber = Some("07700123456")
+          )
+        ),
+        faxNumber = Some("02071234568"),
+        emailAddr = Some("john.doe@example.com")
+      )
+    ),
+    isFutureLeaveDate = Some(false),
+    isFutureJoinDate  = Some(false),
+    businessType      = BusinessType.Corporatebody
   )
 
-  private val partnersDetailsModel = PartnersDetails(
-    partners   = Seq(partnerModel),
+  val partnerDetailsSoleProprietor = SoleProprietorPartnerDetails(
+    mgdRegNumber          = "XWM00000001762",
+    businessPartnerNumber = "0100049899",
+    dateOfJoining         = Some(LocalDate.parse("2022-01-15")),
+    dateOfLeaving         = Some(LocalDate.parse("2028-12-31")),
+    soleProprietorName = Some(
+      SoleProprietorName(
+        title      = "Mr",
+        firstName  = "John",
+        middleName = Some("Michael"),
+        lastName   = "Doe"
+      )
+    ),
+    tradingName            = Some("XYZ Consulting"),
+    dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
+    nino                   = Some("AB123456C"),
+    utr                    = Some("1234567890"),
+    vrn                    = Some("GB123456789"),
+    crn                    = Some("09876543"),
+    dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
+    countryOfIncorporation = Some("GB"),
+    foreignCorporateRef    = Some("FCR-987654"),
+    correspondenceDetails = Some(
+      CorrespondenceDetails(
+        mgdRegNumber = "XWM00000001762",
+        nameLine1    = None,
+        nameLine2    = None,
+        correspondenceAddress = Some(
+          Address(
+            address1 = "123 High Street",
+            address2 = Some("Suite 4"),
+            address3 = Some("Business Park"),
+            address4 = Some("London"),
+            postcode = Some("SW1A 1AA"),
+            country  = Some("GB")
+          )
+        ),
+        additionalInformation = Some("ADI123456"),
+        iomOrCiFlag           = Some(false),
+        contactNumber = Some(
+          ContactNumber(
+            phoneNumber       = Some("02071234567"),
+            mobilePhoneNumber = Some("07700123456")
+          )
+        ),
+        faxNumber = Some("02071234568"),
+        emailAddr = Some("john.doe@example.com")
+      )
+    ),
+    isFutureLeaveDate = Some(false),
+    isFutureJoinDate  = Some(false),
+    businessType      = BusinessType.Soleproprietor
+  )
+
+  val partnersDetailsBusinessName = PartnersDetails(
+    partners   = Seq(partnerDetailsBusiness),
     systemDate = Some(LocalDate.of(2026, 7, 30))
   )
 
-  private val partnerJson = Json.obj(
+  val partnersDetailsSoleProprietor = PartnersDetails(
+    partners   = Seq(partnerDetailsSoleProprietor),
+    systemDate = Some(LocalDate.of(2026, 7, 30))
+  )
+
+  private val solePropPartnerJson = Json.obj(
     "mgdRegNumber"           -> "XWM00000001762",
     "businessPartnerNumber"  -> "0100049899",
     "dateOfJoining"          -> "2022-01-15",
@@ -74,6 +144,37 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     "solePropFirstName"      -> "John",
     "solePropMiddleName"     -> "Michael",
     "solePropLastName"       -> "Doe",
+    "tradingName"            -> "XYZ Consulting",
+    "dateOfBirth"            -> "1985-06-20",
+    "nino"                   -> "AB123456C",
+    "utr"                    -> "1234567890",
+    "vrn"                    -> "GB123456789",
+    "crn"                    -> "09876543",
+    "dateOfIncorporation"    -> "2020-03-01",
+    "countryOfIncorporation" -> "GB",
+    "foreignCorporateRef"    -> "FCR-987654",
+    "address1"               -> "123 High Street",
+    "address2"               -> "Suite 4",
+    "address3"               -> "Business Park",
+    "address4"               -> "London",
+    "postcode"               -> "SW1A 1AA",
+    "country"                -> "GB",
+    "adi"                    -> "ADI123456",
+    "iomOrCiFlag"            -> "N",
+    "phoneNumber"            -> "02071234567",
+    "mobilePhoneNumber"      -> "07700123456",
+    "faxNumber"              -> "02071234568",
+    "emailAddr"              -> "john.doe@example.com",
+    "isFutureLeaveDate"      -> 0,
+    "isFutureJoinDate"       -> 0,
+    "businessType"           -> 1
+  )
+
+  private val businessPartnerJson = Json.obj(
+    "mgdRegNumber"           -> "XWM00000001762",
+    "businessPartnerNumber"  -> "0100049899",
+    "dateOfJoining"          -> "2022-01-15",
+    "dateOfLeaving"          -> "2028-12-31",
     "businessName"           -> "XYZ Consulting Ltd",
     "tradingName"            -> "XYZ Consulting",
     "dateOfBirth"            -> "1985-06-20",
@@ -101,39 +202,43 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     "businessType"           -> 2
   )
 
-  private val fullJson = Json.obj(
-    "partners"   -> Json.arr(partnerJson),
+  private val businessPartnerFullJson = Json.obj(
+    "partners"   -> Json.arr(businessPartnerJson),
+    "systemDate" -> "2026-07-30"
+  )
+
+  private val solePropPartnerFullJson = Json.obj(
+    "partners"   -> Json.arr(solePropPartnerJson),
     "systemDate" -> "2026-07-30"
   )
 
   "PartnersDetails" should {
 
     "read complete partner details correctly" in {
-      fullJson.validate[PartnersDetails] shouldBe JsSuccess(partnersDetailsModel)
-    }
-
-    "write complete partner details correctly" in {
-      Json.toJson(partnersDetailsModel) shouldBe fullJson
+      businessPartnerFullJson.validate[PartnersDetails] shouldBe JsSuccess(partnersDetailsBusinessName)
+      solePropPartnerFullJson.validate[PartnersDetails] shouldBe JsSuccess(partnersDetailsSoleProprietor)
     }
 
     "read partner details with only required fields present" in {
-      val minJson = Json.obj(
+      val minJsonSoleProp = Json.obj(
         "partners" -> Json.arr(
-          Json.obj("mgdRegNumber" -> "XWM00000001762")
+          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessType" -> 1, "businessPartnerNumber" -> "1234567890")
         )
       )
 
-      val expectedModel = PartnersDetails(
-        partners = Seq(
-          PartnerDetails(
+      val minJsonBusiness = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessType" -> 2, "businessPartnerNumber" -> "1234567890")
+        )
+      )
+
+      val businessExpectedModel = PartnersDetails(
+        Seq(
+          BusinessPartnerDetails(
             mgdRegNumber           = "XWM00000001762",
-            businessPartnerNumber  = None,
+            businessPartnerNumber  = "1234567890",
             dateOfJoining          = None,
             dateOfLeaving          = None,
-            solePropTitle          = None,
-            solePropFirstName      = None,
-            solePropMiddleName     = None,
-            solePropLastName       = None,
             businessName           = None,
             tradingName            = None,
             dateOfBirth            = None,
@@ -144,27 +249,116 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
             dateOfIncorporation    = None,
             countryOfIncorporation = None,
             foreignCorporateRef    = None,
-            address1               = None,
-            address2               = None,
-            address3               = None,
-            address4               = None,
-            postcode               = None,
-            country                = None,
-            adi                    = None,
-            iomOrCiFlag            = None,
-            phoneNumber            = None,
-            mobilePhoneNumber      = None,
-            faxNumber              = None,
-            emailAddr              = None,
-            isFutureLeaveDate      = None,
-            isFutureJoinDate       = None,
-            businessType           = None
+            correspondenceDetails = Some(
+              CorrespondenceDetails(
+                mgdRegNumber          = "XWM00000001762",
+                nameLine1             = None,
+                nameLine2             = None,
+                correspondenceAddress = None,
+                additionalInformation = None,
+                iomOrCiFlag           = None,
+                contactNumber         = None,
+                faxNumber             = None,
+                emailAddr             = None
+              )
+            ),
+            isFutureLeaveDate = None,
+            isFutureJoinDate  = None,
+            businessType      = BusinessType.Corporatebody
           )
         ),
-        systemDate = None
+        None
       )
 
-      minJson.validate[PartnersDetails] shouldBe JsSuccess(expectedModel)
+      val solePropExpectedModel = PartnersDetails(
+        Seq(
+          SoleProprietorPartnerDetails(
+            mgdRegNumber           = "XWM00000001762",
+            businessPartnerNumber  = "1234567890",
+            dateOfJoining          = None,
+            dateOfLeaving          = None,
+            soleProprietorName     = None,
+            tradingName            = None,
+            dateOfBirth            = None,
+            nino                   = None,
+            utr                    = None,
+            vrn                    = None,
+            crn                    = None,
+            dateOfIncorporation    = None,
+            countryOfIncorporation = None,
+            foreignCorporateRef    = None,
+            correspondenceDetails = Some(
+              CorrespondenceDetails(
+                mgdRegNumber          = "XWM00000001762",
+                nameLine1             = None,
+                nameLine2             = None,
+                correspondenceAddress = None,
+                additionalInformation = None,
+                iomOrCiFlag           = None,
+                contactNumber         = None,
+                faxNumber             = None,
+                emailAddr             = None
+              )
+            ),
+            isFutureLeaveDate = None,
+            isFutureJoinDate  = None,
+            businessType      = BusinessType.Soleproprietor
+          )
+        ),
+        None
+      )
+
+      minJsonSoleProp.validate[PartnersDetails] shouldBe JsSuccess(solePropExpectedModel)
+      minJsonBusiness.validate[PartnersDetails] shouldBe JsSuccess(businessExpectedModel)
+    }
+
+    "read partner details fails if businessType is missing or incorrect" in {
+      val minJsonMissingBusinessType = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessPartnerNumber" -> "1234567890")
+        )
+      )
+
+      val minJsonIncorrectBusinessType = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessPartnerNumber" -> "12345678900", "businessType" -> 100)
+        )
+      )
+
+      minJsonMissingBusinessType.validate[PartnersDetails] shouldBe JsError(
+        __ \ "partners" \ 0,
+        "Invalid business type structure: expected businessType to contain a valid structure for PartnerDetails."
+      )
+      minJsonIncorrectBusinessType.validate[PartnersDetails] shouldBe JsError(
+        __ \ "partners" \ 0 \ "businessType",
+        "Invalid business type"
+      )
+    }
+
+    "read partner details fails if mgdRegNumber is missing" in {
+      val minJsonMissingRegNumber = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj("businessPartnerNumber" -> "12345678900", "businessType" -> 1)
+        )
+      )
+
+      minJsonMissingRegNumber.validate[PartnersDetails] shouldBe JsError(
+        __ \ "partners" \ 0 \ "mgdRegNumber",
+        "error.path.missing"
+      )
+    }
+
+    "read partner details fails if partnerBusinessNumber is missing" in {
+      val minJsonMissingBusinessNumber = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessType" -> 1)
+        )
+      )
+
+      minJsonMissingBusinessNumber.validate[PartnersDetails] shouldBe JsError(
+        __ \ "partners" \ 0 \ "businessPartnerNumber",
+        "error.path.missing"
+      )
     }
   }
 }

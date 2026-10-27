@@ -83,7 +83,7 @@ class CheckCorrespondenceDetailsController @Inject() (
       userAnswers.get(CorrespondenceAdditionalInformationPage).isDefined ||
       userAnswers.get(CorrespondenceFaxNumberPage).isDefined ||
       userAnswers.get(CorrespondenceEmailPage).isDefined ||
-      userAnswers.get(isleMOrChannelFlagPage).isDefined ||
+      userAnswers.get(IsleMOrChannelFlagPage).isDefined ||
       userAnswers.get(CorrespondenceAddressUkPage).isDefined ||
       userAnswers.get(CorrespondenceAddressNonUkPage).isDefined ||
       userAnswers.get(CorrespondenceContactNumberPage).exists { contact =>

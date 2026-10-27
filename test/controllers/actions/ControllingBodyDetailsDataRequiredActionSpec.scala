@@ -103,7 +103,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
                 "country"  -> "Spain"
               ),
               "additionalInformation" -> "adi",
-              "iomOrCiFlag"           -> "0",
+              "iomOrCiFlag"           -> "N",
               "contactNumber" -> Json.obj(
                 "phoneNumber"       -> "phoneNumber",
                 "mobilePhoneNumber" -> "mobilePhoneNumber"
@@ -326,7 +326,7 @@ object ControllingBodyDetailsDataRequiredActionSpec {
         )
       ),
       additionalInformation = Some("adi"),
-      iomOrCiFlag           = Some("0"),
+      iomOrCiFlag           = Some(false),
       contactNumber = Some(
         ContactNumber(
           phoneNumber       = Some("phoneNumber"),
