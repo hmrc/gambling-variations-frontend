@@ -19,11 +19,12 @@ package controllers.cancellation
 import base.SpecBase
 import forms.cancellation.ReasonForCancellationFormProvider
 import models.cancellation.ReasonForCancellation
-import models.{NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.{BusinessTypePage, GroupMemberPage}
 import pages.cancellation.ReasonForCancellationPage
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -42,6 +43,14 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new ReasonForCancellationFormProvider()
   val form = formProvider()
+  override val emptyUserAnswers: UserAnswers =
+    super.emptyUserAnswers
+      .set(BusinessTypePage, BusinessType.Partnership)
+      .success
+      .value
+      .set(GroupMemberPage, false)
+      .success
+      .value
 
   "ReasonForCancellation Controller" - {
 
@@ -63,7 +72,7 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ReasonForCancellationPage, ReasonForCancellation.values.head).success.value
+      val userAnswers = emptyUserAnswers.set(ReasonForCancellationPage, ReasonForCancellation.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -122,6 +131,36 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to SystemError for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, reasonForCancellationRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError for a POST if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, reasonForCancellationRoute)
+            .withFormUrlEncodedBody(("value", "answer"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
   }

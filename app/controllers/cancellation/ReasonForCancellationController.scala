@@ -36,7 +36,7 @@ class ReasonForCancellationController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessDetailsDataRequiredAction,
   formProvider: ReasonForCancellationFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ReasonForCancellationView
