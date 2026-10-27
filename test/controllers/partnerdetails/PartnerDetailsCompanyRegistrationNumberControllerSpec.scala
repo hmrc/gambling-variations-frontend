@@ -23,10 +23,10 @@ import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Soleprop
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsCrnPage, PartnerDetailsIsBusinessIncorporatedUkPage}
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsCrnPage, PartnerDetailsIsBusinessIncorporatedUkPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -36,15 +36,14 @@ import views.html.partnerdetails.PartnerDetailsCompanyRegistrationNumberView
 import scala.concurrent.Future
 
 class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
-  val formProvider = new PartnerDetailsCompanyRegistrationNumberFormProvider()
-  val form = formProvider()
+  val form: Form[String] = (new PartnerDetailsCompanyRegistrationNumberFormProvider())()
 
-  lazy val partnerDetailsCompanyRegistrationNumberRouteNewPartners =
+  lazy val partnerDetailsCompanyRegistrationNumberRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController
       .onPageLoad(newPartnersIndex1.toString, NormalMode)
       .url
 
-  lazy val partnerDetailsCompanyRegistrationNumberRouteExistingPartners =
+  lazy val partnerDetailsCompanyRegistrationNumberRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController
       .onPageLoad(businessNumber1, CheckMode)
       .url
@@ -56,20 +55,32 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
   val userAnswersWithNoCrnNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
   val userAnswersWithNoCrnExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
 
+  private def crnApplicableExisting(base: UserAnswers = userAnswersWithNoCrnExistingPartners): UserAnswers =
+    base
+      .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
+      .success
+      .value
+      .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), true)
+      .success
+      .value
+
+  private def crnApplicableNew(base: UserAnswers = userAnswersWithNoCrnNewPartners): UserAnswers =
+    base
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+      .success
+      .value
+      .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Corporatebody)
+      .success
+      .value
+      .set(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), true)
+      .success
+      .value
+
   "partners" - {
     "PartnerDetailsCompanyRegistrationNumber Controller" - {
 
       "must return OK and the correct view for a GET for a corporate body incorporated in the UK" in {
-        val userAnswersForGet: UserAnswers =
-          userAnswersWithNoCrnExistingPartners
-            .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
-            .success
-            .value
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), true)
-            .success
-            .value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+        val application = applicationBuilder(userAnswers = Some(crnApplicableExisting())).build()
 
         running(application) {
           val request = FakeRequest(GET, partnerDetailsCompanyRegistrationNumberRouteExistingPartners)
@@ -105,16 +116,7 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
       }
 
       "must populate the view correctly when the question has previously been answered" in {
-        val userAnswersForGet: UserAnswers =
-          validUserAnswersExistingPartners(Some(testCRN))
-            .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
-            .success
-            .value
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), true)
-            .success
-            .value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+        val application = applicationBuilder(userAnswers = Some(crnApplicableExisting(validUserAnswersExistingPartners(Some(testCRN))))).build()
 
         running(application) {
           val request = FakeRequest(GET, partnerDetailsCompanyRegistrationNumberRouteExistingPartners)
@@ -216,8 +218,10 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
+        val answers = crnApplicableExisting()
+
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersWithNoCrnExistingPartners))
+          applicationBuilder(userAnswers = Some(answers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -226,8 +230,7 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
 
         running(application) {
 
-          val expectedAnswers =
-            userAnswersWithNoCrnExistingPartners.set(PartnerDetailsCrnPage(businessNumber1), testCRN).success.value
+          val expectedAnswers = answers.set(PartnerDetailsCrnPage(businessNumber1), testCRN).success.value
 
           val request =
             FakeRequest(POST, partnerDetailsCompanyRegistrationNumberRouteExistingPartners)
@@ -244,7 +247,7 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
       "must return a Bad Request and errors when invalid data is submitted" in {
 
         val badData = "£$%^"
-        val application = applicationBuilder(userAnswers = Some(userAnswersWithNoCrnExistingPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(crnApplicableExisting())).build()
 
         running(application) {
           val request =
@@ -259,6 +262,31 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
 
           status(result) mustEqual BAD_REQUEST
           contentAsString(result) mustEqual view(boundForm, businessNumber1, CheckMode)(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to SystemError without saving when CRN does not apply to an existing partner's business type" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        val answers =
+          userAnswersWithNoCrnExistingPartners.set(PartnerDetailsBusinessTypePage(businessNumber1), Soleproprietor).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(answers))
+            .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsCompanyRegistrationNumberRouteExistingPartners)
+              .withFormUrlEncodedBody(("value", testCRN))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+          verify(mockSessionRepository, never()).set(any())
         }
       }
 
@@ -298,19 +326,7 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
     "PartnerDetailsCompanyRegistrationNumber Controller" - {
 
       "must return OK and the correct view for a GET for a corporate body incorporated in the UK" in {
-        val userAnswersForGet: UserAnswers =
-          userAnswersWithNoCrnNewPartners
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-            .success
-            .value
-            .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Corporatebody)
-            .success
-            .value
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+        val application = applicationBuilder(userAnswers = Some(crnApplicableNew())).build()
 
         running(application) {
           val request = FakeRequest(GET, partnerDetailsCompanyRegistrationNumberRouteNewPartners)
@@ -349,19 +365,7 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
       }
 
       "must populate the view correctly when the question has previously been answered" in {
-        val userAnswersForGet: UserAnswers =
-          validUserAnswersNewPartners(Some(testCRN))
-            .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-            .success
-            .value
-            .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Corporatebody)
-            .success
-            .value
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        val application = applicationBuilder(userAnswers = Some(userAnswersForGet)).build()
+        val application = applicationBuilder(userAnswers = Some(crnApplicableNew(validUserAnswersNewPartners(Some(testCRN))))).build()
 
         running(application) {
           val request = FakeRequest(GET, partnerDetailsCompanyRegistrationNumberRouteNewPartners)
@@ -475,11 +479,10 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
-        val userAnswersForSubmit: UserAnswers =
-          userAnswersWithNoCrnNewPartners.set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value
+        val answers = crnApplicableNew()
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersForSubmit))
+          applicationBuilder(userAnswers = Some(answers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -488,8 +491,7 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
 
         running(application) {
 
-          val expectedAnswers =
-            userAnswersForSubmit.set(PartnerDetailsCrnPage(newPartnersIndex1), testCRN).success.value
+          val expectedAnswers = answers.set(PartnerDetailsCrnPage(newPartnersIndex1), testCRN).success.value
 
           val request =
             FakeRequest(POST, partnerDetailsCompanyRegistrationNumberRouteNewPartners)
@@ -503,10 +505,70 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
         }
       }
 
-      "must return a Bad Request and errors when invalid data is submitted" in {
+      "must redirect to SystemError without saving when CRN does not apply to the business type" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        val answers =
+          userAnswersWithNoCrnNewPartners.set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Soleproprietor).success.value
+
+        val application =
+          applicationBuilder(userAnswers = Some(answers))
+            .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsCompanyRegistrationNumberRouteNewPartners)
+              .withFormUrlEncodedBody(("value", testCRN))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+          verify(mockSessionRepository, never()).set(any())
+        }
+      }
+
+      "must redirect to SystemError without saving for a corporate body not incorporated in the UK" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+
+        val answers =
+          userAnswersWithNoCrnNewPartners
+            .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Corporatebody)
+            .success
+            .value
+            .set(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), false)
+            .success
+            .value
+
+        val application =
+          applicationBuilder(userAnswers = Some(answers))
+            .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, partnerDetailsCompanyRegistrationNumberRouteNewPartners)
+              .withFormUrlEncodedBody(("value", testCRN))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.SystemErrorController.onPageLoad().url
+          verify(mockSessionRepository, never()).set(any())
+        }
+      }
+
+      "must return a Bad Request for invalid data submitted for an LLP" in {
 
         val badData = "£$%^"
-        val application = applicationBuilder(userAnswers = Some(userAnswersWithNoCrnNewPartners)).build()
+
+        val answers =
+          userAnswersWithNoCrnNewPartners.set(PartnerDetailsBusinessTypePage(newPartnersIndex1), LimitedLiabilityPartnership).success.value
+
+        val application = applicationBuilder(userAnswers = Some(answers)).build()
 
         running(application) {
           val request =
@@ -514,7 +576,6 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
               .withFormUrlEncodedBody(("value", badData))
 
           val boundForm = form.bind(Map("value" -> badData))
-
           val view = application.injector.instanceOf[PartnerDetailsCompanyRegistrationNumberView]
 
           val result = route(application, request).value

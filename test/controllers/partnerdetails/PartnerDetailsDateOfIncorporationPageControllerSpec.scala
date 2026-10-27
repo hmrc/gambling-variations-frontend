@@ -35,7 +35,7 @@ import views.html.partnerdetails.PartnerDetailsDateOfIncorporationView
 import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
+class PartnerDetailsDateOfIncorporationPageControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
   private implicit val messages: Messages = stubMessages()
 
@@ -128,7 +128,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
         val userAnswers =
           partnerDetailsUserAnswersNewPartners
             .set(
-              PartnerDetailsDateOfIncorporation(newPartnersIndex1),
+              PartnerDetailsDateOfIncorporationPage(newPartnersIndex1),
               validAnswer
             )
             .success
@@ -478,7 +478,7 @@ class PartnerDetailsDateOfIncorporationControllerSpec extends SpecBase with Mock
         val userAnswers =
           partnerDetailsUserAnswersExistingPartners
             .set(
-              PartnerDetailsDateOfIncorporation(businessNumber1),
+              PartnerDetailsDateOfIncorporationPage(businessNumber1),
               validAnswer
             )
             .success

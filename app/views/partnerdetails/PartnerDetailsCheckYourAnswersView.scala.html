@@ -34,7 +34,7 @@
 @layout(pageTitle = titleNoForm(messages("partnerDetailsCheckYourAnswers.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
     @formHelper(
-        action = vm.continueCall,
+        action = controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onContinue(vm.businessNumberOrIndex.toString),
         Symbol("autoComplete") -> "off") {
 
             @caption(messages("changeRegistrationDetails.caption"))

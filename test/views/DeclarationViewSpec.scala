@@ -17,8 +17,7 @@
 package views
 
 import base.SpecBase
-import forms.{ContactNumberFormProvider, DeclarationSubmittedFormProvider}
-import models.NormalMode
+import forms.DeclarationSubmittedFormProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*

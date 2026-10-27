@@ -17,23 +17,12 @@
 package controllers
 
 import base.SpecBase
-import connectors.GamblingConnector
 import forms.DeclarationSubmittedFormProvider
-import models.{BusinessDetails, BusinessType}
-import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
-import pages.{BusinessTypePage, DeclarationPage, GroupMemberPage}
-import play.api.inject.bind
-import play.api.mvc.Call
+import models.BusinessType
+import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import repositories.SessionRepository
-import uk.gov.hmrc.http.HeaderCarrier
 import views.html.DeclarationView
-
-import java.time.LocalDate
-import scala.concurrent.Future
 
 class DeclarationControllerSpec extends SpecBase {
 
