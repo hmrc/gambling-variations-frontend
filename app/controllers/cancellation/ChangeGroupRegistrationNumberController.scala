@@ -36,7 +36,7 @@ class ChangeGroupRegistrationNumberController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessDetailsDataRequiredAction,
   formProvider: ChangeGroupRegistrationNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeGroupRegistrationNumberView

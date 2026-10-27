@@ -65,7 +65,6 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
         .select(".govuk-label")
         .text mustBe messages("changeGroupRegistrationNumber.heading")
 
-
       doc
         .select("button.govuk-button")
         .text must include(

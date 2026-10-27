@@ -18,11 +18,12 @@ package controllers.cancellation
 
 import base.SpecBase
 import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.{any, contains}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.{BusinessTypePage, GroupMemberPage}
 import pages.cancellation.ChangeGroupRegistrationNumberPage
 import play.api.inject.bind
 import play.api.mvc.Call
@@ -41,6 +42,14 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
   val form = formProvider()
 
   lazy val changeGroupRegistrationNumberRoute = routes.ChangeGroupRegistrationNumberController.onPageLoad().url
+  override val emptyUserAnswers: UserAnswers =
+    super.emptyUserAnswers
+      .set(BusinessTypePage, BusinessType.Partnership)
+      .success
+      .value
+      .set(GroupMemberPage, false)
+      .success
+      .value
 
   "ChangeGroupRegistrationNumber Controller" - {
 
@@ -62,7 +71,7 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ChangeGroupRegistrationNumberPage, "answer").success.value
+      val userAnswers = emptyUserAnswers.set(ChangeGroupRegistrationNumberPage, "answer").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -121,6 +130,36 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to SystemError for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, changeGroupRegistrationNumberRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to SystemError for a POST if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, changeGroupRegistrationNumberRoute)
+            .withFormUrlEncodedBody(("value", "answer"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
       }
     }
   }
