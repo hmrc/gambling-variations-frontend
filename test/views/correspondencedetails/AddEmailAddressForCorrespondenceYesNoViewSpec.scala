@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package views
+package views.correspondencedetails
 
 import base.SpecBase
-import forms.RemoveCorrespondenceDetailsYesNoFormProvider
+import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.correspondencedetails.RemoveCorrespondenceDetailsYesNoView
+import views.html.correspondencedetails.AddEmailAddressForCorrespondenceYesNoView
 
-class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
+class AddEmailAddressForCorrespondenceYesNoViewSpec extends SpecBase {
 
-  private val form = new RemoveCorrespondenceDetailsYesNoFormProvider()()
+  private val form = new AddEmailAddressForCorrespondenceYesNoFormProvider()()
 
-  "RemoveCorrespondenceDetailsYesNoView" - {
+  "AddEmailAddressForCorrespondenceYesNoView" - {
 
     "render the page correctly" in {
 
@@ -37,7 +37,7 @@ class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[RemoveCorrespondenceDetailsYesNoView]
+        val view = application.injector.instanceOf[AddEmailAddressForCorrespondenceYesNoView]
 
         val html = view(
           form,
@@ -47,31 +47,20 @@ class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("removeCorrespondenceDetailsYesNo.title")
+          messages(application)("addEmailAddressForCorrespondenceYesNo.title")
         )
 
-        document.select("h1").text() mustEqual
-          messages(application)("removeCorrespondenceDetailsYesNo.heading")
-
-        document.select("span").select(".govuk-caption-l").text() must include(
+        document.title() must include(
           messages(application)("changeRegistrationDetails.caption")
         )
 
         document.body().text() must include(
-          messages(application)("removeCorrespondenceDetailsYesNo.hint")
-        )
-
-        document.body().text() must include(
-          messages(application)("changeRegistrationDetails.readyToSubmit")
+          messages(application)("addEmailAddressForCorrespondenceYesNo.heading")
         )
 
         document.body().text() must include(
           messages(application)("site.continue")
         )
-
-        document.getElementById("removeCorrespondenceDetailsYesNo").attr("value") mustEqual "true"
-
-        document.getElementById("removeCorrespondenceDetailsYesNo-no").attr("value") mustEqual "false"
       }
     }
 
@@ -81,9 +70,9 @@ class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[RemoveCorrespondenceDetailsYesNoView]
+        val view = application.injector.instanceOf[AddEmailAddressForCorrespondenceYesNoView]
 
-        val boundForm = form.bind(Map("removeCorrespondenceDetailsYesNo" -> ""))
+        val boundForm = form.bind(Map("value" -> ""))
 
         val html = view(
           boundForm,
@@ -95,7 +84,7 @@ class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("removeCorrespondenceDetailsYesNo.error.required")
+          messages(application)("addEmailAddressForCorrespondenceYesNo.error.required")
         )
       }
     }

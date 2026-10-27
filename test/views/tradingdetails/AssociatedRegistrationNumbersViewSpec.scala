@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tradingdetails
 
 import base.SpecBase
 import forms.AssociatedRegistrationNumbersFormProvider

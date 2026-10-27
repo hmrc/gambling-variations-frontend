@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.correspondencedetails
 
 import base.SpecBase
 import forms.AddCorrespondingDetailsYesNoFormProvider
@@ -25,7 +25,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.running
 import views.html.correspondencedetails.AddCorrespondingDetailsYesNoView
 
-class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
+class AddCorrespondenceDetailsYesNoViewSpec extends SpecBase {
 
   private val form = new AddCorrespondingDetailsYesNoFormProvider()()
 

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package views
+package views.businessname
 
 import base.SpecBase
+import forms.BusinessTradingNameFormProvider
+import models.{BusinessType, NormalMode}
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import models.{BusinessType, NormalMode}
 import views.html.BusinessTradingNameView
-import forms.BusinessTradingNameFormProvider
 
 class BusinessTradingNameViewSpec extends SpecBase {
 
