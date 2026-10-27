@@ -701,8 +701,6 @@ partnerAddEmailAddressYesNoPage.checkYourAnswersLabel = Do you want to add an em
 partnerAddEmailAddressYesNoPage.error.required = Select yes to add an email address for the partner
 partnerAddEmailAddressYesNoPage.change.hidden = Do you want to add an email address for the partner?
 
-
-
 partnerEmailAddress.title = What is the partner’s email address?
 partnerEmailAddress.heading = What is the partner’s email address?
 partnerEmailAddress.error.required = Enter the partner’s email address
@@ -1497,3 +1495,25 @@ controllingBodyVATScreener.error.required = Select yes to add a VAT registration
 removeControllingBodyNINumber.title = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
 removeControllingBodyNINumber.heading = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
 removeControllingBodyNINumber.error.required = Select yes if you want to remove this controlling body’s National Insurance number
+
+reasonForCancellation.title = Why are you cancelling this registration?
+reasonForCancellation.heading = Why are you cancelling this registration?
+reasonForCancellation.caption = Cancel registration
+
+reasonForCancellation.allMachineGamesAreExcluded = All machine games are excluded
+reasonForCancellation.allMachineGamesAreExcluded.hint = For example, the prizes are worth less than the cost of play
+
+reasonForCancellation.allTakingsFromMGDAreExcluded = All takings from machine games are excluded
+reasonForCancellation.allTakingsFromMGDAreExcluded.hint = For example, they are donated to charity
+
+reasonForCancellation.noMachineGamesAreAvailableToPlay = No machine games are available to play
+reasonForCancellation.noMachineGamesAreAvailableToPlay.hint = For example, they are all out of service
+
+reasonForCancellation.noLongerNeedToBeRegistered = No longer need to be registered
+reasonForCancellation.noLongerNeedToBeRegistered.hint = For example, you have removed all machine games
+
+reasonForCancellation.businessIsPartOfTheGroup = Business is now part of a group
+
+reasonForCancellation.error.required = Select why you are cancelling this registration
+reasonForCancellation.checkYourAnswersLabel = reasonForCancellation
+reasonForCancellation.change.hidden = ReasonForCancellation

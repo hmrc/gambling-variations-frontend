@@ -18,7 +18,7 @@ package viewmodels.checkAnswers.partnerdetails
 
 import controllers.partnerdetails.*
 import models.BusinessType.*
-import models.{Address, BusinessType, UserAnswers}
+import models.{BusinessType, UserAnswers}
 import pages.partnerdetails.*
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.Reads
@@ -38,10 +38,24 @@ object PartnerMandatoryDetails {
       Field(page, call, ua => ua.get(page).isDefined)
   }
 
-  // --- Public API ---
+  /** The first unanswered mandatory field, used to redirect on continue. */
+  def firstMissing(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Option[Field] =
+    required(userAnswers, index).find(field => !field.isAnswered(userAnswers))
+
+  def isMissing(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Boolean =
+    firstMissing(userAnswers, index).isDefined
+
+  /** Removes answers to conditional pages that don't apply to the partner's current business type. */
+  def cleanUp(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Try[UserAnswers] = {
+    val keep = required(userAnswers, index).map(_.page).toSet
+
+    conditionalPages(index)
+      .filterNot(keep.contains)
+      .foldLeft(Try(userAnswers))((acc, page) => acc.flatMap(_.remove(page)))
+  }
 
   /** Mandatory fields for the partner's current answers, in journey order. */
-  def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
+  private def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
     val mode = PartnerUtils.modeFor(index)
 
     val businessTypeField =
@@ -52,24 +66,6 @@ object PartnerMandatoryDetails {
 
     (businessTypeField +: businessFields) ++ commonFields(index)
   }
-
-  /** The first unanswered mandatory field, used to redirect on continue. */
-  def firstMissing(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Option[Field] =
-    required(userAnswers, index).find(field => !field.isAnswered(userAnswers))
-
-  def isMissing(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Boolean =
-    firstMissing(userAnswers, index).isDefined
-
-  /** Removes answers to conditional pages that don't apply to the partner's current business type / incorporation. */
-  def cleanUp(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Try[UserAnswers] = {
-    val keep = required(userAnswers, index).map(_.page).toSet
-
-    conditionalPages(index)
-      .filterNot(keep.contains)
-      .foldLeft(Try(userAnswers))((acc, page) => acc.flatMap(_.remove(page)))
-  }
-
-  // --- Rules ---
 
   /** Pages are keyed by the typed index; routes only take the string form. */
   private def urlIndex(index: BusinessNumberOrIndex): String = index.toString
@@ -85,8 +81,8 @@ object PartnerMandatoryDetails {
     val utr = Field.of(PartnerDetailsUtrPage(index), routes.PartnerDetailsAddUTRController.onPageLoad(key, mode))
 
     val ukIncorporation = Seq(
-      Field.of(PartnerDetailsDateOfIncorporation(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(key, mode)),
-      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key, mode)) // TODO: CRN page
+      Field.of(PartnerDetailsDateOfIncorporationPage(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(key, mode)),
+      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key, mode))
     )
 
     val nonUkIncorporation = Seq(
@@ -136,16 +132,15 @@ object PartnerMandatoryDetails {
     val key = urlIndex(index)
     val mode = PartnerUtils.modeFor(index)
 
+    // TODO: THIS STEP NEEDS ADDRESS LOOKUP PT-ADLK-S
+    // val correspondenceAddress = (ua: UserAnswers) => ua.get(PartnerDetailsNewCorrespondenceDetailsSectionPage(index)).flatMap(_.correspondenceAddress)
+
     Seq(
-      Field.of(
-        PartnerDetailsDateOfJoiningPage(index),
-        routes.PartnerDateOfJoiningController.onPageLoad(key, mode)
-      ),
-      Field(
-        PartnerDetailsNewCorrespondenceDetailsSectionPage(index),
-        routes.PartnerDetailsBusinessTypeController.onPageLoad(key, mode), // TODO: no address page controller yet
-        ua => correspondenceAddress(ua, index).isDefined
-      ),
+      Field.of(PartnerDetailsDateOfJoiningPage(index), routes.PartnerDateOfJoiningController.onPageLoad(key, mode)),
+      // TODO: THIS STEP NEEDS ADDRESS LOOKUP PT-ADLK-S
+      /** Field(PartnerDetailsNewCorrespondenceDetailsSectionPage(index), routes.PartnerDetailsBusinessTypeController.onPageLoad(key, mode), ua =>
+        * correspondenceAddress(ua, index).isDefined ),
+        */
       Field.of(PartnerDetailsContactNumberPage(index), routes.PartnerDetailsContactDetailsController.onPageLoad(key, mode))
     )
   }
@@ -157,12 +152,10 @@ object PartnerMandatoryDetails {
     PartnerDetailsBusinessNamePage(index),
     PartnerDetailsUtrPage(index),
     PartnerDetailsIsBusinessIncorporatedUkPage(index),
-    PartnerDetailsDateOfIncorporation(index),
+    PartnerDetailsDateOfIncorporationPage(index),
     PartnerDetailsCrnPage(index),
     PartnerDetailsCountryOfIncorporationPage(index),
     PartnerDetailsForeignCorporateReferencePage(index)
   )
 
-  private def correspondenceAddress(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Option[Address] =
-    userAnswers.get(PartnerDetailsNewCorrespondenceDetailsSectionPage(index)).flatMap(_.correspondenceAddress)
 }

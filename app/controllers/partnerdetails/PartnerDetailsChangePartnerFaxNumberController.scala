@@ -70,18 +70,18 @@ class PartnerDetailsChangePartnerFaxNumberController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
         value =>
 
-          val isChanged: Boolean =
-            checkIfChanged(value,
-                           request.userAnswers,
-                           PartnerDetailsCorrespondenceFaxNumberPage(newIndex),
-                           PartnerDetailsChangePartnerFaxNumberPage(newIndex)
-                          )
+          val isChanged: Boolean = checkIfChanged(value,
+                                                  request.userAnswers,
+                                                  PartnerDetailsCorrespondenceFaxNumberPage(newIndex),
+                                                  PartnerDetailsChangePartnerFaxNumberPage(newIndex)
+                                                 )
 
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsCorrespondenceFaxNumberPage(newIndex), value))
+            // TODO: do we need this?
             updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsChangePartnerFaxNumberPage(newIndex), isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsChangePartnerFaxNumberPage(newIndex), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsCorrespondenceFaxNumberPage(newIndex), mode, updatedAnswers))
       )
   }
 }

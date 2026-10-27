@@ -66,7 +66,7 @@ class AddressLookupController @Inject() (
                                       .flatMap(_.set(CorrespondenceDetailsChangesPage, isChanged))
                                   )
         _ <- sessionRepository.set(userAnswersWithAddress)
-      } yield Redirect(routes.CheckCorrespondenceDetailsController.onPageLoad())
+      } yield Redirect(controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad())
     }
 
   private def isIomOrCiAddress(address: Address): Boolean =
