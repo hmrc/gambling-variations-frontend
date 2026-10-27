@@ -19,15 +19,17 @@ package controllers.partnerdetails
 import connectors.GamblingConnector
 import controllers.actions.*
 import forms.partnerdetails.PartnerDateOfJoiningFormProvider
-import models.{BusinessDetails, Mode}
+import models.Mode
 import navigation.Navigator
 import pages.partnerdetails.PartnerDetailsDateOfJoiningPage
-import play.api.i18n.{I18nSupport, Lang, MessagesApi}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, Lang, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.PartnerUtils
 import utils.DateTimeFormats.*
+import utils.PartnerUtils
 import views.html.partnerdetails.PartnerDateOfJoiningView
 
 import java.time.LocalDate
@@ -51,90 +53,54 @@ class PartnerDateOfJoiningController @Inject() (
 
   def onPageLoad(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+      implicit val lang: Lang = messagesApi.preferred(request).lang
+      val page = PartnerDetailsDateOfJoiningPage(PartnerUtils.parseIndex(index, mode))
 
-      gamblingConnector
-        .getBusinessDetails(request.mgdRegNum)
-        .map { businessDetails =>
-
-          implicit val lang: Lang = messagesApi.preferred(request).lang
-
-          val newIndex = PartnerUtils.parseIndex(index, mode)
-          val registrationDate = getRegistrationDate(businessDetails)
-
-          val latestDate = calculateLatestDate(registrationDate)
-
-          val form = formProvider(registrationDate)
-
-          val preparedForm =
-            request.userAnswers
-              .get(PartnerDetailsDateOfJoiningPage(newIndex))
-              .fold(form)(form.fill)
-
-          Ok(
-            view(preparedForm, index, mode, registrationDate.format(dateTimeFormat()), latestDate.format(dateTimeHintFormat))
-          )
-        }
+      loadPageContext(request.mgdRegNum).map { ctx =>
+        val preparedForm = request.userAnswers.get(page).fold(ctx.form)(ctx.form.fill)
+        Ok(view(preparedForm, index, mode, ctx.registrationDate, ctx.latestDate))
+      }
     }
 
   def onSubmit(index: String, mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+      implicit val lang: Lang = messagesApi.preferred(request).lang
+      val page = PartnerDetailsDateOfJoiningPage(PartnerUtils.parseIndex(index, mode))
 
-      gamblingConnector
-        .getBusinessDetails(request.mgdRegNum)
-        .flatMap { businessDetails =>
+      loadPageContext(request.mgdRegNum).flatMap { ctx =>
+        ctx.form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode, ctx.registrationDate, ctx.latestDate))),
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(page, mode, updatedAnswers))
+          )
+      }
+    }
 
-          implicit val lang: Lang =
-            messagesApi.preferred(request).lang
-          val newIndex = PartnerUtils.parseIndex(index, mode)
-          val registrationDate = getRegistrationDate(businessDetails)
-          val latestDate = calculateLatestDate(registrationDate)
-          val form = formProvider(registrationDate)
+  private final case class PageContext(form: Form[LocalDate], registrationDate: String, latestDate: String)
 
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors =>
-                Future.successful(
-                  BadRequest(
-                    view(formWithErrors, index, mode, registrationDate.format(dateTimeFormat()), latestDate.format(dateTimeHintFormat))
-                  )
-                ),
-              value =>
-                for {
-                  updatedAnswers <-
-                    Future.fromTry(
-                      request.userAnswers.set(
-                        PartnerDetailsDateOfJoiningPage(newIndex),
-                        value
-                      )
-                    )
-
-                  _ <- sessionRepository.set(updatedAnswers)
-
-                } yield Redirect(
-                  navigator.nextPage(PartnerDetailsDateOfJoiningPage(newIndex), mode, updatedAnswers)
-                )
+  private def loadPageContext(mgdRegNum: String)(implicit messages: Messages, hc: HeaderCarrier, lang: Lang): Future[PageContext] =
+    gamblingConnector.getBusinessDetails(mgdRegNum).flatMap { businessDetails =>
+      businessDetails.dateOfRegistration match {
+        case Some(registrationDate) =>
+          Future.successful(
+            PageContext(
+              form             = formProvider(registrationDate),
+              registrationDate = registrationDate.format(dateTimeFormat()),
+              latestDate       = latestDate(registrationDate).format(dateTimeHintFormat)
             )
-        }
+          )
+        case None =>
+          Future.failed(new RuntimeException("No registration date found"))
+      }
     }
 
-  private def getRegistrationDate(
-    businessDetails: BusinessDetails
-  ): LocalDate =
-    businessDetails.dateOfRegistration.getOrElse(
-      throw new RuntimeException("No registration date found")
-    )
-
-  private def calculateLatestDate(
-    registrationDate: LocalDate
-  ): LocalDate = {
-
-    val currentDate = LocalDate.now()
-
-    if (registrationDate.isAfter(currentDate)) {
-      registrationDate.plusDays(15)
-    } else {
-      currentDate.plusDays(15)
-    }
+  private def latestDate(registrationDate: LocalDate): LocalDate = {
+    val today = LocalDate.now()
+    (if (registrationDate.isAfter(today)) registrationDate else today).plusDays(15)
   }
 }
