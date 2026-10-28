@@ -51,7 +51,7 @@ class Navigator @Inject() () {
     case ControllingBodySoleProprietorPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case ControllingBodyEmailPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
+      _ => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
     case ControllingBodyDateOfBirthPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyDateOfIncorporationPage =>
@@ -64,6 +64,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodySameAsRepYesNoPage(userAnswers)
     case ControllingBodyNotProvidedYesNoPage =>
       userAnswers => navigateControllingBodyNotProvidedYesNoPage(userAnswers)
+    case ControllingBodyUtrPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -548,7 +550,7 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyChangeScreenerPage)
       .map {
-        case EditDetails => routes.IndexController.onPageLoad() // TODO later -> CB-CYA, controlling body check your answers
+        case EditDetails => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
         case ProvideNew  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
         case KeepSame    => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
