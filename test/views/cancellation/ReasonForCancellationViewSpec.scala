@@ -23,8 +23,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.ReasonForCancellationView
-import views.html.partnerdetails.PartnerDetailsEmailAddressView
+import views.html.cancellation.ReasonForCancellationView
+
 import scala.jdk.CollectionConverters.*
 
 class ReasonForCancellationViewSpec extends SpecBase {
