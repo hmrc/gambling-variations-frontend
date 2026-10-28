@@ -592,7 +592,7 @@ object CheckPartnerDetailsViewModel {
 
   private def formatNino(nino: String): String = {
     val clean = nino.replaceAll("[^a-zA-Z0-9]", "").toUpperCase
-    clean.replaceFirst("^([A-Z]{2})([0-9]{6})([A-Z])$", "$1 $2 $3")
+    clean.replaceFirst("^([A-Z]{2})([0-9]{2})([0-9]{2})([0-9]{2})([A-Z])$", "$1 $2 $3 $4 $5")
   }
 
 }
