@@ -48,7 +48,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
     ).set(ControllingBodyBusinessTypePage, BusinessType.Soleproprietor).success.value
 
 
-  lazy val busAddRoute: String =
+  lazy val niNumRoute: String =
     controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad().url
 
   "ControllingBodyNINumber Controller" - {
@@ -58,7 +58,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(noAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, busAddRoute)
+        val request = FakeRequest(GET, niNumRoute)
 
         val result = route(application, request).value
 
@@ -77,7 +77,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, busAddRoute)
+        val request = FakeRequest(GET, niNumRoute)
 
         val view = application.injector.instanceOf[ControllingBodyNINumberView]
 
@@ -107,7 +107,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
 
         val request =
-          FakeRequest(POST, busAddRoute)
+          FakeRequest(POST, niNumRoute)
             .withFormUrlEncodedBody("value" -> "QQ 12 34 56 C")
 
         val result = route(application, request).value
@@ -122,7 +122,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, busAddRoute)
+        val request = FakeRequest(GET, niNumRoute)
 
         val result = route(application, request).value
 
@@ -138,7 +138,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, busAddRoute)
+          FakeRequest(POST, niNumRoute)
             .withFormUrlEncodedBody(("controllingBodyNINumber", "jlkjfdlkjsls"))
 
         val result = route(application, request).value
