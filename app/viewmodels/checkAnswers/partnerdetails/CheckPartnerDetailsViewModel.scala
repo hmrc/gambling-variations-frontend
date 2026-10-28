@@ -353,7 +353,6 @@ case class CheckPartnerDetailsViewModel(
       Some(optionalRow(label, vatRegistrationNumber.map(vat => Text(vat)), actions, change))
     } else None
 
-
   // --- Address rows ---
 
   private def addressRow(implicit messages: Messages): SummaryListRow = {
