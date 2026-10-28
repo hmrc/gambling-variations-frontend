@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.ControllingBodyRemoveVATRegistrationNumberPage
+import pages.controllingbody.{ControllingBodyRemoveVATRegistrationNumberPage, ControllingBodyVrnPage}
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -94,7 +94,7 @@ class ControllingBodyRemoveVATRegistrationNumberControllerSpec extends SpecBase 
     }
 
     Seq(true, false).foreach { answer =>
-      s"must save $answer and redirect to the placeholder destination" in {
+      s"must ${if (answer) "remove" else "preserve"} the VAT number when the answer is $answer" in {
         val repository = mock[SessionRepository]
         when(repository.set(any())) thenReturn Future.successful(true)
         val application = applicationBuilder(userAnswers = Some(UserAnswers("id", requiredAnswer)))
@@ -108,12 +108,18 @@ class ControllingBodyRemoveVATRegistrationNumberControllerSpec extends SpecBase 
           ).value
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual "#"
+          val originalAnswers = UserAnswers("id", requiredAnswer)
+          val expectedAnswers = (if (answer) originalAnswers.remove(ControllingBodyVrnPage).success.value else originalAnswers)
+            .set(ControllingBodyRemoveVATRegistrationNumberPage, answer)
+            .success
+            .value
+          val captured = org.mockito.ArgumentCaptor.forClass(classOf[UserAnswers])
+          org.mockito.Mockito.verify(repository).set(captured.capture())
+          captured.getValue.get(ControllingBodyVrnPage) mustBe (if (answer) None else Some("123456789"))
           org.mockito.Mockito
             .verify(repository)
             .set(
-              org.mockito.ArgumentMatchers.argThat[UserAnswers](answers =>
-                answers.get(ControllingBodyRemoveVATRegistrationNumberPage).contains(answer)
-              )
+              org.mockito.ArgumentMatchers.argThat[UserAnswers](answers => answers.id == expectedAnswers.id && answers.data == expectedAnswers.data)
             )
         }
       }

@@ -65,10 +65,16 @@ class ControllingBodyRemoveVATRegistrationNumberController @Inject() (
           .bindFromRequest()
           .fold(
             formWithErrors => Future.successful(BadRequest(view(formWithErrors, vatNumber))),
-            value =>
+            removeVATRegistrationNumberYesNo =>
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyRemoveVATRegistrationNumberPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
+                answersAfterRemoval <- if (removeVATRegistrationNumberYesNo) {
+                                         Future.fromTry(request.userAnswers.remove(ControllingBodyVrnPage))
+                                       } else {
+                                         Future.successful(request.userAnswers)
+                                       }
+                updatedAnswers <-
+                  Future.fromTry(answersAfterRemoval.set(ControllingBodyRemoveVATRegistrationNumberPage, removeVATRegistrationNumberYesNo))
+                _ <- sessionRepository.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(ControllingBodyRemoveVATRegistrationNumberPage, mode, updatedAnswers))
           )
     }

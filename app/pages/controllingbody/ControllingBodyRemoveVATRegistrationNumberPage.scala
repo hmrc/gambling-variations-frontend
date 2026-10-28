@@ -23,5 +23,5 @@ case object ControllingBodyRemoveVATRegistrationNumberPage extends QuestionPage[
 
   override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
 
-  override def toString: String = "controllingBodyRemoveVATRegistrationNumber"
+  override def toString: String = "controllingBodyRemoveVATRegistrationNumberYesNo"
 }
