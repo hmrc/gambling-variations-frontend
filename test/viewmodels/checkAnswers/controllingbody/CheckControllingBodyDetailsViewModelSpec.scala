@@ -499,7 +499,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           answers <- answers.set(ControllingBodyNinoPage, "QQ123456C")
           answers <- answers.set(ControllingBodyIsUkIncorporatedPage, "0")
           answers <- answers.set(ControllingBodyCountryOfIncorporationPage, "Spain")
-          answers <- answers.set(ControllingBodyForeignCorporateReferencePage, "ES123")
+          answers <- answers.set(ControllingBodyForeignCorpRefPage, "ES123")
           answers <- answers.set(ControllingBodyDateOfIncorporationPage, LocalDate.of(2000, 1, 1))
           answers <- answers.set(ControllingBodyCrnPage, "CR345678")
           answers <- answers.set(ControllingBodyUtrPage, "1234567890")
