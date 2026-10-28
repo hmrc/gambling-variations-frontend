@@ -74,6 +74,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyVATScreenerPage(userAnswers)
     case ControllingBodyVrnPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-ADLK-S in add flow and CB-CYA in change flow.
+    case ControllingBodyContactDetailsPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
