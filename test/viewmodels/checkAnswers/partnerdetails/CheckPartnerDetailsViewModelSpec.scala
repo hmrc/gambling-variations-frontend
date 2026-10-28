@@ -17,8 +17,8 @@
 package viewmodels.checkAnswers.partnerdetails
 
 import base.SpecBase
-import models.Address
 import models.BusinessType.*
+import models.{Address, ContactNumber}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
@@ -550,6 +550,126 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
           )
 
         actionsOf(rowFor(viewModel.addressSummaryList, "address").value) mustBe empty
+      }
+    }
+
+    "contact details rows" - {
+
+      "escape HTML in the phone number" in {
+
+        val viewModel =
+          existingPartner.copy(
+            contactNumbers = Some(
+              ContactNumber(
+                phoneNumber       = Some("<script>alert(1)</script>"),
+                mobilePhoneNumber = None
+              )
+            )
+          )
+
+        val contactHtml =
+          rowFor(viewModel.contactDetailsSummaryList, "contactNumbers").value.value.content.asHtml.body
+
+        contactHtml must include("&lt;script&gt;")
+        contactHtml must not include "<script>"
+      }
+
+      "show 'not provided' for a missing mobile number without hiding the phone number" in {
+
+        val viewModel =
+          existingPartner.copy(
+            contactNumbers = Some(
+              ContactNumber(
+                phoneNumber       = Some("01234567"),
+                mobilePhoneNumber = None
+              )
+            )
+          )
+
+        val contactHtml =
+          rowFor(viewModel.contactDetailsSummaryList, "contactNumbers").value.value.content.asHtml.body
+
+        contactHtml must include("01234567")
+        contactHtml must include(messages("site.notProvided"))
+      }
+
+      "add the contact-numbers CSS class only when numbers exist" in {
+
+        val withNumbers =
+          existingPartner.copy(contactNumbers = Some(ContactNumber(Some("01234567890"), None)))
+
+        val withoutNumbers =
+          existingPartner.copy(contactNumbers = None)
+
+        rowFor(withNumbers.contactDetailsSummaryList, "contactNumbers").value.value.classes    must include("contact-numbers")
+        rowFor(withoutNumbers.contactDetailsSummaryList, "contactNumbers").value.value.classes must not include "contact-numbers"
+      }
+
+      "lock contact numbers for an existing partner due to join or leave" in {
+
+        val viewModel =
+          existingPartner.copy(isDueToJoin = true)
+
+        actionsOf(rowFor(viewModel.contactDetailsSummaryList, "contactNumbers").value) mustBe empty
+      }
+    }
+
+    "fax and email rows" - {
+
+      "do not show the fax number row only when the screener answer is false" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addFaxNumber = Some(false), faxNumber = None)
+
+        val addFaxHtmlKey =
+          rowFor(viewModel.contactDetailsSummaryList, "addFaxNumber").value.key.content.asHtml.body
+
+        val addFaxHtmlValue =
+          rowFor(viewModel.contactDetailsSummaryList, "addFaxNumber").value.value.content.asHtml.body
+
+        val faxHtml: Option[SummaryListRow] =
+          rowFor(viewModel.contactDetailsSummaryList, "faxNumber")
+
+        addFaxHtmlKey   must include(messages("partnerDetailsCheckYourAnswers.addFaxNumber"))
+        addFaxHtmlValue must include("No")
+        faxHtml mustBe None
+
+      }
+
+      "escape HTML in the fax number" in {
+
+        val viewModel =
+          existingPartner.copy(addFaxNumber = Some(true), faxNumber = Some("<b>123</b>"))
+
+        val faxHtml =
+          rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value.value.content.asHtml.body
+
+        faxHtml must include("&lt;b&gt;123&lt;/b&gt;")
+        faxHtml must not include "<b>123</b>"
+      }
+
+      "offer change and remove for a submitted new partner's fax number" in {
+
+        val viewModel =
+          existingPartner.copy(maybeSubmitted = Some(true), addFaxNumber = Some(true), faxNumber = Some("0123456789"))
+
+        actionsOf(rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value) must have size 2
+      }
+
+      "offer change only for an unsubmitted new partner's fax number" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(maybeSubmitted = Some(false), addFaxNumber = Some(true), faxNumber = Some("0123456789"))
+
+        actionsOf(rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value) must have size 1
+      }
+
+      "show the email row only when the screener answer is yes" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addEmailAddress = Some(false), emailAddress = Some("a@example.com"))
+
+        rowFor(viewModel.contactDetailsSummaryList, "emailAddress") mustBe None
       }
     }
   }
