@@ -32,17 +32,18 @@ class CheckContactDetailsControllerSpec extends SpecBase {
     "must redirect to access denied when group member is true" in {
 
       val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "businessContactNumber" -> Json.obj(
-          "phoneNumber"       -> "07000000000",
-          "mobilePhoneNumber" -> "07000000000"
-        ),
-        "businessFaxNumber"      -> "07000000000",
-        "businessEmailAddress"   -> "a@b.com",
-        GroupMemberPage.toString -> true
+        GroupMemberPage.toString -> true,
+        "businessContactDetailsSection" -> Json.obj(
+          "businessContactNumber" -> Json.obj(
+            "phoneNumber"       -> "07000000000",
+            "mobilePhoneNumber" -> "07000000000"
+          ),
+          "businessFaxNumber"    -> "07000000000",
+          "businessEmailAddress" -> "a@b.com"
+        )
       )
 
-      val userAnswers = UserAnswers("id-number", data)
+      val userAnswers = LoadedContactDetails("id-number", data)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -62,15 +63,16 @@ class CheckContactDetailsControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "businessContactNumber"         -> Json.obj("phoneNumber" -> "07000000000", "mobilePhoneNumber" -> "07000000000"),
-        "businessFaxNumber"             -> "07000000000",
-        "businessEmailAddress"          -> "a@b.com",
-        GroupMemberPage.toString        -> false,
-        "flag"                          -> false
+        GroupMemberPage.toString -> false,
+        "flag"                   -> false,
+        "businessContactDetailsSection" -> Json.obj(
+          "businessContactNumber" -> Json.obj("phoneNumber" -> "07000000000", "mobilePhoneNumber" -> "07000000000"),
+          "businessFaxNumber"     -> "07000000000",
+          "businessEmailAddress"  -> "a@b.com"
+        )
       )
 
-      val userAnswers = UserAnswers("id-number", data)
+      val userAnswers = LoadedContactDetails("id-number", data)
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
@@ -90,16 +92,17 @@ class CheckContactDetailsControllerSpec extends SpecBase {
     "must return SystemErrorController when GroupMemberPage is empty" in {
 
       val data = Json.obj(
-        "businessContactDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum),
-        "businessContactNumber" -> Json.obj(
-          "phoneNumber"       -> "07000000000",
-          "mobilePhoneNumber" -> "07000000000"
-        ),
-        "businessFaxNumber"    -> "07000000000",
-        "businessEmailAddress" -> "a@b.com"
+        "businessContactDetailsSection" -> Json.obj(
+          "businessContactNumber" -> Json.obj(
+            "phoneNumber"       -> "07000000000",
+            "mobilePhoneNumber" -> "07000000000"
+          ),
+          "businessFaxNumber"    -> "07000000000",
+          "businessEmailAddress" -> "a@b.com"
+        )
       )
 
-      val userAnswers = UserAnswers("id-number", data)
+      val userAnswers = LoadedContactDetails("id-number", data)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

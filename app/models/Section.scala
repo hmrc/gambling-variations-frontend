@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.contactdetails
+package models
 
-import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object BusinessContactDetailsSectionPage extends QuestionPage[String] {
+// A section of the registration that is loaded from the backend as a unit. Each section is declared next to its
+// pages rather than in a shared list here, so that migrating a section does not touch this file.
+trait Section {
+  def key: String
 
-  override def path: JsPath = JsPath \ "businessContactDetailsSection" \ toString
-
-  override def toString: String = "mgdRegNum"
+  def path: JsPath = JsPath \ s"${key}Section"
 }

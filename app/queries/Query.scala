@@ -33,3 +33,6 @@ trait Settable[A] extends Query {
   def cleanup(value: Option[A], userAnswers: UserAnswers): Try[UserAnswers] =
     Success(userAnswers)
 }
+
+// A query for journey state rather than data held by the backend. It is kept in the flags store and never submitted.
+trait Flag extends Query
