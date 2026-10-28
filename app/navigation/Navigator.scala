@@ -60,6 +60,10 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
     case ControllingBodyCrnPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-UTR when the controlling body journey is built.
+    case ControllingBodySameAsRepYesNoPage =>
+      userAnswers => navigateControllingBodySameAsRepYesNoPage(userAnswers)
+    case ControllingBodyNotProvidedYesNoPage =>
+      userAnswers => navigateControllingBodyNotProvidedYesNoPage(userAnswers)
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -567,3 +571,17 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 }
+
+private def navigateControllingBodySameAsRepYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodySameAsRepYesNoPage) match {
+    case Some(true)  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+    case Some(false) => routes.ChangeRegistrationDetailsController.onPageLoad()
+    case None        => routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateControllingBodyNotProvidedYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodyNotProvidedYesNoPage) match {
+    case Some(false) => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+    case Some(true)  => routes.ChangeRegistrationDetailsController.onPageLoad()
+    case None        => routes.SystemErrorController.onPageLoad()
+  }
