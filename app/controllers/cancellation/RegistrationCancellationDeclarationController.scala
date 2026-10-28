@@ -20,7 +20,7 @@ import controllers.Execution.trampoline
 import controllers.actions.*
 import models.NormalMode
 import navigation.Navigator
-import pages.cancellation.RegistrationCancellationDeclarationPage
+import pages.cancellation.{RegistrationCancellationConfirmationReferencePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,6 +29,7 @@ import views.html.cancellation.RegistrationCancellationDeclarationView
 
 import javax.inject.Inject
 import scala.concurrent.Future
+import scala.util.Random
 
 class RegistrationCancellationDeclarationController @Inject() (
   override val messagesApi: MessagesApi,
@@ -50,7 +51,16 @@ class RegistrationCancellationDeclarationController @Inject() (
     (authorise andThen getData andThen requireData).async { implicit request =>
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(RegistrationCancellationDeclarationPage, true))
-        _              <- sessionRepository.set(updatedAnswers)
+        // TODO this would be replaced by the actual call to backend and receiving reference number back
+        updatedAnswers <- if request.userAnswers.get(RegistrationCancellationConfirmationReferencePage).isEmpty then
+                            Future.fromTry(
+                              request.userAnswers.set(
+                                RegistrationCancellationConfirmationReferencePage,
+                                Random.alphanumeric.filter(_.isLetter).take(8).mkString.toUpperCase
+                              )
+                            )
+                          else Future.successful(request.userAnswers)
+        _ <- sessionRepository.set(updatedAnswers)
       } yield Redirect(navigator.nextPage(RegistrationCancellationDeclarationPage, NormalMode, updatedAnswers))
     }
 }

@@ -1709,3 +1709,12 @@ changeGroupRegistrationNumber.error.invalidFormat = The group''s registration nu
 changeGroupRegistrationNumber.error.invalidReference = Enter a real registration number for the group
 
 changeGroupRegistrationNumber.change.hidden = ChangeGroupRegistrationNumber
+
+registrationCancellationConfirmation.title = What happens next
+registrationCancellationConfirmation.heading = What happens next
+
+registrationCancellationConfirmation.panel.title = Cancellation submitted
+registrationCancellationConfirmation.panel.p1 = Your reference is
+
+registrationCancellationConfirmation.p1 = We are reviewing your cancellation and will notify you if there are any issues.
+registrationCancellationConfirmation.p2 = It may take up to 48 hours for HMRC to approve your changes.

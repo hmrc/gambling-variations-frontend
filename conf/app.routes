@@ -380,3 +380,5 @@ GET        /change-registration-details/controlling-body-details/business-countr
 POST       /change-registration-details/controlling-body-details/business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-registration/check                       controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()
