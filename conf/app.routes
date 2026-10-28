@@ -342,3 +342,6 @@ POST       /cancel-registration/group-registration-number                       
 
 GET        /change-registration-details/controlling-body-details/unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)
