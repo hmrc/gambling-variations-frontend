@@ -542,6 +542,21 @@ dateOfIncorporation.error.required = cy: Date of incorporation must include a {0
 dateOfIncorporation.error.invalid = cy: Date of incorporation must be a real date
 dateOfIncorporation.change.hidden = cy: DateOfIncorporation
 
+controllingBodyContactDetails.title = cy: What contact numbers should we use for the controlling body?
+controllingBodyContactDetails.heading = cy: What contact numbers should we use for the controlling body?
+controllingBodyContactDetails.paragraph = cy: You must provide at least one contact number.
+controllingBodyContactDetails.phoneNumber = cy: Phone number
+controllingBodyContactDetails.mobilePhoneNumber = cy: Mobile number
+
+controllingBodyContactDetails.error.phoneNumber.length = cy: The phone number must be 20 characters or less
+controllingBodyContactDetails.error.mobileNumber.length = cy: The mobile number must be 20 characters or less
+
+controllingBodyContactDetails.error.phoneNumber.invalid = cy: The phone number must only include numbers 0 to 9 and spaces
+controllingBodyContactDetails.error.mobileNumber.invalid = cy: The mobile number must only include numbers 0 to 9 and spaces
+
+controllingBodyContactDetails.error.phoneNumber.missing = cy: Enter the phone number for the controlling body
+controllingBodyContactDetails.error.mobileNumber.missing = cy: Enter the mobile number for the controlling body
+
 controllingBodyUTR.title = cy: Tell us the controlling body’s Unique Taxpayer Reference
 controllingBodyUTR.subtitle =  cy: What is the Unique Taxpayer Reference?
 controllingBodyUTR.heading = cy: Tell us the controlling body’s Unique Taxpayer Reference (UTR)

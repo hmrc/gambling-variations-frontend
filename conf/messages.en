@@ -1529,6 +1529,21 @@ changeGroupRegistrationNumber.error.invalidReference = Enter a real registration
 
 changeGroupRegistrationNumber.change.hidden = ChangeGroupRegistrationNumber
 
+controllingBodyContactDetails.title = What contact numbers should we use for the controlling body?
+controllingBodyContactDetails.heading = What contact numbers should we use for the controlling body?
+controllingBodyContactDetails.p1 = You must provide at least one contact number.
+controllingBodyContactDetails.phoneNumber = Phone number
+controllingBodyContactDetails.mobileNumber = Mobile number
+
+controllingBodyContactDetails.error.phoneNumber.length = The phone number must be 20 characters or less
+controllingBodyContactDetails.error.mobileNumber.length = The mobile number must be 20 characters or less
+
+controllingBodyContactDetails.error.phoneNumber.invalid = The phone number must only include numbers 0 to 9 and spaces
+controllingBodyContactDetails.error.mobileNumber.invalid = The mobile number must only include numbers 0 to 9 and spaces
+
+controllingBodyContactDetails.error.phoneNumber.required = Enter the phone number for the controlling body
+controllingBodyContactDetails.error.mobileNumber.required = Enter the mobile number for the controlling body
+
 
 controllingBodyUTR.title = Tell us the controlling body’s Unique Taxpayer Reference
 controllingBodyUTR.subtitle =  What is the Unique Taxpayer Reference?

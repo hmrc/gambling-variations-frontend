@@ -339,5 +339,8 @@ POST       /cancel-registration/why-are-you-cancelling                        co
 GET        /cancel-registration/group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
 
+GET        /change-registration-details/controlling-body-details/contact-numbers                        controllers.controllingbody.ControllingBodyContactDetailsController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/contact-numbers                        controllers.controllingbody.ControllingBodyContactDetailsController.onSubmit(mode: Mode = NormalMode)
+
 GET        /change-registration-details/controlling-body-details/unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onSubmit(mode: Mode = NormalMode)
