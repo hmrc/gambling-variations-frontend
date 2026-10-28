@@ -23,15 +23,15 @@ import pages.GroupMemberPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import viewmodels.ChangeRegistrationDetailsViewModel
 import views.html.ChangeRegistrationDetailsView
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -96,19 +96,17 @@ class ChangeRegistrationDetailsController @Inject() (
   private def controllingBodyDetailsUrl(mgdRegNumber: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[String] = {
 
     gamblingConnector.getControlBodyDetails(mgdRegNumber).map { details =>
-      if (details.mgdRegNumber.isEmpty) {
-        controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad().url
-      } else {
-        details.isRepMemSameAsCb match {
-          case Some("1") =>
-            controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
 
-          case Some("0") =>
-            controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
+      details.isRepMemSameAsCb match {
+        case Some("1") =>
+          controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
 
-          case _ =>
-            routes.PageNotFoundController.onPageLoad().url
-        }
+        case Some("0") =>
+          controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
+
+        case _ =>
+          routes.PageNotFoundController.onPageLoad().url
+
       }
     }
   }

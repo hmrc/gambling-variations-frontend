@@ -18,9 +18,8 @@ package controllers
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.BusinessType.Unincorporatedbody
 import models.controllingbody.ControlBodyDetails
-import models.{BusinessDetails, BusinessType, UserAnswers}
+import models.{BusinessType, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -236,30 +235,6 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
 
       redirectLocation(result).value mustEqual
         routes.SystemErrorController.onPageLoad().url
-    }
-  }
-
-  "must link controlling body details to the not provided page when the API returns no details" in {
-
-    val userAnswers =
-      partnershipAnswers.set(GroupMemberPage, true).success.value
-
-    val application =
-      applicationWith(
-        userAnswers,
-        controlBodyDetails("", None)
-      )
-
-    running(application) {
-      val result = route(application, request).value
-      val content = contentAsString(result)
-
-      status(result) mustEqual OK
-
-      controllingBodyLink(content) mustEqual
-        controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController
-          .onPageLoad()
-          .url
     }
   }
 
