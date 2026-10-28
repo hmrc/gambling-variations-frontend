@@ -66,6 +66,10 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyNotProvidedYesNoPage(userAnswers)
     case ControllingBodyUtrPage =>
       _ => controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+    case ControllingBodyVATScreenerPage =>
+      userAnswers => navigateControllingBodyVATScreenerPage(userAnswers)
+    case ControllingBodyVrnPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-ADLK-S in add flow and CB-CYA in change flow.
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -562,6 +566,15 @@ class Navigator @Inject() () {
       case Some(false) => routes.IndexController.onPageLoad() // TODO later -> Redirect to CB-CN in add flow and CB-CYA in change flow
       case None        => routes.SystemErrorController.onPageLoad()
     }
+
+  private def navigateControllingBodyVATScreenerPage(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(ControllingBodyVATScreenerPage)
+      .map {
+        case true  => controllers.controllingbody.routes.ControllingBodyVatRegistrationNumberController.onPageLoad()
+        case false => routes.IndexController.onPageLoad() // TODO later
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call =
     userAnswers
