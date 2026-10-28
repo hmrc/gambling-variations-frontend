@@ -29,7 +29,7 @@ class BusinessEmailAddressPageSpec extends AnyFreeSpec with Matchers {
     }
 
     "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "businessEmailAddress"
+      val expectedPath: JsPath = JsPath \ "businessContactDetailsSection" \ "businessEmailAddress"
       BusinessEmailAddressPage.path mustBe expectedPath
     }
   }

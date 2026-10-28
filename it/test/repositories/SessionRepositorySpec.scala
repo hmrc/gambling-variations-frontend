@@ -21,13 +21,14 @@ import models.UserAnswers
 import org.mockito.Mockito.when
 import org.mongodb.scala.model.Filters
 import org.scalactic.source.Position
-import org.scalatest.OptionValues
+import org.scalatest.{OptionValues, TryValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.MDC
 import uk.gov.hmrc.mdc.MdcExecutionContext
+import pages.contactdetails.{BusinessContactDetailsSection, BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
 import play.api.libs.json.Json
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
@@ -42,6 +43,7 @@ class SessionRepositorySpec
     with ScalaFutures
     with IntegrationPatience
     with OptionValues
+    with TryValues
     with MockitoSugar {
 
   private val instant = Instant.now.truncatedTo(ChronoUnit.MILLIS)
@@ -78,7 +80,7 @@ class SessionRepositorySpec
   ".get" - {
 
     "must migrate legacy controlling body answers and retain edits on the next save" in {
-      val legacy = userAnswers.copy(data = Json.obj(
+      val legacy = UserAnswers(userAnswers.id, Json.obj(
         "controllingBodyDetailsSection" -> Json.obj("typeOfControllingBody" -> "partnership", "businessName" -> "Original"),
         "controllingBodyDetails" -> Json.obj("businessName" -> "Edited", "loaded" -> true)
       ))
@@ -88,6 +90,26 @@ class SessionRepositorySpec
       migrated.data mustBe Json.obj("controllingBodyDetails" -> Json.obj("typeOfControllingBody" -> 4, "businessName" -> "Edited", "loaded" -> true))
       repository.set(migrated).futureValue mustBe true
       repository.get(legacy.id).futureValue.value.data mustBe migrated.data
+    }
+
+    "must keep a tombstone, a flag and the time a section was loaded through the round trip" in {
+      val answers = UserAnswers("id")
+        .withSectionLoaded(BusinessContactDetailsSection, instant)
+        .setOriginal(BusinessFaxNumberPage, "01632 960001")
+        .flatMap(_.setOriginal(BusinessEmailAddressPage, "info@example.com"))
+        .flatMap(_.set(BusinessEmailAddressPage, "contact@example.com"))
+        .flatMap(_.remove(BusinessFaxNumberPage))
+        .flatMap(_.set(BusinessContactDetailsSubmittedPage, true))
+        .success
+        .value
+
+      repository.set(answers).futureValue mustBe true
+
+      val result = repository.get(answers.id).futureValue.value
+      result.original mustBe answers.original
+      result.modified mustBe answers.modified
+      result.flags mustBe answers.flags
+      result.get(BusinessFaxNumberPage) mustBe None
     }
 
     "when there is a record for this id" - {

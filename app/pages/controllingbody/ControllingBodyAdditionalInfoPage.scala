@@ -19,9 +19,10 @@ package pages.controllingbody
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object ControllingBodyForeignCorporateReferencePage extends QuestionPage[String] {
+// The additional address information is held in the correspondence section, as stored by ControllingBodyDetailsDataRequiredAction
+case object ControllingBodyAdditionalInfoPage extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ toString
 
-  override def toString: String = "foreignCorporateRef"
+  override def toString: String = "additionalInformation"
 }
