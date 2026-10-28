@@ -19,21 +19,29 @@ package forms.controllingbody
 import forms.mappings.{ChecksumConstraints, Mappings}
 import forms.controllingbody.ControllingBodyUTRFormProvider.*
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, ValidationError}
 import utils.ChecksumValidator
 
 import javax.inject.Inject
 
 class ControllingBodyUTRFormProvider @Inject() extends Mappings with ChecksumConstraints {
 
+  private val utrConstraint: Constraint[String] =
+    Constraint("constraints.utr") { value =>
+      if (!digitsOnlyRegex.r.matches(value)) {
+        Invalid(ValidationError(invalidCharsKey, digitsOnlyRegex))
+      } else if (value.length != 10) {
+        Invalid(ValidationError(invalidLengthKey, lengthRegex))
+      } else {
+        utrChecksum(invalidKey).apply(value)
+      }
+    }
+    
   def apply(): Form[String] =
     Form(
       "value" -> text(requiredKey)
         .transform[String](_.trim, identity)
-        .verifying(
-          regexp(digitsOnlyRegex, invalidCharsKey),
-          regexp(lengthRegex, invalidLengthKey),
-          utrChecksum(invalidKey)
-        )
+        .verifying(utrConstraint)
     )
 }
 
