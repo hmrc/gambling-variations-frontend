@@ -210,6 +210,8 @@ case class CheckPartnerDetailsViewModel(
       )
     )
 
+  // --- Trading name rows ---
+
   private def addTradingNameRow(implicit messages: Messages): Option[SummaryListRow] =
     // NOTE: routing will be done with the integration ticket
     yesNoRow("addTradingName", addTradingName, routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index).url)
@@ -225,6 +227,8 @@ case class CheckPartnerDetailsViewModel(
       Some(optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change))
     } else None
 
+  // --- Date of Joining row ---
+
   private def dateOfJoiningRow(implicit messages: Messages): SummaryListRow =
     requiredRow(
       "dateOfJoining",
@@ -233,6 +237,8 @@ case class CheckPartnerDetailsViewModel(
       routes.PartnerDateOfJoiningController.onPageLoad(index, mode(businessNumberOrIndex)).url,
       isNewPartnerFlow
     )
+
+  // --- Nino rows ---
 
   private def addNinoRow(implicit messages: Messages): Option[SummaryListRow] =
     if (is(Soleproprietor))
@@ -257,30 +263,7 @@ case class CheckPartnerDetailsViewModel(
     }
     else None
 
-  private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
-    Option.when(!is(Partnership))(
-      // NOTE: routing will be done with the integration ticket
-      requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, mode(businessNumberOrIndex)).url, isNewPartnerFlow)
-    )
-
-  private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    // NOTE: routing will be done with the integration ticket
-    yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
-
-  private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    if (postScreenerDisplayCondition(addVatRegistrationNumber)) {
-      val label = labelFor("vatRegistrationNumber")
-      // NOTE: routing will be done with the integration ticket
-      val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-      val remove = removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-
-      val actions =
-        if (!isNewPartnerFlow) Nil
-        else if (isNewPartnerSubmitted) Seq(change, remove)
-        else Seq(change)
-
-      Some(optionalRow(label, vatRegistrationNumber.map(vat => Text(vat)), actions, change))
-    } else None
+  // --- Incorporated in the UK rows ---
 
   private def isIncorporatedInUkRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(is(Corporatebody))(
@@ -292,6 +275,8 @@ case class CheckPartnerDetailsViewModel(
         isNewPartnerFlow
       )
     )
+
+  // --- Country of incorporation + FCRN row ---
 
   private def countryOfIncorporationRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(isNonUkCorporateBody)(
@@ -315,6 +300,8 @@ case class CheckPartnerDetailsViewModel(
       )
     )
 
+  // --- Date of incorporation + Company reg number rows ---
+
   private def dateOfIncorporationRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(isUkCorporateBody || is(LimitedLiabilityPartnership))(
       requiredRow(
@@ -336,6 +323,36 @@ case class CheckPartnerDetailsViewModel(
         isNewPartnerFlow
       )
     )
+
+  // --- UTR row ---
+
+  private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
+    Option.when(!is(Partnership))(
+      // NOTE: routing will be done with the integration ticket
+      requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, mode(businessNumberOrIndex)).url, isNewPartnerFlow)
+    )
+
+  // --- VAT rows ---
+
+  private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
+    // NOTE: routing will be done with the integration ticket
+    yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
+
+  private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
+    if (postScreenerDisplayCondition(addVatRegistrationNumber)) {
+      val label = labelFor("vatRegistrationNumber")
+      // NOTE: routing will be done with the integration ticket
+      val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val remove = removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+
+      val actions =
+        if (!isNewPartnerFlow) Nil
+        else if (isNewPartnerSubmitted) Seq(change, remove)
+        else Seq(change)
+
+      Some(optionalRow(label, vatRegistrationNumber.map(vat => Text(vat)), actions, change))
+    } else None
+
 
   // --- Address rows ---
 

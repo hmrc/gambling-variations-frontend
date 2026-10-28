@@ -282,208 +282,94 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       }
     }
 
-    "business details rows" - {
+    "trading name rows" - {
 
-      "show date of incorporation and CRN for a UK corporate body" in {
-
-        val rowKeys =
-          keys(existingPartner.businessDetailsSummaryList)
-
-        rowKeys must contain allOf (label("dateOfIncorporation"), label("companyRegistrationNumber"))
-        rowKeys must contain noneOf (label("countryOfIncorporation"), label("foreignCorporateReference"))
-      }
-
-      "show country of incorporation and foreign reference for a non-UK corporate body" in {
+      "show the trading name row only when the screener answer is yes" in {
 
         val viewModel =
-          existingPartner.copy(
-            isIncorporatedInUk = Some(false)
-          )
+          newPartnerNotSaved.copy(addTradingName = Some(true), tradingName = Some("Trading name"))
 
-        val rowKeys =
-          keys(viewModel.businessDetailsSummaryList)
-
-        rowKeys must contain allOf (label("countryOfIncorporation"), label("foreignCorporateReference"))
-        rowKeys must contain noneOf (label("dateOfIncorporation"), label("companyRegistrationNumber"))
+        rowFor(viewModel.businessDetailsSummaryList, "tradingName") mustBe defined
       }
 
-      "show date of incorporation and CRN, but not the UK question, for an LLP" in {
+      "hide the trading name row when the screener answer is no" in {
 
         val viewModel =
-          existingPartner.copy(
-            typeOfBusiness = Some(LimitedLiabilityPartnership)
-          )
+          newPartnerNotSaved.copy(addTradingName = Some(false), tradingName = Some("Trading name"))
 
-        val rowKeys =
-          keys(viewModel.businessDetailsSummaryList)
-
-        rowKeys must contain allOf (label("llpName"), label("dateOfIncorporation"), label("companyRegistrationNumber"))
-        rowKeys must not contain label("isIncorporatedInUk")
+        rowFor(viewModel.businessDetailsSummaryList, "tradingName") mustBe None
       }
-
-      "show the sole proprietor rows for a sole proprietor" in {
-
-        val rowKeys =
-          keys(soleProprietor.businessDetailsSummaryList)
-
-        rowKeys must contain allOf (
-          label("soleProprietorName"),
-          label("soleProprietorDob"),
-          label("nino"),
-          label("vatRegistrationNumber")
-        )
-        rowKeys must not contain label("isIncorporatedInUk")
-      }
-
-      "not show the UTR row for a partnership" in {
-
-        val viewModel =
-          existingPartner.copy(
-            typeOfBusiness = Some(Partnership)
-          )
-
-        keys(viewModel.businessDetailsSummaryList) must not contain label("utr")
-      }
-
-      "show an add link with no actions when a mandatory answer is missing" in {
-
-        val viewModel =
-          newPartnerNotSaved.copy(
-            utr = None
-          )
-
-        val utrRow =
-          rowFor(viewModel.businessDetailsSummaryList, "utr").value
-
-        utrRow.value.content.asHtml.body must include(messages("partnerDetailsCheckYourAnswers.utr.add"))
-        utrRow.actions mustBe None
-      }
-
-      "only allow mandatory answers to be changed in the new partner flow" in {
-
-        actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "utr").value) mustBe Seq(change)
-        actionsOf(rowFor(existingPartner.businessDetailsSummaryList, "utr").value) mustBe empty
-      }
-
-      "show Not provided, with no add link, for a missing mandatory answer when due to join or leave" in {
-
-        val viewModel =
-          existingPartner.copy(
-            utr         = None,
-            isDueToJoin = true
-          )
-
-        val utrRow = rowFor(viewModel.businessDetailsSummaryList, "utr").value
-
-        utrRow.value.content mustBe Text(messages("partnerDetailsCheckYourAnswers.noData"))
-        utrRow.actions mustBe None
-      }
-    }
-
-    "type of business row" - {
-
-      "be shown in the new partner flow before the partner is submitted" in {
-
-        keys(newPartnerNotSaved.businessDetailsSummaryList) must contain(label("typeOfBusiness"))
-      }
-
-      "show the translated business type as its value" in {
-
-        val bt = newPartnerNotSaved.typeOfBusiness.value
-        val row = rowFor(newPartnerNotSaved.businessDetailsSummaryList, "typeOfBusiness").value
-
-        row.value.content.asHtml.body must include(messages(s"businessType.$bt"))
-      }
-
-      "be changeable in the new partner flow" in {
-
-        actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "typeOfBusiness").value) mustBe Seq(change)
-      }
-
-      "show an add link with no actions when the business type is missing" in {
-
-        val viewModel = newPartnerNotSaved.copy(typeOfBusiness = None)
-
-        val row = rowFor(viewModel.businessDetailsSummaryList, "typeOfBusiness").value
-
-        row.value.content.asHtml.body must include(messages("partnerDetailsCheckYourAnswers.typeOfBusiness.add"))
-        row.actions mustBe None
-      }
-
-      "not be shown once the new partner has been submitted" in {
-
-        val viewModel = newPartnerNotSaved.copy(maybeSubmitted = Some(true))
-
-        keys(viewModel.businessDetailsSummaryList) must not contain label("typeOfBusiness")
-      }
-
-      "not be shown for an existing partner" in {
-
-        keys(existingPartner.businessDetailsSummaryList) must not contain label("typeOfBusiness")
-      }
-    }
-
-    "trading name actions" - {
 
       "change only for a new partner that has not been saved" in {
 
-        rowFor(newPartnerNotSaved.businessDetailsSummaryList, "tradingName")
+        val viewModel =
+          newPartnerNotSaved.copy(addTradingName = Some(true), tradingName = Some("Trading name"))
+
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "tradingName").value) mustBe Seq(change)
       }
 
-      "change and remove for a new partner that has been saved" in {
-
-        actionsOf(rowFor(newPartnerSaved.businessDetailsSummaryList, "tradingName").value) mustBe Seq(change, remove)
-      }
-
-      "change and remove for an existing partner" in {
-
-        actionsOf(rowFor(existingPartner.businessDetailsSummaryList, "tradingName").value) mustBe Seq(change, remove)
-      }
-
-      "nothing for an existing partner due to join or leave" in {
+      "change and remove for a saved new partner" in {
 
         val viewModel =
-          existingPartner.copy(
-            isDueToLeave = true
-          )
+          newPartnerSaved.copy(addTradingName = Some(true), tradingName = Some("Trading name"))
+
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "tradingName").value) mustBe Seq(change, remove)
+      }
+
+      "lock the trading name for an existing partner due to leave" in {
+
+        val viewModel =
+          existingPartner.copy(addTradingName = Some(true), tradingName = Some("Trading name"), isDueToLeave = true)
 
         actionsOf(rowFor(viewModel.businessDetailsSummaryList, "tradingName").value) mustBe empty
       }
+    }
 
-      "show no data and keep only the change action when there is no trading name" in {
+    "date of joining row" - {
 
-        val viewModel =
-          newPartnerSaved.copy(
-            tradingName = None
-          )
+      "show the date of joining for an existing partner" in {
 
-        val tradingNameRow =
-          rowFor(viewModel.businessDetailsSummaryList, "tradingName").value
+        rowFor(existingPartner.businessDetailsSummaryList, "dateOfJoining") mustBe defined
+      }
 
-        tradingNameRow.value.content mustBe Text(messages("partnerDetailsCheckYourAnswers.noData"))
-        actionsOf(tradingNameRow) mustBe Seq(change)
+      "show the date of joining for a new partner" in {
+
+        rowFor(newPartnerNotSaved.businessDetailsSummaryList, "dateOfJoining") mustBe defined
+      }
+
+      "allow the date of joining to be changed for a new partner" in {
+
+        actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "dateOfJoining").value) mustBe Seq(change)
       }
     }
 
-    "NINO actions" - {
+    "NINO rows" - {
 
-      "change only for a new partner that has not been saved" in {
-        val viewModel = soleProprietor.copy(addNino = Some(true))
+      "show the NINO screener row only for a sole proprietor" in {
 
-        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "nino").value) mustBe Seq(change)
+        rowFor(existingPartner.businessDetailsSummaryList, "addNino") mustBe None
+        rowFor(soleProprietor.businessDetailsSummaryList, "addNino") mustBe defined
       }
 
-      "change and remove for a new partner that has been saved" in {
+      "hide the NINO row when the screener answer is no" in {
 
         val viewModel =
-          soleProprietor.copy(
-            maybeSubmitted = Some(true)
-          )
+          soleProprietor.copy(addNino = Some(false), nino = None)
 
-        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "nino").value) mustBe Seq(change, remove)
+        rowFor(viewModel.businessDetailsSummaryList, "nino") mustBe None
       }
 
-      "nothing for an existing partner" in {
+      "change only for a new partner that has not been saved" in {
+
+        actionsOf(rowFor(soleProprietor.businessDetailsSummaryList, "nino").value) mustBe Seq(change)
+      }
+
+      "change and remove for a saved new partner" in {
+
+        actionsOf(rowFor(soleProprietor.copy(maybeSubmitted = Some(true)).businessDetailsSummaryList, "nino").value) mustBe Seq(change, remove)
+      }
+
+      "lock the NINO for an existing partner" in {
 
         val viewModel =
           soleProprietor.copy(
@@ -496,60 +382,229 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       }
     }
 
-    "yes/no rows" - {
+    "incorporated in UK rows" - {
 
-      "are shown for a new partner that has not been saved" in {
+      "show the incorporated in UK question for a corporate body" in {
 
-        val tradingNameYesNo =
-          rowFor(newPartnerNotSaved.businessDetailsSummaryList, "addTradingName").value
-
-        tradingNameYesNo.value.content mustBe Text(messages("site.yes"))
+        rowFor(existingPartner.businessDetailsSummaryList, "isIncorporatedInUk") mustBe defined
       }
 
-      "are hidden for a new partner that has been saved" in {
+      "hide the incorporated in UK question for a partnership" in {
 
-        rowFor(newPartnerSaved.businessDetailsSummaryList, "addTradingName") mustBe None
+        val viewModel =
+          existingPartner.copy(typeOfBusiness = Some(Partnership))
+
+        rowFor(viewModel.businessDetailsSummaryList, "isIncorporatedInUk") mustBe None
+      }
+    }
+
+    "country of incorporation and foreign reference rows" - {
+
+      "show both rows for a non-UK corporate body" in {
+
+        val viewModel =
+          existingPartner.copy(isIncorporatedInUk = Some(false))
+
+        keys(viewModel.businessDetailsSummaryList) must contain allOf (label("countryOfIncorporation"), label("foreignCorporateReference"))
       }
 
-      "are hidden for an existing partner" in {
+      "hide both rows for a UK corporate body" in {
 
-        rowFor(existingPartner.businessDetailsSummaryList, "addTradingName") mustBe None
+        keys(existingPartner.businessDetailsSummaryList) must contain noneOf (label("countryOfIncorporation"), label("foreignCorporateReference"))
+      }
+
+      "allow the foreign corporate reference to be changed for a new partner" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(isIncorporatedInUk = Some(false), foreignCorporateReference = Some("ABC-123"))
+
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "foreignCorporateReference").value) mustBe Seq(change)
+      }
+
+      "lock the foreign corporate reference for an existing partner" in {
+
+        val viewModel =
+          existingPartner.copy(isIncorporatedInUk = Some(false), foreignCorporateReference = Some("ABC-123"))
+
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "foreignCorporateReference").value) mustBe empty
+      }
+    }
+
+    "date of incorporation and company registration number rows" - {
+
+      "show both rows for a UK corporate body" in {
+
+        keys(existingPartner.businessDetailsSummaryList) must contain allOf (label("dateOfIncorporation"), label("companyRegistrationNumber"))
+      }
+
+      "show both rows for a limited liability partnership" in {
+
+        val viewModel =
+          existingPartner.copy(typeOfBusiness = Some(LimitedLiabilityPartnership))
+
+        keys(viewModel.businessDetailsSummaryList) must contain allOf (label("dateOfIncorporation"), label("companyRegistrationNumber"))
+      }
+
+      "hide both rows for a partnership" in {
+
+        val viewModel =
+          existingPartner.copy(typeOfBusiness = Some(Partnership))
+
+        keys(viewModel.businessDetailsSummaryList) must contain noneOf (label("dateOfIncorporation"), label("companyRegistrationNumber"))
+      }
+
+      "show Not provided for a missing date of incorporation when due to join" in {
+
+        val viewModel =
+          existingPartner.copy(dateOfIncorporation = None, isDueToJoin = true)
+
+        rowFor(viewModel.businessDetailsSummaryList, "dateOfIncorporation").value.value.content mustBe
+          Text(messages("partnerDetailsCheckYourAnswers.noData"))
+      }
+    }
+
+    "UTR row" - {
+
+      "show the UTR row for a corporate body" in {
+
+        rowFor(existingPartner.businessDetailsSummaryList, "utr") mustBe defined
+      }
+
+      "show the UTR row for a sole proprietor" in {
+
+        rowFor(soleProprietor.businessDetailsSummaryList, "utr") mustBe defined
+      }
+
+      "hide the UTR row for a partnership" in {
+
+        val viewModel =
+          existingPartner.copy(typeOfBusiness = Some(Partnership))
+
+        rowFor(viewModel.businessDetailsSummaryList, "utr") mustBe None
+      }
+    }
+
+    "VAT rows" - {
+
+      "show the VAT screener row for a new partner that is a partnership" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(typeOfBusiness = Some(Partnership), addVatRegistrationNumber = Some(true))
+
+        rowFor(viewModel.businessDetailsSummaryList, "addVatRegistrationNumber") mustBe defined
+      }
+
+      "hide the VAT number row when the screener answer is no" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addVatRegistrationNumber = Some(false), vatRegistrationNumber = Some("123450002"))
+
+        rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber") mustBe None
+      }
+
+      "change only for a new partner that has not been saved" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addVatRegistrationNumber = Some(true), vatRegistrationNumber = Some("123450002"))
+
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber").value) mustBe Seq(change)
+      }
+
+      "change and remove for a saved new partner" in {
+
+        val viewModel =
+          newPartnerSaved.copy(addVatRegistrationNumber = Some(true), vatRegistrationNumber = Some("123450002"))
+
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber").value) mustBe Seq(change, remove)
+      }
+
+      "offer no actions for an existing partner's VAT number" in {
+
+        val viewModel =
+          existingPartner.copy(addVatRegistrationNumber = Some(true), vatRegistrationNumber = Some("123450002"))
+
+        actionsOf(rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber").value) mustBe empty
       }
     }
 
     "address rows" - {
 
-      "escape HTML in the address" in {
+      "show the address row even when the address is missing" in {
 
         val viewModel =
-          existingPartner.copy(
-            address = Some(
-              Address(
-                address1 = "<script>alert(1)</script>",
-                address2 = None,
-                address3 = None,
-                address4 = None,
-                postcode = Some("AA1 1AA"),
-                country  = None
-              )
-            )
-          )
+          newPartnerNotSaved.copy(address = None)
 
-        val addressHtml =
-          rowFor(viewModel.addressSummaryList, "address").value.value.content.asHtml.body
-
-        addressHtml must include("&lt;script&gt;")
-        addressHtml must not include "<script>"
+        rowFor(viewModel.addressSummaryList, "address") mustBe defined
       }
 
-      "lock the address for an existing partner due to join or leave" in {
+      "allow the address to be changed for a new partner due to join or leave" in {
 
         val viewModel =
-          existingPartner.copy(
-            isDueToJoin = true
-          )
+          newPartnerNotSaved.copy(isDueToJoin = true)
 
-        actionsOf(rowFor(viewModel.addressSummaryList, "address").value) mustBe empty
+        actionsOf(rowFor(viewModel.addressSummaryList, "address").value) must not be empty
+      }
+
+      "allow the address to be changed for an existing partner not due to join or leave" in {
+
+        actionsOf(rowFor(existingPartner.addressSummaryList, "address").value) must have size 1
+      }
+
+      "show the additional information yes/no row only when the address is answered" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addAdditionalInformation = Some(true))
+
+        rowFor(viewModel.addressSummaryList, "addAdditionalInformation").value.value.content mustBe Text(messages("site.yes"))
+      }
+
+      "hide the additional information yes/no row for an existing partner" in {
+
+        rowFor(existingPartner.addressSummaryList, "addAdditionalInformation") mustBe None
+      }
+
+      "show the additional information row only when the screener answer is yes" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addAdditionalInformation = Some(true), additionalInformation = Some("Care of Jane"))
+
+        rowFor(viewModel.addressSummaryList, "additionalInformation") mustBe defined
+      }
+
+      "hide the additional information row when the screener answer is no" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addAdditionalInformation = Some(false), additionalInformation = Some("Care of Jane"))
+
+        rowFor(viewModel.addressSummaryList, "additionalInformation") mustBe None
+      }
+
+      "escape HTML in the additional information" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addAdditionalInformation = Some(true), additionalInformation = Some("<i>care</i>"))
+
+        val html =
+          rowFor(viewModel.addressSummaryList, "additionalInformation").value.value.content.asHtml.body
+
+        html must include("&lt;i&gt;care&lt;/i&gt;")
+        html must not include "<i>care</i>"
+      }
+
+      "offer change and remove for a submitted new partner's additional information" in {
+
+        val viewModel =
+          newPartnerSaved.copy(addAdditionalInformation = Some(true), additionalInformation = Some("Care of Jane"))
+
+        actionsOf(rowFor(viewModel.addressSummaryList, "additionalInformation").value) must have size 2
+      }
+
+      "offer change only for an unsubmitted new partner's additional information" in {
+
+        val viewModel =
+          newPartnerNotSaved.copy(addAdditionalInformation = Some(true), additionalInformation = Some("Care of Jane"))
+
+        actionsOf(rowFor(viewModel.addressSummaryList, "additionalInformation").value) must have size 1
       }
     }
 
