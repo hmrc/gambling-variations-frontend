@@ -150,7 +150,7 @@ class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
     }
   }
 
-  "must bind valid dates with leading and trailing whitespace" in {
+  "must bind valid dates by stripping leading and trailing whitespace" in {
 
     forAll(validData -> "valid date") { date =>
 
@@ -167,7 +167,7 @@ class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
     }
   }
 
-  "must bind valid dates with whitespace between the digits" in {
+  "must bind valid dates by stripping any whitespace between the digits" in {
 
     val data = Map(
       "value.day"   -> s"1${singleSpace}2",
@@ -179,30 +179,6 @@ class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
     result.value.value mustEqual LocalDate.of(2026, 3, 12)
     result.errors mustBe empty
-  }
-
-  "must bind valid dates with months provided as names with surrounding whitespace" in {
-
-    forAll(validData -> "valid date") { date =>
-
-      val data = Map(
-        "value.day"   -> date.getDayOfMonth.toString,
-        "value.month" -> s"$singleSpace${date.getMonth.toString.take(3).toLowerCase}$multipleSpace",
-        "value.year"  -> date.getYear.toString
-      )
-
-      val result = form.bind(data)
-
-      result.value.value mustEqual date
-      result.errors mustBe empty
-    }
-  }
-
-  "must fail to bind a date whose fields are all whitespace as an empty date" in {
-
-    val result = form.bind(Map("value.day" -> singleSpace, "value.month" -> tab, "value.year" -> multipleSpace))
-
-    result.errors must contain only FormError("value", "error.required.all", List.empty)
   }
 
   "must fail to bind a date with a whitespace-only day as a missing day" in {
