@@ -25,7 +25,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.RegistrationCancellationDeclarationView
+import views.html.cancellation.RegistrationCancellationDeclarationView
 
 import javax.inject.Inject
 import scala.concurrent.Future
@@ -36,7 +36,7 @@ class RegistrationCancellationDeclarationController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: RegistrationCancellationDeclarationView
 ) extends FrontendBaseController

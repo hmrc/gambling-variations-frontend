@@ -22,7 +22,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.RegistrationCancellationDeclarationView
+import views.html.cancellation.RegistrationCancellationDeclarationView
 
 class RegistrationCancellationDeclarationViewSpec extends SpecBase {
 

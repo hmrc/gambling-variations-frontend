@@ -17,22 +17,33 @@
 package controllers.cancellation
 
 import base.SpecBase
+import models.{BusinessType, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.RegistrationCancellationDeclarationView
+import views.html.cancellation.RegistrationCancellationDeclarationView
 
 import scala.concurrent.Future
 
 class RegistrationCancellationDeclarationControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
+
+  override val emptyUserAnswers: UserAnswers =
+    super.emptyUserAnswers
+      .set(BusinessTypePage, BusinessType.Partnership)
+      .success
+      .value
+      .set(GroupMemberPage, false)
+      .success
+      .value
 
   lazy val registrationCancellationDeclarationRoute =
     controllers.cancellation.routes.RegistrationCancellationDeclarationController.onPageLoad().url
@@ -79,6 +90,54 @@ class RegistrationCancellationDeclarationControllerSpec extends SpecBase with Mo
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to SystemError for a GET if no existing data is found" in {
+
+      val application =
+        applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            GET,
+            registrationCancellationDeclarationRoute
+          )
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController
+            .onPageLoad()
+            .url
+      }
+    }
+
+    "must redirect to SystemError for a POST if no existing data is found" in {
+
+      val application =
+        applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            POST,
+            registrationCancellationDeclarationRoute
+          )
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController
+            .onPageLoad()
+            .url
       }
     }
   }
