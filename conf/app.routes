@@ -336,6 +336,12 @@ POST       /change-registration-details/controlling-body-details/vat-registratio
 GET        /cancel-registration/why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
 
+GET        /cancel-registration/group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-registration/group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /change-registration-details/controlling-body-details/unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onSubmit(mode: Mode = NormalMode)
+
 GET        /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
 GET        /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)

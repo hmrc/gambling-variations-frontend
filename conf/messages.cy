@@ -541,3 +541,16 @@ dateOfIncorporation.error.required.two = cy: Date of incorporation must include 
 dateOfIncorporation.error.required = cy: Date of incorporation must include a {0}
 dateOfIncorporation.error.invalid = cy: Date of incorporation must be a real date
 dateOfIncorporation.change.hidden = cy: DateOfIncorporation
+
+controllingBodyUTR.title = cy: Tell us the controlling body’s Unique Taxpayer Reference
+controllingBodyUTR.subtitle =  cy: What is the Unique Taxpayer Reference?
+controllingBodyUTR.heading = cy: Tell us the controlling body’s Unique Taxpayer Reference (UTR)
+controllingBodyUTR.hint = cy: It must be 10 digits long, for example 1234567890
+controllingBodyUTR.paragraph = cy: You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+controllingBodyUTR.linkText = cy: Get more help to find your UTR (opens in new tab).
+controllingBodyUTR.checkYourAnswersLabel = cy: Tell us the controlling body’s Unique Taxpayer Reference
+controllingBodyUTR.error.required = cy: Enter the controlling body’s Unique Taxpayer Reference (UTR)
+controllingBodyUTR.error.invalidChars = cy: The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+controllingBodyUTR.error.length = cy: The Unique Taxpayer Reference (UTR) must be 10 digits long
+controllingBodyUTR.error.invalid = cy: Enter a real Unique Taxpayer Reference (UTR)
+controllingBodyUTR.change.hidden = cy: Tell us the controlling body’s Unique Taxpayer Reference

@@ -1513,6 +1513,36 @@ reasonForCancellation.businessIsPartOfTheGroup = Business is now part of a group
 reasonForCancellation.error.required = Select why you are cancelling this registration
 reasonForCancellation.checkYourAnswersLabel = reasonForCancellation
 reasonForCancellation.change.hidden = ReasonForCancellation
+
+changeGroupRegistrationNumber.title = What is the group''s registration number?
+changeGroupRegistrationNumber.heading = What is the group''s registration number?
+changeGroupRegistrationNumber.caption = Cancel registration
+
+changeGroupRegistrationNumber.hint = It is 14 characters long and starts with an X, like XEM00000000640
+
+changeGroupRegistrationNumber.checkYourAnswersLabel = changeGroupRegistrationNumber
+changeGroupRegistrationNumber.error.required = Enter the group''s registration number
+
+changeGroupRegistrationNumber.error.invalidCharacters = The group''s registration number must only include letters a to z and numbers 0 to 9
+changeGroupRegistrationNumber.error.invalidFormat = The group''s registration number must be in the correct format
+changeGroupRegistrationNumber.error.invalidReference = Enter a real registration number for the group
+
+changeGroupRegistrationNumber.change.hidden = ChangeGroupRegistrationNumber
+
+
+controllingBodyUTR.title = Tell us the controlling body’s Unique Taxpayer Reference
+controllingBodyUTR.subtitle =  What is the Unique Taxpayer Reference?
+controllingBodyUTR.heading = Tell us the controlling body’s Unique Taxpayer Reference (UTR)
+controllingBodyUTR.hint = It must be 10 digits long, for example 1234567890
+controllingBodyUTR.paragraph = You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+controllingBodyUTR.linkText = Get more help to find your UTR (opens in new tab).
+controllingBodyUTR.checkYourAnswersLabel = Tell us the controlling body’s Unique Taxpayer Reference
+controllingBodyUTR.error.required = Enter the controlling body’s Unique Taxpayer Reference (UTR)
+controllingBodyUTR.error.invalidChars = The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+controllingBodyUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10 digits long
+controllingBodyUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
+controllingBodyUTR.change.hidden = Tell us the controlling body’s Unique Taxpayer Reference
+
 cancelRegistrationDate.title = When are you no longer liable to pay Machine Games Duty?
 cancelRegistrationDate.heading = When are you no longer liable to pay Machine Games Duty?
 cancelRegistrationDate.caption = Cancel registration

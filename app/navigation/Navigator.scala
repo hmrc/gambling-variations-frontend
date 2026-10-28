@@ -64,6 +64,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodySameAsRepYesNoPage(userAnswers)
     case ControllingBodyNotProvidedYesNoPage =>
       userAnswers => navigateControllingBodyNotProvidedYesNoPage(userAnswers)
+    case ControllingBodyUtrPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
