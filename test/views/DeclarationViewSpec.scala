@@ -17,14 +17,14 @@
 package views
 
 import base.SpecBase
-import forms.{ContactNumberFormProvider, DeclarationSubmittedFormProvider}
-import models.NormalMode
+import forms.DeclarationSubmittedFormProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.{CorrespondenceContactNumberView, DeclarationView}
+import views.html.correspondencedetails.CorrespondenceContactNumberView
+import views.html.DeclarationView
 
 class DeclarationViewSpec extends SpecBase {
 

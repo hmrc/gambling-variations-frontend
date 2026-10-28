@@ -20,6 +20,7 @@
 
 @this(
     layout: templates.Layout,
+    formHelper: FormWithCSRF,
     govukButton: GovukButton,
     caption: Caption,
     h1:H1,
@@ -32,27 +33,32 @@
 
 @layout(pageTitle = titleNoForm(messages("partnerDetailsCheckYourAnswers.title"), Some(messages("changeRegistrationDetails.caption")))) {
 
-    @caption(messages("changeRegistrationDetails.caption"))
-    @h1("partnerDetailsCheckYourAnswers.heading", classes = "govuk-heading-l")
+    @formHelper(
+        action = controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onContinue(vm.businessNumberOrIndex.toString),
+        Symbol("autoComplete") -> "off") {
 
-    @for(notice <- vm.notices) {
-        <p class="govuk-body">@notice</p>
-    }
+            @caption(messages("changeRegistrationDetails.caption"))
+            @h1("partnerDetailsCheckYourAnswers.heading", classes = "govuk-heading-l")
 
-    @h2("partnerDetailsCheckYourAnswers.businessDetails", classes = "govuk-heading-m")
-    @govukSummaryList(SummaryList(rows = vm.businessDetailsSummaryList))
+            @for(notice <- vm.notices) {
+                <p class="govuk-body">@notice</p>
+            }
 
-    @h2("partnerDetailsCheckYourAnswers.address", classes = "govuk-heading-m")
-    @govukSummaryList(SummaryList(rows = vm.addressSummaryList))
+            @h2("partnerDetailsCheckYourAnswers.businessDetails", classes = "govuk-heading-m")
+            @govukSummaryList(SummaryList(rows = vm.businessDetailsSummaryList))
 
-    @h2("partnerDetailsCheckYourAnswers.contactDetails", classes = "govuk-heading-m")
-    @govukSummaryList(SummaryList(rows = vm.contactDetailsSummaryList))
+            @h2("partnerDetailsCheckYourAnswers.address", classes = "govuk-heading-m")
+            @govukSummaryList(SummaryList(rows = vm.addressSummaryList))
 
-    @if(vm.isNewPartnerSubmitted) {
-        @paragraph(messages("changeRegistrationDetails.readyToSubmit"))
-    }
+            @h2("partnerDetailsCheckYourAnswers.contactDetails", classes = "govuk-heading-m")
+            @govukSummaryList(SummaryList(rows = vm.contactDetailsSummaryList))
 
-    @govukButton(
-        ButtonViewModel(messages("site.continue")).asLink(vm.continueCall.url)
-    )
+            @if(vm.isNewPartnerSubmitted) {
+                @paragraph(messages("changeRegistrationDetails.readyToSubmit"))
+            }
+
+            @govukButton(
+                ButtonViewModel(messages("site.continue"))
+            )
+        }
 }

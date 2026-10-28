@@ -21,7 +21,7 @@ import forms.partnerdetails.PartnerDateOfIncorporationFormProvider
 import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
 import pages.BusinessNumberOrIndex
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporation, PartnerDetailsIsBusinessIncorporatedUkPage}
+import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfIncorporationPage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -56,7 +56,7 @@ class PartnerDetailsDateOfIncorporationController @Inject() (
 
         val preparedForm =
           request.userAnswers
-            .get(PartnerDetailsDateOfIncorporation(newIndex))
+            .get(PartnerDetailsDateOfIncorporationPage(newIndex))
             .fold(form)(form.fill)
 
         Ok(view(preparedForm, index, mode))
@@ -73,9 +73,9 @@ class PartnerDetailsDateOfIncorporationController @Inject() (
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsDateOfIncorporation(newIndex), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsDateOfIncorporationPage(newIndex), value))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsDateOfIncorporation(newIndex), mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newIndex), mode, updatedAnswers))
       )
   }
 

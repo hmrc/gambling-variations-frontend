@@ -94,22 +94,75 @@ class PartnerUtilsSpec extends SpecBase {
           .set(PartnerDetailsMgdRegNumberPage(0), "mgdRegNumber0")
           .success
           .value
+          .set(PartnerDetailsAddPartnerCompletedPage(0), false)
+          .success
+          .value
           .set(PartnerDetailsMgdRegNumberPage(1), "mgdRegNumber1")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage(1), false)
           .success
           .value
           .set(PartnerDetailsMgdRegNumberPage(2), "mgdRegNumber2")
           .success
           .value
+          .set(PartnerDetailsAddPartnerCompletedPage(2), false)
+          .success
+          .value
           .set(PartnerDetailsMgdRegNumberPage(3), "mgdRegNumber3")
           .success
           .value
+          .set(PartnerDetailsAddPartnerCompletedPage(3), false)
+          .success
+          .value
           .set(PartnerDetailsMgdRegNumberPage(4), "mgdRegNumber4")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage(4), false)
           .success
           .value
 
         val result = partnerUtils.findIndexForNewPartner(userAnswers)
 
         result shouldBe 0
+      }
+
+      "returns 5 when all new partners have partnerDetailsAddPartnerCompleted set to true" in {
+        val userAnswers = UserAnswers("id")
+          .set(PartnerDetailsMgdRegNumberPage(0), "mgdRegNumber0")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage(0), true)
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(1), "mgdRegNumber1")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage(1), true)
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(2), "mgdRegNumber2")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage(2), true)
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(3), "mgdRegNumber3")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage(3), true)
+          .success
+          .value
+          .set(PartnerDetailsMgdRegNumberPage(4), "mgdRegNumber4")
+          .success
+          .value
+          .set(PartnerDetailsAddPartnerCompletedPage(4), true)
+          .success
+          .value
+
+        val result = partnerUtils.findIndexForNewPartner(userAnswers)
+
+        result shouldBe 5
       }
 
       "returns 0 when there is no data" in {
