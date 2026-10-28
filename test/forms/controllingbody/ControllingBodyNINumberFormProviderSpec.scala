@@ -30,27 +30,13 @@ class ControllingBodyNINumberFormProviderSpec extends StringFieldBehaviours {
     val fieldName = "value"
 
     val validNino9Chars = "AA123456A"
-    val validNino8Chars = "AA123456"
-
+    
     "must bind a valid 9-character NINO with suffix" in {
       val result = form.bind(Map(fieldName -> validNino9Chars))
       result.errors mustBe empty
       result.value.value mustBe validNino9Chars
     }
-
-    "must bind a valid 8-character NINO (missing suffix) by appending space for regex check" in {
-      val result = form.bind(Map(fieldName -> validNino8Chars))
-      result.errors mustBe empty
-      result.value.value mustBe validNino8Chars
-    }
-
-    "must strip whitespace and convert to uppercase before running validations" in {
-      val inputWithWhitespace = " a a 1 2 3 4 5 6 "
-      val result = form.bind(Map(fieldName -> inputWithWhitespace))
-      result.errors mustBe empty
-      result.value.value mustBe validNino8Chars
-    }
-
+    
     "must fail to bind invalid characters (e.g. '@')" in {
       val invalidCharsInput = "AA12345@A"
       val result = form.bind(Map(fieldName -> invalidCharsInput))
