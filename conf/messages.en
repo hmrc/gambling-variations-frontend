@@ -1570,6 +1570,10 @@ controllingBodyVATScreener.title = Do you want to add a VAT registration number 
 controllingBodyVATScreener.heading = Do you want to add a VAT registration number for the controlling body?
 controllingBodyVATScreener.error.required = Select yes to add a VAT registration number for the controlling body
 
+removeControllingBodyNINumber.title = Are you sure you want to remove this controlling body’s National Insurance number?
+removeControllingBodyNINumber.heading = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
+removeControllingBodyNINumber.error.required = Select yes if you want to remove this controlling body’s National Insurance number
+
 reasonForCancellation.title = Why are you cancelling this registration?
 reasonForCancellation.heading = Why are you cancelling this registration?
 reasonForCancellation.caption = Cancel registration
@@ -1620,3 +1624,12 @@ controllingBodyUTR.error.invalidChars = The Unique Taxpayer Reference (UTR) must
 controllingBodyUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10 digits long
 controllingBodyUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
 controllingBodyUTR.change.hidden = Tell us the controlling body’s Unique Taxpayer Reference
+
+
+controllingBodyForeignCorpRef.title = What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.heading = What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.checkYourAnswersLabel =What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.error.required = Enter the controlling body’s foreign corporate reference
+controllingBodyForeignCorpRef.error.invalid = The foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+controllingBodyForeignCorpRef.error.length = The foreign corporate reference must be 100 characters or less
+controllingBodyForeignCorpRef.change.hidden = What is the controlling body’s foreign corporate reference?
