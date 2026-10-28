@@ -29,6 +29,7 @@ class ControllingBodyCountryOfIncorporationFormProvider @Inject() extends Mappin
   def apply(): Form[String] =
     Form(
       "controllingBodyCountryOfIncorporation" -> text("controllingBodyCountryOfIncorporation.error.required")
+        .transform_.trim, identity
         .verifying(
           maxLength(100, "controllingBodyCountryOfIncorporation.error.length")
         )
