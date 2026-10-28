@@ -138,7 +138,7 @@ object PartnerDetailsViewModel {
               PartnerDetailsRow(
                 index = partnerNumber,
                 // Note: Realistically this should never happen, left it here for now to easily identify if it happens
-                name              = name, // .getOrElse("null"),
+                name              = name,
                 status            = status,
                 statusDetails     = statusDetails,
                 partnerDetailsUrl = onPartnerDetailsRoute(partnerNumber),
