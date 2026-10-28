@@ -16,12 +16,22 @@
 
 package pages.controllingbody
 
-import pages.QuestionPage
+import controllers.partnerdetails.PartnerDetailsHelper
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-case object ControllingBodyForeignCorporateReferencePage extends QuestionPage[String] {
+class ControllingBodyForeignCorpRefPageSpec extends PlaySpec with PartnerDetailsHelper {
 
-  override def path: JsPath = JsPath \ "controllingBodyDetails" \ toString
+  "ControllingBodyForeignCorpRefPage" must {
 
-  override def toString: String = "foreignCorporateRef"
+    "have the correct path" in {
+
+      ControllingBodyForeignCorpRefPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "foreignCorporateRef")
+    }
+
+    "have the correct toString value" in {
+
+      ControllingBodyForeignCorpRefPage.toString mustEqual "foreignCorporateRef"
+    }
+  }
 }

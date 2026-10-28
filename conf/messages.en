@@ -1621,3 +1621,12 @@ controllingBodyUTR.error.invalidChars = The Unique Taxpayer Reference (UTR) must
 controllingBodyUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10 digits long
 controllingBodyUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
 controllingBodyUTR.change.hidden = Tell us the controlling body’s Unique Taxpayer Reference
+
+
+controllingBodyForeignCorpRef.title = What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.heading = What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.checkYourAnswersLabel =What is the controlling body’s foreign corporate reference?
+controllingBodyForeignCorpRef.error.required = Enter the controlling body’s foreign corporate reference
+controllingBodyForeignCorpRef.error.invalid = The foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+controllingBodyForeignCorpRef.error.length = The foreign corporate reference must be 100 characters or less
+controllingBodyForeignCorpRef.change.hidden = What is the controlling body’s foreign corporate reference?
