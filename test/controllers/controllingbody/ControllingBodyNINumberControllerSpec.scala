@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyNINumberPage}
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyNinoPage}
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -72,7 +72,7 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val userAnswers = noAnswers.set(ControllingBodyNINumberPage, "1234").success.value
+      val userAnswers = noAnswers.set(ControllingBodyNinoPage, "1234").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

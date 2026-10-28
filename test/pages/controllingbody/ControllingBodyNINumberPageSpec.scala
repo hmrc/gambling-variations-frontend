@@ -21,16 +21,16 @@ import play.api.libs.json.JsPath
 
 class ControllingBodyNINumberPageSpec extends PlaySpec {
 
-  "ControllingBodyNINumberPage" must {
+  "ControllingBodyNinoPage" must {
 
     "have the correct path" in {
 
-      ControllingBodyNINumberPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "controllingBodyNINumber")
+      ControllingBodyNinoPage.path mustEqual (JsPath \ "controllingBodyDetails" \ "nino")
     }
 
     "have the correct toString value" in {
 
-      ControllingBodyNINumberPage.toString mustEqual "controllingBodyNINumber"
+      ControllingBodyNinoPage.toString mustEqual "nino"
     }
   }
 }
