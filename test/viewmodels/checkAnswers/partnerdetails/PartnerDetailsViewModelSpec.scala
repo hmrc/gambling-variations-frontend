@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.partnerdetails
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.partnerdetails.PartnerDetailsHelper
-import models.BusinessType
+import models.{BusinessType, SoleProprietorName}
 import pages.partnerdetails.*
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
@@ -33,6 +33,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
   private val paginationHelper2 = PaginationHelper(2)
   private val paginationHelper3 = PaginationHelper(3)
   private val paginationHelper10 = PaginationHelper(10)
+  private val businessName1 = "business1"
 
   private val application =
     applicationBuilder()
@@ -82,6 +83,12 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
+          .set(
+            PartnerDetailsBusinessNamePage(businessNumber1),
+            businessName1
+          )
+          .success
+          .value
           .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
           .success
           .value
@@ -95,7 +102,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
         )
 
       viewModel.partners must have size 1
-      viewModel.partners.head.name mustBe "XWM00000001762"
+      viewModel.partners.head.name mustBe businessName1
     }
 
     "use trading name when present" in {
@@ -117,6 +124,12 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
           .success
           .value
+          .set(
+            PartnerDetailsBusinessNamePage(businessNumber1),
+            businessName1
+          )
+          .success
+          .value
 
       val viewModel =
         PartnerDetailsViewModel.from(
@@ -126,7 +139,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           frontendAppConfig
         )
 
-      viewModel.partners.head.name mustBe "XYZ Trading"
+      viewModel.partners.head.name mustBe businessName1
     }
 
     "use business name when trading name is absent" in {
@@ -373,7 +386,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .success
           .value
           .set(
-            PartnerDetailsTradingNamePage(businessNumber1),
+            PartnerDetailsBusinessNamePage(businessNumber1),
             "Zulu"
           )
           .success
@@ -388,7 +401,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .success
           .value
           .set(
-            PartnerDetailsTradingNamePage(businessNumber2),
+            PartnerDetailsBusinessNamePage(businessNumber2),
             "Alpha"
           )
           .success
@@ -422,7 +435,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .success
           .value
           .set(
-            PartnerDetailsTradingNamePage(businessNumber1),
+            PartnerDetailsBusinessNamePage(businessNumber1),
             "zulu"
           )
           .success
@@ -437,7 +450,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .success
           .value
           .set(
-            PartnerDetailsTradingNamePage(businessNumber2),
+            PartnerDetailsBusinessNamePage(businessNumber2),
             "Alpha"
           )
           .success

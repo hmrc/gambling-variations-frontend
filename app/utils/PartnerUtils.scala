@@ -55,8 +55,8 @@ object PartnerUtils {
     .zipWithIndex
     .collect { case (Some(true), i) => i }
 
-  //Note: We return "null" string as we don't want to filter out partners that have a name missing, although this scenario should
-  //not happen under normal circumstances 
+  // Note: We return "null" string as we don't want to filter out partners that have a name missing, although this scenario should
+  // not happen under normal circumstances
   def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): String = userAnswers
     .get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
     .flatMap {

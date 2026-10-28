@@ -60,7 +60,7 @@ class PartnerDetailsDeleteDateController @Inject() (
           val registrationDate = getRegistrationDate(businessDetails)
           val latestDate = calculateLatestDate(registrationDate)
           val index = getPartnerIndex
-          val partnerName = PartnerUtils.getPartnerDetailsName(index, request.userAnswers) // .getOrElse("N/A")
+          val partnerName = PartnerUtils.getPartnerDetailsName(index, request.userAnswers)
 
           val form = formProvider(registrationDate)
 
@@ -94,7 +94,7 @@ class PartnerDetailsDeleteDateController @Inject() (
 
           val registrationDate = getRegistrationDate(businessDetails)
           val latestDate = calculateLatestDate(registrationDate)
-          val partnerName = PartnerUtils.getPartnerDetailsName(index, request.userAnswers) // .getOrElse("N/A")
+          val partnerName = PartnerUtils.getPartnerDetailsName(index, request.userAnswers)
 
           formProvider(registrationDate)
             .bindFromRequest()
