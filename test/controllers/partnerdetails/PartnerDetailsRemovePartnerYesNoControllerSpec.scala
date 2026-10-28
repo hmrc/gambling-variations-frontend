@@ -126,8 +126,9 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val withoutBusinessName =
             userAnswersExistingPartners.remove(PartnerDetailsBusinessNamePage(businessNumber1)).success.value
 
-          withoutBusinessName.copy(
-            data = withoutBusinessName.data.deepMerge(
+          UserAnswers(
+            withoutBusinessName.id,
+            withoutBusinessName.data.deepMerge(
               Json.obj(
                 "partners" -> Json.obj(
                   businessNumber1 -> Json.obj(

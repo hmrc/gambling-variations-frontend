@@ -20,8 +20,7 @@ import connectors.GamblingConnector
 import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessContactDetails, ContactNumber, UserAnswers}
-import pages.*
-import pages.contactdetails.{BusinessContactDetailsSectionPage, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
+import pages.contactdetails.{BusinessContactDetailsSection, BusinessContactNumberPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
 import play.api.Logging
 import play.api.mvc.{ActionRefiner, Result}
 import play.api.mvc.Results.Redirect
@@ -29,6 +28,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import java.time.{Clock, Instant}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -36,7 +36,8 @@ import scala.util.control.NonFatal
 
 class BusinessContactDetailsDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
+  val gamblingConnector: GamblingConnector,
+  clock: Clock
 )(implicit val executionContext: ExecutionContext)
     extends BusinessContactDetailsDataRequiredAction
     with Logging {
@@ -53,9 +54,9 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(BusinessContactDetailsSectionPage) map { _ =>
+        if (userAnswers.isLoaded(BusinessContactDetailsSection)) {
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
+        } else {
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           saveUserAnswersToSessionAndRedirect(userAnswers, request)
         }
@@ -85,16 +86,16 @@ class BusinessContactDetailsDataRequiredActionImpl @Inject() (
 
   private def setBusinessContactDetails(contact: BusinessContactDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Business Contact Details")
+    val loadedAnswers = answers.withSectionLoaded(BusinessContactDetailsSection, Instant.now(clock))
     for {
-      updatedAnswers <- answers.set(BusinessContactDetailsSectionPage, contact.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(
+      updatedAnswers <- loadedAnswers.setOriginalIfDefined(
                           BusinessContactNumberPage,
                           contact.phoneNumber.zip(contact.mobilePhoneNumber).map { case (phone, mobile) =>
                             ContactNumber(Some(phone), Some(mobile))
                           }
                         )
-      updatedAnswers <- updatedAnswers.setIfDefined(BusinessFaxNumberPage, contact.faxNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(BusinessEmailAddressPage, contact.emailAddr)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(BusinessFaxNumberPage, contact.faxNumber)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(BusinessEmailAddressPage, contact.emailAddr)
     } yield updatedAnswers
   }
 

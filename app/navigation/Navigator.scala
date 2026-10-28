@@ -51,7 +51,7 @@ class Navigator @Inject() () {
     case ControllingBodySoleProprietorPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case ControllingBodyEmailPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
+      _ => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
     case ControllingBodyDateOfBirthPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyDateOfIncorporationPage =>
@@ -60,6 +60,12 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
     case ControllingBodyCrnPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-UTR when the controlling body journey is built.
+    case ControllingBodySameAsRepYesNoPage =>
+      userAnswers => navigateControllingBodySameAsRepYesNoPage(userAnswers)
+    case ControllingBodyNotProvidedYesNoPage =>
+      userAnswers => navigateControllingBodyNotProvidedYesNoPage(userAnswers)
+    case ControllingBodyUtrPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -544,7 +550,7 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyChangeScreenerPage)
       .map {
-        case EditDetails => routes.IndexController.onPageLoad() // TODO later -> CB-CYA, controlling body check your answers
+        case EditDetails => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
         case ProvideNew  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
         case KeepSame    => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
@@ -567,3 +573,17 @@ class Navigator @Inject() () {
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 }
+
+private def navigateControllingBodySameAsRepYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodySameAsRepYesNoPage) match {
+    case Some(true)  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+    case Some(false) => routes.ChangeRegistrationDetailsController.onPageLoad()
+    case None        => routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateControllingBodyNotProvidedYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodyNotProvidedYesNoPage) match {
+    case Some(false) => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+    case Some(true)  => routes.ChangeRegistrationDetailsController.onPageLoad()
+    case None        => routes.SystemErrorController.onPageLoad()
+  }

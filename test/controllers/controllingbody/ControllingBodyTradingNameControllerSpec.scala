@@ -183,7 +183,7 @@ class ControllingBodyTradingNameControllerSpec extends SpecBase with MockitoSuga
 
     BusinessType.values.foreach { bodyType =>
       s"show the hint only for a sole proprietor on GET and validation errors for $bodyType" in {
-        val answers = loadedAnswers(bodyType).copy(data = loadedAnswers(bodyType).data ++ Json.obj("businessType" -> 1))
+        val answers = UserAnswers(loadedAnswers(bodyType).id, loadedAnswers(bodyType).data ++ Json.obj("businessType" -> 1))
         val repository = mock[SessionRepository]
         when(repository.set(any())).thenReturn(Future.successful(true))
         val application = applicationBuilder(userAnswers = Some(answers))

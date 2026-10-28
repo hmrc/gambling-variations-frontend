@@ -1033,7 +1033,7 @@ class NavigatorSpec extends SpecBase {
           )
         )
 
-        navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, emptyAnswers.copy(data = businessData)) mustBe
+        navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, UserAnswers(emptyAnswers.id, businessData)) mustBe
           controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(newPartnersIndex1.toString,
                                                                                                   Corporatebody,
                                                                                                   NormalMode
@@ -1657,7 +1657,7 @@ class NavigatorSpec extends SpecBase {
 
     "normal mode controlling body details navigation" - {
 
-      "should route ControllingBodyChangeScreenerPage to Index when the answer is EditDetails" in {
+      "should route ControllingBodyChangeScreenerPage to CheckControllingBodyDetails when the answer is EditDetails" in {
         val answers =
           emptyAnswers
             .set(ControllingBodyChangeScreenerPage, EditDetails)
@@ -1665,7 +1665,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
       "should route ControllingBodyChangeScreenerPage to ControllingBodyBusinessType when the answer is ProvideNew" in {
@@ -1715,6 +1715,11 @@ class NavigatorSpec extends SpecBase {
 
         navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
           routes.IndexController.onPageLoad()
+      }
+
+      "should route ControllingBodyEmailPage to CheckControllingBodyDetails" in {
+        navigator.nextPage(ControllingBodyEmailPage, NormalMode, emptyAnswers) mustBe
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
       "should route ControllingBodyDateOfIncorporationPage to Index until the onward journey is built" in {
@@ -1815,6 +1820,62 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(ControllingBodyBusinessTypePage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ChangeControllingBodyNameController.onPageLoad(BusinessType.LimitedLiabilityPartnership)
       }
+
+      "should route ControllingBodySameAsRepYesNoPage to ChangeRegistrationDetails Controller" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "controllingBodySameAsRepYesNo" -> false
+                          )
+                        )
+                       )
+          navigator.nextPage(ControllingBodySameAsRepYesNoPage, NormalMode, answers) mustBe
+            controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
+        }
+
+      "should route ControllingBodySameAsRepYesNoPage to ControllingBodyBusinessType Controller" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "controllingBodySameAsRepYesNo" -> true
+              )
+            )
+          )
+        navigator.nextPage(ControllingBodySameAsRepYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+      }
+      "should route ControllingBodyNotProvidedYesNoPage to ChangeRegistrationDetails Controller" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "controllingBodyNotProvidedYesNo" -> true
+              )
+            )
+          )
+        navigator.nextPage(ControllingBodyNotProvidedYesNoPage, NormalMode, answers) mustBe
+          controllers.routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+
+      "should route ControllingBodyNotProvidedYesNoPage to ControllingBodyBusinessType Controller" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "controllingBodyNotProvidedYesNo" -> false
+              )
+            )
+          )
+        navigator.nextPage(ControllingBodyNotProvidedYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+      }
+
     }
 
     "in Check mode" - {
