@@ -1529,6 +1529,20 @@ changeGroupRegistrationNumber.error.invalidReference = Enter a real registration
 
 changeGroupRegistrationNumber.change.hidden = ChangeGroupRegistrationNumber
 
+
+controllingBodyUTR.title = Tell us the controlling body’s Unique Taxpayer Reference
+controllingBodyUTR.subtitle =  What is the Unique Taxpayer Reference?
+controllingBodyUTR.heading = Tell us the controlling body’s Unique Taxpayer Reference (UTR)
+controllingBodyUTR.hint = It must be 10 digits long, for example 1234567890
+controllingBodyUTR.paragraph = You can find this in your Business Tax Account, the HMRC app or on tax returns and other documents from HMRC. It might be called ‘reference’, ‘UTR’ or ‘official use’.
+controllingBodyUTR.linkText = Get more help to find your UTR (opens in new tab).
+controllingBodyUTR.checkYourAnswersLabel = Tell us the controlling body’s Unique Taxpayer Reference
+controllingBodyUTR.error.required = Enter the controlling body’s Unique Taxpayer Reference (UTR)
+controllingBodyUTR.error.invalidChars = The Unique Taxpayer Reference (UTR) must only include numbers 0 to 9
+controllingBodyUTR.error.length = The Unique Taxpayer Reference (UTR) must be 10 digits long
+controllingBodyUTR.error.invalid = Enter a real Unique Taxpayer Reference (UTR)
+controllingBodyUTR.change.hidden = Tell us the controlling body’s Unique Taxpayer Reference
+
 controllingBodyAddNino.title = What is the controlling body’s National Insurance number?
 controllingBodyAddNino.paragraph = You can find this on their National Insurance card, benefit letter, payslip or P60.
 controllingBodyAddNino.heading = What is the controlling body’s National Insurance number?
