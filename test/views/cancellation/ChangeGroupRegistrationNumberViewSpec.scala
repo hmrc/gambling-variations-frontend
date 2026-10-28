@@ -76,7 +76,7 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
         .size() mustEqual 0
     }
 
-    "must render error summary when form has errors" in new Setup {
+    "must render error summary when form has missing input" in new Setup {
 
       val boundForm =
         form.bind(Map("changeGroupRegistrationNumber" -> ""))
@@ -92,6 +92,64 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
         .select(".govuk-error-summary")
         .text must include(
         messages("changeGroupRegistrationNumber.error.required")
+      )
+    }
+
+    "must render error summary when form has invalid characters" in new Setup {
+
+      val boundForm =
+        form.bind(Map("changeGroupRegistrationNumber" -> "X!M00000000640"))
+
+      val html = view(boundForm, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc
+        .select(".govuk-error-summary")
+        .size() mustEqual 1
+
+      doc
+        .select(".govuk-error-summary")
+        .text must include(
+        messages("changeGroupRegistrationNumber.error.invalidCharacters")
+      )
+    }
+
+    "must render error summary when form has invalid format" in new Setup {
+
+      val boundForm =
+        form.bind(Map("changeGroupRegistrationNumber" -> "PEM00000000640"))
+
+      val html = view(boundForm, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc
+        .select(".govuk-error-summary")
+        .size() mustEqual 1
+
+      doc
+        .select(".govuk-error-summary")
+        .text must include(
+        messages("changeGroupRegistrationNumber.error.invalidFormat")
+      )
+    }
+
+
+    "must render error summary when form has invalid reference" in new Setup {
+
+      val boundForm =
+        form.bind(Map("changeGroupRegistrationNumber" -> "XEM00000000641"))
+
+      val html = view(boundForm, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
+
+      doc
+        .select(".govuk-error-summary")
+        .size() mustEqual 1
+
+      doc
+        .select(".govuk-error-summary")
+        .text must include(
+        messages("changeGroupRegistrationNumber.error.invalidReference")
       )
     }
 
