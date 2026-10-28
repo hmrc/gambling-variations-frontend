@@ -251,10 +251,10 @@ class PartnerUtilsSpec extends SpecBase {
         val result4 = partnerUtils.getPartnerDetailsName(3, userAnswers)
 
         partnerUtils.getNewPartnersSize(userAnswers) mustBe 4
-        result1 mustBe Some("Mr Tom John Smith")
-        result2 mustBe Some("mgd1")
-        result3 mustBe None
-        result4 mustBe None
+        result1 mustBe "Mr Tom John Smith"
+        result2 mustBe "mgd1"
+        result3 mustBe "null"
+        result4 mustBe "null"
       }
 
       "correctly retrieves data in order for business type" in {
@@ -300,11 +300,11 @@ class PartnerUtilsSpec extends SpecBase {
         val result5 = partnerUtils.getPartnerDetailsName("4", userAnswers)
 
         partnerUtils.getExistingPartnersBusinessNumbers(userAnswers).size mustBe 5
-        result1 mustBe Some("business0")
-        result2 mustBe Some("tradingName1")
-        result3 mustBe Some("mgd2")
-        result4 mustBe None
-        result5 mustBe None
+        result1 mustBe "business0"
+        result2 mustBe "tradingName1"
+        result3 mustBe "mgd2"
+        result4 mustBe "null"
+        result5 mustBe "null"
       }
 
       "fails to fetch any data if businessType is missing" in {
@@ -322,7 +322,7 @@ class PartnerUtilsSpec extends SpecBase {
         val result1 = partnerUtils.getPartnerDetailsName("0", userAnswers)
         partnerUtils.getExistingPartnersBusinessNumbers(userAnswers).size mustBe 1
 
-        result1 mustBe None
+        result1 mustBe "null"
       }
 
     }

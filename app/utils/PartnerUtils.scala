@@ -70,13 +70,20 @@ object PartnerUtils {
 //                  .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(businessNumberOrIndex)))
 //            }
 //  } yield name
-
-  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = userAnswers
+  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): String = userAnswers
     .get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
     .flatMap {
       case BusinessType.Soleproprietor => userAnswers.get(PartnerDetailsSoleProprietorPage(businessNumberOrIndex)).map(_.fullName)
       case _                           => userAnswers.get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
     }
+    .getOrElse("null")
+
+//  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = userAnswers
+//    .get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
+//    .flatMap {
+//      case BusinessType.Soleproprietor => userAnswers.get(PartnerDetailsSoleProprietorPage(businessNumberOrIndex)).map(_.fullName)
+//      case _                           => userAnswers.get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
+//    }
 
   def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
