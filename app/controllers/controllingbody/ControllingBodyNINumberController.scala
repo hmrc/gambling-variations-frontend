@@ -52,7 +52,7 @@ class ControllingBodyNINumberController @Inject()(
     request.userAnswers.get(ControllingBodyBusinessTypePage) match {
       case Some(Soleproprietor) =>
         val preparedForm = request.userAnswers
-          .get(ControllingBodyNINumberPage)
+          .get(ControllingBodyNinoPage)
           .fold(form)(form.fill)
 
         Ok(view(preparedForm, mode))
@@ -68,13 +68,13 @@ class ControllingBodyNINumberController @Inject()(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
         value =>
           val ua = request.userAnswers
-          val isChanged: Boolean = checkIfChanged(value, ua, ControllingBodyNINumberPage, ControllingBodyChangesPage)
+          val isChanged: Boolean = checkIfChanged(value, ua, ControllingBodyNinoPage, ControllingBodyChangesPage)
           for {
-            updatedAnswers <- Future.fromTry(ua.set(ControllingBodyNINumberPage, value))
+            updatedAnswers <- Future.fromTry(ua.set(ControllingBodyNinoPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ControllingBodyChangesPage, isChanged))
             _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ControllingBodyNINumberPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ControllingBodyNinoPage, mode, updatedAnswers))
       )
   }
 }
