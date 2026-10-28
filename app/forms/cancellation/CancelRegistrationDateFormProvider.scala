@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.cancellation
 
 import forms.mappings.Mappings
 import play.api.data.Form
@@ -30,19 +30,19 @@ class CancelRegistrationDateFormProvider @Inject() extends Mappings {
     DateTimeFormatter.ofPattern("d MMMM yyyy")
 
   def apply(
-             registrationDate: LocalDate,
-             maximumValidDate: LocalDate
-           )(implicit messages: Messages): Form[LocalDate] = {
+    registrationDate: LocalDate,
+    maximumValidDate: LocalDate
+  )(implicit messages: Messages): Form[LocalDate] = {
 
     val firstInvalidDate =
       maximumValidDate.plusDays(1)
 
     Form(
       "value" -> localDate(
-        invalidKey = "cancelRegistrationDate.error.invalid",
+        invalidKey     = "cancelRegistrationDate.error.invalid",
         allRequiredKey = "cancelRegistrationDate.error.required.all",
         twoRequiredKey = "cancelRegistrationDate.error.required.two",
-        requiredKey = "cancelRegistrationDate.error.required"
+        requiredKey    = "cancelRegistrationDate.error.required"
       ).verifying(
         firstError(
           minDate(

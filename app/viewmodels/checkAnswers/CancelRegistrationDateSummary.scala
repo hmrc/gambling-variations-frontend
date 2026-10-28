@@ -16,30 +16,28 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.CancelRegistrationDatePage
+import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{Lang, Messages}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormats.dateTimeFormat
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.summarylist.*
+import viewmodels.implicits.*
 
-object CancelRegistrationDateSummary  {
+object CancelRegistrationDateSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(CancelRegistrationDatePage).map {
-      answer =>
+    answers.get(CancelRegistrationDatePage).map { answer =>
 
-        implicit val lang: Lang = messages.lang
+      implicit val lang: Lang = messages.lang
 
-        SummaryListRowViewModel(
-          key     = "cancelRegistrationDate.checkYourAnswersLabel",
-          value   = ValueViewModel(answer.format(dateTimeFormat())),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.CancelRegistrationDateController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("cancelRegistrationDate.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key   = "cancelRegistrationDate.checkYourAnswersLabel",
+        value = ValueViewModel(answer.format(dateTimeFormat())),
+        actions = Seq(
+          ActionItemViewModel("site.change", controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("cancelRegistrationDate.change.hidden"))
         )
+      )
     }
 }

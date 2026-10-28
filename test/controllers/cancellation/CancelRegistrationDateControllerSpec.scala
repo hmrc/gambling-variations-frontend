@@ -14,41 +14,33 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.cancellation
 
 import base.SpecBase
 import connectors.GamblingConnector
-import forms.CancelRegistrationDateFormProvider
+import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl}
+import controllers.routes
+import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{BusinessDetails, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CancelRegistrationDatePage
+import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.Messages
 import play.api.inject.bind
-import play.api.mvc.{
-  AnyContentAsEmpty,
-  AnyContentAsFormUrlEncoded,
-  Call
-}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.CancelRegistrationDateView
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.cancellation.CancelRegistrationDateView
+
 import java.time.temporal.ChronoUnit
-import java.time.{
-  Clock,
-  Instant,
-  LocalDate,
-  ZoneOffset
-}
+import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
-class CancelRegistrationDateControllerSpec
-  extends SpecBase
-    with MockitoSugar {
+class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
 
   private implicit val messages: Messages =
     stubMessages()
@@ -97,7 +89,7 @@ class CancelRegistrationDateControllerSpec
     Call("GET", "/foo")
 
   private lazy val cancelRegistrationDateRoute =
-    routes.CancelRegistrationDateController
+    controllers.cancellation.routes.CancelRegistrationDateController
       .onPageLoad(NormalMode)
       .url
 
@@ -111,8 +103,8 @@ class CancelRegistrationDateControllerSpec
     )
 
   private def postRequest(
-                           answer: LocalDate = validAnswer
-                         ): FakeRequest[AnyContentAsFormUrlEncoded] =
+    answer: LocalDate = validAnswer
+  ): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(
       POST,
       cancelRegistrationDateRoute
@@ -123,13 +115,11 @@ class CancelRegistrationDateControllerSpec
     )
 
   private def buildApplication(
-                                userAnswers: Option[UserAnswers],
-                                businessDetails: BusinessDetails,
-                                sessionRepository: SessionRepository =
-                                mock[SessionRepository],
-                                navigator: Navigator =
-                                new FakeNavigator(onwardRoute)
-                              ) = {
+    userAnswers: Option[UserAnswers],
+    businessDetails: BusinessDetails,
+    sessionRepository: SessionRepository = mock[SessionRepository],
+    navigator: Navigator = new FakeNavigator(onwardRoute)
+  ) = {
     val gamblingConnector =
       mock[GamblingConnector]
 
@@ -156,41 +146,41 @@ class CancelRegistrationDateControllerSpec
         bind[Navigator]
           .toInstance(navigator),
         bind[Clock]
-          .toInstance(fixedClock)
+          .toInstance(fixedClock),
+        bind[BusinessDetailsDataRequiredAction]
+          .to[BusinessDetailsDataRequiredActionImpl]
       )
       .build()
   }
 
-  private def businessDetailsWithRegistrationDate =
-    mockBusinessDetails(Some(registrationDate))
+  private def businessDetails(
+    dateOfRegistration: Option[LocalDate]
+  ): BusinessDetails =
+    BusinessDetails(
+      mgdRegNumber          = "XMGD00000000001",
+      businessType          = None,
+      currentlyRegistered   = 1,
+      groupReg              = false,
+      dateOfRegistration    = dateOfRegistration,
+      businessPartnerNumber = None,
+      systemDate            = currentDate
+    )
 
-  private def businessDetailsWithoutRegistrationDate =
-    mockBusinessDetails(None)
+  private def businessDetailsWithRegistrationDate: BusinessDetails =
+    businessDetails(Some(registrationDate))
 
-  private def mockBusinessDetails(
-                                   dateOfRegistration: Option[LocalDate]
-                                 ): BusinessDetails = {
-    val businessDetails =
-      mock[BusinessDetails]
-
-    when(businessDetails.dateOfRegistration)
-      .thenReturn(dateOfRegistration)
-
-    businessDetails
-  }
+  private def businessDetailsWithoutRegistrationDate: BusinessDetails =
+    businessDetails(None)
 
   "CancelRegistrationDateController" - {
 
     "onPageLoad" - {
 
       "must return OK and the correct view for a GET" in {
-        val businessDetails =
-          businessDetailsWithRegistrationDate
-
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails = businessDetails
+            userAnswers     = Some(emptyUserAnswers),
+            businessDetails = businessDetailsWithRegistrationDate
           )
 
         running(application) {
@@ -230,13 +220,10 @@ class CancelRegistrationDateControllerSpec
             .success
             .value
 
-        val businessDetails =
-          businessDetailsWithRegistrationDate
-
         val application =
           buildApplication(
-            userAnswers = Some(userAnswers),
-            businessDetails = businessDetails
+            userAnswers     = Some(userAnswers),
+            businessDetails = businessDetailsWithRegistrationDate
           )
 
         running(application) {
@@ -267,13 +254,10 @@ class CancelRegistrationDateControllerSpec
       }
 
       "must redirect to SystemError when the business details do not contain a registration date" in {
-        val businessDetails =
-          businessDetailsWithoutRegistrationDate
-
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails = businessDetails
+            userAnswers     = Some(emptyUserAnswers),
+            businessDetails = businessDetailsWithoutRegistrationDate
           )
 
         running(application) {
@@ -289,21 +273,18 @@ class CancelRegistrationDateControllerSpec
         }
       }
 
-      "must redirect to SystemError when no existing user answers are found" in {
+      "must return OK when no existing user answers are found" in {
         val application =
-          applicationBuilder(userAnswers = None)
-            .build()
+          buildApplication(
+            userAnswers     = None,
+            businessDetails = businessDetailsWithRegistrationDate
+          )
 
         running(application) {
           val result =
             route(application, getRequest()).value
 
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual
-            routes.SystemErrorController
-              .onPageLoad()
-              .url
+          status(result) mustEqual OK
         }
       }
     }
@@ -320,13 +301,10 @@ class CancelRegistrationDateControllerSpec
           Future.successful(true)
         )
 
-        val businessDetails =
-          businessDetailsWithRegistrationDate
-
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails = businessDetails,
+            userAnswers       = Some(emptyUserAnswers),
+            businessDetails   = businessDetailsWithRegistrationDate,
             sessionRepository = mockSessionRepository
           )
 
@@ -339,17 +317,11 @@ class CancelRegistrationDateControllerSpec
           redirectLocation(result).value mustEqual
             onwardRoute.url
 
-          val expectedAnswers =
-            emptyUserAnswers
-              .set(
-                CancelRegistrationDatePage,
-                validAnswer
-              )
-              .success
-              .value
-
-          verify(mockSessionRepository)
-            .set(expectedAnswers)
+          verify(mockSessionRepository).set(
+            org.mockito.ArgumentMatchers.argThat[UserAnswers] { answers =>
+              answers.get(CancelRegistrationDatePage).contains(validAnswer)
+            }
+          )
         }
       }
 
@@ -365,9 +337,8 @@ class CancelRegistrationDateControllerSpec
 
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails =
-              businessDetailsWithRegistrationDate,
+            userAnswers       = Some(emptyUserAnswers),
+            businessDetails   = businessDetailsWithRegistrationDate,
             sessionRepository = mockSessionRepository
           )
 
@@ -397,9 +368,8 @@ class CancelRegistrationDateControllerSpec
 
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails =
-              businessDetailsWithRegistrationDate,
+            userAnswers       = Some(emptyUserAnswers),
+            businessDetails   = businessDetailsWithRegistrationDate,
             sessionRepository = mockSessionRepository
           )
 
@@ -420,33 +390,23 @@ class CancelRegistrationDateControllerSpec
       "must return BadRequest when a date before registration is submitted" in {
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails =
-              businessDetailsWithRegistrationDate
+            userAnswers     = Some(emptyUserAnswers),
+            businessDetails = businessDetailsWithRegistrationDate
           )
 
         running(application) {
+          val invalidDate =
+            registrationDate.minusDays(1)
+
           val request =
-            postRequest(registrationDate.minusDays(1))
+            postRequest(invalidDate)
 
           val boundForm =
             form.bind(
               Map(
-                "value.day" ->
-                  registrationDate
-                    .minusDays(1)
-                    .getDayOfMonth
-                    .toString,
-                "value.month" ->
-                  registrationDate
-                    .minusDays(1)
-                    .getMonthValue
-                    .toString,
-                "value.year" ->
-                  registrationDate
-                    .minusDays(1)
-                    .getYear
-                    .toString
+                "value.day"   -> invalidDate.getDayOfMonth.toString,
+                "value.month" -> invalidDate.getMonthValue.toString,
+                "value.year"  -> invalidDate.getYear.toString
               )
             )
 
@@ -476,9 +436,8 @@ class CancelRegistrationDateControllerSpec
       "must return BadRequest for today plus 15 days because it is the first invalid date" in {
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails =
-              businessDetailsWithRegistrationDate
+            userAnswers     = Some(emptyUserAnswers),
+            businessDetails = businessDetailsWithRegistrationDate
           )
 
         running(application) {
@@ -488,18 +447,9 @@ class CancelRegistrationDateControllerSpec
           val boundForm =
             form.bind(
               Map(
-                "value.day" ->
-                  firstInvalidDate
-                    .getDayOfMonth
-                    .toString,
-                "value.month" ->
-                  firstInvalidDate
-                    .getMonthValue
-                    .toString,
-                "value.year" ->
-                  firstInvalidDate
-                    .getYear
-                    .toString
+                "value.day"   -> firstInvalidDate.getDayOfMonth.toString,
+                "value.month" -> firstInvalidDate.getMonthValue.toString,
+                "value.year"  -> firstInvalidDate.getYear.toString
               )
             )
 
@@ -529,9 +479,8 @@ class CancelRegistrationDateControllerSpec
       "must return BadRequest and the correct view when invalid data is submitted" in {
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails =
-              businessDetailsWithRegistrationDate
+            userAnswers     = Some(emptyUserAnswers),
+            businessDetails = businessDetailsWithRegistrationDate
           )
 
         val request =
@@ -580,9 +529,8 @@ class CancelRegistrationDateControllerSpec
       "must redirect to SystemError when the business details do not contain a registration date" in {
         val application =
           buildApplication(
-            userAnswers = Some(emptyUserAnswers),
-            businessDetails =
-              businessDetailsWithoutRegistrationDate
+            userAnswers     = Some(emptyUserAnswers),
+            businessDetails = businessDetailsWithoutRegistrationDate
           )
 
         running(application) {
@@ -598,10 +546,22 @@ class CancelRegistrationDateControllerSpec
         }
       }
 
-      "must redirect to SystemError when no existing user answers are found" in {
+      "must save the answer and redirect to the next page when no existing user answers are found" in {
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(
+          mockSessionRepository.set(any[UserAnswers])
+        ).thenReturn(
+          Future.successful(true)
+        )
+
         val application =
-          applicationBuilder(userAnswers = None)
-            .build()
+          buildApplication(
+            userAnswers       = None,
+            businessDetails   = businessDetailsWithRegistrationDate,
+            sessionRepository = mockSessionRepository
+          )
 
         running(application) {
           val result =
@@ -610,9 +570,13 @@ class CancelRegistrationDateControllerSpec
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            routes.SystemErrorController
-              .onPageLoad()
-              .url
+            onwardRoute.url
+
+          verify(mockSessionRepository).set(
+            org.mockito.ArgumentMatchers.argThat[UserAnswers] { answers =>
+              answers.get(CancelRegistrationDatePage).contains(validAnswer)
+            }
+          )
         }
       }
     }

@@ -336,7 +336,7 @@ POST       /change-registration-details/controlling-body-details/vat-registratio
 GET        /cancel-registration/why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
 
-GET        /cancel-registration/no-longer-liable                  controllers.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
-POST       /cancel-registration/no-longer-liable                  controllers.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
-GET        /cancel-registration/change-no-longer-liable                        controllers.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
-POST       /cancel-registration/change-no-longer-liable                        controllers.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)
+GET        /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+GET        /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)

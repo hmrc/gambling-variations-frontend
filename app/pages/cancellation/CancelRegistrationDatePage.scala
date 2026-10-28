@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package pages.cancellation
+
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
 import java.time.LocalDate
-
-import play.api.libs.json.JsPath
 
 case object CancelRegistrationDatePage extends QuestionPage[LocalDate] {
 

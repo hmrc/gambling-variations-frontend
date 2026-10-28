@@ -44,7 +44,7 @@
 
  @layout(pageTitle = title(form, messages("cancelRegistrationDate.title"), Some(messages("cancelRegistrationDate.caption")))) {
 
- @formHelper(action = routes.CancelRegistrationDateController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+ @formHelper(action = controllers.cancellation.routes.CancelRegistrationDateController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
  @if(form.errors.nonEmpty) {
   @govukErrorSummary(ErrorSummaryViewModel(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.cancellation
 
 import forms.behaviours.DateBehaviours
 import play.api.i18n.Messages
@@ -105,9 +105,11 @@ class CancelRegistrationDateFormProviderSpec extends DateBehaviours {
         form.bind(dateData(registrationDate.minusDays(1)))
 
       val error =
-        result.errors.find(
-          _.message == "cancelRegistrationDate.error.outsideBoundaries"
-        ).value
+        result.errors
+          .find(
+            _.message == "cancelRegistrationDate.error.outsideBoundaries"
+          )
+          .value
 
       error.args mustBe Seq(
         "20 March 2007",
@@ -120,9 +122,11 @@ class CancelRegistrationDateFormProviderSpec extends DateBehaviours {
         form.bind(dateData(firstInvalidDate))
 
       val error =
-        result.errors.find(
-          _.message == "cancelRegistrationDate.error.outsideBoundaries"
-        ).value
+        result.errors
+          .find(
+            _.message == "cancelRegistrationDate.error.outsideBoundaries"
+          )
+          .value
 
       error.args mustBe Seq(
         "20 March 2007",
