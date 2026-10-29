@@ -70,9 +70,10 @@ class ControllingBodyAddNINumberYesNoController @Inject() (
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ControllingBodyAddNINumberYesNoPage, value))
             saved          <- sessionRepository.set(updatedAnswers)
           } yield {
-            saved match {
-              case true  => Redirect(navigator.nextPage(ControllingBodyAddNINumberYesNoPage, mode, updatedAnswers))
-              case false => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+            if (saved) {
+              Redirect(navigator.nextPage(ControllingBodyAddNINumberYesNoPage, mode, updatedAnswers))
+            } else {
+              Redirect(controllers.routes.SystemErrorController.onPageLoad())
             }
           }
       )
