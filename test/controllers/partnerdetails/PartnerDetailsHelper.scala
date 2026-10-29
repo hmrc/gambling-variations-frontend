@@ -243,7 +243,8 @@ trait PartnerDetailsHelper {
         "partnerDetailsDateOfIncorporation"      -> "2020-03-01",
         "partnerDetailsCountryOfIncorporation"   -> null,
         "partnerDetailsIsBusinessIncorporatedUk" -> isIncorporatedInTheUK,
-        "partnerDetailsBusinessType"             -> businessType
+        "partnerDetailsBusinessType"             -> businessType,
+        "partnerDetailsHasAnsweredAllQuestion"   -> false
       )
     )
   )
