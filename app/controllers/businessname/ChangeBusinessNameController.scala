@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.BusinessTypeKeyBuilder
 import utils.FlagsUtil.checkIfChanged
 import views.html.businessname.ChangeBusinessNameView
-import views.html.tradingdetails.SoleProprietorNameView
+import views.html.businessname.SoleProprietorNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

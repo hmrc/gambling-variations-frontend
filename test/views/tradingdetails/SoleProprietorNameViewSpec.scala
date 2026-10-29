@@ -23,7 +23,7 @@ import models.{NormalMode, SoleProprietorName}
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.tradingdetails.SoleProprietorNameView
+import views.html.businessname.SoleProprietorNameView
 
 class SoleProprietorNameViewSpec extends SpecBase {
 

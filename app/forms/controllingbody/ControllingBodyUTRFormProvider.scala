@@ -36,7 +36,7 @@ class ControllingBodyUTRFormProvider @Inject() extends Mappings with ChecksumCon
         utrChecksum(invalidKey).apply(value)
       }
     }
-    
+
   def apply(): Form[String] =
     Form(
       "value" -> text(requiredKey)
