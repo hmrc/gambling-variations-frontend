@@ -296,7 +296,7 @@ object CheckControllingBodyDetailsViewModel {
         case "0" => false
       },
       countryOfIncorporation = text(ControllingBodyCountryOfIncorporationPage),
-      foreignCorporateRef    = text(ControllingBodyForeignCorporateReferencePage),
+      foreignCorporateRef    = text(ControllingBodyForeignCorpRefPage),
       dateOfIncorporation    = answers.get(ControllingBodyDateOfIncorporationPage),
       crn                    = text(ControllingBodyCrnPage),
       utr                    = text(ControllingBodyUtrPage),
