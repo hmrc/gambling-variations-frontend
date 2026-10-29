@@ -21,23 +21,23 @@ import models.UserAnswers
 import org.mockito.Mockito.when
 import org.mongodb.scala.model.Filters
 import org.scalactic.source.Position
-import org.scalatest.{OptionValues, TryValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import org.scalatest.{OptionValues, TryValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.slf4j.MDC
-import uk.gov.hmrc.mdc.MdcExecutionContext
 import pages.contactdetails.{BusinessContactDetailsSection, BusinessContactDetailsSubmittedPage, BusinessEmailAddressPage, BusinessFaxNumberPage}
 import play.api.libs.json.Json
+import uk.gov.hmrc.mdc.MdcExecutionContext
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
-import java.time.{Clock, Instant, ZoneId}
 import java.time.temporal.ChronoUnit
-import scala.concurrent.{ExecutionContext, Future, ExecutionContextExecutorService}
+import java.time.{Clock, Instant, ZoneId}
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService, Future}
 
 class SessionRepositorySpec
-  extends AnyFreeSpec
+    extends AnyFreeSpec
     with Matchers
     with DefaultPlayMongoRepositorySupport[UserAnswers]
     with ScalaFutures
@@ -68,7 +68,7 @@ class SessionRepositorySpec
 
       val expectedResult = userAnswers copy (lastUpdated = instant)
 
-      val setResult     = repository.set(userAnswers).futureValue
+      val setResult = repository.set(userAnswers).futureValue
       val updatedRecord = find(Filters.equal("_id", userAnswers.id)).futureValue.headOption.value
 
       updatedRecord mustEqual expectedResult
@@ -80,10 +80,13 @@ class SessionRepositorySpec
   ".get" - {
 
     "must migrate legacy controlling body answers and retain edits on the next save" in {
-      val legacy = UserAnswers(userAnswers.id, Json.obj(
-        "controllingBodyDetailsSection" -> Json.obj("typeOfControllingBody" -> "partnership", "businessName" -> "Original"),
-        "controllingBodyDetails" -> Json.obj("businessName" -> "Edited", "loaded" -> true)
-      ))
+      val legacy = UserAnswers(
+        userAnswers.id,
+        Json.obj(
+          "controllingBodyDetailsSection" -> Json.obj("typeOfControllingBody" -> "partnership", "businessName" -> "Original"),
+          "controllingBodyDetails"        -> Json.obj("businessName" -> "Edited", "loaded" -> true)
+        )
+      )
       insert(legacy).futureValue
 
       val migrated = repository.get(legacy.id).futureValue.value
@@ -118,7 +121,7 @@ class SessionRepositorySpec
 
         insert(userAnswers).futureValue
 
-        val result         = repository.get(userAnswers.id).futureValue
+        val result = repository.get(userAnswers.id).futureValue
         val expectedResult = userAnswers copy (lastUpdated = instant)
 
         result.value mustEqual expectedResult

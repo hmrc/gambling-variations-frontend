@@ -18,7 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
-import models.{CorrespondenceDetails, NormalMode, UserAnswers}
+import models.UserAnswers
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

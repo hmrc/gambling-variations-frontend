@@ -18,7 +18,6 @@ package views.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
-import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
