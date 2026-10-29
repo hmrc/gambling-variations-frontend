@@ -1638,6 +1638,13 @@ controllingBodyRemoveVATRegistrationNumber.title = Are you sure you want to remo
 controllingBodyRemoveVATRegistrationNumber.heading = Are you sure you want to remove {0} as this controlling body’s VAT registration number?
 controllingBodyRemoveVATRegistrationNumber.error.required = Select yes if you want to remove this controlling body’s VAT registration number
 
+
+registrationCancellationDeclaration.title = Declaration
+registrationCancellationDeclaration.heading = Declaration
+registrationCancellationDeclaration.caption = Cancel registration
+registrationCancellationDeclaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+registrationCancellationDeclaration.submit = Declare and submit
+
 cancelRegistrationDate.title = When are you no longer liable to pay Machine Games Duty?
 cancelRegistrationDate.heading = When are you no longer liable to pay Machine Games Duty?
 cancelRegistrationDate.caption = Cancel registration
