@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
 import controllers.routes
 import models.*
-import models.BusinessType.{Corporatebody, Soleproprietor}
+import models.BusinessType.Corporatebody
 import models.CorrespondenceChangeAddrOption.*
 import models.controllingbody.ControllingBodyChangeOption.*
 import pages.*
@@ -347,10 +347,46 @@ class NavigatorSpec extends SpecBase {
 
     "in Check mode" - {
 
+      "should route ChooseReturnPeriodsPage back to CheckReturnPeriodsController for standard return periods" in {
+        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+
+        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, answers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+      }
+
+      "should route ChooseReturnPeriodsPage to CheckReturnPeriods" in {
+        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, emptyAnswers) mustBe
+          controllers.returnperiods.routes.CheckReturnPeriodsController
+            .onPageLoad()
+      }
+
+      Seq(
+        NonStandardPeriodDate1Page,
+        NonStandardPeriodDate2Page,
+        NonStandardPeriodDate3Page,
+        NonStandardPeriodDate4Page,
+        NonStandardPeriodDate5Page,
+        NonStandardPeriodDate6Page,
+        NonStandardPeriodDate7Page,
+        NonStandardPeriodDate8Page
+      ).zipWithIndex.foreach { case (page, index) =>
+        s"should route NonStandardPeriodDate${index + 1}Page to CheckReturnPeriods" in {
+          navigator.nextPage(page, CheckMode, emptyAnswers) mustBe
+            controllers.returnperiods.routes.CheckReturnPeriodsController
+              .onPageLoad()
+        }
+      }
+
+      "should route any other page to ChangeRegistrationDetails" in {
+        navigator.nextPage(BusinessNamePage, CheckMode, emptyAnswers) mustBe
+          routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
+
       "should route a non-partner page to ChangeRegistrationDetails" in {
         navigator.nextPage(BusinessNamePage, CheckMode, emptyAnswers) mustBe
           routes.ChangeRegistrationDetailsController.onPageLoad()
       }
+
     }
 
     "normal mode correspondence details navigation" - {
@@ -1020,641 +1056,6 @@ class NavigatorSpec extends SpecBase {
 
     }
 
-    "check mode / new partner details navigation" - new PartnerDetailsHelper {
-
-      // New, unsaved partners: the add journey. The navigator takes the mode from the index, not the mode argument.
-
-      // --- Business type and incorporation branches ---
-
-      "should route PartnerDetailsBusinessTypePage to PartnerDetailsChangeBusinessNameController when answered" in {
-        val businessData = Json.obj(
-          "newPartners" -> Json.arr(
-            Json.obj("partnerDetailsBusinessType" -> 2)
-          )
-        )
-
-        navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, UserAnswers(emptyAnswers.id, businessData)) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(newPartnersIndex1.toString,
-                                                                                                  Corporatebody,
-                                                                                                  NormalMode
-                                                                                                 )
-      }
-
-      "should route PartnerDetailsBusinessTypePage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsIsBusinessIncorporatedUkPage to PartnerDetailsDateOfIncorporationController when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsIsBusinessIncorporatedUkPage to PartnerDetailsAddCountryOfIncorporationController when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsIsBusinessIncorporatedUkPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      // --- Name, trading name and date of joining ---
-
-      "should route PartnerDetailsBusinessNamePage to PartnerDetailsAddTradingNameYesNoController" in {
-        navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsBusinessNamePage to the next add journey page when called with CheckMode for an unsaved new partner" in {
-        navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), CheckMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsSoleProprietorPage to PartnerDetailsSoleProprietorDobController" in {
-        navigator.nextPage(PartnerDetailsSoleProprietorPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsDateOfBirthPage to PartnerDetailsAddTradingNameYesNoController" in {
-        navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDetailsTradingNameController when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDateOfJoiningController when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAddTradingNameYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsTradingNamePage to PartnerDateOfJoiningController" in {
-        navigator.nextPage(PartnerDetailsTradingNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsAddNationalInsuranceNumberYesNoController when the business type is Soleproprietor" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
-
-        navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsIsBusinessIncorporatedUkController when the business type is Corporatebody" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2))
-
-        navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsAddUTRController when the business type is Unincorporatedbody" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 3))
-
-        navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsVatRegistrationNumberYesNoController when the business type is Partnership" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 4))
-
-        navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsDateOfIncorporationController when the business type is LimitedLiabilityPartnership" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 5))
-
-        navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsDateOfJoiningPage to SystemError when the business type is unanswered" in {
-        navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      // --- Date of incorporation ---
-
-      "should route PartnerDetailsDateOfIncorporationPage to PartnerDetailsCompanyRegistrationNumberController when the business type is Corporatebody and is incorporated in the UK" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2))
-
-        navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is Corporatebody and is not incorporated in the UK" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2, isIncorporatedInTheUK = false))
-
-        navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, answers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsDateOfIncorporationPage to PartnerDetailsCompanyRegistrationNumberController when the business type is LimitedLiabilityPartnership" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 5))
-
-        navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is Soleproprietor" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
-
-        navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, answers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is Unincorporatedbody" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 3))
-
-        navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, answers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is Partnership" in {
-        val answers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 4))
-
-        navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, answers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is unanswered" in {
-        navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      // --- Reference numbers ---
-
-      "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to PartnerDetailsAddNationalInsuranceNumberController when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to PartnerDetailsAddUTRController when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsNinoPage to PartnerDetailsAddUTRController" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsNinoPage(newPartnersIndex1), "AA123456A")
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsCrnPage to PartnerDetailsAddUTRController for the same new partner" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsCrnPage(newPartnersIndex1), "SC123456")
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsCrnPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsCrnPage to PartnerDetailsAddUTRController for the partner at the given index" in {
-        navigator.nextPage(PartnerDetailsCrnPage(newPartnersIndex2), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex2.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsCountryOfIncorporationPage to PartnerDetailsForeignCorporateReferenceController" in {
-        navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsForeignCorporateReferencePage to PartnerDetailsAddUTRController" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), "ABC-123 456")
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsUtrPage to PartnerDetailsVatRegistrationNumberYesNoController" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsUtrPage(newPartnersIndex1), "123")
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsUtrPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsVatRegistrationNumberYesNoPage to PartnerDetailsVatRegistrationNumberController when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      // --- Address and contact details ---
-
-      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoController when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsContactDetailsController when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAdditionalAddressInfoYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsAdditionalAddressInfoPage to PartnerDetailsContactDetailsController" in {
-        navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsContactNumberPage to PartnerDetailsAddFaxNumberYesNoController" in {
-        navigator.nextPage(PartnerDetailsContactNumberPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsAddFaxNumberYesNoPage to PartnerDetailsChangePartnerFaxNumberController when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAddFaxNumberYesNoPage to PartnerDetailsAddEmailAddressYesNoPageController when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsAddFaxNumberYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsCorrespondenceFaxNumberPage to PartnerDetailsAddEmailAddressYesNoPageController" in {
-        navigator.nextPage(PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsAddEmailAddressYesNoPage to PartnerDetailsEmailAddressController when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(newPartnersIndex1.toString, NormalMode)
-      }
-
-      "should route PartnerDetailsAddEmailAddressYesNoPage to PartnerDetailsCheckYourAnswersController when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(newPartnersIndex1.toString)
-      }
-
-      "should route PartnerDetailsAddEmailAddressYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      // --- Remove partner: reached from the partner list ---
-
-      "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
-      }
-
-      "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is Yes and it's a new partner" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
-      }
-
-      "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is Yes and it's an existing partner" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), NormalMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
-      }
-
-      "should route PartnerDetailsRemovePartnerYesNoPage to SystemError when unanswered" in {
-        navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-    }
-
-    // TODO: This test block will be fixed with the CYA routing tickets
-    "normal mode / existing partner details navigation" ignore new PartnerDetailsHelper {
-
-      // Existing partners and saved new partners return to check your answers.
-
-      val existingMode = PartnerUtils.modeFor(businessNumber1)
-
-      val savedNewPartner =
-        emptyAnswers
-          .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), true)
-          .success
-          .value
-
-      def checkYourAnswers(index: BusinessNumberOrIndex): Call =
-        controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString)
-
-      def valuePages(index: BusinessNumberOrIndex): Seq[Page] = Seq(
-        PartnerDetailsBusinessNamePage(index),
-        PartnerDetailsSoleProprietorPage(index),
-        PartnerDetailsDateOfBirthPage(index),
-        PartnerDetailsTradingNamePage(index),
-        PartnerDetailsDateOfJoiningPage(index),
-        PartnerDetailsDateOfIncorporationPage(index),
-        PartnerDetailsNinoPage(index),
-        PartnerDetailsCrnPage(index),
-        PartnerDetailsUtrPage(index),
-        PartnerDetailsVrnPage(index),
-        PartnerDetailsCountryOfIncorporationPage(index),
-        PartnerDetailsForeignCorporateReferencePage(index),
-        PartnerDetailsAdditionalAddressInfoPage(index),
-        PartnerDetailsContactNumberPage(index),
-        PartnerDetailsCorrespondenceFaxNumberPage(index),
-        PartnerDetailsCorrespondenceEmailAddressPage(index)
-      )
-
-      def addYesNoPages(index: BusinessNumberOrIndex): Seq[QuestionPage[Boolean]] = Seq(
-        PartnerDetailsAddTradingNameYesNoPage(index),
-        PartnerDetailsAddNationalInsuranceNumberYesNoPage(index),
-        PartnerDetailsVatRegistrationNumberYesNoPage(index),
-        PartnerDetailsAdditionalAddressInfoYesNoPage(index),
-        PartnerDetailsAddFaxNumberYesNoPage(index),
-        PartnerDetailsAddEmailAddressYesNoPage(index)
-      )
-
-      def removePages(index: BusinessNumberOrIndex): Seq[Page] = Seq(
-        PartnerDetailsRemovePartnerTradingNameYesNoPage(index),
-        PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index),
-        PartnerDetailsRemoveVatRegNumberYesNoPage(index),
-        PartnerDetailsRemoveEmailAddressYesNoPage(index),
-        PartnerDetailsRemoveFaxNumberYesNoPage(index),
-        PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(index)
-      )
-
-      // --- Value pages ---
-
-      valuePages(businessNumber1).foreach { page =>
-        s"should route $page to check your answers for an existing partner" in {
-          navigator.nextPage(page, CheckMode, emptyAnswers) mustBe checkYourAnswers(businessNumber1)
-        }
-      }
-
-      valuePages(newPartnersIndex1).foreach { page =>
-        s"should route $page to check your answers for a saved new partner" in {
-          navigator.nextPage(page, CheckMode, savedNewPartner) mustBe checkYourAnswers(newPartnersIndex1)
-        }
-      }
-
-      // --- Optional "add X?" questions ---
-
-      val addYesNoTargets: Seq[(QuestionPage[Boolean], Call)] = Seq(
-        PartnerDetailsAddTradingNameYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(businessNumber1, existingMode),
-        PartnerDetailsAddNationalInsuranceNumberYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(businessNumber1, existingMode),
-        PartnerDetailsVatRegistrationNumberYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(businessNumber1, existingMode),
-        PartnerDetailsAdditionalAddressInfoYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(businessNumber1, existingMode),
-        PartnerDetailsAddFaxNumberYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(businessNumber1, existingMode),
-        PartnerDetailsAddEmailAddressYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(businessNumber1, existingMode)
-      )
-
-      addYesNoTargets.foreach { case (page, target) =>
-        s"should route $page to the question it adds when the answer is Yes for an existing partner" in {
-          val answers = emptyAnswers.set(page, true).success.value
-
-          navigator.nextPage(page, CheckMode, answers) mustBe target
-        }
-      }
-
-      addYesNoPages(businessNumber1).foreach { page =>
-        s"should route $page to check your answers when the answer is No for an existing partner" in {
-          val answers = emptyAnswers.set(page, false).success.value
-
-          navigator.nextPage(page, CheckMode, answers) mustBe checkYourAnswers(businessNumber1)
-        }
-
-        s"should route $page to SystemError when unanswered for an existing partner" in {
-          navigator.nextPage(page, CheckMode, emptyAnswers) mustBe routes.SystemErrorController.onPageLoad()
-        }
-      }
-
-      addYesNoPages(newPartnersIndex1).foreach { page =>
-        s"should route $page to check your answers when the answer is No for a saved new partner" in {
-          val answers = savedNewPartner.set(page, false).success.value
-
-          navigator.nextPage(page, CheckMode, answers) mustBe checkYourAnswers(newPartnersIndex1)
-        }
-      }
-
-      // --- Answers that change which pages apply still follow the branch ---
-
-      "should route PartnerDetailsBusinessTypePage to PartnerDetailsChangeBusinessNameController for an existing partner" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsBusinessTypePage(businessNumber1), Soleproprietor)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsBusinessTypePage(businessNumber1), CheckMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(businessNumber1, Corporatebody, existingMode)
-      }
-
-      "should route PartnerDetailsBusinessTypePage to SystemError when unanswered for an existing partner" in {
-        navigator.nextPage(PartnerDetailsBusinessTypePage(businessNumber1), CheckMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      "should route PartnerDetailsIsBusinessIncorporatedUkPage to PartnerDetailsDateOfIncorporationController when the answer is Yes for an existing partner" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), true)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), CheckMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(businessNumber1, existingMode)
-      }
-
-      "should route PartnerDetailsIsBusinessIncorporatedUkPage to PartnerDetailsAddCountryOfIncorporationController when the answer is No for an existing partner" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), CheckMode, answers) mustBe
-          controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(businessNumber1, existingMode)
-      }
-
-      "should route PartnerDetailsIsBusinessIncorporatedUkPage to SystemError when unanswered for an existing partner" in {
-        navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), CheckMode, emptyAnswers) mustBe
-          routes.SystemErrorController.onPageLoad()
-      }
-
-      // --- Remove questions: only reachable from check your answers ---
-
-      removePages(businessNumber1).foreach { page =>
-        s"should route $page to check your answers for an existing partner" in {
-          navigator.nextPage(page, CheckMode, emptyAnswers) mustBe checkYourAnswers(businessNumber1)
-        }
-      }
-
-      removePages(newPartnersIndex1).foreach { page =>
-        s"should route $page to check your answers for a new partner" in {
-          navigator.nextPage(page, CheckMode, emptyAnswers) mustBe checkYourAnswers(newPartnersIndex1)
-        }
-      }
-    }
-
-    // TODO: This test block will be fixed with the CYA routing tickets
-    "CYA page first missing field routing" ignore new PartnerDetailsHelper {
-      def firstMissingOrCheckYourAnswers(answers: UserAnswers, index: BusinessNumberOrIndex): Call = PartnerMandatoryDetails
-        .firstMissing(answers, index)
-        .map(_.call)
-        .getOrElse(controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString))
-
-      "should route PartnerDetailsVatRegistrationNumberYesNoPage to the first missing mandatory page when the answer is No" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), false)
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), NormalMode, answers) mustBe
-          firstMissingOrCheckYourAnswers(answers, newPartnersIndex1)
-      }
-
-      "should route PartnerDetailsVrnPage to the first missing mandatory page" in {
-        val answers =
-          emptyAnswers
-            .set(PartnerDetailsVrnPage(newPartnersIndex1), "GB123456789")
-            .success
-            .value
-
-        navigator.nextPage(PartnerDetailsVrnPage(newPartnersIndex1), NormalMode, answers) mustBe
-          firstMissingOrCheckYourAnswers(answers, newPartnersIndex1)
-      }
-
-      "should route PartnerDetailsCorrespondenceEmailAddressPage to the first missing mandatory page" in {
-        navigator.nextPage(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-          firstMissingOrCheckYourAnswers(emptyAnswers, newPartnersIndex1)
-      }
-    }
-
     "normal mode controlling body details navigation" - {
 
       "should route ControllingBodyChangeScreenerPage to CheckControllingBodyDetails when the answer is EditDetails" in {
@@ -1878,43 +1279,515 @@ class NavigatorSpec extends SpecBase {
 
     }
 
-    "in Check mode" - {
+    "Partner details navigation" - new PartnerDetailsHelper {
 
-      "should route ChooseReturnPeriodsPage back to CheckReturnPeriodsController for standard return periods" in {
-        val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
+      private val existingMode: Mode = PartnerUtils.modeFor(businessNumber1)
+      private val existingUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
+      private val savedNewPartnerAnswers: UserAnswers =
+        UserAnswers(mgdRegNumber, cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true)))
 
-        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, answers) mustBe
-          controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
-      }
+      // --- Helpers ---
 
-      "should route ChooseReturnPeriodsPage to CheckReturnPeriods" in {
-        navigator.nextPage(ChooseReturnPeriodsPage, CheckMode, emptyAnswers) mustBe
-          controllers.returnperiods.routes.CheckReturnPeriodsController
-            .onPageLoad()
-      }
+      private def withYesNo(page: QuestionPage[Boolean], answer: Boolean, answers: UserAnswers = emptyAnswers): UserAnswers =
+        answers.set(page, answer).success.value
 
-      Seq(
-        NonStandardPeriodDate1Page,
-        NonStandardPeriodDate2Page,
-        NonStandardPeriodDate3Page,
-        NonStandardPeriodDate4Page,
-        NonStandardPeriodDate5Page,
-        NonStandardPeriodDate6Page,
-        NonStandardPeriodDate7Page,
-        NonStandardPeriodDate8Page
-      ).zipWithIndex.foreach { case (page, index) =>
-        s"should route NonStandardPeriodDate${index + 1}Page to CheckReturnPeriods" in {
-          navigator.nextPage(page, CheckMode, emptyAnswers) mustBe
-            controllers.returnperiods.routes.CheckReturnPeriodsController
-              .onPageLoad()
+      private def checkYourAnswers(index: BusinessNumberOrIndex): Call =
+        controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString)
+
+      private def firstMissingOrCheckYourAnswers(answers: UserAnswers, index: BusinessNumberOrIndex): Call =
+        PartnerMandatoryDetails
+          .firstMissing(answers, index)
+          .map(_.call)
+          .getOrElse(checkYourAnswers(index))
+
+      private def valuePages(index: BusinessNumberOrIndex): Seq[Page] = Seq(
+        PartnerDetailsBusinessNamePage(index),
+        PartnerDetailsSoleProprietorPage(index),
+        PartnerDetailsDateOfBirthPage(index),
+        PartnerDetailsTradingNamePage(index),
+        PartnerDetailsDateOfJoiningPage(index),
+        PartnerDetailsDateOfIncorporationPage(index),
+        PartnerDetailsNinoPage(index),
+        PartnerDetailsCrnPage(index),
+        PartnerDetailsUtrPage(index),
+        PartnerDetailsVrnPage(index),
+        PartnerDetailsCountryOfIncorporationPage(index),
+        PartnerDetailsForeignCorporateReferencePage(index),
+        PartnerDetailsAdditionalAddressInfoPage(index),
+        PartnerDetailsContactNumberPage(index),
+        PartnerDetailsCorrespondenceFaxNumberPage(index),
+        PartnerDetailsCorrespondenceEmailAddressPage(index)
+      )
+
+      private def addYesNoPages(index: BusinessNumberOrIndex): Seq[QuestionPage[Boolean]] = Seq(
+        PartnerDetailsAddTradingNameYesNoPage(index),
+        PartnerDetailsAddNationalInsuranceNumberYesNoPage(index),
+        PartnerDetailsVatRegistrationNumberYesNoPage(index),
+        PartnerDetailsAdditionalAddressInfoYesNoPage(index),
+        PartnerDetailsAddFaxNumberYesNoPage(index),
+        PartnerDetailsAddEmailAddressYesNoPage(index)
+      )
+
+      private def removePages(index: BusinessNumberOrIndex): Seq[Page] = Seq(
+        PartnerDetailsRemovePartnerTradingNameYesNoPage(index),
+        PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(index),
+        PartnerDetailsRemoveVatRegNumberYesNoPage(index),
+        PartnerDetailsRemoveEmailAddressYesNoPage(index),
+        PartnerDetailsRemoveFaxNumberYesNoPage(index),
+        PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(index)
+      )
+
+      private def addYesNoTargets(): Seq[(QuestionPage[Boolean], Call)] = Seq(
+        PartnerDetailsAddTradingNameYesNoPage(businessNumber1) ->
+          controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(businessNumber1, existingMode),
+        PartnerDetailsAddNationalInsuranceNumberYesNoPage(businessNumber1) ->
+          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(businessNumber1, existingMode),
+        PartnerDetailsVatRegistrationNumberYesNoPage(businessNumber1) ->
+          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(businessNumber1, existingMode),
+        PartnerDetailsAdditionalAddressInfoYesNoPage(businessNumber1) ->
+          controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(businessNumber1, existingMode),
+        PartnerDetailsAddFaxNumberYesNoPage(businessNumber1) ->
+          controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(businessNumber1, existingMode),
+        PartnerDetailsAddEmailAddressYesNoPage(businessNumber1) ->
+          controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(businessNumber1, existingMode)
+      )
+
+      // --- Normal mode: adding a new, unsaved partner ---
+
+      "normal mode: adding new partner details navigation" - {
+
+        // Business type and incorporation
+
+        "should route PartnerDetailsBusinessTypePage to PartnerDetailsChangeBusinessNameController when answered" in {
+          val businessData = Json.obj(
+            "newPartners" -> Json.arr(
+              Json.obj("partnerDetailsBusinessType" -> 2)
+            )
+          )
+
+          navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, businessData)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(
+              newPartnersIndex1.toString,
+              Corporatebody,
+              NormalMode
+            )
+        }
+
+        "should route PartnerDetailsBusinessTypePage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route PartnerDetailsIsBusinessIncorporatedUkPage to PartnerDetailsDateOfIncorporationController when the answer is Yes" in {
+          navigator.nextPage(
+            PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1),
+            NormalMode,
+            withYesNo(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), true)
+          ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsIsBusinessIncorporatedUkPage to PartnerDetailsAddCountryOfIncorporationController when the answer is No" in {
+          navigator.nextPage(
+            PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1),
+            NormalMode,
+            withYesNo(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), false)
+          ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsIsBusinessIncorporatedUkPage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        // Name, trading name and date of joining
+
+        "should route PartnerDetailsBusinessNamePage to PartnerDetailsAddTradingNameYesNoController" in {
+          navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsBusinessNamePage to the next add journey page when called with CheckMode for an unsaved new partner" in {
+          navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), CheckMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsSoleProprietorPage to PartnerDetailsSoleProprietorDobController" in {
+          navigator.nextPage(PartnerDetailsSoleProprietorPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsDateOfBirthPage to PartnerDetailsAddTradingNameYesNoController" in {
+          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDetailsTradingNameController when the answer is Yes" in {
+          navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDateOfJoiningController when the answer is No" in {
+          navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), false)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAddTradingNameYesNoPage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route PartnerDetailsTradingNamePage to PartnerDateOfJoiningController" in {
+          navigator.nextPage(PartnerDetailsTradingNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        // Date of joining
+
+        "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsAddNationalInsuranceNumberYesNoController when the business type is Soleproprietor" in {
+          navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1),
+                             NormalMode,
+                             UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsIsBusinessIncorporatedUkController when the business type is Corporatebody" in {
+          navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1),
+                             NormalMode,
+                             UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2))
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsAddUTRController when the business type is Unincorporatedbody" in {
+          navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1),
+                             NormalMode,
+                             UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 3))
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsVatRegistrationNumberYesNoController when the business type is Partnership" in {
+          navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1),
+                             NormalMode,
+                             UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 4))
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsDateOfIncorporationController when the business type is LimitedLiabilityPartnership" in {
+          navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1),
+                             NormalMode,
+                             UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 5))
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsDateOfJoiningPage to SystemError when the business type is unanswered" in {
+          navigator.nextPage(PartnerDetailsDateOfJoiningPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        // Date of incorporation
+
+        "should route PartnerDetailsDateOfIncorporationPage to PartnerDetailsCompanyRegistrationNumberController when the business type is Corporatebody and is incorporated in the UK" in {
+          navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1),
+                             NormalMode,
+                             UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2))
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is Corporatebody and is not incorporated in the UK" in {
+          navigator.nextPage(
+            PartnerDetailsDateOfIncorporationPage(newPartnersIndex1),
+            NormalMode,
+            UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2, isIncorporatedInTheUK = false))
+          ) mustBe routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route PartnerDetailsDateOfIncorporationPage to PartnerDetailsCompanyRegistrationNumberController when the business type is LimitedLiabilityPartnership" in {
+          navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1),
+                             NormalMode,
+                             UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 5))
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsDateOfIncorporationPage to SystemError for business types that don't incorporate" in {
+          Seq(1, 3, 4).foreach { businessType =>
+            navigator.nextPage(
+              PartnerDetailsDateOfIncorporationPage(newPartnersIndex1),
+              NormalMode,
+              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = businessType))
+            ) mustBe routes.SystemErrorController.onPageLoad()
+          }
+        }
+
+        "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is unanswered" in {
+          navigator.nextPage(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        // Reference numbers
+
+        "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to PartnerDetailsAddNationalInsuranceNumberController when the answer is Yes" in {
+          navigator.nextPage(
+            PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1),
+            NormalMode,
+            withYesNo(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), true)
+          ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to PartnerDetailsAddUTRController when the answer is No" in {
+          navigator.nextPage(
+            PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1),
+            NormalMode,
+            withYesNo(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), false)
+          ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route PartnerDetailsNinoPage to PartnerDetailsAddUTRController" in {
+          val answers = emptyAnswers.set(PartnerDetailsNinoPage(newPartnersIndex1), "AA123456A").success.value
+
+          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsCrnPage to PartnerDetailsAddUTRController for the same new partner" in {
+          val answers = emptyAnswers.set(PartnerDetailsCrnPage(newPartnersIndex1), "SC123456").success.value
+
+          navigator.nextPage(PartnerDetailsCrnPage(newPartnersIndex1), NormalMode, answers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsCrnPage to PartnerDetailsAddUTRController for the partner at the given index" in {
+          navigator.nextPage(PartnerDetailsCrnPage(newPartnersIndex2), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex2.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsCountryOfIncorporationPage to PartnerDetailsForeignCorporateReferenceController" in {
+          navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsForeignCorporateReferencePage to PartnerDetailsAddUTRController" in {
+          val answers = emptyAnswers.set(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), "ABC-123 456").success.value
+
+          navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), NormalMode, answers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsUtrPage to PartnerDetailsVatRegistrationNumberYesNoController" in {
+          val answers = emptyAnswers.set(PartnerDetailsUtrPage(newPartnersIndex1), "123").success.value
+
+          navigator.nextPage(PartnerDetailsUtrPage(newPartnersIndex1), NormalMode, answers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsVatRegistrationNumberYesNoPage to PartnerDetailsVatRegistrationNumberController when the answer is Yes" in {
+          navigator.nextPage(
+            PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1),
+            NormalMode,
+            withYesNo(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), true)
+          ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        // Address and contact details
+
+        "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsAdditionalAddressInfoController when the answer is Yes" in {
+          navigator.nextPage(
+            PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1),
+            NormalMode,
+            withYesNo(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), true)
+          ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsContactDetailsController when the answer is No" in {
+          navigator.nextPage(
+            PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1),
+            NormalMode,
+            withYesNo(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), false)
+          ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAdditionalAddressInfoYesNoPage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route PartnerDetailsAdditionalAddressInfoPage to PartnerDetailsContactDetailsController" in {
+          navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsContactNumberPage to PartnerDetailsAddFaxNumberYesNoController" in {
+          navigator.nextPage(PartnerDetailsContactNumberPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsAddFaxNumberYesNoPage to PartnerDetailsChangePartnerFaxNumberController when the answer is Yes" in {
+          navigator.nextPage(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), true)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAddFaxNumberYesNoPage to PartnerDetailsAddEmailAddressYesNoPageController when the answer is No" in {
+          navigator.nextPage(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), false)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsAddFaxNumberYesNoPage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route PartnerDetailsCorrespondenceFaxNumberPage to PartnerDetailsAddEmailAddressYesNoPageController" in {
+          navigator.nextPage(PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsAddEmailAddressYesNoPage to PartnerDetailsEmailAddressController when the answer is Yes" in {
+          navigator.nextPage(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), true)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+        }
+
+        "should route PartnerDetailsAddEmailAddressYesNoPage to PartnerDetailsCheckYourAnswersController when the answer is No" in {
+          navigator.nextPage(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), false)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(newPartnersIndex1.toString)
+        }
+
+        "should route PartnerDetailsAddEmailAddressYesNoPage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        // Remove partner: reached from the partner list
+
+        "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is No" in {
+          navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), false)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+        }
+
+        "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is Yes and it's a new partner" in {
+          navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+        }
+
+        "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is Yes and it's an existing partner" in {
+          navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(businessNumber1),
+                             NormalMode,
+                             withYesNo(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
+                            ) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+        }
+
+        "should route PartnerDetailsRemovePartnerYesNoPage to SystemError when unanswered" in {
+          navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
+            routes.SystemErrorController.onPageLoad()
         }
       }
 
-      "should route any other page to ChangeRegistrationDetails" in {
-        navigator.nextPage(BusinessNamePage, CheckMode, emptyAnswers) mustBe
-          routes.ChangeRegistrationDetailsController.onPageLoad()
+      // --- Check mode: existing partners ---
+
+      "CYA page navigation for existing partners" - {
+
+        valuePages(businessNumber1).foreach { page =>
+          s"should route $page to check your answers" in {
+            navigator.nextPage(page, CheckMode, existingUserAnswers) mustBe checkYourAnswers(businessNumber1)
+          }
+        }
+
+        addYesNoTargets().foreach { case (page, target) =>
+          s"should route $page to the question it adds when the answer is Yes" in {
+            navigator.nextPage(page, CheckMode, withYesNo(page, true)) mustBe target
+          }
+        }
+
+        addYesNoPages(businessNumber1).foreach { page =>
+          s"should route $page to check your answers when the answer is No" in {
+            navigator.nextPage(page, CheckMode, withYesNo(page, false)) mustBe checkYourAnswers(businessNumber1)
+          }
+
+          s"should route $page to SystemError when unanswered" in {
+            navigator.nextPage(page, CheckMode, emptyAnswers) mustBe routes.SystemErrorController.onPageLoad()
+          }
+        }
+
+      }
+
+      // --- Check mode: new partners ---
+
+      "CYA page navigation for new partners" - {
+
+        valuePages(newPartnersIndex1).foreach { page =>
+          s"should route $page to check your answers for a saved new partner" in {
+            navigator.nextPage(page, CheckMode, savedNewPartnerAnswers) mustBe checkYourAnswers(newPartnersIndex1)
+          }
+        }
+
+        addYesNoPages(newPartnersIndex1).foreach { page =>
+          s"should route $page to check your answers when the answer is No for a saved new partner" in {
+            navigator.nextPage(page, CheckMode, withYesNo(page, false, savedNewPartnerAnswers)) mustBe checkYourAnswers(newPartnersIndex1)
+          }
+        }
+
+      }
+
+      // --- Check mode: removals ---
+
+      "CYA page navigation for removals" - {
+
+        removePages(businessNumber1).foreach { page =>
+          s"should route $page to check your answers for an existing partner" in {
+            navigator.nextPage(page, CheckMode, emptyAnswers) mustBe checkYourAnswers(businessNumber1)
+          }
+        }
+
+        removePages(newPartnersIndex1).foreach { page =>
+          s"should route $page to check your answers for a new partner" in {
+            navigator.nextPage(page, CheckMode, emptyAnswers) mustBe checkYourAnswers(newPartnersIndex1)
+          }
+        }
+
       }
     }
+
   }
 
 }
