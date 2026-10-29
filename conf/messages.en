@@ -1634,6 +1634,10 @@ controllingBodyForeignCorpRef.error.required = Enter the controlling body’s fo
 controllingBodyForeignCorpRef.error.invalid = The foreign corporate reference must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 controllingBodyForeignCorpRef.error.length = The foreign corporate reference must be 100 characters or less
 controllingBodyForeignCorpRef.change.hidden = What is the controlling body’s foreign corporate reference?
+controllingBodyRemoveVATRegistrationNumber.title = Are you sure you want to remove this controlling body’s VAT registration number?
+controllingBodyRemoveVATRegistrationNumber.heading = Are you sure you want to remove {0} as this controlling body’s VAT registration number?
+controllingBodyRemoveVATRegistrationNumber.error.required = Select yes if you want to remove this controlling body’s VAT registration number
+
 cancelRegistrationDate.title = When are you no longer liable to pay Machine Games Duty?
 cancelRegistrationDate.heading = When are you no longer liable to pay Machine Games Duty?
 cancelRegistrationDate.caption = Cancel registration
