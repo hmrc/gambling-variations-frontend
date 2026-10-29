@@ -23,10 +23,8 @@ import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessNamePage}
-import play.api.Application
+import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
 import play.api.inject.bind
-import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -47,22 +45,6 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
 
   val userAnswersExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
   val userAnswersNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-
-  def continueRoute(index: String): String =
-    controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController
-      .onContinue(index)
-      .url
-
-  val incompleteNewPartnerAnswers: UserAnswers =
-    UserAnswers(mgdRegNumber, Json.obj())
-      .set(PartnerDetailsBusinessNamePage(newPartnersIndex1), "Partner Ltd")
-      .success
-      .value
-
-  def applicationWithRepository(answers: Option[UserAnswers], repository: SessionRepository): Application =
-    applicationBuilder(userAnswers = answers)
-      .overrides(bind[SessionRepository].toInstance(repository))
-      .build()
 
   "PartnerDetailsCheckYourAnswers Controller" - {
 
@@ -165,10 +147,16 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
         when(repository.set(any[UserAnswers])).thenReturn(Future.successful(true))
 
         val completeAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
-        val application = applicationWithRepository(Some(completeAnswers), repository)
+        val application = applicationBuilder(userAnswers = Some(completeAnswers))
+          .overrides(bind[SessionRepository].toInstance(repository))
+          .build()
 
         running(application) {
-          val request = FakeRequest(POST, continueRoute(newPartnersIndex1.toString))
+          val request = FakeRequest(POST,
+                                    controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController
+                                      .onContinue(newPartnersIndex1.toString)
+                                      .url
+                                   )
 
           val result = route(application, request).value
 
