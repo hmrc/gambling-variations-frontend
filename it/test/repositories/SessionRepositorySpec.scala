@@ -115,6 +115,24 @@ class SessionRepositorySpec
       result.get(BusinessFaxNumberPage) mustBe None
     }
 
+    "must keep a removed controlling body VAT number absent after saving and reading again" in {
+      import pages.controllingbody.{ControllingBodyRemoveVATRegistrationNumberPage, ControllingBodyVrnPage}
+
+      val original = UserAnswers(userAnswers.id, Json.obj(
+        "controllingBodyDetails" -> Json.obj("mgdRegNum" -> "XGM00000001761", "vrn" -> "123456789")
+      ))
+      repository.set(original).futureValue mustBe true
+      val loaded = repository.get(original.id).futureValue.value
+      val removed = loaded.remove(ControllingBodyVrnPage).get
+        .set(ControllingBodyRemoveVATRegistrationNumberPage, true).get
+      repository.set(removed).futureValue mustBe true
+
+      val reloaded = repository.get(original.id).futureValue.value
+      reloaded.get(ControllingBodyVrnPage) mustBe None
+      reloaded.get(ControllingBodyRemoveVATRegistrationNumberPage) mustBe Some(true)
+      (reloaded.data \ "controllingBodyDetails" \ "mgdRegNum").as[String] mustBe "XGM00000001761"
+    }
+
     "when there is a record for this id" - {
 
       "must update the lastUpdated time and get the record" in {
