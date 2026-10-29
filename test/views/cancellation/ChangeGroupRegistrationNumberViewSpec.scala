@@ -133,7 +133,6 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
       )
     }
 
-
     "must render error summary when form has invalid reference" in new Setup {
 
       val boundForm =
