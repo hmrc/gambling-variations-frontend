@@ -18,7 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
-import models.{CorrespondenceDetails, NormalMode, UserAnswers}
+import models.{CorrespondenceDetails, NormalMode, UserAnswers, BusinessType}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -49,15 +49,30 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
   private lazy val submitRoute =
     routes.RemoveControllingBodyNINumberController.onSubmit().url
 
-  private val userAnswersWithoutNino: UserAnswers =
+  private val cbSection: UserAnswers =
     emptyUserAnswers
       .set(ControllingBodySectionPage, userAnswersId)
       .success
       .value
 
-  private val userAnswersWithNino: UserAnswers =
-    userAnswersWithoutNino
+  private val validAnswers: UserAnswers =
+    cbSection
       .set(ControllingBodyNinoPage, nino)
+      .success
+      .value
+      .set(ControllingBodyBusinessTypePage, BusinessType.Soleproprietor)
+      .success
+      .value
+
+  private val noSoleProprietorAnswers: UserAnswers  =
+    cbSection
+      .set(ControllingBodyNinoPage, nino)
+      .success
+      .value
+
+  private val noNinoAnswers: UserAnswers =
+    cbSection
+      .set(ControllingBodyBusinessTypePage, BusinessType.Soleproprietor)
       .success
       .value
 
@@ -68,7 +83,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithNino)).build()
+      val application = applicationBuilder(userAnswers = Some(validAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, removeControllingBodyNINumberRoute)
@@ -86,7 +101,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers =
-        userAnswersWithNino
+        validAnswers
           .set(RemoveControllingBodyNINumberPage, false)
           .success
           .value
@@ -113,7 +128,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
       when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithNino))
+        applicationBuilder(userAnswers = Some(validAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -130,7 +145,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
 
     "must return a Bad Request and errors when no answer is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithNino)).build()
+      val application = applicationBuilder(userAnswers = Some(validAnswers)).build()
 
       running(application) {
         val request = submitRequest("")
@@ -149,7 +164,21 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to System Error for a GET if the controlling body has no nino" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithoutNino)).build()
+      val application = applicationBuilder(userAnswers = Some(noNinoAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, removeControllingBodyNINumberRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
+      }
+    }
+
+    "must redirect to System Error for a GET if the controlling body is not SoleProprietor" in {
+
+      val application = applicationBuilder(userAnswers = Some(noSoleProprietorAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, removeControllingBodyNINumberRoute)
@@ -163,7 +192,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to System Error for a POST if the controlling body has no nino" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithoutNino)).build()
+      val application = applicationBuilder(userAnswers = Some(noNinoAnswers)).build()
 
       running(application) {
         val result = route(application, submitRequest("true")).value
@@ -207,7 +236,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
       when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.successful(true))
 
       val answersWithEmailAddress =
-        userAnswersWithNino
+        validAnswers
           .set(ControllingBodyEmailPage, "a@b.com")
           .success
           .value
@@ -240,7 +269,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
       when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithNino))
+        applicationBuilder(userAnswers = Some(validAnswers))
           .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
           .build()
 
@@ -266,7 +295,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
       when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.successful(true))
 
       val answersWithEarlierChange =
-        userAnswersWithNino
+        validAnswers
           .set(ControllingBodyChangesPage, true)
           .success
           .value
