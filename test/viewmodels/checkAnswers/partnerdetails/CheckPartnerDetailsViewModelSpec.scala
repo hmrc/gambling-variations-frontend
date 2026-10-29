@@ -24,6 +24,9 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import utils.DateTimeFormats.longDateDisplay
+
+import java.time.LocalDate
 
 class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
@@ -42,8 +45,9 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
     s"""<a href="https://www.gov.uk/find-hmrc-contacts/gambling-duties-enquiries" class="govuk-link" target="_blank" rel="noopener noreferrer">${messages(
         "partnerDetailsCheckYourAnswers.error.contactUsLinkText"
       )}</a>"""
-  private val joiningDate = "1 Oct 2026"
-  private val leavingDate = "31 Dec 2026"
+
+  private val joiningDate = LocalDate.of(2026, 1, 10)
+  private val leavingDate = LocalDate.of(2026, 12, 31)
 
   // Existing UK corporate body, fully answered, not joining or leaving
   private val existingPartner: CheckPartnerDetailsViewModel =
@@ -129,8 +133,8 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
   private val missingDetails = messages("partnerDetailsCheckYourAnswers.error.missingDetails")
   private val missingChanges = messages("partnerDetailsCheckYourAnswers.error.missingChanges")
   private val contactUs = messages("partnerDetailsCheckYourAnswers.error.contactUs", contactLink)
-  private val cannotChangeJoining = messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", joiningDate, contactLink)
-  private val cannotChangeLeaving = messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", leavingDate, contactLink)
+  private val cannotChangeJoining = messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", longDateDisplay(joiningDate), contactLink)
+  private val cannotChangeLeaving = messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", longDateDisplay(leavingDate), contactLink)
 
   "CheckPartnerDetailsViewModel" - {
 
