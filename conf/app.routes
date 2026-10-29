@@ -350,3 +350,6 @@ GET        /change-registration-details/controlling-body-details/foreign-corpora
 POST       /change-registration-details/controlling-body-details/foreign-corporate-reference     controllers.controllingbody.ControllingBodyForeignCorpRefController.onSubmit(mode: Mode = NormalMode)
 GET        /change-registration-details/controlling-body-details/remove-vat-registration-number                        controllers.controllingbody.ControllingBodyRemoveVATRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/remove-vat-registration-number                        controllers.controllingbody.ControllingBodyRemoveVATRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
+GET        /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onPageLoad()
+POST       /cancel-registration/declaration                      controllers.cancellation.RegistrationCancellationDeclarationController.onSubmit()
