@@ -40,8 +40,8 @@ case class CheckPartnerDetailsViewModel(
   soleProprietorDob: Option[String],
   addTradingName: Option[Boolean],
   tradingName: Option[String],
-  dateOfJoining: Option[String],
-  dateOfLeaving: Option[String],
+  dateOfJoining: Option[LocalDate],
+  dateOfLeaving: Option[LocalDate],
   addNino: Option[Boolean],
   nino: Option[String],
   utr: Option[String],
@@ -93,11 +93,13 @@ case class CheckPartnerDetailsViewModel(
           )
 
         val leaving =
-          if (isDueToLeave) dateOfLeaving.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", d, link))
+          if (isDueToLeave)
+            dateOfLeaving.map(date => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", longDateDisplay(date), link))
           else None
 
         val joining =
-          if (isDueToJoin) dateOfJoining.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", d, link))
+          if (isDueToJoin)
+            dateOfJoining.map(date => messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", longDateDisplay(date), link))
           else None
 
         // If due to both join and leave, show only the leaving notice (per design spec)
@@ -232,7 +234,7 @@ case class CheckPartnerDetailsViewModel(
   private def dateOfJoiningRow(implicit messages: Messages): SummaryListRow =
     requiredRow(
       "dateOfJoining",
-      dateOfJoining,
+      dateOfJoining.map(shortDateDisplay),
       // NOTE: routing will be done with the integration ticket (currently points at the DOB page placeholder)
       routes.PartnerDateOfJoiningController.onPageLoad(index, mode(businessNumberOrIndex)).url,
       isNewPartnerFlow
@@ -552,8 +554,8 @@ object CheckPartnerDetailsViewModel {
       soleProprietorDob         = userAnswers.get(PartnerDetailsDateOfBirthPage(index)).map(shortDateDisplay),
       addTradingName            = userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)),
       tradingName               = userAnswers.get(PartnerDetailsTradingNamePage(index)),
-      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(longDateDisplay),
-      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(longDateDisplay),
+      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)),
+      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)),
       addNino                   = userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)),
       nino                      = userAnswers.get(PartnerDetailsNinoPage(index)).map(formatNino),
       utr                       = userAnswers.get(PartnerDetailsUtrPage(index)),
