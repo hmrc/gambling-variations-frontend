@@ -1657,5 +1657,15 @@ cancelRegistrationDate.error.invalid = 	Must be a real date
 cancelRegistrationDate.error.outsideBoundaries = Date must be after {0} and before {1}
 cancelRegistrationDate.change.hidden = when are you no longer liable to pay Machine Games Duty?
 
-checkRegistrationCancelationDetails.title = checkRegistrationCancelationDetails
-checkRegistrationCancelationDetails.heading = checkRegistrationCancelationDetails
+checkRegistrationCancellationDetails.title = Check your cancellation details
+checkRegistrationCancellationDetails.heading = Check your cancellation details
+checkRegistrationCancellationDetails.caption = Cancel registration
+
+checkRegistrationCancellationDetails.cancellationDate = Cancellation date
+checkRegistrationCancellationDetails.cancellationDate.change.hidden = cancellation date
+
+checkRegistrationCancellationDetails.cancellationReason = Cancellation reason
+checkRegistrationCancellationDetails.cancellationReason.change.hidden = cancellation reason
+
+checkRegistrationCancellationDetails.groupRegistrationNumber = Group’s registration number
+checkRegistrationCancellationDetails.groupRegistrationNumber.change.hidden = group’s registration number

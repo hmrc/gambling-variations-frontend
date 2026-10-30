@@ -14,14 +14,33 @@
  * limitations under the License.
  *@
 
-@this(
-        layout: templates.Layout,
-        govukButton: GovukButton
-)
+@import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryList
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
+@import views.html.components.*
 
-@()(implicit request: Request[_], messages: Messages)
+ @this(
+  layout: templates.Layout,
+  govukSummaryList: GovukSummaryList,
+  govukButton: GovukButton,
+  formHelper: FormWithCSRF,
+  caption: Caption,
+  h1:H1
+ )
 
-@layout(pageTitle = titleNoForm(messages("checkRegistrationCancelationDetails.title"))) {
+@(summaryList: SummaryList)(implicit request: Request[_], messages: Messages)
 
-    <h1 class="govuk-heading-xl">@messages("checkRegistrationCancelationDetails.heading")</h1>
+@layout(pageTitle = titleNoForm(messages("checkRegistrationCancellationDetails.title"))) {
+
+  @formHelper(action = controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()) {
+
+  @caption(messages("changeGroupRegistrationNumber.caption"))
+  @h1("checkRegistrationCancellationDetails.heading", classes = "govuk-heading-l")
+
+
+  @govukSummaryList(summaryList)
+
+  @govukButton(
+     ButtonViewModel(messages("site.continue"))
+    )
+   }
 }

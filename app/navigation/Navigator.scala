@@ -20,12 +20,14 @@ import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
+import models.cancellation.ReasonForCancellation
 import models.controllingbody.ControllingBodyChangeOption.*
 import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.PartnerDetailsNavigator.{partnerDetailsCheckRoutes, partnerDetailsNormalRoutes}
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
+import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
@@ -232,6 +234,13 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate8Page =>
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
 
+    case CancelRegistrationDatePage =>
+      _ => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad(NormalMode)
+    case ReasonForCancellationPage =>
+      userAnswers => navigateReasonForCancellationPage(userAnswers, NormalMode)
+    case ChangeGroupRegistrationNumberPage =>
+      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -245,6 +254,15 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
         NonStandardPeriodDate5Page | NonStandardPeriodDate6Page | NonStandardPeriodDate7Page | NonStandardPeriodDate8Page =>
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+
+    case CancelRegistrationDatePage =>
+      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case ReasonForCancellationPage =>
+      userAnswers => navigateCheckReasonForCancellationPage(userAnswers)
+
+    case ChangeGroupRegistrationNumberPage =>
+      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
 
     case _ =>
       _ => routes.ChangeRegistrationDetailsController.onPageLoad()
@@ -588,4 +606,33 @@ private def navigateControllingBodyNotProvidedYesNoPage(answers: UserAnswers): C
     case Some(false) => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
     case Some(true)  => routes.ChangeRegistrationDetailsController.onPageLoad()
     case None        => routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateReasonForCancellationPage(
+  userAnswers: UserAnswers,
+  mode: Mode
+): Call =
+  userAnswers.get(ReasonForCancellationPage) match {
+    case Some(ReasonForCancellation.BusinessIsPartOfTheGroup) =>
+      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad(mode)
+
+    case Some(_) =>
+      controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateCheckReasonForCancellationPage(
+  userAnswers: UserAnswers
+): Call =
+  userAnswers.get(ReasonForCancellationPage) match {
+    case Some(ReasonForCancellation.BusinessIsPartOfTheGroup) =>
+      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad(CheckMode)
+
+    case Some(_) =>
+      controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
   }
