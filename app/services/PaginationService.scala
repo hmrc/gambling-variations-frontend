@@ -42,13 +42,7 @@ class PaginationService(recordsPerPage: Int, maxRecords: Int, maxVisiblePages: I
   ): PaginationResult = {
     val partnerDetailsList: Seq[BusinessNumberOrIndex] = completedNewPartners ++ existingPartnerDetails
     val sortedPartnerDetails = partnerDetailsList
-      .flatMap(bOrI =>
-        PartnerUtils
-          .getPartnerDetailsName(bOrI, userAnswers)
-          .map(_ -> bOrI)
-      )
-      .sortBy(_._1.toLowerCase)
-      .map((_, a) => a)
+      .sortBy(PartnerUtils.getPartnerDetailsName(_, userAnswers))
       .take(maxRecords)
 
     val totalRecords = sortedPartnerDetails.length

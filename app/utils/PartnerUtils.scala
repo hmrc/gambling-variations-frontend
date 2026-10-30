@@ -55,21 +55,15 @@ object PartnerUtils {
     .zipWithIndex
     .collect { case (Some(true), i) => i }
 
-  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = for {
-    businessType <- userAnswers.get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
-    name <- businessType match {
-              case BusinessType.Soleproprietor =>
-                userAnswers
-                  .get(PartnerDetailsSoleProprietorPage(businessNumberOrIndex))
-                  .map(_.fullName)
-                  .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(businessNumberOrIndex)))
-              case _ =>
-                userAnswers
-                  .get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
-                  .orElse(userAnswers.get(PartnerDetailsTradingNamePage(businessNumberOrIndex)))
-                  .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(businessNumberOrIndex)))
-            }
-  } yield name
+  // Note: We return "null" string as we don't want to filter out partners that have a name missing, although this scenario should
+  // not happen under normal circumstances
+  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): String = userAnswers
+    .get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
+    .flatMap {
+      case BusinessType.Soleproprietor => userAnswers.get(PartnerDetailsSoleProprietorPage(businessNumberOrIndex)).map(_.fullName)
+      case _                           => userAnswers.get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
+    }
+    .getOrElse("null")
 
   def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
