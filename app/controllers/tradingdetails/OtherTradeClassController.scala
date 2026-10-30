@@ -26,7 +26,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
-import views.html.OtherTradeClassView
+import views.html.tradingdetails.OtherTradeClassView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

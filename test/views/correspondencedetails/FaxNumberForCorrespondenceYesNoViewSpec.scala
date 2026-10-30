@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package views
+package views.correspondencedetails
 
 import base.SpecBase
-import forms.OtherTradeClassFormProvider
+import forms.FaxNumberForCorrespondenceYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.OtherTradeClassView
+import views.html.correspondencedetails.FaxNumberForCorrespondenceYesNoView
 
-class OtherTradeClassViewSpec extends SpecBase {
+class FaxNumberForCorrespondenceYesNoViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    private val view = app.injector.instanceOf[OtherTradeClassView]
+    private val view = app.injector.instanceOf[FaxNumberForCorrespondenceYesNoView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new OtherTradeClassFormProvider()
+    private val formProvider = new FaxNumberForCorrespondenceYesNoFormProvider()
     private val form = formProvider()
 
     private val html = view(form, NormalMode)(request, messages)
@@ -47,22 +47,15 @@ class OtherTradeClassViewSpec extends SpecBase {
 
   }
 
-  "OtherTradeClassView" - {
+  "FaxNumberForCorrespondenceYesNoView" - {
 
     "must render page correctly" in new Setup {
 
-      doc.title must include(messages("otherTradeClass.title"))
+      doc.title must include(messages("faxNumberForCorrespondenceYesNo.title"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
-      doc.select("#with-hint-hint").select(".govuk-hint").text() must include(messages("otherTradeClass.caption"))
-      doc.select("h1").select(".govuk-heading-l").text()         must include(messages("otherTradeClass.heading"))
-
-      doc
-        .select("#otherTradeClass-info")
-        .select(".govuk-hint")
-        .select(".govuk-character-count__message")
-        .text() must include(messages("otherTradeClass.textarea.label"))
+      doc.select("h1").select(".govuk-fieldset__heading").text() must include(messages("faxNumberForCorrespondenceYesNo.heading"))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 

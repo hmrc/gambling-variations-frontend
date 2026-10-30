@@ -25,7 +25,7 @@ import pages.businessname.{BusinessNamePage, BusinessNameSectionPage, SolePropri
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import views.html.BusinessNameView
+import views.html.businessname.BusinessNameView
 
 class CheckBusinessNameControllerSpec extends SpecBase {
 

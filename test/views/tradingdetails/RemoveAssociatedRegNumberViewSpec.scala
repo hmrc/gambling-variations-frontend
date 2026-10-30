@@ -14,77 +14,59 @@
  * limitations under the License.
  */
 
-package views
+package views.tradingdetails
 
 import base.SpecBase
-import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
+import forms.RemoveAssociatedRegNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.correspondencedetails.AddEmailAddressForCorrespondenceYesNoView
+import views.html.tradingdetails.RemoveAssociatedRegNumberView
 
-class AddEmailAddressForCorrespondenceYesNoViewSpec extends SpecBase {
+class RemoveAssociatedRegNumberViewSpec extends SpecBase {
 
-  private val form = new AddEmailAddressForCorrespondenceYesNoFormProvider()()
+  private val form = new RemoveAssociatedRegNumberFormProvider()()
+  private val application = applicationBuilder().build()
+  val view: RemoveAssociatedRegNumberView = application.injector.instanceOf[RemoveAssociatedRegNumberView]
 
-  "AddEmailAddressForCorrespondenceYesNoView" - {
+  "RemoveAssociatedRegNumberView" - {
 
     "render the page correctly" in {
-
-      val application = applicationBuilder().build()
-
       running(application) {
-
-        val view = application.injector.instanceOf[AddEmailAddressForCorrespondenceYesNoView]
-
-        val html = view(
-          form,
-          NormalMode
-        )(FakeRequest(), messages(application))
-
+        val regNumber = "reg-number"
+        val html = view(form, NormalMode, regNumber)(FakeRequest(), messages(application))
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("addEmailAddressForCorrespondenceYesNo.title")
+          messages(application)("removeAssociatedRegNumber.title")
         )
 
-        document.title() must include(
+        document.select("span").select(".govuk-caption-l").text() must include(
           messages(application)("changeRegistrationDetails.caption")
         )
 
-        document.body().text() must include(
-          messages(application)("addEmailAddressForCorrespondenceYesNo.heading")
-        )
+        document.select(".govuk-fieldset__heading").text() mustEqual
+          messages(application)("removeAssociatedRegNumber.heading", regNumber)
 
         document.body().text() must include(
           messages(application)("site.continue")
         )
+
       }
     }
 
     "render an error summary when there are form errors" in {
-
-      val application = applicationBuilder().build()
-
       running(application) {
-
-        val view = application.injector.instanceOf[AddEmailAddressForCorrespondenceYesNoView]
-
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val html = view(
-          boundForm,
-          NormalMode
-        )(FakeRequest(), messages(application))
-
+        val boundForm = form.bind(Map("removeCorrespondenceDetailsYesNo" -> ""))
+        val html = view(boundForm, NormalMode, "reg")(FakeRequest(), messages(application))
         val document: Document = Jsoup.parse(html.toString)
 
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("addEmailAddressForCorrespondenceYesNo.error.required")
+          messages(application)("Select yes if you want to remove the associated registration number")
         )
       }
     }

@@ -14,48 +14,51 @@
  * limitations under the License.
  */
 
-package views
+package views.correspondencedetails
 
 import base.SpecBase
-import forms.PreviousRegistrationNumberFormProvider
+import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.PreviousRegistrationNumberView
+import views.html.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoView
 
-class PreviousRegistrationNumberViewSpec extends SpecBase {
+class RemoveAdditionalCorrespondenceNameYesNoViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    private val view = app.injector.instanceOf[PreviousRegistrationNumberView]
+    private val view = app.injector.instanceOf[RemoveAdditionalCorrespondenceNameYesNoView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new PreviousRegistrationNumberFormProvider()
+    private val formProvider = new RemoveAdditionalCorrespondenceNameYesNoFormProvider()
     private val form = formProvider()
+    val correspondenceAdditionalNamePage = "CorrespondenceAdditionalNamePage"
 
-    private val html = view(form, NormalMode)(request, messages)
+    private val html = view(form, NormalMode, correspondenceAdditionalNamePage)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
 
   }
 
-  "PreviousRegistrationNumberView" - {
+  "RemoveAdditionalCorrespondenceNameYesNoView" - {
 
     "must render page correctly" in new Setup {
 
-      doc.title must include(messages("previousRegistrationNumber.title"))
+      doc.title must include(messages("removeAdditionalCorrespondenceNameYesNo.title"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
-      doc.select("#previousRegistrationNumber-hint").select(".govuk-hint").text() must include(messages("previousRegistrationNumber.hint"))
+      doc.select("h1").select(".govuk-fieldset__heading").text() must include(
+        messages("removeAdditionalCorrespondenceNameYesNo.heading", correspondenceAdditionalNamePage)
+      )
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 

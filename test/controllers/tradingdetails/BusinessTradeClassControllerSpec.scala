@@ -32,7 +32,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.BusinessTradeClassView
+import views.html.tradingdetails.BusinessTradeClassView
 
 import scala.concurrent.Future
 
