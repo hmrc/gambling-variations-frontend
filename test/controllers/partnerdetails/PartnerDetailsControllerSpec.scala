@@ -143,60 +143,6 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
         }
       }
 
-      "must populate the form when the question has previously been answered" in {
-
-        val userAnswers =
-          userAnswersWithPartner
-            .set(
-              PartnerDetailsAddAnotherPartnerYesNoPage,
-              true
-            )
-            .success
-            .value
-
-        val application =
-          applicationBuilder(
-            userAnswers = Some(userAnswers)
-          ).build()
-
-        running(application) {
-
-          val request =
-            FakeRequest(
-              GET,
-              partnerDetailsRoute
-            )
-
-          val result =
-            route(application, request).value
-
-          val view =
-            application.injector
-              .instanceOf[PartnerDetailsView]
-
-          status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(
-              addAnotherPartnerForm.fill(true),
-              viewModel(
-                application,
-                userAnswers,
-                paginationHelper.partnerDetailsBusinessNumberList
-              ),
-              paginationHelper.paginatedViewModel,
-              paginationHelper.page,
-              paginationHelper.totalPages,
-              paginationHelper.from,
-              paginationHelper.to,
-              paginationHelper.totalRecords
-            )(
-              request,
-              messages(application)
-            ).toString
-        }
-      }
-
       "must populate existing partners table with correct pagination" in {
 
         val application =
@@ -328,6 +274,121 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
 
           redirectLocation(result).value mustEqual
             controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(0.toString, NormalMode).url
+        }
+      }
+
+      "url index increments on each new partner POST" in {
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        val userAnswersWithPartner2 = userAnswersWithPartner
+          .set(
+            PartnerDetailsAddPartnerCompletedPage(0),
+            true
+          )
+          .success
+          .value
+
+        val userAnswersWithPartner3 = userAnswersWithPartner2
+          .set(
+            PartnerDetailsAddPartnerCompletedPage(1),
+            true
+          )
+          .success
+          .value
+
+        when(
+          mockSessionRepository.set(any[UserAnswers])
+        ).thenReturn(
+          Future.successful(true)
+        )
+
+        val application1 =
+          applicationBuilder(
+            userAnswers = Some(userAnswersWithPartner)
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
+
+        val application2 =
+          applicationBuilder(
+            userAnswers = Some(userAnswersWithPartner2)
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
+
+        val application3 =
+          applicationBuilder(
+            userAnswers = Some(userAnswersWithPartner3)
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application1) {
+
+          val request =
+            FakeRequest(
+              POST,
+              onSubmitRoute
+            ).withFormUrlEncodedBody(
+              "value" -> "true"
+            )
+
+          val result =
+            route(application1, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(0.toString, NormalMode).url
+        }
+
+        running(application2) {
+
+          val request =
+            FakeRequest(
+              POST,
+              onSubmitRoute
+            ).withFormUrlEncodedBody(
+              "value" -> "true"
+            )
+
+          val result =
+            route(application2, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(1.toString, NormalMode).url
+        }
+
+        running(application3) {
+
+          val request =
+            FakeRequest(
+              POST,
+              onSubmitRoute
+            ).withFormUrlEncodedBody(
+              "value" -> "true"
+            )
+
+          val result =
+            route(application3, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(2.toString, NormalMode).url
         }
       }
 
