@@ -1485,7 +1485,7 @@ controllingBodyAdditionalAddressInformationYesNo.hint = For example, building na
 
 enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
 enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
-enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, {2}
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}, for example {2}
 enterNonStandardPeriodDate.dateLabel = End date
 
 enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
