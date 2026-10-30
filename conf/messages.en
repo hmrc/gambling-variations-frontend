@@ -1574,6 +1574,15 @@ removeControllingBodyNINumber.title = Are you sure you want to remove this contr
 removeControllingBodyNINumber.heading = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
 removeControllingBodyNINumber.error.required = Select yes if you want to remove this controlling body’s National Insurance number
 
+controllingBodyVatRegNumber.title = What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.heading = What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.paragraph = You can find it on their VAT registration certificate.
+controllingBodyVatRegNumber.hint = It must be 9 digits long, for example 123456789
+controllingBodyVatRegNumber.error.required = Enter the controlling body’s VAT registration number
+controllingBodyVatRegNumber.error.invalid.characters = The VAT registration number must only include numbers 0 to 9
+controllingBodyVatRegNumber.error.length = The VAT registration number must be 9 characters
+controllingBodyVatRegNumber.error.invalid = Enter a real VAT registration number
+
 reasonForCancellation.title = Why are you cancelling this registration?
 reasonForCancellation.heading = Why are you cancelling this registration?
 reasonForCancellation.caption = Cancel registration

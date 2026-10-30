@@ -1732,6 +1732,30 @@ class NavigatorSpec extends SpecBase {
           routes.IndexController.onPageLoad()
       }
 
+      "should route ControllingBodyVATScreenerPage to CB-VAT when the answer is Yes" in {
+        val answers = emptyAnswers.set(ControllingBodyVATScreenerPage, true).success.value
+
+        navigator.nextPage(ControllingBodyVATScreenerPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyVatRegistrationNumberController.onPageLoad()
+      }
+
+      "should route ControllingBodyVATScreenerPage to Index when the answer is No" in {
+        val answers = emptyAnswers.set(ControllingBodyVATScreenerPage, false).success.value
+
+        navigator.nextPage(ControllingBodyVATScreenerPage, NormalMode, answers) mustBe
+          routes.IndexController.onPageLoad()
+      }
+
+      "should route ControllingBodyVATScreenerPage to SystemError when there is no answer" in {
+        navigator.nextPage(ControllingBodyVATScreenerPage, NormalMode, emptyAnswers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route ControllingBodyVrnPage to Index until CB-ADLK-S and CB-CYA are built" in {
+        navigator.nextPage(ControllingBodyVrnPage, NormalMode, emptyAnswers) mustBe
+          routes.IndexController.onPageLoad()
+      }
+
       "should route ChooseReturnPeriodsPage to CheckReturnPeriodsController for standard return periods" in {
         val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
 
