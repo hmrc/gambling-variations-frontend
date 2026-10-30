@@ -453,11 +453,14 @@ case class CheckPartnerDetailsViewModel(
     if (s.isEmpty) s
     else s.head.toLower +: s.tail
 
+  private def stripQuestionMarks(s: String): String =
+    s.replaceAll("\\?+$", "")
+
   private def labelFor(key: String)(implicit messages: Messages): String =
     messages(s"partnerDetailsCheckYourAnswers.$key")
 
   private def labelForActions(key: String)(implicit messages: Messages): String =
-    lowerFirst(messages(s"partnerDetailsCheckYourAnswers.$key"))
+    stripQuestionMarks(lowerFirst(messages(s"partnerDetailsCheckYourAnswers.$key")))
 
   private def yesNo(value: Boolean)(implicit messages: Messages): String =
     messages(if (value) "site.yes" else "site.no")
