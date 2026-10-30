@@ -71,7 +71,7 @@ case class CheckPartnerDetailsViewModel(
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
   private val index = businessNumberOrIndex.toString
-  private def mode(index: BusinessNumberOrIndex): Mode = PartnerUtils.modeFor(index)
+  private def mode(businessNumberOrIndex: BusinessNumberOrIndex): Mode = PartnerUtils.modeFor(businessNumberOrIndex)
   val isNewPartnerSubmitted: Boolean = maybeSubmitted.exists(identity) // NEW PARTNERS ONLY
 
   def notices(implicit messages: Messages): Seq[Html] = {
@@ -221,10 +221,13 @@ case class CheckPartnerDetailsViewModel(
   private def tradingNameRow(implicit messages: Messages): Option[SummaryListRow] =
     if (postScreenerDisplayCondition(addTradingName)) {
       val label = labelFor("tradingName")
+      val labelForHiddenActions = labelForActions("tradingName")
       // NOTE: routing will be done with the integration ticket
-      val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, labelForHiddenActions)
       val remove =
-        removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+        removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+                     labelForHiddenActions
+                    )
 
       Some(optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change))
     } else None
@@ -331,7 +334,13 @@ case class CheckPartnerDetailsViewModel(
   private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(!is(Partnership))(
       // NOTE: routing will be done with the integration ticket
-      requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, mode(businessNumberOrIndex)).url, isNewPartnerFlow)
+      requiredRow(
+        "utr",
+        utr,
+        routes.PartnerDetailsAddUTRController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+        isNewPartnerFlow,
+        Some(labelFor("utr"))
+      )
     )
 
   // --- VAT rows ---
@@ -344,8 +353,10 @@ case class CheckPartnerDetailsViewModel(
     if (postScreenerDisplayCondition(addVatRegistrationNumber)) {
       val label = labelFor("vatRegistrationNumber")
       // NOTE: routing will be done with the integration ticket
-      val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-      val remove = removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val change =
+        changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val remove =
+        removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
       val actions =
         if (!isNewPartnerFlow) Nil
@@ -359,10 +370,12 @@ case class CheckPartnerDetailsViewModel(
 
   private def addressRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("address")
+    val labelForHiddenActions = labelForActions("address")
+
     // NOTE: routing will be done with the integration ticket (currently points at the business type page placeholder)
     val url = routes.PartnerDetailsBusinessTypeController.onPageLoad(index, mode(businessNumberOrIndex)).url
 
-    createSummaryListRow(label, addressContent, if (isNewPartnerFlow || !dueToJoinOrLeave) Seq(changeAction(url, label)) else Nil)
+    createSummaryListRow(label, addressContent, if (isNewPartnerFlow || !dueToJoinOrLeave) Seq(changeAction(url, labelForHiddenActions)) else Nil)
   }
 
   private def addAdditionalInformationRow(implicit messages: Messages): Option[SummaryListRow] =
@@ -377,11 +390,13 @@ case class CheckPartnerDetailsViewModel(
     if (postScreenerDisplayCondition(addAdditionalInformation)) {
 
       val label = labelFor("additionalInformation")
+      val labelForHiddenActions = labelForActions("additionalInformation")
       // NOTE: routing will be done with the integration ticket
-      val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val change =
+        changeAction(routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index, mode(businessNumberOrIndex)).url, labelForHiddenActions)
       val remove = removeAction(
         routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url,
-        label
+        labelForHiddenActions
       )
 
       Some(optionalRow(label, additionalInformation.map(Text(_)), changeOrRemove(change, remove), change))
@@ -392,8 +407,9 @@ case class CheckPartnerDetailsViewModel(
 
   private def contactNumbersRow(implicit messages: Messages): SummaryListRow = {
     val label = labelFor("contactNumbers")
-    // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsContactDetailsController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+    val labelForHiddenActions = labelForActions("contactNumbers")
+
+    val change = changeAction(routes.PartnerDetailsContactDetailsController.onPageLoad(index, mode(businessNumberOrIndex)).url, labelForHiddenActions)
     val actions = if (isNewPartnerFlow || !dueToJoinOrLeave) Seq(change) else Nil
     val row = optionalRow(label, contactNumbers.map(n => contactNumbersContent(n)), actions, change)
 
@@ -401,15 +417,16 @@ case class CheckPartnerDetailsViewModel(
   }
 
   private def addFaxNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    // NOTE: routing will be done with the integration ticket
     yesNoRow("addFaxNumber", addFaxNumber, routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index).url)
 
   private def faxNumberRow(implicit messages: Messages): Option[SummaryListRow] = if (postScreenerDisplayCondition(addFaxNumber)) {
-
     val label = labelFor("faxNumber")
-    // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-    val remove = removeAction(routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+    val labelForHiddenActions = labelForActions("faxNumber")
+
+    val change =
+      changeAction(routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, labelForHiddenActions)
+    val remove =
+      removeAction(routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, labelForHiddenActions)
 
     Some(optionalRow(label, faxNumber.map(Text(_)), changeOrRemove(change, remove), change))
   } else None
@@ -420,32 +437,50 @@ case class CheckPartnerDetailsViewModel(
 
   private def emailAddressRow(implicit messages: Messages): Option[SummaryListRow] = if (postScreenerDisplayCondition(addEmailAddress)) {
     val label = labelFor("emailAddress")
+    val labelForHiddenActions = labelForActions("emailAddress")
+
     // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsEmailAddressController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-    val remove = removeAction(routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+    val change = changeAction(routes.PartnerDetailsEmailAddressController.onPageLoad(index, mode(businessNumberOrIndex)).url, labelForHiddenActions)
+    val remove =
+      removeAction(routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, labelForHiddenActions)
 
     Some(optionalRow(label, emailAddress.map(Text(_)), changeOrRemove(change, remove), change))
   } else None
 
   // --- Row builders ---
 
+  private def lowerFirst(s: String): String =
+    if (s.isEmpty) s
+    else s.head.toLower +: s.tail
+
+  private def stripQuestionMarks(s: String): String =
+    s.replaceAll("\\?+$", "")
+
   private def labelFor(key: String)(implicit messages: Messages): String =
     messages(s"partnerDetailsCheckYourAnswers.$key")
+
+  private def labelForActions(key: String)(implicit messages: Messages): String =
+    stripQuestionMarks(lowerFirst(messages(s"partnerDetailsCheckYourAnswers.$key")))
 
   private def yesNo(value: Boolean)(implicit messages: Messages): String =
     messages(if (value) "site.yes" else "site.no")
 
   /** Shows the value, or an "add" link with no actions when missing. */
-  private def requiredRow(key: String, value: Option[String], url: String, canChange: Boolean)(implicit
-    messages: Messages
-  ): SummaryListRow = {
+  private def requiredRow(
+    key: String,
+    value: Option[String],
+    url: String,
+    canChange: Boolean,
+    hiddenLabel: Option[String] = None
+  )(implicit messages: Messages): SummaryListRow = {
     val label = labelFor(key)
+    val labelForAction = labelForActions(key)
+    val actionLabel = hiddenLabel.getOrElse(labelForAction)
 
     value match {
       case Some(v) =>
-        createSummaryListRow(label, Text(v), if (canChange) Seq(changeAction(url, label)) else Nil)
+        createSummaryListRow(label, Text(v), if (canChange) Seq(changeAction(url, actionLabel)) else Nil)
 
-      // Due to join or leave: details can't be changed online, so no add link
       case None if dueToJoinOrLeave =>
         createSummaryListRow(label, Text(messages("partnerDetailsCheckYourAnswers.noData")), Nil)
 
@@ -476,7 +511,8 @@ case class CheckPartnerDetailsViewModel(
     if (isNewPartnerFlow && !isNewPartnerSubmitted)
       value.map { v =>
         val label = labelFor(key)
-        createSummaryListRow(label, Text(yesNo(v)), Seq(changeAction(url, label)))
+        val labelForHiddenActions = labelForActions(key)
+        createSummaryListRow(label, Text(yesNo(v)), Seq(changeAction(url, labelForHiddenActions)))
       }
     else None
 
