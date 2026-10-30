@@ -71,7 +71,7 @@ case class CheckPartnerDetailsViewModel(
 
   import CheckPartnerDetailsViewModel.NoDataActionClasses
   private val index = businessNumberOrIndex.toString
-  private def mode(index: BusinessNumberOrIndex): Mode = PartnerUtils.modeFor(index)
+  private def mode(businessNumberOrIndex: BusinessNumberOrIndex): Mode = PartnerUtils.modeFor(businessNumberOrIndex)
   val isNewPartnerSubmitted: Boolean = maybeSubmitted.exists(identity) // NEW PARTNERS ONLY
 
   def notices(implicit messages: Messages): Seq[Html] = {
