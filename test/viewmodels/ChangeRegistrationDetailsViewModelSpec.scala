@@ -37,12 +37,18 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
 
   private val managementHomeUrl = "http://foo.com/home"
 
-  private def viewModel(userAnswers: UserAnswers, isGroupMember: Boolean): ChangeRegistrationDetailsViewModel =
+  private val controllingBodyUrl = "http://foo.com/home"
+
+  private def viewModel(userAnswers: UserAnswers,
+                        isGroupMember: Boolean,
+                        controllingBodyUrl: String = controllingBodyUrl
+                       ): ChangeRegistrationDetailsViewModel =
     ChangeRegistrationDetailsViewModel.from(
-      userAnswers       = userAnswers,
-      mgdRegNumber      = mgdRegNum,
-      managementHomeUrl = managementHomeUrl,
-      isGroupMember     = isGroupMember
+      userAnswers        = userAnswers,
+      mgdRegNumber       = mgdRegNum,
+      managementHomeUrl  = managementHomeUrl,
+      isGroupMember      = isGroupMember,
+      controllingBodyUrl = controllingBodyUrl
     )
 
   private def answersFor(businessType: BusinessType): UserAnswers =
@@ -137,21 +143,14 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
       // These rows are shown so the user sees the full picture, but the journeys behind them do
       // not exist. Remove a name from this list as each journey is built.
       val notBuiltYet = Set(
-        "Controlling body details",
         "Group member details"
       )
 
-      val allSections =
-        viewModel(partnershipAnswers, isGroupMember = false).sections ++
-          viewModel(partnershipAnswers, isGroupMember = true).sections
+      val vm = viewModel(partnershipAnswers, isGroupMember = true)
 
-      val placeholderUrls =
-        allSections
-          .filter(section => notBuiltYet.contains(section.name))
-          .map(_.url)
-          .distinct
-
-      placeholderUrls mustEqual Seq(
+      vm.sections
+        .filter(_.name == "Group member details")
+        .map(_.url) mustEqual Seq(
         routes.PageNotFoundController.onPageLoad().url
       )
     }
@@ -232,6 +231,29 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
 
       vm.sections.map(_.status).distinct mustEqual Seq(NoDetailsChanged)
       vm.hasChanges mustEqual false
+    }
+    "must use the supplied controlling body URL for a group member" in {
+
+      val expectedUrl =
+        controllers.controllingbody.routes.ControllingBodyChangeScreenerController
+          .onPageLoad()
+          .url
+
+      val vm = viewModel(
+        nonPartnershipAnswers,
+        isGroupMember      = true,
+        controllingBodyUrl = expectedUrl
+      )
+
+      vm.sections.find(_.name == "Controlling body details").value.url mustEqual expectedUrl
+    }
+
+    "must link the group member details section to page not found" in {
+
+      val vm = viewModel(nonPartnershipAnswers, isGroupMember = true)
+
+      vm.sections.find(_.name == "Group member details").value.url mustEqual
+        routes.PageNotFoundController.onPageLoad().url
     }
   }
 
