@@ -186,7 +186,8 @@ trait PartnerDetailsHelper {
     vrn: Option[String] = None,
     utr: Option[String] = None,
     fcr: Option[String] = None,
-    crn: Option[String] = None
+    crn: Option[String] = None,
+    hasAnsweredAllQuestion: Option[Boolean] = None
   ): JsObject = Json.obj(
     "partners" -> Json.obj(),
     "newPartners" -> Json.arr(
@@ -225,7 +226,8 @@ trait PartnerDetailsHelper {
         "partnerDetailsForeignCorporateRef"    -> fcr,
         "partnerDetailsIsFutureLeaveDate"      -> 0,
         "partnerDetailsIsFutureJoinDate"       -> 0,
-        "partnerDetailsBusinessType"           -> 1
+        "partnerDetailsBusinessType"           -> 1,
+        "partnerDetailsHasAnsweredAllQuestion" -> hasAnsweredAllQuestion
       )
     )
   )
@@ -241,7 +243,8 @@ trait PartnerDetailsHelper {
         "partnerDetailsDateOfIncorporation"      -> "2020-03-01",
         "partnerDetailsCountryOfIncorporation"   -> null,
         "partnerDetailsIsBusinessIncorporatedUk" -> isIncorporatedInTheUK,
-        "partnerDetailsBusinessType"             -> businessType
+        "partnerDetailsBusinessType"             -> businessType,
+        "partnerDetailsHasAnsweredAllQuestion"   -> false
       )
     )
   )

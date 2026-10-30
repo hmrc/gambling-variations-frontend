@@ -16,7 +16,6 @@
 
 package forms.cancellation
 
-import forms.AssociatedRegNumberFormProvider
 import forms.behaviours.StringFieldBehaviours
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.data.FormError

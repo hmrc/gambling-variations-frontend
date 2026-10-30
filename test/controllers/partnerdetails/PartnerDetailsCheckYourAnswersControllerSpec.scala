@@ -18,13 +18,20 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import controllers.routes
-import models.UserAnswers
+import models.BusinessType.Soleproprietor
+import models.{NormalMode, UserAnswers}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import repositories.SessionRepository
 import viewmodels.checkAnswers.partnerdetails.CheckPartnerDetailsViewModel
 import views.html.partnerdetails.PartnerDetailsCheckYourAnswersView
+
+import scala.concurrent.Future
 
 class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
 
@@ -39,8 +46,9 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
   val userAnswersExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
   val userAnswersNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
 
-  "partners" - {
-    "PartnerDetailsCheckYourAnswers Controller" - {
+  "PartnerDetailsCheckYourAnswers Controller" - {
+
+    "existing partners" - {
 
       "must return OK and the correct view for a GET" in {
 
@@ -75,10 +83,8 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
         }
       }
     }
-  }
 
-  "newPartners" - {
-    "PartnerDetailsCheckYourAnswers Controller" - {
+    "newPartners" - {
 
       "must return OK and the correct view for a GET when the partner has not been saved" in {
 
@@ -130,6 +136,37 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
         }
       }
 
+      "must redirect to the first missing mandatory page and not save when a new partner has a gap" in {
+        /*
+         * Small example
+         * We select business type, we skip the name, and we get to the end of the journey.
+         * When we click on continue we should head back to PartnerDetailsChangeBusinessNameController
+         * */
+
+        val repository = mock[SessionRepository]
+        when(repository.set(any[UserAnswers])).thenReturn(Future.successful(true))
+
+        val completeAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
+        val application = applicationBuilder(userAnswers = Some(completeAnswers))
+          .overrides(bind[SessionRepository].toInstance(repository))
+          .build()
+
+        running(application) {
+          val request = FakeRequest(POST,
+                                    controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController
+                                      .onContinue(newPartnersIndex1.toString)
+                                      .url
+                                   )
+
+          val result = route(application, request).value
+
+          redirectLocation(result).value mustEqual controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController
+            .onPageLoad(newPartnersIndex1.toString, Soleproprietor, NormalMode)
+            .url
+
+        }
+      }
+
       "must redirect to SystemError for a GET if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
@@ -144,10 +181,8 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
         }
       }
     }
-  }
 
-  "invalid index" - {
-    "PartnerDetailsCheckYourAnswers Controller" - {
+    "invalid index" - {
 
       "must redirect to SystemError for a negative index" in {
 
@@ -177,5 +212,6 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
         }
       }
     }
+
   }
 }
