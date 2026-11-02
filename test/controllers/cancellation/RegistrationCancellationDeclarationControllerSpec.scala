@@ -32,7 +32,6 @@ import views.html.cancellation.RegistrationCancellationDeclarationView
 
 import scala.concurrent.Future
 
-//TODO more tests for adding value further, wait for Eva to finish her PR
 class RegistrationCancellationDeclarationControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")

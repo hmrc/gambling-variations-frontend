@@ -17,13 +17,12 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.{ChangeGroupRegistrationNumberFormProvider, ReasonForCancellationFormProvider}
-import models.NormalMode
+import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.cancellation.{ChangeGroupRegistrationNumberView, RegistrationCancellationConfirmationView}
+import views.html.cancellation.RegistrationCancellationConfirmationView
 
 class RegistrationCancellationConfirmationViewSpec extends SpecBase {
 
