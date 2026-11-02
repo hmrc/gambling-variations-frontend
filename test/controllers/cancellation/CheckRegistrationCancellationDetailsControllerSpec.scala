@@ -17,27 +17,67 @@
 package controllers.cancellation
 
 import base.SpecBase
+import models.cancellation.ReasonForCancellation
+import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import viewmodels.checkAnswers.cancellation.CheckRegistrationCancellationDetailsViewModel
 import views.html.cancellation.CheckRegistrationCancellationDetailsView
+
+import java.time.LocalDate
 
 class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
 
-  "checkRegistrationCancellationDetails Controller" - {
+  "CheckRegistrationCancellationDetailsController" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers =
+        emptyUserAnswers
+          .set(CancelRegistrationDatePage, LocalDate.of(2026, 2, 2))
+          .success
+          .value
+          .set(
+            ReasonForCancellationPage,
+            ReasonForCancellation.BusinessIsPartOfTheGroup
+          )
+          .success
+          .value
+          .set(
+            ChangeGroupRegistrationNumberPage,
+            "XWM000000001770"
+          )
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad().url)
+
+        val request =
+          FakeRequest(
+            GET,
+            controllers.cancellation.routes.CheckRegistrationCancellationDetailsController
+              .onPageLoad()
+              .url
+          )
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[CheckRegistrationCancellationDetailsView]
+        val view =
+          application.injector
+            .instanceOf[CheckRegistrationCancellationDetailsView]
+
+        implicit val msgs = messages(application)
+
+        val expectedSummaryList =
+          CheckRegistrationCancellationDetailsViewModel.summaryList(userAnswers)
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+
+        contentAsString(result) mustEqual
+          view(expectedSummaryList)(request, msgs).toString
       }
     }
   }
