@@ -361,3 +361,6 @@ GET        /cancel-registration/no-longer-liable                  controllers.ca
 POST       /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
 GET        /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)
+
+GET        /change-registration-details/controlling-body-details/national-insurance-number                      controllers.controllingbody.ControllingBodyNINumberController.onPageLoad(mode: Mode = NormalMode)
+POST       /change-registration-details/controlling-body-details/national-insurance-number                      controllers.controllingbody.ControllingBodyNINumberController.onSubmit(mode: Mode = NormalMode)
