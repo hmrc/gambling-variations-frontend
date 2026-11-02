@@ -205,7 +205,7 @@ changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated 
 changeBusinessName.error.required.llp = Enter the limited liability partnership’s name
 
 changeBusinessName.error.invalid.soleproprietor = The sole proprietor’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.partnership = The partnership’s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
+changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.corporatebody = The corporate body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.llp = The limited liability partnership’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
@@ -833,7 +833,6 @@ partnerDetailsFaxNumber.heading = What is the partner’s fax number?
 partnerDetailsFaxNumber.checkYourAnswersLabel = What is the partner’s fax number?
 partnerDetailsFaxNumber.change.hidden = What is the partner’s fax number?
 partnerDetailsFaxNumber.error.required = Enter the partner’s fax number
-partnerDetailsFaxNumber.error.length = Enter the partner’s fax number
 partnerDetailsFaxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
 partnerDetailsFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
 partnerDetailsFaxNumber.error.length = The fax number must be 20 characters or less
@@ -1575,6 +1574,15 @@ removeControllingBodyNINumber.title = Are you sure you want to remove this contr
 removeControllingBodyNINumber.heading = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
 removeControllingBodyNINumber.error.required = Select yes if you want to remove this controlling body’s National Insurance number
 
+controllingBodyVatRegNumber.title = What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.heading = What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.paragraph = You can find it on their VAT registration certificate.
+controllingBodyVatRegNumber.hint = It must be 9 digits long, for example 123456789
+controllingBodyVatRegNumber.error.required = Enter the controlling body’s VAT registration number
+controllingBodyVatRegNumber.error.invalid.characters = The VAT registration number must only include numbers 0 to 9
+controllingBodyVatRegNumber.error.length = The VAT registration number must be 9 characters
+controllingBodyVatRegNumber.error.invalid = Enter a real VAT registration number
+
 reasonForCancellation.title = Why are you cancelling this registration?
 reasonForCancellation.heading = Why are you cancelling this registration?
 reasonForCancellation.caption = Cancel registration
@@ -1637,3 +1645,22 @@ controllingBodyForeignCorpRef.change.hidden = What is the controlling body’s f
 controllingBodyRemoveVATRegistrationNumber.title = Are you sure you want to remove this controlling body’s VAT registration number?
 controllingBodyRemoveVATRegistrationNumber.heading = Are you sure you want to remove {0} as this controlling body’s VAT registration number?
 controllingBodyRemoveVATRegistrationNumber.error.required = Select yes if you want to remove this controlling body’s VAT registration number
+
+
+registrationCancellationDeclaration.title = Declaration
+registrationCancellationDeclaration.heading = Declaration
+registrationCancellationDeclaration.caption = Cancel registration
+registrationCancellationDeclaration.p1 = To the best of my knowledge, I declare that the information I have provided is accurate and complete.
+registrationCancellationDeclaration.submit = Declare and submit
+
+cancelRegistrationDate.title = When are you no longer liable to pay Machine Games Duty?
+cancelRegistrationDate.heading = When are you no longer liable to pay Machine Games Duty?
+cancelRegistrationDate.caption = Cancel registration
+cancelRegistrationDate.hint = The date must be after {0} and before {1}, for example {2}
+cancelRegistrationDate.checkYourAnswersLabel = When are you no longer liable to pay Machine Games Duty?
+cancelRegistrationDate.error.required.all = Enter the date for when you are no longer liable to pay Machine Games Duty
+cancelRegistrationDate.error.required.two =  Date must include a {0} and a {1}
+cancelRegistrationDate.error.required = Date must include a {0}
+cancelRegistrationDate.error.invalid = 	Must be a real date
+cancelRegistrationDate.error.outsideBoundaries = Date must be after {0} and before {1}
+cancelRegistrationDate.change.hidden = when are you no longer liable to pay Machine Games Duty?

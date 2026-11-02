@@ -17,7 +17,6 @@
 package forms.controllingbody
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.controllingbody.ControllingBodyVATScreenerFormProvider
 import play.api.data.FormError
 
 class ControllingBodyVATScreenerFormProviderSpec extends BooleanFieldBehaviours {

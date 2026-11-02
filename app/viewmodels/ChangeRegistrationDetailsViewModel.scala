@@ -25,6 +25,7 @@ import pages.contactdetails.ContactDetailsChangesPage
 import pages.correspondencedetails.CorrespondenceDetailsChangesPage
 import pages.licencespremises.LicencesPremisesDetailsChangesPage
 import pages.tradingdetails.TradingDetailsChangesPage
+import pages.controllingbody.*
 import play.api.i18n.Messages
 
 final case class ChangeRegistrationDetailsViewModel(
@@ -48,7 +49,8 @@ object ChangeRegistrationDetailsViewModel {
     userAnswers: UserAnswers,
     mgdRegNumber: String,
     managementHomeUrl: String,
-    isGroupMember: Boolean
+    isGroupMember: Boolean,
+    controllingBodyUrl: String
   )(implicit messages: Messages): ChangeRegistrationDetailsViewModel = {
 
     val isPartnership =
@@ -62,8 +64,8 @@ object ChangeRegistrationDetailsViewModel {
         optional(isGroupMember)(
           RegistrationSectionRow(
             messages("changeRegistrationDetails.controllingBodyDetails"),
-            routes.PageNotFoundController.onPageLoad().url,
-            NoDetailsChanged
+            controllingBodyUrl,
+            status(ControllingBodyChangesPage)
           )
         ),
         optional(isGroupMember)(

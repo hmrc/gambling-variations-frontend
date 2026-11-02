@@ -17,7 +17,6 @@
 package controllers.correspondencedetails
 
 import base.SpecBase
-import controllers.routes
 import forms.AddCorrespondingDetailsYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator

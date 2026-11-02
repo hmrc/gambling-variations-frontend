@@ -170,6 +170,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         hrefs(rowFor(business, "dateOfInc")) mustEqual Seq(routes.DateOfIncorporationController.onPageLoad().url)
         hrefs(rowFor(business, "companyRegNumber")) mustEqual Seq(routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url)
         hrefs(rowFor(business, "addVat")) mustEqual Seq(routes.ControllingBodyVATScreenerController.onPageLoad().url)
+        hrefs(rowFor(business, "vat")) mustEqual Seq(routes.ControllingBodyVatRegistrationNumberController.onPageLoad().url)
         hrefs(rowFor(corporateBody.addressDetails, "addAddrInfo")) mustEqual
           Seq(routes.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad().url)
         hrefs(rowFor(corporateBody.contactDetails, "addFaxNumber")) mustEqual Seq(routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url)
@@ -178,9 +179,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
           Seq(routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad().url)
         hrefs(rowFor(corporateBody.contactDetails, "emailAddress")) mustEqual Seq(routes.ControllingBodyEmailAddressController.onPageLoad().url)
 
-        Seq("utr", "vat").foreach { name =>
-          hrefs(rowFor(business, name)) mustEqual Seq("#")
-        }
+        hrefs(rowFor(business, "utr")) mustEqual Seq("#")
         Seq("address", "addAdditionalInfo").foreach { name =>
           hrefs(rowFor(corporateBody.addressDetails, name)) mustEqual Seq("#")
         }
@@ -353,7 +352,7 @@ class CheckControllingBodyDetailsViewModelSpec extends SpecBase {
         valueText(rowFor(viewModel.businessDetails, "tradingName")) mustEqual "Controlling Traders"
         valueText(rowFor(viewModel.businessDetails, "vat")) mustEqual msgs("site.notProvided")
         valueText(rowFor(viewModel.contactDetails, "emailAddress")) mustEqual msgs("site.notProvided")
-        hrefs(rowFor(viewModel.businessDetails, "vat")) mustEqual Seq("#")
+        hrefs(rowFor(viewModel.businessDetails, "vat")) mustEqual Seq(routes.ControllingBodyVatRegistrationNumberController.onPageLoad().url)
       }
 
       "must show the National Insurance number as not provided for a sole proprietor who has not answered its screener" in {

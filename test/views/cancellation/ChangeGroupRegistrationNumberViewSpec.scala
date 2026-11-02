@@ -17,7 +17,7 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.{ChangeGroupRegistrationNumberFormProvider, ReasonForCancellationFormProvider}
+import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

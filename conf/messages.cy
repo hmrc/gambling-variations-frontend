@@ -195,7 +195,7 @@ changeBusinessName.title.llp= Beth yw enw’r bartneriaeth atebolrwydd cyfyngedi
 changeBusinessName.heading.llp = Beth yw enw’r bartneriaeth atebolrwydd cyfyngedig?
 
 changeBusinessName.error.required.partnership = Nodwch enw’r bartneriaeth
-changeBusinessName.error.invalid.partnership = Mae’n rhaid i enw’r bartneriaeth gynnwys y llythrennau a i z, y rhifau 0 i 9, ampersandau (&), collnodau, cromfachau, comas, ebychnodau, cysylltnodau, blaenslaesau a bylchau yn unig
+changeBusinessName.error.invalid.partnership = Mae’n rhaid i enw’r bartneriaeth gynnwys y llythrennau a i z, y rhifau 0 i 9, collnodau, cysylltnodau a bylchau yn unig
 changeBusinessName.error.length.partnership = Mae’n rhaid i enw’r bartneriaeth fod yn 35 o gymeriadau neu lai
 
 changeBusinessName.error.required.corporatebody = Nodwch enw’r corff corfforaethol
@@ -610,6 +610,15 @@ controllingBodyCompanyRegNumber.error.invalid.characters = cy: The controlling b
 controllingBodyCompanyRegNumber.error.invalid.format = cy: The controlling body’s company registration number must be in the correct format
 controllingBodyCompanyRegNumber.p1 = cy: You can find this by
 controllingBodyCompanyRegNumber.link = cy: searching for the company on the Companies House register (opens in new tab)
+
+controllingBodyVatRegNumber.title = cy: What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.heading = cy: What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.paragraph = cy: You can find it on their VAT registration certificate.
+controllingBodyVatRegNumber.hint = cy: It must be 9 digits long, for example 123456789
+controllingBodyVatRegNumber.error.required = cy: Enter the controlling body’s VAT registration number
+controllingBodyVatRegNumber.error.invalid.characters = cy: The VAT registration number must only include numbers 0 to 9
+controllingBodyVatRegNumber.error.length = cy: The VAT registration number must be 9 characters
+controllingBodyVatRegNumber.error.invalid = cy: Enter a real VAT registration number
 
 dateOfIncorporation.title = cy: When was the controlling body’s date of incorporation?
 dateOfIncorporation.heading = cy: When was the controlling body’s date of incorporation?

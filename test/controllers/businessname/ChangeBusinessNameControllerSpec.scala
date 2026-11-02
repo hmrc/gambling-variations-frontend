@@ -69,6 +69,20 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
   "ChangeBusinessName Controller" - {
 
+    "must reject commas and render the partnership character validation message" in {
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
+
+      running(application) {
+        val request = FakeRequest(POST, changeBusinessNameRoute).withFormUrlEncodedBody("value" -> "Test, Partnership")
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        org.jsoup.Jsoup.parse(contentAsString(result)).select(".govuk-error-message").text() must include(
+          "The partnership's name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces"
+        )
+      }
+    }
+
     "must return OK and the correct view for a GET" in {
 
       val application =

@@ -21,7 +21,8 @@ import forms.controllingbody.ControllingBodyForeignCorpRefFormProvider
 import models.BusinessType.Corporatebody
 import models.{BusinessType, Mode}
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyDateOfBirthPage, ControllingBodyForeignCorpRefPage, ControllingBodyIsUkIncorporatedPage, ControllingBodySubmittedPage}
+import pages.controllingbody.*
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,7 +47,7 @@ class ControllingBodyForeignCorpRefController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form: Form[String] = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
 
