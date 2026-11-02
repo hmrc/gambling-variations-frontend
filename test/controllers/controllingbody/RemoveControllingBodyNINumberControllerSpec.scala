@@ -18,7 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
-import models.{CorrespondenceDetails, NormalMode, UserAnswers, BusinessType}
+import models.{BusinessType, CorrespondenceDetails, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -64,7 +64,7 @@ class RemoveControllingBodyNINumberControllerSpec extends SpecBase with MockitoS
       .success
       .value
 
-  private val noSoleProprietorAnswers: UserAnswers  =
+  private val noSoleProprietorAnswers: UserAnswers =
     cbSection
       .set(ControllingBodyNinoPage, nino)
       .success
