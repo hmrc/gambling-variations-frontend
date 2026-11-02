@@ -39,8 +39,13 @@
 
   @govukSummaryList(summaryList)
 
-  @govukButton(
-     ButtonViewModel(messages("site.continue"))
-    )
+    <p class="govuk-body">
+        @govukButton(
+        ButtonViewModel(messages("site.continue"))
+        .asLink(controllers.cancellation.routes.RegistrationCancellationDeclarationController.onPageLoad().url)
+        )
+    </p>
+
+
    }
 }
