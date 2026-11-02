@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.tradingdetails
 
 import base.SpecBase
 import forms.AssociatedRegistrationNumbersFormProvider
@@ -23,7 +23,7 @@ import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.AssociatedRegistrationNumbersView
+import views.html.tradingdetails.AssociatedRegistrationNumbersView
 
 class AssociatedRegistrationNumbersViewSpec extends SpecBase {
 
