@@ -28,7 +28,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.RemoveAdditionalCorrespondenceNameYesNoView
+import views.html.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoView
 
 import scala.concurrent.Future
 

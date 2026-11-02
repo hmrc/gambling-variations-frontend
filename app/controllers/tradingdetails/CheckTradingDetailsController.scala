@@ -27,7 +27,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkFlag
 import viewmodels.checkAnswers.tradingdetails.*
-import views.html.CheckTradingDetailsView
+import views.html.tradingdetails.CheckTradingDetailsView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

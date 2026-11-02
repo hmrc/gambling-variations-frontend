@@ -18,7 +18,6 @@ package controllers.businesscontactdetails
 
 import base.SpecBase
 import controllers.routes
-import models.UserAnswers
 import pages.GroupMemberPage
 import play.api.libs.json.Json
 import play.api.test.FakeRequest

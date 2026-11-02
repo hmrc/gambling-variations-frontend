@@ -40,8 +40,8 @@ case class CheckPartnerDetailsViewModel(
   soleProprietorDob: Option[String],
   addTradingName: Option[Boolean],
   tradingName: Option[String],
-  dateOfJoining: Option[String],
-  dateOfLeaving: Option[String],
+  dateOfJoining: Option[LocalDate],
+  dateOfLeaving: Option[LocalDate],
   addNino: Option[Boolean],
   nino: Option[String],
   utr: Option[String],
@@ -93,11 +93,13 @@ case class CheckPartnerDetailsViewModel(
           )
 
         val leaving =
-          if (isDueToLeave) dateOfLeaving.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", d, link))
+          if (isDueToLeave)
+            dateOfLeaving.map(date => messages("partnerDetailsCheckYourAnswers.error.cannotChangeLeaving", longDateDisplay(date), link))
           else None
 
         val joining =
-          if (isDueToJoin) dateOfJoining.map(d => messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", d, link))
+          if (isDueToJoin)
+            dateOfJoining.map(date => messages("partnerDetailsCheckYourAnswers.error.cannotChangeJoining", longDateDisplay(date), link))
           else None
 
         // If due to both join and leave, show only the leaving notice (per design spec)
@@ -116,32 +118,32 @@ case class CheckPartnerDetailsViewModel(
     businessNameRow,
     soleProprietorDobRow,
     addTradingNameRow,
-    Some(tradingNameRow),
+    tradingNameRow,
     Some(dateOfJoiningRow),
     addNinoRow,
     ninoRow,
+    isIncorporatedInUkRow,
+    dateOfIncorporationRow,
+    companyRegistrationNumberRow,
+    countryOfIncorporationRow,
+    foreignCorporateReferenceRow,
     utrRow,
     addVatRegistrationNumberRow,
-    vatRegistrationNumberRow,
-    isIncorporatedInUkRow,
-    countryOfIncorporationRow,
-    dateOfIncorporationRow,
-    foreignCorporateReferenceRow,
-    companyRegistrationNumberRow
+    vatRegistrationNumberRow
   ).flatten
 
   def addressSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     Some(addressRow),
     addAdditionalInformationRow,
-    Some(additionalInformationRow)
+    additionalInformationRow
   ).flatten
 
   def contactDetailsSummaryList(implicit messages: Messages): Seq[SummaryListRow] = Seq(
     Some(contactNumbersRow),
     addFaxNumberRow,
-    Some(faxNumberRow),
+    faxNumberRow,
     addEmailAddressRow,
-    Some(emailAddressRow)
+    emailAddressRow
   ).flatten
 
   // --- Access rules ---
@@ -159,6 +161,10 @@ case class CheckPartnerDetailsViewModel(
   private def isUkCorporateBody: Boolean = is(Corporatebody) && isIncorporatedInUk.contains(true)
 
   private def isNonUkCorporateBody: Boolean = is(Corporatebody) && isIncorporatedInUk.contains(false)
+
+  private def postScreenerDisplayCondition(screener: Option[Boolean]): Boolean = if (isNewPartnerFlow && !isNewPartnerSubmitted) {
+    screener.contains(true)
+  } else true
 
   // --- Business details rows ---
 
@@ -206,27 +212,35 @@ case class CheckPartnerDetailsViewModel(
       )
     )
 
+  // --- Trading name rows ---
+
   private def addTradingNameRow(implicit messages: Messages): Option[SummaryListRow] =
     // NOTE: routing will be done with the integration ticket
     yesNoRow("addTradingName", addTradingName, routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(index).url)
 
-  private def tradingNameRow(implicit messages: Messages): SummaryListRow = {
-    val label = labelFor("tradingName")
-    // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-    val remove = removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+  private def tradingNameRow(implicit messages: Messages): Option[SummaryListRow] =
+    if (postScreenerDisplayCondition(addTradingName)) {
+      val label = labelFor("tradingName")
+      // NOTE: routing will be done with the integration ticket
+      val change = changeAction(routes.PartnerDetailsTradingNameController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val remove =
+        removeAction(routes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+      Some(optionalRow(label, tradingName.map(Text(_)), changeOrRemove(change, remove), change))
+    } else None
+
+  // --- Date of Joining row ---
 
   private def dateOfJoiningRow(implicit messages: Messages): SummaryListRow =
     requiredRow(
       "dateOfJoining",
-      dateOfJoining,
+      dateOfJoining.map(shortDateDisplay),
       // NOTE: routing will be done with the integration ticket (currently points at the DOB page placeholder)
       routes.PartnerDateOfJoiningController.onPageLoad(index, mode(businessNumberOrIndex)).url,
       isNewPartnerFlow
     )
+
+  // --- Nino rows ---
 
   private def addNinoRow(implicit messages: Messages): Option[SummaryListRow] =
     if (is(Soleproprietor))
@@ -235,7 +249,7 @@ case class CheckPartnerDetailsViewModel(
     else None
 
   private def ninoRow(implicit messages: Messages): Option[SummaryListRow] =
-    Option.when(is(Soleproprietor)) {
+    if (postScreenerDisplayCondition(addNino)) Option.when(is(Soleproprietor)) {
       val label = labelFor("nino")
       // NOTE: routing will be done with the integration ticket
       val change = changeAction(routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
@@ -249,31 +263,9 @@ case class CheckPartnerDetailsViewModel(
 
       optionalRow(label, nino.map(Text(_)), actions, change)
     }
+    else None
 
-  private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
-    Option.when(!is(Partnership))(
-      // NOTE: routing will be done with the integration ticket
-      requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, mode(businessNumberOrIndex)).url, isNewPartnerFlow)
-    )
-
-  private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    // NOTE: routing will be done with the integration ticket
-    yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
-
-  private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
-    vatRegistrationNumber.map { vat =>
-      val label = labelFor("vatRegistrationNumber")
-      // NOTE: routing will be done with the integration ticket
-      val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-      val remove = removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-
-      val actions =
-        if (!isNewPartnerFlow) Nil
-        else if (isNewPartnerSubmitted) Seq(change, remove)
-        else Seq(change)
-
-      optionalRow(label, Some(Text(vat)), actions, change)
-    }
+  // --- Incorporated in the UK rows ---
 
   private def isIncorporatedInUkRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(is(Corporatebody))(
@@ -285,6 +277,8 @@ case class CheckPartnerDetailsViewModel(
         isNewPartnerFlow
       )
     )
+
+  // --- Country of incorporation + FCRN row ---
 
   private def countryOfIncorporationRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(isNonUkCorporateBody)(
@@ -308,6 +302,8 @@ case class CheckPartnerDetailsViewModel(
       )
     )
 
+  // --- Date of incorporation + Company reg number rows ---
+
   private def dateOfIncorporationRow(implicit messages: Messages): Option[SummaryListRow] =
     Option.when(isUkCorporateBody || is(LimitedLiabilityPartnership))(
       requiredRow(
@@ -330,6 +326,35 @@ case class CheckPartnerDetailsViewModel(
       )
     )
 
+  // --- UTR row ---
+
+  private def utrRow(implicit messages: Messages): Option[SummaryListRow] =
+    Option.when(!is(Partnership))(
+      // NOTE: routing will be done with the integration ticket
+      requiredRow("utr", utr, routes.PartnerDetailsAddUTRController.onPageLoad(index, mode(businessNumberOrIndex)).url, isNewPartnerFlow)
+    )
+
+  // --- VAT rows ---
+
+  private def addVatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
+    // NOTE: routing will be done with the integration ticket
+    yesNoRow("addVatRegistrationNumber", addVatRegistrationNumber, routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(index).url)
+
+  private def vatRegistrationNumberRow(implicit messages: Messages): Option[SummaryListRow] =
+    if (postScreenerDisplayCondition(addVatRegistrationNumber)) {
+      val label = labelFor("vatRegistrationNumber")
+      // NOTE: routing will be done with the integration ticket
+      val change = changeAction(routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val remove = removeAction(routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+
+      val actions =
+        if (!isNewPartnerFlow) Nil
+        else if (isNewPartnerSubmitted) Seq(change, remove)
+        else Seq(change)
+
+      Some(optionalRow(label, vatRegistrationNumber.map(vat => Text(vat)), actions, change))
+    } else None
+
   // --- Address rows ---
 
   private def addressRow(implicit messages: Messages): SummaryListRow = {
@@ -348,17 +373,20 @@ case class CheckPartnerDetailsViewModel(
       routes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(index).url
     )
 
-  private def additionalInformationRow(implicit messages: Messages): SummaryListRow = {
-    val label = labelFor("additionalInformation")
-    // NOTE: routing will be done with the integration ticket
-    val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
-    val remove = removeAction(
-      routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url,
-      label
-    )
+  private def additionalInformationRow(implicit messages: Messages): Option[SummaryListRow] =
+    if (postScreenerDisplayCondition(addAdditionalInformation)) {
 
-    optionalRow(label, additionalInformation.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+      val label = labelFor("additionalInformation")
+      // NOTE: routing will be done with the integration ticket
+      val change = changeAction(routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
+      val remove = removeAction(
+        routes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url,
+        label
+      )
+
+      Some(optionalRow(label, additionalInformation.map(Text(_)), changeOrRemove(change, remove), change))
+
+    } else None
 
   // --- Contact details rows ---
 
@@ -376,27 +404,28 @@ case class CheckPartnerDetailsViewModel(
     // NOTE: routing will be done with the integration ticket
     yesNoRow("addFaxNumber", addFaxNumber, routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(index).url)
 
-  private def faxNumberRow(implicit messages: Messages): SummaryListRow = {
+  private def faxNumberRow(implicit messages: Messages): Option[SummaryListRow] = if (postScreenerDisplayCondition(addFaxNumber)) {
+
     val label = labelFor("faxNumber")
     // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
     val remove = removeAction(routes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    optionalRow(label, faxNumber.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+    Some(optionalRow(label, faxNumber.map(Text(_)), changeOrRemove(change, remove), change))
+  } else None
 
   private def addEmailAddressRow(implicit messages: Messages): Option[SummaryListRow] =
     // NOTE: routing will be done with the integration ticket
     yesNoRow("addEmailAddress", addEmailAddress, routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(index).url)
 
-  private def emailAddressRow(implicit messages: Messages): SummaryListRow = {
+  private def emailAddressRow(implicit messages: Messages): Option[SummaryListRow] = if (postScreenerDisplayCondition(addEmailAddress)) {
     val label = labelFor("emailAddress")
     // NOTE: routing will be done with the integration ticket
     val change = changeAction(routes.PartnerDetailsEmailAddressController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
     val remove = removeAction(routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(index, mode(businessNumberOrIndex)).url, label)
 
-    optionalRow(label, emailAddress.map(Text(_)), changeOrRemove(change, remove), change)
-  }
+    Some(optionalRow(label, emailAddress.map(Text(_)), changeOrRemove(change, remove), change))
+  } else None
 
   // --- Row builders ---
 
@@ -491,12 +520,17 @@ case class CheckPartnerDetailsViewModel(
   )
 
   private def contactNumbersContent(numbers: ContactNumber)(implicit messages: Messages): Content = {
-    val phoneBlock = numbers.phoneNumber.map(p => s"${messages("contactDetails.label.phoneNumber")}<br>${escape(p)}")
-    val mobileBlock = numbers.mobilePhoneNumber.map(m => s"${messages("contactDetails.label.mobilePhoneNumber")}<br>${escape(m)}")
-    val blocks = Seq(phoneBlock, mobileBlock).flatten
+    def numberBlock(labelKey: String, value: Option[String]): String = {
+      val shown = value.fold(messages("site.notProvided"))(escape)
+      s"${messages(labelKey)}<br>$shown"
+    }
 
-    if (blocks.isEmpty) Text(messages("site.notProvided"))
-    else HtmlContent(Html(blocks.mkString("<br><br>")))
+    val blocks = Seq(
+      numberBlock("contactDetails.label.phoneNumber", numbers.phoneNumber),
+      numberBlock("contactDetails.label.mobilePhoneNumber", numbers.mobilePhoneNumber)
+    )
+
+    HtmlContent(Html(blocks.mkString("<br><br>")))
   }
 }
 
@@ -520,8 +554,8 @@ object CheckPartnerDetailsViewModel {
       soleProprietorDob         = userAnswers.get(PartnerDetailsDateOfBirthPage(index)).map(shortDateDisplay),
       addTradingName            = userAnswers.get(PartnerDetailsAddTradingNameYesNoPage(index)),
       tradingName               = userAnswers.get(PartnerDetailsTradingNamePage(index)),
-      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)).map(longDateDisplay),
-      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)).map(longDateDisplay),
+      dateOfJoining             = userAnswers.get(PartnerDetailsDateOfJoiningPage(index)),
+      dateOfLeaving             = userAnswers.get(PartnerDetailsDateOfLeavingPage(index)),
       addNino                   = userAnswers.get(PartnerDetailsAddNationalInsuranceNumberYesNoPage(index)),
       nino                      = userAnswers.get(PartnerDetailsNinoPage(index)).map(formatNino),
       utr                       = userAnswers.get(PartnerDetailsUtrPage(index)),
@@ -560,7 +594,7 @@ object CheckPartnerDetailsViewModel {
 
   private def formatNino(nino: String): String = {
     val clean = nino.replaceAll("[^a-zA-Z0-9]", "").toUpperCase
-    clean.replaceFirst("^([A-Z]{2})([0-9]{6})([A-Z])$", "$1-$2-$3")
+    clean.replaceFirst("^([A-Z]{2})([0-9]{2})([0-9]{2})([0-9]{2})([A-Z])$", "$1 $2 $3 $4 $5")
   }
 
 }

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package views
+package views.correspondencedetails
 
 import base.SpecBase
-import forms.AddCorrespondingDetailsYesNoFormProvider
+import forms.RemoveCorrespondenceDetailsYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
-import views.html.correspondencedetails.AddCorrespondingDetailsYesNoView
+import views.html.correspondencedetails.RemoveCorrespondenceDetailsYesNoView
 
-class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
+class RemoveCorrespondenceDetailsYesNoViewSpec extends SpecBase {
 
-  private val form = new AddCorrespondingDetailsYesNoFormProvider()()
+  private val form = new RemoveCorrespondenceDetailsYesNoFormProvider()()
 
-  "AddCorrespondingDetailsYesNoView" - {
+  "RemoveCorrespondenceDetailsYesNoView" - {
 
     "render the page correctly" in {
 
@@ -37,7 +37,7 @@ class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[AddCorrespondingDetailsYesNoView]
+        val view = application.injector.instanceOf[RemoveCorrespondenceDetailsYesNoView]
 
         val html = view(
           form,
@@ -47,27 +47,31 @@ class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
         val document: Document = Jsoup.parse(html.toString)
 
         document.title() must include(
-          messages(application)("addCorrespondingDetailsYesNo.title")
+          messages(application)("removeCorrespondenceDetailsYesNo.title")
         )
 
         document.select("h1").text() mustEqual
-          messages(application)("addCorrespondingDetailsYesNo.heading")
+          messages(application)("removeCorrespondenceDetailsYesNo.heading")
 
-        document.body().text() must include(
+        document.select("span").select(".govuk-caption-l").text() must include(
           messages(application)("changeRegistrationDetails.caption")
         )
 
         document.body().text() must include(
-          messages(application)("addCorrespondingDetailsYesNo.p1")
+          messages(application)("removeCorrespondenceDetailsYesNo.hint")
         )
 
         document.body().text() must include(
-          messages(application)("addCorrespondingDetailsYesNo.doYou")
+          messages(application)("changeRegistrationDetails.readyToSubmit")
         )
 
-        document.getElementById("value").attr("value") mustEqual "true"
+        document.body().text() must include(
+          messages(application)("site.continue")
+        )
 
-        document.getElementById("value-no").attr("value") mustEqual "false"
+        document.getElementById("removeCorrespondenceDetailsYesNo").attr("value") mustEqual "true"
+
+        document.getElementById("removeCorrespondenceDetailsYesNo-no").attr("value") mustEqual "false"
       }
     }
 
@@ -77,9 +81,9 @@ class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
 
       running(application) {
 
-        val view = application.injector.instanceOf[AddCorrespondingDetailsYesNoView]
+        val view = application.injector.instanceOf[RemoveCorrespondenceDetailsYesNoView]
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("removeCorrespondenceDetailsYesNo" -> ""))
 
         val html = view(
           boundForm,
@@ -91,7 +95,7 @@ class AddCorrespondingDetailsYesNoViewSpec extends SpecBase {
         document.select(".govuk-error-summary").size() mustEqual 1
 
         document.body().text() must include(
-          messages(application)("addCorrespondingDetailsYesNo.error.required")
+          messages(application)("removeCorrespondenceDetailsYesNo.error.required")
         )
       }
     }

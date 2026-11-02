@@ -18,9 +18,10 @@ package controllers.controllingbody
 
 import controllers.actions.*
 import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
+import models.BusinessType.Soleproprietor
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyNinoPage, ControllingBodySubmittedPage, RemoveControllingBodyNINumberPage}
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyNinoPage, ControllingBodySubmittedPage, RemoveControllingBodyNINumberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -53,11 +54,15 @@ class RemoveControllingBodyNINumberController @Inject() (
       case None        => form
       case Some(value) => form.fill(value)
     }
+    val ua = request.userAnswers
 
-    request.userAnswers.get(ControllingBodyNinoPage) match {
-      case Some(nino) => Ok(view(preparedForm, nino))
-      case _          => Redirect(controllers.routes.SystemErrorController.onPageLoad())
-    }
+    ua.get(ControllingBodyNinoPage)
+      .fold(Redirect(controllers.routes.SystemErrorController.onPageLoad()))(nino =>
+        ua.get(ControllingBodyBusinessTypePage) match {
+          case Some(Soleproprietor) => Ok(view(preparedForm, nino))
+          case _                    => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+        }
+      )
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
