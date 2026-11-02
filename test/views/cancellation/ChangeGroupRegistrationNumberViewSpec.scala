@@ -17,7 +17,7 @@
 package views.cancellation
 
 import base.SpecBase
-import forms.cancellation.{ChangeGroupRegistrationNumberFormProvider, ReasonForCancellationFormProvider}
+import forms.cancellation.ChangeGroupRegistrationNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -132,7 +132,6 @@ class ChangeGroupRegistrationNumberViewSpec extends SpecBase {
         messages("changeGroupRegistrationNumber.error.invalidFormat")
       )
     }
-
 
     "must render error summary when form has invalid reference" in new Setup {
 

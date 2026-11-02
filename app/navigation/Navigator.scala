@@ -43,6 +43,8 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: PartialFunction[Page, UserAnswers => Call] = {
+    case ControllingBodyRemoveVATRegistrationNumberPage =>
+      _ => Call("GET", "#") // TODO: Connect CB-CYA when the controlling body check your answers page is built.
     case ControllingBodyBusinessNamePage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyAddTradingNameYesNoPage =>
@@ -51,7 +53,7 @@ class Navigator @Inject() () {
     case ControllingBodySoleProprietorPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case ControllingBodyEmailPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-CYA when the controlling body journey is built.
+      _ => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
     case ControllingBodyDateOfBirthPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyDateOfIncorporationPage =>
@@ -66,6 +68,10 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyNotProvidedYesNoPage(userAnswers)
     case ControllingBodyUtrPage =>
       _ => controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+    case ControllingBodyVATScreenerPage =>
+      userAnswers => navigateControllingBodyVATScreenerPage(userAnswers)
+    case ControllingBodyVrnPage =>
+      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-ADLK-S in add flow and CB-CYA in change flow.
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -550,7 +556,7 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyChangeScreenerPage)
       .map {
-        case EditDetails => routes.IndexController.onPageLoad() // TODO later -> CB-CYA, controlling body check your answers
+        case EditDetails => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
         case ProvideNew  => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
         case KeepSame    => routes.ChangeRegistrationDetailsController.onPageLoad()
       }
@@ -562,6 +568,15 @@ class Navigator @Inject() () {
       case Some(false) => routes.IndexController.onPageLoad() // TODO later -> Redirect to CB-CN in add flow and CB-CYA in change flow
       case None        => routes.SystemErrorController.onPageLoad()
     }
+
+  private def navigateControllingBodyVATScreenerPage(userAnswers: UserAnswers): Call =
+    userAnswers
+      .get(ControllingBodyVATScreenerPage)
+      .map {
+        case true  => controllers.controllingbody.routes.ControllingBodyVatRegistrationNumberController.onPageLoad()
+        case false => routes.IndexController.onPageLoad() // TODO later
+      }
+      .getOrElse(routes.SystemErrorController.onPageLoad())
 
   private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call =
     userAnswers

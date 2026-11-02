@@ -29,7 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FlagsUtil.checkIfChanged
-import views.html.AssociatedRegNumberView
+import views.html.tradingdetails.AssociatedRegNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
