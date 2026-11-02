@@ -29,7 +29,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.correspondencedetails.AddCorrespondingDetailsYesNoView
+import views.html.correspondencedetails.AddCorrespondenceDetailsYesNoView
 
 import scala.concurrent.Future
 
@@ -62,7 +62,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AddCorrespondingDetailsYesNoView]
+        val view = application.injector.instanceOf[AddCorrespondenceDetailsYesNoView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
@@ -87,7 +87,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AddCorrespondingDetailsYesNoView]
+        val view = application.injector.instanceOf[AddCorrespondenceDetailsYesNoView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual
@@ -141,7 +141,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AddCorrespondingDetailsYesNoView]
+        val view = application.injector.instanceOf[AddCorrespondenceDetailsYesNoView]
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual

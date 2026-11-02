@@ -14,49 +14,49 @@
  * limitations under the License.
  */
 
-package views
+package views.tradingdetails
 
 import base.SpecBase
-import forms.RemoveTradeNameFormProvider
+import forms.RemovePreviousRegNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers.*
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import views.html.RemoveTradeNameView
+import views.html.tradingdetails.RemovePreviousRegNumberView
 
-class RemoveTradeNameViewSpec extends SpecBase {
+class RemovePreviousRegNumberViewSpec extends SpecBase {
 
   trait Setup {
     private val app = applicationBuilder().build()
 
-    private val view = app.injector.instanceOf[RemoveTradeNameView]
+    private val view = app.injector.instanceOf[RemovePreviousRegNumberView]
 
     implicit private val request: play.api.mvc.Request[?] = FakeRequest()
 
     implicit val messages: Messages =
       app.injector.instanceOf[play.api.i18n.MessagesApi].preferred(request)
 
-    private val formProvider = new RemoveTradeNameFormProvider()
+    private val formProvider = new RemovePreviousRegNumberFormProvider()
     private val form = formProvider()
 
-    val tradingName = "TradingNamePage"
-    private val html = view(form, NormalMode, tradingName)(request, messages)
+    val regNumber = "ChosenPreviousRegNumberPage"
+    private val html = view(form, NormalMode, regNumber)(request, messages)
 
     val doc: Document = Jsoup.parse(html.body)
 
   }
 
-  "RemoveTradeNameView" - {
+  "RemovePreviousRegNumberView" - {
 
     "must render page correctly" in new Setup {
 
-      doc.title must include(messages("removeTradeName.title"))
+      doc.title must include(messages("removePreviousRegNumber.title"))
 
       doc.select("span").select(".govuk-caption-l").text() must include(messages("changeRegistrationDetails.caption"))
 
-      doc.select("h1").select(".govuk-fieldset__heading").text() must include(messages("removeTradeName.heading", tradingName))
+      doc.select("h1").select(".govuk-fieldset__heading").text() must include(messages("removePreviousRegNumber.heading", regNumber))
 
       doc.select("button.govuk-button").text must include(messages("site.continue"))
 
