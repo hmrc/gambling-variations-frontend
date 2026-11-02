@@ -91,7 +91,7 @@ class CheckRegistrationCancellationDetailsViewSpec extends SpecBase {
       document
         .select(".govuk-caption-l")
         .text() mustBe
-        messages("cancelRegistrationDate.caption")
+        messages("checkRegistrationCancellationDetails.caption")
     }
 
     "must display the correct heading" in {

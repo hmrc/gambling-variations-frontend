@@ -29,11 +29,11 @@
 
 @(summaryList: SummaryList)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("checkRegistrationCancellationDetails.title"), Some(messages("cancelRegistrationDate.caption")))) {
+@layout(pageTitle = titleNoForm(messages("checkRegistrationCancellationDetails.title"), Some(messages("checkRegistrationCancellationDetails.caption")))) {
 
   @formHelper(action = controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()) {
 
-  @caption(messages("cancelRegistrationDate.caption"))
+  @caption(messages("checkRegistrationCancellationDetails.caption"))
   @h1("checkRegistrationCancellationDetails.heading", classes = "govuk-heading-l")
 
 
