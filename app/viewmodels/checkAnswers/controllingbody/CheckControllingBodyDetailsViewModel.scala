@@ -223,6 +223,7 @@ object CheckControllingBodyDetailsViewModel {
   private def dateOfIncorporationUrl: String = routes.DateOfIncorporationController.onPageLoad().url
   private def crnUrl: String = routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url
   private def addVrnUrl: String = routes.ControllingBodyVATScreenerController.onPageLoad().url
+  private def vrnUrl: String = routes.ControllingBodyVatRegistrationNumberController.onPageLoad().url
   private def addAdditionalInfoUrl: String = routes.ControllingBodyAdditionalAddressInformationYesNoController.onPageLoad().url
   private def addFaxNumberUrl: String = routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad().url
   private def faxNumberUrl: String = routes.ControllingBodyFaxNumberController.onPageLoad().url
@@ -233,7 +234,6 @@ object CheckControllingBodyDetailsViewModel {
   private val countryOfIncorporationUrl = "#" // CB-COU
   private val foreignCorporateRefUrl = "#" // CB-FOR
   private val utrUrl = "#" // CB-UTR
-  private val vrnUrl = "#" // CB-VAT
   private val addressUrl = "#" // CB-ADLK-S
   private val additionalInfoUrl = "#" // CB-AI
   private val contactNumbersUrl = "#" // CB-CN

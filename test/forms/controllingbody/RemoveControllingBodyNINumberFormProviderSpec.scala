@@ -17,7 +17,6 @@
 package forms.controllingbody
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.controllingbody.RemoveControllingBodyNINumberFormProvider
 import play.api.data.FormError
 
 class RemoveControllingBodyNINumberFormProviderSpec extends BooleanFieldBehaviours {

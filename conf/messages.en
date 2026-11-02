@@ -205,7 +205,7 @@ changeBusinessName.error.required.unincorporatedbody = Enter the unincorporated 
 changeBusinessName.error.required.llp = Enter the limited liability partnership’s name
 
 changeBusinessName.error.invalid.soleproprietor = The sole proprietor’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
-changeBusinessName.error.invalid.partnership = The partnership’s name must only include letters a to z, numbers 0 to 9, ampersands, apostrophes, brackets, commas, exclamation marks, hyphens, slashes or spaces
+changeBusinessName.error.invalid.partnership = The partnership''s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.corporatebody = The corporate body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.unincorporatedbody = The unincorporated body’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
 changeBusinessName.error.invalid.llp = The limited liability partnership’s name must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
@@ -833,7 +833,6 @@ partnerDetailsFaxNumber.heading = What is the partner’s fax number?
 partnerDetailsFaxNumber.checkYourAnswersLabel = What is the partner’s fax number?
 partnerDetailsFaxNumber.change.hidden = What is the partner’s fax number?
 partnerDetailsFaxNumber.error.required = Enter the partner’s fax number
-partnerDetailsFaxNumber.error.length = Enter the partner’s fax number
 partnerDetailsFaxNumber.error.invalid.format = The fax number must be in the correct format, like 01632 960 001 or 07700 900 982
 partnerDetailsFaxNumber.error.invalid.characters = The fax number must only include numbers 0 to 9 and spaces
 partnerDetailsFaxNumber.error.length = The fax number must be 20 characters or less
@@ -1574,6 +1573,15 @@ controllingBodyVATScreener.error.required = Select yes to add a VAT registration
 removeControllingBodyNINumber.title = Are you sure you want to remove this controlling body’s National Insurance number?
 removeControllingBodyNINumber.heading = Are you sure you want to remove {0} as this controlling body’s National Insurance number?
 removeControllingBodyNINumber.error.required = Select yes if you want to remove this controlling body’s National Insurance number
+
+controllingBodyVatRegNumber.title = What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.heading = What is the controlling body’s VAT registration number?
+controllingBodyVatRegNumber.paragraph = You can find it on their VAT registration certificate.
+controllingBodyVatRegNumber.hint = It must be 9 digits long, for example 123456789
+controllingBodyVatRegNumber.error.required = Enter the controlling body’s VAT registration number
+controllingBodyVatRegNumber.error.invalid.characters = The VAT registration number must only include numbers 0 to 9
+controllingBodyVatRegNumber.error.length = The VAT registration number must be 9 characters
+controllingBodyVatRegNumber.error.invalid = Enter a real VAT registration number
 
 reasonForCancellation.title = Why are you cancelling this registration?
 reasonForCancellation.heading = Why are you cancelling this registration?
