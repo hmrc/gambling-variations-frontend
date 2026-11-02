@@ -210,8 +210,8 @@ changeBusinessName.title.unincorporatedbody = Beth yw enw’r corff anghorffored
 
 changeBusinessName.heading.unincorporatedbody = Beth yw enw’r corff anghorfforedig?
 changeBusinessName.error.required.unincorporatedbody = Nodwch enw’r corff anghorfforedig
-changeBusinessName.error.length.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig gynnwys y llythrennau a i z, y rhifau 0 i 9, bylchau, cysylltnodau a chollnodau yn unig
-changeBusinessName.error.invalid.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig fod yn 160 o gymeriadau neu lai
+changeBusinessName.error.length.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig fod yn 160 o gymeriadau neu lai
+changeBusinessName.error.invalid.unincorporatedbody = Mae’n rhaid i enw’r corff anghorfforedig gynnwys y llythrennau a i z, y rhifau 0 i 9, bylchau, cysylltnodau a chollnodau yn unig
 
 checkBusinessAddress.title = cy: Check your business address
 checkBusinessAddress.heading = cy: Check your business address
