@@ -2,6 +2,7 @@ package forms
 
 import java.time.{LocalDate, ZoneOffset}
 import forms.behaviours.DateBehaviours
+import forms.cancellation.CancelGroupRegistrationDateFormProvider
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages
 

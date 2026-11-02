@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package forms
+package pages.cancellation
 
-import forms.mappings.Mappings
-import play.api.data.Form
-import play.api.i18n.Messages
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
 import java.time.LocalDate
-import javax.inject.Inject
 
-class CancelGroupRegistrationDateFormProvider @Inject() extends Mappings {
+case object CancelGroupRegistrationDatePage extends QuestionPage[LocalDate] {
 
-  def apply()(implicit messages: Messages): Form[LocalDate] =
-    Form(
-      "value" -> localDate(
-        invalidKey     = "cancelGroupRegistrationDate.error.invalid",
-        allRequiredKey = "cancelGroupRegistrationDate.error.required.all",
-        twoRequiredKey = "cancelGroupRegistrationDate.error.required.two",
-        requiredKey    = "cancelGroupRegistrationDate.error.required"
-      )
-    )
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "cancelGroupRegistrationDate"
 }

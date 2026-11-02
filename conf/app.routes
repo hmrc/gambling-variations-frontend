@@ -362,5 +362,7 @@ POST       /cancel-registration/no-longer-liable                  controllers.ca
 GET        /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)
 
-GET        /cancel-group-registration/no-longer-liable                  controllers.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
-POST       /cancel-group-registration/no-longer-liable                  controllers.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+GET        /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+GET        /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = CheckMode)

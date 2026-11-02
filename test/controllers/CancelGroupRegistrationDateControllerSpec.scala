@@ -3,13 +3,13 @@ package controllers
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import forms.CancelGroupRegistrationDateFormProvider
+import forms.cancellation.CancelGroupRegistrationDateFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CancelGroupRegistrationDatePage
+import pages.cancellation.CancelGroupRegistrationDatePage
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}

@@ -14,8 +14,12 @@
  * limitations under the License.
  *@
 
+@import java.time.LocalDate
+@import java.time.format.DateTimeFormatter
 @import viewmodels.LegendSize.Large
 @import views.html.components._
+@import java.time.LocalDate
+@import java.time.format.DateTimeFormatter
 
 @this(
     layout: templates.Layout,
@@ -23,16 +27,22 @@
     govukErrorSummary: GovukErrorSummary,
     govukDateInput: GovukDateInput,
     govukButton: GovukButton,
-    h1: H1,
-    p: Paragraph,
     caption: Caption
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate)(implicit request: Request[_], messages: Messages)
+
+@fullDate(date: LocalDate) = @{
+ date.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))
+}
+
+@numericDate(date: LocalDate) = @{
+ date.format(DateTimeFormatter.ofPattern("d M yyyy"))
+}
 
 @layout(pageTitle = title(form, messages("cancelGroupRegistrationDate.title"), Some(messages("cancelGroupRegistrationDate.caption")))) {
 
-    @formHelper(action = routes.CancelGroupRegistrationDateController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.cancellation.routes.CancelGroupRegistrationDateController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
@@ -45,7 +55,11 @@
                 field  = form("value"),
                 legend = LegendViewModel(messages("cancelGroupRegistrationDate.heading")).asPageHeading(Large)
             )
-            .withHint(HintViewModel(messages("cancelGroupRegistrationDate.hint")))
+            .withHint(
+            HintViewModel(messages("cancelGroupRegistrationDate.hint",
+             fullDate(registrationDate),
+             fullDate(maximumDate),
+             numericDate(middleOfDateRange))))
         )
 
         @govukButton(
