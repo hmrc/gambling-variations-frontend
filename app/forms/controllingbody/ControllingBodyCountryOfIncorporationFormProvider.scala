@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class ControllingBodyCountryOfIncorporationFormProvider @Inject() extends Mappings {
 
-  private val controllingBodyCountryOfIncorporationRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+  private val controllingBodyCountryOfIncorporationRegex = "^[A-Za-z 0-9-\\']{1,100}$"
 
   def apply(): Form[String] =
     Form(
