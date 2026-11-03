@@ -51,10 +51,11 @@ class EnterNonStandardPeriodDateFormProvider @Inject() extends Mappings {
 
     Form(
       "value" -> localDate(
-        invalidKey     = "enterNonStandardPeriodDate.error.invalid",
-        allRequiredKey = "enterNonStandardPeriodDate.error.required.all",
-        twoRequiredKey = "enterNonStandardPeriodDate.error.required.two",
-        requiredKey    = "enterNonStandardPeriodDate.error.required"
+        invalidKey               = "enterNonStandardPeriodDate.error.invalid",
+        allRequiredKey           = "enterNonStandardPeriodDate.error.required.all",
+        twoRequiredKey           = "enterNonStandardPeriodDate.error.required.two",
+        requiredKey              = "enterNonStandardPeriodDate.error.required",
+        requireNumericDateFormat = true
       ).verifying(
         outsideBoundariesConstraint
       )
