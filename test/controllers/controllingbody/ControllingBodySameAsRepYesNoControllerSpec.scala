@@ -23,7 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.ControllingBodySameAsRepYesNoPage
+import pages.controllingbody.{ControllingBodyIsRepMemSameAsCbPage, ControllingBodySameAsRepYesNoPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -42,13 +42,26 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
   val form = formProvider()
 
   lazy val controllingBodySameAsRepYesNoRoute: String = routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
+  lazy val controllingBodyChangeScreenerRoute: String = routes.ControllingBodyChangeScreenerController.onPageLoad().url
 
-  private val baseAnswers =
+  private val repMemSameAnswers =
     UserAnswers(userAnswersId,
                 Json.obj(
                   "controllingBodyDetails" -> Json.obj(
                     "mgdRegNum"    -> userAnswersId,
-                    "businessName" -> "abc"
+                    "businessName" -> "abc",
+                    "isRepMemSameAsCb" -> "1"
+                  )
+                )
+               )
+
+  private val repMemDifferentAnswers =
+    UserAnswers(userAnswersId,
+                Json.obj(
+                  "controllingBodyDetails" -> Json.obj(
+                    "mgdRegNum"    -> userAnswersId,
+                    "businessName" -> "abc",
+                    "isRepMemSameAsCb" -> "0"
                   )
                 )
                )
@@ -58,7 +71,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers)).build()
+        applicationBuilder(userAnswers = Some(repMemSameAnswers)).build()
 
       running(application) {
         val request =
@@ -82,7 +95,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers =
-        baseAnswers.set(ControllingBodySameAsRepYesNoPage, true).success.value
+        repMemSameAnswers.set(ControllingBodySameAsRepYesNoPage, true).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -116,7 +129,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers))
+        applicationBuilder(userAnswers = Some(repMemSameAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -145,7 +158,7 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers))
+        applicationBuilder(userAnswers = Some(repMemSameAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -165,10 +178,27 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
       }
     }
 
+    "must redirect to ControllingBodyChangeScreenerController if isRepMemSameAsCb is 0" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(repMemDifferentAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(GET, controllingBodySameAsRepYesNoRoute)
+
+        val result =
+          route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
+      }
+    }
+
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers)).build()
+        applicationBuilder(userAnswers = Some(repMemSameAnswers)).build()
 
       running(application) {
         val request =
