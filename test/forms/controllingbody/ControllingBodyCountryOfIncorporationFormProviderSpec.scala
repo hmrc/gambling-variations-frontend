@@ -27,7 +27,7 @@ class ControllingBodyCountryOfIncorporationFormProviderSpec extends StringFieldB
   private val invalidCharactersKey = "controllingBodyCountryOfIncorporation.error.invalid"
 
   private val maxLength = 100
-  private val controllingBodyCountryOfIncorporationCharactersRegex = "^[A-Za-z 0-9-\\']{1,100}$"
+  private val controllingBodyCountryOfIncorporationCharactersRegex = "^[A-Za-z 0-9-\\']$"
 
   private val form = new ControllingBodyCountryOfIncorporationFormProvider()()
 
