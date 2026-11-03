@@ -16,13 +16,28 @@
 
 package pages.cancellation
 
+import models.UserAnswers
 import models.cancellation.ReasonForCancellation
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object ReasonForCancellationPage extends QuestionPage[ReasonForCancellation] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "reasonForCancellation"
+
+  override def cleanup(
+    value: Option[ReasonForCancellation],
+    userAnswers: UserAnswers
+  ): Try[UserAnswers] =
+    value match {
+      case Some(ReasonForCancellation.BusinessIsPartOfTheGroup) =>
+        super.cleanup(value, userAnswers)
+
+      case _ =>
+        userAnswers.remove(ChangeGroupRegistrationNumberPage)
+    }
 }

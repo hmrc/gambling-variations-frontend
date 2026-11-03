@@ -39,7 +39,7 @@ class ReasonForCancellationControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val reasonForCancellationRoute = routes.ReasonForCancellationController.onPageLoad().url
+  lazy val reasonForCancellationRoute = routes.ReasonForCancellationController.onPageLoad(NormalMode).url
 
   val formProvider = new ReasonForCancellationFormProvider()
   val form = formProvider()

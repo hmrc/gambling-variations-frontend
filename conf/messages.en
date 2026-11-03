@@ -1484,7 +1484,7 @@ controllingBodyAdditionalAddressInformationYesNo.hint = For example, building na
 
 enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
 enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
-enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, {2}
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}, for example {2}
 enterNonStandardPeriodDate.dateLabel = End date
 
 enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
@@ -1680,3 +1680,16 @@ controllingBodyAddNino.hint = For example, QQ 12 34 56 C
 controllingBodyAddNino.error.required = Enter the controlling body’s National Insurance number
 controllingBodyAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 0 to 9 and spaces
 controllingBodyAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character
+
+checkRegistrationCancellationDetails.title = Check your cancellation details
+checkRegistrationCancellationDetails.heading = Check your cancellation details
+checkRegistrationCancellationDetails.caption = Cancel registration
+
+checkRegistrationCancellationDetails.cancellationDate = Cancellation date
+checkRegistrationCancellationDetails.cancellationDate.change.hidden = cancellation date
+
+checkRegistrationCancellationDetails.cancellationReason = Cancellation reason
+checkRegistrationCancellationDetails.cancellationReason.change.hidden = cancellation reason
+
+checkRegistrationCancellationDetails.groupRegistrationNumber = Group’s registration number
+checkRegistrationCancellationDetails.groupRegistrationNumber.change.hidden = group’s registration number
