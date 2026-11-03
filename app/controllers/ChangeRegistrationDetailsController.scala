@@ -40,7 +40,6 @@ class ChangeRegistrationDetailsController @Inject() (
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   businessDetailsRequired: BusinessDetailsDataRequiredAction,
-  gamblingConnector: GamblingConnector,
   appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeRegistrationDetailsView

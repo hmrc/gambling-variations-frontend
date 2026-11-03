@@ -1,0 +1,55 @@
+{
+  "_id": "XGM00000001762",
+  "original": {},
+  "loaded": {},
+  "modified": {
+    "controllingBodyDetails": {
+      "mgdRegNum": "XGM00000001762",
+      "businessPartnerNumber": "0100051762",
+      "dateOfJoining": "2013-02-01",
+      "dateOfLeaving": "2023-03-01",
+      "correspondenceSection": {
+        "mgdRegNumber": "XGM00000001762",
+        "correspondenceAddress": {
+          "address1": "Address 1",
+          "address2": "Address 2",
+          "address3": "Address 3",
+          "address4": "Address 4",
+          "postcode": "postcode",
+          "country": "Spain"
+        },
+        "additionalInformation": "adi",
+        "iomOrCiFlag": "0",
+        "contactNumber": {
+          "phoneNumber": "9999",
+          "mobilePhoneNumber": "8888"
+        },
+        "faxNumber": "7777",
+        "emailAddr": "emailAddr@example.com"
+      },
+      "dateOfIncorporation": "2020-02-15",
+      "countryOfIncorporation": "Spain",
+      "foreignCorporateRef": "foreignCorporateRef",
+      "dateOfBirth": "1998-06-24",
+      "nino": "AB123456C",
+      "utr": "5202020208",
+      "vrn": "127207785",
+      "crn": "12345678",
+      "businessName": "ControllingBody SoleProprietor business name 62",
+      "tradingName": "ControllingBody SoleProprietor trading name 62",
+      "typeOfControllingBody": 1,
+      "isRepMemSameAsCb": "0",
+      "isUkIncorporated": "0",
+      "soleProprietor": {
+        "title": "Mr",
+        "firstName": "ControllingBody SoleProprietor FirstName",
+        "middleName": "ControllingBody SoleProprietor MiddleName",
+        "lastName": "ControllingBody SoleProprietor LastName"
+      }
+    }
+  },
+  "flags": {},
+  "lastUpdated": {
+    "$date": "2026-11-02T16:42:58.779Z"
+  }
+}

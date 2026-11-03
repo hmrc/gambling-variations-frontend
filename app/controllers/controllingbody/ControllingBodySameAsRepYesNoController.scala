@@ -58,10 +58,10 @@ class ControllingBodySameAsRepYesNoController @Inject() (
       // checks if the rep member is the same as Controlling body, if it is then redirects
       // to the same as rep page, in case user hits this url directly
       // TODO: refactor controlling body to make 0 and 1 true and false
-      if (request.userAnswers.get(ControllingBodyIsRepMemSameAsCbPage).contains("1")) {
-        Ok(view(preparedForm, mode, businessName))
-      } else {
-        Redirect(controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url)
+      request.userAnswers.get(ControllingBodyIsRepMemSameAsCbPage) match {
+        case Some("1") => Ok(view(preparedForm, mode, businessName))
+        case Some("0") => Redirect(controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url)
+        case _         => Redirect(routes.SystemErrorController.onPageLoad().url)
       }
     }
 
