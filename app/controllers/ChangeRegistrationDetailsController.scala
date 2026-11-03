@@ -61,7 +61,7 @@ class ChangeRegistrationDetailsController @Inject() (
               mgdRegNumber       = request.mgdRegNum,
               managementHomeUrl  = appConfig.gamblingManagementHomeUrl,
               isGroupMember      = isGroupMember,
-              controllingBodyUrl = controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
+              controllingBodyUrl = routes.PageNotFoundController.onPageLoad().url
 
             )
 
