@@ -56,7 +56,6 @@ class ControllingBodySameAsRepYesNoController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-
       // checks if the rep member is the same as Controlling body, if it is then redirects
       // to the same as rep page, in case user hits this url directly
       // TODO: refactor controlling body to make 0 and 1 true and false
