@@ -1665,6 +1665,16 @@ cancelRegistrationDate.error.invalid = 	Must be a real date
 cancelRegistrationDate.error.outsideBoundaries = Date must be after {0} and before {1}
 cancelRegistrationDate.change.hidden = when are you no longer liable to pay Machine Games Duty?
 
+controllingBodyAddNino.title = What is the controlling body’s National Insurance number?
+controllingBodyAddNino.paragraph = You can find this on their National Insurance card, benefit letter, payslip or P60.
+controllingBodyAddNino.heading = What is the controlling body’s National Insurance number?
+controllingBodyAddNino.checkYourAnswersLabel = What is the controlling body’s National Insurance number?
+controllingBodyAddNino.hidden = What is the controlling body’sNational Insurance number?
+controllingBodyAddNino.hint = For example, QQ 12 34 56 C
+controllingBodyAddNino.error.required = Enter the controlling body’s National Insurance number
+controllingBodyAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 0 to 9 and spaces
+controllingBodyAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character
+
 checkRegistrationCancellationDetails.title = Check your cancellation details
 checkRegistrationCancellationDetails.heading = Check your cancellation details
 checkRegistrationCancellationDetails.caption = Cancel registration

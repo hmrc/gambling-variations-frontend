@@ -27,7 +27,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.RemoveAssociatedRegNumberView
+import views.html.tradingdetails.RemoveAssociatedRegNumberView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

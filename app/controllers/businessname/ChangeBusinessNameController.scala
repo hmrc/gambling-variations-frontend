@@ -30,7 +30,8 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.BusinessTypeKeyBuilder
 import utils.FlagsUtil.checkIfChanged
-import views.html.{ChangeBusinessNameView, SoleProprietorNameView}
+import views.html.businessname.ChangeBusinessNameView
+import views.html.businessname.SoleProprietorNameView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

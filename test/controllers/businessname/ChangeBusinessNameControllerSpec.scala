@@ -34,7 +34,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
-import views.html.{ChangeBusinessNameView, SoleProprietorNameView}
+import views.html.businessname.{ChangeBusinessNameView, SoleProprietorNameView}
 
 import scala.concurrent.Future
 
