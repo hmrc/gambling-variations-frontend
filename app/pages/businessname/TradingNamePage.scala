@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package pages.tradingdetails
+package pages.businessname
 
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object RemoveTradeNamePage extends QuestionPage[Boolean] {
+case object TradingNamePage extends QuestionPage[String] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = BusinessNameSection.path \ toString
 
-  override def toString: String = "removeTradeName"
+  override def toString: String = "tradingName"
 }
