@@ -143,6 +143,55 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
         }
       }
 
+      "must NOT populate the form when the question has previously been answered" in {
+        val userAnswers = userAnswersWithPartner
+          .set(
+            PartnerDetailsAddAnotherPartnerYesNoPage,
+            true
+          )
+          .success
+          .value
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(userAnswers)
+          ).build()
+
+        running(application) {
+
+          val request = FakeRequest(
+            GET,
+            partnerDetailsRoute
+          )
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[PartnerDetailsView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(
+              addAnotherPartnerForm,
+              viewModel(
+                application,
+                userAnswers,
+                paginationHelper.partnerDetailsBusinessNumberList
+              ),
+              paginationHelper.paginatedViewModel,
+              paginationHelper.page,
+              paginationHelper.totalPages,
+              paginationHelper.from,
+              paginationHelper.to,
+              paginationHelper.totalRecords
+            )(
+              request,
+              messages(application)
+            ).toString
+
+        }
+      }
+
       "must populate existing partners table with correct pagination" in {
 
         val application =
