@@ -22,7 +22,6 @@ import play.api.data.{Form, FormError}
 
 class ControllingBodyNINumberFormProviderSpec extends StringFieldBehaviours {
 
-
   val form: Form[String] = (new ControllingBodyNINumberFormProvider())()
 
   ".value" - {
@@ -30,13 +29,13 @@ class ControllingBodyNINumberFormProviderSpec extends StringFieldBehaviours {
     val fieldName = "value"
 
     val validNino9Chars = "AA123456A"
-    
+
     "must bind a valid 9-character NINO with suffix" in {
       val result = form.bind(Map(fieldName -> validNino9Chars))
       result.errors mustBe empty
       result.value.value mustBe validNino9Chars
     }
-    
+
     "must fail to bind invalid characters (e.g. '@')" in {
       val invalidCharsInput = "AA12345@A"
       val result = form.bind(Map(fieldName -> invalidCharsInput))
