@@ -26,7 +26,10 @@
 
 @(gamblingManagementHomeUrl: String, referenceNumber: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("registrationCancellationConfirmation.title"))) {
+@layout(
+    pageTitle = titleNoForm(messages("registrationCancellationConfirmation.panel.title"), Some(messages("registrationCancellationConfirmation.title"))),
+    showBackLink = false
+) {
 
 
     <div class="govuk-panel govuk-panel--confirmation">

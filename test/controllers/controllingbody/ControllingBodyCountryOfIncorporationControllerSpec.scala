@@ -49,7 +49,7 @@ class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with 
 
   val data: JsObject = Json.obj(
     "controllingBodyDetails" -> Json.obj(
-      "mgdRegNum"                           -> userAnswersId,
+      "mgdRegNum"                                        -> userAnswersId,
       ControllingBodyCountryOfIncorporationPage.toString -> "The Republic of Ben"
     )
   )

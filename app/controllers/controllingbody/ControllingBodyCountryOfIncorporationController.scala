@@ -31,7 +31,7 @@ import views.html.controllingbody.ControllingBodyCountryOfIncorporationView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodyCountryOfIncorporationController @Inject()(
+class ControllingBodyCountryOfIncorporationController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,

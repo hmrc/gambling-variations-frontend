@@ -1710,7 +1710,7 @@ changeGroupRegistrationNumber.error.invalidReference = Enter a real registration
 
 changeGroupRegistrationNumber.change.hidden = ChangeGroupRegistrationNumber
 
-registrationCancellationConfirmation.title = What happens next
+registrationCancellationConfirmation.title = Cancel registration
 registrationCancellationConfirmation.heading = What happens next
 
 registrationCancellationConfirmation.panel.title = Cancellation submitted
