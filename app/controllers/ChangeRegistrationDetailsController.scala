@@ -78,11 +78,13 @@ class ChangeRegistrationDetailsController @Inject() (
   private def controllingBodyUrl(ua: UserAnswers): String = {
 
     ua.get(ControllingBodyIsRepMemSameAsCbPage) match {
+      case Some("0") =>
+        controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
+
       case Some("1") =>
         controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
 
-      case Some("0") =>
-        controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
+
 
       case _ =>
         routes.PageNotFoundController.onPageLoad().url
