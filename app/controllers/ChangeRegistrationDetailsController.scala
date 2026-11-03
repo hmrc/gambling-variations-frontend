@@ -61,8 +61,7 @@ class ChangeRegistrationDetailsController @Inject() (
               mgdRegNumber       = request.mgdRegNum,
               managementHomeUrl  = appConfig.gamblingManagementHomeUrl,
               isGroupMember      = isGroupMember,
-              controllingBodyUrl = routes.PageNotFoundController.onPageLoad().url
-
+              controllingBodyUrl = controllingBodyUrl(request.userAnswers)
             )
 
           Ok(view(vm))
@@ -79,6 +78,7 @@ class ChangeRegistrationDetailsController @Inject() (
   private def controllingBodyUrl(ua: UserAnswers): String = {
 
     ua.get(ControllingBodyIsRepMemSameAsCbPage) match {
+
       case Some("1") =>
         controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
 
