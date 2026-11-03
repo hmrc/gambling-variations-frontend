@@ -29,7 +29,7 @@ class CheckRegistrationCancellationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessDetailsDataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckRegistrationCancellationDetailsView
 ) extends FrontendBaseController

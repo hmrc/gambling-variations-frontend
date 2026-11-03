@@ -17,7 +17,9 @@
 package controllers.cancellation
 
 import base.SpecBase
+import models.BusinessType
 import models.cancellation.ReasonForCancellation
+import pages.{BusinessTypePage, GroupMemberPage}
 import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -34,6 +36,12 @@ class CheckRegistrationCancellationDetailsControllerSpec extends SpecBase {
 
       val userAnswers =
         emptyUserAnswers
+          .set(BusinessTypePage, BusinessType.Partnership)
+          .success
+          .value
+          .set(GroupMemberPage, false)
+          .success
+          .value
           .set(CancelRegistrationDatePage, LocalDate.of(2026, 2, 2))
           .success
           .value
