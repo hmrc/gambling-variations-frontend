@@ -340,20 +340,18 @@ GET        /change-registration-details/controlling-body-details/check          
 
 GET        /cancel-registration/why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/why-are-you-cancelling                               controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = NormalMode)
+
 GET        /cancel-registration/change-why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-registration/change-why-are-you-cancelling                        controllers.cancellation.ReasonForCancellationController.onSubmit(mode: Mode = CheckMode)
-
-
 
 GET        /change-registration-details/controlling-body-details/remove-national-insurance-number                      controllers.controllingbody.RemoveControllingBodyNINumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /change-registration-details/controlling-body-details/remove-national-insurance-number                      controllers.controllingbody.RemoveControllingBodyNINumberController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-registration/group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = NormalMode)
+
 GET        /cancel-registration/change-group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-registration/change-group-registration-number                        controllers.cancellation.ChangeGroupRegistrationNumberController.onSubmit(mode: Mode = CheckMode)
-
-
 
 
 GET        /change-registration-details/controlling-body-details/unique-taxpayer-reference                        controllers.controllingbody.ControllingBodyUTRController.onPageLoad(mode: Mode = NormalMode)
@@ -369,6 +367,7 @@ POST       /cancel-registration/declaration                      controllers.can
 
 GET        /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-registration/no-longer-liable                  controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+
 GET        /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-registration/change-no-longer-liable                        controllers.cancellation.CancelRegistrationDateController.onSubmit(mode: Mode = CheckMode)
 
@@ -379,3 +378,5 @@ GET        /change-registration-details/controlling-body-details/business-countr
 POST       /change-registration-details/controlling-body-details/business-country-incorporated        controllers.controllingbody.ControllingBodyCountryOfIncorporationController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-registration/check                       controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()

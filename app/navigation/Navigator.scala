@@ -27,7 +27,7 @@ import navigation.PartnerDetailsNavigator.{partnerDetailsCheckRoutes, partnerDet
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
-import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage}
+import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage, RegistrationCancellationDeclarationPage}
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
@@ -238,12 +238,15 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate8Page =>
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
 
+    // Cancellation
     case CancelRegistrationDatePage =>
       _ => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad(NormalMode)
     case ReasonForCancellationPage =>
       userAnswers => navigateReasonForCancellationPage(userAnswers, NormalMode)
     case ChangeGroupRegistrationNumberPage =>
       _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+    case RegistrationCancellationDeclarationPage =>
+      _ => controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad()
