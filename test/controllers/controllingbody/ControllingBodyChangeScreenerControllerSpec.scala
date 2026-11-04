@@ -59,7 +59,24 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
     )
 
   private val userAnswers: UserAnswers =
-    userAnswersWith("businessName" -> businessName)
+    userAnswersWith("businessName" -> businessName,
+                    "controllingBodyDetails" -> Json.obj(
+                      "mgdRegNumber"     -> mgdRegNum,
+                      "isRepMemSameAsCB" -> "0"
+                    )
+                   )
+
+  private val repMemDifferentAnswers =
+    UserAnswers(userAnswersId,
+      Json.obj(
+        "businessName" -> businessName,
+        "controllingBodyDetails" -> Json.obj(
+          "mgdRegNum"        -> userAnswersId,
+          "businessName"     -> businessName,
+          "isRepMemSameAsCb" -> "0"
+        )
+      )
+    )
 
   private val soleProprietorAnswers: UserAnswers =
     userAnswersWith(
@@ -68,6 +85,9 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
         "firstName"  -> "Jane",
         "middleName" -> "Mary",
         "lastName"   -> "Smith"
+      ),
+      "controllingBodyDetails" -> Json.obj(
+        "isRepMemSameAsCB" -> "0"
       )
     )
 
@@ -80,7 +100,7 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
 
       "must return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(repMemDifferentAnswers)).build()
 
         running(application) {
           val request = FakeRequest(GET, controllingBodyChangeScreenerRoute)
@@ -125,6 +145,23 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual view(form, NormalMode, "Mrs Jane Mary Smith")(request, messages(application)).toString
+        }
+      }
+
+      "must redirect to ControllingBodyChangeScreenerController if isRepMemSameAsCb is 1" in {
+
+        val application =
+          applicationBuilder(userAnswers = Some(repMemDifferentAnswers)).build()
+
+        running(application) {
+          val request =
+            FakeRequest(GET, controllingBodyChangeScreenerRoute)
+
+          val result =
+            route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
         }
       }
 

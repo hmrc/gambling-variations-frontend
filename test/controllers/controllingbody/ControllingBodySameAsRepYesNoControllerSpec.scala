@@ -48,8 +48,8 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
     UserAnswers(userAnswersId,
                 Json.obj(
                   "controllingBodyDetails" -> Json.obj(
-                    "mgdRegNum"    -> userAnswersId,
-                    "businessName" -> "abc",
+                    "mgdRegNum"        -> userAnswersId,
+                    "businessName"     -> "abc",
                     "isRepMemSameAsCb" -> "1"
                   )
                 )
@@ -59,8 +59,8 @@ class ControllingBodySameAsRepYesNoControllerSpec extends SpecBase with MockitoS
     UserAnswers(userAnswersId,
                 Json.obj(
                   "controllingBodyDetails" -> Json.obj(
-                    "mgdRegNum"    -> userAnswersId,
-                    "businessName" -> "abc",
+                    "mgdRegNum"        -> userAnswersId,
+                    "businessName"     -> "abc",
                     "isRepMemSameAsCb" -> "0"
                   )
                 )
