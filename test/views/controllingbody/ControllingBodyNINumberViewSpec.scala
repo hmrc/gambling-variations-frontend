@@ -99,7 +99,9 @@ class ControllingBodyNINumberViewSpec extends SpecBase {
 
       val html = view(errorForm, NormalMode)
       val doc = Jsoup.parse(html.body)
-      doc.select(".govuk-error-summary").text() must include("The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character")
+      doc.select(".govuk-error-summary").text() must include(
+        "The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character"
+      )
     }
   }
 

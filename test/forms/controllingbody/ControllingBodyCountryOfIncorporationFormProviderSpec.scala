@@ -60,7 +60,6 @@ class ControllingBodyCountryOfIncorporationFormProviderSpec extends StringFieldB
       result.errors must contain only FormError(fieldName, invalidCharactersKey, Seq(controllingBodyCountryOfIncorporationCharactersRegex))
     }
 
-
     behave like mandatoryField(
       form,
       fieldName,

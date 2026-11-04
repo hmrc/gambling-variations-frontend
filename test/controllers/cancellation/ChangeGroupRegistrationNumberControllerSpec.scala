@@ -41,7 +41,7 @@ class ChangeGroupRegistrationNumberControllerSpec extends SpecBase with MockitoS
   val formProvider = new ChangeGroupRegistrationNumberFormProvider()
   val form = formProvider()
 
-  lazy val changeGroupRegistrationNumberRoute = routes.ChangeGroupRegistrationNumberController.onPageLoad().url
+  lazy val changeGroupRegistrationNumberRoute = routes.ChangeGroupRegistrationNumberController.onPageLoad(NormalMode).url
   override val emptyUserAnswers: UserAnswers =
     super.emptyUserAnswers
       .set(BusinessTypePage, BusinessType.Partnership)

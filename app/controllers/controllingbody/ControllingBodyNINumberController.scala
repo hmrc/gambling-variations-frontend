@@ -32,7 +32,7 @@ import views.html.controllingbody.ControllingBodyNINumberView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ControllingBodyNINumberController @Inject()(
+class ControllingBodyNINumberController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
