@@ -15,7 +15,7 @@
  *@
 
 @import viewmodels.LegendSize.Large
-@import views.html.components.Caption
+@import views.html.components._
 
 @this(
     layout: templates.Layout,
@@ -23,7 +23,8 @@
     govukErrorSummary: GovukErrorSummary,
     govukDateInput: GovukDateInput,
     govukButton: GovukButton,
-    caption:Caption
+    caption:Caption,
+    mainErrorSummary: MainErrorSummary,
 )
 
 @(form: Form[_], index: String, mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -32,9 +33,16 @@
 
     @formHelper(action = controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onSubmit(index, mode), Symbol("autoComplete") -> "off") {
 
-        @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
-        }
+        @mainErrorSummary(
+        form.copy(errors = form.errors.filter(_.key == "value")),
+        errorLinkOverrides = Map(
+        "value" ->
+        form.errors
+        .find(e => Seq("value.day", "value.month", "value.year").contains(e.key))
+        .map(_.key)
+        .getOrElse("value.day")
+        )
+        )
 
         @caption(messages("changeRegistrationDetails.caption"))
         @govukDateInput(

@@ -15,7 +15,7 @@
  *@
 
 @import viewmodels.LegendSize.Large
-@import views.html.components.Caption
+@import views.html.components._
 
 @this(
     layout: templates.Layout,
@@ -23,7 +23,8 @@
     govukErrorSummary: GovukErrorSummary,
     govukDateInput: GovukDateInput,
     govukButton: GovukButton,
-    caption: Caption
+    caption: Caption,
+    mainErrorSummary: MainErrorSummary
 )
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
@@ -32,15 +33,21 @@
 
     @formHelper(action = controllers.controllingbody.routes.DateOfIncorporationController.onSubmit(), Symbol("autoComplete") -> "off") {
 
-        @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("dateOfIncorporation" -> "dateOfIncorporation.day")))
-        }
-
+        @mainErrorSummary(
+            form.copy(errors = form.errors.filter(_.key == "value")),
+                errorLinkOverrides = Map(
+                "value" ->
+                form.errors
+                .find(e => Seq("value.day", "value.month", "value.year").contains(e.key))
+                .map(_.key)
+                .getOrElse("value.day")
+            )
+        )
         @caption(messages("changeRegistrationDetails.caption"))
 
         @govukDateInput(
             DateViewModel(
-                field  = form("dateOfIncorporation"),
+                field  = form("value"),
                 legend = LegendViewModel(messages("dateOfIncorporation.heading")).asPageHeading(Large)
             )
             .withHint(HintViewModel(messages("dateOfIncorporation.hint")))

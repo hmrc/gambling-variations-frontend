@@ -44,7 +44,10 @@ private[mappings] class LocalDateFormatter(
         Left(Seq(FormError(key, invalidKey, args)))
     }
 
-  private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
+  private def formatDate(
+    key: String,
+    data: Map[String, String]
+  ): Either[Seq[FormError], LocalDate] = {
 
     val int = intFormatter(
       requiredKey    = invalidKey,
@@ -55,17 +58,45 @@ private[mappings] class LocalDateFormatter(
 
     val month = new MonthFormatter(invalidKey, args)
 
-    val validFormat = !requireNumericDateFormat || Seq("day" -> "[0-9]{1,2}", "month" -> "[0-9]{1,2}", "year" -> "[0-9]{4}").forall {
-      case (part, pattern) => data.get(s"$key.$part").exists(_.trim.matches(pattern))
-    }
+    val invalidFields =
+      if (requireNumericDateFormat) {
+        Seq(
+          "day"   -> "[0-9]{1,2}",
+          "month" -> "[0-9]{1,2}",
+          "year"  -> "[1-9][0-9]{3}"
+        ).collect {
+          case (field, pattern) if !data.get(s"$key.$field").exists(_.matches(pattern)) =>
+            field
+        }
+      } else {
+        Seq.empty
+      }
 
-    for {
-      _     <- Either.cond(validFormat, (), Seq(FormError(key, invalidKey, args)))
-      day   <- int.bind(s"$key.day", data)
-      month <- month.bind(s"$key.month", data)
-      year  <- int.bind(s"$key.year", data)
-      date  <- toDate(key, day, month, year)
-    } yield date
+    if (invalidFields.nonEmpty) {
+      Left(
+        Seq(
+          FormError(
+            key,
+            invalidKey,
+            invalidFields.map(field => messages(s"date.error.$field")) ++ args
+          )
+        ) ++
+          invalidFields.map { field =>
+            FormError(
+              s"$key.$field",
+              invalidKey,
+              args
+            )
+          }
+      )
+    } else {
+      for {
+        day   <- int.bind(s"$key.day", data)
+        month <- month.bind(s"$key.month", data)
+        year  <- int.bind(s"$key.year", data)
+        date  <- toDate(key, day, month, year)
+      } yield date
+    }
   }
 
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
@@ -88,9 +119,7 @@ private[mappings] class LocalDateFormatter(
 
     fields.count(_._2.isDefined) match {
       case 3 =>
-        formatDate(key, cleaned).left.map {
-          _.map(_.copy(key = key, args = args))
-        }
+        formatDate(key, cleaned)
       case 2 =>
         Left(List(FormError(key, requiredKey, missingFields ++ args)))
       case 1 =>
