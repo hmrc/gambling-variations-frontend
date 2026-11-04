@@ -31,7 +31,7 @@
 
 @layout(pageTitle = title(form, messages("reasonForCancellation.title"))) {
 
-    @formHelper(action = controllers.cancellation.routes.ReasonForCancellationController.onSubmit(), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.cancellation.routes.ReasonForCancellationController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
