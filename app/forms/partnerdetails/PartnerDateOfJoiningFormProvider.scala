@@ -41,10 +41,11 @@ class PartnerDateOfJoiningFormProvider @Inject() (clock: Clock) extends Mappings
 
     Form(
       "value" -> localDate(
-        invalidKey     = "partnerDateOfJoining.error.invalid",
-        allRequiredKey = "partnerDateOfJoining.error.required.all",
-        twoRequiredKey = "partnerDateOfJoining.error.required.two",
-        requiredKey    = "partnerDateOfJoining.error.required"
+        invalidKey               = "partnerDateOfJoining.error.invalid",
+        allRequiredKey           = "partnerDateOfJoining.error.required.all",
+        twoRequiredKey           = "partnerDateOfJoining.error.required.two",
+        requiredKey              = "partnerDateOfJoining.error.required",
+        requireNumericDateFormat = true
       ).verifying(
         beforeLatestDateConstraint(latestDate)
       )

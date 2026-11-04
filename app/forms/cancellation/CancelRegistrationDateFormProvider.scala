@@ -39,10 +39,11 @@ class CancelRegistrationDateFormProvider @Inject() extends Mappings {
 
     Form(
       "value" -> localDate(
-        invalidKey     = "cancelRegistrationDate.error.invalid",
-        allRequiredKey = "cancelRegistrationDate.error.required.all",
-        twoRequiredKey = "cancelRegistrationDate.error.required.two",
-        requiredKey    = "cancelRegistrationDate.error.required"
+        invalidKey               = "cancelRegistrationDate.error.invalid",
+        allRequiredKey           = "cancelRegistrationDate.error.required.all",
+        twoRequiredKey           = "cancelRegistrationDate.error.required.two",
+        requiredKey              = "cancelRegistrationDate.error.required",
+        requireNumericDateFormat = true
       ).verifying(
         firstError(
           minDate(
