@@ -18,7 +18,7 @@ package forms.controllingbody
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.data.validation.Constraint
 
 import javax.inject.Inject
 
