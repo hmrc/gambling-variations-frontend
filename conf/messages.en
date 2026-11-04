@@ -1484,7 +1484,7 @@ controllingBodyAdditionalAddressInformationYesNo.hint = For example, building na
 
 enterNonStandardPeriodDate.title = When is the end date for the period ending {0}? (Date {1} of {2})
 enterNonStandardPeriodDate.heading = When is the end date for the period ending {0}? (Date {1} of {2})
-enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}. For example, {2}
+enterNonStandardPeriodDate.hint = The end date must be after {0} and before {1}, for example {2}
 enterNonStandardPeriodDate.dateLabel = End date
 
 enterNonStandardPeriodDate.error.required.all = Enter the end date for this period
@@ -1514,6 +1514,12 @@ controllingBodyBusinessUKIncorporated.error.required = Select yes if the control
 controllingBodyAddEmailAddressYesNo.title = Do you want to add an email address for the controlling body?
 controllingBodyAddEmailAddressYesNo.heading = Do you want to add an email address for the controlling body?
 controllingBodyAddEmailAddressYesNo.error.required = Select yes to add an email address for the controlling body
+
+controllingBodyCountryOfIncorporation.title = Which country is the controlling body''s business incorporated in?
+controllingBodyCountryOfIncorporation.heading = Which country is the controlling body''s business incorporated in?
+controllingBodyCountryOfIncorporation.error.required = Enter the country the controlling body''s business is incorporated in
+controllingBodyCountryOfIncorporation.error.invalid = The country must only include letters a to z, numbers 0 to 9, apostrophes, hyphens or spaces
+controllingBodyCountryOfIncorporation.error.length = The country must be 100 characters or less
 
 controllingBodyAddFaxNumberYesNo.title = Do you want to add a fax number for the controlling body?
 controllingBodyAddFaxNumberYesNo.heading = Do you want to add a fax number for the controlling body?
@@ -1675,6 +1681,43 @@ controllingBodyAddNino.error.required = Enter the controlling body’s National 
 controllingBodyAddNino.error.invalidChars = The National Insurance number must only include letters a to z, numbers 0 to 9 and spaces
 controllingBodyAddNino.error.invalidFormat = The National Insurance number must start with 2 letters, but not D, followed by 6 numbers, with A, B, C, or D as the final character
 
+checkRegistrationCancellationDetails.title = Check your cancellation details
+checkRegistrationCancellationDetails.heading = Check your cancellation details
+checkRegistrationCancellationDetails.caption = Cancel registration
+
+checkRegistrationCancellationDetails.cancellationDate = Cancellation date
+checkRegistrationCancellationDetails.cancellationDate.change.hidden = cancellation date
+
+checkRegistrationCancellationDetails.cancellationReason = Cancellation reason
+checkRegistrationCancellationDetails.cancellationReason.change.hidden = cancellation reason
+
+checkRegistrationCancellationDetails.groupRegistrationNumber = Group’s registration number
+checkRegistrationCancellationDetails.groupRegistrationNumber.change.hidden = group’s registration number
+
+changeGroupRegistrationNumber.title = What is the group’s registration number?
+changeGroupRegistrationNumber.heading = What is the group’s registration number?
+changeGroupRegistrationNumber.title = What is the group''s registration number?
+changeGroupRegistrationNumber.heading = What is the group''s registration number?
+changeGroupRegistrationNumber.caption = Cancel registration
+
+changeGroupRegistrationNumber.hint = It is 14 characters long and starts with an X, like XEM00000000640
+
+changeGroupRegistrationNumber.checkYourAnswersLabel = changeGroupRegistrationNumber
+changeGroupRegistrationNumber.error.required = Enter the group''s registration number
+changeGroupRegistrationNumber.error.invalidCharacters = The group''s registration number must only include letters a to z and numbers 0 to 9
+changeGroupRegistrationNumber.error.invalidFormat = The group''s registration number must be in the correct format
+changeGroupRegistrationNumber.error.invalidReference = Enter a real registration number for the group
+
+changeGroupRegistrationNumber.change.hidden = ChangeGroupRegistrationNumber
+
+registrationCancellationConfirmation.title = Cancel registration
+registrationCancellationConfirmation.heading = What happens next
+
+registrationCancellationConfirmation.panel.title = Cancellation submitted
+registrationCancellationConfirmation.panel.p1 = Your reference is
+
+registrationCancellationConfirmation.p1 = We are reviewing your cancellation and will notify you if there are any issues.
+registrationCancellationConfirmation.p2 = It may take up to 48 hours for HMRC to approve your changes.
 cancelGroupRegistrationDate.title = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.heading = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.caption = Cancel group registration
