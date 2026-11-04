@@ -60,7 +60,7 @@ class ChangeRegistrationDetailsController @Inject() (
               mgdRegNumber       = request.mgdRegNum,
               managementHomeUrl  = appConfig.gamblingManagementHomeUrl,
               isGroupMember      = isGroupMember,
-              controllingBodyUrl = controllingBodyUrl(request.userAnswers)
+              controllingBodyUrl = controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
             )
 
           Ok(view(vm))
@@ -73,20 +73,4 @@ class ChangeRegistrationDetailsController @Inject() (
           Redirect(routes.SystemErrorController.onPageLoad())
         }
     }
-
-  private def controllingBodyUrl(ua: UserAnswers): String = {
-
-    ua.get(ControllingBodyIsRepMemSameAsCbPage) match {
-
-      case Some("1") =>
-        controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
-
-      case Some("0") =>
-        controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
-
-      case _ =>
-        routes.PageNotFoundController.onPageLoad().url
-
-    }
-  }
 }

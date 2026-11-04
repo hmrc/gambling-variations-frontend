@@ -58,25 +58,18 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
       )
     )
 
-  private val userAnswers: UserAnswers =
-    userAnswersWith("businessName" -> businessName,
-                    "controllingBodyDetails" -> Json.obj(
-                      "mgdRegNumber"     -> mgdRegNum,
-                      "isRepMemSameAsCB" -> "0"
-                    )
-                   )
-
-  private val repMemDifferentAnswers =
-    UserAnswers(userAnswersId,
-      Json.obj(
-        "businessName" -> businessName,
-        "controllingBodyDetails" -> Json.obj(
-          "mgdRegNum"        -> userAnswersId,
-          "businessName"     -> businessName,
+  private val validAnswers =
+    userAnswersWith(
+          "businessName" -> businessName,
           "isRepMemSameAsCb" -> "0"
         )
-      )
+
+  private val repMemDifferentAnswers =
+    userAnswersWith(
+      "businessName" -> businessName,
+      "isRepMemSameAsCb" -> "1"
     )
+
 
   private val soleProprietorAnswers: UserAnswers =
     userAnswersWith(
@@ -84,11 +77,9 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
         "title"      -> "Mrs",
         "firstName"  -> "Jane",
         "middleName" -> "Mary",
-        "lastName"   -> "Smith"
+        "lastName"   -> "Smith",
       ),
-      "controllingBodyDetails" -> Json.obj(
-        "isRepMemSameAsCB" -> "0"
-      )
+      "isRepMemSameAsCb" -> "0",
     )
 
   private val noNameAnswers: UserAnswers =
@@ -100,7 +91,8 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
 
       "must return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(repMemDifferentAnswers)).build()
+
+        val application = applicationBuilder(userAnswers = Some(validAnswers)).build()
 
         running(application) {
           val request = FakeRequest(GET, controllingBodyChangeScreenerRoute)
@@ -116,7 +108,7 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
-        val answers = userAnswers.set(ControllingBodyChangeScreenerPage, ProvideNew).success.value
+        val answers = validAnswers.set(ControllingBodyChangeScreenerPage, ProvideNew).success.value
 
         val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -143,8 +135,8 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
 
           val view = application.injector.instanceOf[ControllingBodyChangeScreenerView]
 
-          status(result) mustEqual OK
           contentAsString(result) mustEqual view(form, NormalMode, "Mrs Jane Mary Smith")(request, messages(application)).toString
+          status(result) mustEqual OK
         }
       }
 
@@ -204,7 +196,7 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
         val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
+          applicationBuilder(userAnswers = Some(validAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -230,7 +222,7 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
         val mockSessionRepository = mock[SessionRepository]
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswers))
+          applicationBuilder(userAnswers = Some(validAnswers))
             .overrides(
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
