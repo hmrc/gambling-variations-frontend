@@ -20,8 +20,7 @@ import models.ContactNumber
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-// The contact numbers are held in the correspondence section, as stored by ControllingBodyDetailsDataRequiredAction
-case object ControllingBodyContactNumberPage extends QuestionPage[ContactNumber] {
+case object ControllingBodyContactDetailsPage extends QuestionPage[ContactNumber] {
 
   override def path: JsPath = JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ toString
 
