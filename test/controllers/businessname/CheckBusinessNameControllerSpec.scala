@@ -19,9 +19,9 @@ package controllers.businessname
 import base.SpecBase
 import controllers.routes
 import models.BusinessType.Soleproprietor
-import models.{BusinessType, SoleProprietorName, UserAnswers}
+import models.{BusinessType, SoleProprietorName}
 import pages.*
-import pages.businessname.{BusinessNamePage, BusinessNameSectionPage, SoleProprietorPage}
+import pages.businessname.{BusinessNamePage, SoleProprietorPage}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -31,12 +31,7 @@ class CheckBusinessNameControllerSpec extends SpecBase {
 
   "BusinessName Controller" - {
 
-    val noAnswers = UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
-    )
+    val noAnswers = LoadedBusinessName(userAnswersId, Json.obj())
 
     "must return OK and the correct view for a GET" - {
 
@@ -47,14 +42,11 @@ class CheckBusinessNameControllerSpec extends SpecBase {
       "when sole proprietor" in {
 
         val userAnswers =
-          UserAnswers(userAnswersId)
-            .set(BusinessNameSectionPage, mgdRegNum)
-            .success
-            .value
+          LoadedBusinessName(userAnswersId, Json.obj())
             .set(GroupMemberPage, false)
             .success
             .value
-            .set(
+            .setOriginal(
               SoleProprietorPage,
               SoleProprietorName(
                 "Mr",
@@ -89,17 +81,14 @@ class CheckBusinessNameControllerSpec extends SpecBase {
       "when partnership" in {
 
         val userAnswers =
-          UserAnswers(userAnswersId)
-            .set(BusinessNameSectionPage, mgdRegNum)
-            .success
-            .value
+          LoadedBusinessName(userAnswersId, Json.obj())
             .set(GroupMemberPage, false)
             .success
             .value
-            .set(BusinessNamePage, "Test Business Ltd")
+            .setOriginal(BusinessNamePage, "Test Business Ltd")
             .success
             .value
-            .set(BusinessTypePage, BusinessType.Partnership)
+            .setOriginal(BusinessTypePage, BusinessType.Partnership)
             .success
             .value
 
@@ -127,17 +116,14 @@ class CheckBusinessNameControllerSpec extends SpecBase {
     "must redirect to access denied when group member is true" in {
 
       val userAnswers =
-        UserAnswers(userAnswersId)
-          .set(BusinessNameSectionPage, mgdRegNum)
-          .success
-          .value
+        LoadedBusinessName(userAnswersId, Json.obj())
           .set(GroupMemberPage, true)
           .success
           .value
-          .set(BusinessNamePage, "Test Business Ltd")
+          .setOriginal(BusinessNamePage, "Test Business Ltd")
           .success
           .value
-          .set(BusinessTypePage, BusinessType.Partnership)
+          .setOriginal(BusinessTypePage, BusinessType.Partnership)
           .success
           .value
 

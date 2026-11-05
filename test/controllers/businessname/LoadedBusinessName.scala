@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package pages.tradingdetails
+package controllers.businessname
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.{OriginalAnswers, UserAnswers}
+import pages.businessname.BusinessNameSection
+import play.api.libs.json.JsObject
 
-case object TradingNamePage extends QuestionPage[String] {
+import java.time.Instant
 
-  override def path: JsPath = JsPath \ toString
+// Answers in which the business name has already been loaded from the backend, with the given original data
+object LoadedBusinessName {
 
-  override def toString: String = "tradingName"
+  def apply(id: String, data: JsObject): UserAnswers =
+    UserAnswers(id, OriginalAnswers(data, Map(BusinessNameSection.key -> Instant.EPOCH)))
 }

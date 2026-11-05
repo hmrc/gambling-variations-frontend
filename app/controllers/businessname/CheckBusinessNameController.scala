@@ -20,7 +20,6 @@ import controllers.actions.{AuthorisedAction, BusinessNameDataRequiredAction, Da
 import controllers.routes
 import models.{BusinessType, SoleProprietorName}
 import pages.businessname.*
-import pages.tradingdetails.TradingNamePage
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
