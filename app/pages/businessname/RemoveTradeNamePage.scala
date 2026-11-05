@@ -16,12 +16,12 @@
 
 package pages.businessname
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object BusinessNameSectionPage extends QuestionPage[String] {
+case object RemoveTradeNamePage extends FlagPage[Boolean] {
 
-  override def path: JsPath = JsPath \ "businessNameSection" \ toString
+  override def path: JsPath = BusinessNameSection.path \ toString
 
-  override def toString: String = "mgdRegNum"
+  override def toString: String = "removeTradeName"
 }

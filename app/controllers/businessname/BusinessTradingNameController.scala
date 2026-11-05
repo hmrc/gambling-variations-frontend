@@ -21,8 +21,7 @@ import controllers.routes
 import forms.BusinessTradingNameFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
-import pages.tradingdetails.TradingNamePage
+import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage, TradingNamePage}
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

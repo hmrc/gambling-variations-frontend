@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package pages.controllingbody
+package controllers.businessname
 
-import models.ContactNumber
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.{OriginalAnswers, UserAnswers}
+import pages.businessname.BusinessNameSection
+import play.api.libs.json.JsObject
 
-// The contact numbers are held in the correspondence section, as stored by ControllingBodyDetailsDataRequiredAction
-case object ControllingBodyContactNumberPage extends QuestionPage[ContactNumber] {
+import java.time.Instant
 
-  override def path: JsPath = JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ toString
+// Answers in which the business name has already been loaded from the backend, with the given original data
+object LoadedBusinessName {
 
-  override def toString: String = "contactNumber"
+  def apply(id: String, data: JsObject): UserAnswers =
+    UserAnswers(id, OriginalAnswers(data, Map(BusinessNameSection.key -> Instant.EPOCH)))
 }
