@@ -22,7 +22,7 @@ import forms.controllingbody.ControllingBodyChangeScreenerFormProvider
 import models.controllingbody.ControllingBodyChangeOption
 import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyChangeScreenerPage, ControllingBodySoleProprietorPage}
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyChangeScreenerPage, ControllingBodyIsRepMemSameAsCbPage, ControllingBodySoleProprietorPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -60,8 +60,14 @@ class ControllingBodyChangeScreenerController @Inject() (
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, mode, name))
-
+        // checks if the rep member is the same as Controlling body, if it is then redirects
+        // to the same as rep page, in case user hits this url directly
+        // TODO: refactor controlling body to make 0 and 1 true and false
+        request.userAnswers.get(ControllingBodyIsRepMemSameAsCbPage) match {
+          case Some("0") => Ok(view(preparedForm, mode, name))
+          case Some("1") => Redirect(controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url)
+          case _         => Redirect(routes.SystemErrorController.onPageLoad().url)
+        }
       case None =>
         redirectToSystemError(request.userAnswers)
     }
