@@ -27,9 +27,9 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.*
-import pages.businessname.{BusinessNameChangesPage, BusinessNamePage, BusinessNameSectionPage, SoleProprietorPage}
+import pages.businessname.{BusinessNameChangesPage, BusinessNamePage, BusinessNameSection, SoleProprietorPage}
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -51,18 +51,11 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
   val data = Json.obj(
     BusinessTypePage.toString -> businessType.code,
-    BusinessNamePage.toString -> businessName,
     GroupMemberPage.toString  -> false,
-    "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+    "businessNameSection"     -> Json.obj(BusinessNamePage.toString -> businessName)
   )
 
-  val noAnswers = UserAnswers(
-    userAnswersId,
-    Json.obj(
-      GroupMemberPage.toString -> false,
-      "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
-    )
-  )
+  val noAnswers = LoadedBusinessName(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
 
   lazy val changeBusinessNameRoute =
     controllers.businessname.routes.ChangeBusinessNameController.onPageLoad(Partnership).url
@@ -70,7 +63,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
   "ChangeBusinessName Controller" - {
 
     "must reject commas and render the partnership character validation message" in {
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
+      val application = applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data))).build()
 
       running(application) {
         val request = FakeRequest(POST, changeBusinessNameRoute).withFormUrlEncodedBody("value" -> "Test, Partnership")
@@ -86,7 +79,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data))).build()
 
       running(application) {
         val request = FakeRequest(GET, changeBusinessNameRoute)
@@ -108,12 +101,11 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to system error when GroupMemberPage is missing on GET" in {
 
       val userAnswers =
-        UserAnswers(
+        LoadedBusinessName(
           userAnswersId,
           Json.obj(
             BusinessTypePage.toString -> businessType.code,
-            BusinessNamePage.toString -> businessName,
-            "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+            "businessNameSection"     -> Json.obj(BusinessNamePage.toString -> businessName)
           )
         )
 
@@ -134,17 +126,14 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
     "must return OK and sole proprietor view for a GET" in {
 
       val userAnswers =
-        UserAnswers(userAnswersId)
-          .set(BusinessNameSectionPage, mgdRegNum)
-          .success
-          .value
+        LoadedBusinessName(userAnswersId, Json.obj())
           .set(GroupMemberPage, false)
           .success
           .value
-          .set(BusinessTypePage, BusinessType.Soleproprietor)
+          .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
           .success
           .value
-          .set(
+          .setOriginal(
             SoleProprietorPage,
             SoleProprietorName(
               "Mr",
@@ -174,13 +163,12 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
       val groupMemberData = Json.obj(
         BusinessTypePage.toString -> businessType.code,
-        BusinessNamePage.toString -> businessName,
         GroupMemberPage.toString  -> true,
-        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+        "businessNameSection"     -> Json.obj(BusinessNamePage.toString -> businessName)
       )
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", groupMemberData))).build()
 
       running(application) {
         val request = FakeRequest(GET, changeBusinessNameRoute)
@@ -230,12 +218,11 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
       "must redirect to system error when GroupMemberPage is missing on POST" in {
 
         val userAnswers =
-          UserAnswers(
+          LoadedBusinessName(
             userAnswersId,
             Json.obj(
               BusinessTypePage.toString -> businessType.code,
-              BusinessNamePage.toString -> businessName,
-              "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+              "businessNameSection"     -> Json.obj(BusinessNamePage.toString -> businessName)
             )
           )
 
@@ -263,7 +250,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
-          applicationBuilder(userAnswers = Some(UserAnswers("id", data)))
+          applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data)))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -290,17 +277,14 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val userAnswers =
-        UserAnswers(userAnswersId)
-          .set(BusinessNameSectionPage, mgdRegNum)
-          .success
-          .value
+        LoadedBusinessName(userAnswersId, Json.obj())
           .set(GroupMemberPage, false)
           .success
           .value
-          .set(BusinessTypePage, BusinessType.Soleproprietor)
+          .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
           .success
           .value
-          .set(
+          .setOriginal(
             SoleProprietorPage,
             SoleProprietorName(
               "Mr",
@@ -342,20 +326,73 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must return bad request when invalid sole proprietor data is submitted" in {
+    "must replace the loaded sole proprietor name whole, so that a removed middle name does not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val userAnswers =
-        UserAnswers(userAnswersId)
-          .set(BusinessNameSectionPage, mgdRegNum)
-          .success
-          .value
+        LoadedBusinessName(userAnswersId, Json.obj())
           .set(GroupMemberPage, false)
           .success
           .value
-          .set(BusinessTypePage, BusinessType.Soleproprietor)
+          .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
           .success
           .value
-          .set(
+          .setOriginal(SoleProprietorPage, SoleProprietorName("Mr", "John", Some("James"), "Smith"))
+          .success
+          .value
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(
+            POST,
+            controllers.businessname.routes.ChangeBusinessNameController
+              .onSubmit(BusinessType.Soleproprietor)
+              .url
+          )
+            .withFormUrlEncodedBody(
+              "title"      -> "Mr",
+              "firstName"  -> "John",
+              "middleName" -> "",
+              "lastName"   -> "Smith"
+            )
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers = savedAnswersCaptor.getValue
+        savedAnswers.get(SoleProprietorPage).value mustEqual SoleProprietorName("Mr", "John", None, "Smith")
+        savedAnswers.original.get[SoleProprietorName](SoleProprietorPage.path).value.middleName.value mustEqual "James"
+        savedAnswers.changes(BusinessNameSection) mustBe Json.obj(
+          "businessNameSection" -> Json.obj("soleProprietor" -> Json.obj("middleName" -> JsNull))
+        )
+      }
+    }
+
+    "must return bad request when invalid sole proprietor data is submitted" in {
+
+      val userAnswers =
+        LoadedBusinessName(userAnswersId, Json.obj())
+          .set(GroupMemberPage, false)
+          .success
+          .value
+          .setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+          .success
+          .value
+          .setOriginal(
             SoleProprietorPage,
             SoleProprietorName(
               "Mr",
@@ -415,13 +452,12 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
 
       val groupMemberData = Json.obj(
         BusinessTypePage.toString -> businessType.code,
-        BusinessNamePage.toString -> businessName,
         GroupMemberPage.toString  -> true,
-        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+        "businessNameSection"     -> Json.obj(BusinessNamePage.toString -> businessName)
       )
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", groupMemberData))).build()
 
       running(application) {
         val request =
@@ -442,7 +478,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", data)))
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data)))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -470,7 +506,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", data)))
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data)))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -494,7 +530,7 @@ class ChangeBusinessNameControllerSpec extends SpecBase with MockitoSugar {
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data))).build()
 
       running(application) {
         val request =

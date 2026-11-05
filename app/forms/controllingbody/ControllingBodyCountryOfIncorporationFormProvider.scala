@@ -18,13 +18,13 @@ package forms.controllingbody
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.data.validation.Constraint
 
 import javax.inject.Inject
 
 class ControllingBodyCountryOfIncorporationFormProvider @Inject() extends Mappings {
 
-  private val controllingBodyCountryOfIncorporationRegex = "^[A-Za-z 0-9-\\']{1,100}$"
+  private val controllingBodyCountryOfIncorporationRegex = "^[A-Za-z 0-9-\\']+$"
 
   def apply(): Form[String] =
     Form(

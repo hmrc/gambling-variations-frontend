@@ -21,7 +21,7 @@ import controllers.routes
 import forms.controllingbody.ControllingBodySameAsRepYesNoFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodySameAsRepYesNoPage}
+import pages.controllingbody.{ControllingBodyBusinessNamePage, ControllingBodyIsRepMemSameAsCbPage, ControllingBodySameAsRepYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -56,7 +56,14 @@ class ControllingBodySameAsRepYesNoController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, businessName))
+      // checks if the rep member is the same as Controlling body, if it is then redirects
+      // to the same as rep page, in case user hits this url directly
+      // TODO: refactor controlling body to make 0 and 1 true and false
+      request.userAnswers.get(ControllingBodyIsRepMemSameAsCbPage) match {
+        case Some("1") => Ok(view(preparedForm, mode, businessName))
+        case Some("0") => Redirect(controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url)
+        case _         => Redirect(routes.SystemErrorController.onPageLoad().url)
+      }
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
