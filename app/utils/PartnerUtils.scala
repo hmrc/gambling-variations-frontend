@@ -41,15 +41,6 @@ object PartnerUtils {
     // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
     .toSeq
 
-  def findIndexForNewPartner(userAnswers: UserAnswers): Int = {
-    val newPartnersSize = getNewPartnersSize(userAnswers)
-    val newPartnerExistingIndex = (0 to newPartnersSize).collectFirst {
-      case index: Int if userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)).contains(false) =>
-        index
-    }
-    newPartnerExistingIndex getOrElse newPartnersSize
-  }
-
   def getCompletedNewPartners(userAnswers: UserAnswers): IndexedSeq[Int] = (0 to getNewPartnersSize(userAnswers))
     .map(index => userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)))
     .zipWithIndex

@@ -279,7 +279,7 @@ object CheckControllingBodyDetailsViewModel {
     def text(page: QuestionPage[String]): Option[String] =
       answers.get(page).map(_.trim).filter(_.nonEmpty)
 
-    val contactNumber = answers.get(ControllingBodyContactNumberPage)
+    val contactNumber = answers.get(ControllingBodyContactDetailsPage)
 
     CheckControllingBodyDetailsViewModel(
       businessType       = answers.get(ControllingBodyBusinessTypePage),

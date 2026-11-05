@@ -18,12 +18,12 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.ControllingBodyCountryOfIncorporationFormProvider
-import models.{NormalMode, UserAnswers}
+import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.ControllingBodyCountryOfIncorporationPage
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyCountryOfIncorporationPage, ControllingBodyIsUkIncorporatedPage}
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
@@ -45,14 +45,18 @@ class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with 
     UserAnswers(
       userAnswersId,
       Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+    ).set(ControllingBodyBusinessTypePage, BusinessType.Corporatebody).success.value
+     .set(ControllingBodyIsUkIncorporatedPage, "0").success.value
 
-  val data: JsObject = Json.obj(
-    "controllingBodyDetails" -> Json.obj(
-      "mgdRegNum"                                        -> userAnswersId,
+  val data =
+    UserAnswers(
+      userAnswersId,
+      Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId,
       ControllingBodyCountryOfIncorporationPage.toString -> "The Republic of Ben"
     )
-  )
+  )).set(ControllingBodyBusinessTypePage, BusinessType.Corporatebody).success.value
+    .set(ControllingBodyIsUkIncorporatedPage, "0").success.value
+
 
   lazy val countryRoute: String =
     routes.ControllingBodyCountryOfIncorporationController.onPageLoad().url
@@ -78,9 +82,7 @@ class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with 
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId, data)
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(data)).build()
 
       running(application) {
         val request = FakeRequest(GET, countryRoute)

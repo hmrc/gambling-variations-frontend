@@ -25,8 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.businessname.BusinessNameChangesPage
-import pages.tradingdetails.TradingNamePage
+import pages.businessname.{BusinessNameChangesPage, TradingNamePage}
 import pages.{BusinessTypePage, GroupMemberPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
@@ -50,12 +49,11 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
   val data = Json.obj(
     BusinessTypePage.toString -> BusinessType.Partnership.code,
-    GroupMemberPage.toString  -> false,
-    "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+    GroupMemberPage.toString  -> false
   )
 
   private val baseUserAnswers =
-    UserAnswers(userAnswersId, data)
+    LoadedBusinessName(userAnswersId, data)
 
   "BusinessTradingName Controller" - {
 
@@ -80,13 +78,12 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
       val groupMemberData = Json.obj(
         BusinessTypePage.toString -> BusinessType.Partnership.code,
-        GroupMemberPage.toString  -> true,
-        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+        GroupMemberPage.toString  -> true
       )
 
       val application =
         applicationBuilder(
-          userAnswers = Some(UserAnswers(userAnswersId, groupMemberData))
+          userAnswers = Some(LoadedBusinessName(userAnswersId, groupMemberData))
         ).build()
 
       running(application) {
@@ -184,13 +181,12 @@ class BusinessTradingNameControllerSpec extends SpecBase with MockitoSugar {
 
       val groupMemberData = Json.obj(
         BusinessTypePage.toString -> BusinessType.Partnership.code,
-        GroupMemberPage.toString  -> true,
-        "businessNameSection"     -> Json.obj("mgdRegNum" -> mgdRegNum)
+        GroupMemberPage.toString  -> true
       )
 
       val application =
         applicationBuilder(
-          userAnswers = Some(UserAnswers(userAnswersId, groupMemberData))
+          userAnswers = Some(LoadedBusinessName(userAnswersId, groupMemberData))
         ).build()
 
       running(application) {

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages.tradingdetails
+package pages.controllingbody
 
+import models.ContactNumber
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object TradingNamePage extends QuestionPage[String] {
+case object ControllingBodyContactDetailsPage extends QuestionPage[ContactNumber] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "controllingBodyDetails" \ "correspondenceSection" \ toString
 
-  override def toString: String = "tradingName"
+  override def toString: String = "contactNumber"
 }

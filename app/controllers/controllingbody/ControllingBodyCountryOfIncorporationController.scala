@@ -18,6 +18,7 @@ package controllers.controllingbody
 
 import controllers.actions.*
 import forms.controllingbody.ControllingBodyCountryOfIncorporationFormProvider
+import models.BusinessType.Corporatebody
 import models.Mode
 import navigation.Navigator
 import pages.controllingbody.*
@@ -48,11 +49,22 @@ class ControllingBodyCountryOfIncorporationController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers
-      .get(ControllingBodyCountryOfIncorporationPage)
-      .fold(form)(form.fill)
+    request.userAnswers.get(ControllingBodyBusinessTypePage)
+    match {
+      case Some(Corporatebody) =>
+        request.userAnswers.get(ControllingBodyIsUkIncorporatedPage)
+        match {
+          case Some("0") =>
+            val preparedForm = request.userAnswers
+            .get(ControllingBodyCountryOfIncorporationPage)
+            .fold(form)(form.fill)
 
-    Ok(view(preparedForm, mode))
+            Ok(view(preparedForm, mode))
+
+        case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
+    case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+    }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
