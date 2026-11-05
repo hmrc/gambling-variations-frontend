@@ -665,3 +665,31 @@ private def navigateCheckReasonForCancellationPage(
     case None =>
       routes.SystemErrorController.onPageLoad()
   }
+
+private def navigateControllingBodyAddTradingNameYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodyAddTradingNameYesNoPage) match {
+    case Some(true) => controllers.controllingbody.routes.ControllingBodyTradingNameController.onPageLoad()
+    case Some(false) =>
+      answers.get(ControllingBodyBusinessTypePage) match {
+        case Some(Soleproprietor) =>
+          controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+
+        case Some(Corporatebody) =>
+          controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+
+        case Some(Partnership) =>
+          controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+
+        case Some(LimitedLiabilityPartnership) =>
+          controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+
+        case Some(Unincorporatedbody) =>
+          controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+
+        case _ =>
+          routes.SystemErrorController.onPageLoad()
+      }
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
+  }
