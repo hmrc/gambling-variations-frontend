@@ -57,9 +57,9 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, dateOfIncorporationRoute)
       .withFormUrlEncodedBody(
-        "dateOfIncorporation.day"   -> validAnswer.getDayOfMonth.toString,
-        "dateOfIncorporation.month" -> validAnswer.getMonthValue.toString,
-        "dateOfIncorporation.year"  -> validAnswer.getYear.toString
+        "value.day"   -> validAnswer.getDayOfMonth.toString,
+        "value.month" -> validAnswer.getMonthValue.toString,
+        "value.year"  -> validAnswer.getYear.toString
       )
 
   "DateOfIncorporation Controller" - {
@@ -122,10 +122,10 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, dateOfIncorporationRoute)
-          .withFormUrlEncodedBody("dateOfIncorporation.day" -> "31", "dateOfIncorporation.month" -> "4", "dateOfIncorporation.year" -> "2007")
+          .withFormUrlEncodedBody("value.day" -> "31", "value.month" -> "4", "value.year" -> "2007")
 
       running(application) {
-        val boundForm = form.bind(Map("dateOfIncorporation.day" -> "31", "dateOfIncorporation.month" -> "4", "dateOfIncorporation.year" -> "2007"))
+        val boundForm = form.bind(Map("value.day" -> "31", "value.month" -> "4", "value.year" -> "2007"))
 
         val view = application.injector.instanceOf[DateOfIncorporationView]
 

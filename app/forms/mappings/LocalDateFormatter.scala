@@ -111,21 +111,61 @@ private[mappings] class LocalDateFormatter(
       field -> cleaned.get(s"$key.$field").filter(_.nonEmpty)
     }.toMap
 
-    lazy val missingFields = fields
-      .withFilter(_._2.isEmpty)
-      .map(_._1)
-      .toList
-      .map(field => messages(s"date.error.$field"))
+    val invalidFields =
+      if (requireNumericDateFormat) {
+        Seq(
+          "day"   -> "[0-9]{1,2}",
+          "month" -> "[0-9]{1,2}",
+          "year"  -> "[1-9][0-9]{3}"
+        ).collect {
+          case (field, pattern)
+              if cleaned
+                .get(s"$key.$field")
+                .exists(value => value.nonEmpty && !value.matches(pattern)) =>
+            field
+        }
+      } else {
+        Seq.empty
+      }
 
-    fields.count(_._2.isDefined) match {
-      case 3 =>
-        formatDate(key, cleaned)
-      case 2 =>
-        Left(List(FormError(key, requiredKey, missingFields ++ args)))
-      case 1 =>
-        Left(List(FormError(key, twoRequiredKey, missingFields ++ args)))
-      case _ =>
-        Left(List(FormError(key, allRequiredKey, args)))
+    if (invalidFields.nonEmpty) {
+      Left(
+        Seq(
+          FormError(
+            key,
+            invalidKey,
+            invalidFields.map(field => messages(s"date.error.$field")) ++ args
+          )
+        ) ++
+          invalidFields.map { field =>
+            FormError(
+              s"$key.$field",
+              invalidKey,
+              args
+            )
+          }
+      )
+    } else {
+
+      lazy val missingFields = fields
+        .withFilter(_._2.isEmpty)
+        .map(_._1)
+        .toList
+        .map(field => messages(s"date.error.$field"))
+
+      fields.count(_._2.isDefined) match {
+        case 3 =>
+          formatDate(key, cleaned)
+
+        case 2 =>
+          Left(List(FormError(key, requiredKey, missingFields ++ args)))
+
+        case 1 =>
+          Left(List(FormError(key, twoRequiredKey, missingFields ++ args)))
+
+        case _ =>
+          Left(List(FormError(key, allRequiredKey, args)))
+      }
     }
   }
 

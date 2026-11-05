@@ -36,13 +36,14 @@
         @mainErrorSummary(
             form.copy(errors = form.errors.filter(_.key == "value")),
                 errorLinkOverrides = Map(
-                "value" ->
-                form.errors
-                .find(e => Seq("value.day", "value.month", "value.year").contains(e.key))
-                .map(_.key)
-                .getOrElse("value.day")
-            )
-        )
+                    "value" ->
+                    form.errors
+                    .find(e => Seq("value.day", "value.month", "value.year").contains(e.key))
+                    .map(_.key)
+                    .getOrElse("value.day")
+                )
+             )
+
         @caption(messages("changeRegistrationDetails.caption"))
 
         @govukDateInput(
