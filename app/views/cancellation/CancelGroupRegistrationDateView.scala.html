@@ -27,7 +27,9 @@
     govukErrorSummary: GovukErrorSummary,
     govukDateInput: GovukDateInput,
     govukButton: GovukButton,
-    caption: Caption
+    caption: Caption,
+    p: Paragraph,
+    h1: H1
 )
 
 @(form: Form[_], mode: Mode, registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate)(implicit request: Request[_], messages: Messages)
@@ -50,10 +52,12 @@
 
         @caption(messages("cancelGroupRegistrationDate.caption"))
 
+        @h1("cancelGroupRegistrationDate.heading", classes = "govuk-heading-l govuk-!-margin-bottom-4")
+
         @govukDateInput(
             DateViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("cancelGroupRegistrationDate.heading")).asPageHeading(Large)
+                legend = LegendViewModel(messages("cancelGroupRegistrationDate.paragraph")).withCssClass("govuk-!-margin-bottom-4")
             )
             .withHint(
             HintViewModel(messages("cancelGroupRegistrationDate.hint",

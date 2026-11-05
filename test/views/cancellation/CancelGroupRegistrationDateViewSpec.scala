@@ -82,9 +82,14 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
       )
 
       doc
-        .select(".govuk-fieldset__heading")
+        .select("h1")
         .text() mustBe
         messages("cancelGroupRegistrationDate.heading")
+
+      doc
+        .body()
+        .text() must include
+      messages("cancelGroupRegistrationDate.paragraph")
 
       doc
         .select("button.govuk-button")

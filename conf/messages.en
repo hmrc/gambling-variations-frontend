@@ -1718,6 +1718,7 @@ registrationCancellationConfirmation.panel.p1 = Your reference is
 
 registrationCancellationConfirmation.p1 = We are reviewing your cancellation and will notify you if there are any issues.
 registrationCancellationConfirmation.p2 = It may take up to 48 hours for HMRC to approve your changes.
+
 cancelGroupRegistrationDate.title = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.heading = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.caption = Cancel group registration
@@ -1728,5 +1729,5 @@ cancelGroupRegistrationDate.error.required.all = Enter the date for when this gr
 cancelGroupRegistrationDate.error.required.two = Date must include a {0} and {1}
 cancelGroupRegistrationDate.error.required = Date must include a {0}
 cancelGroupRegistrationDate.error.invalid = Must be a real date
-cancelGroupRegistrationDate.outsideBoundaries = Date must be after {0} and before {1}
+cancelGroupRegistrationDate.error.outsideBoundaries = Date must be after {0} and before {1}
 cancelGroupRegistrationDate.change.hidden = When is this group no longer liable to pay Machine Games Duty?
