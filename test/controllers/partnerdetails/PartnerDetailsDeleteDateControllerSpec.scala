@@ -92,29 +92,30 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
   override val emptyUserAnswers: UserAnswers =
     UserAnswers(userAnswersId)
 
-  private val userAnswersWithBusinessName: UserAnswers =
-    emptyUserAnswers
-      .set(
-        PartnerDetailsMgdRegNumberPage(businessNumber1),
-        userAnswersId
-      )
-      .success
-      .value
-      .set(
-        PartnerDetailsChosenPartnerToRemovePage,
-        businessNumber1
-      )
-      .success
-      .value
-      .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
-      .success
-      .value
-      .set(
-        PartnerDetailsBusinessNamePage(businessNumber1),
-        businessName
-      )
-      .success
-      .value
+  private val userAnswersWithoutBusinessName: UserAnswers = emptyUserAnswers
+    .set(
+      PartnerDetailsMgdRegNumberPage(businessNumber1),
+      userAnswersId
+    )
+    .success
+    .value
+    .set(
+      PartnerDetailsChosenPartnerToRemovePage,
+      businessNumber1
+    )
+    .success
+    .value
+    .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+    .success
+    .value
+
+  private val userAnswersWithBusinessName: UserAnswers = userAnswersWithoutBusinessName
+    .set(
+      PartnerDetailsBusinessNamePage(businessNumber1),
+      businessName
+    )
+    .success
+    .value
 
   private val businessDetails: BusinessDetails =
     BusinessDetails(
@@ -1087,6 +1088,62 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       }
     }
 
+    "must propagate an exception on POST when no partner name has been found" in {
+
+      val invalidAnswer =
+        latestFormDate.plusDays(1)
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      val mockGamblingConnector =
+        mockConnectorReturning(
+          businessDetails
+        )
+
+      val application =
+        buildApplication(
+          userAnswersWithoutBusinessName,
+          mockGamblingConnector,
+          Some(mockSessionRepository)
+        )
+
+      running(application) {
+
+        implicit val lang: Lang =
+          messages(application).lang
+
+        val request =
+          postRequest(invalidAnswer)
+
+        val boundForm =
+          form(application)
+            .bind(
+              formData(invalidAnswer)
+            )
+
+        val result =
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
+
+        status(result) mustEqual SEE_OTHER
+
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController
+            .onPageLoad()
+            .url
+
+        verify(
+          mockSessionRepository,
+          never()
+        ).set(any[UserAnswers])
+      }
+
+
+    }
+
     "must propagate the connector failure on GET" in {
 
       val mockGamblingConnector =
@@ -1184,6 +1241,35 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .toInstance(clock)
           )
           .build()
+
+      running(application) {
+
+        val result =
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(getRequest())
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController
+            .onPageLoad()
+            .url
+      }
+    }
+
+    "must redirect to SystemError for a GET when getPartnerDetailsName fails to find" in {
+
+      val mockGamblingConnector =
+        mockConnectorReturning(
+          businessDetails
+        )
+
+      val application =
+        buildApplication(
+          userAnswersWithoutBusinessName,
+          mockGamblingConnector
+        )
 
       running(application) {
 
