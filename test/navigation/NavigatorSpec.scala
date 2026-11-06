@@ -1493,6 +1493,21 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
       }
+
+      "should route to SystemErrorController when controlling body type is invalid or none" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "addTradingName" -> false
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
     }
 
 

@@ -674,7 +674,7 @@ private def navigateControllingBodyAddTradingNameYesNoPage(answers: UserAnswers)
         case Some(Unincorporatedbody) =>
           controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
 
-        case _ =>
+        case None =>
           routes.SystemErrorController.onPageLoad()
       }
 
