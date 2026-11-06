@@ -50,8 +50,7 @@ class Navigator @Inject() () {
     case ControllingBodyBusinessNamePage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyAddTradingNameYesNoPage =>
-      // TODO: Connect CB-TN and the business-type-specific identity screens when that journey is built.
-      _ => routes.IndexController.onPageLoad()
+      userAnswers => navigateControllingBodyAddTradingNameYesNoPage(userAnswers)
     case ControllingBodySoleProprietorPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
     case ControllingBodyEmailPage =>
@@ -650,6 +649,34 @@ private def navigateCheckReasonForCancellationPage(
 
     case Some(_) =>
       controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateControllingBodyAddTradingNameYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodyAddTradingNameYesNoPage) match {
+    case Some(true) => controllers.controllingbody.routes.ControllingBodyTradingNameController.onPageLoad()
+    case Some(false) =>
+      answers.get(ControllingBodyBusinessTypePage) match {
+        case Some(Soleproprietor) =>
+          controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+
+        case Some(Corporatebody) =>
+          controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+
+        case Some(Partnership) =>
+          controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+
+        case Some(LimitedLiabilityPartnership) =>
+          controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+
+        case Some(Unincorporatedbody) =>
+          controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+
+        case None =>
+          routes.SystemErrorController.onPageLoad()
+      }
 
     case None =>
       routes.SystemErrorController.onPageLoad()
