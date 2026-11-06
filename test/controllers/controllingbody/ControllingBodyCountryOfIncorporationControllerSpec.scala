@@ -45,18 +45,27 @@ class ControllingBodyCountryOfIncorporationControllerSpec extends SpecBase with 
     UserAnswers(
       userAnswersId,
       Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId))
-    ).set(ControllingBodyBusinessTypePage, BusinessType.Corporatebody).success.value
-     .set(ControllingBodyIsUkIncorporatedPage, "0").success.value
+    ).set(ControllingBodyBusinessTypePage, BusinessType.Corporatebody)
+      .success
+      .value
+      .set(ControllingBodyIsUkIncorporatedPage, "0")
+      .success
+      .value
 
   val data =
     UserAnswers(
       userAnswersId,
-      Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId,
-      ControllingBodyCountryOfIncorporationPage.toString -> "The Republic of Ben"
-    )
-  )).set(ControllingBodyBusinessTypePage, BusinessType.Corporatebody).success.value
-    .set(ControllingBodyIsUkIncorporatedPage, "0").success.value
-
+      Json.obj(
+        "controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId,
+                                             ControllingBodyCountryOfIncorporationPage.toString -> "The Republic of Ben"
+                                            )
+      )
+    ).set(ControllingBodyBusinessTypePage, BusinessType.Corporatebody)
+      .success
+      .value
+      .set(ControllingBodyIsUkIncorporatedPage, "0")
+      .success
+      .value
 
   lazy val countryRoute: String =
     routes.ControllingBodyCountryOfIncorporationController.onPageLoad().url

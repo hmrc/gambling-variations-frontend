@@ -49,21 +49,19 @@ class ControllingBodyCountryOfIncorporationController @Inject() (
   val form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
-    request.userAnswers.get(ControllingBodyBusinessTypePage)
-    match {
+    request.userAnswers.get(ControllingBodyBusinessTypePage) match {
       case Some(Corporatebody) =>
-        request.userAnswers.get(ControllingBodyIsUkIncorporatedPage)
-        match {
+        request.userAnswers.get(ControllingBodyIsUkIncorporatedPage) match {
           case Some("0") =>
             val preparedForm = request.userAnswers
-            .get(ControllingBodyCountryOfIncorporationPage)
-            .fold(form)(form.fill)
+              .get(ControllingBodyCountryOfIncorporationPage)
+              .fold(form)(form.fill)
 
             Ok(view(preparedForm, mode))
 
-        case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
-    }
-    case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+          case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
+        }
+      case _ => Redirect(controllers.routes.SystemErrorController.onPageLoad())
     }
   }
 

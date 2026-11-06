@@ -33,7 +33,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
           nameLine2             = Some("Line 2"),
           correspondenceAddress = None,
           additionalInformation = Some("Additional information"),
-          iomOrCiFlag           = Some("IOM"),
+          iomOrCiFlag           = Some(true),
           contactNumber         = None,
           faxNumber             = Some("12345"),
           emailAddr             = Some("test@test.com")
@@ -43,6 +43,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
         Json.toJson(model)
 
       (json \ "mgdRegNumber").as[String] shouldBe "MGD123456"
+      (json \ "iomOrCiFlag").as[String]  shouldBe "Y"
     }
 
     "convert empty nameLine2 to None" in {
@@ -69,7 +70,7 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
           "nameLine1"    -> "Test Name",
           "nameLine2"    -> "Line 2",
           "adi"          -> "Additional information",
-          "iomOrCiFlag"  -> "IOM",
+          "iomOrCiFlag"  -> "0",
           "faxNumber"    -> "12345",
           "emailAddr"    -> "test@test.com"
         )
@@ -81,6 +82,9 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
 
       result.get.additionalInformation shouldBe
         Some("Additional information")
+
+      result.get.iomOrCiFlag shouldBe
+        Some(false)
     }
 
     "convert empty adi to None" in {
@@ -158,17 +162,60 @@ class CorrespondenceDetailsSpec extends AnyWordSpec with Matchers {
 
     "retain iomOrCiFlag when present" in {
 
-      val json =
+      val json = {
         Json.obj(
           "mgdRegNumber" -> "MGD123456",
-          "iomOrCiFlag"  -> "IOM"
+          "iomOrCiFlag"  -> "1"
         )
+
+      }
 
       val result =
         json.validate[CorrespondenceDetails]
 
       result.isSuccess       shouldBe true
-      result.get.iomOrCiFlag shouldBe Some("IOM")
+      result.get.iomOrCiFlag shouldBe Some(true)
+    }
+
+    "set iomOrCiFlag to None when not parsable" in {
+
+      val json1 = {
+        Json.obj(
+          "mgdRegNumber" -> "MGD123456",
+          "iomOrCiFlag"  -> "incorrect-flag"
+        )
+      }
+
+      val json2 = {
+        Json.obj(
+          "mgdRegNumber" -> "MGD123456",
+          "iomOrCiFlag"  -> null
+        )
+      }
+
+      val json3 = {
+        Json.obj(
+          "mgdRegNumber" -> "MGD123456"
+        )
+      }
+
+      val result1 =
+        json1.validate[CorrespondenceDetails]
+
+      val result2 =
+        json2.validate[CorrespondenceDetails]
+
+      val result3 =
+        json3.validate[CorrespondenceDetails]
+
+      result1.isSuccess       shouldBe true
+      result1.get.iomOrCiFlag shouldBe None
+
+      result2.isSuccess       shouldBe true
+      result2.get.iomOrCiFlag shouldBe None
+
+      result3.isSuccess       shouldBe true
+      result3.get.iomOrCiFlag shouldBe None
     }
 
     "retain nameLine1 when present" in {

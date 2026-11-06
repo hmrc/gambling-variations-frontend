@@ -846,7 +846,7 @@ object GamblingConnectorISpec {
       )
     ),
     additionalInformation = Some("Upstairs"),
-    iomOrCiFlag           = Some("true"),
+    iomOrCiFlag           = Some(true),
     contactNumber         = Some(ContactNumber(Some("0123456789"), Some("0123456780"))),
     faxNumber             = Some("0123456799"),
     emailAddr             = Some("abc@email.com")
@@ -887,16 +887,12 @@ object GamblingConnectorISpec {
 
   val partnersDetailsBusinessName = PartnersDetails(
     partners = Seq(
-      PartnerDetails(
+      BusinessPartnerDetails(
         mgdRegNumber           = "XWM00000001762",
-        businessPartnerNumber  = Some("0100049899"),
+        businessPartnerNumber  = "0100049899",
         dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
         dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
-        solePropTitle          = None,
-        solePropFirstName      = None,
-        solePropMiddleName     = None,
-        solePropLastName       = None,
-        businessName           = Some("XYZ Consulting Ltd"),
+        businessName           = "XYZ Consulting Ltd",
         tradingName            = Some("XYZ Consulting"),
         dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
         nino                   = Some("AB123456C"),
@@ -906,24 +902,39 @@ object GamblingConnectorISpec {
         dateOfIncorporation    = Some(LocalDate.parse("2020-03-01")),
         countryOfIncorporation = Some("GB"),
         foreignCorporateRef    = Some("FCR-987654"),
-        address1               = Some("123 High Street"),
-        address2               = Some("Suite 4"),
-        address3               = Some("Business Park"),
-        address4               = Some("London"),
-        postcode               = Some("SW1A 1AA"),
-        country                = Some("GB"),
-        adi                    = Some("ADI123456"),
-        iomOrCiFlag            = Some("N"),
-        phoneNumber            = Some("02071234567"),
-        mobilePhoneNumber      = Some("07700123456"),
-        faxNumber              = Some("02071234568"),
-        emailAddr              = Some("john.doe@example.com"),
-        isFutureLeaveDate      = Some(0),
-        isFutureJoinDate       = Some(0),
-        businessType           = Some(2)
+        correspondenceDetails = Some(
+          CorrespondenceDetails(
+            mgdRegNumber = "XWM00000001762",
+            nameLine1    = None,
+            nameLine2    = None,
+            correspondenceAddress = Some(
+              Address(
+                address1 = "123 High Street",
+                address2 = Some("Suite 4"),
+                address3 = Some("Business Park"),
+                address4 = Some("London"),
+                postcode = Some("SW1A 1AA"),
+                country  = Some("GB")
+              )
+            ),
+            additionalInformation = Some("ADI123456"),
+            iomOrCiFlag           = Some(false),
+            contactNumber = Some(
+              ContactNumber(
+                phoneNumber       = Some("02071234567"),
+                mobilePhoneNumber = Some("07700123456")
+              )
+            ),
+            faxNumber = Some("02071234568"),
+            emailAddr = Some("john.doe@example.com")
+          )
+        ),
+        isFutureLeaveDate = Some(false),
+        isFutureJoinDate  = Some(false),
+        businessType      = BusinessType.Corporatebody
       )
-    ),
-    systemDate = Some(LocalDate.of(2026, 7, 30))
+    ) // ,
+//    systemDate = Some(LocalDate.of(2026, 7, 30))
   )
 
   val premisesDetails: Seq[PremisesDetails] = Seq(
