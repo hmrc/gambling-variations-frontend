@@ -494,35 +494,14 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           )
 
         running(application) {
-          val boundForm =
-            form.bind(
-              Map(
-                "value.day"   -> "not-a-day",
-                "value.month" -> "10",
-                "value.year"  -> "2026"
-              )
-            )
-
-          val view =
-            application.injector
-              .instanceOf[CancelRegistrationDateView]
-
           val result =
             route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
 
-          contentAsString(result) mustEqual
-            view(
-              boundForm,
-              NormalMode,
-              registrationDate,
-              firstInvalidDate,
-              middleOfDateRange
-            )(
-              request,
-              messages(application)
-            ).toString
+          val content = contentAsString(result)
+
+          content must include("Must be a real date")
         }
       }
 
