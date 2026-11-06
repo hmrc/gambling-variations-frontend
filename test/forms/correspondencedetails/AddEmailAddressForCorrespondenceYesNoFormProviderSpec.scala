@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.correspondencedetails.RemoveCorrespondenceEmailAddressFormProvider
+import forms.correspondencedetails.AddEmailAddressForCorrespondenceYesNoFormProvider
 import play.api.data.FormError
 
-class RemoveCorrespondenceEmailAddressFormProviderSpec extends BooleanFieldBehaviours {
+class AddEmailAddressForCorrespondenceYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removeCorrespondenceEmailAddress.error.required"
+  val requiredKey = "addEmailAddressForCorrespondenceYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemoveCorrespondenceEmailAddressFormProvider()()
+  val form = new AddEmailAddressForCorrespondenceYesNoFormProvider()()
 
   ".value" - {
 

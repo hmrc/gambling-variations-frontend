@@ -17,23 +17,17 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.GamblingConnector
 import controllers.actions.*
-import models.UserAnswers
 import pages.GroupMemberPage
-import pages.controllingbody.ControllingBodyIsRepMemSameAsCbPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import viewmodels.ChangeRegistrationDetailsViewModel
 import views.html.ChangeRegistrationDetailsView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
+import scala.concurrent.ExecutionContext
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -43,8 +37,7 @@ class ChangeRegistrationDetailsController @Inject() (
   appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeRegistrationDetailsView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport
     with Logging {
 

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.correspondencedetails.CorrespondenceAdditionalNameYesNoFormProvider
+import forms.correspondencedetails.CorrespondenceUKAddrScreenerFormProvider
 import play.api.data.FormError
 
-class CorrespondenceAdditionalNameYesNoFormProviderSpec extends BooleanFieldBehaviours {
+class CorrespondenceUKAddrScreenerFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "correspondenceAdditionalNameYesNo.error.required"
+  val requiredKey = "correspondenceUKAddrScreener.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new CorrespondenceAdditionalNameYesNoFormProvider()()
+  val form = new CorrespondenceUKAddrScreenerFormProvider()()
 
-  ".value" - {
+  ".correspondenceUKAddrScreener" - {
 
-    val fieldName = "value"
+    val fieldName = "correspondenceUKAddrScreener"
 
     behave like booleanField(
       form,

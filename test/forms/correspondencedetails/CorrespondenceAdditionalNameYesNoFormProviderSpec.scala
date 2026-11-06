@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.correspondencedetails.RemoveCorrespondenceDetailsYesNoFormProvider
+import forms.correspondencedetails.CorrespondenceAdditionalNameYesNoFormProvider
 import play.api.data.FormError
 
-class RemoveCorrespondenceDetailsYesNoFormProviderSpec extends BooleanFieldBehaviours {
+class CorrespondenceAdditionalNameYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removeCorrespondenceDetailsYesNo.error.required"
+  val requiredKey = "correspondenceAdditionalNameYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemoveCorrespondenceDetailsYesNoFormProvider()()
+  val form = new CorrespondenceAdditionalNameYesNoFormProvider()()
 
-  ".removeCorrespondenceDetailsYesNo" - {
+  ".value" - {
 
-    val fieldName = "removeCorrespondenceDetailsYesNo"
+    val fieldName = "value"
 
     behave like booleanField(
       form,

@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.correspondencedetails.CorrespondenceUKAddrScreenerFormProvider
+import forms.correspondencedetails.RemoveCorrespondenceDetailsYesNoFormProvider
 import play.api.data.FormError
 
-class CorrespondenceUKAddrScreenerFormProviderSpec extends BooleanFieldBehaviours {
+class RemoveCorrespondenceDetailsYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "correspondenceUKAddrScreener.error.required"
+  val requiredKey = "removeCorrespondenceDetailsYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new CorrespondenceUKAddrScreenerFormProvider()()
+  val form = new RemoveCorrespondenceDetailsYesNoFormProvider()()
 
-  ".correspondenceUKAddrScreener" - {
+  ".removeCorrespondenceDetailsYesNo" - {
 
-    val fieldName = "correspondenceUKAddrScreener"
+    val fieldName = "removeCorrespondenceDetailsYesNo"
 
     behave like booleanField(
       form,

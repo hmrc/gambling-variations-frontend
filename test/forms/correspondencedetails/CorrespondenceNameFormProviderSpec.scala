@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.behaviours.StringFieldBehaviours
 import forms.correspondencedetails.CorrespondenceNameFormProvider

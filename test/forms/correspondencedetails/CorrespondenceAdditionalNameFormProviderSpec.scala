@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.behaviours.StringFieldBehaviours
-import forms.correspondencedetails.CorrespondenceAdditionalInfoFormProvider
+import forms.correspondencedetails.CorrespondenceAdditionalNameFormProvider
 import org.scalacheck.Gen
 import play.api.data.FormError
 
-class CorrespondenceAdditionalInfoFormProviderSpec extends StringFieldBehaviours {
+class CorrespondenceAdditionalNameFormProviderSpec extends StringFieldBehaviours {
 
-  private val requiredKey = "correspondenceAdditionalInfo.error.required"
-  private val lengthKey = "correspondenceAdditionalInfo.error.length"
-  private val invalidKey = "correspondenceAdditionalInfo.error.invalid"
+  private val requiredKey = "correspondenceAdditionalName.error.required"
+  private val lengthKey = "correspondenceAdditionalName.error.length"
+  private val invalidKey = "correspondenceAdditionalName.error.invalid"
 
   private val maxLength = 100
 
-  private val form = new CorrespondenceAdditionalInfoFormProvider()()
+  private val form = new CorrespondenceAdditionalNameFormProvider()()
 
-  private val correspondenceAdditionalInfoRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+  private val correspondenceAdditionalNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
 
-  ".correspondenceAdditionalInfo" - {
+  ".correspondenceAdditionalName" - {
 
-    val fieldName = "correspondenceAdditionalInfo"
+    val fieldName = "correspondenceAdditionalName"
 
     behave like fieldThatBindsValidData(
       form,
@@ -81,7 +81,7 @@ class CorrespondenceAdditionalInfoFormProviderSpec extends StringFieldBehaviours
         )
 
         result.errors must contain(
-          FormError(fieldName, invalidKey, Seq(correspondenceAdditionalInfoRegex))
+          FormError(fieldName, invalidKey, Seq(correspondenceAdditionalNameRegex))
         )
       }
     }

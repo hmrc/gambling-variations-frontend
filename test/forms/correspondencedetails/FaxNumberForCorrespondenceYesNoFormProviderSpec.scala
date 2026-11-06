@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.correspondencedetails.RemoveCorrespondenceFaxNumberFormProvider
+import forms.correspondencedetails.FaxNumberForCorrespondenceYesNoFormProvider
 import play.api.data.FormError
 
-class RemoveCorrespondenceFaxNumberFormProviderSpec extends BooleanFieldBehaviours {
+class FaxNumberForCorrespondenceYesNoFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "removeCorrespondenceFaxNumber.error.required"
+  val requiredKey = "faxNumberForCorrespondenceYesNo.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new RemoveCorrespondenceFaxNumberFormProvider()()
+  val form = new FaxNumberForCorrespondenceYesNoFormProvider()()
 
   ".value" - {
 
