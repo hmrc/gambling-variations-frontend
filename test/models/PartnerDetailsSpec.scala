@@ -29,7 +29,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     businessPartnerNumber  = "0100049899",
     dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
     dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
-    businessName           = Some("XYZ Consulting Ltd"),
+    businessName           = "XYZ Consulting Ltd",
     tradingName            = Some("XYZ Consulting"),
     dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
     nino                   = Some("AB123456C"),
@@ -76,13 +76,11 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     businessPartnerNumber = "0100049899",
     dateOfJoining         = Some(LocalDate.parse("2022-01-15")),
     dateOfLeaving         = Some(LocalDate.parse("2028-12-31")),
-    soleProprietorName = Some(
-      SoleProprietorName(
-        title      = "Mr",
-        firstName  = "John",
-        middleName = Some("Michael"),
-        lastName   = "Doe"
-      )
+    soleProprietorName = SoleProprietorName(
+      title      = "Mr",
+      firstName  = "John",
+      middleName = Some("Michael"),
+      lastName   = "Doe"
     ),
     tradingName            = Some("XYZ Consulting"),
     dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
@@ -126,13 +124,11 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
   )
 
   val partnersDetailsBusinessName = PartnersDetails(
-    partners   = Seq(partnerDetailsBusiness),
-    systemDate = Some(LocalDate.of(2026, 7, 30))
+    partners = Seq(partnerDetailsBusiness)
   )
 
   val partnersDetailsSoleProprietor = PartnersDetails(
-    partners   = Seq(partnerDetailsSoleProprietor),
-    systemDate = Some(LocalDate.of(2026, 7, 30))
+    partners = Seq(partnerDetailsSoleProprietor)
   )
 
   private val solePropPartnerJson = Json.obj(
@@ -222,13 +218,25 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     "read partner details with only required fields present" in {
       val minJsonSoleProp = Json.obj(
         "partners" -> Json.arr(
-          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessType" -> 1, "businessPartnerNumber" -> "1234567890")
+          Json.obj(
+            "mgdRegNumber"          -> "XWM00000001762",
+            "businessType"          -> 1,
+            "businessPartnerNumber" -> "1234567890",
+            "solePropTitle"         -> "Mr",
+            "solePropFirstName"     -> "John",
+            "solePropMiddleName"    -> "Michael",
+            "solePropLastName"      -> "Doe"
+          )
         )
       )
 
       val minJsonBusiness = Json.obj(
         "partners" -> Json.arr(
-          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessType" -> 2, "businessPartnerNumber" -> "1234567890")
+          Json.obj("mgdRegNumber"          -> "XWM00000001762",
+                   "businessType"          -> 2,
+                   "businessPartnerNumber" -> "1234567890",
+                   "businessName"          -> "XYZ Consulting Ltd"
+                  )
         )
       )
 
@@ -239,7 +247,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
             businessPartnerNumber  = "1234567890",
             dateOfJoining          = None,
             dateOfLeaving          = None,
-            businessName           = None,
+            businessName           = "XYZ Consulting Ltd",
             tradingName            = None,
             dateOfBirth            = None,
             nino                   = None,
@@ -266,18 +274,22 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
             isFutureJoinDate  = None,
             businessType      = BusinessType.Corporatebody
           )
-        ),
-        None
+        )
       )
 
       val solePropExpectedModel = PartnersDetails(
         Seq(
           SoleProprietorPartnerDetails(
-            mgdRegNumber           = "XWM00000001762",
-            businessPartnerNumber  = "1234567890",
-            dateOfJoining          = None,
-            dateOfLeaving          = None,
-            soleProprietorName     = None,
+            mgdRegNumber          = "XWM00000001762",
+            businessPartnerNumber = "1234567890",
+            dateOfJoining         = None,
+            dateOfLeaving         = None,
+            soleProprietorName = SoleProprietorName(
+              title      = "Mr",
+              firstName  = "John",
+              middleName = Some("Michael"),
+              lastName   = "Doe"
+            ),
             tradingName            = None,
             dateOfBirth            = None,
             nino                   = None,
@@ -304,8 +316,7 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
             isFutureJoinDate  = None,
             businessType      = BusinessType.Soleproprietor
           )
-        ),
-        None
+        )
       )
 
       minJsonSoleProp.validate[PartnersDetails] shouldBe JsSuccess(solePropExpectedModel)
@@ -315,7 +326,10 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     "read partner details fails if businessType is missing or incorrect" in {
       val minJsonMissingBusinessType = Json.obj(
         "partners" -> Json.arr(
-          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessPartnerNumber" -> "1234567890")
+          Json.obj(
+            "mgdRegNumber"          -> "XWM00000001762",
+            "businessPartnerNumber" -> "1234567890"
+          )
         )
       )
 
@@ -338,7 +352,11 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
     "read partner details fails if mgdRegNumber is missing" in {
       val minJsonMissingRegNumber = Json.obj(
         "partners" -> Json.arr(
-          Json.obj("businessPartnerNumber" -> "12345678900", "businessType" -> 1)
+          Json.obj("businessPartnerNumber" -> "12345678900",
+                   "businessType"          -> 2,
+                   "businessPartnerNumber" -> "1234567890",
+                   "businessName"          -> "businessName"
+                  )
         )
       )
 
@@ -348,15 +366,66 @@ class PartnerDetailsSpec extends AnyWordSpec with Matchers {
       )
     }
 
-    "read partner details fails if partnerBusinessNumber is missing" in {
+    "read partner details fails if businessPartnerNumber is missing" in {
       val minJsonMissingBusinessNumber = Json.obj(
         "partners" -> Json.arr(
-          Json.obj("mgdRegNumber" -> "XWM00000001762", "businessType" -> 1)
+          Json.obj(
+            "mgdRegNumber" -> "XWM00000001762",
+            "businessType" -> 2,
+            "businessName" -> "businessName"
+          )
         )
       )
 
       minJsonMissingBusinessNumber.validate[PartnersDetails] shouldBe JsError(
         __ \ "partners" \ 0 \ "businessPartnerNumber",
+        "error.path.missing"
+      )
+    }
+
+    "read partner details fails if businessName is missing" in {
+      val minJsonMissingBusinessNumber = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj(
+            "mgdRegNumber"          -> "XWM00000001762",
+            "businessType"          -> 2,
+            "businessPartnerNumber" -> "1234567890"
+          )
+        )
+      )
+
+      minJsonMissingBusinessNumber.validate[PartnersDetails] shouldBe JsError(
+        __ \ "partners" \ 0 \ "businessName",
+        "error.path.missing"
+      )
+    }
+
+    "read partner details fails if partnerBusinessNumber is missing" in {
+      val minJsonMissingBusinessNumber = Json.obj(
+        "partners" -> Json.arr(
+          Json.obj(
+            "mgdRegNumber" -> "XWM00000001762",
+            "businessType" -> 2,
+            "businessName" -> "businessName"
+          )
+        )
+      )
+
+      minJsonMissingBusinessNumber.validate[PartnersDetails] shouldBe JsError(
+        __ \ "partners" \ 0 \ "businessPartnerNumber",
+        "error.path.missing"
+      )
+    }
+
+    "read partner details fails if soleProp params are missing" in {
+      val minJsonMissingBusinessNumber = Json.obj(
+        "mgdRegNumber"          -> "XWM00000001762",
+        "businessType"          -> 1,
+        "businessPartnerNumber" -> "1234567890"
+      )
+
+      minJsonMissingBusinessNumber.validate[PartnersDetails] shouldBe JsError(
+        __ \ "partners",
         "error.path.missing"
       )
     }

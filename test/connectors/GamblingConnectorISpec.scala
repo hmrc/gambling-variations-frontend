@@ -892,7 +892,7 @@ object GamblingConnectorISpec {
         businessPartnerNumber  = "0100049899",
         dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
         dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
-        businessName           = Some("XYZ Consulting Ltd"),
+        businessName           = "XYZ Consulting Ltd",
         tradingName            = Some("XYZ Consulting"),
         dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
         nino                   = Some("AB123456C"),
@@ -933,8 +933,8 @@ object GamblingConnectorISpec {
         isFutureJoinDate  = Some(false),
         businessType      = BusinessType.Corporatebody
       )
-    ),
-    systemDate = Some(LocalDate.of(2026, 7, 30))
+    ) // ,
+//    systemDate = Some(LocalDate.of(2026, 7, 30))
   )
 
   val premisesDetails: Seq[PremisesDetails] = Seq(

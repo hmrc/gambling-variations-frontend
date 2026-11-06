@@ -347,7 +347,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
             partners = partnersDetailsSoleProprietor.partners.map(e =>
               e.asInstanceOf[SoleProprietorPartnerDetails]
                 .copy(
-                  soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(middleName = None))
+                  soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.copy(middleName = None)
                 )
             )
           )
@@ -563,7 +563,7 @@ object PartnerDetailsDataRequiredActionSpec {
     businessPartnerNumber  = "0100049899",
     dateOfJoining          = Some(LocalDate.parse("2022-01-15")),
     dateOfLeaving          = Some(LocalDate.parse("2028-12-31")),
-    businessName           = Some("XYZ Consulting Ltd"),
+    businessName           = "XYZ Consulting Ltd",
     tradingName            = Some("XYZ Consulting"),
     dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
     nino                   = Some("AB123456C"),
@@ -610,13 +610,11 @@ object PartnerDetailsDataRequiredActionSpec {
     businessPartnerNumber = "0100049899",
     dateOfJoining         = Some(LocalDate.parse("2022-01-15")),
     dateOfLeaving         = Some(LocalDate.parse("2028-12-31")),
-    soleProprietorName = Some(
-      SoleProprietorName(
-        title      = "Mr",
-        firstName  = "John",
-        middleName = Some("Michael"),
-        lastName   = "Doe"
-      )
+    soleProprietorName = SoleProprietorName(
+      title      = "Mr",
+      firstName  = "John",
+      middleName = Some("Michael"),
+      lastName   = "Doe"
     ),
     tradingName            = Some("XYZ Consulting"),
     dateOfBirth            = Some(LocalDate.parse("1985-06-20")),
@@ -660,13 +658,11 @@ object PartnerDetailsDataRequiredActionSpec {
   )
 
   val partnersDetailsBusinessName = PartnersDetails(
-    partners   = Seq(partnerDetailsBusiness),
-    systemDate = Some(LocalDate.of(2026, 7, 30))
+    partners = Seq(partnerDetailsBusiness)
   )
 
   val partnersDetailsSoleProprietor = PartnersDetails(
-    partners   = Seq(partnerDetailsSoleProprietor),
-    systemDate = Some(LocalDate.of(2026, 7, 30))
+    partners = Seq(partnerDetailsSoleProprietor)
   )
 
   val partnersDetailsSoleProprietorMissingData: Seq[(String, PartnersDetails)] = Seq(
@@ -675,7 +671,7 @@ object PartnerDetailsDataRequiredActionSpec {
        partnersDetailsSoleProprietor.partners.map(e =>
          e.asInstanceOf[SoleProprietorPartnerDetails]
            .copy(
-             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(title = ""))
+             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.copy(title = "")
            )
        )
      )
@@ -685,7 +681,7 @@ object PartnerDetailsDataRequiredActionSpec {
        partnersDetailsSoleProprietor.partners.map(e =>
          e.asInstanceOf[SoleProprietorPartnerDetails]
            .copy(
-             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(firstName = ""))
+             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.copy(firstName = "")
            )
        )
      )
@@ -695,7 +691,7 @@ object PartnerDetailsDataRequiredActionSpec {
        partnersDetailsSoleProprietor.partners.map(e =>
          e.asInstanceOf[SoleProprietorPartnerDetails]
            .copy(
-             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.map(_.copy(lastName = ""))
+             soleProprietorName = e.asInstanceOf[SoleProprietorPartnerDetails].soleProprietorName.copy(lastName = "")
            )
        )
      )

@@ -1129,7 +1129,6 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
         status(result) mustEqual SEE_OTHER
 
-
         redirectLocation(result).value mustEqual
           controllers.routes.SystemErrorController
             .onPageLoad()
@@ -1140,7 +1139,6 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           never()
         ).set(any[UserAnswers])
       }
-
 
     }
 

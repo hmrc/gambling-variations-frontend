@@ -25,8 +25,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 final case class PartnersDetails(
-  partners: Seq[PartnerDetails],
-  systemDate: Option[LocalDate]
+  partners: Seq[PartnerDetails]
 )
 
 object PartnersDetails {
@@ -61,7 +60,7 @@ sealed trait PartnerDetails {
   val isFutureJoinDate: Option[Boolean]
   val businessType: BusinessType
 
-  def getName: Option[String]
+  def getName: String
 }
 
 final case class SoleProprietorPartnerDetails(
@@ -69,7 +68,7 @@ final case class SoleProprietorPartnerDetails(
   businessPartnerNumber: String,
   dateOfJoining: Option[LocalDate],
   dateOfLeaving: Option[LocalDate],
-  soleProprietorName: Option[SoleProprietorName],
+  soleProprietorName: SoleProprietorName,
   tradingName: Option[String],
   dateOfBirth: Option[LocalDate],
   nino: Option[String],
@@ -84,7 +83,7 @@ final case class SoleProprietorPartnerDetails(
   isFutureJoinDate: Option[Boolean],
   businessType: BusinessType
 ) extends PartnerDetails {
-  override def getName: Option[String] = soleProprietorName.map(_.fullName)
+  override def getName: String = soleProprietorName.fullName
 }
 
 case class BusinessPartnerDetails(
@@ -92,7 +91,7 @@ case class BusinessPartnerDetails(
   businessPartnerNumber: String,
   dateOfJoining: Option[LocalDate],
   dateOfLeaving: Option[LocalDate],
-  businessName: Option[String],
+  businessName: String,
   tradingName: Option[String],
   dateOfBirth: Option[LocalDate],
   nino: Option[String],
@@ -107,7 +106,7 @@ case class BusinessPartnerDetails(
   isFutureJoinDate: Option[Boolean],
   businessType: BusinessType
 ) extends PartnerDetails {
-  override def getName: Option[String] = businessName
+  override def getName: String = businessName
 }
 
 object PartnerDetails {
@@ -146,7 +145,7 @@ object SoleProprietorPartnerDetails {
       (__ \ "businessPartnerNumber").read[String] and
       (__ \ "dateOfJoining").readNullable[LocalDate] and
       (__ \ "dateOfLeaving").readNullable[LocalDate] and
-      solePropReads.map(Some(_)).orElse(Reads.pure(None)) and
+      solePropReads and
       (__ \ "tradingName").readNullable[String] and
       (__ \ "dateOfBirth").readNullable[LocalDate] and
       (__ \ "nino").readNullable[String] and
@@ -173,7 +172,7 @@ object BusinessPartnerDetails {
       (__ \ "businessPartnerNumber").read[String] and
       (__ \ "dateOfJoining").readNullable[LocalDate] and
       (__ \ "dateOfLeaving").readNullable[LocalDate] and
-      (__ \ "businessName").readNullable[String] and
+      (__ \ "businessName").read[String] and
       (__ \ "tradingName").readNullable[String] and
       (__ \ "dateOfBirth").readNullable[LocalDate] and
       (__ \ "nino").readNullable[String] and

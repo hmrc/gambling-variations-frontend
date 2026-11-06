@@ -134,12 +134,10 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     updatedAnswers <- partnerDetails.businessType match {
                         case Soleproprietor =>
                           val partnerDetailsSoleProp = partnerDetails.asInstanceOf[SoleProprietorPartnerDetails]
-                          updatedAnswers.setIfDefined(PartnerDetailsSoleProprietorPage(partnerBusinessNumber),
-                                                      partnerDetailsSoleProp.soleProprietorName
-                                                     )
+                          updatedAnswers.set(PartnerDetailsSoleProprietorPage(partnerBusinessNumber), partnerDetailsSoleProp.soleProprietorName)
                         case _ =>
                           val partnerDetailsBusiness = partnerDetails.asInstanceOf[BusinessPartnerDetails]
-                          updatedAnswers.setIfDefined(PartnerDetailsBusinessNamePage(partnerBusinessNumber), partnerDetailsBusiness.businessName)
+                          updatedAnswers.set(PartnerDetailsBusinessNamePage(partnerBusinessNumber), partnerDetailsBusiness.businessName)
                       }
 
   } yield updatedAnswers
