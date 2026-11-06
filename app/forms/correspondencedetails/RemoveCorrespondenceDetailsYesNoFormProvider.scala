@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class RemoveCorrespondenceFaxNumberFormProvider @Inject() extends Mappings {
+class RemoveCorrespondenceDetailsYesNoFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("removeCorrespondenceFaxNumber.error.required")
+      "removeCorrespondenceDetailsYesNo" -> boolean("removeCorrespondenceDetailsYesNo.error.required")
     )
 }

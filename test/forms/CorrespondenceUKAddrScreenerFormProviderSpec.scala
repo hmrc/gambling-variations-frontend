@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.correspondencedetails.CorrespondenceUKAddrScreenerFormProvider
 import play.api.data.FormError
 
 class CorrespondenceUKAddrScreenerFormProviderSpec extends BooleanFieldBehaviours {

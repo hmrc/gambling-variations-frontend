@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import forms.correspondencedetails.CorrespondenceUKAddressFormProvider
 import models.Address
 import play.api.data.FormError
 

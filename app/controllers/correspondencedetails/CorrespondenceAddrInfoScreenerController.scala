@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceAddrInfoScreenerFormProvider
+import forms.correspondencedetails.CorrespondenceAddrInfoScreenerFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*

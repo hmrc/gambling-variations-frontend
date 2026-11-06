@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.correspondencedetails.AddEmailAddressForCorrespondenceYesNoFormProvider
 import play.api.data.FormError
 
 class AddEmailAddressForCorrespondenceYesNoFormProviderSpec extends BooleanFieldBehaviours {

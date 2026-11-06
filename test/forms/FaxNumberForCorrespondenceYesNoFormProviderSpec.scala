@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.correspondencedetails.FaxNumberForCorrespondenceYesNoFormProvider
 import play.api.data.FormError
 
 class FaxNumberForCorrespondenceYesNoFormProviderSpec extends BooleanFieldBehaviours {

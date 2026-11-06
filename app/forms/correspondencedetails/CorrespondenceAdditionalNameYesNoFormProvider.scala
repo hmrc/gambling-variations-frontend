@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.mappings.Mappings
-import models.CorrespondenceChangeAddrOption
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class CorrespondenceChangeAddrScreenerFormProvider @Inject() extends Mappings {
+class CorrespondenceAdditionalNameYesNoFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[CorrespondenceChangeAddrOption] =
+  def apply(): Form[Boolean] =
     Form(
-      "correspondenceChangeAddrScreener" -> enumerable[CorrespondenceChangeAddrOption](
-        "correspondenceChangeAddrScreener.error.required"
-      )
+      "value" -> boolean("correspondenceAdditionalNameYesNo.error.required")
     )
 }

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.correspondencedetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class AddEmailAddressForCorrespondenceYesNoFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
+
+class CorrespondenceUKAddrScreenerFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("addEmailAddressForCorrespondenceYesNo.error.required")
+      "correspondenceUKAddrScreener" -> boolean("correspondenceUKAddrScreener.error.required")
     )
 }

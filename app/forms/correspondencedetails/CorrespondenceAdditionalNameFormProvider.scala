@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.correspondencedetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class CorrespondenceAdditionalNameYesNoFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
-  def apply(): Form[Boolean] =
+class CorrespondenceAdditionalNameFormProvider @Inject() extends Mappings {
+
+  private val correspondenceAdditionalNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+
+  def apply(): Form[String] =
     Form(
-      "value" -> boolean("correspondenceAdditionalNameYesNo.error.required")
+      "correspondenceAdditionalName" -> text("correspondenceAdditionalName.error.required")
+        .verifying(
+          maxLength(100, "correspondenceAdditionalName.error.length")
+        )
+        .verifying(
+          regexp(
+            correspondenceAdditionalNameRegex,
+            "correspondenceAdditionalName.error.invalid"
+          )
+        )
     )
 }

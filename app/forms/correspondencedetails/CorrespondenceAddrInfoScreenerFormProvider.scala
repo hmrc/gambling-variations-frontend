@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package forms
+package forms.correspondencedetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class CorrespondenceAdditionalInfoFormProvider @Inject() extends Mappings {
+class CorrespondenceAddrInfoScreenerFormProvider @Inject() extends Mappings {
 
-  private val correspondenceAdditionalInfoRegex = "^[a-zA-Z0-9\\-'\\s]+$"
-
-  def apply(): Form[String] =
+  def apply(): Form[Boolean] =
     Form(
-      "correspondenceAdditionalInfo" -> text("correspondenceAdditionalInfo.error.required")
-        .verifying(
-          maxLength(100, "correspondenceAdditionalInfo.error.length")
-        )
-        .verifying(
-          regexp(
-            correspondenceAdditionalInfoRegex,
-            "correspondenceAdditionalInfo.error.invalid"
-          )
-        )
+      "correspondenceAddrInfoScreener" -> boolean("correspondenceAddrInfoScreener.error.required")
     )
 }

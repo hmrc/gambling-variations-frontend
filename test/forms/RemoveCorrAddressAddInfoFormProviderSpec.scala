@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.correspondencedetails.RemoveCorrAddressAddInfoFormProvider
 import play.api.data.FormError
 
 class RemoveCorrAddressAddInfoFormProviderSpec extends BooleanFieldBehaviours {

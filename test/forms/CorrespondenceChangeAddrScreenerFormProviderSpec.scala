@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.OptionFieldBehaviours
+import forms.correspondencedetails.CorrespondenceChangeAddrScreenerFormProvider
 import models.CorrespondenceChangeAddrOption
 import play.api.data.FormError
 

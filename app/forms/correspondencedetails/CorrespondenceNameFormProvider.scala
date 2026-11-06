@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.correspondencedetails
 
 import forms.mappings.Mappings
 import play.api.data.Form
 
-class FaxNumberForCorrespondenceYesNoFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
-  def apply(): Form[Boolean] =
+class CorrespondenceNameFormProvider @Inject() extends Mappings {
+
+  private val correspondenceNameRegex = "^[a-zA-Z0-9\\-'\\s]+$"
+
+  def apply(): Form[String] =
     Form(
-      "value" -> boolean("faxNumberForCorrespondenceYesNo.error.required")
+      "correspondenceName" -> text("correspondenceName.error.required")
+        .verifying(
+          maxLength(100, "correspondenceName.error.length")
+        )
+        .verifying(
+          regexp(
+            correspondenceNameRegex,
+            "correspondenceName.error.invalid"
+          )
+        )
     )
 }

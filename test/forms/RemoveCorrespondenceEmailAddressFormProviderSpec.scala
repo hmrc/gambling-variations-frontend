@@ -17,6 +17,7 @@
 package forms
 
 import forms.behaviours.BooleanFieldBehaviours
+import forms.correspondencedetails.RemoveCorrespondenceEmailAddressFormProvider
 import play.api.data.FormError
 
 class RemoveCorrespondenceEmailAddressFormProviderSpec extends BooleanFieldBehaviours {

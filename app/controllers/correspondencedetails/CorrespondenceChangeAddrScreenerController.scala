@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceChangeAddrScreenerFormProvider
+import forms.correspondencedetails.CorrespondenceChangeAddrScreenerFormProvider
 import models.{Address, Mode}
 import navigation.Navigator
 import pages.correspondencedetails.{CorrespondenceAddressUkPage, CorrespondenceChangeAddrScreenerPage}
