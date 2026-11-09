@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.BusinessType.Unincorporatedbody
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
 import models.*
 import org.mockito.Mockito
@@ -71,7 +71,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
         get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
           .willReturn(okJson(s"""{"mgdRegNumber":"$mgdRegNumber","typeOfControllingBody":4,"businessName":"Test Partnership"}"""))
       )
-      connector.getControlBodyDetails(mgdRegNumber).map { result =>
+      connector.getControllingBodyDetails(mgdRegNumber).map { result =>
         result.typeOfControllingBody mustBe Some(models.BusinessType.Partnership)
         result.businessName mustBe Some("Test Partnership")
       }
@@ -83,7 +83,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
             .willReturn(aResponse().withStatus(status))
         )
-        recoverToSucceededIf[UpstreamErrorResponse](connector.getControlBodyDetails(mgdRegNumber))
+        recoverToSucceededIf[UpstreamErrorResponse](connector.getControllingBodyDetails(mgdRegNumber))
       }
     }
 
@@ -96,7 +96,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
             .willReturn(okJson(payload))
         )
-        recoverToSucceededIf[RuntimeException](connector.getControlBodyDetails(mgdRegNumber))
+        recoverToSucceededIf[RuntimeException](connector.getControllingBodyDetails(mgdRegNumber))
       }
     }
   }
@@ -715,7 +715,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
           .willReturn(okJson(jsonAsString))
       )
 
-      connector.getControlBodyDetails(mgdRegNumber).futureValue mustBe controlBodyResponse
+      connector.getControllingBodyDetails(mgdRegNumber).futureValue mustBe controlBodyResponse
     }
 
     "return UpstreamErrorResponse when backend returns 404" in {
@@ -726,7 +726,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       )
 
       recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getControlBodyDetails(mgdRegNumber)
+        connector.getControllingBodyDetails(mgdRegNumber)
       }
     }
 
@@ -738,7 +738,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
       )
 
       recoverToSucceededIf[UpstreamErrorResponse] {
-        connector.getControlBodyDetails(mgdRegNumber)
+        connector.getControllingBodyDetails(mgdRegNumber)
       }
     }
 
@@ -984,8 +984,8 @@ object GamblingConnectorISpec {
     premisesDetails       = Some(premisesDetailsResponse)
   )
 
-  val controlBodyResponse: ControlBodyDetails =
-    ControlBodyDetails(
+  val controlBodyResponse: ControllingBodyDetails =
+    ControllingBodyDetails(
       mgdRegNumber           = mgdRegNumber,
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(LocalDate.of(2013, 2, 1)),

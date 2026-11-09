@@ -20,12 +20,12 @@ import base.SpecBase
 import models.BusinessType
 import play.api.libs.json.Json
 
-class ControlBodyDetailsContractSpec extends SpecBase {
-  "ControlBodyDetails" - {
+class ControllingBodyDetailsContractSpec extends SpecBase {
+  "ControllingBodyDetails" - {
     BusinessType.values.foreach { businessType =>
       s"read business type $businessType from the I1.36 field" in {
         val json = Json.obj("mgdRegNumber" -> mgdRegNum, "typeOfControllingBody" -> businessType.code, "businessName" -> "Name")
-        val result = json.as[ControlBodyDetails]
+        val result = json.as[ControllingBodyDetails]
         result.typeOfControllingBody.value mustBe businessType
         result.businessName.value mustBe "Name"
       }
@@ -36,24 +36,24 @@ class ControlBodyDetailsContractSpec extends SpecBase {
         "typeOfControllingBody" -> 4,
         "businessType"          -> 2
       )
-      json.as[ControlBodyDetails].typeOfControllingBody.value mustBe BusinessType.Partnership
+      json.as[ControllingBodyDetails].typeOfControllingBody.value mustBe BusinessType.Partnership
     }
     "allow an absent type without substituting the registered business type" in {
-      val details = Json.obj("mgdRegNumber" -> mgdRegNum, "businessType" -> 2).as[ControlBodyDetails]
+      val details = Json.obj("mgdRegNumber" -> mgdRegNum, "businessType" -> 2).as[ControllingBodyDetails]
       details.typeOfControllingBody mustBe None
       details.businessName mustBe None
     }
     "allow a null controlling body type" in {
       Json
         .obj("mgdRegNumber" -> mgdRegNum, "typeOfControllingBody" -> play.api.libs.json.JsNull)
-        .as[ControlBodyDetails]
+        .as[ControllingBodyDetails]
         .typeOfControllingBody mustBe None
     }
     "reject an invalid business type" in {
-      Json.obj("mgdRegNumber" -> mgdRegNum, "typeOfControllingBody" -> 99).validate[ControlBodyDetails].isError mustBe true
+      Json.obj("mgdRegNumber" -> mgdRegNum, "typeOfControllingBody" -> 99).validate[ControllingBodyDetails].isError mustBe true
     }
     "reject a missing registration number" in {
-      Json.obj("typeOfControllingBody" -> 4).validate[ControlBodyDetails].isError mustBe true
+      Json.obj("typeOfControllingBody" -> 4).validate[ControllingBodyDetails].isError mustBe true
     }
   }
 }

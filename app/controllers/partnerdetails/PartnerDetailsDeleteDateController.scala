@@ -20,7 +20,7 @@ import connectors.GamblingConnector
 import controllers.actions.*
 import forms.partnerdetails.PartnerDeleteDateFormProvider
 import models.requests.DataRequest
-import models.{BusinessDetails, BusinessType, Mode}
+import models.{BusinessDetails, Mode}
 import pages.partnerdetails.*
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
