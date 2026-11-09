@@ -130,6 +130,15 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
   private def noticeBodies(viewModel: CheckPartnerDetailsViewModel): Seq[String] =
     viewModel.notices.map(_.body)
 
+  private def hidden(key: String): Option[String] =
+    Some(messages(s"partnerDetailsCheckYourAnswers.$key.hidden"))
+
+  private def hiddenTextsOf(row: SummaryListRow): Seq[Option[String]] =
+    row.actions.toSeq.flatMap(_.items).map(_.visuallyHiddenText)
+
+  private def valueHtml(row: SummaryListRow): String =
+    row.value.content.asHtml.body
+
   private val missingDetails = messages("partnerDetailsCheckYourAnswers.error.missingDetails")
   private val missingChanges = messages("partnerDetailsCheckYourAnswers.error.missingChanges")
   private val contactUs = messages("partnerDetailsCheckYourAnswers.error.contactUs", contactLink)
@@ -327,6 +336,22 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         actionsOf(rowFor(viewModel.businessDetailsSummaryList, "tradingName").value) mustBe empty
       }
+
+      "use the trading name hidden text on change and remove" in {
+        val viewModel =
+          newPartnerSaved.copy(addTradingName = Some(true), tradingName = Some("Trading name"))
+
+        hiddenTextsOf(rowFor(viewModel.businessDetailsSummaryList, "tradingName").value) mustBe
+          Seq(hidden("tradingName"), hidden("tradingName"))
+      }
+
+      "use the add hidden text on the trading name screener row" in {
+        val viewModel =
+          newPartnerNotSaved.copy(addTradingName = Some(true))
+
+        hiddenTextsOf(rowFor(viewModel.businessDetailsSummaryList, "tradingName.add").value) mustBe
+          Seq(hidden("tradingName.add"))
+      }
     }
 
     "date of joining row" - {
@@ -345,14 +370,20 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         actionsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "dateOfJoining").value) mustBe Seq(change)
       }
+
+      "use the date of joining hidden text on change" in {
+        hiddenTextsOf(rowFor(newPartnerNotSaved.businessDetailsSummaryList, "dateOfJoining").value) mustBe
+          Seq(hidden("dateOfJoining"))
+      }
     }
 
     "NINO rows" - {
 
       "show the NINO screener row only for a sole proprietor" in {
 
-        rowFor(existingPartner.businessDetailsSummaryList, "addNino") mustBe None
-        rowFor(soleProprietor.businessDetailsSummaryList, "addNino") mustBe defined
+        rowFor(existingPartner.businessDetailsSummaryList, "nino.add") mustBe None
+        rowFor(soleProprietor.businessDetailsSummaryList, "nino") mustBe defined
+        rowFor(soleProprietor.businessDetailsSummaryList, "nino.add") mustBe defined
       }
 
       "hide the NINO row when the screener answer is no" in {
@@ -383,6 +414,18 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
           )
 
         actionsOf(rowFor(viewModel.businessDetailsSummaryList, "nino").value) mustBe empty
+      }
+
+      "use the NINO hidden text on change and remove" in {
+        val viewModel = soleProprietor.copy(maybeSubmitted = Some(true))
+
+        hiddenTextsOf(rowFor(viewModel.businessDetailsSummaryList, "nino").value) mustBe
+          Seq(hidden("nino"), hidden("nino"))
+      }
+
+      "use the NINO add hidden text on the screener row" in {
+        hiddenTextsOf(rowFor(soleProprietor.businessDetailsSummaryList, "nino.add").value) mustBe
+          Seq(hidden("nino.add"))
       }
     }
 
@@ -432,6 +475,15 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         actionsOf(rowFor(viewModel.businessDetailsSummaryList, "foreignCorporateReference").value) mustBe empty
       }
+
+      "use the foreign corporate reference hidden text on change" in {
+        val viewModel =
+          newPartnerNotSaved.copy(isIncorporatedInUk = Some(false), foreignCorporateReference = Some("ABC-123"))
+
+        hiddenTextsOf(rowFor(viewModel.businessDetailsSummaryList, "foreignCorporateReference").value) mustBe
+          Seq(hidden("foreignCorporateReference"))
+      }
+
     }
 
     "date of incorporation and company registration number rows" - {
@@ -495,7 +547,8 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         val viewModel =
           newPartnerNotSaved.copy(typeOfBusiness = Some(Partnership), addVatRegistrationNumber = Some(true))
 
-        rowFor(viewModel.businessDetailsSummaryList, "addVatRegistrationNumber") mustBe defined
+        rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber") mustBe defined
+        rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber.add") mustBe defined
       }
 
       "hide the VAT number row when the screener answer is no" in {
@@ -529,6 +582,22 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         actionsOf(rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber").value) mustBe empty
       }
+
+      "use the VAT hidden text on change and remove" in {
+        val viewModel =
+          newPartnerSaved.copy(addVatRegistrationNumber = Some(true), vatRegistrationNumber = Some("123450002"))
+
+        hiddenTextsOf(rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber").value) mustBe
+          Seq(hidden("vatRegistrationNumber"), hidden("vatRegistrationNumber"))
+      }
+
+      "use the VAT add hidden text on the screener row" in {
+        val viewModel =
+          newPartnerNotSaved.copy(addVatRegistrationNumber = Some(true))
+
+        hiddenTextsOf(rowFor(viewModel.businessDetailsSummaryList, "vatRegistrationNumber.add").value) mustBe
+          Seq(hidden("vatRegistrationNumber.add"))
+      }
     }
 
     "address rows" - {
@@ -559,7 +628,7 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         val viewModel =
           newPartnerNotSaved.copy(addAdditionalInformation = Some(true))
 
-        rowFor(viewModel.addressSummaryList, "addAdditionalInformation").value.value.content mustBe Text(messages("site.yes"))
+        rowFor(viewModel.addressSummaryList, "additionalInformation.add").value.value.content mustBe Text(messages("site.yes"))
       }
 
       "hide the additional information yes/no row for an existing partner" in {
@@ -610,6 +679,28 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         actionsOf(rowFor(viewModel.addressSummaryList, "additionalInformation").value) must have size 1
       }
+
+      "use the address hidden text on change" in {
+        hiddenTextsOf(rowFor(existingPartner.addressSummaryList, "address").value) mustBe
+          Seq(hidden("address"))
+      }
+
+      "use the additional information hidden text on change and remove" in {
+        val viewModel =
+          newPartnerSaved.copy(addAdditionalInformation = Some(true), additionalInformation = Some("Care of Jane"))
+
+        hiddenTextsOf(rowFor(viewModel.addressSummaryList, "additionalInformation").value) mustBe
+          Seq(hidden("additionalInformation"), hidden("additionalInformation"))
+      }
+
+      "use the additional information add hidden text on the screener row" in {
+        val viewModel =
+          newPartnerNotSaved.copy(addAdditionalInformation = Some(true))
+
+        hiddenTextsOf(rowFor(viewModel.addressSummaryList, "additionalInformation.add").value) mustBe
+          Seq(hidden("additionalInformation.add"))
+      }
+
     }
 
     "contact details rows" - {
@@ -671,6 +762,11 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
         actionsOf(rowFor(viewModel.contactDetailsSummaryList, "contactNumbers").value) mustBe empty
       }
+
+      "use the contact numbers hidden text on change" in {
+        hiddenTextsOf(rowFor(existingPartner.contactDetailsSummaryList, "contactNumbers").value) mustBe
+          Seq(hidden("contactNumbers"))
+      }
     }
 
     "fax and email rows" - {
@@ -681,15 +777,15 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
           newPartnerNotSaved.copy(addFaxNumber = Some(false), faxNumber = None)
 
         val addFaxHtmlKey =
-          rowFor(viewModel.contactDetailsSummaryList, "addFaxNumber").value.key.content.asHtml.body
+          rowFor(viewModel.contactDetailsSummaryList, "faxNumber.add").value.key.content.asHtml.body
 
         val addFaxHtmlValue =
-          rowFor(viewModel.contactDetailsSummaryList, "addFaxNumber").value.value.content.asHtml.body
+          rowFor(viewModel.contactDetailsSummaryList, "faxNumber.add").value.value.content.asHtml.body
 
         val faxHtml: Option[SummaryListRow] =
           rowFor(viewModel.contactDetailsSummaryList, "faxNumber")
 
-        addFaxHtmlKey   must include(messages("partnerDetailsCheckYourAnswers.addFaxNumber"))
+        addFaxHtmlKey   must include(messages("partnerDetailsCheckYourAnswers.faxNumber.add"))
         addFaxHtmlValue must include("No")
         faxHtml mustBe None
 
@@ -729,6 +825,80 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
           newPartnerNotSaved.copy(addEmailAddress = Some(false), emailAddress = Some("a@example.com"))
 
         rowFor(viewModel.contactDetailsSummaryList, "emailAddress") mustBe None
+      }
+
+      "use the fax hidden text on change and remove" in {
+        val viewModel =
+          newPartnerSaved.copy(addFaxNumber = Some(true), faxNumber = Some("0123456789"))
+
+        hiddenTextsOf(rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value) mustBe
+          Seq(hidden("faxNumber"), hidden("faxNumber"))
+      }
+
+      "use the email hidden text on change and remove" in {
+        val viewModel =
+          newPartnerSaved.copy(addEmailAddress = Some(true), emailAddress = Some("a@example.com"))
+
+        hiddenTextsOf(rowFor(viewModel.contactDetailsSummaryList, "emailAddress").value) mustBe
+          Seq(hidden("emailAddress"), hidden("emailAddress"))
+      }
+
+      "use the email add hidden text on the screener row" in {
+        val viewModel =
+          newPartnerNotSaved.copy(addEmailAddress = Some(true))
+
+        hiddenTextsOf(rowFor(viewModel.contactDetailsSummaryList, "emailAddress.add").value) mustBe
+          Seq(hidden("emailAddress.add"))
+      }
+    }
+
+    "add links for missing required values" - {
+
+      "render an add link with visually hidden text for a missing UTR" in {
+        val row = rowFor(newPartnerNotSaved.copy(utr = None).businessDetailsSummaryList, "utr").value
+        val html = valueHtml(row)
+
+        html must include(messages("partnerDetailsCheckYourAnswers.utr.add"))
+        actionsOf(row) mustBe empty
+      }
+
+      "use the business name add text that matches the business type" in {
+        val cases = Seq(
+          Soleproprietor              -> "soleProprietorName",
+          Corporatebody               -> "corporateBodyName",
+          Unincorporatedbody          -> "unincorporatedBodyName",
+          Partnership                 -> "partnershipName",
+          LimitedLiabilityPartnership -> "llpName"
+        )
+
+        cases.foreach { case (businessType, key) =>
+          val viewModel = newPartnerNotSaved.copy(typeOfBusiness = Some(businessType), businessName = None)
+          val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, key).value)
+
+          html must include(messages(s"partnerDetailsCheckYourAnswers.$key.add"))
+        }
+      }
+
+      "render an add link for a missing value on an existing partner not due to join or leave" in {
+        val viewModel = existingPartner.copy(companyRegistrationNumber = None)
+        val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, "companyRegistrationNumber").value)
+
+        html must include("<a href=")
+      }
+
+      "render no add link when the partner is due to leave" in {
+        val viewModel = existingPartner.copy(utr = None, isDueToLeave = true, dateOfLeaving = Some(leavingDate))
+        val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, "utr").value)
+
+        html must not include "<a href="
+        html must include(messages("partnerDetailsCheckYourAnswers.noData"))
+      }
+
+      "render no add link when a value is present" in {
+        val html = valueHtml(rowFor(existingPartner.businessDetailsSummaryList, "utr").value)
+
+        html must not include "<a href="
+        html must include("1121766916")
       }
     }
   }
