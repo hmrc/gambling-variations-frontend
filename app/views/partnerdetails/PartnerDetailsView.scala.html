@@ -33,6 +33,10 @@
 
 @(form: Form[Boolean], viewModel: PartnerDetailsViewModel, paginatedViewModel: PaginationViewModel, page: Int, totalPages: Int, from: Int, to: Int, totalRecords: Int)(implicit request: Request[_], messages: Messages)
 
+@showActionColumn = @{
+    viewModel.partners.exists(_.canRemove)
+}
+
 @layout(
     pageTitle = title(
         form,
@@ -102,12 +106,14 @@
                     @messages("partnerDetails.status")
                 </th>
 
+                @if(showActionColumn) {
                 <th
                         scope="col"
                         class="govuk-table__header"
                 >
                     @messages("partnerDetails.action")
                 </th>
+                 }
 
             </tr>
             </thead>
@@ -139,27 +145,34 @@
                                         </span>
                 </td>
 
-                <td class="govuk-table__cell">
 
-                    @if(partner.canRemove) {
+                @if(showActionColumn) {
 
-                    @partner.removeUrl.map { removeUrl =>
-                    <a
-                            class="govuk-link"
-                            href="@removeUrl"
-                    >
-                        @messages("site.remove")
+                    <td class="govuk-table__cell">
+
+                        @if(partner.canRemove) {
+
+                        @partner.removeUrl.map { removeUrl =>
+                        <a
+                                class="govuk-link"
+                                href="@removeUrl"
+                        >
+                            @messages("site.remove")
+                            <span class="govuk-visually-hidden">
+                                   @partner.name
+                            </span>
+                        </a>
+                        }
+
+                        } else {
+
                         <span class="govuk-visually-hidden">
-                                                        @partner.name
-                                                    </span>
-                    </a>
-                    }
+                       @messages("partnerDetails.cannotRemove") @partner.name
+                     </span>
 
-                    } else {
+                        }
 
-                    @messages("partnerDetails.cannotRemove")
-
-                    }
+                 }
 
                 </td>
 
