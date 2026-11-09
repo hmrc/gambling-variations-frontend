@@ -16,7 +16,7 @@
 
 package forms.controllingbody
 
-import forms.controllingbody.ControllingBodyNINumberFormProvider.{invalidCharsKey, invalidFormatKey, ninoCharsRegex, ninoValidRegex, requiredKey}
+import forms.controllingbody.ControllingBodyNINumberFormProvider.{invalidCharsKey, invalidFormatKey, ninoCharsRegex, ninoValidRegex, normaliseNino, requiredKey}
 import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.validation.{Constraint, Invalid, Valid}
@@ -29,10 +29,12 @@ class ControllingBodyNINumberFormProvider @Inject() extends Mappings {
     Form(
       "value" ->
         text(requiredKey)
-          .transform[String](_.filterNot(_.isWhitespace), identity)
+          .transform[String](normaliseNino, identity)
           .verifying(
             Seq(
-              regexp(ninoCharsRegex, invalidCharsKey),
+              Constraint[String](invalidCharsKey) { nino =>
+                if (nino.trim.matches(ninoCharsRegex)) Valid else Invalid(invalidCharsKey)
+              },
               Constraint[String](invalidFormatKey) { nino =>
                 if (nino.matches(ninoValidRegex)) Valid else Invalid(invalidFormatKey)
               }
@@ -47,10 +49,17 @@ object ControllingBodyNINumberFormProvider {
   private[forms] val requiredKey = "controllingBodyAddNino.error.required"
 
   private[forms] val invalidCharsKey = "controllingBodyAddNino.error.invalidChars"
-  private[forms] val ninoCharsRegex = """^[A-Za-z0-9]+$"""
+  private[forms] val ninoCharsRegex  = """^[A-Za-z0-9]+$"""
 
   private[forms] val invalidFormatKey = "controllingBodyAddNino.error.invalidFormat"
-  private[forms] val ninoValidRegex = """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
+  private[forms] val ninoValidRegex   = """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
+
+  private[forms] val ninoLengthWithoutSuffix = 8
+
+  private[forms] def normaliseNino(input: String): String = {
+    val stripped = input.filterNot(_.isWhitespace)
+    if (stripped.length == ninoLengthWithoutSuffix) s"$stripped " else stripped
+  }
 }
 
 
