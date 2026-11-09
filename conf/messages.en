@@ -1069,6 +1069,8 @@ partnerDetailsForeignCorporateReference.change.hidden = What is the partner’s 
 
 partnerDetailsCheckYourAnswers.title = Check your partner details
 partnerDetailsCheckYourAnswers.heading = Check your partner details
+
+# Notices
 partnerDetailsCheckYourAnswers.error.missingChanges = You must submit any changes you make to your partner details. Once HMRC approves the changes, we will update your registration certificate.
 partnerDetailsCheckYourAnswers.error.missingDetails = You must add missing details before you submit this partner for approval.
 partnerDetailsCheckYourAnswers.error.contactUsLinkText = you need to contact us (opens in new tab)
@@ -1077,54 +1079,124 @@ partnerDetailsCheckYourAnswers.error.cannotChangeLeaving = You cannot change thi
 partnerDetailsCheckYourAnswers.error.cannotChangeJoining = You cannot change this partner''s details online because they are due to join. If you want to make changes before they join on {0}, {1}.
 partnerDetailsCheckYourAnswers.noData = Not provided
 
+# Business details
 partnerDetailsCheckYourAnswers.businessDetails = Business details
+partnerDetailsCheckYourAnswers.businessDetails.hidden = business details
+
 partnerDetailsCheckYourAnswers.typeOfBusiness = Type of business
+partnerDetailsCheckYourAnswers.typeOfBusiness.hidden = type of business
 partnerDetailsCheckYourAnswers.typeOfBusiness.add = Add type of business
+partnerDetailsCheckYourAnswers.typeOfBusiness.add.hidden = add type of business
+
 partnerDetailsCheckYourAnswers.soleProprietorName = Sole proprietor’s name
+partnerDetailsCheckYourAnswers.soleProprietorName.hidden = sole proprietor’s name
 partnerDetailsCheckYourAnswers.soleProprietorName.add = Add sole proprietor’s name
-partnerDetailsCheckYourAnswers.soleProprietorDob = Sole proprietor’s date of birth
-partnerDetailsCheckYourAnswers.soleProprietorDob.add = Add sole proprietor’s date of birth
-partnerDetailsCheckYourAnswers.unincorporatedBodyName = Unincorporated body’s name
-partnerDetailsCheckYourAnswers.unincorporatedBodyName.add = Add unincorporated body’s name
+partnerDetailsCheckYourAnswers.soleProprietorName.add.hidden = add sole proprietor’s name
+
 partnerDetailsCheckYourAnswers.corporateBodyName = Corporate body’s name
+partnerDetailsCheckYourAnswers.corporateBodyName.hidden = corporate body’s name
 partnerDetailsCheckYourAnswers.corporateBodyName.add = Add corporate body’s name
+partnerDetailsCheckYourAnswers.corporateBodyName.add.hidden = add corporate body’s name
+
+partnerDetailsCheckYourAnswers.unincorporatedBodyName = Unincorporated body’s name
+partnerDetailsCheckYourAnswers.unincorporatedBodyName.hidden = unincorporated body’s name
+partnerDetailsCheckYourAnswers.unincorporatedBodyName.add = Add unincorporated body’s name
+partnerDetailsCheckYourAnswers.unincorporatedBodyName.add.hidden = add unincorporated body’s name
+
 partnerDetailsCheckYourAnswers.partnershipName = Partnership’s name
+partnerDetailsCheckYourAnswers.partnershipName.hidden = partnership’s name
 partnerDetailsCheckYourAnswers.partnershipName.add = Add partnership’s name
+partnerDetailsCheckYourAnswers.partnershipName.add.hidden = add partnership’s name
+
 partnerDetailsCheckYourAnswers.llpName = Limited liability partnership’s name
+partnerDetailsCheckYourAnswers.llpName.hidden = limited liability partnership’s name
 partnerDetailsCheckYourAnswers.llpName.add = Add limited liability partnership’s name
-partnerDetailsCheckYourAnswers.addNino = Add National Insurance number?
-partnerDetailsCheckYourAnswers.nino = National Insurance number
-partnerDetailsCheckYourAnswers.nino.add = Add National Insurance number
-partnerDetailsCheckYourAnswers.addTradingName = Add trading name?
+partnerDetailsCheckYourAnswers.llpName.add.hidden = add limited liability partnership’s name
+
+partnerDetailsCheckYourAnswers.soleProprietorDob = Sole proprietor’s date of birth
+partnerDetailsCheckYourAnswers.soleProprietorDob.hidden = sole proprietor’s date of birth
+partnerDetailsCheckYourAnswers.soleProprietorDob.add = Add sole proprietor’s date of birth
+partnerDetailsCheckYourAnswers.soleProprietorDob.add.hidden = add sole proprietor’s date of birth
+
 partnerDetailsCheckYourAnswers.tradingName = Trading name
-partnerDetailsCheckYourAnswers.isIncorporatedInUk = Is the business incorporated in the UK?
-partnerDetailsCheckYourAnswers.isIncorporatedInUk.add = Add is the business incorporated in the UK
-partnerDetailsCheckYourAnswers.countryOfIncorporation = Country of incorporation
-partnerDetailsCheckYourAnswers.countryOfIncorporation.add = Add country of incorporation
-partnerDetailsCheckYourAnswers.foreignCorporateReference = Foreign corporate reference
-partnerDetailsCheckYourAnswers.foreignCorporateReference.add = Add foreign corporate reference
-partnerDetailsCheckYourAnswers.dateOfIncorporation = Date of incorporation
-partnerDetailsCheckYourAnswers.dateOfIncorporation.add = Add date of incorporation
-partnerDetailsCheckYourAnswers.companyRegistrationNumber = Company registration number
-partnerDetailsCheckYourAnswers.companyRegistrationNumber.add = Add company registration number
-partnerDetailsCheckYourAnswers.utr = Unique Taxpayer Reference
-partnerDetailsCheckYourAnswers.utr.add = Add Unique Taxpayer Reference
-partnerDetailsCheckYourAnswers.addVatRegistrationNumber = Add VAT registration number?
-partnerDetailsCheckYourAnswers.vatRegistrationNumber = VAT registration number
+partnerDetailsCheckYourAnswers.tradingName.hidden = trading name
+partnerDetailsCheckYourAnswers.tradingName.add = Add trading name?
+partnerDetailsCheckYourAnswers.tradingName.add.hidden = add trading name
+
 partnerDetailsCheckYourAnswers.dateOfJoining = Date of joining
+partnerDetailsCheckYourAnswers.dateOfJoining.hidden = date of joining
 partnerDetailsCheckYourAnswers.dateOfJoining.add = Add date of joining
+partnerDetailsCheckYourAnswers.dateOfJoining.add.hidden = add date of joining
 
+partnerDetailsCheckYourAnswers.nino = National Insurance number
+partnerDetailsCheckYourAnswers.nino.hidden = National Insurance number
+partnerDetailsCheckYourAnswers.nino.add = Add National Insurance number?
+partnerDetailsCheckYourAnswers.nino.add.hidden = add National Insurance number
+
+partnerDetailsCheckYourAnswers.isIncorporatedInUk = Is the business incorporated in the UK?
+partnerDetailsCheckYourAnswers.isIncorporatedInUk.hidden = is the business incorporated in the UK
+partnerDetailsCheckYourAnswers.isIncorporatedInUk.add = Add is the business incorporated in the UK
+partnerDetailsCheckYourAnswers.isIncorporatedInUk.add.hidden = add is the business incorporated in the UK
+
+partnerDetailsCheckYourAnswers.dateOfIncorporation = Date of incorporation
+partnerDetailsCheckYourAnswers.dateOfIncorporation.hidden = date of incorporation
+partnerDetailsCheckYourAnswers.dateOfIncorporation.add = Add date of incorporation
+partnerDetailsCheckYourAnswers.dateOfIncorporation.add.hidden = add date of incorporation
+
+partnerDetailsCheckYourAnswers.companyRegistrationNumber = Company registration number
+partnerDetailsCheckYourAnswers.companyRegistrationNumber.hidden = company registration number
+partnerDetailsCheckYourAnswers.companyRegistrationNumber.add = Add company registration number
+partnerDetailsCheckYourAnswers.companyRegistrationNumber.add.hidden = add company registration number
+
+partnerDetailsCheckYourAnswers.countryOfIncorporation = Country of incorporation
+partnerDetailsCheckYourAnswers.countryOfIncorporation.hidden = country of incorporation
+partnerDetailsCheckYourAnswers.countryOfIncorporation.add = Add country of incorporation
+partnerDetailsCheckYourAnswers.countryOfIncorporation.add.hidden = add country of incorporation
+
+partnerDetailsCheckYourAnswers.foreignCorporateReference = Foreign corporate reference
+partnerDetailsCheckYourAnswers.foreignCorporateReference.hidden = foreign corporate reference
+partnerDetailsCheckYourAnswers.foreignCorporateReference.add = Add foreign corporate reference
+partnerDetailsCheckYourAnswers.foreignCorporateReference.add.hidden = add foreign corporate reference
+
+partnerDetailsCheckYourAnswers.utr = Unique Taxpayer Reference
+partnerDetailsCheckYourAnswers.utr.hidden = Unique Taxpayer Reference
+partnerDetailsCheckYourAnswers.utr.add = Add Unique Taxpayer Reference
+partnerDetailsCheckYourAnswers.utr.add.hidden = add Unique Taxpayer Reference
+
+partnerDetailsCheckYourAnswers.vatRegistrationNumber.add = Add VAT registration number?
+partnerDetailsCheckYourAnswers.vatRegistrationNumber.add.hidden = add VAT registration number
+partnerDetailsCheckYourAnswers.vatRegistrationNumber = VAT registration number
+partnerDetailsCheckYourAnswers.vatRegistrationNumber.hidden = VAT registration number
+
+# Address
 partnerDetailsCheckYourAnswers.address = Address
-partnerDetailsCheckYourAnswers.addAdditionalInformation = Add additional information for address?
+partnerDetailsCheckYourAnswers.address.hidden = address
+partnerDetailsCheckYourAnswers.address.add = Add address
+partnerDetailsCheckYourAnswers.address.add.hidden = add address
+partnerDetailsCheckYourAnswers.additionalInformation.add = Add additional information for address?
+partnerDetailsCheckYourAnswers.additionalInformation.add.hidden = add additional information for address
 partnerDetailsCheckYourAnswers.additionalInformation = Additional information
+partnerDetailsCheckYourAnswers.additionalInformation.hidden = additional information
 
+# Contact details
 partnerDetailsCheckYourAnswers.contactDetails = Contact details
+partnerDetailsCheckYourAnswers.contactDetails.hidden = contact details
+
 partnerDetailsCheckYourAnswers.contactNumbers = Contact numbers
+partnerDetailsCheckYourAnswers.contactNumbers.hidden = contact numbers
 partnerDetailsCheckYourAnswers.contactNumbers.add = Add contact numbers
-partnerDetailsCheckYourAnswers.addFaxNumber = Add fax number?
+partnerDetailsCheckYourAnswers.contactNumbers.add.hidden = add contact numbers
+
+partnerDetailsCheckYourAnswers.faxNumber.add = Add fax number?
+partnerDetailsCheckYourAnswers.faxNumber.add.hidden = add fax number
 partnerDetailsCheckYourAnswers.faxNumber = Fax number
-partnerDetailsCheckYourAnswers.addEmailAddress = Add email address?
+partnerDetailsCheckYourAnswers.faxNumber.hidden = fax number
+
+partnerDetailsCheckYourAnswers.emailAddress.add = Add email address?
+partnerDetailsCheckYourAnswers.emailAddress.add.hidden = add email address
 partnerDetailsCheckYourAnswers.emailAddress = Email address
+partnerDetailsCheckYourAnswers.emailAddress.hidden = email address
+
 
 otherLicencesAndPermitsGB.title = Do you have any other licences and permits in Great Britain?
 otherLicencesAndPermitsGB.heading = Do you have any other licences and permits in Great Britain?
