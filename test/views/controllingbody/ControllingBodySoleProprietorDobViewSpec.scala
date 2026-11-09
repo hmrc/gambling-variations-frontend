@@ -22,9 +22,12 @@ import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.running
 import views.html.controllingbody.ControllingBodySoleProprietorDobView
+
+import java.time.{Clock, LocalDate, ZoneOffset}
 
 class ControllingBodySoleProprietorDobViewSpec extends SpecBase {
 
@@ -110,6 +113,84 @@ class ControllingBodySoleProprietorDobViewSpec extends SpecBase {
         document.body().text() must include(
           msgs("controllingBodySoleProprietorDob.error.required.all")
         )
+      }
+    }
+
+    "report invalid fields before missing fields and highlight only the invalid fields" in {
+
+      val application = applicationBuilder().build()
+
+      running(application) {
+
+        implicit val msgs: Messages = messages(application)
+
+        val view =
+          application.injector.instanceOf[ControllingBodySoleProprietorDobView]
+
+        val form =
+          application.injector.instanceOf[ControllingBodySoleProprietorDobFormProvider].apply()
+
+        Seq(
+          ("$$", "me", "", Seq("day", "month")),
+          ("32", "3", "", Seq("day")),
+          ("2", "13", "", Seq("month")),
+          ("2", "13", "1998", Seq("month"))
+        ).foreach { case (day, month, year, invalidFields) =>
+          val boundForm = form.bind(
+            Map(
+              "value.day"   -> day,
+              "value.month" -> month,
+              "value.year"  -> year
+            )
+          )
+
+          val document: Document = Jsoup.parse(view(boundForm, NormalMode)(FakeRequest(), msgs).toString)
+
+          val highlightedFields =
+            Seq("day", "month", "year").filter(part => document.getElementById(s"value.$part").hasClass("govuk-input--error"))
+
+          withClue(s"Date $day/$month/$year: ") {
+            document.select(".govuk-error-summary a").size() mustEqual 1
+            document.select(".govuk-error-summary a").text() mustEqual msgs("controllingBodySoleProprietorDob.error.invalid")
+            document.select(".govuk-error-summary a").attr("href") mustEqual s"#value.${invalidFields.head}"
+            document.select(".govuk-error-message").text() mustEqual s"Error: ${msgs("controllingBodySoleProprietorDob.error.invalid")}"
+            highlightedFields mustEqual invalidFields
+          }
+        }
+      }
+    }
+
+    "render the latest date error once in the error summary" in {
+
+      val today = LocalDate.of(2026, 9, 5)
+
+      val application = applicationBuilder()
+        .overrides(bind[Clock].toInstance(Clock.fixed(today.atStartOfDay(ZoneOffset.UTC).toInstant, ZoneOffset.UTC)))
+        .build()
+
+      running(application) {
+
+        implicit val msgs: Messages = messages(application)
+
+        val view =
+          application.injector.instanceOf[ControllingBodySoleProprietorDobView]
+
+        val form =
+          application.injector.instanceOf[ControllingBodySoleProprietorDobFormProvider].apply()
+
+        val boundForm = form.bind(
+          Map(
+            "value.day"   -> "5",
+            "value.month" -> "9",
+            "value.year"  -> "2026"
+          )
+        )
+
+        val document: Document = Jsoup.parse(view(boundForm, NormalMode)(FakeRequest(), msgs).toString)
+
+        document.select(".govuk-error-summary a").size() mustEqual 1
+        document.select(".govuk-error-summary a").text() mustEqual "Date of birth must be the same as or before 4 September 2026"
+        document.select(".govuk-error-summary a").attr("href") mustEqual "#value.day"
       }
     }
   }

@@ -34,11 +34,10 @@ class PartnerSoleProprietorDobFormProvider @Inject() (clock: Clock) extends Mapp
 
     Form(
       "value" -> localDate(
-        invalidKey               = "partnerSoleProprietorDob.error.invalid",
-        allRequiredKey           = "partnerSoleProprietorDob.error.required.all",
-        twoRequiredKey           = "partnerSoleProprietorDob.error.required.two",
-        requiredKey              = "partnerSoleProprietorDob.error.required",
-        requireNumericDateFormat = true
+        invalidKey     = "partnerSoleProprietorDob.error.invalid",
+        allRequiredKey = "partnerSoleProprietorDob.error.required.all",
+        twoRequiredKey = "partnerSoleProprietorDob.error.required.two",
+        requiredKey    = "partnerSoleProprietorDob.error.required"
       ).verifying(
         dateOfBirthConstraint(latestDate)
       )

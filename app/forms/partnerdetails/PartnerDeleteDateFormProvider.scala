@@ -43,11 +43,10 @@ class PartnerDeleteDateFormProvider @Inject() (clock: Clock) extends Mappings {
 
     Form(
       "value" -> localDate(
-        invalidKey               = "partnerDeleteDate.error.invalid",
-        allRequiredKey           = "partnerDeleteDate.error.required.all",
-        twoRequiredKey           = "partnerDeleteDate.error.required.two",
-        requiredKey              = "partnerDeleteDate.error.required",
-        requireNumericDateFormat = true
+        invalidKey     = "partnerDeleteDate.error.invalid",
+        allRequiredKey = "partnerDeleteDate.error.required.all",
+        twoRequiredKey = "partnerDeleteDate.error.required.two",
+        requiredKey    = "partnerDeleteDate.error.required"
       ).verifying(
         beforeLatestDateConstraint(latestDate)
       )
