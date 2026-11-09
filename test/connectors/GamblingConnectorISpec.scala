@@ -65,7 +65,7 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   private lazy val connector =
     app.injector.instanceOf[GamblingConnector]
 
-  "GamblingConnector.getControlBodyDetails" should {
+  "GamblingConnector.getDetails" should {
     "read the I1.36 response from the controlling body endpoint" in {
       wireMockServer.stubFor(
         get(urlEqualTo(s"/gambling/controlling-body-details/mgd/$mgdRegNumber"))
@@ -669,9 +669,9 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
 
   }
 
-  "GamblingConnector.getControlBodyDetails" should {
+  "GamblingConnector.getControllingBodyDetails" should {
 
-    "return ControlBodyDetails when backend returns 200" in {
+    "return ControllingBodyDetails when backend returns 200" in {
 
       val jsonAsString: String =
         s"""{
