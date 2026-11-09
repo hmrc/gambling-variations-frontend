@@ -33,6 +33,10 @@
 
 @(form: Form[Boolean], viewModel: PartnerDetailsViewModel, paginatedViewModel: PaginationViewModel, page: Int, totalPages: Int, from: Int, to: Int, totalRecords: Int)(implicit request: Request[_], messages: Messages)
 
+@showActionColumn = @{
+    viewModel.partners.exists(_.canRemove)
+}
+
 @layout(
     pageTitle = title(
         form,
@@ -102,12 +106,14 @@
                     @messages("partnerDetails.status")
                 </th>
 
+                @if(showActionColumn) {
                 <th
                         scope="col"
                         class="govuk-table__header"
                 >
                     @messages("partnerDetails.action")
                 </th>
+                }
 
             </tr>
             </thead>
@@ -139,6 +145,7 @@
                                         </span>
                 </td>
 
+                @if(showActionColumn) {
                 <td class="govuk-table__cell">
 
                     @if(partner.canRemove) {
@@ -150,18 +157,21 @@
                     >
                         @messages("site.remove")
                         <span class="govuk-visually-hidden">
-                                                        @partner.name
-                                                    </span>
+                        @partner.name
+                    </span>
                     </a>
                     }
 
                     } else {
 
-                    @messages("partnerDetails.cannotRemove")
+                     <span class="govuk-visually-hidden">
+                       @messages("partnerDetails.cannotRemove") @partner.name
+                     </span>
 
                     }
 
                 </td>
+                }
 
             </tr>
             }
