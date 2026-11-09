@@ -48,7 +48,11 @@ class Navigator @Inject() () {
     case ControllingBodyRemoveVATRegistrationNumberPage =>
       _ => Call("GET", "#") // TODO: Connect CB-CYA when the controlling body check your answers page is built.
     case ControllingBodyBusinessNamePage =>
-      _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
+      answers =>
+        val hasExistingControllingBody =
+          answers.get(ControllingBodyBusinessPartnerNumberPage).exists(_.trim.nonEmpty)
+        if (hasExistingControllingBody) controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
+        else controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyAddTradingNameYesNoPage =>
       // TODO: Connect CB-TN and the business-type-specific identity screens when that journey is built.
       _ => routes.IndexController.onPageLoad()
