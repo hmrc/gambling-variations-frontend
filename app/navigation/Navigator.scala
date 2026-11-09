@@ -50,10 +50,10 @@ class Navigator @Inject() () {
     case ControllingBodyBusinessNamePage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyAddTradingNameYesNoPage =>
-      // TODO: Connect CB-TN and the business-type-specific identity screens when that journey is built.
-      _ => routes.IndexController.onPageLoad()
+      userAnswers => navigateControllingBodyAddTradingNameYesNoPage(userAnswers)
     case ControllingBodySoleProprietorPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
+      // TODO: Redirect to CB-CYA in the change flow.
+      _ => controllers.controllingbody.routes.ControllingBodySoleProprietorDobController.onPageLoad()
     case ControllingBodyEmailPage =>
       _ => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
     case ControllingBodyDateOfBirthPage =>
@@ -530,6 +530,13 @@ class Navigator @Inject() () {
     case None =>
       routes.SystemErrorController.onPageLoad()
   }
+
+  private def navigateControllingBodyAddTradingNameYesNoPage(userAnswers: UserAnswers): Call =
+    (userAnswers.get(ControllingBodyAddTradingNameYesNoPage), userAnswers.get(ControllingBodyBusinessTypePage)) match {
+      case (Some(false), Some(Soleproprietor)) => controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+      // TODO: Connect CB-TN for Yes, and the screens for No with the other business types.
+      case _ => routes.IndexController.onPageLoad()
+    }
 
   private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
