@@ -803,26 +803,41 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         faxHtml must not include "<b>123</b>"
       }
 
-      "offer change and remove for a submitted new partner's fax number" in {
+      "show change and remove for a submitted new partner's fax number" in {
 
         val viewModel =
           existingPartner.copy(maybeSubmitted = Some(true), addFaxNumber = Some(true), faxNumber = Some("0123456789"))
 
-        actionsOf(rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value) must have size 2
+        val actions = actionsOf(rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value)
+        actions must have size 2
+        actions mustBe Seq(Text("Change"), Text("Remove"))
       }
 
-      "offer change only for an unsubmitted new partner's fax number" in {
+      "show change only for an unsubmitted new partner's fax number" in {
 
         val viewModel =
           newPartnerNotSaved.copy(maybeSubmitted = Some(false), addFaxNumber = Some(true), faxNumber = Some("0123456789"))
 
-        actionsOf(rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value) must have size 1
+        val actions = actionsOf(rowFor(viewModel.contactDetailsSummaryList, "faxNumber").value)
+        actions must have size 1
+        actions mustBe Seq(Text("Change"))
       }
 
       "show the email row only when the screener answer is yes" in {
 
+        val email = "a@example.com"
         val viewModel =
-          newPartnerNotSaved.copy(addEmailAddress = Some(false), emailAddress = Some("a@example.com"))
+          newPartnerNotSaved.copy(addEmailAddress = Some(true), emailAddress = Some(email))
+
+
+        rowFor(viewModel.contactDetailsSummaryList, "emailAddress").map(_.value.content mustBe Text(email))
+        hiddenTextsOf(rowFor(viewModel.contactDetailsSummaryList, "emailAddress.add").value) mustBe Seq(hidden("emailAddress.add"))
+        hiddenTextsOf(rowFor(viewModel.contactDetailsSummaryList, "emailAddress").value) mustBe Seq(hidden("emailAddress"))
+      }
+
+      "do not show the email row only when the screener answer is no" in {
+
+        val viewModel = newPartnerNotSaved.copy(addEmailAddress = Some(false))
 
         rowFor(viewModel.contactDetailsSummaryList, "emailAddress") mustBe None
       }
@@ -835,21 +850,6 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
           Seq(hidden("faxNumber"), hidden("faxNumber"))
       }
 
-      "use the email hidden text on change and remove" in {
-        val viewModel =
-          newPartnerSaved.copy(addEmailAddress = Some(true), emailAddress = Some("a@example.com"))
-
-        hiddenTextsOf(rowFor(viewModel.contactDetailsSummaryList, "emailAddress").value) mustBe
-          Seq(hidden("emailAddress"), hidden("emailAddress"))
-      }
-
-      "use the email add hidden text on the screener row" in {
-        val viewModel =
-          newPartnerNotSaved.copy(addEmailAddress = Some(true))
-
-        hiddenTextsOf(rowFor(viewModel.contactDetailsSummaryList, "emailAddress.add").value) mustBe
-          Seq(hidden("emailAddress.add"))
-      }
     }
 
     "add links for missing required values" - {
