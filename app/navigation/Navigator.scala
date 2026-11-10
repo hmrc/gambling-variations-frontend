@@ -535,13 +535,6 @@ class Navigator @Inject() () {
       routes.SystemErrorController.onPageLoad()
   }
 
-  private def navigateControllingBodyAddTradingNameYesNoPage(userAnswers: UserAnswers): Call =
-    (userAnswers.get(ControllingBodyAddTradingNameYesNoPage), userAnswers.get(ControllingBodyBusinessTypePage)) match {
-      case (Some(false), Some(Soleproprietor)) => controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
-      // TODO: Connect CB-TN for Yes, and the screens for No with the other business types.
-      case _ => routes.IndexController.onPageLoad()
-    }
-
   private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
       .get(ControllingBodyAddNINumberYesNoPage)
@@ -661,6 +654,34 @@ private def navigateCheckReasonForCancellationPage(
 
     case Some(_) =>
       controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateControllingBodyAddTradingNameYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodyAddTradingNameYesNoPage) match {
+    case Some(true) => controllers.controllingbody.routes.ControllingBodyTradingNameController.onPageLoad()
+    case Some(false) =>
+      answers.get(ControllingBodyBusinessTypePage) match {
+        case Some(Soleproprietor) =>
+          controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+
+        case Some(Corporatebody) =>
+          controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+
+        case Some(Partnership) =>
+          controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+
+        case Some(LimitedLiabilityPartnership) =>
+          controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+
+        case Some(Unincorporatedbody) =>
+          controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+
+        case None =>
+          routes.SystemErrorController.onPageLoad()
+      }
 
     case None =>
       routes.SystemErrorController.onPageLoad()
