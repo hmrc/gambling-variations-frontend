@@ -163,5 +163,30 @@ class DateFluencySpec extends AnyFreeSpec with Matchers with Mappings with Optio
 
       result.items.forall(_.classes.contains(errorClass)) mustEqual false
     }
+
+    Seq(
+      ("$$", "1", "2000", Seq("day")),
+      ("1", "13", "2000", Seq("month")),
+      ("1", "1", "998", Seq("year")),
+      ("$$", "me", "", Seq("day", "month"))
+    ).foreach { case (day, month, year, invalidFields) =>
+      s"must highlight only the invalid fields when the date is $day/$month/$year" in {
+
+        val boundForm = form.bind(
+          Map(
+            "value.day"   -> day,
+            "value.month" -> month,
+            "value.year"  -> year
+          )
+        )
+
+        val result = DateViewModel(boundForm("value"), fieldset)
+
+        val highlightedFields =
+          Seq("day", "month", "year").filter(field => result.items.find(_.id == s"value.$field").value.classes.contains(errorClass))
+
+        highlightedFields mustEqual invalidFields
+      }
+    }
   }
 }

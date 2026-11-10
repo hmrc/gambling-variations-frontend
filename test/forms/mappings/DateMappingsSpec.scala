@@ -35,20 +35,20 @@ class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
 
   private val form = Form(
     "value" -> localDate(
-      requiredKey    = "error.required",
-      allRequiredKey = "error.required.all",
-      twoRequiredKey = "error.required.two",
-      invalidKey     = "error.invalid"
+      requiredKey              = "error.required",
+      allRequiredKey           = "error.required.all",
+      twoRequiredKey           = "error.required.two",
+      invalidKey               = "error.invalid",
+      requireNumericDateFormat = false
     )
   )
 
   private val numericForm = Form(
     "value" -> localDate(
-      requiredKey              = "error.required",
-      allRequiredKey           = "error.required.all",
-      twoRequiredKey           = "error.required.two",
-      invalidKey               = "error.invalid",
-      requireNumericDateFormat = true
+      requiredKey    = "error.required",
+      allRequiredKey = "error.required.all",
+      twoRequiredKey = "error.required.two",
+      invalidKey     = "error.invalid"
     )
   )
 
@@ -904,6 +904,66 @@ class DateMappingsSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
           "error.invalid",
           List.empty
         )
+      }
+
+      Seq("0", "00", "32", "99").foreach { day =>
+        s"must identify the day $day as an invalid day" in {
+
+          val result = numericForm.bind(
+            Map(
+              "value.day"   -> day,
+              "value.month" -> "3",
+              "value.year"  -> "2026"
+            )
+          )
+
+          result.errors must contain theSameElementsAs Seq(
+            FormError("value", "error.invalid", Seq(messages("date.error.day"))),
+            FormError("value.day", "error.invalid", Seq.empty)
+          )
+        }
+      }
+
+      Seq("0", "00", "13", "99").foreach { month =>
+        s"must identify the month $month as an invalid month" in {
+
+          val result = numericForm.bind(
+            Map(
+              "value.day"   -> "12",
+              "value.month" -> month,
+              "value.year"  -> "2026"
+            )
+          )
+
+          result.errors must contain theSameElementsAs Seq(
+            FormError("value", "error.invalid", Seq(messages("date.error.month"))),
+            FormError("value.month", "error.invalid", Seq.empty)
+          )
+        }
+      }
+
+      Seq(
+        ("$", "$", "", Seq("day", "month")),
+        ("32", "3", "", Seq("day")),
+        ("12", "13", "", Seq("month")),
+        ("", "13", "", Seq("month")),
+        ("", "3", "999", Seq("year"))
+      ).foreach { case (day, month, year, invalidFields) =>
+        s"must identify the invalid fields of $day/$month/$year before the missing fields" in {
+
+          val result = numericForm.bind(
+            Map(
+              "value.day"   -> day,
+              "value.month" -> month,
+              "value.year"  -> year
+            )
+          )
+
+          result.errors must contain theSameElementsAs (
+            FormError("value", "error.invalid", invalidFields.map(field => messages(s"date.error.$field"))) +:
+              invalidFields.map(field => FormError(s"value.$field", "error.invalid", Seq.empty))
+          )
+        }
       }
     }
 
