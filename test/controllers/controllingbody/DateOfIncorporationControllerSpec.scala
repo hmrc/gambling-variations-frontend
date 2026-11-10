@@ -136,6 +136,29 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must return a Bad Request with the invalid date error when invalid fields are submitted with a missing year" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val invalidData = Map("value.day" -> "$$", "value.month" -> "me", "value.year" -> "")
+
+      val request =
+        FakeRequest(POST, dateOfIncorporationRoute)
+          .withFormUrlEncodedBody(invalidData.toSeq*)
+
+      running(application) {
+        val boundForm = formProvider()(messages(application)).bind(invalidData)
+
+        val view = application.injector.instanceOf[DateOfIncorporationView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        boundForm.errors.map(_.message).distinct mustEqual Seq("dateOfIncorporation.error.invalid")
+        contentAsString(result) mustEqual view(boundForm)(request, messages(application)).toString
+      }
+    }
+
     "must render an empty form for a GET if no existing data is found" in {
       val application = applicationBuilder(userAnswers = None).build()
 

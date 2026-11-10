@@ -224,6 +224,35 @@ class ControllingBodySoleProprietorDobControllerSpec extends SpecBase with Mocki
           view(application)(boundForm, NormalMode)(request, msgs).toString
       }
     }
+
+    "must return Bad Request with the invalid date error when invalid fields are submitted with a missing year" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersForSoleProprietor))
+          .overrides(bind[Clock].toInstance(clock))
+          .build()
+
+      running(application) {
+        val invalidData = Map("value.day" -> "$$", "value.month" -> "me", "value.year" -> "")
+
+        val request: FakeRequest[play.api.mvc.AnyContentAsFormUrlEncoded] =
+          FakeRequest(POST, postRoute).withFormUrlEncodedBody(invalidData.toSeq*)
+
+        implicit val msgs: Messages = messages(application)
+
+        val boundForm = form(application).bind(invalidData)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        boundForm.errors.map(_.message).distinct mustEqual
+          Seq("controllingBodySoleProprietorDob.error.invalid")
+
+        contentAsString(result) mustEqual
+          view(application)(boundForm, NormalMode)(request, msgs).toString
+      }
+    }
     "must return Bad Request when today's date is submitted" in {
 
       val application =
