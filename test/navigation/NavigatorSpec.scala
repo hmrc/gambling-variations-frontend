@@ -40,7 +40,6 @@ import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import utils.PartnerUtils
-import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
 
 class NavigatorSpec extends SpecBase {
 
@@ -401,6 +400,11 @@ class NavigatorSpec extends SpecBase {
     }
 
     "in Check mode" - {
+
+      "should preserve check mode navigation for a controlling body business name" in {
+        navigator.nextPage(ControllingBodyBusinessNamePage, CheckMode, emptyAnswers) mustBe
+          routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
 
       "should route ChooseReturnPeriodsPage back to CheckReturnPeriodsController for standard return periods" in {
         val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
@@ -1175,6 +1179,33 @@ class NavigatorSpec extends SpecBase {
 
     "normal mode controlling body details navigation" - {
 
+      "should return to check controlling body details when a business partner number exists" in {
+        val answers = emptyAnswers.set(ControllingBodyBusinessPartnerNumberPage, "1234567890").success.value
+
+        navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
+      }
+
+      Seq(None, Some(""), Some("   ")).foreach { businessPartnerNumber =>
+        Seq(None, Some(EditDetails), Some(ProvideNew)).foreach { changeAnswer =>
+          s"should continue setup to the trading name screener with business partner number $businessPartnerNumber and change answer $changeAnswer" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessNamePage, "Unincorporated business Name")
+              .success
+              .value
+              .setIfDefined(ControllingBodyBusinessPartnerNumberPage, businessPartnerNumber)
+              .success
+              .value
+              .setIfDefined(ControllingBodyChangeScreenerPage, changeAnswer)
+              .success
+              .value
+
+            navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, answers) mustBe
+              controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
+          }
+        }
+      }
+
       "should route ControllingBodyChangeScreenerPage to CheckControllingBodyDetails when the answer is EditDetails" in {
         val answers =
           emptyAnswers
@@ -1474,12 +1505,6 @@ class NavigatorSpec extends SpecBase {
 
       private def checkYourAnswers(index: BusinessNumberOrIndex): Call =
         controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString)
-
-      private def firstMissingOrCheckYourAnswers(answers: UserAnswers, index: BusinessNumberOrIndex): Call =
-        PartnerMandatoryDetails
-          .firstMissing(answers, index)
-          .map(_.call)
-          .getOrElse(checkYourAnswers(index))
 
       private def valuePages(index: BusinessNumberOrIndex): Seq[Page] = Seq(
         PartnerDetailsBusinessNamePage(index),
