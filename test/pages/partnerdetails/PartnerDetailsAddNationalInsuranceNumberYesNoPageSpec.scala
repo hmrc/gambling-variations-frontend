@@ -28,7 +28,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoPageSpec extends SpecBase wit
       "must have the correct path" in {
         PartnerDetailsAddNationalInsuranceNumberYesNoPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsAddNationalInsuranceNumberYesNo")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsAddNationalInsuranceNumberYesNo")
       }
 
       "must have the correct string representation" in {
@@ -40,7 +40,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoPageSpec extends SpecBase wit
       "must have the correct path" in {
         PartnerDetailsAddNationalInsuranceNumberYesNoPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAddNationalInsuranceNumberYesNo")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsAddNationalInsuranceNumberYesNo")
       }
 
       "must have the correct string representation" in {

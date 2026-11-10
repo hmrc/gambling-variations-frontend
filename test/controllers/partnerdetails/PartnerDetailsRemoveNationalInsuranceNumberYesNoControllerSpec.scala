@@ -17,13 +17,14 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedContactDetails
 import forms.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsNinoPage, PartnerDetailsRemoveNationalInsuranceNumberYesNoPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsNinoPage, PartnerDetailsRemoveNationalInsuranceNumberYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -46,20 +47,30 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
   lazy val partnerDetailsRemoveNinoRouteExistingUsers: String =
     controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  val validUserAnswersNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners(nino = Some(testNino)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsNinoPage(newPartnersIndex1), testNino)
-      .success
-      .value
+  val validUserAnswersNewPartners: UserAnswers = LoadedContactDetails
+    .apply(
+      mgdRegNumber,
+      cleanedDataNewPartners(nino = Some(testNino)),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
+    )
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
+    .set(PartnerDetailsNinoPage(newPartnersIndex1), testNino)
+    .success
+    .value
 
-  val validUserAnswersExistingUsers: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners(nino = Some(testNino)))
-      .set(PartnerDetailsNinoPage(businessNumber1), testNino)
-      .success
-      .value
+  val validUserAnswersExistingUsers: UserAnswers = LoadedContactDetails
+    .apply(
+      mgdRegNumber,
+      cleanedDataExistingPartners(nino = Some(testNino)),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
+    )
+    .set(PartnerDetailsNinoPage(businessNumber1), testNino)
+    .success
+    .value
 
   "partners" - {
 

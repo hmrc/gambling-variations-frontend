@@ -27,7 +27,7 @@ class PartnerDetailsAddEmailAddressYesNoPageSpec extends SpecBase with PartnerDe
     "partners" - {
       "have the correct path" in {
         PartnerDetailsAddEmailAddressYesNoPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsAddEmailAddressYesNo")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsAddEmailAddressYesNo")
       }
 
       "have the correct toString value" in {
@@ -36,7 +36,7 @@ class PartnerDetailsAddEmailAddressYesNoPageSpec extends SpecBase with PartnerDe
 
       "be able to read and write values with correct index" in {
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(PartnerDetailsAddEmailAddressYesNoPage(businessNumber1).toString -> Json.toJson(true)),
             businessNumber2 -> Json.obj(PartnerDetailsAddEmailAddressYesNoPage(businessNumber2).toString -> Json.toJson(false))
           )
@@ -50,12 +50,12 @@ class PartnerDetailsAddEmailAddressYesNoPageSpec extends SpecBase with PartnerDe
     "newPartners" - {
       "have the correct path" in {
         PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAddEmailAddressYesNo")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsAddEmailAddressYesNo")
       }
 
       "be able to read and write values with correct index" in {
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1).toString -> Json.toJson(true)),
             Json.obj(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex2).toString -> Json.toJson(false))
           )

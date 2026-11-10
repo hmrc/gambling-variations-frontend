@@ -16,14 +16,14 @@
 
 package pages.partnerdetails
 
-import pages.{BusinessNumberOrIndex, QuestionPage}
+import pages.{BusinessNumberOrIndex, FlagPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
+case class PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(businessNumberOrIndex: BusinessNumberOrIndex) extends FlagPage[Boolean] {
 
   override val path: JsPath = businessNumberOrIndex match {
-    case key: String => JsPath \ "partners" \ key \ toString
-    case index: Int  => JsPath \ "newPartners" \ index \ toString
+    case key: String => ExistingPartnerDetailsSection.path \ key \ toString
+    case index: Int  => NewPartnerDetailsSection.path \ index \ toString
   }
 
   override def toString: String = "partnerDetailsRemoveNationalInsuranceNumberYesNo"

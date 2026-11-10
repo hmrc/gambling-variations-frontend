@@ -43,11 +43,10 @@ class PartnerDetailsAddTradingNameYesNoControllerSpec extends SpecBase with Mock
   lazy val partnerDetailsAddTradingNameYesNoRoute: String =
     controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
-  val validUserAnswers: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
+  val validUserAnswers: UserAnswers = userAnswersPartnerDetailsExistingPartners
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
 
   "PartnerDetailsAddTradingNameYesNo Controller" - {
 

@@ -29,7 +29,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
       "have the correct path" in {
         PartnerDetailsCorrespondenceDetailsSectionPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection")
       }
 
       "have the correct toString value" in {
@@ -128,7 +128,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
         )
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsCorrespondenceDetailsSectionPage(businessNumber1).toString -> value1AsJson
             ),
@@ -158,7 +158,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
       "have the correct path" in {
         PartnerDetailsCorrespondenceDetailsSectionPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection")
       }
 
       "have the correct toString value" in {
@@ -257,7 +257,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
         )
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsCorrespondenceDetailsSectionPage(newPartnersIndex1).toString -> value1AsJson
             ),

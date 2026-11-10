@@ -16,9 +16,10 @@
 
 package controllers.partnerdetails
 
+import controllers.businesscontactdetails.LoadedContactDetails
 import models.{BusinessType, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import services.{PaginationResult, PaginationService}
@@ -118,10 +119,14 @@ trait PartnerDetailsHelper {
     "partners" -> Json.obj()
   )
 
-  def userAnswersPartnerDetailsEmpty: UserAnswers = UserAnswers("id")
-  def userAnswersPartnerDetailsMinimalValidData: UserAnswers = UserAnswers("id", minimalValidData)
-  def userAnswersPartnerDetailsExistingPartners: UserAnswers = UserAnswers("id", cleanedDataExistingPartners())
-  def userAnswersPartnerDetailsNewPartners: UserAnswers = UserAnswers("id", cleanedDataNewPartners())
+  def userAnswersPartnerDetailsEmpty: UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, JsObject.empty, NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+  def userAnswersPartnerDetailsMinimalValidData: UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, minimalValidData, NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+  def userAnswersPartnerDetailsExistingPartners: UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+  def userAnswersPartnerDetailsNewPartners: UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
   def cleanedDataExistingPartners(
     faxNumber: Option[String] = None,
@@ -135,7 +140,7 @@ trait PartnerDetailsHelper {
     fcr: Option[String] = None,
     crn: Option[String] = None
   ): JsObject = Json.obj(
-    "partners" -> Json.obj(
+    "partnersSection" -> Json.obj(
       businessNumber1 -> Json.obj(
         "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
         "partnerDetailsDateOfJoining" -> "2022-01-15",
@@ -189,8 +194,8 @@ trait PartnerDetailsHelper {
     crn: Option[String] = None,
     hasAnsweredAllQuestion: Option[Boolean] = None
   ): JsObject = Json.obj(
-    "partners" -> Json.obj(),
-    "newPartners" -> Json.arr(
+    "partnersSection" -> Json.obj(),
+    "newPartnersSection" -> Json.arr(
       Json.obj(
         "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
         "partnerDetailsDateOfJoining" -> "2022-01-15",
@@ -236,8 +241,8 @@ trait PartnerDetailsHelper {
     businessType: Int,
     isIncorporatedInTheUK: Boolean = true
   ): JsObject = Json.obj(
-    "partners" -> Json.obj(),
-    "newPartners" -> Json.arr(
+    "partnersSection" -> Json.obj(),
+    "newPartnersSection" -> Json.arr(
       Json.obj(
         "partnerDetailsMgdRegNumber"             -> mgdRegNumber,
         "partnerDetailsDateOfIncorporation"      -> "2020-03-01",

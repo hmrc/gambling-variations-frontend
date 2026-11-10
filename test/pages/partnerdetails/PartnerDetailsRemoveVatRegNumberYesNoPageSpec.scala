@@ -27,7 +27,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoPageSpec extends PlaySpec with Partne
     "partners" must {
       "have the correct path" in {
         PartnerDetailsRemoveVatRegNumberYesNoPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsSection" \ "partnerDetailsRemoveVRNYesNo")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsSection" \ "partnerDetailsRemoveVRNYesNo")
       }
 
       "have the correct string representation" in {
@@ -38,7 +38,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoPageSpec extends PlaySpec with Partne
     "newPartners" must {
       "have the correct path" in {
         PartnerDetailsRemoveVatRegNumberYesNoPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsSection" \ "partnerDetailsRemoveVRNYesNo")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsSection" \ "partnerDetailsRemoveVRNYesNo")
       }
 
       "have the correct string representation" in {

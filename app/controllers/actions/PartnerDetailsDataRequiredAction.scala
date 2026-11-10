@@ -27,14 +27,14 @@ import pages.partnerdetails.*
 import play.api.Logging
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
-import play.api.libs.json.{JsObject, Writes}
+import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
-import java.time.LocalDate
+import java.time.{Clock, Instant, LocalDate}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -42,7 +42,8 @@ import scala.util.control.NonFatal
 
 class PartnerDetailsDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
+  val gamblingConnector: GamblingConnector,
+  clock: Clock
 )(implicit val executionContext: ExecutionContext)
     extends PartnerDetailsDataRequiredAction
     with Logging {
@@ -59,11 +60,11 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers: UserAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(PartnerDetailsPage) map { _ =>
+        if (userAnswers.isLoaded(ExistingPartnerDetailsSection)) {
           logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
+        } else {
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -95,13 +96,17 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
   private def setPartnerDetails(
     partnersDetails: PartnersDetails,
     answers: UserAnswers
-  ): Try[UserAnswers] = partnersDetails.partners
-    .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
-    .foldLeft(Try(answers)) { case (userAnswers, partnerDetails) =>
-      buildPartnerDetails(partnerDetails, partnerDetails.businessPartnerNumber, userAnswers)
-    }
+  ): Try[UserAnswers] = {
+    val loadedAnswers = answers.withSectionLoaded(ExistingPartnerDetailsSection, Instant.now(clock))
+    partnersDetails.partners
+      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+      .foldLeft(Try(loadedAnswers)) { case (userAnswers, partnerDetails) =>
+        partnerDetails.businessPartnerNumber.fold(userAnswers)(businessNumber => buildPartnerDetails(partnerDetails, businessNumber, userAnswers))
+      }
+  }
 
   private def buildPartnerDetails(partnerDetails: PartnerDetails, partnerBusinessNumber: String, userAnswers: Try[UserAnswers]) = for {
+
     updatedAnswers <- userAnswers
 
     updatedAnswers <- updatedAnswers.set(PartnerDetailsMgdRegNumberPage(partnerBusinessNumber), partnerDetails.mgdRegNumber)
@@ -141,6 +146,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
                       }
 
   } yield updatedAnswers
+
 }
 
 trait PartnerDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

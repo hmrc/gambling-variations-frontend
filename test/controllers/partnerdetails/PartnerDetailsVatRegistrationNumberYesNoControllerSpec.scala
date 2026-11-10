@@ -41,17 +41,16 @@ class PartnerDetailsVatRegistrationNumberYesNoControllerSpec extends SpecBase wi
   lazy val vatRegistrationNumberYesNoRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
-  private val userAnswersWithoutVatAnswerNewPartners =
-    UserAnswers(userAnswersId, minimalValidData)
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-      .success
-      .value
-      .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
-      .success
-      .value
+  private val userAnswersWithoutVatAnswerNewPartners = userAnswersPartnerDetailsMinimalValidData
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
+    .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
+    .success
+    .value
+    .set(PartnerDetailsMgdRegNumberPage(newPartnersIndex1), "123456789")
+    .success
+    .value
 
   private val userAnswersWithVatAnswerNewPartners =
     userAnswersWithoutVatAnswerNewPartners

@@ -18,6 +18,7 @@ package controllers.partnerdetails
 
 import base.SpecBase
 import connectors.GamblingConnector
+import controllers.businesscontactdetails.LoadedContactDetails
 import forms.partnerdetails.PartnerDeleteDateFormProvider
 import models.{BusinessDetails, BusinessType, NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
@@ -27,6 +28,7 @@ import pages.partnerdetails.*
 import play.api.Application
 import play.api.i18n.{Lang, Messages}
 import play.api.inject.bind
+import play.api.libs.json.JsObject
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -90,7 +92,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       .url
 
   override val emptyUserAnswers: UserAnswers =
-    UserAnswers(userAnswersId)
+    LoadedContactDetails.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   private val userAnswersWithoutBusinessName: UserAnswers = emptyUserAnswers
     .set(

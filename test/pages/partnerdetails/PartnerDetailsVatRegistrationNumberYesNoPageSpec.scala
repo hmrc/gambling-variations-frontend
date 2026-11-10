@@ -31,7 +31,7 @@ class PartnerDetailsVatRegistrationNumberYesNoPageSpec extends AnyFreeSpec with 
       }
 
       "must have a path corresponding to its name and index" in {
-        val expectedPath: JsPath = JsPath \ "partners" \ businessNumber1 \ "partnerDetailsVrnYesNo"
+        val expectedPath: JsPath = JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsVrnYesNo"
 
         PartnerDetailsVatRegistrationNumberYesNoPage(businessNumber1).path mustBe expectedPath
       }
@@ -46,7 +46,7 @@ class PartnerDetailsVatRegistrationNumberYesNoPageSpec extends AnyFreeSpec with 
       }
 
       "must have a path corresponding to its name and index" in {
-        val expectedPath: JsPath = JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsVrnYesNo"
+        val expectedPath: JsPath = JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsVrnYesNo"
 
         PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1).path mustBe expectedPath
       }

@@ -28,7 +28,7 @@ class PartnerDetailsRemoveEmailAddressYesNoPageSpec extends SpecBase with Partne
       "must have the correct path" in {
         PartnerDetailsRemoveEmailAddressYesNoPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsRemoveEmailAddressYesNo")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsRemoveEmailAddressYesNo")
       }
 
       "must have the correct string representation" in {
@@ -43,7 +43,7 @@ class PartnerDetailsRemoveEmailAddressYesNoPageSpec extends SpecBase with Partne
       "must have the correct path" in {
         PartnerDetailsRemoveEmailAddressYesNoPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsRemoveEmailAddressYesNo")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsRemoveEmailAddressYesNo")
       }
 
       "must have the correct string representation" in {

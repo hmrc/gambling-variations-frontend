@@ -19,8 +19,10 @@ package pages.partnerdetails
 import pages.QuestionPage
 import play.api.libs.json.{JsObject, JsPath}
 
-case object PartnerDetailsPage extends QuestionPage[JsObject] {
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "partners"
-}
+//TODO delete no longer needed, use Section instead
+//case object PartnerDetailsPage extends QuestionPage[JsObject] {
+//
+//  override def path: JsPath = JsPath \ toString
+//
+//  override def toString: String = "partners"
+//}

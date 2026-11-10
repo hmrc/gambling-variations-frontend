@@ -16,10 +16,10 @@
 
 package pages.partnerdetails
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object PartnerDetailsAddAnotherPartnerYesNoPage extends QuestionPage[Boolean] {
+case object PartnerDetailsAddAnotherPartnerYesNoPage extends FlagPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 

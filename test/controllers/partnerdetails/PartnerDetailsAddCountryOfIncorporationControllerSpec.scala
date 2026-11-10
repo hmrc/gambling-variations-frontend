@@ -52,15 +52,12 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       .onPageLoad(businessNumber1, CheckMode)
       .url
 
-  val userAnswersNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-  val userAnswersExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-
   "partners" - {
     "PartnerDetailsAddCountryOfIncorporation Controller" - {
 
       "must return OK and the correct view for a GET" in {
         val userAnswersForGet: UserAnswers =
-          userAnswersExistingPartners
+          userAnswersPartnerDetailsExistingPartners
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -85,7 +82,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must populate the view correctly when the question has previously been answered" in {
 
         val userAnswersWithCountry: UserAnswers =
-          userAnswersExistingPartners
+          userAnswersPartnerDetailsExistingPartners
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -113,7 +110,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError when business type is not Corporatebody" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersExistingPartners
+          userAnswersPartnerDetailsExistingPartners
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Soleproprietor)
             .success
             .value
@@ -135,7 +132,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError when the business is incorporated in the UK" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersExistingPartners
+          userAnswersPartnerDetailsExistingPartners
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -157,7 +154,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError for a GET when incorporatedInUK has not been answered" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersExistingPartners
+          userAnswersPartnerDetailsExistingPartners
             .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
             .success
             .value
@@ -176,7 +173,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError when business type has not been answered" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersExistingPartners
+          userAnswersPartnerDetailsExistingPartners
             .set(PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1), false)
             .success
             .value
@@ -199,7 +196,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersExistingPartners))
+          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsExistingPartners))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -209,7 +206,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
         running(application) {
 
           val expectedAnswers =
-            userAnswersExistingPartners.set(PartnerDetailsCountryOfIncorporationPage(businessNumber1), testCountry).success.value
+            userAnswersPartnerDetailsExistingPartners.set(PartnerDetailsCountryOfIncorporationPage(businessNumber1), testCountry).success.value
 
           val request =
             FakeRequest(POST, partnerDetailsAddCountryOfIncorporationRouteExistingPartners)
@@ -226,7 +223,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must return a Bad Request and errors when invalid data is submitted" in {
 
         val badData = ""
-        val application = applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsExistingPartners)).build()
 
         running(application) {
           val request =
@@ -281,7 +278,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
 
       "must return OK and the correct view for a GET" in {
         val userAnswersForGet: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -309,7 +306,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must populate the view correctly when the question has previously been answered" in {
 
         val userAnswersWithCountry: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -342,7 +339,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError when business type is not Corporatebody" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -367,7 +364,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError when the business is incorporated in the UK" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -392,7 +389,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError for a GET when incorporatedInUK has not been answered" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -414,7 +411,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must redirect to SystemError when business type has not been answered" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -440,7 +437,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val userAnswersForSubmit: UserAnswers =
-          userAnswersNewPartners.set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value
+          userAnswersPartnerDetailsNewPartners.set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false).success.value
 
         val application =
           applicationBuilder(userAnswers = Some(userAnswersForSubmit))
@@ -470,7 +467,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
       "must return a Bad Request and errors when invalid data is submitted" in {
 
         val badData = ""
-        val application = applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsNewPartners)).build()
 
         running(application) {
           val request =

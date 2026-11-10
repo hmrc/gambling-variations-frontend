@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedContactDetails
 import controllers.routes.JourneyRecoveryController
 import forms.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
@@ -24,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceEmailAddressPage, PartnerDetailsRemoveEmailAddressYesNoPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceEmailAddressPage, PartnerDetailsRemoveEmailAddressYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -44,26 +45,30 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
   private lazy val partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val baseUserAnswersNewPartners: UserAnswers =
-    UserAnswers(
+  private val baseUserAnswersNewPartners: UserAnswers = LoadedContactDetails
+    .apply(
       mgdRegNumber,
-      cleanedDataNewPartners(emailAddress = Some(testEmailAddress))
+      cleanedDataNewPartners(emailAddress = Some(testEmailAddress)),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
     )
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), testEmailAddress)
-      .success
-      .value
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
+    .set(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), testEmailAddress)
+    .success
+    .value
 
-  private val baseUserAnswersExistingPartners: UserAnswers =
-    UserAnswers(
+  private val baseUserAnswersExistingPartners: UserAnswers = LoadedContactDetails
+    .apply(
       mgdRegNumber,
-      cleanedDataExistingPartners(emailAddress = Some(testEmailAddress))
+      cleanedDataExistingPartners(emailAddress = Some(testEmailAddress)),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
     )
-      .set(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1), testEmailAddress)
-      .success
-      .value
+    .set(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1), testEmailAddress)
+    .success
+    .value
 
   "partners" - {
 

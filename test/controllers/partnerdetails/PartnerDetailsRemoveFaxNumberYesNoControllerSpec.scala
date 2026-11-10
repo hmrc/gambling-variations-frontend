@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedContactDetails
 import controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoFormProvider
@@ -25,7 +26,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceFaxNumberPage, PartnerDetailsRemoveFaxNumberYesNoPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceFaxNumberPage, PartnerDetailsRemoveFaxNumberYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -46,20 +47,20 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
   lazy val partnerDetailsRemoveFaxNumberYesNoRouteExistingPartners: String =
     PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val validUserAnswersNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners(Some(testFaxNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1), testFaxNumber)
-      .success
-      .value
+  private val validUserAnswersNewPartners: UserAnswers = LoadedContactDetails
+    .apply(mgdRegNumber, cleanedDataExistingPartners(Some(testFaxNumber)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
+    .set(PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1), testFaxNumber)
+    .success
+    .value
 
-  private val validUserAnswersExistingPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners(Some(testFaxNumber)))
-      .set(PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1), testFaxNumber)
-      .success
-      .value
+  private val validUserAnswersExistingPartners: UserAnswers = LoadedContactDetails
+    .apply(mgdRegNumber, cleanedDataNewPartners(Some(testFaxNumber)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    .set(PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1), testFaxNumber)
+    .success
+    .value
 
   "partners" - {
 

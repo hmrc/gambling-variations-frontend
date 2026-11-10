@@ -16,7 +16,7 @@
 
 package controllers.businesscontactdetails
 
-import models.{OriginalAnswers, UserAnswers}
+import models.{OriginalAnswers, Section, UserAnswers}
 import pages.contactdetails.BusinessContactDetailsSection
 import play.api.libs.json.JsObject
 
@@ -27,4 +27,7 @@ object LoadedContactDetails {
 
   def apply(id: String, data: JsObject): UserAnswers =
     UserAnswers(id, OriginalAnswers(data, Map(BusinessContactDetailsSection.key -> Instant.EPOCH)))
+
+  def apply(id: String, data: JsObject, sections: Section*): UserAnswers =
+    UserAnswers(id, OriginalAnswers(data, sections.map(section => section.key -> Instant.EPOCH).toMap))
 }

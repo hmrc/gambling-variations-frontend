@@ -56,20 +56,18 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
   lazy val deleteDateRoute: String =
     controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad().url
 
-  val userAnswersExistingPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-      .set(PartnerDetailsBusinessNamePage(businessNumber1), testBusinessName)
-      .success
-      .value
+  val userAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
+    .set(PartnerDetailsBusinessNamePage(businessNumber1), testBusinessName)
+    .success
+    .value
 
-  val userAnswersNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-      .set(PartnerDetailsBusinessNamePage(newPartnersIndex1), testBusinessName)
-      .success
-      .value
+  val userAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
+    .set(PartnerDetailsBusinessNamePage(newPartnersIndex1), testBusinessName)
+    .success
+    .value
 
   private def newPartnersIn(userAnswers: UserAnswers): Seq[JsObject] =
-    (userAnswers.data \ "newPartners").asOpt[JsArray].map(_.value.toSeq.map(_.as[JsObject])).getOrElse(Seq.empty)
+    (userAnswers.data \ "newPartnersSection").asOpt[JsArray].map(_.value.toSeq.map(_.as[JsObject])).getOrElse(Seq.empty)
 
   private def mockedSessionRepository: SessionRepository = {
     val mockSessionRepository = mock[SessionRepository]

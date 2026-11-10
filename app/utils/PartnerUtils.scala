@@ -35,7 +35,8 @@ object PartnerUtils {
     case _: String => CheckMode
   }
 
-  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = (userAnswers.data \ "partners")
+  // TODO wrong way of fetching data
+  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = (userAnswers.data \ "partnersSection")
     .asOpt[JsObject]
     .fold(Seq.empty[String])(_.fields.map(_._1))
     // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
@@ -53,7 +54,8 @@ object PartnerUtils {
       case _                           => userAnswers.get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
     }
 
+  // TODO outdated approach
   def getNewPartnersSize(userAnswers: UserAnswers): Int =
-    (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
+    (userAnswers.data \ "newPartnersSection").validate[JsArray].map(_.value.size).getOrElse(0)
 
 }

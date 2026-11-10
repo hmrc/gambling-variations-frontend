@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedContactDetails
 import forms.partnerdetails.AddAnotherPartnerFormProvider
 import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -25,6 +26,7 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.partnerdetails.*
 import play.api.inject.bind
+import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -62,6 +64,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
     controllers.partnerdetails.routes.PartnerDetailsController
       .onRemove(businessNumber1, CheckMode)
       .url
+
+  override val emptyUserAnswers: UserAnswers =
+    LoadedContactDetails.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   private val userAnswersWithPartner =
     emptyUserAnswers
@@ -332,6 +337,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
           mock[SessionRepository]
 
         val userAnswersWithPartner2 = userAnswersWithPartner
+          .set(PartnerDetailsMgdRegNumberPage(0), 0.toString)
+          .success
+          .value
           .set(
             PartnerDetailsAddPartnerCompletedPage(0),
             true
@@ -340,6 +348,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
           .value
 
         val userAnswersWithPartner3 = userAnswersWithPartner2
+          .set(PartnerDetailsMgdRegNumberPage(1), 1.toString)
+          .success
+          .value
           .set(
             PartnerDetailsAddPartnerCompletedPage(1),
             true

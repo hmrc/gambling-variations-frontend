@@ -26,7 +26,7 @@ class PartnerDetailsNinoPageSpec extends PlaySpec with PartnerDetailsHelper {
     "PartnerDetailsNinoPage" must {
 
       "have the correct path" in {
-        PartnerDetailsNinoPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsNino")
+        PartnerDetailsNinoPage(businessNumber1).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsNino")
       }
 
       "have the correct toString value" in {
@@ -40,7 +40,7 @@ class PartnerDetailsNinoPageSpec extends PlaySpec with PartnerDetailsHelper {
         val value2 = "Value2"
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsNinoPage(businessNumber1).toString -> Json.toJson(value1)
             ),
@@ -68,7 +68,7 @@ class PartnerDetailsNinoPageSpec extends PlaySpec with PartnerDetailsHelper {
     "PartnerDetailsNinoPage" must {
 
       "have the correct path" in {
-        PartnerDetailsNinoPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsNino")
+        PartnerDetailsNinoPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsNino")
       }
 
       "have the correct toString value" in {
@@ -82,7 +82,7 @@ class PartnerDetailsNinoPageSpec extends PlaySpec with PartnerDetailsHelper {
         val value2 = "Value2"
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsNinoPage(newPartnersIndex1).toString -> Json.toJson(value1)
             ),

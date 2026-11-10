@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedContactDetails
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsCompanyRegistrationNumberFormProvider
 import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Soleproprietor}
@@ -25,7 +26,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsCrnPage, PartnerDetailsIsBusinessIncorporatedUkPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsCrnPage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -48,12 +49,16 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
       .onPageLoad(businessNumber1, CheckMode)
       .url
 
-  def validUserAnswersNewPartners(crn: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners(crn = crn))
+  def validUserAnswersNewPartners(crn: Option[String] = None): UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(crn = crn), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
-  def validUserAnswersExistingPartners(crn: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(crn = crn))
+  def validUserAnswersExistingPartners(crn: Option[String] = None): UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(crn = crn), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
-  val userAnswersWithNoCrnNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-  val userAnswersWithNoCrnExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
+  val userAnswersWithNoCrnNewPartners: UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+  val userAnswersWithNoCrnExistingPartners: UserAnswers =
+    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   private def crnApplicableExisting(base: UserAnswers = userAnswersWithNoCrnExistingPartners): UserAnswers =
     base

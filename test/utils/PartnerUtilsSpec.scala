@@ -82,7 +82,13 @@ class PartnerUtilsSpec extends SpecBase {
         val newPartners: Seq[(Int, Boolean)] = (0 to 49).map(index => (index, if index % 2 == 0 then true else false))
 
         val userAnswers = newPartners.foldLeft(UserAnswers("id"))((userAnswers, tuple) =>
-          userAnswers.set(PartnerDetailsAddPartnerCompletedPage(tuple._1), tuple._2).success.value
+          userAnswers
+            .set(PartnerDetailsAddPartnerCompletedPage(tuple._1), tuple._2)
+            .success
+            .value
+            .set(PartnerDetailsMgdRegNumberPage(tuple._1), tuple._2.toString)
+            .success
+            .value
         )
 
         val userAnswers2 =

@@ -19,23 +19,23 @@ package pages.partnerdetails
 import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.{JsObject, JsPath, Json}
 
-class PartnerDetailsPageSpec extends PlaySpec {
-
-  "PartnerDetailsPage" must {
-
-    "have the correct path" in {
-      PartnerDetailsPage.path mustEqual (JsPath \ "partners")
-    }
-
-    "have the correct toString value" in {
-      PartnerDetailsPage.toString mustEqual "partners"
-    }
-
-    "be able to read and write values" in {
-      val partnersObj: JsObject = Json.obj("12345" -> Json.obj("partnerDetailsMgdRegNumber" -> "XGM00000001761"))
-      val json = Json.obj(PartnerDetailsPage.toString -> partnersObj)
-
-      PartnerDetailsPage.path.asSingleJson(json).validate[JsObject].get mustEqual partnersObj
-    }
-  }
-}
+//class PartnerDetailsPageSpec extends PlaySpec {
+//
+//  "PartnerDetailsPage" must {
+//
+//    "have the correct path" in {
+//      PartnerDetailsPage.path mustEqual (JsPath \ "partners")
+//    }
+//
+//    "have the correct toString value" in {
+//      PartnerDetailsPage.toString mustEqual "partners"
+//    }
+//
+//    "be able to read and write values" in {
+//      val partnersObj: JsObject = Json.obj("12345" -> Json.obj("partnerDetailsMgdRegNumber" -> "XGM00000001761"))
+//      val json = Json.obj(PartnerDetailsPage.toString -> partnersObj)
+//
+//      PartnerDetailsPage.path.asSingleJson(json).validate[JsObject].get mustEqual partnersObj
+//    }
+//  }
+//}

@@ -17,13 +17,14 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedContactDetails
 import forms.FaxNumberFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsChangePartnerFaxNumberPage, PartnerDetailsCorrespondenceFaxNumberPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsChangePartnerFaxNumberPage, PartnerDetailsCorrespondenceFaxNumberPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -43,23 +44,41 @@ class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with M
   lazy val partnerDetailsChangePartnerFaxNumberRouteNewPartner: String =
     controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
-  val userAnswersWithNoFaxExistingPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
+  val userAnswersWithNoFaxExistingPartners: UserAnswers = LoadedContactDetails.apply(
+    mgdRegNumber,
+    cleanedDataExistingPartners(),
+    ExistingPartnerDetailsSection,
+    NewPartnerDetailsSection
+  )
 
-  val userAnswersWithFaxExistingPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners(faxNumber = Some(testFaxNumber)))
+  val userAnswersWithFaxExistingPartners: UserAnswers = LoadedContactDetails.apply(
+    mgdRegNumber,
+    cleanedDataExistingPartners(faxNumber = Some(testFaxNumber)),
+    ExistingPartnerDetailsSection,
+    NewPartnerDetailsSection
+  )
 
-  val userAnswersWithNoFaxNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
+  val userAnswersWithNoFaxNewPartners: UserAnswers = LoadedContactDetails
+    .apply(
+      mgdRegNumber,
+      cleanedDataNewPartners(),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
+    )
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
 
-  val userAnswersWithFaxNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners(faxNumber = Some(testFaxNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
+  val userAnswersWithFaxNewPartners: UserAnswers = LoadedContactDetails
+    .apply(
+      mgdRegNumber,
+      cleanedDataNewPartners(faxNumber = Some(testFaxNumber)),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
+    )
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
 
   "newPartners" - {
     "ChangePartnerFaxNumber Controller" - {

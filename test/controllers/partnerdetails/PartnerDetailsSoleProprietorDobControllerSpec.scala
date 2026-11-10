@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedContactDetails
 import controllers.routes
 import forms.partnerdetails.PartnerSoleProprietorDobFormProvider
 import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
@@ -24,10 +25,11 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsMgdRegNumberPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsMgdRegNumberPage}
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.inject.bind
+import play.api.libs.json.JsObject
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -65,7 +67,7 @@ class PartnerDetailsSoleProprietorDobControllerSpec extends SpecBase with Mockit
       .url
 
   override val emptyUserAnswers: UserAnswers =
-    UserAnswers(userAnswersId)
+    LoadedContactDetails.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   private val partnerDetailsUserAnswersExistingUsers: UserAnswers =
     emptyUserAnswers
