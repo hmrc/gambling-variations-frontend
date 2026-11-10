@@ -1081,7 +1081,6 @@ partnerDetailsCheckYourAnswers.noData = Not provided
 
 # Business details
 partnerDetailsCheckYourAnswers.businessDetails = Business details
-partnerDetailsCheckYourAnswers.businessDetails.hidden = business details
 
 partnerDetailsCheckYourAnswers.typeOfBusiness = Type of business
 partnerDetailsCheckYourAnswers.typeOfBusiness.hidden = type of business
@@ -1161,16 +1160,16 @@ partnerDetailsCheckYourAnswers.address.add = Add address
 
 partnerDetailsCheckYourAnswers.additionalInformation.add = Add additional information for address?
 partnerDetailsCheckYourAnswers.additionalInformation.add.hidden = add additional information for address
+
 partnerDetailsCheckYourAnswers.additionalInformation = Additional information
 partnerDetailsCheckYourAnswers.additionalInformation.hidden = additional information
 
 # Contact details
 partnerDetailsCheckYourAnswers.contactDetails = Contact details
-partnerDetailsCheckYourAnswers.contactDetails.hidden = contact details
 
 partnerDetailsCheckYourAnswers.contactNumbers = Contact numbers
-partnerDetailsCheckYourAnswers.contactNumbers.hidden = contact numbers
 partnerDetailsCheckYourAnswers.contactNumbers.add = Add contact numbers
+partnerDetailsCheckYourAnswers.contactNumbers.hidden = contact numbers
 
 partnerDetailsCheckYourAnswers.faxNumber.add = Add fax number?
 partnerDetailsCheckYourAnswers.faxNumber.add.hidden = add fax number
