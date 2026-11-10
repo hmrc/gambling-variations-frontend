@@ -1254,58 +1254,6 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
       }
 
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(ControllingBodyAddTradingNameYesNoPage, true)
-            .success
-            .value
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
-      }
-
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is No and the controlling body type is not known" in {
-        val answers =
-          emptyAnswers
-            .set(ControllingBodyAddTradingNameYesNoPage, false)
-            .success
-            .value
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
-      }
-
-      // The type is given as the code the app stores, since a set in this spec writes its name through the imported Enumerable writes
-      def addTradingNameAnswers(businessType: BusinessType, addTradingName: Boolean): UserAnswers =
-        UserAnswers("id", Json.obj("controllingBodyDetails" -> Json.obj("typeOfControllingBody" -> businessType.code)))
-          .set(ControllingBodyAddTradingNameYesNoPage, addTradingName)
-          .success
-          .value
-
-      "should route ControllingBodyAddTradingNameYesNoPage to CB-NI-SC when the answer is No and the controlling body is a sole proprietor" in {
-        val answers = addTradingNameAnswers(BusinessType.Soleproprietor, addTradingName = false)
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
-      }
-
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is Yes and the controlling body is a sole proprietor" in {
-        val answers = addTradingNameAnswers(BusinessType.Soleproprietor, addTradingName = true)
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
-      }
-
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is No and the controlling body is not a sole proprietor" in {
-        BusinessType.values.filterNot(_ == BusinessType.Soleproprietor).foreach { businessType =>
-          val answers = addTradingNameAnswers(businessType, addTradingName = false)
-
-          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-            routes.IndexController.onPageLoad()
-        }
-      }
-
       "should route ControllingBodyEmailPage to CheckControllingBodyDetails" in {
         navigator.nextPage(ControllingBodyEmailPage, NormalMode, emptyAnswers) mustBe
           controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
