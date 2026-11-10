@@ -21,7 +21,7 @@ import models.BusinessType.*
 import models.{Address, ContactNumber}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
-import uk.gov.hmrc.govukfrontend.views.Aliases.{HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormats.longDateDisplay
