@@ -535,13 +535,6 @@ class Navigator @Inject() () {
       routes.SystemErrorController.onPageLoad()
   }
 
-  private def navigateControllingBodyAddTradingNameYesNoPage(userAnswers: UserAnswers): Call =
-    (userAnswers.get(ControllingBodyAddTradingNameYesNoPage), userAnswers.get(ControllingBodyBusinessTypePage)) match {
-      case (Some(false), Some(Soleproprietor)) => controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
-      // TODO: Connect CB-TN for Yes, and the screens for No with the other business types.
-      case _ => routes.IndexController.onPageLoad()
-    }
-
   private def navigateControllingBodyAddNINumberYesNoPage(userAnswers: UserAnswers): Call =
     userAnswers
       .get(ControllingBodyAddNINumberYesNoPage)
