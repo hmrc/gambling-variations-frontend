@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.RemoveCorrAddressAddInfoFormProvider
+import forms.correspondencedetails.RemoveCorrAddressAddInfoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*

@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.RemoveCorrespondenceEmailAddressFormProvider
+import forms.correspondencedetails.RemoveCorrespondenceEmailAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*

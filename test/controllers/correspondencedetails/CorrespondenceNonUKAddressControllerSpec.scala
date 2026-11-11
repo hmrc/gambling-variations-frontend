@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import base.SpecBase
 import controllers.routes
-import forms.CorrespondenceNonUKAddressFormProvider
+import forms.correspondencedetails.CorrespondenceNonUKAddressFormProvider
 import models.{Address, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
