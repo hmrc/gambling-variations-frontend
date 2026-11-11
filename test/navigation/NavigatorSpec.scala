@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
 import controllers.routes
 import models.*
-import models.BusinessType.Corporatebody
+import models.BusinessType.{Corporatebody, Partnership, Soleproprietor}
 import models.CorrespondenceChangeAddrOption.*
 import models.cancellation.ReasonForCancellation
 import models.controllingbody.ControllingBodyChangeOption.*
@@ -37,7 +37,7 @@ import pages.returnperiods.*
 import pages.tradingdetails.*
 import pages.tradingdetails.associatedregnumbers.*
 import pages.tradingdetails.previousregnumbers.*
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, JsObject, Json}
 import play.api.mvc.Call
 import utils.PartnerUtils
 
@@ -1555,9 +1555,24 @@ class NavigatorSpec extends SpecBase {
     "Partner details navigation" - new PartnerDetailsHelper {
 
       private val existingMode: Mode = PartnerUtils.modeFor(businessNumber1)
-      private val existingUserAnswers: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-      private val savedNewPartnerAnswers: UserAnswers =
-        UserAnswers(mgdRegNumber, cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true)))
+
+      private val existingUserAnswers: UserAnswers = UserAnswers(
+        mgdRegNumber,
+        cleanedDataExistingPartners(
+          soleProprietorDob     = testSolePropDOB,
+          soleProprietorDetails = testSoleProprietor,
+          utr                   = Some(testUtr)
+        )
+      )
+      private val savedNewPartnerAnswers: UserAnswers = UserAnswers(
+        mgdRegNumber,
+        cleanedDataNewPartners(
+          soleProprietorDob      = testSolePropDOB,
+          soleProprietorDetails  = testSoleProprietor,
+          utr                    = Some(testUtr),
+          hasAnsweredAllQuestion = Some(true)
+        )
+      )
 
       // --- Helpers ---
 
@@ -1618,6 +1633,11 @@ class NavigatorSpec extends SpecBase {
         PartnerDetailsAddEmailAddressYesNoPage(businessNumber1) ->
           controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(businessNumber1, existingMode)
       )
+
+      private def updateNewPartner(data: JsObject, index: Int = 0)(f: JsObject => JsObject): JsObject = {
+        val partners = (data \ "newPartners").as[JsArray].value
+        data ++ Json.obj("newPartners" -> JsArray(partners.updated(index, f(partners(index).as[JsObject]))))
+      }
 
       // --- Normal mode: adding a new, unsaved partner ---
 
@@ -1988,6 +2008,103 @@ class NavigatorSpec extends SpecBase {
           navigator.nextPage(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
             routes.SystemErrorController.onPageLoad()
         }
+      }
+
+      "normal mode: changing business type to sole proprietor goes through all the mandatory pages" - {
+
+        "when we switch BusinessType to Sole Proprietor" in {
+          val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
+          val idx = newPartnersIndex1.toString
+
+          navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, businessData)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(idx, Soleproprietor, NormalMode)
+
+          val afterName = updateNewPartner(businessData) {
+            _ ++ Json.obj(
+              "partnerDetailsSoleProprietor" -> Json.obj("title" -> "Mx", "firstName" -> "Test", "lastName" -> "Test")
+            )
+          }
+
+          navigator.nextPage(PartnerDetailsSoleProprietorPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterName)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(idx, NormalMode)
+
+          val afterDob = updateNewPartner(afterName)(_ ++ Json.obj("partnerDetailsDateOfBirth" -> "1985-12-31"))
+
+          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterDob)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+
+          val afterUTR = updateNewPartner(afterDob)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
+
+
+          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterUTR)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+        }
+
+
+        "when we switch BusinessType to Corporate Body" in {
+          val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
+          val idx = newPartnersIndex1.toString
+
+          val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 2))
+
+          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
+
+          val afterUTR = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
+
+
+          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterUTR)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+        }
+
+        "when we switch BusinessType to Unincorporated Body" in {
+          val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
+          val idx = newPartnersIndex1.toString
+
+          val answers = UserAnswers(mgdRegNumber, businessData)
+          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+
+          val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 3))
+
+          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+
+          val afterUTR = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
+
+          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterUTR)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+        }
+
+        "when we switch BusinessType to Partnership" in {
+          val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
+          val idx = newPartnersIndex1.toString
+
+          val answers = UserAnswers(mgdRegNumber, businessData)
+          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+
+          val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 4))
+
+          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+        }
+
+        "when we switch BusinessType to Limited Liability Partnership" in {
+          val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
+          val idx = newPartnersIndex1.toString
+
+          val answers = UserAnswers(mgdRegNumber, businessData)
+          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+
+          val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 5))
+
+          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
+            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+        }
+
+
       }
 
       // --- Check mode: existing partners ---
