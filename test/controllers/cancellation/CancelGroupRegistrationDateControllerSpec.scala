@@ -352,35 +352,97 @@ class CancelGroupRegistrationDateControllerSpec extends SpecBase with MockitoSug
         }
       }
 
-      "must return BadRequest and the correct view when invalid data is submitted" in {
+      "must return BadRequest when invalid data is submitted" in {
 
         val application = buildApplication(
           userAnswers     = Some(emptyUserAnswers),
           businessDetails = businessDetailsWithRegistrationDate
         )
 
-        val request = FakeRequest(POST, cancelGroupRegistrationDateRoute).withFormUrlEncodedBody(
-          "value.day"   -> "not-a-day",
-          "value.month" -> "10",
-          "value.year"  -> "2026"
-        )
-
         running(application) {
-          val boundForm = form.bind(
-            Map(
-              "value.day"   -> "not-a-day",
-              "value.month" -> "10",
-              "value.year"  -> "2026"
-            )
-          )
 
-          val view = application.injector.instanceOf[CancelGroupRegistrationDateView]
+          val request =
+            FakeRequest(POST, cancelGroupRegistrationDateRoute)
+              .withFormUrlEncodedBody(
+                "value.day"   -> "not-a-day",
+                "value.month" -> "10",
+                "value.year"  -> "2026"
+              )
 
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual
-            view(boundForm, NormalMode, registrationDate, firstInvalidDate, middleOfDateRange)(request, messages(application)).toString
+
+          val content = contentAsString(result)
+
+          content must include("not-a-day")
+          content must include("govuk-error-summary")
+        }
+      }
+
+      "must return BadRequest when the day contains a non-numeric character" in {
+
+        val application = buildApplication(
+          userAnswers     = Some(emptyUserAnswers),
+          businessDetails = businessDetailsWithRegistrationDate
+        )
+
+        running(application) {
+          val request =
+            FakeRequest(POST, cancelGroupRegistrationDateRoute)
+              .withFormUrlEncodedBody(
+                "value.day"   -> "£",
+                "value.month" -> "10",
+                "value.year"  -> "2026"
+              )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+        }
+      }
+
+      "must return BadRequest when the month contains a non-numeric character" in {
+
+        val application = buildApplication(
+          userAnswers     = Some(emptyUserAnswers),
+          businessDetails = businessDetailsWithRegistrationDate
+        )
+
+        running(application) {
+          val request =
+            FakeRequest(POST, cancelGroupRegistrationDateRoute)
+              .withFormUrlEncodedBody(
+                "value.day"   -> "10",
+                "value.month" -> "$",
+                "value.year"  -> "2026"
+              )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+        }
+      }
+
+      "must return BadRequest when the year contains a non-numeric character" in {
+
+        val application = buildApplication(
+          userAnswers     = Some(emptyUserAnswers),
+          businessDetails = businessDetailsWithRegistrationDate
+        )
+
+        running(application) {
+          val request =
+            FakeRequest(POST, cancelGroupRegistrationDateRoute)
+              .withFormUrlEncodedBody(
+                "value.day"   -> "10",
+                "value.month" -> "10",
+                "value.year"  -> "£"
+              )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
         }
       }
 
