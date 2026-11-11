@@ -1740,7 +1740,7 @@ cancelGroupRegistrationDate.caption = Cancel group registration
 cancelGroupRegistrationDate.hint = <span class="govuk-body govuk-!-display-block govuk-!-margin-bottom-3">If any member of this group is still liable to pay Machine Games Duty, they must register as an individual.</span>The date must be after {0} and before {1}. For example, {2}
 cancelGroupRegistrationDate.checkYourAnswersLabel = When is this group no longer liable to pay Machine Games Duty?
 cancelGroupRegistrationDate.error.required.all = Enter the date for when this group is longer liable to pay Machine Games Duty
-cancelGroupRegistrationDate.error.required.two = Date must include a {0} and {1}
+cancelGroupRegistrationDate.error.required.two = Date must include a {0} and a {1}
 cancelGroupRegistrationDate.error.required = Date must include a {0}
 cancelGroupRegistrationDate.error.invalid = Must be a real date
 cancelGroupRegistrationDate.error.outsideBoundaries = Date must be after {0} and before {1}
