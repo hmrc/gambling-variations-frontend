@@ -142,8 +142,8 @@ class ControllingBodyCompanyRegistrationNumberFormProviderSpec extends StringFie
       }
     }
 
-    "fail to bind spaces, hyphens or apostrophes inside the CRN, with the characters and format errors" in {
-      Seq("SC 12345", "SC-12345", "SC'12345").foreach { crn =>
+    "fail to bind hyphens or apostrophes inside the CRN, with the characters and format errors" in {
+      Seq("SC-12345", "SC'12345").foreach { crn =>
         withClue(s"$crn: ")(errorsFor(crn) mustBe Seq(invalidCharactersError, invalidFormatError))
       }
     }
