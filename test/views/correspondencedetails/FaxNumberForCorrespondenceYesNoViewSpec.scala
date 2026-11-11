@@ -17,7 +17,7 @@
 package views.correspondencedetails
 
 import base.SpecBase
-import forms.FaxNumberForCorrespondenceYesNoFormProvider
+import forms.correspondencedetails.FaxNumberForCorrespondenceYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

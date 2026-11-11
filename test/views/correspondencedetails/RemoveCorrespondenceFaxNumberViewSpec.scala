@@ -17,7 +17,7 @@
 package views.correspondencedetails
 
 import base.SpecBase
-import forms.RemoveCorrespondenceFaxNumberFormProvider
+import forms.correspondencedetails.RemoveCorrespondenceFaxNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages

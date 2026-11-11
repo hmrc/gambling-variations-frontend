@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.AddCorrespondingDetailsYesNoFormProvider
+import forms.correspondencedetails.AddCorrespondingDetailsYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, IsAddingNewCorrespondenceDetailsPage}

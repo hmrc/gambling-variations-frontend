@@ -17,7 +17,7 @@
 package views.correspondencedetails
 
 import base.SpecBase
-import forms.RemoveCorrAddressAddInfoFormProvider
+import forms.correspondencedetails.RemoveCorrAddressAddInfoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import play.api.i18n.Messages

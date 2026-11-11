@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import base.SpecBase
-import forms.AddCorrespondingDetailsYesNoFormProvider
+import forms.correspondencedetails.AddCorrespondingDetailsYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
