@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
+import forms.correspondencedetails.AddEmailAddressForCorrespondenceYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, AddEmailAddressForCorrespondenceYesNoPage}

@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import base.SpecBase
-import forms.AddEmailAddressForCorrespondenceYesNoFormProvider
+import forms.correspondencedetails.AddEmailAddressForCorrespondenceYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

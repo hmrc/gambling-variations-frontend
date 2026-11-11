@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import base.SpecBase
-import forms.FaxNumberForCorrespondenceYesNoFormProvider
+import forms.correspondencedetails.FaxNumberForCorrespondenceYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any

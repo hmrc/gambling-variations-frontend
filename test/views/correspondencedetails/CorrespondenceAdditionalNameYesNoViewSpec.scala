@@ -17,7 +17,7 @@
 package views.correspondencedetails
 
 import base.SpecBase
-import forms.CorrespondenceAdditionalNameYesNoFormProvider
+import forms.correspondencedetails.CorrespondenceAdditionalNameYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.scalatest.matchers.must.Matchers.*

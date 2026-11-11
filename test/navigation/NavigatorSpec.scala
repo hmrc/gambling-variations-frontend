@@ -1550,6 +1550,80 @@ class NavigatorSpec extends SpecBase {
         }
       }
 
+      "ControllingBodyTradingNamePage" - {
+
+        "should route to ControllingBodyAddNINumberYesNoController when controlling body type is Proprietor" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 1
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+        }
+
+        "should route to ControllingBodyBusinessUKIncorporatedController when controlling body type is Corporate Body" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 2
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+        }
+
+        "should route to ControllingBodyUTRController when controlling body type is Unincorporated" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 3
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+        }
+
+        "should route to ControllingBodyVATScreenerController when controlling body type is Partnership" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 4
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+        }
+
+        "should route to DateOfIncorporationController when controlling body type is Limited Liability Partnership" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 5
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+        }
+      }
+
+
     }
 
     "Partner details navigation" - new PartnerDetailsHelper {

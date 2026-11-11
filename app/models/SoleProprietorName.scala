@@ -16,8 +16,7 @@
 
 package models
 
-import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{Json, OFormat, Reads, __}
+import play.api.libs.json.{Json, OFormat, Reads}
 
 case class SoleProprietorName(
   title: String,

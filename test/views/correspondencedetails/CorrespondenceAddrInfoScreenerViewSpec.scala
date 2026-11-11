@@ -17,7 +17,7 @@
 package views.correspondencedetails
 
 import base.SpecBase
-import forms.CorrespondenceAddrInfoScreenerFormProvider
+import forms.correspondencedetails.CorrespondenceAddrInfoScreenerFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

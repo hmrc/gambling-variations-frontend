@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceUKAddrScreenerFormProvider
+import forms.correspondencedetails.CorrespondenceUKAddrScreenerFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.CorrespondenceUKAddrScreenerPage
