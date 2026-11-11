@@ -20,6 +20,8 @@
 @import views.html.components._
 @import java.time.LocalDate
 @import java.time.format.DateTimeFormatter
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Hint, HtmlContent}
+@import play.twirl.api.Html
 
 @this(
     layout: templates.Layout,
@@ -59,18 +61,20 @@
         )
 
         @caption(messages("cancelGroupRegistrationDate.caption"))
-        @h1("cancelGroupRegistrationDate.heading", classes = "govuk-heading-l")
-        @p(messages("cancelGroupRegistrationDate.paragraph"))
+
         @govukDateInput(
-                DateViewModel(
-                field  = form("value"),
-                legend = LegendViewModel(messages("cancelGroupRegistrationDate.heading")).withCssClass("govuk-visually-hidden")
+            DateViewModel(
+                field = form("value"),
+                legend = LegendViewModel(messages("cancelGroupRegistrationDate.heading")).asPageHeading(Large)
                 )
-            .withHint(
-            HintViewModel(messages("cancelGroupRegistrationDate.hint",
-             fullDate(registrationDate),
-             fullDate(maximumDate),
-             numericDate(middleOfDateRange))))
+                .withHint(Hint(
+                    content = HtmlContent(
+                    Html(
+                    messages("cancelGroupRegistrationDate.hint", fullDate(registrationDate), fullDate(maximumDate), numericDate(middleOfDateRange))
+                    )
+                  )
+                )
+            )
         )
 
         @govukButton(

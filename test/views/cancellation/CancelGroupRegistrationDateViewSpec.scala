@@ -106,15 +106,30 @@ class CancelGroupRegistrationDateViewSpec extends SpecBase {
 
       val doc = document()
 
-      doc
-        .select(".govuk-hint")
-        .text() mustBe
-        messages(
-          "cancelGroupRegistrationDate.hint",
-          "20 March 2007",
-          "5 November 2026",
-          "27 1 2017"
+      val hint = doc.select(".govuk-hint")
+
+      hint.text() must include(
+        "If any member of this group is still liable to pay Machine Games Duty, they must register as an individual."
+      )
+
+      hint.text() must include(
+        "The date must be after 20 March 2007 and before 5 November 2026. For example, 27 1 2017"
+      )
+    }
+
+    "must render the liability information separately within the hint" in new Setup {
+
+      val doc = document()
+
+      val liabilityText =
+        doc.select(
+          ".govuk-hint span.govuk-body.govuk-\\!-display-block.govuk-\\!-margin-bottom-3"
         )
+
+      liabilityText.size() mustEqual 1
+
+      liabilityText.text() mustBe
+        "If any member of this group is still liable to pay Machine Games Duty, they must register as an individual."
     }
 
     "must render the registration date in full month format in the hint" in new Setup {
