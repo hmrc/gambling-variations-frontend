@@ -29,7 +29,8 @@
     govukButton: GovukButton,
     caption: Caption,
     p: Paragraph,
-    h1: H1
+    h1: H1,
+    mainErrorSummary: MainErrorSummary
 )
 
 @(form: Form[_], mode: Mode, registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate)(implicit request: Request[_], messages: Messages)
@@ -46,19 +47,25 @@
 
     @formHelper(action = controllers.cancellation.routes.CancelGroupRegistrationDateController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
-        @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
-        }
+        @mainErrorSummary(
+            form.copy(errors = form.errors.filter(_.key == "value")),
+            errorLinkOverrides = Map(
+                "value" ->
+                form.errors
+                .find(e => Seq("value.day", "value.month", "value.year").contains(e.key))
+                .map(_.key)
+                .getOrElse("value.day")
+            )
+        )
 
         @caption(messages("cancelGroupRegistrationDate.caption"))
-
-        @h1("cancelGroupRegistrationDate.heading", classes = "govuk-heading-l govuk-!-margin-bottom-4")
-
+        @h1("cancelGroupRegistrationDate.heading", classes = "govuk-heading-l")
+        @p(messages("cancelGroupRegistrationDate.paragraph"))
         @govukDateInput(
-            DateViewModel(
+                DateViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("cancelGroupRegistrationDate.paragraph")).withCssClass("govuk-!-margin-bottom-4")
-            )
+                legend = LegendViewModel(messages("cancelGroupRegistrationDate.heading")).withCssClass("govuk-visually-hidden")
+                )
             .withHint(
             HintViewModel(messages("cancelGroupRegistrationDate.hint",
              fullDate(registrationDate),
