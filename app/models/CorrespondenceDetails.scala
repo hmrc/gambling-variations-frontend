@@ -25,7 +25,7 @@ case class CorrespondenceDetails(
   nameLine2: Option[String],
   correspondenceAddress: Option[Address],
   additionalInformation: Option[String],
-  iomOrCiFlag: Option[String],
+  iomOrCiFlag: Option[Boolean],
   contactNumber: Option[ContactNumber],
   faxNumber: Option[String],
   emailAddr: Option[String]
@@ -33,7 +33,37 @@ case class CorrespondenceDetails(
 
 object CorrespondenceDetails {
 
-  implicit val writes: OWrites[CorrespondenceDetails] = Json.writes[CorrespondenceDetails]
+  private val booleanYNFormat: Format[Boolean] = Format(
+    Reads {
+      case JsString(value) =>
+        value.trim.toLowerCase match {
+          case "y"     => JsSuccess(true)
+          case "n"     => JsSuccess(false)
+          case "1"     => JsSuccess(true)
+          case "0"     => JsSuccess(false)
+          case "true"  => JsSuccess(true)
+          case "false" => JsSuccess(false)
+          case _ =>
+            JsError("Expected Y/N, 1/0 or true/false")
+        }
+
+      case JsNull => JsError("Expected a boolean value, got null")
+      case _      => JsError("Expected a string representing a boolean")
+    },
+    Writes {
+      case true  => JsString("Y")
+      case false => JsString("N")
+    }
+  )
+
+  implicit val writes: OWrites[CorrespondenceDetails] =
+    OWrites { details =>
+      val json = Json.writes[CorrespondenceDetails].writes(details)
+
+      json ++ Json.obj(
+        "iomOrCiFlag" -> details.iomOrCiFlag.map(booleanYNFormat.writes)
+      )
+    }
 
   implicit val reads: Reads[CorrespondenceDetails] = (
     (__ \ "mgdRegNumber").read[String] and
@@ -41,7 +71,7 @@ object CorrespondenceDetails {
       (__ \ "nameLine2").readNullable[String].map(_.filter(_.nonEmpty)) and
       Address.reads.map(Some(_): Option[Address]).orElse(Reads.pure(None)) and
       (__ \ "adi").readNullable[String].map(_.filter(_.nonEmpty)) and
-      (__ \ "iomOrCiFlag").readNullable[String] and
+      (__ \ "iomOrCiFlag").readNullable[Boolean](booleanYNFormat).orElse(Reads.pure(None)) and
       ContactNumber.reads
         .map(contactNumber => if (contactNumber.phoneNumber.isEmpty && contactNumber.mobilePhoneNumber.isEmpty) None else Some(contactNumber))
         .orElse(Reads.pure(None)) and

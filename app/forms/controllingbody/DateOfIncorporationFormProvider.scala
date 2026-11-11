@@ -27,12 +27,11 @@ class DateOfIncorporationFormProvider @Inject() extends Mappings {
 
   def apply()(implicit messages: Messages): Form[LocalDate] =
     Form(
-      "dateOfIncorporation" -> localDate(
-        invalidKey               = "dateOfIncorporation.error.invalid",
-        allRequiredKey           = "dateOfIncorporation.error.required.all",
-        twoRequiredKey           = "dateOfIncorporation.error.required.two",
-        requiredKey              = "dateOfIncorporation.error.required",
-        requireNumericDateFormat = true
+      "value" -> localDate(
+        invalidKey     = "dateOfIncorporation.error.invalid",
+        allRequiredKey = "dateOfIncorporation.error.required.all",
+        twoRequiredKey = "dateOfIncorporation.error.required.two",
+        requiredKey    = "dateOfIncorporation.error.required"
       )
     )
 }

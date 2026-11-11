@@ -60,16 +60,15 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
 
   private val validAnswers =
     userAnswersWith(
-          "businessName" -> businessName,
-          "isRepMemSameAsCb" -> "0"
-        )
+      "businessName"     -> businessName,
+      "isRepMemSameAsCb" -> "0"
+    )
 
   private val repMemDifferentAnswers =
     userAnswersWith(
-      "businessName" -> businessName,
+      "businessName"     -> businessName,
       "isRepMemSameAsCb" -> "1"
     )
-
 
   private val soleProprietorAnswers: UserAnswers =
     userAnswersWith(
@@ -77,9 +76,9 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
         "title"      -> "Mrs",
         "firstName"  -> "Jane",
         "middleName" -> "Mary",
-        "lastName"   -> "Smith",
+        "lastName"   -> "Smith"
       ),
-      "isRepMemSameAsCb" -> "0",
+      "isRepMemSameAsCb" -> "0"
     )
 
   private val noNameAnswers: UserAnswers =
@@ -90,7 +89,6 @@ class ControllingBodyChangeScreenerControllerSpec extends SpecBase with MockitoS
     "onPageLoad" - {
 
       "must return OK and the correct view for a GET" in {
-
 
         val application = applicationBuilder(userAnswers = Some(validAnswers)).build()
 

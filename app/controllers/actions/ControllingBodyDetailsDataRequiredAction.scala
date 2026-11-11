@@ -89,7 +89,7 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
       nameLine2             = None,
       correspondenceAddress = address,
       additionalInformation = details.adi,
-      iomOrCiFlag           = details.isIomOrCiFlag,
+      iomOrCiFlag           = details.isIomOrCiFlag.flatMap(parseIomOrCiFlag),
       contactNumber         = contactNumberDetails,
       faxNumber             = details.faxNumber,
       emailAddr             = details.emailAddr
@@ -133,6 +133,16 @@ class ControllingBodyDetailsDataRequiredActionImpl @Inject() (
         details.solePropLastName.getOrElse("")
       )
     )
+
+  private def parseIomOrCiFlag(isIomOrCiFlagString: String): Option[Boolean] = isIomOrCiFlagString.trim.toLowerCase match {
+    case "y"     => Some(true)
+    case "n"     => Some(false)
+    case "1"     => Some(true)
+    case "0"     => Some(false)
+    case "true"  => Some(true)
+    case "false" => Some(false)
+    case _       => None
+  }
 
 }
 

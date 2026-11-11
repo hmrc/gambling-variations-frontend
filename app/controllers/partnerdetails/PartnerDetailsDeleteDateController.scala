@@ -20,13 +20,14 @@ import connectors.GamblingConnector
 import controllers.actions.*
 import forms.partnerdetails.PartnerDeleteDateFormProvider
 import models.requests.DataRequest
-import models.{BusinessDetails, Mode}
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsTradingNamePage}
+import models.{BusinessDetails, BusinessType, Mode}
+import pages.partnerdetails.*
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.DateTimeFormats.*
+import utils.PartnerUtils
 import views.html.partnerdetails.PartnerDetailsDeleteDateView
 
 import java.time.LocalDate
@@ -59,7 +60,7 @@ class PartnerDetailsDeleteDateController @Inject() (
           val registrationDate = getRegistrationDate(businessDetails)
           val latestDate = calculateLatestDate(registrationDate)
           val index = getPartnerIndex
-          val partnerName = getPartnerName(index)
+          val partnerName = PartnerUtils.getPartnerDetailsName(index, request.userAnswers)
 
           val form = formProvider(registrationDate)
 
@@ -68,13 +69,17 @@ class PartnerDetailsDeleteDateController @Inject() (
               .get(PartnerDetailsDateOfLeavingPage(index))
               .fold(form)(form.fill)
 
-          Ok(
-            view(
-              preparedForm,
-              mode,
-              registrationDate.format(dateTimeFormat()),
-              latestDate.format(dateTimeHintFormat),
-              partnerName
+          partnerName.fold(
+            Redirect(controllers.routes.SystemErrorController.onPageLoad().url)
+          )(partnerName =>
+            Ok(
+              view(
+                preparedForm,
+                mode,
+                registrationDate.format(dateTimeFormat()),
+                latestDate.format(dateTimeHintFormat),
+                partnerName
+              )
             )
           )
         }
@@ -93,20 +98,22 @@ class PartnerDetailsDeleteDateController @Inject() (
 
           val registrationDate = getRegistrationDate(businessDetails)
           val latestDate = calculateLatestDate(registrationDate)
-          val partnerName = getPartnerName(index)
+          val partnerName = PartnerUtils.getPartnerDetailsName(index, request.userAnswers)
 
           formProvider(registrationDate)
             .bindFromRequest()
             .fold(
               formWithErrors =>
-                Future.successful(
-                  BadRequest(
-                    view(
-                      formWithErrors,
-                      mode,
-                      registrationDate.format(dateTimeFormat()),
-                      latestDate.format(dateTimeHintFormat),
-                      partnerName
+                partnerName.fold(Future.successful(Redirect(controllers.routes.SystemErrorController.onPageLoad().url)))(partnerName =>
+                  Future.successful(
+                    BadRequest(
+                      view(
+                        formWithErrors,
+                        mode,
+                        registrationDate.format(dateTimeFormat()),
+                        latestDate.format(dateTimeHintFormat),
+                        partnerName
+                      )
                     )
                   )
                 ),
@@ -156,16 +163,4 @@ class PartnerDetailsDeleteDateController @Inject() (
       .getOrElse(
         throw new RuntimeException("No selected partner for removal")
       )
-
-  private def getPartnerName(
-    index: String
-  )(implicit request: DataRequest[AnyContent]): String =
-    request.userAnswers
-      .get(PartnerDetailsTradingNamePage(index))
-      .orElse(
-        request.userAnswers.get(
-          PartnerDetailsBusinessNamePage(index)
-        )
-      )
-      .getOrElse(request.mgdRegNum)
 }

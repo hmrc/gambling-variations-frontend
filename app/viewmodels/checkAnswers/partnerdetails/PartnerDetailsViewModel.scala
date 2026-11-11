@@ -76,76 +76,74 @@ object PartnerDetailsViewModel {
     val rows: Seq[PartnerDetailsRow] =
       partnerNumbers
         .flatMap { partnerNumber =>
-          userAnswers
-            .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
-            .map { mgdRegNumber =>
-
-              val name = PartnerUtils.getPartnerDetailsName(partnerNumber, userAnswers)
-
-              val dateOfJoining =
-                userAnswers.get(
-                  PartnerDetailsDateOfJoiningPage(partnerNumber)
-                )
-
-              val dateOfLeaving =
-                userAnswers.get(
-                  PartnerDetailsDateOfLeavingPage(partnerNumber)
-                )
-
-              val status =
-                dateOfLeaving match {
-                  case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
-                    messages("partnerDetails.status.dueToLeave")
-
-                  case _ =>
-                    dateOfJoining match {
-                      case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
-                        messages("partnerDetails.status.dueToJoin")
-
-                      case Some(joiningDate) =>
-                        messages("partnerDetails.status.active", joiningDate.format(dateFormatter))
-                      case _ =>
-                        messages("partnerDetails.status.active")
-                    }
-                }
-
-              val statusDetails =
-                dateOfLeaving match {
-                  case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
-                    Some(leavingDate.format(dateFormatter))
-
-                  case _ =>
-                    dateOfJoining match {
-                      case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
-                        Some(joiningDate.format(dateFormatter))
-
-                      case _ =>
-                        None
-                    }
-                }
-
-              val canRemove =
-                dateOfLeaving.isEmpty &&
-                  activePartnerCount > 2
-
-              val removeUrl =
-                if (canRemove) {
-                  Some(onRemoveRoute(partnerNumber))
-                } else {
-                  None
-                }
-
-              PartnerDetailsRow(
-                index = partnerNumber,
-                // Note: Realistically this should never happen, left it here for now to easily identify if it happens
-                name              = name.getOrElse("Business Name not found!"),
-                status            = status,
-                statusDetails     = statusDetails,
-                partnerDetailsUrl = onPartnerDetailsRoute(partnerNumber),
-                removeUrl         = removeUrl,
-                canRemove         = canRemove
+          for {
+            _    <- userAnswers.get(PartnerDetailsMgdRegNumberPage(partnerNumber))
+            name <- PartnerUtils.getPartnerDetailsName(partnerNumber, userAnswers)
+          } yield {
+            val dateOfJoining =
+              userAnswers.get(
+                PartnerDetailsDateOfJoiningPage(partnerNumber)
               )
-            }
+
+            val dateOfLeaving =
+              userAnswers.get(
+                PartnerDetailsDateOfLeavingPage(partnerNumber)
+              )
+
+            val status =
+              dateOfLeaving match {
+                case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
+                  messages("partnerDetails.status.dueToLeave")
+
+                case _ =>
+                  dateOfJoining match {
+                    case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
+                      messages("partnerDetails.status.dueToJoin")
+
+                    case Some(joiningDate) =>
+                      messages("partnerDetails.status.active", joiningDate.format(dateFormatter))
+                    case _ =>
+                      messages("partnerDetails.status.active")
+                  }
+              }
+
+            val statusDetails =
+              dateOfLeaving match {
+                case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
+                  Some(leavingDate.format(dateFormatter))
+
+                case _ =>
+                  dateOfJoining match {
+                    case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
+                      Some(joiningDate.format(dateFormatter))
+
+                    case _ =>
+                      None
+                  }
+              }
+
+            val canRemove =
+              dateOfLeaving.isEmpty &&
+                activePartnerCount > 2
+
+            val removeUrl =
+              if (canRemove) {
+                Some(onRemoveRoute(partnerNumber))
+              } else {
+                None
+              }
+
+            PartnerDetailsRow(
+              index = partnerNumber,
+              // Note: Realistically this should never happen, left it here for now to easily identify if it happens
+              name              = name,
+              status            = status,
+              statusDetails     = statusDetails,
+              partnerDetailsUrl = onPartnerDetailsRoute(partnerNumber),
+              removeUrl         = removeUrl,
+              canRemove         = canRemove
+            )
+          }
         }
         .sortBy(_.name.toLowerCase)
 

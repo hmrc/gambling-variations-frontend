@@ -21,7 +21,7 @@ import forms.CorrespondenceUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
-import pages.isleMOrChannelFlagPage
+import pages.IsleMOrChannelFlagPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -81,9 +81,9 @@ class CorrespondenceUKAddressController @Inject() (
             val isChanged: Boolean = checkIfChanged(value, ua, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage)
             val iomOrCiFlag =
               if (value.postcode.exists(isIomOrCiPostcode)) {
-                "true"
+                true
               } else {
-                "false"
+                false
               }
 
             for {
@@ -101,7 +101,7 @@ class CorrespondenceUKAddressController @Inject() (
                                 )
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.set(
-                                    isleMOrChannelFlagPage,
+                                    IsleMOrChannelFlagPage,
                                     iomOrCiFlag
                                   )
                                 )

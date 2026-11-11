@@ -19,7 +19,7 @@ package pages.partnerdetails
 import pages.{BusinessNumberOrIndex, QuestionPage}
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsIsFutureJoinDatePage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Int] {
+case class PartnerDetailsIsFutureJoinDatePage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[Boolean] {
 
   override val path: JsPath = businessNumberOrIndex match {
     case key: String => JsPath \ "partners" \ key \ toString

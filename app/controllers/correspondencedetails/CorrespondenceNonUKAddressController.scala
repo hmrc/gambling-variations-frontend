@@ -21,7 +21,7 @@ import forms.CorrespondenceNonUKAddressFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.*
-import pages.isleMOrChannelFlagPage
+import pages.IsleMOrChannelFlagPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -87,8 +87,8 @@ class CorrespondenceNonUKAddressController @Inject() (
 
               updatedAnswers <- Future.fromTry(
                                   updatedAnswers.set(
-                                    isleMOrChannelFlagPage,
-                                    "false"
+                                    IsleMOrChannelFlagPage,
+                                    false
                                   )
                                 )
 

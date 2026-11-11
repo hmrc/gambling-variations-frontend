@@ -16,30 +16,40 @@
 
 package forms
 
-import java.time.{LocalDate, ZoneOffset}
 import forms.behaviours.DateBehaviours
 import forms.controllingbody.DateOfIncorporationFormProvider
 import play.api.data.FormError
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages
 
+import java.time.{LocalDate, ZoneOffset}
+
 class DateOfIncorporationFormProviderSpec extends DateBehaviours {
 
   private implicit val messages: Messages = stubMessages()
   private val form = new DateOfIncorporationFormProvider()()
 
-  ".dateOfIncorporation" - {
+  ".value" - {
 
     val validData = datesBetween(
       min = LocalDate.of(2000, 1, 1),
       max = LocalDate.now(ZoneOffset.UTC)
     )
 
-    behave like dateField(form, "dateOfIncorporation", validData)
+    behave like dateField(form, "value", validData)
 
-    behave like mandatoryDateField(form, "dateOfIncorporation", "dateOfIncorporation.error.required.all")
+    behave like mandatoryDateField(
+      form,
+      "value",
+      "dateOfIncorporation.error.required.all"
+    )
 
-    val validDate = Map("dateOfIncorporation.day" -> "27", "dateOfIncorporation.month" -> "3", "dateOfIncorporation.year" -> "2007")
+    val validDate = Map(
+      "value.day"   -> "27",
+      "value.month" -> "3",
+      "value.year"  -> "2007"
+    )
+
     Seq(
       Seq("day"),
       Seq("month"),
@@ -49,13 +59,26 @@ class DateOfIncorporationFormProviderSpec extends DateBehaviours {
       Seq("day", "year")
     ).foreach { missing =>
       s"reject a date missing ${missing.mkString(" and ")}" in {
-        val errorKey = if (missing.size == 1) "dateOfIncorporation.error.required" else "dateOfIncorporation.error.required.two"
-        val expectedArgs = missing.map(part => messages(s"date.error.$part"))
+
+        val errorKey =
+          if (missing.size == 1) {
+            "dateOfIncorporation.error.required"
+          } else {
+            "dateOfIncorporation.error.required.two"
+          }
+
+        val expectedArgs =
+          missing.map(part => messages(s"date.error.$part"))
+
         Seq(
-          validDate -- missing.map(part => s"dateOfIncorporation.$part"),
-          validDate ++ missing.map(part => s"dateOfIncorporation.$part" -> "")
+          validDate -- missing.map(part => s"value.$part"),
+          validDate ++ missing.map(part => s"value.$part" -> "")
         ).foreach { data =>
-          form.bind(data).errors must contain only FormError("dateOfIncorporation", errorKey, expectedArgs)
+          form.bind(data).errors must contain only FormError(
+            "value",
+            errorKey,
+            expectedArgs
+          )
         }
       }
     }
@@ -71,47 +94,151 @@ class DateOfIncorporationFormProviderSpec extends DateBehaviours {
       ("1.5", "3", "2007")
     ).foreach { case (day, month, year) =>
       s"reject the invalid date $day/$month/$year" in {
-        form.bind(Map("dateOfIncorporation.day" -> day, "dateOfIncorporation.month" -> month, "dateOfIncorporation.year" -> year)).errors must
-          contain only FormError("dateOfIncorporation", "dateOfIncorporation.error.invalid")
+
+        val errors =
+          form
+            .bind(
+              Map(
+                "value.day"   -> day,
+                "value.month" -> month,
+                "value.year"  -> year
+              )
+            )
+            .errors
+
+        errors.map(_.message) must contain(
+          "dateOfIncorporation.error.invalid"
+        )
       }
     }
 
-    Seq("1", "99", "999", "10000", "999999999", "00002007", "+2007", "-2007").foreach { year =>
-      s"reject year $year because it does not contain exactly four digits" in {
-        form.bind(validDate.updated("dateOfIncorporation.year", year)).errors must
-          contain only FormError("dateOfIncorporation", "dateOfIncorporation.error.invalid")
+    Seq(
+      "1",
+      "99",
+      "999",
+      "10000",
+      "999999999",
+      "00002007",
+      "+2007",
+      "-2007"
+    ).foreach { year =>
+      s"reject year $year because it does not contain exactly four valid digits" in {
+
+        val errors =
+          form
+            .bind(
+              validDate.updated("value.year", year)
+            )
+            .errors
+
+        errors.map(_.message) must contain(
+          "dateOfIncorporation.error.invalid"
+        )
+
+        errors.map(_.key) must contain("value.year")
       }
     }
 
     Seq("1000", "2007", "9999").foreach { year =>
       s"accept four-digit year $year" in {
-        form.bind(validDate.updated("dateOfIncorporation.year", year)).value.value mustEqual LocalDate.of(year.toInt, 3, 27)
+
+        form
+          .bind(
+            validDate.updated("value.year", year)
+          )
+          .value
+          .value mustEqual
+          LocalDate.of(year.toInt, 3, 27)
       }
     }
 
     Seq("day", "month").foreach { part =>
-      Seq("001", "000000001", "123", "+1", "-1").foreach { value =>
+      Seq(
+        "001",
+        "000000001",
+        "123",
+        "+1",
+        "-1"
+      ).foreach { value =>
         s"reject $part $value because it does not contain one or two digits" in {
-          form.bind(validDate.updated(s"dateOfIncorporation.$part", value)).errors must
-            contain only FormError("dateOfIncorporation", "dateOfIncorporation.error.invalid")
+
+          val errors =
+            form
+              .bind(
+                validDate.updated(s"value.$part", value)
+              )
+              .errors
+
+          errors.map(_.message) must contain(
+            "dateOfIncorporation.error.invalid"
+          )
+
+          errors.map(_.key) must contain(s"value.$part")
         }
       }
     }
 
-    Seq(("1", "3"), ("01", "03"), ("27", "12")).foreach { case (day, month) =>
+    Seq(
+      ("1", "3"),
+      ("01", "03"),
+      ("27", "12")
+    ).foreach { case (day, month) =>
       s"accept day $day and month $month" in {
-        form.bind(validDate ++ Map("dateOfIncorporation.day" -> day, "dateOfIncorporation.month" -> month)).value.value mustEqual
+
+        form
+          .bind(
+            validDate ++ Map(
+              "value.day"   -> day,
+              "value.month" -> month
+            )
+          )
+          .value
+          .value mustEqual
           LocalDate.of(2007, month.toInt, day.toInt)
       }
     }
 
     "accept a valid leap day" in {
+
       form
-        .bind(Map("dateOfIncorporation.day" -> "29", "dateOfIncorporation.month" -> "2", "dateOfIncorporation.year" -> "2008"))
+        .bind(
+          Map(
+            "value.day"   -> "29",
+            "value.month" -> "2",
+            "value.year"  -> "2008"
+          )
+        )
         .value
         .value mustEqual
         LocalDate.of(2008, 2, 29)
     }
 
+    Seq(
+      ("$$", "me", "", Seq("day", "month")),
+      ("32", "3", "", Seq("day")),
+      ("27", "13", "", Seq("month")),
+      ("", "13", "2007", Seq("month")),
+      ("27", "13", "2007", Seq("month")),
+      ("00", "3", "2007", Seq("day"))
+    ).foreach { case (day, month, year, invalidFields) =>
+      s"report $day/$month/$year as not a real date and mark only its invalid fields" in {
+
+        val errors =
+          form
+            .bind(
+              Map(
+                "value.day"   -> day,
+                "value.month" -> month,
+                "value.year"  -> year
+              )
+            )
+            .errors
+
+        errors must contain theSameElementsAs (
+          FormError("value", "dateOfIncorporation.error.invalid", invalidFields.map(part => messages(s"date.error.$part"))) +:
+            invalidFields.map(part => FormError(s"value.$part", "dateOfIncorporation.error.invalid"))
+        )
+      }
+    }
   }
 }
