@@ -222,6 +222,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
     case ControllingBodyBusinessTypePage =>
       userAnswers => navigateControllingBodyBusinessTypePage(userAnswers)
+    case ControllingBodyTradingNamePage =>
+      userAnswers => navigateControllingBodyTradingNamePage(userAnswers)
 
     // Return Periods
     case ChooseReturnPeriodsPage =>
@@ -629,6 +631,23 @@ private def navigateControllingBodyNotProvidedYesNoPage(answers: UserAnswers): C
     case Some(true)  => routes.ChangeRegistrationDetailsController.onPageLoad()
     case None        => routes.SystemErrorController.onPageLoad()
   }
+
+private def navigateControllingBodyTradingNamePage(userAnswers: UserAnswers): Call = {
+  userAnswers
+    .get(ControllingBodyBusinessTypePage) match {
+    case Some(Soleproprietor) =>
+      controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+    case Some(Corporatebody) =>
+      controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+    case Some(Unincorporatedbody) =>
+      controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+    case Some(Partnership) =>
+      controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+    case Some(LimitedLiabilityPartnership) =>
+      controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+    case _ => routes.SystemErrorController.onPageLoad()
+  }
+}
 
 private def navigateReasonForCancellationPage(
   userAnswers: UserAnswers,
