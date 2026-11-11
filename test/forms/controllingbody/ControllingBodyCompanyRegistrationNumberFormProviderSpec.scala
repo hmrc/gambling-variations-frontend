@@ -94,6 +94,22 @@ class ControllingBodyCompanyRegistrationNumberFormProviderSpec extends StringFie
       }
     }
 
+    "bind a valid CRN ignoring whitespaces spaces" in {
+      Seq("SC 123 456", "SC 123456", "SC123   456").foreach { input =>
+        val result = form.bind(Map(fieldName -> input))
+        result.errors mustBe empty
+        result.value.value mustBe "SC123456"
+      }
+    }
+
+    "must remove spaces and other whitespace before validation" in {
+      Seq(" SC123456 ", "SC 123 456", "S C 1 2 3 4 5 6", "SC1\t2345\t6", "SC123456\n").foreach { input =>
+        val bound = form.bind(Map(fieldName -> input))
+        bound.errors mustBe empty
+        bound.value.value mustBe "SC123456"
+      }
+    }
+
     "fail to bind the Confluence incorrect-format example ZZ345678" in {
       errorsFor("ZZ345678") mustBe Seq(invalidFormatError)
     }
