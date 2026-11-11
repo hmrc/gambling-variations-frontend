@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package pages.licencespremises
+package controllers.licencespremises
 
-import models.licencespremises.PremisesDetails
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.{OriginalAnswers, UserAnswers}
+import pages.licencespremises.LicencesPremisesSection
+import play.api.libs.json.JsObject
 
-case object PremisesPage extends QuestionPage[Seq[PremisesDetails]] {
+import java.time.Instant
 
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ "premisesDetails" \ toString
+// Answers in which the licences and premises have already been loaded from the backend, with the given original data
+object LoadedLicencesPremises {
 
-  override def toString: String = "premises"
+  def apply(id: String, data: JsObject): UserAnswers =
+    UserAnswers(id, OriginalAnswers(data, Map(LicencesPremisesSection.key -> Instant.EPOCH)))
 }

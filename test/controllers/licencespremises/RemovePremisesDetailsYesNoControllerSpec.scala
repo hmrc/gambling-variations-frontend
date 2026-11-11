@@ -26,9 +26,10 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesPage, LicencesPremisesSectionPage, PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
+import pages.licencespremises.{LicencesPremisesDetailsChangesPage, LicencesPremisesPage, LicencesPremisesSection, PremisesDetailsPage, RemovePremisesDetailsYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -60,11 +61,8 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
   )
 
   val userAnswersWithPremisesDetails: UserAnswers =
-    emptyUserAnswers
-      .set(LicencesPremisesSectionPage, userAnswersId)
-      .success
-      .value
-      .set(PremisesDetailsPage, premisesDetails)
+    LoadedLicencesPremises(userAnswersId, Json.obj())
+      .setOriginal(PremisesDetailsPage, premisesDetails)
       .success
       .value
 
@@ -166,6 +164,38 @@ class RemovePremisesDetailsYesNoControllerSpec extends SpecBase with MockitoSuga
         savedAnswersCaptor.getValue.get(LicencesPremisesDetailsChangesPage).value mustEqual true
         savedAnswersCaptor.getValue.get(PremisesDetailsPage) mustBe None
         savedAnswersCaptor.getValue.get(LicencesPremisesPage).value mustEqual ByPost
+      }
+    }
+
+    "must assert the removal, so that the premises loaded from the backend do not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersWithPremisesDetails))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, removePremisesDetailsYesNoRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers = savedAnswersCaptor.getValue
+        savedAnswers.get(PremisesDetailsPage) mustBe None
+        savedAnswers.original.get[PremisesDetailsResponse](PremisesDetailsPage.path).value mustEqual premisesDetails
+        savedAnswers.changes(LicencesPremisesSection) mustBe Json.obj(
+          "licencesPremisesSection" -> Json.obj("premisesDetails" -> JsNull)
+        )
       }
     }
 

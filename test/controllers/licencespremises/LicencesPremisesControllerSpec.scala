@@ -46,10 +46,7 @@ class LicencesPremisesControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider()
 
   private val emptyLicencesPremisesAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+    LoadedLicencesPremises(userAnswersId, Json.obj())
 
   private val premises = PremisesDetails(userAnswersId, Some("1 Street"), None, None, None, Some("AA1 1AA"), None)
 
