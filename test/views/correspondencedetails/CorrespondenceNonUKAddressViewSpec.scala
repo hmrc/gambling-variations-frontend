@@ -17,7 +17,7 @@
 package views.correspondencedetails
 
 import base.SpecBase
-import forms.CorrespondenceUKAddrScreenerFormProvider
+import forms.correspondencedetails.CorrespondenceUKAddrScreenerFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

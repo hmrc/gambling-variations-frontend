@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.CorrespondenceAdditionalNameYesNoFormProvider
+import forms.correspondencedetails.CorrespondenceAdditionalNameYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.CorrespondenceAdditionalNameYesNoPage

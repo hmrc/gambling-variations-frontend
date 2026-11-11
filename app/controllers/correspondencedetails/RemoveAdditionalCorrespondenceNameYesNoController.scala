@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import controllers.actions.*
 import controllers.routes
-import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
+import forms.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.Mode
 import pages.correspondencedetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}

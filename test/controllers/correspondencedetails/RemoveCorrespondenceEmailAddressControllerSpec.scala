@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import base.SpecBase
 import controllers.routes
-import forms.RemoveCorrespondenceEmailAddressFormProvider
+import forms.correspondencedetails.RemoveCorrespondenceEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
