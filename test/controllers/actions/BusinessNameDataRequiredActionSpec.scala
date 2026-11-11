@@ -20,19 +20,20 @@ import base.SpecBase
 import connectors.GamblingConnector
 import models.BusinessType.{Partnership, Soleproprietor}
 import models.requests.{DataRequest, OptionalDataRequest}
-import models.{BusinessNameDetails, SoleProprietorNameDetails, UserAnswers}
+import models.{BusinessNameDetails, OriginalAnswers, SoleProprietorNameDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
+import pages.businessname.BusinessNameSection
 import play.api.http.Status.INTERNAL_SERVER_ERROR
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Results.*
 import play.api.mvc.{AnyContent, Result}
 import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
-import java.time.LocalDate
+import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -41,7 +42,7 @@ class BusinessNameDataRequiredActionSpec extends SpecBase with MockitoSugar {
   import BusinessNameDataRequiredActionSpec.*
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
-      extends BusinessNameDataRequiredActionImpl(sessionRepository, gamblingConnector) {
+      extends BusinessNameDataRequiredActionImpl(sessionRepository, gamblingConnector, clock) {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
@@ -59,23 +60,16 @@ class BusinessNameDataRequiredActionSpec extends SpecBase with MockitoSugar {
           when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(businessNameModel)
           val action = new Harness(sessionRepository, gamblingConnector)
 
-          val data = Json.obj(
-            "businessName" -> "Test Business Ltd",
-            "tradingName"  -> "Test Trader Ltd",
-            "businessType" -> 4,
-            "businessNameSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            )
-          )
-
           val result: Either[Result, DataRequest[AnyContent]] =
             action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
 
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, loadedBusinessData))
 
           result.map { req =>
             req.request mustBe expected.request
-            req.userAnswers.data mustBe expected.userAnswers.data
+            req.userAnswers.original.data mustBe expected.userAnswers.data
+            req.userAnswers.original.loaded mustBe Map(BusinessNameSection.key -> now)
+            req.userAnswers.modified.data mustBe Json.obj()
             req.userAnswers.id mustBe expected.userAnswers.id
           }
           verify(sessionRepository, times(1)).set(any())
@@ -90,27 +84,16 @@ class BusinessNameDataRequiredActionSpec extends SpecBase with MockitoSugar {
           when(gamblingConnector.getBusinessName(any())(any())) thenReturn Future(soleProprietorModel)
           val action = new Harness(sessionRepository, gamblingConnector)
 
-          val data = Json.obj(
-            "soleProprietor" -> Json.obj(
-              "title"     -> "Mr",
-              "firstName" -> "Test",
-              "lastName"  -> "Fella"
-            ),
-            "businessType" -> 1,
-            "tradingName"  -> "Test Trader",
-            "businessNameSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            )
-          )
-
           val result: Either[Result, DataRequest[AnyContent]] =
             action.callRefine(OptionalDataRequest(request, mgdRegNum, None)).futureValue
 
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, loadedSoleProprietorData))
 
           result.map { req =>
             req.request mustBe expected.request
-            req.userAnswers.data mustBe expected.userAnswers.data
+            req.userAnswers.original.data mustBe expected.userAnswers.data
+            req.userAnswers.original.loaded mustBe Map(BusinessNameSection.key -> now)
+            req.userAnswers.modified.data mustBe Json.obj()
             req.userAnswers.id mustBe expected.userAnswers.id
           }
           verify(sessionRepository, times(1)).set(any())
@@ -164,16 +147,12 @@ class BusinessNameDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val gamblingConnector = mock[GamblingConnector]
           val action = new Harness(sessionRepository, gamblingConnector)
 
-          val data = Json.obj(
-            "businessNameSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            )
-          )
+          val loadedAnswers = UserAnswers(mgdRegNum, OriginalAnswers(loadedSoleProprietorData, Map(BusinessNameSection.key -> now)))
 
           val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(UserAnswers(mgdRegNum, data)))).futureValue
+            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(loadedAnswers))).futureValue
 
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, data))
+          val expected = DataRequest(request, mgdRegNum, loadedAnswers)
 
           result.map { req =>
             req.request mustBe expected.request
@@ -194,18 +173,8 @@ class BusinessNameDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val updatedSessionData = Json.obj(
-            "soleProprietor" -> Json.obj(
-              "title"     -> "Mr",
-              "firstName" -> "Test",
-              "lastName"  -> "Fella"
-            ),
-            "businessType" -> 1,
-            "tradingName"  -> "Test Trader",
-            "businessNameSection" -> Json.obj(
-              "mgdRegNum" -> "ABC12345678901"
-            ),
             "faxNumber" -> "+_+_ hdj39783"
-          )
+          ) ++ loadedSoleProprietorData
 
           val existingUserAnswers = UserAnswers(mgdRegNum,
                                                 Json.obj(
@@ -254,4 +223,26 @@ object BusinessNameDataRequiredActionSpec {
     businessType = Soleproprietor
   )
 
+  val now: Instant = Instant.parse("2026-11-02T09:00:00Z")
+  val clock: Clock = Clock.fixed(now, ZoneOffset.UTC)
+
+  val loadedBusinessData: JsObject = Json.obj(
+    "businessType" -> 4,
+    "businessNameSection" -> Json.obj(
+      "businessName" -> "Test Business Ltd",
+      "tradingName"  -> "Test Trader Ltd"
+    )
+  )
+
+  val loadedSoleProprietorData: JsObject = Json.obj(
+    "businessType" -> 1,
+    "businessNameSection" -> Json.obj(
+      "soleProprietor" -> Json.obj(
+        "title"     -> "Mr",
+        "firstName" -> "Test",
+        "lastName"  -> "Fella"
+      ),
+      "tradingName" -> "Test Trader"
+    )
+  )
 }

@@ -61,5 +61,3 @@ object ControllingBodyNINumberFormProvider {
     if (stripped.length == ninoLengthWithoutSuffix) s"$stripped " else stripped
   }
 }
-
-

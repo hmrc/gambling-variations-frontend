@@ -100,7 +100,7 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
         }
       }
       updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceAdditionalInformationPage, correspondenceDetails.additionalInformation)
-      updatedAnswers <- updatedAnswers.setIfDefined(isleMOrChannelFlagPage, correspondenceDetails.iomOrCiFlag)
+      updatedAnswers <- updatedAnswers.setIfDefined(IsleMOrChannelFlagPage, correspondenceDetails.iomOrCiFlag)
       updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceContactNumberPage, correspondenceDetails.contactNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceFaxNumberPage, correspondenceDetails.faxNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceEmailPage, correspondenceDetails.emailAddr)

@@ -22,8 +22,8 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceDetailsChangesPage, CorrespondenceDetailsSectionPage, CorrespondenceDetailsSubmittedPage}
-import pages.isleMOrChannelFlagPage
+import pages.correspondencedetails.*
+import pages.IsleMOrChannelFlagPage
 import play.api.inject.bind
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
@@ -101,7 +101,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
         savedAnswersCaptor.getValue.get(CorrespondenceAddressUkPage).value mustBe address
         savedAnswersCaptor.getValue.get(CorrespondenceAddressNonUkPage) mustBe None
-        savedAnswersCaptor.getValue.get(isleMOrChannelFlagPage).value mustBe "true"
+        savedAnswersCaptor.getValue.get(IsleMOrChannelFlagPage).value mustBe true
         savedAnswersCaptor.getValue.get(CorrespondenceDetailsSubmittedPage).value mustBe true
         savedAnswersCaptor.getValue.get(CorrespondenceDetailsChangesPage).value mustBe true
       }

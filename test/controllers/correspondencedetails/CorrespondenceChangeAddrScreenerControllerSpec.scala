@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import base.SpecBase
-import forms.CorrespondenceChangeAddrScreenerFormProvider
+import forms.correspondencedetails.CorrespondenceChangeAddrScreenerFormProvider
 import models.CorrespondenceChangeAddrOption.EditCurrentAddress
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}

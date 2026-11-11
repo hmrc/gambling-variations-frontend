@@ -238,7 +238,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
     }
   }
 
-  "must link controlling body details to the same representative page when the API flag is 1" in {
+  "must link controlling body details to the ControllingBodyChangeScreenerController" in {
 
     val userAnswers =
       partnershipAnswers.set(GroupMemberPage, true).success.value
@@ -256,83 +256,9 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
       status(result) mustEqual OK
 
       controllingBodyLink(content) mustEqual
-        controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController
-          .onPageLoad()
-          .url
-    }
-  }
-
-  "must link controlling body details to the change screener when the API flag is 0" in {
-
-    val userAnswers =
-      partnershipAnswers.set(GroupMemberPage, true).success.value
-
-    val application =
-      applicationWith(
-        userAnswers,
-        controlBodyDetails("XGM00000001761", Some("0"))
-      )
-
-    running(application) {
-      val result = route(application, request).value
-      val content = contentAsString(result)
-
-      status(result) mustEqual OK
-
-      controllingBodyLink(content) mustEqual
         controllers.controllingbody.routes.ControllingBodyChangeScreenerController
           .onPageLoad()
           .url
-    }
-  }
-
-  "must link controlling body details to page not found when the API flag is invalid" in {
-
-    val userAnswers =
-      partnershipAnswers.set(GroupMemberPage, true).success.value
-
-    val application =
-      applicationWith(
-        userAnswers,
-        controlBodyDetails("XGM00000001761", Some("invalid"))
-      )
-
-    running(application) {
-      val result = route(application, request).value
-      val content = contentAsString(result)
-
-      status(result) mustEqual OK
-
-      controllingBodyLink(content) mustEqual
-        routes.PageNotFoundController.onPageLoad().url
-    }
-  }
-
-  "must redirect to SystemErrorController when retrieving controlling body details fails" in {
-
-    val userAnswers =
-      partnershipAnswers.set(GroupMemberPage, true).success.value
-
-    val gamblingConnector = mock[GamblingConnector]
-
-    when(
-      gamblingConnector.getControlBodyDetails(
-        any[String]
-      )(any[HeaderCarrier])
-    ).thenReturn(Future.failed(new RuntimeException("API failure")))
-
-    val application =
-      applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[GamblingConnector].toInstance(gamblingConnector))
-        .build()
-
-    running(application) {
-      val result = route(application, request).value
-
-      status(result) mustEqual SEE_OTHER
-
-      redirectLocation(result).value mustEqual
-        routes.SystemErrorController.onPageLoad().url
     }
   }
 }

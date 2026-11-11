@@ -17,97 +17,53 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.GamblingConnector
 import controllers.actions.*
 import pages.GroupMemberPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import viewmodels.ChangeRegistrationDetailsViewModel
 import views.html.ChangeRegistrationDetailsView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.NonFatal
+import scala.concurrent.ExecutionContext
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
   businessDetailsRequired: BusinessDetailsDataRequiredAction,
-  gamblingConnector: GamblingConnector,
   appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeRegistrationDetailsView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport
     with Logging {
 
   def onPageLoad: Action[AnyContent] =
-    (authorise andThen getData andThen businessDetailsRequired).async { implicit request =>
+    (authorise andThen getData andThen businessDetailsRequired) { implicit request =>
 
       request.userAnswers
         .get(GroupMemberPage)
         .map { isGroupMember =>
-
-          given HeaderCarrier =
-            HeaderCarrierConverter.fromRequestAndSession(
-              request,
-              request.session
+          val vm =
+            ChangeRegistrationDetailsViewModel.from(
+              userAnswers        = request.userAnswers,
+              mgdRegNumber       = request.mgdRegNum,
+              managementHomeUrl  = appConfig.gamblingManagementHomeUrl,
+              isGroupMember      = isGroupMember,
+              controllingBodyUrl = controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
             )
 
-          controllingBodyDetailsUrl(request.mgdRegNum)
-            .map { controllingBodyUrl =>
+          Ok(view(vm))
 
-              val vm =
-                ChangeRegistrationDetailsViewModel.from(
-                  userAnswers        = request.userAnswers,
-                  mgdRegNumber       = request.mgdRegNum,
-                  managementHomeUrl  = appConfig.gamblingManagementHomeUrl,
-                  isGroupMember      = isGroupMember,
-                  controllingBodyUrl = controllingBodyUrl
-                )
-
-              Ok(view(vm))
-            }
-            .recover { case NonFatal(e) =>
-              logger.error(
-                s"Unable to retrieve controlling body details for ${request.mgdRegNum}",
-                e
-              )
-              Redirect(routes.SystemErrorController.onPageLoad())
-            }
         }
         .getOrElse {
           logger.error(
             s"Missing GroupMemberPage for MGD registration number ${request.mgdRegNum}"
           )
-
-          Future.successful(
-            Redirect(routes.SystemErrorController.onPageLoad())
-          )
+          Redirect(routes.SystemErrorController.onPageLoad())
         }
     }
-
-  private def controllingBodyDetailsUrl(mgdRegNumber: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[String] = {
-
-    gamblingConnector.getControlBodyDetails(mgdRegNumber).map { details =>
-
-      details.isRepMemSameAsCb match {
-        case Some("1") =>
-          controllers.controllingbody.routes.ControllingBodySameAsRepYesNoController.onPageLoad().url
-
-        case Some("0") =>
-          controllers.controllingbody.routes.ControllingBodyChangeScreenerController.onPageLoad().url
-
-        case _ =>
-          routes.PageNotFoundController.onPageLoad().url
-
-      }
-    }
-  }
 }

@@ -40,7 +40,7 @@ class CheckControllingBodyDetailsPagesSpec extends SpecBase {
         nameLine2             = None,
         correspondenceAddress = Some(address),
         additionalInformation = Some("adi"),
-        iomOrCiFlag           = Some("0"),
+        iomOrCiFlag           = Some(false),
         contactNumber         = Some(ContactNumber(Some("phoneNumber"), Some("mobilePhoneNumber"))),
         faxNumber             = Some("faxNumber"),
         emailAddr             = Some("emailAddr")
@@ -50,7 +50,7 @@ class CheckControllingBodyDetailsPagesSpec extends SpecBase {
 
       answers.get(ControllingBodyAddressPage).value mustEqual address
       answers.get(ControllingBodyAdditionalInfoPage).value mustEqual "adi"
-      answers.get(ControllingBodyContactNumberPage).value mustEqual ContactNumber(Some("phoneNumber"), Some("mobilePhoneNumber"))
+      answers.get(ControllingBodyContactDetailsPage).value mustEqual ContactNumber(Some("phoneNumber"), Some("mobilePhoneNumber"))
       answers.get(ControllingBodyFaxNumberPage).value mustEqual "faxNumber"
       answers.get(ControllingBodyEmailPage).value mustEqual "emailAddr"
     }
@@ -62,7 +62,7 @@ class CheckControllingBodyDetailsPagesSpec extends SpecBase {
 
       answers.get(ControllingBodyAddressPage) mustBe None
       answers.get(ControllingBodyAdditionalInfoPage) mustBe None
-      answers.get(ControllingBodyContactNumberPage) mustBe None
+      answers.get(ControllingBodyContactDetailsPage) mustBe None
       answers.get(ControllingBodyFaxNumberPage) mustBe None
       answers.get(ControllingBodyEmailPage) mustBe None
     }

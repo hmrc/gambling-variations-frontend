@@ -64,117 +64,6 @@ class PartnerUtilsSpec extends SpecBase {
 
     }
 
-    "findIndexForNewPartner" - {
-
-      "returns first correct index when there is new partner with partnerDetailsAddPartnerCompleted set to false" in {
-        val userAnswers = UserAnswers("id")
-          .set(PartnerDetailsAddPartnerCompletedPage(0), true)
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(1), true)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(2), "mgdRegNumber")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(3), false)
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(4), false)
-          .success
-          .value
-
-        val result = partnerUtils.findIndexForNewPartner(userAnswers)
-
-        result mustBe 3
-      }
-
-      "returns 0 when all new partners don't have partnerDetailsAddPartnerCompleted" in {
-        val userAnswers = UserAnswers("id")
-          .set(PartnerDetailsMgdRegNumberPage(0), "mgdRegNumber0")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(0), false)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(1), "mgdRegNumber1")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(1), false)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(2), "mgdRegNumber2")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(2), false)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(3), "mgdRegNumber3")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(3), false)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(4), "mgdRegNumber4")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(4), false)
-          .success
-          .value
-
-        val result = partnerUtils.findIndexForNewPartner(userAnswers)
-
-        result shouldBe 0
-      }
-
-      "returns 5 when all new partners have partnerDetailsAddPartnerCompleted set to true" in {
-        val userAnswers = UserAnswers("id")
-          .set(PartnerDetailsMgdRegNumberPage(0), "mgdRegNumber0")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(0), true)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(1), "mgdRegNumber1")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(1), true)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(2), "mgdRegNumber2")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(2), true)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(3), "mgdRegNumber3")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(3), true)
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(4), "mgdRegNumber4")
-          .success
-          .value
-          .set(PartnerDetailsAddPartnerCompletedPage(4), true)
-          .success
-          .value
-
-        val result = partnerUtils.findIndexForNewPartner(userAnswers)
-
-        result shouldBe 5
-      }
-
-      "returns 0 when there is no data" in {
-        val userAnswers = UserAnswers("id")
-
-        val result = partnerUtils.findIndexForNewPartner(userAnswers)
-
-        result shouldBe 0
-      }
-
-    }
-
     "getCompletedNewPartners" - {
 
       "correctly lists indexes of new partners who's journey is complete" in {
@@ -219,7 +108,7 @@ class PartnerUtilsSpec extends SpecBase {
 
     "getPartnerDetailsName" - {
 
-      "correctly retrieves data in order for sole proprietor" in {
+      "correctly retrieves sole proprietor full name or null if missing" in {
         val userAnswers = UserAnswers("id")
           .set(PartnerDetailsBusinessTypePage(0), BusinessType.Soleproprietor)
           .success
@@ -252,12 +141,12 @@ class PartnerUtilsSpec extends SpecBase {
 
         partnerUtils.getNewPartnersSize(userAnswers) mustBe 4
         result1 mustBe Some("Mr Tom John Smith")
-        result2 mustBe Some("mgd1")
+        result2 mustBe None
         result3 mustBe None
         result4 mustBe None
       }
 
-      "correctly retrieves data in order for business type" in {
+      "correctly retrieves data for any business type or null if missing" in {
         val userAnswers = UserAnswers("id")
           .set(PartnerDetailsBusinessTypePage("0"), BusinessType.Partnership)
           .success
@@ -301,8 +190,8 @@ class PartnerUtilsSpec extends SpecBase {
 
         partnerUtils.getExistingPartnersBusinessNumbers(userAnswers).size mustBe 5
         result1 mustBe Some("business0")
-        result2 mustBe Some("tradingName1")
-        result3 mustBe Some("mgd2")
+        result2 mustBe None
+        result3 mustBe None
         result4 mustBe None
         result5 mustBe None
       }

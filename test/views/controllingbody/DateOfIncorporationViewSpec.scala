@@ -36,22 +36,22 @@ class DateOfIncorporationViewSpec extends SpecBase {
         document.select("h1").text() mustEqual "When was the controlling body’s date of incorporation?"
         document.title() must include("When was the controlling body’s date of incorporation?")
         document.title() must include("Change registration details")
-        document.select("#dateOfIncorporation-hint").text() mustEqual "For example, 27 3 2007"
+        document.select("#value-hint").text() mustEqual "For example, 27 3 2007"
         document.select(".govuk-date-input label").eachText().toArray.toSeq mustEqual Seq("Day", "Month", "Year")
         Seq("day", "month", "year").foreach { part =>
-          val input = document.getElementById(s"dateOfIncorporation.$part")
-          input.attr("name") mustEqual s"dateOfIncorporation.$part"
+          val input = document.getElementById(s"value.$part")
+          input.attr("name") mustEqual s"value.$part"
           input.attr("value") mustEqual ""
         }
         document.select("form").attr("action") mustEqual
           controllers.controllingbody.routes.DateOfIncorporationController.onSubmit().url
         document.select(".govuk-button").text() mustEqual "Continue"
 
-        val errors = form.bind(Map("dateOfIncorporation.day" -> "", "dateOfIncorporation.month" -> "", "dateOfIncorporation.year" -> ""))
+        val errors = form.bind(Map("value.day" -> "", "value.month" -> "", "value.year" -> ""))
         val errorDocument = Jsoup.parse(view(errors)(FakeRequest(), messages(application)).toString)
         errorDocument.select(".govuk-error-summary").size() mustEqual 1
-        errorDocument.select(".govuk-error-summary a").attr("href") mustEqual "#dateOfIncorporation.day"
-        errorDocument.select("#dateOfIncorporation-hint").text() mustEqual "For example, 27 3 2007"
+        errorDocument.select(".govuk-error-summary a").attr("href") mustEqual "#value.day"
+        errorDocument.select("#value-hint").text() mustEqual "For example, 27 3 2007"
       }
     }
 
@@ -74,12 +74,39 @@ class DateOfIncorporationViewSpec extends SpecBase {
           ("27", "003", "2007", "Date of incorporation must be a real date")
         )
         cases.foreach { case (day, month, year, expected) =>
-          val boundForm = form.bind(Map("dateOfIncorporation.day" -> day, "dateOfIncorporation.month" -> month, "dateOfIncorporation.year" -> year))
+          val boundForm = form.bind(Map("value.day" -> day, "value.month" -> month, "value.year" -> year))
           val document = Jsoup.parse(view(boundForm)(FakeRequest(), messages(application)).toString)
           withClue(s"Date $day/$month/$year: ") {
             document.select(".govuk-error-summary a").text() mustEqual expected
             document.select(".govuk-error-message").text() mustEqual s"Error: $expected"
-            document.select("#dateOfIncorporation-hint").text() mustEqual "For example, 27 3 2007"
+            document.select("#value-hint").text() mustEqual "For example, 27 3 2007"
+          }
+        }
+      }
+    }
+
+    "report invalid fields before missing fields and highlight only the invalid fields" in {
+      val application = applicationBuilder().build()
+      running(application) {
+        val view = application.injector.instanceOf[DateOfIncorporationView]
+        val form = new DateOfIncorporationFormProvider()()(messages(application))
+        val cases = Seq(
+          ("$$", "me", "", Seq("day", "month")),
+          ("32", "3", "", Seq("day")),
+          ("27", "13", "", Seq("month")),
+          ("27", "13", "2007", Seq("month"))
+        )
+        cases.foreach { case (day, month, year, invalidFields) =>
+          val boundForm = form.bind(Map("value.day" -> day, "value.month" -> month, "value.year" -> year))
+          val document = Jsoup.parse(view(boundForm)(FakeRequest(), messages(application)).toString)
+          val highlightedFields =
+            Seq("day", "month", "year").filter(part => document.getElementById(s"value.$part").hasClass("govuk-input--error"))
+          withClue(s"Date $day/$month/$year: ") {
+            document.select(".govuk-error-summary a").size() mustEqual 1
+            document.select(".govuk-error-summary a").text() mustEqual "Date of incorporation must be a real date"
+            document.select(".govuk-error-summary a").attr("href") mustEqual s"#value.${invalidFields.head}"
+            document.select(".govuk-error-message").text() mustEqual "Error: Date of incorporation must be a real date"
+            highlightedFields mustEqual invalidFields
           }
         }
       }

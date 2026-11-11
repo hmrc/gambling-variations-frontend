@@ -20,12 +20,14 @@ import controllers.routes
 import models.*
 import models.BusinessType.*
 import models.CorrespondenceChangeAddrOption.*
+import models.cancellation.ReasonForCancellation
 import models.controllingbody.ControllingBodyChangeOption.*
 import models.licencespremises.LicencesPremisesAnswers.*
 import navigation.PartnerDetailsNavigator.{partnerDetailsCheckRoutes, partnerDetailsNormalRoutes}
 import pages.*
 import pages.businessaddress.*
 import pages.businessname.*
+import pages.cancellation.{CancelRegistrationDatePage, ChangeGroupRegistrationNumberPage, ReasonForCancellationPage, RegistrationCancellationDeclarationPage}
 import pages.contactdetails.*
 import pages.controllingbody.*
 import pages.correspondencedetails.*
@@ -46,12 +48,16 @@ class Navigator @Inject() () {
     case ControllingBodyRemoveVATRegistrationNumberPage =>
       _ => Call("GET", "#") // TODO: Connect CB-CYA when the controlling body check your answers page is built.
     case ControllingBodyBusinessNamePage =>
-      _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
+      answers =>
+        val hasExistingControllingBody =
+          answers.get(ControllingBodyBusinessPartnerNumberPage).exists(_.trim.nonEmpty)
+        if (hasExistingControllingBody) controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
+        else controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyAddTradingNameYesNoPage =>
-      // TODO: Connect CB-TN and the business-type-specific identity screens when that journey is built.
-      _ => routes.IndexController.onPageLoad()
+      userAnswers => navigateControllingBodyAddTradingNameYesNoPage(userAnswers)
     case ControllingBodySoleProprietorPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Wire to CB-DOB or CB-CYA when the controlling body journey is built.
+      // TODO: Redirect to CB-CYA in the change flow.
+      _ => controllers.controllingbody.routes.ControllingBodySoleProprietorDobController.onPageLoad()
     case ControllingBodyEmailPage =>
       _ => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
     case ControllingBodyDateOfBirthPage =>
@@ -72,6 +78,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyVATScreenerPage(userAnswers)
     case ControllingBodyVrnPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-ADLK-S in add flow and CB-CYA in change flow.
+    case ControllingBodyContactDetailsPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -214,6 +222,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
     case ControllingBodyBusinessTypePage =>
       userAnswers => navigateControllingBodyBusinessTypePage(userAnswers)
+    case ControllingBodyTradingNamePage =>
+      userAnswers => navigateControllingBodyTradingNamePage(userAnswers)
 
     // Return Periods
     case ChooseReturnPeriodsPage =>
@@ -236,6 +246,16 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate8Page =>
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
 
+    // Cancellation
+    case CancelRegistrationDatePage =>
+      _ => controllers.cancellation.routes.ReasonForCancellationController.onPageLoad(NormalMode)
+    case ReasonForCancellationPage =>
+      userAnswers => navigateReasonForCancellationPage(userAnswers, NormalMode)
+    case ChangeGroupRegistrationNumberPage =>
+      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+    case RegistrationCancellationDeclarationPage =>
+      _ => controllers.cancellation.routes.RegistrationCancellationConfirmationController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad()
   }
@@ -249,6 +269,15 @@ class Navigator @Inject() () {
     case NonStandardPeriodDate1Page | NonStandardPeriodDate2Page | NonStandardPeriodDate3Page | NonStandardPeriodDate4Page |
         NonStandardPeriodDate5Page | NonStandardPeriodDate6Page | NonStandardPeriodDate7Page | NonStandardPeriodDate8Page =>
       _ => controllers.returnperiods.routes.CheckReturnPeriodsController.onPageLoad()
+
+    case CancelRegistrationDatePage =>
+      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case ReasonForCancellationPage =>
+      userAnswers => navigateCheckReasonForCancellationPage(userAnswers)
+
+    case ChangeGroupRegistrationNumberPage =>
+      _ => controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
 
     case _ =>
       _ => routes.ChangeRegistrationDetailsController.onPageLoad()
@@ -601,4 +630,78 @@ private def navigateControllingBodyNotProvidedYesNoPage(answers: UserAnswers): C
     case Some(false) => controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
     case Some(true)  => routes.ChangeRegistrationDetailsController.onPageLoad()
     case None        => routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateControllingBodyTradingNamePage(userAnswers: UserAnswers): Call = {
+  userAnswers
+    .get(ControllingBodyBusinessTypePage) match {
+    case Some(Soleproprietor) =>
+      controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+    case Some(Corporatebody) =>
+      controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+    case Some(Unincorporatedbody) =>
+      controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+    case Some(Partnership) =>
+      controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+    case Some(LimitedLiabilityPartnership) =>
+      controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+    case _ => routes.SystemErrorController.onPageLoad()
+  }
+}
+
+private def navigateReasonForCancellationPage(
+  userAnswers: UserAnswers,
+  mode: Mode
+): Call =
+  userAnswers.get(ReasonForCancellationPage) match {
+    case Some(ReasonForCancellation.BusinessIsPartOfTheGroup) =>
+      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad(mode)
+
+    case Some(_) =>
+      controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateCheckReasonForCancellationPage(
+  userAnswers: UserAnswers
+): Call =
+  userAnswers.get(ReasonForCancellationPage) match {
+    case Some(ReasonForCancellation.BusinessIsPartOfTheGroup) =>
+      controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onPageLoad(CheckMode)
+
+    case Some(_) =>
+      controllers.cancellation.routes.CheckRegistrationCancellationDetailsController.onPageLoad()
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
+  }
+
+private def navigateControllingBodyAddTradingNameYesNoPage(answers: UserAnswers): Call =
+  answers.get(ControllingBodyAddTradingNameYesNoPage) match {
+    case Some(true) => controllers.controllingbody.routes.ControllingBodyTradingNameController.onPageLoad()
+    case Some(false) =>
+      answers.get(ControllingBodyBusinessTypePage) match {
+        case Some(Soleproprietor) =>
+          controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+
+        case Some(Corporatebody) =>
+          controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+
+        case Some(Partnership) =>
+          controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+
+        case Some(LimitedLiabilityPartnership) =>
+          controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+
+        case Some(Unincorporatedbody) =>
+          controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+
+        case None =>
+          routes.SystemErrorController.onPageLoad()
+      }
+
+    case None =>
+      routes.SystemErrorController.onPageLoad()
   }

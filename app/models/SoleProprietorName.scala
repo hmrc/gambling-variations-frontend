@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Json, OFormat, Reads}
 
 case class SoleProprietorName(
   title: String,
@@ -34,4 +34,5 @@ case class SoleProprietorName(
 
 object SoleProprietorName {
   implicit val format: OFormat[SoleProprietorName] = Json.format[SoleProprietorName]
+
 }

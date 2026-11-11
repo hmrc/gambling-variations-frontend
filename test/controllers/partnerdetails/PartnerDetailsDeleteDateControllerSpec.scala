@@ -23,7 +23,7 @@ import models.{BusinessDetails, BusinessType, NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.Application
 import play.api.i18n.{Lang, Messages}
 import play.api.inject.bind
@@ -92,26 +92,30 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
   override val emptyUserAnswers: UserAnswers =
     UserAnswers(userAnswersId)
 
-  private val userAnswersWithTradingName: UserAnswers =
-    emptyUserAnswers
-      .set(
-        PartnerDetailsMgdRegNumberPage(businessNumber1),
-        userAnswersId
-      )
-      .success
-      .value
-      .set(
-        PartnerDetailsChosenPartnerToRemovePage,
-        businessNumber1
-      )
-      .success
-      .value
-      .set(
-        PartnerDetailsTradingNamePage(businessNumber1),
-        tradingName
-      )
-      .success
-      .value
+  private val userAnswersWithoutBusinessName: UserAnswers = emptyUserAnswers
+    .set(
+      PartnerDetailsMgdRegNumberPage(businessNumber1),
+      userAnswersId
+    )
+    .success
+    .value
+    .set(
+      PartnerDetailsChosenPartnerToRemovePage,
+      businessNumber1
+    )
+    .success
+    .value
+    .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+    .success
+    .value
+
+  private val userAnswersWithBusinessName: UserAnswers = userAnswersWithoutBusinessName
+    .set(
+      PartnerDetailsBusinessNamePage(businessNumber1),
+      businessName
+    )
+    .success
+    .value
 
   private val businessDetails: BusinessDetails =
     BusinessDetails(
@@ -257,7 +261,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector
         )
 
@@ -287,7 +291,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .format(
                 dateTimeHintFormat
               ),
-            tradingName
+            businessName
           )(
             request,
             messages(application)
@@ -308,7 +312,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
         today.plusDays(2)
 
       val userAnswers =
-        userAnswersWithTradingName
+        userAnswersWithBusinessName
           .set(
             PartnerDetailsDateOfLeavingPage(
               businessNumber1
@@ -356,7 +360,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .format(
                 dateTimeHintFormat
               ),
-            tradingName
+            businessName
           )(
             request,
             messages(application)
@@ -367,7 +371,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
     "must use the trading name when both trading name and business name are available" in {
 
       val userAnswers =
-        userAnswersWithTradingName
+        userAnswersWithBusinessName
           .set(
             PartnerDetailsBusinessNamePage(
               businessNumber1
@@ -414,7 +418,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .format(
                 dateTimeHintFormat
               ),
-            tradingName
+            businessName
           )(
             request,
             messages(application)
@@ -448,6 +452,9 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           )
           .success
           .value
+          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .success
+          .value
 
       val mockGamblingConnector =
         mockConnectorReturning(
@@ -494,70 +501,6 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       }
     }
 
-    "must use the MGD registration number when the trading name and business name are missing" in {
-
-      val userAnswers =
-        emptyUserAnswers
-          .set(
-            PartnerDetailsMgdRegNumberPage(
-              businessNumber1
-            ),
-            userAnswersId
-          )
-          .success
-          .value
-          .set(
-            PartnerDetailsChosenPartnerToRemovePage,
-            businessNumber1
-          )
-          .success
-          .value
-
-      val mockGamblingConnector =
-        mockConnectorReturning(
-          businessDetails
-        )
-
-      val application =
-        buildApplication(
-          userAnswers,
-          mockGamblingConnector
-        )
-
-      running(application) {
-
-        implicit val lang: Lang =
-          messages(application).lang
-
-        val request =
-          getRequest()
-
-        val result =
-          controller(application)
-            .onPageLoad(NormalMode)
-            .apply(request)
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(application)(
-            form(application),
-            NormalMode,
-            registrationDate.format(
-              dateTimeFormat()
-            ),
-            latestControllerDisplayDate
-              .format(
-                dateTimeHintFormat
-              ),
-            userAnswersId
-          )(
-            request,
-            messages(application)
-          ).toString
-      }
-    }
-
     "must calculate the displayed latest date from today when registration date is before today" in {
 
       val mockGamblingConnector =
@@ -567,7 +510,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector
         )
 
@@ -609,7 +552,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector
         )
 
@@ -645,7 +588,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
             latestDisplayDate.format(
               dateTimeHintFormat
             ),
-            tradingName
+            businessName
           )(
             request,
             messages(application)
@@ -673,7 +616,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector,
           Some(mockSessionRepository)
         )
@@ -718,7 +661,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector,
           Some(mockSessionRepository)
         )
@@ -726,7 +669,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       running(application) {
 
         val expectedUserAnswers =
-          userAnswersWithTradingName
+          userAnswersWithBusinessName
             .set(
               PartnerDetailsDateOfLeavingPage(
                 businessNumber1
@@ -770,7 +713,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector,
           Some(mockSessionRepository)
         )
@@ -792,7 +735,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
           controllers.partnerdetails.routes.PartnerDetailsCheckConfirmRemoveDateController.onPageLoad().url
 
         val expectedUserAnswers =
-          userAnswersWithTradingName
+          userAnswersWithBusinessName
             .set(
               PartnerDetailsDateOfLeavingPage(
                 businessNumber1
@@ -822,7 +765,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector,
           Some(mockSessionRepository)
         )
@@ -864,7 +807,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .format(
                 dateTimeHintFormat
               ),
-            tradingName
+            businessName
           )(
             request,
             messages(application)
@@ -889,7 +832,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector,
           Some(mockSessionRepository)
         )
@@ -941,7 +884,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .format(
                 dateTimeHintFormat
               ),
-            tradingName
+            businessName
           )(
             request,
             messages(application)
@@ -966,7 +909,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector,
           Some(mockSessionRepository)
         )
@@ -1018,7 +961,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .format(
                 dateTimeHintFormat
               ),
-            tradingName
+            businessName
           )(
             request,
             messages(application)
@@ -1042,7 +985,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector
         )
 
@@ -1145,6 +1088,60 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       }
     }
 
+    "must propagate an exception on POST when no partner name has been found" in {
+
+      val invalidAnswer =
+        latestFormDate.plusDays(1)
+
+      val mockSessionRepository =
+        mock[SessionRepository]
+
+      val mockGamblingConnector =
+        mockConnectorReturning(
+          businessDetails
+        )
+
+      val application =
+        buildApplication(
+          userAnswersWithoutBusinessName,
+          mockGamblingConnector,
+          Some(mockSessionRepository)
+        )
+
+      running(application) {
+
+        implicit val lang: Lang =
+          messages(application).lang
+
+        val request =
+          postRequest(invalidAnswer)
+
+        val boundForm =
+          form(application)
+            .bind(
+              formData(invalidAnswer)
+            )
+
+        val result =
+          controller(application)
+            .onSubmit(NormalMode)
+            .apply(request)
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController
+            .onPageLoad()
+            .url
+
+        verify(
+          mockSessionRepository,
+          never()
+        ).set(any[UserAnswers])
+      }
+
+    }
+
     "must propagate the connector failure on GET" in {
 
       val mockGamblingConnector =
@@ -1167,7 +1164,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector
         )
 
@@ -1210,7 +1207,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
 
       val application =
         buildApplication(
-          userAnswersWithTradingName,
+          userAnswersWithBusinessName,
           mockGamblingConnector
         )
 
@@ -1242,6 +1239,35 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
               .toInstance(clock)
           )
           .build()
+
+      running(application) {
+
+        val result =
+          controller(application)
+            .onPageLoad(NormalMode)
+            .apply(getRequest())
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual
+          controllers.routes.SystemErrorController
+            .onPageLoad()
+            .url
+      }
+    }
+
+    "must redirect to SystemError for a GET when getPartnerDetailsName fails to find" in {
+
+      val mockGamblingConnector =
+        mockConnectorReturning(
+          businessDetails
+        )
+
+      val application =
+        buildApplication(
+          userAnswersWithoutBusinessName,
+          mockGamblingConnector
+        )
 
       running(application) {
 

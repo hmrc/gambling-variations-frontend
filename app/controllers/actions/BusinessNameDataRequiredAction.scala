@@ -21,8 +21,7 @@ import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{BusinessNameDetails, BusinessType, EntityName, SoleProprietorName, SoleProprietorNameDetails, UserAnswers}
 import pages.*
-import pages.businessname.{BusinessNamePage, BusinessNameSectionPage, SoleProprietorPage}
-import pages.tradingdetails.TradingNamePage
+import pages.businessname.{BusinessNamePage, BusinessNameSection, SoleProprietorPage, TradingNamePage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -30,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import java.time.{Clock, Instant}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -37,7 +37,8 @@ import scala.util.control.NonFatal
 
 class BusinessNameDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
+  val gamblingConnector: GamblingConnector,
+  clock: Clock
 )(implicit val executionContext: ExecutionContext)
     extends BusinessNameDataRequiredAction
     with Logging {
@@ -54,11 +55,11 @@ class BusinessNameDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(BusinessNameSectionPage) map { _ =>
-          logger.info(s"MgdRegNum found for Business Name with id ${userAnswers.id}")
+        if (userAnswers.isLoaded(BusinessNameSection)) {
+          logger.info(s"Business Name already loaded for id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
+        } else {
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -90,20 +91,21 @@ class BusinessNameDataRequiredActionImpl @Inject() (
 
   private def setBusinessName(entity: EntityName, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Business Name")
+    val loadedAnswers = answers.withSectionLoaded(BusinessNameSection, Instant.now(clock))
+    // The business type belongs to Business Details, which loads it as well, so its path is outside this section.
+    // It is loaded here too, since the business name pages depend on it.
     entity match {
-      case SoleProprietorNameDetails(mgdRegNum, title, firstName, middleName, lastName, tradingName, _, _) =>
+      case SoleProprietorNameDetails(_, title, firstName, middleName, lastName, tradingName, _, _) =>
         for {
-          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
-          updatedAnswers <- updatedAnswers.set(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
-          updatedAnswers <- updatedAnswers.set(BusinessTypePage, BusinessType.Soleproprietor)
-          updatedAnswers <- updatedAnswers.setIfDefined(TradingNamePage, tradingName)
+          updatedAnswers <- loadedAnswers.setOriginal(SoleProprietorPage, SoleProprietorName(title, firstName, middleName, lastName))
+          updatedAnswers <- updatedAnswers.setOriginal(BusinessTypePage, BusinessType.Soleproprietor)
+          updatedAnswers <- updatedAnswers.setOriginalIfDefined(TradingNamePage, tradingName)
         } yield updatedAnswers
-      case BusinessNameDetails(mgdRegNum, businessName, businessType, tradingName, _) =>
+      case BusinessNameDetails(_, businessName, businessType, tradingName, _) =>
         for {
-          updatedAnswers <- answers.set(BusinessNameSectionPage, mgdRegNum)
-          updatedAnswers <- updatedAnswers.set(BusinessNamePage, businessName)
-          updatedAnswers <- updatedAnswers.set(BusinessTypePage, businessType)
-          updatedAnswers <- updatedAnswers.setIfDefined(TradingNamePage, tradingName)
+          updatedAnswers <- loadedAnswers.setOriginal(BusinessNamePage, businessName)
+          updatedAnswers <- updatedAnswers.setOriginal(BusinessTypePage, businessType)
+          updatedAnswers <- updatedAnswers.setOriginalIfDefined(TradingNamePage, tradingName)
         } yield updatedAnswers
     }
   }

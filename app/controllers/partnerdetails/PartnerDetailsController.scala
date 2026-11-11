@@ -75,14 +75,9 @@ class PartnerDetailsController @Inject() (
 
       val form = formProvider(errorMessage)
 
-      val preparedForm =
-        request.userAnswers
-          .get(PartnerDetailsAddAnotherPartnerYesNoPage)
-          .fold(form)(form.fill)
-
       Ok(
         view(
-          preparedForm,
+          form,
           viewModel,
           paginatedPartnerNumbers.paginationViewModel,
           paginatedPartnerNumbers.currentPage,
@@ -146,7 +141,7 @@ class PartnerDetailsController @Inject() (
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
               if (value) {
-                val newPartnerIndex = PartnerUtils.findIndexForNewPartner(updatedAnswers)
+                val newPartnerIndex = PartnerUtils.getNewPartnersSize(updatedAnswers)
                 for {
                   updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
                   updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsMgdRegNumberPage(newPartnerIndex), updatedAnswers.id))

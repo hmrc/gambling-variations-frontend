@@ -57,9 +57,9 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, dateOfIncorporationRoute)
       .withFormUrlEncodedBody(
-        "dateOfIncorporation.day"   -> validAnswer.getDayOfMonth.toString,
-        "dateOfIncorporation.month" -> validAnswer.getMonthValue.toString,
-        "dateOfIncorporation.year"  -> validAnswer.getYear.toString
+        "value.day"   -> validAnswer.getDayOfMonth.toString,
+        "value.month" -> validAnswer.getMonthValue.toString,
+        "value.year"  -> validAnswer.getYear.toString
       )
 
   "DateOfIncorporation Controller" - {
@@ -122,16 +122,39 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
       val request =
         FakeRequest(POST, dateOfIncorporationRoute)
-          .withFormUrlEncodedBody("dateOfIncorporation.day" -> "31", "dateOfIncorporation.month" -> "4", "dateOfIncorporation.year" -> "2007")
+          .withFormUrlEncodedBody("value.day" -> "31", "value.month" -> "4", "value.year" -> "2007")
 
       running(application) {
-        val boundForm = form.bind(Map("dateOfIncorporation.day" -> "31", "dateOfIncorporation.month" -> "4", "dateOfIncorporation.year" -> "2007"))
+        val boundForm = form.bind(Map("value.day" -> "31", "value.month" -> "4", "value.year" -> "2007"))
 
         val view = application.injector.instanceOf[DateOfIncorporationView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm)(request, messages(application)).toString
+      }
+    }
+
+    "must return a Bad Request with the invalid date error when invalid fields are submitted with a missing year" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val invalidData = Map("value.day" -> "$$", "value.month" -> "me", "value.year" -> "")
+
+      val request =
+        FakeRequest(POST, dateOfIncorporationRoute)
+          .withFormUrlEncodedBody(invalidData.toSeq*)
+
+      running(application) {
+        val boundForm = formProvider()(messages(application)).bind(invalidData)
+
+        val view = application.injector.instanceOf[DateOfIncorporationView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        boundForm.errors.map(_.message).distinct mustEqual Seq("dateOfIncorporation.error.invalid")
         contentAsString(result) mustEqual view(boundForm)(request, messages(application)).toString
       }
     }

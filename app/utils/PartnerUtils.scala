@@ -41,35 +41,17 @@ object PartnerUtils {
     // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
     .toSeq
 
-  def findIndexForNewPartner(userAnswers: UserAnswers): Int = {
-    val newPartnersSize = getNewPartnersSize(userAnswers)
-    val newPartnerExistingIndex = (0 to newPartnersSize).collectFirst {
-      case index: Int if userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)).contains(false) =>
-        index
-    }
-    newPartnerExistingIndex getOrElse newPartnersSize
-  }
-
   def getCompletedNewPartners(userAnswers: UserAnswers): IndexedSeq[Int] = (0 to getNewPartnersSize(userAnswers))
     .map(index => userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)))
     .zipWithIndex
     .collect { case (Some(true), i) => i }
 
-  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = for {
-    businessType <- userAnswers.get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
-    name <- businessType match {
-              case BusinessType.Soleproprietor =>
-                userAnswers
-                  .get(PartnerDetailsSoleProprietorPage(businessNumberOrIndex))
-                  .map(_.fullName)
-                  .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(businessNumberOrIndex)))
-              case _ =>
-                userAnswers
-                  .get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
-                  .orElse(userAnswers.get(PartnerDetailsTradingNamePage(businessNumberOrIndex)))
-                  .orElse(userAnswers.get(PartnerDetailsMgdRegNumberPage(businessNumberOrIndex)))
-            }
-  } yield name
+  def getPartnerDetailsName(businessNumberOrIndex: BusinessNumberOrIndex, userAnswers: UserAnswers): Option[String] = userAnswers
+    .get(PartnerDetailsBusinessTypePage(businessNumberOrIndex))
+    .flatMap {
+      case BusinessType.Soleproprietor => userAnswers.get(PartnerDetailsSoleProprietorPage(businessNumberOrIndex)).map(_.fullName)
+      case _                           => userAnswers.get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
+    }
 
   def getNewPartnersSize(userAnswers: UserAnswers): Int =
     (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)

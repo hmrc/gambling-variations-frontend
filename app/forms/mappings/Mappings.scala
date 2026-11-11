@@ -51,7 +51,7 @@ trait Mappings extends Formatters with Constraints {
                           twoRequiredKey: String,
                           requiredKey: String,
                           args: Seq[String] = Seq.empty,
-                          requireNumericDateFormat: Boolean = false
+                          requireNumericDateFormat: Boolean = true
                          )(implicit
     messages: Messages
   ): FieldMapping[LocalDate] =

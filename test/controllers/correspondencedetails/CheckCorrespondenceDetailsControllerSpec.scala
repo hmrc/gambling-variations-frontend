@@ -175,7 +175,7 @@ class CheckCorrespondenceDetailsControllerSpec extends SpecBase {
 
       val userAnswers =
         baseAnswers
-          .set(isleMOrChannelFlagPage, "true")
+          .set(IsleMOrChannelFlagPage, true)
           .success
           .value
 

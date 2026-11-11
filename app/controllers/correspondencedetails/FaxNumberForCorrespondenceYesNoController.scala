@@ -17,7 +17,7 @@
 package controllers.correspondencedetails
 
 import controllers.actions.*
-import forms.FaxNumberForCorrespondenceYesNoFormProvider
+import forms.correspondencedetails.FaxNumberForCorrespondenceYesNoFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.correspondencedetails.AddCorrespondenceFaxNumberPage

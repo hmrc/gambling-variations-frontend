@@ -47,7 +47,6 @@ class ControllingBodyNINumberControllerSpec extends SpecBase with MockitoSugar {
       Json.obj("controllingBodyDetails" -> Json.obj("mgdRegNum" -> userAnswersId))
     ).set(ControllingBodyBusinessTypePage, BusinessType.Soleproprietor).success.value
 
-
   lazy val niNumRoute: String =
     controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad().url
 

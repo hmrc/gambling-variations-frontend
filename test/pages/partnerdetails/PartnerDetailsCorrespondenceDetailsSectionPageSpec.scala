@@ -54,7 +54,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
             )
           ),
           additionalInformation = Some("111"),
-          iomOrCiFlag           = Some("111"),
+          iomOrCiFlag           = Some(false),
           contactNumber = Some(
             ContactNumber(
               phoneNumber       = Some("111"),
@@ -76,7 +76,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
           "postcode"          -> "111",
           "country"           -> "111",
           "adi"               -> "111",
-          "iomOrCiFlag"       -> "111",
+          "iomOrCiFlag"       -> "0",
           "phoneNumber"       -> "111",
           "mobilePhoneNumber" -> "111",
           "faxNumber"         -> "111",
@@ -98,7 +98,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
             )
           ),
           additionalInformation = Some("222"),
-          iomOrCiFlag           = Some("222"),
+          iomOrCiFlag           = Some(false),
           contactNumber = Some(
             ContactNumber(
               phoneNumber       = Some("222"),
@@ -120,7 +120,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
           "postcode"          -> "222",
           "country"           -> "222",
           "adi"               -> "222",
-          "iomOrCiFlag"       -> "222",
+          "iomOrCiFlag"       -> "0",
           "phoneNumber"       -> "222",
           "mobilePhoneNumber" -> "222",
           "faxNumber"         -> "222",
@@ -183,7 +183,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
             )
           ),
           additionalInformation = Some("111"),
-          iomOrCiFlag           = Some("111"),
+          iomOrCiFlag           = Some(false),
           contactNumber = Some(
             ContactNumber(
               phoneNumber       = Some("111"),
@@ -205,7 +205,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
           "postcode"          -> "111",
           "country"           -> "111",
           "adi"               -> "111",
-          "iomOrCiFlag"       -> "111",
+          "iomOrCiFlag"       -> "0",
           "phoneNumber"       -> "111",
           "mobilePhoneNumber" -> "111",
           "faxNumber"         -> "111",
@@ -227,7 +227,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
             )
           ),
           additionalInformation = Some("222"),
-          iomOrCiFlag           = Some("222"),
+          iomOrCiFlag           = Some(false),
           contactNumber = Some(
             ContactNumber(
               phoneNumber       = Some("222"),
@@ -249,7 +249,7 @@ class PartnerDetailsCorrespondenceDetailsSectionPageSpec extends PlaySpec with P
           "postcode"          -> "222",
           "country"           -> "222",
           "adi"               -> "222",
-          "iomOrCiFlag"       -> "222",
+          "iomOrCiFlag"       -> "0",
           "phoneNumber"       -> "222",
           "mobilePhoneNumber" -> "222",
           "faxNumber"         -> "222",

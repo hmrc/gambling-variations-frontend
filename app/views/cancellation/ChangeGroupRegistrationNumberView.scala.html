@@ -18,6 +18,7 @@
 @import viewmodels.InputWidth._
 @import viewmodels.LabelSize.{Large, Medium}
 
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
@@ -31,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages("changeGroupRegistrationNumber.title"))) {
 
-    @formHelper(action = controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onSubmit()) {
+    @formHelper(action = controllers.cancellation.routes.ChangeGroupRegistrationNumberController.onSubmit(mode)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

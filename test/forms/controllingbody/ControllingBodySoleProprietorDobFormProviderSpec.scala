@@ -17,7 +17,7 @@
 package forms.controllingbody
 
 import forms.behaviours.DateBehaviours
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages
 
@@ -111,5 +111,33 @@ class ControllingBodySoleProprietorDobFormProviderSpec extends DateBehaviours {
 
     result.errors.head.message mustBe
       "controllingBodySoleProprietorDob.error.afterLatestDate"
+  }
+
+  Seq(
+    ("$$", "me", "", Seq("day", "month")),
+    ("32", "3", "", Seq("day")),
+    ("2", "13", "", Seq("month")),
+    ("", "13", "1998", Seq("month")),
+    ("2", "13", "1998", Seq("month")),
+    ("00", "3", "1998", Seq("day")),
+    ("2", "March", "1998", Seq("month")),
+    ("2", "3", "998", Seq("year")),
+    ("2", "3", "98", Seq("year"))
+  ).foreach { case (day, month, year, invalidFields) =>
+    s"must report $day/$month/$year as not a real date and mark only its invalid fields" in {
+
+      val result = form.bind(
+        Map(
+          "value.day"   -> day,
+          "value.month" -> month,
+          "value.year"  -> year
+        )
+      )
+
+      result.errors must contain theSameElementsAs (
+        FormError("value", "controllingBodySoleProprietorDob.error.invalid", invalidFields.map(part => messages(s"date.error.$part"))) +:
+          invalidFields.map(part => FormError(s"value.$part", "controllingBodySoleProprietorDob.error.invalid"))
+      )
+    }
   }
 }

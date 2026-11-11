@@ -26,10 +26,9 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.GroupMemberPage
-import pages.businessname.BusinessNameChangesPage
-import pages.tradingdetails.RemoveTradeNamePage
+import pages.businessname.{BusinessNameChangesPage, BusinessNameSection, RemoveTradeNamePage, TradingNamePage}
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -47,15 +46,11 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
   val tradingName = "Test Trader"
 
   val data = Json.obj(
-    "tradingName"            -> "Test Trader",
     GroupMemberPage.toString -> false,
-    "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
+    "businessNameSection"    -> Json.obj("tradingName" -> "Test Trader")
   )
 
-  val noAnswers = Json.obj(
-    GroupMemberPage.toString -> false,
-    "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
-  )
+  val noAnswers = Json.obj(GroupMemberPage.toString -> false)
 
   lazy val removeTradeNameRoute = controllers.businessname.routes.RemoveTradeNameController.onPageLoad().url
 
@@ -63,7 +58,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
+      val application = applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data))).build()
 
       running(application) {
         val request = FakeRequest(GET, removeTradeNameRoute)
@@ -80,13 +75,12 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on GET" in {
 
       val groupMemberData = Json.obj(
-        "tradingName"            -> "Test Trader",
         GroupMemberPage.toString -> true,
-        "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
+        "businessNameSection"    -> Json.obj("tradingName" -> "Test Trader")
       )
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", groupMemberData))).build()
 
       running(application) {
         val request = FakeRequest(GET, removeTradeNameRoute)
@@ -100,13 +94,10 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to system error when GroupMemberPage is missing on GET" in {
 
-      val noGroupMemberData = Json.obj(
-        "tradingName"         -> "Test Trader",
-        "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
+      val noGroupMemberData = Json.obj("businessNameSection" -> Json.obj("tradingName" -> "Test Trader"))
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", noGroupMemberData))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", noGroupMemberData))).build()
 
       running(application) {
         val request = FakeRequest(GET, removeTradeNameRoute)
@@ -122,7 +113,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       "to Check Business Name when no Trading Name exists" - {
         "when GET" in {
 
-          val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
+          val application = applicationBuilder(userAnswers = Some(LoadedBusinessName(userAnswersId, noAnswers))).build()
 
           running(application) {
             val request = FakeRequest(GET, removeTradeNameRoute)
@@ -137,7 +128,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
         "when POST" in {
 
           val application =
-            applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId, noAnswers))).build()
+            applicationBuilder(userAnswers = Some(LoadedBusinessName(userAnswersId, noAnswers))).build()
 
           running(application) {
             val request =
@@ -154,13 +145,10 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
       "must redirect to system error when GroupMemberPage is missing on POST" in {
 
-        val noGroupMemberData = Json.obj(
-          "tradingName"         -> "Test Trader",
-          "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-        )
+        val noGroupMemberData = Json.obj("businessNameSection" -> Json.obj("tradingName" -> "Test Trader"))
 
         val application =
-          applicationBuilder(userAnswers = Some(UserAnswers("id", noGroupMemberData))).build()
+          applicationBuilder(userAnswers = Some(LoadedBusinessName("id", noGroupMemberData))).build()
 
         running(application) {
           val request =
@@ -177,13 +165,12 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       "must redirect to access denied when group member is true on POST" in {
 
         val groupMemberData = Json.obj(
-          "tradingName"            -> "Test Trader",
           GroupMemberPage.toString -> true,
-          "businessNameSection"    -> Json.obj("mgdRegNum" -> mgdRegNum)
+          "businessNameSection"    -> Json.obj("tradingName" -> "Test Trader")
         )
 
         val application =
-          applicationBuilder(userAnswers = Some(UserAnswers("id", groupMemberData))).build()
+          applicationBuilder(userAnswers = Some(LoadedBusinessName("id", groupMemberData))).build()
 
         running(application) {
           val request =
@@ -204,7 +191,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
-          applicationBuilder(userAnswers = Some(UserAnswers("id", data)))
+          applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data)))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -232,7 +219,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", data)))
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data)))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -252,6 +239,40 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must assert the removal, so that the trading name loaded from the backend does not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data)))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, removeTradeNameRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers = savedAnswersCaptor.getValue
+        savedAnswers.get(TradingNamePage) mustBe None
+        savedAnswers.original.get[String](TradingNamePage.path).value mustEqual tradingName
+        savedAnswers.changes(BusinessNameSection) mustBe Json.obj(
+          "businessNameSection" -> Json.obj("tradingName" -> JsNull)
+        )
+      }
+    }
+
     "must flag BusinessNameChangesPage when data changed in" in {
 
       val mockSessionRepository = mock[SessionRepository]
@@ -260,7 +281,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(UserAnswers("id", data)))
+        applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data)))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -283,7 +304,7 @@ class RemoveTradeNameControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", data))).build()
+      val application = applicationBuilder(userAnswers = Some(LoadedBusinessName("id", data))).build()
 
       running(application) {
         val request =

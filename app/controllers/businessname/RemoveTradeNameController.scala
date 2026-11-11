@@ -22,8 +22,7 @@ import forms.RemoveTradeNameFormProvider
 import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.GroupMemberPage
-import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage}
-import pages.tradingdetails.{RemoveTradeNamePage, TradingNamePage}
+import pages.businessname.{BusinessNameChangesPage, BusinessNameSubmittedPage, RemoveTradeNamePage, TradingNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
