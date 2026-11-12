@@ -44,10 +44,7 @@ class LicenceNumberControllerSpec extends SpecBase with MockitoSugar {
   val form: Form[String] = formProvider()
 
   val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+    LoadedLicencesPremises(userAnswersId, Json.obj())
 
   lazy val licenceAndPremisesRoute: String =
     routes.LicenceNumberController.onPageLoad().url
@@ -74,10 +71,10 @@ class LicenceNumberControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId, "gamblingLicenceNo" -> "123-456789-A-123456-789")
+        "licencesPremisesSection" -> Json.obj("gamblingLicenceNo" -> "123-456789-A-123456-789")
       )
 
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers = LoadedLicencesPremises(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
