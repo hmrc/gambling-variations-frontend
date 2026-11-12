@@ -33,35 +33,37 @@ import viewmodels.implicits.*
 import java.time.LocalDate
 
 /** CB-CYA in the add flow: screener questions are shown once answered, optional details read "Not provided" while they have no data, and missing
-  * mandatory details link to the screen that provides them.
-  */
+ * mandatory details link to the screen that provides them. Once the details have been submitted, the optional details that hold data can also
+ * be removed.
+ */
 case class CheckControllingBodyDetailsViewModel(
-  businessType: Option[BusinessType] = None,
-  businessName: Option[String] = None,
-  soleProprietorName: Option[SoleProprietorName] = None,
-  dateOfBirth: Option[LocalDate] = None,
-  addTradingName: Option[Boolean] = None,
-  tradingName: Option[String] = None,
-  addNino: Option[Boolean] = None,
-  nino: Option[String] = None,
-  isUkIncorporated: Option[Boolean] = None,
-  countryOfIncorporation: Option[String] = None,
-  foreignCorporateRef: Option[String] = None,
-  dateOfIncorporation: Option[LocalDate] = None,
-  crn: Option[String] = None,
-  utr: Option[String] = None,
-  addVrn: Option[Boolean] = None,
-  vrn: Option[String] = None,
-  address: Option[Address] = None,
-  addAdditionalInfo: Option[Boolean] = None,
-  additionalInfo: Option[String] = None,
-  phoneNumber: Option[String] = None,
-  mobilePhoneNumber: Option[String] = None,
-  addFaxNumber: Option[Boolean] = None,
-  faxNumber: Option[String] = None,
-  addEmailAddress: Option[Boolean] = None,
-  emailAddress: Option[String] = None
-) {
+                                                 businessType: Option[BusinessType] = None,
+                                                 businessName: Option[String] = None,
+                                                 soleProprietorName: Option[SoleProprietorName] = None,
+                                                 dateOfBirth: Option[LocalDate] = None,
+                                                 addTradingName: Option[Boolean] = None,
+                                                 tradingName: Option[String] = None,
+                                                 addNino: Option[Boolean] = None,
+                                                 nino: Option[String] = None,
+                                                 isUkIncorporated: Option[Boolean] = None,
+                                                 countryOfIncorporation: Option[String] = None,
+                                                 foreignCorporateRef: Option[String] = None,
+                                                 dateOfIncorporation: Option[LocalDate] = None,
+                                                 crn: Option[String] = None,
+                                                 utr: Option[String] = None,
+                                                 addVrn: Option[Boolean] = None,
+                                                 vrn: Option[String] = None,
+                                                 address: Option[Address] = None,
+                                                 addAdditionalInfo: Option[Boolean] = None,
+                                                 additionalInfo: Option[String] = None,
+                                                 phoneNumber: Option[String] = None,
+                                                 mobilePhoneNumber: Option[String] = None,
+                                                 addFaxNumber: Option[Boolean] = None,
+                                                 faxNumber: Option[String] = None,
+                                                 addEmailAddress: Option[Boolean] = None,
+                                                 emailAddress: Option[String] = None,
+                                                 isSubmitted: Boolean = false
+                                               ) {
 
   import CheckControllingBodyDetailsViewModel.*
 
@@ -153,7 +155,7 @@ case class CheckControllingBodyDetailsViewModel(
         nameDetail.map(_.row),
         dateOfBirthDetail.map(_.row),
         screenerRow("addTradingName", addTradingName, addTradingNameUrl),
-        optionalRow("tradingName", addTradingName, tradingName, tradingNameUrl),
+        optionalRow("tradingName", addTradingName, tradingName, tradingNameUrl, Some(removeTradingNameUrl)),
         Option.when(isSoleProprietor)(screenerRow("addNino", addNino, addNinoUrl)).flatten,
         Option.when(isSoleProprietor)(optionalRow("nino", addNino, nino, ninoUrl)).flatten,
         isUkIncorporatedDetail.map(_.row),
@@ -163,7 +165,7 @@ case class CheckControllingBodyDetailsViewModel(
         crnDetail.map(_.row),
         utrDetail.map(_.row),
         screenerRow("addVat", addVrn, addVrnUrl),
-        optionalRow("vat", addVrn, vrn, vrnUrl)
+        optionalRow("vat", addVrn, vrn, vrnUrl, Some(removeVrnUrl))
       ).flatten
     )
 
@@ -172,7 +174,7 @@ case class CheckControllingBodyDetailsViewModel(
       rows = Seq(
         Some(addressDetail.row),
         screenerRow("addAddrInfo", addAdditionalInfo, addAdditionalInfoUrl),
-        optionalRow("addAdditionalInfo", addAdditionalInfo, additionalInfo, additionalInfoUrl)
+        optionalRow("addAdditionalInfo", addAdditionalInfo, additionalInfo, additionalInfoUrl, Some(removeAdditionalInfoUrl))
       ).flatten
     )
 
@@ -181,9 +183,15 @@ case class CheckControllingBodyDetailsViewModel(
       rows = Seq(
         Some(contactNumbersDetail.row),
         screenerRow("addFaxNumber", addFaxNumber, addFaxNumberUrl),
-        optionalRow("faxNumber", addFaxNumber, faxNumber, faxNumberUrl),
+        optionalRow("faxNumber", addFaxNumber, faxNumber, faxNumberUrl, Some(removeFaxNumberUrl)),
         screenerRow("addEmailAddress", addEmailAddress, addEmailAddressUrl),
-        optionalRow("emailAddress", addEmailAddress, emailAddress, routes.ControllingBodyEmailAddressController.onPageLoad().url)
+        optionalRow(
+          "emailAddress",
+          addEmailAddress,
+          emailAddress,
+          routes.ControllingBodyEmailAddressController.onPageLoad().url,
+          Some(removeEmailAddressUrl)
+        )
       ).flatten
     )
 
@@ -191,12 +199,18 @@ case class CheckControllingBodyDetailsViewModel(
   private def screenerRow(key: String, answer: Option[Boolean], href: String)(implicit messages: Messages): Option[SummaryListRow] =
     answer.map(value => changeableRow(key, Text(yesNo(value)), href))
 
-  // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data
-  private def optionalRow(key: String, screenerAnswer: Option[Boolean], value: Option[String], href: String)(implicit
-    messages: Messages
+  // An optional detail is hidden once its screener has been answered no, otherwise it is shown with "Not provided" in place of missing data.
+  // Once the details have been submitted, a detail that holds data can also be removed.
+  private def optionalRow(key: String, screenerAnswer: Option[Boolean], value: Option[String], href: String, removeHref: Option[String] = None)(
+    implicit messages: Messages
   ): Option[SummaryListRow] =
     Option.unless(screenerAnswer.contains(false)) {
-      changeableRow(key, Text(value.getOrElse(messages("site.notProvided"))), href)
+      changeableRow(
+        key,
+        Text(value.getOrElse(messages("site.notProvided"))),
+        href,
+        removeHref.filter(_ => isSubmitted && value.isDefined)
+      )
     }
 
   private def contactNumbersContent(messages: Messages): Content = {
@@ -238,6 +252,13 @@ object CheckControllingBodyDetailsViewModel {
   private val additionalInfoUrl = "#" // CB-AI
   private val contactNumbersUrl = "#" // CB-CN
 
+  // Remove screens that are not built yet
+  private val removeTradingNameUrl = "#"
+  private val removeVrnUrl = "#"
+  private val removeAdditionalInfoUrl = "#"
+  private val removeFaxNumberUrl = "#"
+  private val removeEmailAddressUrl = "#"
+
   // A detail that must be provided before the controlling body can be submitted, shown as a link to add it while it is missing
   private final case class MandatoryDetail(key: String, value: Option[Messages => Content], href: String) {
 
@@ -261,11 +282,16 @@ object CheckControllingBodyDetailsViewModel {
       MandatoryDetail(key, value.map(date => _ => Text(shortDateDisplay(date))), href)
   }
 
-  private def changeableRow(key: String, content: Content, href: String)(implicit messages: Messages): SummaryListRow =
+  private def changeableRow(key: String, content: Content, href: String, removeHref: Option[String] = None)(implicit
+                                                                                                            messages: Messages
+  ): SummaryListRow =
     SummaryListRowViewModel(
-      key     = s"$prefix.$key",
-      value   = ValueViewModel(content),
-      actions = Seq(ActionItemViewModel("site.change", href).withVisuallyHiddenText(messages(s"$prefix.$key.hidden")))
+      key   = s"$prefix.$key",
+      value = ValueViewModel(content),
+      actions = Seq(
+        Some(ActionItemViewModel("site.change", href).withVisuallyHiddenText(messages(s"$prefix.$key.hidden"))),
+        removeHref.map(remove => ActionItemViewModel("site.remove", remove).withVisuallyHiddenText(messages(s"$prefix.$key.hidden")))
+      ).flatten
     )
 
   private def addLink(href: String, text: String): String =
@@ -274,7 +300,7 @@ object CheckControllingBodyDetailsViewModel {
   private def yesNo(answer: Boolean)(implicit messages: Messages): String =
     if (answer) messages("site.yes") else messages("site.no")
 
-  def from(answers: UserAnswers): CheckControllingBodyDetailsViewModel = {
+  def from(answers: UserAnswers, isSubmitted: Boolean = false): CheckControllingBodyDetailsViewModel = {
 
     def text(page: QuestionPage[String]): Option[String] =
       answers.get(page).map(_.trim).filter(_.nonEmpty)
@@ -310,7 +336,8 @@ object CheckControllingBodyDetailsViewModel {
       addFaxNumber           = answers.get(ControllingBodyAddFaxNumberYesNoPage),
       faxNumber              = text(ControllingBodyFaxNumberPage),
       addEmailAddress        = answers.get(ControllingBodyAddEmailAddressYesNoPage),
-      emailAddress           = text(ControllingBodyEmailPage)
+      emailAddress           = text(ControllingBodyEmailPage),
+      isSubmitted            = isSubmitted
     )
   }
 }
