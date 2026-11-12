@@ -18,7 +18,7 @@ package controllers.cancellation
 
 import base.SpecBase
 import connectors.GamblingConnector
-import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl}
+import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl, FakeAgentAuthorisedAction, FakeDataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{BusinessDetails, NormalMode, UserAnswers}
@@ -558,6 +558,58 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
           )
         }
       }
+    }
+  }
+
+  "onLanding" - {
+    def landingRequest(regNumber: String) =
+      FakeRequest(GET, controllers.cancellation.routes.CancelRegistrationDateController.onLanding(regNumber).url)
+
+    "must redirect an organisation to the page and store the regNumber when it matches its own" in {
+      val application = applicationBuilder().build()
+
+      running(application) {
+        val result = route(application, landingRequest("id")).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+        cookies(result).get("mdtp") mustBe defined
+      }
+    }
+
+    "must deny an organisation requesting a different regNumber" in {
+      val application = applicationBuilder().build()
+
+      running(application) {
+        val result = route(application, landingRequest("other")).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
+      }
+    }
+
+    "must redirect an agent to the page and store the requested regNumber" in {
+      val cc = stubMessagesControllerComponents()
+      val controller = new CancelRegistrationDateController(
+        cc.messagesApi,
+        mock[SessionRepository],
+        mock[Navigator],
+        new FakeAgentAuthorisedAction(cc.parsers),
+        new FakeDataRetrievalAction(None),
+        mock[BusinessDetailsDataRequiredAction],
+        mock[CancelRegistrationDateFormProvider],
+        mock[GamblingConnector],
+        fixedClock,
+        cc,
+        mock[CancelRegistrationDateView]
+      )(scala.concurrent.ExecutionContext.global)
+
+      val result = controller.onLanding("client1")(landingRequest("client1"))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual
+        controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode).url
+      session(result).get("mgdRegNum").value mustEqual "client1"
     }
   }
 }

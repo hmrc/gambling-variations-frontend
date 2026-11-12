@@ -96,6 +96,35 @@ class AuthorisedActionSpec extends SpecBase {
       contentAsString(result) mustBe "1234567890"
     }
 
+    "create AuthorisedRequest with the session regNumber when an agent has selected a client" in {
+      val mockAuthConnector: AuthConnector = mock[AuthConnector]
+
+      (mockAuthConnector
+        .authorise(_: Predicate, _: Retrieval[Option[AffinityGroup] ~ Enrolments])(using
+          _: HeaderCarrier,
+          _: ExecutionContext
+        ))
+        .expects(*, *, *, *)
+        .returning(
+          Future.successful(
+            `~`(
+              Some(AffinityGroup.Agent),
+              Enrolments(
+                Set(Enrolment("HMRC-MGD-AGNT", Seq(EnrolmentIdentifier("HMRCMGDAGENTREF", "1234567890")), "Activated"))
+              )
+            )
+          )
+        )
+
+      val authorisedAction =
+        new DefaultAuthorisedAction(mockAuthConnector, testFrontendAppConfig, bodyParser)
+
+      val controller = new Harness(authorisedAction)
+      val result = controller.onPageLoad(FakeRequest("GET", "/test").withSession("mgdRegNum" -> "client123"))
+      status(result) mustBe OK
+      contentAsString(result) mustBe "client123"
+    }
+
     "redirect to access denied page when user has no affinity group" in {
       val mockAuthConnector: AuthConnector = mock[AuthConnector]
 

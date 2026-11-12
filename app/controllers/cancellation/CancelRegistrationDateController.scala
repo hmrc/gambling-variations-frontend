@@ -20,12 +20,13 @@ import connectors.GamblingConnector
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
+import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.cancellation.CancelRegistrationDateView
 
@@ -48,6 +49,19 @@ class CancelRegistrationDateController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
+
+  def onLanding(regNumber: String): Action[AnyContent] =
+    authorise { request =>
+      def storeAndRedirect = Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
+        .addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
+
+      request.affinityGroup match {
+        case AffinityGroup.Organisation if regNumber == request.mgdRegNum => storeAndRedirect
+        // TODO Agent access to the client's regNumber is authorised separately.
+        case AffinityGroup.Agent => storeAndRedirect
+        case _                   => Redirect(routes.AccessDeniedController.onPageLoad())
+      }
+    }
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
