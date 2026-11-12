@@ -83,7 +83,7 @@ class Navigator @Inject() () {
     case ControllingBodyFaxNumberPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
     case ControllingBodyNinoPage =>
-      - => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+      _ => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
