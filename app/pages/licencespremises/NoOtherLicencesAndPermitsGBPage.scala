@@ -16,12 +16,12 @@
 
 package pages.licencespremises
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object NoOtherLicencesAndPermitsGBPage extends QuestionPage[String] {
+case object NoOtherLicencesAndPermitsGBPage extends FlagPage[String] {
 
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
+  override def path: JsPath = LicencesPremisesSection.path \ toString
 
   override def toString: String = "noOtherLicencesAndPremisesGBSelected"
 }
