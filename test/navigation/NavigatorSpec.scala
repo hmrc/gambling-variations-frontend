@@ -1704,6 +1704,50 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
       }
 
+      "should route ControllingBodyNinoPage to ControllingBodyUTRController" in {
+
+        navigator.nextPage(ControllingBodyNinoPage, NormalMode, emptyAnswers) mustBe
+          controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyUTRController when answer is true" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "addNINumber" -> true
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyNINumberController when answer is false" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "addNINumber" -> false
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddNINumberYesNoPage to SystemErrorController when answer is missing" in {
+        val answers = UserAnswers("id", Json.obj())
+
+        navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+
     }
 
     "Partner details navigation" - new PartnerDetailsHelper {
