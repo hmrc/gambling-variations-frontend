@@ -2237,8 +2237,9 @@ class NavigatorSpec extends SpecBase {
             .onPageLoad(idx, NormalMode)
 
           val afterFcr = updateNewPartner(afterCountry)(_ ++ Json.obj("partnerDetailsForeignCorporateRef" -> testFCR))
-          next(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), afterFcr) mustBe PartnerDetailsAddUTRController.onPageLoad(idx,
-                                                                                                                                          NormalMode
+          next(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), afterFcr) mustBe
+            PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+
           val afterUtr = updateNewPartner(afterFcr)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
           next(PartnerDetailsUtrPage(newPartnersIndex1), afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }

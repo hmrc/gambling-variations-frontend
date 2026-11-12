@@ -111,21 +111,24 @@ object PartnerDetailsNavigator {
     // --- Value pages: carry on to the next page in the journey ---
 
     case PartnerDetailsBusinessNamePage(index) =>
-      carryOnForMandatoryFields(
+      carryOn(
         index,
-        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index)))
+        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))),
+        checkMandatory = true
       )
 
     case PartnerDetailsSoleProprietorPage(index) =>
-      carryOnForMandatoryFields(
+      carryOn(
         index,
-        to(partnerRoutes.PartnerDetailsSoleProprietorDobController.onPageLoad(key(index), mode(index)))
+        to(partnerRoutes.PartnerDetailsSoleProprietorDobController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
       )
 
     case PartnerDetailsDateOfBirthPage(index) =>
-      carryOnForMandatoryFields(
+      carryOn(
         index,
-        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index)))
+        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))),
+        checkMandatory = true
       )
     case PartnerDetailsTradingNamePage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDateOfJoiningController.onPageLoad(key(index), mode(index))))
@@ -134,28 +137,32 @@ object PartnerDetailsNavigator {
       carryOn(index, afterDateOfJoining(index))
 
     case PartnerDetailsDateOfIncorporationPage(index) =>
-      carryOnForMandatoryFields(
+      carryOn(
         index,
-        afterDateOfIncorporation(index)
+        afterDateOfIncorporation(index),
+        checkMandatory = true
       )
 
     case PartnerDetailsCrnPage(index) =>
-      carryOnForMandatoryFields(
+      carryOn(
         index,
-        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index)))
+        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
       )
     case PartnerDetailsNinoPage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
 
     case PartnerDetailsCountryOfIncorporationPage(index) =>
-      carryOnForMandatoryFields(
+      carryOn(
         index,
-        to(partnerRoutes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key(index), mode(index)))
+        to(partnerRoutes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
       )
     case PartnerDetailsForeignCorporateReferencePage(index) =>
-      carryOnForMandatoryFields(
+      carryOn(
         index,
-        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index)))
+        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
       )
 
     case PartnerDetailsUtrPage(index) =>
@@ -232,20 +239,17 @@ object PartnerDetailsNavigator {
       case i: Int    => answers.get(PartnerDetailsHasAnsweredAllQuestionsPage(i)).contains(true) // new partner that has reached CYA
     }
 
-  private def carryOn(index: BusinessNumberOrIndex, next: UserAnswers => Call): UserAnswers => Call =
-    answers =>
-      if (returnsToCheckYourAnswers(index, answers)) checkYourAnswers(index)
-      else next(answers)
-
-  /** New partners can change the business type, and we want to have a mini-flow so they can answer all missing mandatory fields */
-  private def carryOnForMandatoryFields(
+  /** Existing partners and saved new partners return to check your answers. With `checkMandatory`, they only do so once every mandatory field is
+    * answered; otherwise they are sent to the first missing one (the business type change mini-flow).
+    */
+  private def carryOn(
     index: BusinessNumberOrIndex,
-    next: UserAnswers => Call
+    next: UserAnswers => Call,
+    checkMandatory: Boolean = false
   ): UserAnswers => Call = { answers =>
-    if (returnsToCheckYourAnswers(index, answers)) {
-      if (!PartnerMandatoryDetails.isMissing(answers, index)) checkYourAnswers(index)
-      else nextMissing(index)(answers)
-    } else next(answers)
+    if (!returnsToCheckYourAnswers(index, answers)) next(answers)
+    else if (checkMandatory && PartnerMandatoryDetails.isMissing(answers, index)) nextMissing(index)(answers)
+    else checkYourAnswers(index)
   }
 
   private def addYesNo(
