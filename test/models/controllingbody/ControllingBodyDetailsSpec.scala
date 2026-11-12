@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package models.cotrollingbody
+package models.controllingbody
 
 import models.BusinessType
-import models.controllingbody.ControllingBodyDetails
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
