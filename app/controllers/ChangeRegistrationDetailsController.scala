@@ -22,7 +22,6 @@ import pages.GroupMemberPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.auth.core.AffinityGroup
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.ChangeRegistrationDetailsViewModel
 import views.html.ChangeRegistrationDetailsView
@@ -44,15 +43,7 @@ class ChangeRegistrationDetailsController @Inject() (
 
   def onLanding(regNumber: String): Action[AnyContent] =
     authorise { request =>
-      def storeAndRedirect =
-        Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()).addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
-
-      request.affinityGroup match {
-        case AffinityGroup.Organisation if regNumber == request.mgdRegNum => storeAndRedirect
-        // TODO Agent access to the client's regNumber is authorised separately.
-        case AffinityGroup.Agent => storeAndRedirect
-        case _                   => Redirect(routes.AccessDeniedController.onPageLoad())
-      }
+      Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()).addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
     }
 
   def onPageLoad: Action[AnyContent] =

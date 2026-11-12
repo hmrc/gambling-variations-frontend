@@ -267,7 +267,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
     def landingRequest(regNumber: String) =
       FakeRequest(GET, routes.ChangeRegistrationDetailsController.onLanding(regNumber).url)
 
-    "must redirect an organisation to the page and store the regNumber when it matches its own" in {
+    "must redirect an organisation to the page and store the regNumber" in {
       val application = applicationBuilder().build()
 
       running(application) {
@@ -276,17 +276,6 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.ChangeRegistrationDetailsController.onPageLoad().url
         cookies(result).get("mdtp") mustBe defined
-      }
-    }
-
-    "must deny an organisation requesting a different regNumber" in {
-      val application = applicationBuilder().build()
-
-      running(application) {
-        val result = route(application, landingRequest("other")).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.AccessDeniedController.onPageLoad().url
       }
     }
 

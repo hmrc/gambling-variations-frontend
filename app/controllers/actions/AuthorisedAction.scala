@@ -54,7 +54,7 @@ class DefaultAuthorisedAction @Inject() (
           // TODO(agent auth): Temporary. Trusts the regNumber stored in the session by the /:regNumber landing
           //  endpoints until agent access to a client is properly authorised and validated.
           //  Without a chosen client the agent reference is passed through as before.
-          val clientRegNum = request.session.get(AuthorisedAction.sessionRegNumberKey).getOrElse(agentRef)
+          val clientRegNum = request.session.get(AuthorisedAction.sessionRegNumberKey).getOrElse("")
           block(AuthorisedRequest(request, affinityGroup, clientRegNum))
         case Some(AffinityGroup.Agent) ~ _ =>
           logger.warn(s"Agent auth failed: enrolment missing or not activated for ${request.path}")

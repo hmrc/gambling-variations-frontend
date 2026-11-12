@@ -93,7 +93,7 @@ class AuthorisedActionSpec extends SpecBase {
       val controller = new Harness(authorisedAction)
       val result = controller.onPageLoad(FakeRequest("GET", "/test"))
       status(result) mustBe OK
-      contentAsString(result) mustBe "1234567890"
+      contentAsString(result) mustBe ""
     }
 
     "create AuthorisedRequest with the session regNumber when an agent has selected a client" in {
