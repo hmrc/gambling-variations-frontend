@@ -47,19 +47,17 @@ class OtherLicencesAndPermitsNIControllerSpec extends SpecBase with MockitoSugar
 
   val formProvider = new OtherLicencesAndPermitsNIFormProvider()
   val form = formProvider()
-  val blankAnswers = UserAnswers(userAnswersId, Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> "XGM000001761")))
+  val blankAnswers = LoadedLicencesPremises(userAnswersId, Json.obj())
 
-  private val userAnswers = UserAnswers(
+  private val userAnswers = LoadedLicencesPremises(
     userAnswersId,
     Json.obj(
       "licencesPremisesSection" -> Json.obj(
-        "mgdRegNum"                            -> "XGM000001761",
-        "amusement"                            -> "1",
-        "bingo"                                -> "0",
-        "bookmaking"                           -> "0",
-        "serveAlcohol"                         -> "1",
-        "regCert"                              -> "0",
-        "noOtherLicencesAndPremisesNISelected" -> "0"
+        "amusement"    -> "1",
+        "bingo"        -> "0",
+        "bookmaking"   -> "0",
+        "serveAlcohol" -> "1",
+        "regCert"      -> "0"
       )
     )
   )
