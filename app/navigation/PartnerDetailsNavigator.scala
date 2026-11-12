@@ -21,12 +21,11 @@ import controllers.routes
 import models.{BusinessType, Mode, UserAnswers}
 import pages.partnerdetails.*
 import pages.{BusinessNumberOrIndex, Page, QuestionPage}
-import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
 import play.api.libs.json.Reads
 import play.api.mvc.Call
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
-import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.{firstMissing, required}
+import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.firstMissing
 
 /** Partner details routing.
   *
@@ -139,6 +138,7 @@ object PartnerDetailsNavigator {
         index,
         afterDateOfIncorporation(index)
       )
+
     case PartnerDetailsCrnPage(index) =>
       carryOnForMandatoryFields(
         index,

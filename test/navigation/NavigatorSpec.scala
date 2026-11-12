@@ -2267,6 +2267,7 @@ class NavigatorSpec extends SpecBase {
           val idx = newPartnersIndex1.toString
 
           val answers = UserAnswers(mgdRegNumber, businessData)
+
           navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
             PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
 
@@ -2284,7 +2285,8 @@ class NavigatorSpec extends SpecBase {
 
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 5))
 
-          next(page, afterChangingBT) mustBe PartnerDetailsDateOfIncorporationController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterChangingBT) mustBe PartnerDetailsDateOfIncorporationController
+            .onPageLoad(idx, NormalMode)
 
           val afterDate = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsDateOfIncorporation" -> "2000-03-01"))
           next(page, afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
