@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package pages.licencespremises
+package pages.cancellation
 
-import org.scalatestplus.play.PlaySpec
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-class LicencesPremisesSectionPageSpec extends PlaySpec {
+import java.time.LocalDate
 
-  "LicencesPremisesSectionPage" must {
+case object CancelGroupRegistrationDatePage extends QuestionPage[LocalDate] {
 
-    "must have the correct toString" in {
-      LicencesPremisesSectionPage.toString mustBe "mgdRegNum"
-    }
+  override def path: JsPath = JsPath \ toString
 
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "mgdRegNum"
-      LicencesPremisesSectionPage.path mustBe expectedPath
-    }
-  }
+  override def toString: String = "cancelGroupRegistrationDate"
 }

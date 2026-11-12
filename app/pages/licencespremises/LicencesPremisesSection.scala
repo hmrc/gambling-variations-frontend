@@ -16,12 +16,8 @@
 
 package pages.licencespremises
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import models.Section
 
-case object LicencesPremisesSectionPage extends QuestionPage[String] {
-
-  override def path: JsPath = JsPath \ "licencesPremisesSection" \ toString
-
-  override def toString: String = "mgdRegNum"
+case object LicencesPremisesSection extends Section {
+  val key = "licencesPremises"
 }

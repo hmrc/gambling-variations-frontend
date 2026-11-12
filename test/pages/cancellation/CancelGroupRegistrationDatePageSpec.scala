@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package pages.licencespremises
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+package pages.cancellation
+
+import org.scalatestplus.play.PlaySpec
 import play.api.libs.json.JsPath
 
-class PremisesPageSpec extends AnyFreeSpec with Matchers {
-  "PremisesPage" - {
+class CancelGroupRegistrationDatePageSpec extends PlaySpec {
 
-    "must have the correct toString" in {
-      PremisesPage.toString mustBe "premises"
+  "CancelGroupRegistrationDatePage" must {
+
+    "have the correct path" in {
+
+      CancelGroupRegistrationDatePage.path mustEqual (JsPath \ "cancelGroupRegistrationDate")
     }
 
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "premisesDetails" \ "premises"
-      PremisesPage.path mustBe expectedPath
+    "have the correct toString value" in {
+
+      CancelGroupRegistrationDatePage.toString mustEqual "cancelGroupRegistrationDate"
     }
   }
 }
