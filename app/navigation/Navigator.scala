@@ -545,8 +545,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyAddNINumberYesNoPage)
       .map {
-        case true  => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
-        case false => controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad()
+        case true => controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad()
+        case false  => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 

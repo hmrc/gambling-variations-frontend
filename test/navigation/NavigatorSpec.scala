@@ -1710,13 +1710,13 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
       }
 
-      "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyUTRController when answer is true" in {
+      "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyUTRController when answer is false" in {
         val answers =
           UserAnswers("id",
             Json.obj(
               "controllingBodyDetails" -> Json.obj(
                 "mgdRegNumber" -> "XGM00000001761",
-                "addNINumber" -> true
+                "addNINumber" -> false
               )
             )
           )
@@ -1725,13 +1725,13 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
       }
 
-      "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyNINumberController when answer is false" in {
+      "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyNINumberController when answer is true" in {
         val answers =
           UserAnswers("id",
             Json.obj(
               "controllingBodyDetails" -> Json.obj(
                 "mgdRegNumber" -> "XGM00000001761",
-                "addNINumber" -> false
+                "addNINumber" -> true
               )
             )
           )
