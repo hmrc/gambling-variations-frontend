@@ -1,0 +1,84 @@
+@*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import java.time.LocalDate
+@import java.time.format.DateTimeFormatter
+@import viewmodels.LegendSize.Large
+@import views.html.components._
+@import java.time.LocalDate
+@import java.time.format.DateTimeFormatter
+@import uk.gov.hmrc.govukfrontend.views.Aliases.{Hint, HtmlContent}
+@import play.twirl.api.Html
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukDateInput: GovukDateInput,
+    govukButton: GovukButton,
+    caption: Caption,
+    p: Paragraph,
+    h1: H1,
+    mainErrorSummary: MainErrorSummary
+)
+
+@(form: Form[_], mode: Mode, registrationDate: LocalDate, maximumDate: LocalDate, middleOfDateRange: LocalDate)(implicit request: Request[_], messages: Messages)
+
+@fullDate(date: LocalDate) = @{
+ date.format(DateTimeFormatter.ofPattern("d MMMM yyyy"))
+}
+
+@numericDate(date: LocalDate) = @{
+ date.format(DateTimeFormatter.ofPattern("d M yyyy"))
+}
+
+@layout(pageTitle = title(form, messages("cancelGroupRegistrationDate.title"), Some(messages("cancelGroupRegistrationDate.caption")))) {
+
+    @formHelper(action = controllers.cancellation.routes.CancelGroupRegistrationDateController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+
+        @mainErrorSummary(
+            form.copy(errors = form.errors.filter(_.key == "value")),
+            errorLinkOverrides = Map(
+                "value" ->
+                form.errors
+                .find(e => Seq("value.day", "value.month", "value.year").contains(e.key))
+                .map(_.key)
+                .getOrElse("value.day")
+            )
+        )
+
+        @caption(messages("cancelGroupRegistrationDate.caption"))
+
+        @govukDateInput(
+            DateViewModel(
+                field = form("value"),
+                legend = LegendViewModel(messages("cancelGroupRegistrationDate.heading")).asPageHeading(Large)
+                )
+                .withHint(Hint(
+                    content = HtmlContent(
+                    Html(
+                    messages("cancelGroupRegistrationDate.hint", fullDate(registrationDate), fullDate(maximumDate), numericDate(middleOfDateRange))
+                    )
+                  )
+                )
+            )
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

@@ -27,6 +27,7 @@ import viewmodels.ChangeRegistrationDetailsViewModel
 import views.html.ChangeRegistrationDetailsView
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,

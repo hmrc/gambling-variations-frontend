@@ -29,7 +29,7 @@ private[mappings] class LocalDateFormatter(
   twoRequiredKey: String,
   requiredKey: String,
   args: Seq[String] = Seq.empty,
-  requireNumericDateFormat: Boolean = false
+  requireNumericDateFormat: Boolean = true
 )(implicit messages: Messages)
     extends Formatter[LocalDate]
     with Formatters {
@@ -61,8 +61,8 @@ private[mappings] class LocalDateFormatter(
     val invalidFields =
       if (requireNumericDateFormat) {
         Seq(
-          "day"   -> "[0-9]{1,2}",
-          "month" -> "[0-9]{1,2}",
+          "day"   -> "0?[1-9]|[12][0-9]|3[01]",
+          "month" -> "0?[1-9]|1[0-2]",
           "year"  -> "[1-9][0-9]{3}"
         ).collect {
           case (field, pattern) if !data.get(s"$key.$field").exists(_.matches(pattern)) =>
@@ -114,8 +114,8 @@ private[mappings] class LocalDateFormatter(
     val invalidFields =
       if (requireNumericDateFormat) {
         Seq(
-          "day"   -> "[0-9]{1,2}",
-          "month" -> "[0-9]{1,2}",
+          "day"   -> "0?[1-9]|[12][0-9]|3[01]",
+          "month" -> "0?[1-9]|1[0-2]",
           "year"  -> "[1-9][0-9]{3}"
         ).collect {
           case (field, pattern)

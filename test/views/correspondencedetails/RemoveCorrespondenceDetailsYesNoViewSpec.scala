@@ -17,7 +17,7 @@
 package views.correspondencedetails
 
 import base.SpecBase
-import forms.RemoveCorrespondenceDetailsYesNoFormProvider
+import forms.correspondencedetails.RemoveCorrespondenceDetailsYesNoFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

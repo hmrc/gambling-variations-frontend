@@ -84,5 +84,32 @@ class DateOfIncorporationViewSpec extends SpecBase {
         }
       }
     }
+
+    "report invalid fields before missing fields and highlight only the invalid fields" in {
+      val application = applicationBuilder().build()
+      running(application) {
+        val view = application.injector.instanceOf[DateOfIncorporationView]
+        val form = new DateOfIncorporationFormProvider()()(messages(application))
+        val cases = Seq(
+          ("$$", "me", "", Seq("day", "month")),
+          ("32", "3", "", Seq("day")),
+          ("27", "13", "", Seq("month")),
+          ("27", "13", "2007", Seq("month"))
+        )
+        cases.foreach { case (day, month, year, invalidFields) =>
+          val boundForm = form.bind(Map("value.day" -> day, "value.month" -> month, "value.year" -> year))
+          val document = Jsoup.parse(view(boundForm)(FakeRequest(), messages(application)).toString)
+          val highlightedFields =
+            Seq("day", "month", "year").filter(part => document.getElementById(s"value.$part").hasClass("govuk-input--error"))
+          withClue(s"Date $day/$month/$year: ") {
+            document.select(".govuk-error-summary a").size() mustEqual 1
+            document.select(".govuk-error-summary a").text() mustEqual "Date of incorporation must be a real date"
+            document.select(".govuk-error-summary a").attr("href") mustEqual s"#value.${invalidFields.head}"
+            document.select(".govuk-error-message").text() mustEqual "Error: Date of incorporation must be a real date"
+            highlightedFields mustEqual invalidFields
+          }
+        }
+      }
+    }
   }
 }

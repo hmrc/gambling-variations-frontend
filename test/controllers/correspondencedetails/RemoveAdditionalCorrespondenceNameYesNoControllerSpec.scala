@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import base.SpecBase
 import controllers.routes
-import forms.RemoveAdditionalCorrespondenceNameYesNoFormProvider
+import forms.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when

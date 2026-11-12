@@ -379,13 +379,19 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
       removeLink.text() must include("ABC Partners")
     }
 
-    "must render cannot remove message when partner cannot be removed" in new Setup {
+    "must not render action column when all partners cannot be removed" in new Setup {
 
       val doc =
         render(
           viewModel(
             partners = Seq(
               partner(
+                name      = "Alpha Partners",
+                canRemove = false,
+                removeUrl = None
+              ),
+              partner(
+                name      = "Beta Partners",
                 canRemove = false,
                 removeUrl = None
               )
@@ -394,10 +400,25 @@ class PartnerDetailsViewSpec extends SpecBase with PartnerDetailsHelper {
           paginationHelper
         )
 
+      val headers =
+        doc.select("thead.govuk-table__head th.govuk-table__header")
+
+      headers.size() mustBe 2
+
+      headers.text() must not include (
+        messages("partnerDetails.action")
+      )
+
       doc
         .select("tbody.govuk-table__body")
-        .text() must include(
+        .text() must not include (
         messages("partnerDetails.cannotRemove")
+      )
+
+      doc
+        .select("tbody.govuk-table__body")
+        .text() must not include (
+        messages("site.remove")
       )
     }
 

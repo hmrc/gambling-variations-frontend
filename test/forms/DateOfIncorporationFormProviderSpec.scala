@@ -212,5 +212,33 @@ class DateOfIncorporationFormProviderSpec extends DateBehaviours {
         .value mustEqual
         LocalDate.of(2008, 2, 29)
     }
+
+    Seq(
+      ("$$", "me", "", Seq("day", "month")),
+      ("32", "3", "", Seq("day")),
+      ("27", "13", "", Seq("month")),
+      ("", "13", "2007", Seq("month")),
+      ("27", "13", "2007", Seq("month")),
+      ("00", "3", "2007", Seq("day"))
+    ).foreach { case (day, month, year, invalidFields) =>
+      s"report $day/$month/$year as not a real date and mark only its invalid fields" in {
+
+        val errors =
+          form
+            .bind(
+              Map(
+                "value.day"   -> day,
+                "value.month" -> month,
+                "value.year"  -> year
+              )
+            )
+            .errors
+
+        errors must contain theSameElementsAs (
+          FormError("value", "dateOfIncorporation.error.invalid", invalidFields.map(part => messages(s"date.error.$part"))) +:
+            invalidFields.map(part => FormError(s"value.$part", "dateOfIncorporation.error.invalid"))
+        )
+      }
+    }
   }
 }

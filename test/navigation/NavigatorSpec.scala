@@ -40,7 +40,6 @@ import pages.tradingdetails.previousregnumbers.*
 import play.api.libs.json.Json
 import play.api.mvc.Call
 import utils.PartnerUtils
-import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
 
 class NavigatorSpec extends SpecBase {
 
@@ -401,6 +400,11 @@ class NavigatorSpec extends SpecBase {
     }
 
     "in Check mode" - {
+
+      "should preserve check mode navigation for a controlling body business name" in {
+        navigator.nextPage(ControllingBodyBusinessNamePage, CheckMode, emptyAnswers) mustBe
+          routes.ChangeRegistrationDetailsController.onPageLoad()
+      }
 
       "should route ChooseReturnPeriodsPage back to CheckReturnPeriodsController for standard return periods" in {
         val answers = emptyAnswers.set(HasExistingNstpValuesPage, false).success.value
@@ -1175,6 +1179,33 @@ class NavigatorSpec extends SpecBase {
 
     "normal mode controlling body details navigation" - {
 
+      "should return to check controlling body details when a business partner number exists" in {
+        val answers = emptyAnswers.set(ControllingBodyBusinessPartnerNumberPage, "1234567890").success.value
+
+        navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
+      }
+
+      Seq(None, Some(""), Some("   ")).foreach { businessPartnerNumber =>
+        Seq(None, Some(EditDetails), Some(ProvideNew)).foreach { changeAnswer =>
+          s"should continue setup to the trading name screener with business partner number $businessPartnerNumber and change answer $changeAnswer" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessNamePage, "Unincorporated business Name")
+              .success
+              .value
+              .setIfDefined(ControllingBodyBusinessPartnerNumberPage, businessPartnerNumber)
+              .success
+              .value
+              .setIfDefined(ControllingBodyChangeScreenerPage, changeAnswer)
+              .success
+              .value
+
+            navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, answers) mustBe
+              controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
+          }
+        }
+      }
+
       "should route ControllingBodyChangeScreenerPage to CheckControllingBodyDetails when the answer is EditDetails" in {
         val answers =
           emptyAnswers
@@ -1221,58 +1252,6 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyDateOfBirthPage to CB-TN-SC" in {
         navigator.nextPage(ControllingBodyDateOfBirthPage, NormalMode, emptyAnswers) mustBe
           controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
-      }
-
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is Yes" in {
-        val answers =
-          emptyAnswers
-            .set(ControllingBodyAddTradingNameYesNoPage, true)
-            .success
-            .value
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
-      }
-
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is No and the controlling body type is not known" in {
-        val answers =
-          emptyAnswers
-            .set(ControllingBodyAddTradingNameYesNoPage, false)
-            .success
-            .value
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
-      }
-
-      // The type is given as the code the app stores, since a set in this spec writes its name through the imported Enumerable writes
-      def addTradingNameAnswers(businessType: BusinessType, addTradingName: Boolean): UserAnswers =
-        UserAnswers("id", Json.obj("controllingBodyDetails" -> Json.obj("typeOfControllingBody" -> businessType.code)))
-          .set(ControllingBodyAddTradingNameYesNoPage, addTradingName)
-          .success
-          .value
-
-      "should route ControllingBodyAddTradingNameYesNoPage to CB-NI-SC when the answer is No and the controlling body is a sole proprietor" in {
-        val answers = addTradingNameAnswers(BusinessType.Soleproprietor, addTradingName = false)
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
-      }
-
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is Yes and the controlling body is a sole proprietor" in {
-        val answers = addTradingNameAnswers(BusinessType.Soleproprietor, addTradingName = true)
-
-        navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-          routes.IndexController.onPageLoad()
-      }
-
-      "should route ControllingBodyAddTradingNameYesNoPage to Index when the answer is No and the controlling body is not a sole proprietor" in {
-        BusinessType.values.filterNot(_ == BusinessType.Soleproprietor).foreach { businessType =>
-          val answers = addTradingNameAnswers(businessType, addTradingName = false)
-
-          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
-            routes.IndexController.onPageLoad()
-        }
       }
 
       "should route ControllingBodyEmailPage to CheckControllingBodyDetails" in {
@@ -1458,6 +1437,273 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
       }
 
+      "ControllingBodyAddTradingNameYesNoPage Navigation" - {
+
+        "should route to ControllingBodyTradingNameController when Yes is selected" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"   -> "XGM00000001761",
+                            "addTradingName" -> true
+                          )
+                        )
+                       )
+
+          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyTradingNameController.onPageLoad()
+        }
+
+        "should route to ControllingBodyBusinessUKIncorporatedController when Corporate body and No is selected" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "addTradingName"        -> false,
+                            "typeOfControllingBody" -> 2
+                          )
+                        )
+                       )
+
+          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+        }
+
+        "should route to ControllingBodyVATScreenerController when Partnership and No is selected" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "addTradingName"        -> false,
+                            "typeOfControllingBody" -> 4
+                          )
+                        )
+                       )
+
+          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+        }
+
+        "should route to DateOfIncorporationController when Limited Liability Partnership and No is selected" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "addTradingName"        -> false,
+                            "typeOfControllingBody" -> 5
+                          )
+                        )
+                       )
+
+          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+        }
+
+        "should route to ControllingBodyUTRController when Unincorporated body and No is selected" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "addTradingName"        -> false,
+                            "typeOfControllingBody" -> 3
+                          )
+                        )
+                       )
+
+          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+        }
+
+        "should route to ControllingBodyAddNINumberYesNoController when Soleproprietor and No is selected" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "addTradingName"        -> false,
+                            "typeOfControllingBody" -> 1
+                          )
+                        )
+                       )
+
+          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+        }
+
+        "should route to SystemErrorController when controlling body type is invalid or none" in {
+          val answers =
+            UserAnswers("id",
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"   -> "XGM00000001761",
+                            "addTradingName" -> false
+                          )
+                        )
+                       )
+
+          navigator.nextPage(ControllingBodyAddTradingNameYesNoPage, NormalMode, answers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+      }
+
+      "ControllingBodyTradingNamePage" - {
+
+        "should route to ControllingBodyAddNINumberYesNoController when controlling body type is Proprietor" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 1
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+        }
+
+        "should route to ControllingBodyBusinessUKIncorporatedController when controlling body type is Corporate Body" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 2
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+        }
+
+        "should route to ControllingBodyUTRController when controlling body type is Unincorporated" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 3
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+        }
+
+        "should route to ControllingBodyVATScreenerController when controlling body type is Partnership" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 4
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+        }
+
+        "should route to DateOfIncorporationController when controlling body type is Limited Liability Partnership" in {
+          val answers =
+            UserAnswers("id",
+              Json.obj(
+                "controllingBodyDetails" -> Json.obj(
+                  "mgdRegNumber" -> "XGM00000001761",
+                  "typeOfControllingBody" -> 5
+                )
+              )
+            )
+          navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+        }
+      }
+
+
+      "should route ControllingBodyAddFaxNumberYesNoPage to ControllingBodyFaxNumberController when answer is true" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "addFaxNumber" -> true
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyFaxNumberController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddFaxNumberYesNoPage to ControllingBodyAddEmailAddressYesNoController when answer is false" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "addFaxNumber" -> false
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddFaxNumberYesNoPage to SystemErrorController when answer is missing" in {
+        val answers = UserAnswers("id", Json.obj())
+
+        navigator.nextPage(ControllingBodyAddFaxNumberYesNoPage, NormalMode, answers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddEmailAddressYesNoPage to ControllingBodyEmailAddressController when answer is true" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "addEmailAddress" -> true
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyAddEmailAddressYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.ControllingBodyEmailAddressController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddEmailAddressYesNoPage to CheckControllingBodyDetailsController when answer is false" in {
+        val answers =
+          UserAnswers("id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber" -> "XGM00000001761",
+                "addEmailAddress" -> false
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyAddEmailAddressYesNoPage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
+      }
+
+      "should route ControllingBodyAddEmailAddressYesNoPage to SystemErrorController when answer is missing" in {
+        val answers = UserAnswers("id", Json.obj())
+
+        navigator.nextPage(ControllingBodyAddEmailAddressYesNoPage, NormalMode, answers) mustBe
+          routes.SystemErrorController.onPageLoad()
+      }
+
+      "should route ControllingBodyFaxNumberPage to ControllingBodyAddEmailAddressYesNoController" in {
+
+        navigator.nextPage(ControllingBodyFaxNumberPage, NormalMode, emptyAnswers) mustBe
+          controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
+      }
+
     }
 
     "Partner details navigation" - new PartnerDetailsHelper {
@@ -1474,12 +1720,6 @@ class NavigatorSpec extends SpecBase {
 
       private def checkYourAnswers(index: BusinessNumberOrIndex): Call =
         controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString)
-
-      private def firstMissingOrCheckYourAnswers(answers: UserAnswers, index: BusinessNumberOrIndex): Call =
-        PartnerMandatoryDetails
-          .firstMissing(answers, index)
-          .map(_.call)
-          .getOrElse(checkYourAnswers(index))
 
       private def valuePages(index: BusinessNumberOrIndex): Seq[Page] = Seq(
         PartnerDetailsBusinessNamePage(index),
@@ -1970,5 +2210,4 @@ class NavigatorSpec extends SpecBase {
     }
 
   }
-
 }
