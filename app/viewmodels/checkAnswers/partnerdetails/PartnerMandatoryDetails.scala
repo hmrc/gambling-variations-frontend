@@ -83,7 +83,7 @@ object PartnerMandatoryDetails {
 
     val ukIncorporation = Seq(
       Field.of(PartnerDetailsDateOfIncorporationPage(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(key, mode)),
-      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key, mode))
+      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(key, mode))
     )
 
     val nonUkIncorporation = Seq(
