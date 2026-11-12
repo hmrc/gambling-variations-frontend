@@ -2198,49 +2198,43 @@ class NavigatorSpec extends SpecBase {
         "when we switch BusinessType to Corporate Body - UK" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
-          val page = PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1)
+          val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 2))
 
-          val afterChangingBT = updateNewPartner(businessData) {
-            _ - "partnerDetailsDateOfIncorporation" ++ Json.obj("partnerDetailsBusinessType" -> 2)
-          }
-
-          next(page, afterChangingBT) mustBe
+          navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
             PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
 
           val afterUk: JsObject = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsIsBusinessIncorporatedUk" -> true))
-          next(page, afterUk) mustBe PartnerDetailsDateOfIncorporationController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), afterUk) mustBe PartnerDetailsDateOfIncorporationController.onPageLoad(idx, NormalMode)
 
           val afterDate = updateNewPartner(afterUk)(_ ++ Json.obj("partnerDetailsDateOfIncorporation" -> "2000-03-01"))
-          next(page, afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
 
           val afterCrn = updateNewPartner(afterDate)(_ ++ Json.obj("partnerDetailsCrn" -> testCRN))
-          next(page, afterCrn) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsCrnPage(newPartnersIndex1), afterCrn) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
 
           val afterUtr = updateNewPartner(afterCrn)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
-          next(page, afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+          next(PartnerDetailsUtrPage(newPartnersIndex1), afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
         "when we switch BusinessType to Corporate Body - Non UK" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
-          val page = PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1)
-
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 2))
 
           navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
             PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
 
           val afterNonUk = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsIsBusinessIncorporatedUk" -> false))
-          next(page, afterNonUk) mustBe PartnerDetailsAddCountryOfIncorporationController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), afterNonUk) mustBe PartnerDetailsAddCountryOfIncorporationController.onPageLoad(idx, NormalMode)
 
           val afterCountry = updateNewPartner(afterNonUk)(_ ++ Json.obj("partnerDetailsCountryOfIncorporation" -> "France"))
-          next(page, afterCountry) mustBe PartnerDetailsForeignCorporateReferenceController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1), afterCountry) mustBe PartnerDetailsForeignCorporateReferenceController.onPageLoad(idx, NormalMode)
 
           val afterFcr = updateNewPartner(afterCountry)(_ ++ Json.obj("partnerDetailsForeignCorporateRef" -> testFCR))
-          next(page, afterFcr) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), afterFcr) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
 
           val afterUtr = updateNewPartner(afterFcr)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
-          next(page, afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+          next(PartnerDetailsUtrPage(newPartnersIndex1), afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
         "when we switch BusinessType to Unincorporated Body" in {
@@ -2281,21 +2275,19 @@ class NavigatorSpec extends SpecBase {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
 
-          val page = PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1)
-
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 5))
 
-          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterChangingBT) mustBe PartnerDetailsDateOfIncorporationController
-            .onPageLoad(idx, NormalMode)
+          navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
+            PartnerDetailsDateOfIncorporationController.onPageLoad(idx, NormalMode)
 
           val afterDate = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsDateOfIncorporation" -> "2000-03-01"))
-          next(page, afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
 
           val afterCrn = updateNewPartner(afterDate)(_ ++ Json.obj("partnerDetailsCrn" -> testCRN))
-          next(page, afterCrn) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsCrnPage(newPartnersIndex1), afterCrn) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
 
           val afterUtr = updateNewPartner(afterCrn)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
-          next(page, afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+          next(PartnerDetailsUtrPage(newPartnersIndex1), afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
       }
