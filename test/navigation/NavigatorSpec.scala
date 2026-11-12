@@ -2204,10 +2204,14 @@ class NavigatorSpec extends SpecBase {
             PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
 
           val afterUk: JsObject = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsIsBusinessIncorporatedUk" -> true))
-          next(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), afterUk) mustBe PartnerDetailsDateOfIncorporationController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), afterUk) mustBe PartnerDetailsDateOfIncorporationController.onPageLoad(
+            idx,
+            NormalMode
+          )
 
           val afterDate = updateNewPartner(afterUk)(_ ++ Json.obj("partnerDetailsDateOfIncorporation" -> "2000-03-01"))
-          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController
+            .onPageLoad(idx, NormalMode)
 
           val afterCrn = updateNewPartner(afterDate)(_ ++ Json.obj("partnerDetailsCrn" -> testCRN))
           next(PartnerDetailsCrnPage(newPartnersIndex1), afterCrn) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
@@ -2225,14 +2229,16 @@ class NavigatorSpec extends SpecBase {
             PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
 
           val afterNonUk = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsIsBusinessIncorporatedUk" -> false))
-          next(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), afterNonUk) mustBe PartnerDetailsAddCountryOfIncorporationController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), afterNonUk) mustBe PartnerDetailsAddCountryOfIncorporationController
+            .onPageLoad(idx, NormalMode)
 
           val afterCountry = updateNewPartner(afterNonUk)(_ ++ Json.obj("partnerDetailsCountryOfIncorporation" -> "France"))
-          next(PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1), afterCountry) mustBe PartnerDetailsForeignCorporateReferenceController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1), afterCountry) mustBe PartnerDetailsForeignCorporateReferenceController
+            .onPageLoad(idx, NormalMode)
 
           val afterFcr = updateNewPartner(afterCountry)(_ ++ Json.obj("partnerDetailsForeignCorporateRef" -> testFCR))
-          next(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), afterFcr) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
-
+          next(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), afterFcr) mustBe PartnerDetailsAddUTRController.onPageLoad(idx,
+                                                                                                                                          NormalMode
           val afterUtr = updateNewPartner(afterFcr)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
           next(PartnerDetailsUtrPage(newPartnersIndex1), afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
@@ -2281,7 +2287,8 @@ class NavigatorSpec extends SpecBase {
             PartnerDetailsDateOfIncorporationController.onPageLoad(idx, NormalMode)
 
           val afterDate = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsDateOfIncorporation" -> "2000-03-01"))
-          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
+          next(PartnerDetailsDateOfIncorporationPage(newPartnersIndex1), afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController
+            .onPageLoad(idx, NormalMode)
 
           val afterCrn = updateNewPartner(afterDate)(_ ++ Json.obj("partnerDetailsCrn" -> testCRN))
           next(PartnerDetailsCrnPage(newPartnersIndex1), afterCrn) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
