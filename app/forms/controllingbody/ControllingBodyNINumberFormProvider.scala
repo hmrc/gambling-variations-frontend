@@ -49,10 +49,10 @@ object ControllingBodyNINumberFormProvider {
   private[forms] val requiredKey = "controllingBodyAddNino.error.required"
 
   private[forms] val invalidCharsKey = "controllingBodyAddNino.error.invalidChars"
-  private[forms] val ninoCharsRegex  = """^[A-Za-z0-9]+$"""
+  private[forms] val ninoCharsRegex = """^[A-Za-z0-9]+$"""
 
   private[forms] val invalidFormatKey = "controllingBodyAddNino.error.invalidFormat"
-  private[forms] val ninoValidRegex   = """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
+  private[forms] val ninoValidRegex = """^[ABCE-Zabce-z][ABCE-Zabce-z][0-9][0-9][0-9][0-9][0-9][0-9][A BCD]$"""
 
   private[forms] val ninoLengthWithoutSuffix = 8
 
