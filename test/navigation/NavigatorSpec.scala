@@ -2166,9 +2166,11 @@ class NavigatorSpec extends SpecBase {
         }
       }
 
-      "normal mode: changing business type to sole proprietor goes through all the mandatory pages" - {
+      // --- Changing business type for a new, unsaved partner means going through all mandatory fields ---
 
-        "when we switch BusinessType to Sole Proprietor" in {
+      "CYA routing: changing business type" - {
+
+        "when BT is changed to Sole Proprietor" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
 
@@ -2195,7 +2197,7 @@ class NavigatorSpec extends SpecBase {
             PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
-        "when we switch BusinessType to Corporate Body - UK" in {
+        "when BT is changed to Corporate Body - UK" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 2))
@@ -2220,7 +2222,7 @@ class NavigatorSpec extends SpecBase {
           next(PartnerDetailsUtrPage(newPartnersIndex1), afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
-        "when we switch BusinessType to Corporate Body - Non UK" in {
+        "when BT is changed to Corporate Body - Non UK" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 2))
@@ -2244,7 +2246,7 @@ class NavigatorSpec extends SpecBase {
           next(PartnerDetailsUtrPage(newPartnersIndex1), afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
-        "when we switch BusinessType to Unincorporated Body" in {
+        "when BT is changed to Unincorporated Body" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
 
@@ -2263,7 +2265,7 @@ class NavigatorSpec extends SpecBase {
             PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
-        "when we switch BusinessType to Partnership" in {
+        "when BT is changed to Partnership" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
 
@@ -2278,7 +2280,7 @@ class NavigatorSpec extends SpecBase {
             PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
-        "when we switch BusinessType to Limited Liability Partnership" in {
+        "when BT is changed to Limited Liability Partnership" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
 
