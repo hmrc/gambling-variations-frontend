@@ -29,7 +29,10 @@ class PartnerDetailsAddNationalInsuranceNumberFormProvider @Inject() extends Map
     Form(
       "value" ->
         text(requiredKey)
-          .transform[String](_.filterNot(_.isWhitespace).toUpperCase, identity)
+          .transform[String](
+            _.replaceAll("\\s+", "").toUpperCase,
+            identity
+          )
           .verifying(
             Seq(
               regexp(ninoCharsRegex, invalidCharsKey),

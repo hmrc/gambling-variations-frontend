@@ -28,7 +28,10 @@ class PartnerDetailsForeignCorporateReferenceFormProvider @Inject() extends Mapp
     Form(
       "value" ->
         text(requiredKey)
-          .transform[String](_.trim, identity)
+          .transform[String](
+            _.trim.replaceAll("\\s+", " "),
+            identity
+          )
           .verifying(
             regexp(
               refNumberRegex,
