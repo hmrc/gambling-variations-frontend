@@ -28,7 +28,7 @@ class ControllingBodyCompanyRegistrationNumberFormProvider @Inject() extends Map
     Form(
       "value" ->
         text(requiredKey)
-          .transform[String](_.trim, identity)
+          .transform[String](_.filterNot(_.isWhitespace), identity)
           .verifying(
             regexp(allowedCharsRegex, invalidCharactersKey)
           )
