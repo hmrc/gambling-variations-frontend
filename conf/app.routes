@@ -383,3 +383,9 @@ POST       /change-registration-details/controlling-body-details/business-countr
 GET        /cancel-registration/check                       controllers.cancellation.CheckRegistrationCancellationDetailsController.onPageLoad()
 
 GET        /cancel-registration/submitted                       controllers.cancellation.RegistrationCancellationConfirmationController.onPageLoad()
+
+GET        /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
+GET        /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
+POST       /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = CheckMode)
+

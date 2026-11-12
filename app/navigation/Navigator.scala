@@ -80,6 +80,8 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-ADLK-S in add flow and CB-CYA in change flow.
     case ControllingBodyContactDetailsPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad()
+    case ControllingBodyFaxNumberPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -222,6 +224,8 @@ class Navigator @Inject() () {
       userAnswers => navigateControllingBodyAddNINumberYesNoPage(userAnswers)
     case ControllingBodyBusinessTypePage =>
       userAnswers => navigateControllingBodyBusinessTypePage(userAnswers)
+    case ControllingBodyTradingNamePage =>
+      userAnswers => navigateControllingBodyTradingNamePage(userAnswers)
 
     // Return Periods
     case ChooseReturnPeriodsPage =>
@@ -565,8 +569,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyAddFaxNumberYesNoPage)
       .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later
-        case false => routes.IndexController.onPageLoad() // TODO later
+        case true  => controllers.controllingbody.routes.ControllingBodyFaxNumberController.onPageLoad()
+        case false => controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -574,8 +578,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyAddEmailAddressYesNoPage)
       .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later
-        case false => routes.IndexController.onPageLoad() // TODO later
+        case true  => controllers.controllingbody.routes.ControllingBodyEmailAddressController.onPageLoad()
+        case false => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -629,6 +633,23 @@ private def navigateControllingBodyNotProvidedYesNoPage(answers: UserAnswers): C
     case Some(true)  => routes.ChangeRegistrationDetailsController.onPageLoad()
     case None        => routes.SystemErrorController.onPageLoad()
   }
+
+private def navigateControllingBodyTradingNamePage(userAnswers: UserAnswers): Call = {
+  userAnswers
+    .get(ControllingBodyBusinessTypePage) match {
+    case Some(Soleproprietor) =>
+      controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
+    case Some(Corporatebody) =>
+      controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
+    case Some(Unincorporatedbody) =>
+      controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+    case Some(Partnership) =>
+      controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
+    case Some(LimitedLiabilityPartnership) =>
+      controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+    case _ => routes.SystemErrorController.onPageLoad()
+  }
+}
 
 private def navigateReasonForCancellationPage(
   userAnswers: UserAnswers,
