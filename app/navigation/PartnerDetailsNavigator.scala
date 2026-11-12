@@ -26,7 +26,7 @@ import play.api.libs.json.Reads
 import play.api.mvc.Call
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
-import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.firstMissing
+import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.{firstMissing, required}
 
 /** Partner details routing.
   *
@@ -130,18 +130,34 @@ object PartnerDetailsNavigator {
       )
     case PartnerDetailsTradingNamePage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDateOfJoiningController.onPageLoad(key(index), mode(index))))
+
     case PartnerDetailsDateOfJoiningPage(index) =>
       carryOn(index, afterDateOfJoining(index))
+
     case PartnerDetailsDateOfIncorporationPage(index) =>
-      carryOn(index, afterDateOfIncorporation(index))
+      carryOnForMandatoryFields(
+        index,
+        afterDateOfIncorporation(index)
+      )
+    case PartnerDetailsCrnPage(index) =>
+      carryOnForMandatoryFields(
+        index,
+        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index)))
+      )
     case PartnerDetailsNinoPage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
-    case PartnerDetailsCrnPage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
+
     case PartnerDetailsCountryOfIncorporationPage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key(index), mode(index))))
+      carryOnForMandatoryFields(
+        index,
+        to(partnerRoutes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key(index), mode(index)))
+      )
     case PartnerDetailsForeignCorporateReferencePage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
+      carryOnForMandatoryFields(
+        index,
+        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index)))
+      )
+
     case PartnerDetailsUtrPage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(key(index))))
     case PartnerDetailsVrnPage(index) => // TODO -> this should go to address lookup
