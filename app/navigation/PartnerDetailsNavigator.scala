@@ -24,7 +24,6 @@ import pages.{BusinessNumberOrIndex, Page, QuestionPage}
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
 import play.api.libs.json.Reads
 import play.api.mvc.Call
-import queries.Gettable
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.firstMissing
@@ -113,20 +112,21 @@ object PartnerDetailsNavigator {
     // --- Value pages: carry on to the next page in the journey ---
 
     case PartnerDetailsBusinessNamePage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))))
+      carryOnForMandatoryFields(
+        index,
+        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index)))
+      )
 
     case PartnerDetailsSoleProprietorPage(index) =>
       carryOnForMandatoryFields(
         index,
-        to(partnerRoutes.PartnerDetailsSoleProprietorDobController.onPageLoad(key(index), mode(index))),
-        Seq(isAnswered(PartnerDetailsDateOfBirthPage(index)), isAnswered(PartnerDetailsUtrPage(index)))
+        to(partnerRoutes.PartnerDetailsSoleProprietorDobController.onPageLoad(key(index), mode(index)))
       )
 
     case PartnerDetailsDateOfBirthPage(index) =>
       carryOnForMandatoryFields(
         index,
-        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))),
-        Seq(isAnswered(PartnerDetailsUtrPage(index)))
+        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index)))
       )
     case PartnerDetailsTradingNamePage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDateOfJoiningController.onPageLoad(key(index), mode(index))))
@@ -222,31 +222,12 @@ object PartnerDetailsNavigator {
       else next(answers)
 
   /** New partners can change the business type, and we want to have a mini-flow so they can answer all missing mandatory fields */
-  private def isAnswered[A: Reads](page: Gettable[A]): UserAnswers => Boolean =
-    _.get(page).isDefined
-
   private def carryOnForMandatoryFields(
     index: BusinessNumberOrIndex,
-    next: UserAnswers => Call,
-    mandatory: Seq[UserAnswers => Boolean]
+    next: UserAnswers => Call
   ): UserAnswers => Call = { answers =>
-
-    println()
-    println("return to CYA")
-    println(returnsToCheckYourAnswers(index, answers))
-    println()
-    println("missing mandatory")
-    println(answers.get(PartnerDetailsSoleProprietorPage(index)))
-    println()
-    println("answers")
-    println(answers)
-    println()
-    println("firstMissing")
-    println(firstMissing(answers, index).map(_.page))
-    println()
-
     if (returnsToCheckYourAnswers(index, answers)) {
-      if (mandatory.forall(_(answers))) checkYourAnswers(index)
+      if (!PartnerMandatoryDetails.isMissing(answers, index)) checkYourAnswers(index)
       else nextMissing(index)(answers)
     } else next(answers)
   }

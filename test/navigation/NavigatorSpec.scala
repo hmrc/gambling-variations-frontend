@@ -18,9 +18,10 @@ package navigation
 
 import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
+import controllers.partnerdetails.routes.*
 import controllers.routes
 import models.*
-import models.BusinessType.{Corporatebody, Partnership, Soleproprietor}
+import models.BusinessType.{Corporatebody, Soleproprietor}
 import models.CorrespondenceChangeAddrOption.*
 import models.cancellation.ReasonForCancellation
 import models.controllingbody.ControllingBodyChangeOption.*
@@ -1555,13 +1556,13 @@ class NavigatorSpec extends SpecBase {
         "should route to ControllingBodyAddNINumberYesNoController when controlling body type is Proprietor" in {
           val answers =
             UserAnswers("id",
-              Json.obj(
-                "controllingBodyDetails" -> Json.obj(
-                  "mgdRegNumber" -> "XGM00000001761",
-                  "typeOfControllingBody" -> 1
-                )
-              )
-            )
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "typeOfControllingBody" -> 1
+                          )
+                        )
+                       )
           navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
             controllers.controllingbody.routes.ControllingBodyAddNINumberYesNoController.onPageLoad()
         }
@@ -1569,13 +1570,13 @@ class NavigatorSpec extends SpecBase {
         "should route to ControllingBodyBusinessUKIncorporatedController when controlling body type is Corporate Body" in {
           val answers =
             UserAnswers("id",
-              Json.obj(
-                "controllingBodyDetails" -> Json.obj(
-                  "mgdRegNumber" -> "XGM00000001761",
-                  "typeOfControllingBody" -> 2
-                )
-              )
-            )
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "typeOfControllingBody" -> 2
+                          )
+                        )
+                       )
           navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
             controllers.controllingbody.routes.ControllingBodyBusinessUKIncorporatedController.onPageLoad()
         }
@@ -1583,13 +1584,13 @@ class NavigatorSpec extends SpecBase {
         "should route to ControllingBodyUTRController when controlling body type is Unincorporated" in {
           val answers =
             UserAnswers("id",
-              Json.obj(
-                "controllingBodyDetails" -> Json.obj(
-                  "mgdRegNumber" -> "XGM00000001761",
-                  "typeOfControllingBody" -> 3
-                )
-              )
-            )
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "typeOfControllingBody" -> 3
+                          )
+                        )
+                       )
           navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
             controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
         }
@@ -1597,13 +1598,13 @@ class NavigatorSpec extends SpecBase {
         "should route to ControllingBodyVATScreenerController when controlling body type is Partnership" in {
           val answers =
             UserAnswers("id",
-              Json.obj(
-                "controllingBodyDetails" -> Json.obj(
-                  "mgdRegNumber" -> "XGM00000001761",
-                  "typeOfControllingBody" -> 4
-                )
-              )
-            )
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "typeOfControllingBody" -> 4
+                          )
+                        )
+                       )
           navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
             controllers.controllingbody.routes.ControllingBodyVATScreenerController.onPageLoad()
         }
@@ -1611,29 +1612,28 @@ class NavigatorSpec extends SpecBase {
         "should route to DateOfIncorporationController when controlling body type is Limited Liability Partnership" in {
           val answers =
             UserAnswers("id",
-              Json.obj(
-                "controllingBodyDetails" -> Json.obj(
-                  "mgdRegNumber" -> "XGM00000001761",
-                  "typeOfControllingBody" -> 5
-                )
-              )
-            )
+                        Json.obj(
+                          "controllingBodyDetails" -> Json.obj(
+                            "mgdRegNumber"          -> "XGM00000001761",
+                            "typeOfControllingBody" -> 5
+                          )
+                        )
+                       )
           navigator.nextPage(ControllingBodyTradingNamePage, NormalMode, answers) mustBe
             controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
         }
       }
 
-
       "should route ControllingBodyAddFaxNumberYesNoPage to ControllingBodyFaxNumberController when answer is true" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addFaxNumber" -> true
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber" -> "XGM00000001761",
+                          "addFaxNumber" -> true
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddFaxNumberYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyFaxNumberController.onPageLoad()
@@ -1642,13 +1642,13 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyAddFaxNumberYesNoPage to ControllingBodyAddEmailAddressYesNoController when answer is false" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addFaxNumber" -> false
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber" -> "XGM00000001761",
+                          "addFaxNumber" -> false
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddFaxNumberYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
@@ -1664,13 +1664,13 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyAddEmailAddressYesNoPage to ControllingBodyEmailAddressController when answer is true" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addEmailAddress" -> true
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber"    -> "XGM00000001761",
+                          "addEmailAddress" -> true
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddEmailAddressYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyEmailAddressController.onPageLoad()
@@ -1679,13 +1679,13 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyAddEmailAddressYesNoPage to CheckControllingBodyDetailsController when answer is false" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addEmailAddress" -> false
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber"    -> "XGM00000001761",
+                          "addEmailAddress" -> false
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddEmailAddressYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
@@ -1734,7 +1734,7 @@ class NavigatorSpec extends SpecBase {
         answers.set(page, answer).success.value
 
       private def checkYourAnswers(index: BusinessNumberOrIndex): Call =
-        controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString)
+        PartnerDetailsCheckYourAnswersController.onPageLoad(index.toString)
 
       private def valuePages(index: BusinessNumberOrIndex): Seq[Page] = Seq(
         PartnerDetailsBusinessNamePage(index),
@@ -1775,23 +1775,25 @@ class NavigatorSpec extends SpecBase {
 
       private def addYesNoTargets(): Seq[(QuestionPage[Boolean], Call)] = Seq(
         PartnerDetailsAddTradingNameYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(businessNumber1, existingMode),
+          PartnerDetailsTradingNameController.onPageLoad(businessNumber1, existingMode),
         PartnerDetailsAddNationalInsuranceNumberYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(businessNumber1, existingMode),
+          PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(businessNumber1, existingMode),
         PartnerDetailsVatRegistrationNumberYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(businessNumber1, existingMode),
+          PartnerDetailsVatRegistrationNumberController.onPageLoad(businessNumber1, existingMode),
         PartnerDetailsAdditionalAddressInfoYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(businessNumber1, existingMode),
+          PartnerDetailsAdditionalAddressInfoController.onPageLoad(businessNumber1, existingMode),
         PartnerDetailsAddFaxNumberYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(businessNumber1, existingMode),
+          PartnerDetailsChangePartnerFaxNumberController.onPageLoad(businessNumber1, existingMode),
         PartnerDetailsAddEmailAddressYesNoPage(businessNumber1) ->
-          controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(businessNumber1, existingMode)
+          PartnerDetailsEmailAddressController.onPageLoad(businessNumber1, existingMode)
       )
 
       private def updateNewPartner(data: JsObject, index: Int = 0)(f: JsObject => JsObject): JsObject = {
         val partners = (data \ "newPartners").as[JsArray].value
         data ++ Json.obj("newPartners" -> JsArray(partners.updated(index, f(partners(index).as[JsObject]))))
       }
+
+      private def next(page: Page, data: JsObject): Call = navigator.nextPage(page, NormalMode, UserAnswers(mgdRegNumber, data))
 
       // --- Normal mode: adding a new, unsaved partner ---
 
@@ -1807,7 +1809,7 @@ class NavigatorSpec extends SpecBase {
           )
 
           navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, businessData)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(
+            PartnerDetailsChangeBusinessNameController.onPageLoad(
               newPartnersIndex1.toString,
               Corporatebody,
               NormalMode
@@ -1825,7 +1827,7 @@ class NavigatorSpec extends SpecBase {
             NormalMode,
             withYesNo(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), true)
           ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsIsBusinessIncorporatedUkPage to PartnerDetailsAddCountryOfIncorporationController when the answer is No" in {
@@ -1834,7 +1836,7 @@ class NavigatorSpec extends SpecBase {
             NormalMode,
             withYesNo(PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1), false)
           ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAddCountryOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsIsBusinessIncorporatedUkPage to SystemError when unanswered" in {
@@ -1846,22 +1848,22 @@ class NavigatorSpec extends SpecBase {
 
         "should route PartnerDetailsBusinessNamePage to PartnerDetailsAddTradingNameYesNoController" in {
           navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsBusinessNamePage to the next add journey page when called with CheckMode for an unsaved new partner" in {
           navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), CheckMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsSoleProprietorPage to PartnerDetailsSoleProprietorDobController" in {
           navigator.nextPage(PartnerDetailsSoleProprietorPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsSoleProprietorDobController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsDateOfBirthPage to PartnerDetailsAddTradingNameYesNoController" in {
           navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsAddTradingNameYesNoController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDetailsTradingNameController when the answer is Yes" in {
@@ -1869,7 +1871,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), true)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsTradingNameController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsTradingNameController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAddTradingNameYesNoPage to PartnerDateOfJoiningController when the answer is No" in {
@@ -1877,7 +1879,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1), false)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAddTradingNameYesNoPage to SystemError when unanswered" in {
@@ -1887,7 +1889,7 @@ class NavigatorSpec extends SpecBase {
 
         "should route PartnerDetailsTradingNamePage to PartnerDateOfJoiningController" in {
           navigator.nextPage(PartnerDetailsTradingNamePage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDateOfJoiningController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         // Date of joining
@@ -1897,7 +1899,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsIsBusinessIncorporatedUkController when the business type is Corporatebody" in {
@@ -1905,7 +1907,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2))
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsAddUTRController when the business type is Unincorporatedbody" in {
@@ -1913,7 +1915,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 3))
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsVatRegistrationNumberYesNoController when the business type is Partnership" in {
@@ -1921,7 +1923,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 4))
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsDateOfJoiningPage to PartnerDetailsDateOfIncorporationController when the business type is LimitedLiabilityPartnership" in {
@@ -1929,7 +1931,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 5))
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsDateOfIncorporationController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsDateOfJoiningPage to SystemError when the business type is unanswered" in {
@@ -1944,7 +1946,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 2))
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsDateOfIncorporationPage to SystemError when the business type is Corporatebody and is not incorporated in the UK" in {
@@ -1960,7 +1962,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 5))
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsCompanyRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsDateOfIncorporationPage to SystemError for business types that don't incorporate" in {
@@ -1986,7 +1988,7 @@ class NavigatorSpec extends SpecBase {
             NormalMode,
             withYesNo(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), true)
           ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to PartnerDetailsAddUTRController when the answer is No" in {
@@ -1995,7 +1997,7 @@ class NavigatorSpec extends SpecBase {
             NormalMode,
             withYesNo(PartnerDetailsAddNationalInsuranceNumberYesNoPage(newPartnersIndex1), false)
           ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAddNationalInsuranceNumberYesNoPage to SystemError when unanswered" in {
@@ -2007,38 +2009,38 @@ class NavigatorSpec extends SpecBase {
           val answers = emptyAnswers.set(PartnerDetailsNinoPage(newPartnersIndex1), "AA123456A").success.value
 
           navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsCrnPage to PartnerDetailsAddUTRController for the same new partner" in {
           val answers = emptyAnswers.set(PartnerDetailsCrnPage(newPartnersIndex1), "SC123456").success.value
 
           navigator.nextPage(PartnerDetailsCrnPage(newPartnersIndex1), NormalMode, answers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsCrnPage to PartnerDetailsAddUTRController for the partner at the given index" in {
           navigator.nextPage(PartnerDetailsCrnPage(newPartnersIndex2), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex2.toString, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex2.toString, NormalMode)
         }
 
         "should route PartnerDetailsCountryOfIncorporationPage to PartnerDetailsForeignCorporateReferenceController" in {
           navigator.nextPage(PartnerDetailsCountryOfIncorporationPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsForeignCorporateReferenceController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsForeignCorporateReferencePage to PartnerDetailsAddUTRController" in {
           val answers = emptyAnswers.set(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), "ABC-123 456").success.value
 
           navigator.nextPage(PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1), NormalMode, answers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsUtrPage to PartnerDetailsVatRegistrationNumberYesNoController" in {
           val answers = emptyAnswers.set(PartnerDetailsUtrPage(newPartnersIndex1), "123").success.value
 
           navigator.nextPage(PartnerDetailsUtrPage(newPartnersIndex1), NormalMode, answers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsVatRegistrationNumberYesNoPage to PartnerDetailsVatRegistrationNumberController when the answer is Yes" in {
@@ -2047,7 +2049,7 @@ class NavigatorSpec extends SpecBase {
             NormalMode,
             withYesNo(PartnerDetailsVatRegistrationNumberYesNoPage(newPartnersIndex1), true)
           ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsVatRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsVatRegistrationNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         // Address and contact details
@@ -2058,7 +2060,7 @@ class NavigatorSpec extends SpecBase {
             NormalMode,
             withYesNo(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), true)
           ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsAdditionalAddressInfoController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAdditionalAddressInfoYesNoPage to PartnerDetailsContactDetailsController when the answer is No" in {
@@ -2067,7 +2069,7 @@ class NavigatorSpec extends SpecBase {
             NormalMode,
             withYesNo(PartnerDetailsAdditionalAddressInfoYesNoPage(newPartnersIndex1), false)
           ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAdditionalAddressInfoYesNoPage to SystemError when unanswered" in {
@@ -2077,12 +2079,12 @@ class NavigatorSpec extends SpecBase {
 
         "should route PartnerDetailsAdditionalAddressInfoPage to PartnerDetailsContactDetailsController" in {
           navigator.nextPage(PartnerDetailsAdditionalAddressInfoPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsContactNumberPage to PartnerDetailsAddFaxNumberYesNoController" in {
           navigator.nextPage(PartnerDetailsContactNumberPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsAddFaxNumberYesNoController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsAddFaxNumberYesNoPage to PartnerDetailsChangePartnerFaxNumberController when the answer is Yes" in {
@@ -2090,7 +2092,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), true)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsChangePartnerFaxNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAddFaxNumberYesNoPage to PartnerDetailsAddEmailAddressYesNoPageController when the answer is No" in {
@@ -2098,7 +2100,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1), false)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsAddFaxNumberYesNoPage to SystemError when unanswered" in {
@@ -2108,7 +2110,7 @@ class NavigatorSpec extends SpecBase {
 
         "should route PartnerDetailsCorrespondenceFaxNumberPage to PartnerDetailsAddEmailAddressYesNoPageController" in {
           navigator.nextPage(PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1), NormalMode, emptyAnswers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsAddEmailAddressYesNoPage to PartnerDetailsEmailAddressController when the answer is Yes" in {
@@ -2116,7 +2118,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), true)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsEmailAddressController.onPageLoad(newPartnersIndex1.toString, NormalMode)
+            PartnerDetailsEmailAddressController.onPageLoad(newPartnersIndex1.toString, NormalMode)
         }
 
         "should route PartnerDetailsAddEmailAddressYesNoPage to PartnerDetailsCheckYourAnswersController when the answer is No" in {
@@ -2124,7 +2126,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsAddEmailAddressYesNoPage(newPartnersIndex1), false)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(newPartnersIndex1.toString)
+            PartnerDetailsCheckYourAnswersController.onPageLoad(newPartnersIndex1.toString)
         }
 
         "should route PartnerDetailsAddEmailAddressYesNoPage to SystemError when unanswered" in {
@@ -2139,7 +2141,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), false)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+            PartnerDetailsController.onPageLoad(None)
         }
 
         "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is Yes and it's a new partner" in {
@@ -2147,7 +2149,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsRemovePartnerYesNoPage(newPartnersIndex1), true)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+            PartnerDetailsController.onPageLoad(None)
         }
 
         "should route PartnerDetailsRemovePartnerYesNoPage to PartnerDetailsController when the answer is Yes and it's an existing partner" in {
@@ -2155,7 +2157,7 @@ class NavigatorSpec extends SpecBase {
                              NormalMode,
                              withYesNo(PartnerDetailsRemovePartnerYesNoPage(businessNumber1), true)
                             ) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)
+            PartnerDetailsController.onPageLoad(None)
         }
 
         "should route PartnerDetailsRemovePartnerYesNoPage to SystemError when unanswered" in {
@@ -2171,7 +2173,7 @@ class NavigatorSpec extends SpecBase {
           val idx = newPartnersIndex1.toString
 
           navigator.nextPage(PartnerDetailsBusinessTypePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, businessData)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsChangeBusinessNameController.onPageLoad(idx, Soleproprietor, NormalMode)
+            PartnerDetailsChangeBusinessNameController.onPageLoad(idx, Soleproprietor, NormalMode)
 
           val afterName = updateNewPartner(businessData) {
             _ ++ Json.obj(
@@ -2180,35 +2182,65 @@ class NavigatorSpec extends SpecBase {
           }
 
           navigator.nextPage(PartnerDetailsSoleProprietorPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterName)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsSoleProprietorDobController.onPageLoad(idx, NormalMode)
+            PartnerDetailsSoleProprietorDobController.onPageLoad(idx, NormalMode)
 
           val afterDob = updateNewPartner(afterName)(_ ++ Json.obj("partnerDetailsDateOfBirth" -> "1985-12-31"))
 
           navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterDob)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
 
           val afterUTR = updateNewPartner(afterDob)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
 
-
           navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterUTR)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+            PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
-
-        "when we switch BusinessType to Corporate Body" in {
+        "when we switch BusinessType to Corporate Body - UK" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
+          val page = PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1)
+
+          val afterChangingBT = updateNewPartner(businessData) {
+            _ - "partnerDetailsDateOfIncorporation" ++ Json.obj("partnerDetailsBusinessType" -> 2)
+          }
+
+          next(page, afterChangingBT) mustBe
+            PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
+
+          val afterUk: JsObject = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsIsBusinessIncorporatedUk" -> true))
+          next(page, afterUk) mustBe PartnerDetailsDateOfIncorporationController.onPageLoad(idx, NormalMode)
+
+          val afterDate = updateNewPartner(afterUk)(_ ++ Json.obj("partnerDetailsDateOfIncorporation" -> "2000-03-01"))
+          next(page, afterDate) mustBe PartnerDetailsCompanyRegistrationNumberController.onPageLoad(idx, NormalMode)
+
+          val afterCrn = updateNewPartner(afterDate)(_ ++ Json.obj("partnerDetailsCrn" -> testCRN))
+          next(page, afterCrn) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+
+          val afterUtr = updateNewPartner(afterCrn)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
+          next(page, afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+        }
+
+        "when we switch BusinessType to Corporate Body - Non UK" in {
+          val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
+          val idx = newPartnersIndex1.toString
+          val page = PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1)
 
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 2))
 
-          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
+          navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
+            PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
 
-          val afterUTR = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
+          val afterNonUk = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsIsBusinessIncorporatedUk" -> false))
+          next(page, afterNonUk) mustBe PartnerDetailsAddCountryOfIncorporationController.onPageLoad(idx, NormalMode)
 
+          val afterCountry = updateNewPartner(afterNonUk)(_ ++ Json.obj("partnerDetailsCountryOfIncorporation" -> "France"))
+          next(page, afterCountry) mustBe PartnerDetailsForeignCorporateReferenceController.onPageLoad(idx, NormalMode)
 
-          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterUTR)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+          val afterFcr = updateNewPartner(afterCountry)(_ ++ Json.obj("partnerDetailsForeignCorporateRef" -> testFCR))
+          next(page, afterFcr) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+
+          val afterUtr = updateNewPartner(afterFcr)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
+          next(page, afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
         "when we switch BusinessType to Unincorporated Body" in {
@@ -2217,17 +2249,17 @@ class NavigatorSpec extends SpecBase {
 
           val answers = UserAnswers(mgdRegNumber, businessData)
           navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+            PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
 
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 3))
 
           navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+            PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
 
           val afterUTR = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
 
           navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterUTR)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+            PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
         "when we switch BusinessType to Partnership" in {
@@ -2236,28 +2268,37 @@ class NavigatorSpec extends SpecBase {
 
           val answers = UserAnswers(mgdRegNumber, businessData)
           navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+            PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
 
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 4))
 
           navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+            PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
         }
 
         "when we switch BusinessType to Limited Liability Partnership" in {
           val businessData = cleanedDataNewPartners(hasAnsweredAllQuestion = Some(true))
           val idx = newPartnersIndex1.toString
 
-          val answers = UserAnswers(mgdRegNumber, businessData)
-          navigator.nextPage(PartnerDetailsNinoPage(newPartnersIndex1), NormalMode, answers) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+          val page = PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1)
 
           val afterChangingBT = updateNewPartner(businessData)(_ ++ Json.obj("partnerDetailsBusinessType" -> 5))
 
-          navigator.nextPage(PartnerDetailsDateOfBirthPage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
-            controllers.partnerdetails.routes.PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
-        }
+          navigator.nextPage(PartnerDetailsBusinessNamePage(newPartnersIndex1), NormalMode, UserAnswers(mgdRegNumber, afterChangingBT)) mustBe
+            PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(idx, NormalMode)
 
+          val afterNonUk = updateNewPartner(afterChangingBT)(_ ++ Json.obj("partnerDetailsIsBusinessIncorporatedUk" -> false))
+          next(page, afterNonUk) mustBe PartnerDetailsAddCountryOfIncorporationController.onPageLoad(idx, NormalMode)
+
+          val afterCountry = updateNewPartner(afterNonUk)(_ ++ Json.obj("partnerDetailsCountryOfIncorporation" -> "France"))
+          next(page, afterCountry) mustBe PartnerDetailsForeignCorporateReferenceController.onPageLoad(idx, NormalMode)
+
+          val afterFcr = updateNewPartner(afterCountry)(_ ++ Json.obj("partnerDetailsForeignCorporateRef" -> testFCR))
+          next(page, afterFcr) mustBe PartnerDetailsAddUTRController.onPageLoad(idx, NormalMode)
+
+          val afterUtr = updateNewPartner(afterFcr)(_ ++ Json.obj("partnerDetailsUtr" -> testUtr))
+          next(page, afterUtr) mustBe PartnerDetailsCheckYourAnswersController.onPageLoad(idx)
+        }
 
       }
 

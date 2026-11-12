@@ -43,6 +43,7 @@ trait PartnerDetailsHelper {
   val testUtr: String = "1121766916"
   val testForeignCorpRef = "FCR-987654"
   val testCRN: String = "SC123456"
+  val testFCR: String = "Foreign Corporate Ref"
 
   val testSoleProprietor: JsObject = Json.obj("title" -> "Mx", "firstName" -> "Test", "lastName" -> "Test")
   val testSolePropDOB: Option[String] = Some("1492-03-01")
@@ -194,7 +195,9 @@ trait PartnerDetailsHelper {
     utr: Option[String] = None,
     fcr: Option[String] = None,
     crn: Option[String] = None,
-    partnerDetailsBusinessType: Int = 1,
+    dateOfIncorporation: Option[String] = None,
+    countryOfIncorporation: Option[String] = None,
+    businessType: Int = 1,
     hasAnsweredAllQuestion: Option[Boolean] = None,
     soleProprietorDob: Option[String] = None,
     soleProprietorDetails: JsObject = JsObject.empty
@@ -224,8 +227,8 @@ trait PartnerDetailsHelper {
           "faxNumber" -> faxNumber,
           "emailAddr" -> emailAddress
         ),
-        "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-        "partnerDetailsCountryOfIncorporation" -> null,
+        "partnerDetailsDateOfIncorporation"    -> dateOfIncorporation,
+        "partnerDetailsCountryOfIncorporation" -> countryOfIncorporation,
         "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
         "partnerDetailsTradingName"            -> "XYZ Consulting",
         "partnerDetailsDateOfBirth"            -> soleProprietorDob,
