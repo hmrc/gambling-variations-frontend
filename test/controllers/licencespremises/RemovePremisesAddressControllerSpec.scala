@@ -26,6 +26,7 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.licencespremises.*
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -76,23 +77,17 @@ class RemovePremisesAddressControllerSpec extends SpecBase with MockitoSugar {
     routes.RemovePremisesAddressController.onPageLoad().url
 
   private val userAnswersWithChosenAddress: UserAnswers =
-    emptyUserAnswers
-      .set(LicencesPremisesSectionPage, userAnswersId)
-      .success
-      .value
+    LoadedLicencesPremises(userAnswersId, Json.obj())
       .set(ChosenPremisesAddressPage, chosenAddress)
       .success
       .value
-      .set(PremisesDetailsPage, premisesDetailsResponse)
+      .setOriginal(PremisesDetailsPage, premisesDetailsResponse)
       .success
       .value
 
   private val userAnswersWithoutChosenAddress: UserAnswers =
-    emptyUserAnswers
-      .set(LicencesPremisesSectionPage, userAnswersId)
-      .success
-      .value
-      .set(PremisesDetailsPage, premisesDetailsResponse)
+    LoadedLicencesPremises(userAnswersId, Json.obj())
+      .setOriginal(PremisesDetailsPage, premisesDetailsResponse)
       .success
       .value
 
@@ -276,6 +271,37 @@ class RemovePremisesAddressControllerSpec extends SpecBase with MockitoSugar {
         savedAnswers.get(LicencesPremisesDetailsSubmittedPage).value mustEqual true
         savedAnswers.get(LicencesPremisesDetailsChangesPage).value mustEqual true
         savedAnswers.get(ChosenPremisesAddressPage) mustEqual None
+      }
+    }
+
+    "must assert the premises without the removed address, so that the address loaded from the backend does not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersWithChosenAddress))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, routes.RemovePremisesAddressController.onSubmit().url)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val remainingPremises = premisesDetailsResponse.premises.tail
+        val savedAnswers = savedAnswersCaptor.getValue
+        savedAnswers.get(PremisesDetailsPage).value.premises mustEqual remainingPremises
+        savedAnswers.original.get[PremisesDetailsResponse](PremisesDetailsPage.path).value mustEqual premisesDetailsResponse
+        savedAnswers.changes(LicencesPremisesSection) mustBe Json.obj(
+          "licencesPremisesSection" -> Json.obj("premisesDetails" -> Json.obj("premises" -> remainingPremises))
+        )
       }
     }
 
