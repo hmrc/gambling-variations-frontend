@@ -44,16 +44,16 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   private val faxNumber = "123456789"
 
   private val baseAnswers =
-    LoadedContactDetails(
+    LoadedUserAnswers(
       userAnswersId,
       Json.obj(GroupMemberPage.toString -> false, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
     )
 
   private val answersWithoutFaxNumber =
-    LoadedContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
+    LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
 
   private val answersWithoutGroupMember =
-    LoadedContactDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
+    LoadedUserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
 
   val formProvider = new RemoveFaxNumberFormProvider()
   val form = formProvider()
@@ -106,7 +106,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on GET" in {
 
       val userAnswers =
-        LoadedContactDetails(
+        LoadedUserAnswers(
           userAnswersId,
           Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
         )
@@ -361,7 +361,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on POST" in {
 
       val userAnswers =
-        LoadedContactDetails(
+        LoadedUserAnswers(
           userAnswersId,
           Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
         )
@@ -387,7 +387,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to system error when GroupMemberPage is missing on POST" in {
 
       val userAnswers =
-        LoadedContactDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
+        LoadedUserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

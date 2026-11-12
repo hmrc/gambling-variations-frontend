@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.BusinessType.{Corporatebody, Soleproprietor}
@@ -53,16 +53,16 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
       .url
 
   def validUserAnswersNewPartners(fcr: Option[String] = None): UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(fcr = fcr), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataNewPartners(fcr = fcr), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
   def validUserAnswersExistingPartners(fcr: Option[String] = None): UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(fcr = fcr), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataExistingPartners(fcr = fcr), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
   val userAnswersWithNoFcrNewPartners: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
-  val userAnswersWithFcrNewPartners: UserAnswers = LoadedContactDetails
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataNewPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+  val userAnswersWithFcrNewPartners: UserAnswers = LoadedUserAnswers
     .apply(mgdRegNumber, cleanedDataNewPartners(fcr = Some(testForeignCorpRef)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
   val userAnswersWithNoFcrExistingPartners: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
-  val userAnswersWithFcrExistingPartners: UserAnswers = LoadedContactDetails
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataExistingPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+  val userAnswersWithFcrExistingPartners: UserAnswers = LoadedUserAnswers
     .apply(mgdRegNumber, cleanedDataExistingPartners(fcr = Some(testForeignCorpRef)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   "partners" - {

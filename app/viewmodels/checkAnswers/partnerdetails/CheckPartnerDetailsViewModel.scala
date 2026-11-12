@@ -642,7 +642,7 @@ final case class ExistingPartner(businessPartnerNumber: String) extends Partner 
 
 object Partner {
   def indexParser(index: String, userAnswers: UserAnswers): Either[String, Partner] =
-    if ((userAnswers.data \ ExistingPartnerDetailsSection.path.toString \ index).toOption.isDefined) {
+    if ((ExistingPartnerDetailsSection.path \ index).asSingleJson(userAnswers.data).isDefined) {
       Right(ExistingPartner(index))
     } else if (index.matches("\\d{1,2}")) {
       val i = index.toInt

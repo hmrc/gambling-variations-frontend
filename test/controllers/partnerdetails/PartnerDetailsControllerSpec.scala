@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import forms.partnerdetails.AddAnotherPartnerFormProvider
 import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
@@ -66,7 +66,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
       .url
 
   override val emptyUserAnswers: UserAnswers =
-    LoadedContactDetails.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    LoadedUserAnswers.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   private val userAnswersWithPartner =
     emptyUserAnswers

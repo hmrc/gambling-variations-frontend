@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import forms.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -45,7 +45,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
   private lazy val removeVrnRouteExistingPartners =
     controllers.partnerdetails.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val userAnswersWithVrnNewPartners: UserAnswers = LoadedContactDetails
+  private val userAnswersWithVrnNewPartners: UserAnswers = LoadedUserAnswers
     .apply(mgdRegNumber, cleanedDataNewPartners(vrn = Some(testVRN)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
     .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
     .success
@@ -54,7 +54,7 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
     .success
     .value
 
-  private val userAnswersWithVrnExistingUsers: UserAnswers = LoadedContactDetails
+  private val userAnswersWithVrnExistingUsers: UserAnswers = LoadedUserAnswers
     .apply(mgdRegNumber, cleanedDataExistingPartners(vrn = Some(testVRN)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
     .set(PartnerDetailsVrnPage(businessNumber1), testVRN)
     .success

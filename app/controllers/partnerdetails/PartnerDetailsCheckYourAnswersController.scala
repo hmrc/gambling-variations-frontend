@@ -56,13 +56,14 @@ class PartnerDetailsCheckYourAnswersController @Inject() (
             Future.successful(Redirect(routes.SystemErrorController.onPageLoad()))
           },
           partner =>
-            if (partner.isNewPartnerFlow)
+            if (partner.isNewPartnerFlow) {
               for {
                 updatedAnswers <- Future.fromTry(answers.set(PartnerDetailsHasAnsweredAllQuestionsPage(index.toInt), true))
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Ok(view(partner))
-            else
+            } else {
               Future.successful(Ok(view(partner)))
+            }
         )
     }
 

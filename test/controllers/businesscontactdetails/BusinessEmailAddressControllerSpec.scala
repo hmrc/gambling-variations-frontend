@@ -45,7 +45,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider("emailAddress")
 
   val noAnswers =
-    LoadedContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
+    LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
 
   lazy val emailAddressRoute =
     controllers.businesscontactdetails.routes.BusinessEmailAddressController.onPageLoad().url
@@ -75,7 +75,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
                           "businessContactDetailsSection" -> Json.obj(BusinessEmailAddressPage.toString -> "validEmail@example.com")
                          )
 
-      val userAnswers = LoadedContactDetails(userAnswersId, data)
+      val userAnswers = LoadedUserAnswers(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -95,7 +95,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on GET" in {
 
       val userAnswers =
-        LoadedContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
+        LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -232,7 +232,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on POST" in {
 
       val userAnswers =
-        LoadedContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
+        LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

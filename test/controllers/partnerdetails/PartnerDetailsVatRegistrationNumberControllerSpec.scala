@@ -94,9 +94,10 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
         val mockSessionRepository = mock[SessionRepository]
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val baseUserAnswers = userAnswersPartnerDetailsExistingPartners
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsExistingPartners))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -109,7 +110,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
               .withFormUrlEncodedBody((fieldName, testVRN))
 
           val result = route(application, request).value
-          val expectedAnswers = userAnswersPartnerDetailsExistingPartners.set(PartnerDetailsVrnPage(businessNumber1), testVRN).success.value
+          val expectedAnswers = baseUserAnswers.set(PartnerDetailsVrnPage(businessNumber1), testVRN).success.value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
@@ -211,9 +212,10 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
         val mockSessionRepository = mock[SessionRepository]
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val baseUserAnswers = userAnswersPartnerDetailsNewPartners
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsNewPartners))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -226,7 +228,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
               .withFormUrlEncodedBody((fieldName, testVRN))
 
           val result = route(application, request).value
-          val expectedAnswers = userAnswersPartnerDetailsNewPartners.set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN).success.value
+          val expectedAnswers = baseUserAnswers.set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN).success.value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url

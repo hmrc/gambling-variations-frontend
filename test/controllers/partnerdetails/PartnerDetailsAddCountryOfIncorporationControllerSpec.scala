@@ -195,8 +195,10 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
+        val baseUserAnswers = userAnswersPartnerDetailsExistingPartners
+
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsExistingPartners))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -206,7 +208,7 @@ class PartnerDetailsAddCountryOfIncorporationControllerSpec extends SpecBase wit
         running(application) {
 
           val expectedAnswers =
-            userAnswersPartnerDetailsExistingPartners.set(PartnerDetailsCountryOfIncorporationPage(businessNumber1), testCountry).success.value
+            baseUserAnswers.set(PartnerDetailsCountryOfIncorporationPage(businessNumber1), testCountry).success.value
 
           val request =
             FakeRequest(POST, partnerDetailsAddCountryOfIncorporationRouteExistingPartners)

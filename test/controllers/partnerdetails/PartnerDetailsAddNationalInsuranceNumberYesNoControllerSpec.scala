@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import forms.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -43,7 +43,7 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoControllerSpec extends SpecBa
     controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   val validUserAnswers: UserAnswers =
-    LoadedContactDetails
+    LoadedUserAnswers
       .apply(mgdRegNumber, cleanedDataNewPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success

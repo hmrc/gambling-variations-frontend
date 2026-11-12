@@ -42,7 +42,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         )
       )
 
-      val userAnswers = LoadedContactDetails("id-number", data)
+      val userAnswers = LoadedUserAnswers("id-number", data)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -71,7 +71,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         )
       )
 
-      val userAnswers = LoadedContactDetails("id-number", data)
+      val userAnswers = LoadedUserAnswers("id-number", data)
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
@@ -101,7 +101,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         )
       )
 
-      val userAnswers = LoadedContactDetails("id-number", data)
+      val userAnswers = LoadedUserAnswers("id-number", data)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

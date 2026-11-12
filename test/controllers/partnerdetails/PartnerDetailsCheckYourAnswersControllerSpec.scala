@@ -17,13 +17,14 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedUserAnswers
 import controllers.routes
 import models.BusinessType.Soleproprietor
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -147,7 +148,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
         val repository = mock[SessionRepository]
         when(repository.set(any[UserAnswers])).thenReturn(Future.successful(true))
 
-        val completeAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
+        val completeAnswers = LoadedUserAnswers.apply(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1), ExistingPartnerDetailsSection)
         val application = applicationBuilder(userAnswers = Some(completeAnswers))
           .overrides(bind[SessionRepository].toInstance(repository))
           .build()

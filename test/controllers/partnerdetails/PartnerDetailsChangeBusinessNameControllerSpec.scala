@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import controllers.routes
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
@@ -48,7 +48,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
     val businessName = "Test Business"
     val form = formProvider(businessType)
 
-    val userAnswersExistingPartners: UserAnswers = LoadedContactDetails.apply(
+    val userAnswersExistingPartners: UserAnswers = LoadedUserAnswers.apply(
       "id",
       Json.obj(
         "partnersSection" -> Json.obj(
@@ -63,7 +63,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
       NewPartnerDetailsSection
     )
 
-    val userAnswersNewPartners: UserAnswers = LoadedContactDetails
+    val userAnswersNewPartners: UserAnswers = LoadedUserAnswers
       .apply(
         "id",
         Json.obj(
@@ -83,7 +83,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
       .success
       .value
 
-    val soleProprietorUserAnswersExistingPartners: UserAnswers = LoadedContactDetails
+    val soleProprietorUserAnswersExistingPartners: UserAnswers = LoadedUserAnswers
       .apply(
         "id",
         Json.obj(
@@ -104,7 +104,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
         NewPartnerDetailsSection
       )
 
-    val soleProprietorUserAnswersNewPartners: UserAnswers = LoadedContactDetails
+    val soleProprietorUserAnswersNewPartners: UserAnswers = LoadedUserAnswers
       .apply(
         "id",
         Json.obj(
@@ -129,7 +129,7 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
       .success
       .value
 
-    val noAnswers = LoadedContactDetails.apply(
+    val noAnswers = LoadedUserAnswers.apply(
       userAnswersId,
       Json.obj(
         "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)

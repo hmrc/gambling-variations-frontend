@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsCompanyRegistrationNumberFormProvider
 import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Soleproprietor}
@@ -50,15 +50,15 @@ class PartnerDetailsCompanyRegistrationNumberControllerSpec extends SpecBase wit
       .url
 
   def validUserAnswersNewPartners(crn: Option[String] = None): UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(crn = crn), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataNewPartners(crn = crn), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
   def validUserAnswersExistingPartners(crn: Option[String] = None): UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(crn = crn), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataExistingPartners(crn = crn), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   val userAnswersWithNoCrnNewPartners: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataNewPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
   val userAnswersWithNoCrnExistingPartners: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataExistingPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   private def crnApplicableExisting(base: UserAnswers = userAnswersWithNoCrnExistingPartners): UserAnswers =
     base

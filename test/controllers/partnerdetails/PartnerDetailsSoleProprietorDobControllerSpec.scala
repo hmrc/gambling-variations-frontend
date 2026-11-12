@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import controllers.routes
 import forms.partnerdetails.PartnerSoleProprietorDobFormProvider
 import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
@@ -67,7 +67,7 @@ class PartnerDetailsSoleProprietorDobControllerSpec extends SpecBase with Mockit
       .url
 
   override val emptyUserAnswers: UserAnswers =
-    LoadedContactDetails.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    LoadedUserAnswers.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   private val partnerDetailsUserAnswersExistingUsers: UserAnswers =
     emptyUserAnswers

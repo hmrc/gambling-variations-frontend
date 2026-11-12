@@ -18,7 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, BusinessPartnerDetails, BusinessType, ContactNumber, CorrespondenceDetails, PartnersDetails, SoleProprietorName, SoleProprietorPartnerDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
@@ -175,7 +175,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
             "systemDate" -> "2026-07-30"
           )
 
-          val minimalDataWithSections = LoadedContactDetails.apply(mgdRegNum, minimalData, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+          val minimalDataWithSections = LoadedUserAnswers.apply(mgdRegNum, minimalData, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
           val result: Either[Result, DataRequest[AnyContent]] =
             action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(minimalDataWithSections))).futureValue

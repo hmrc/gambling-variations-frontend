@@ -16,7 +16,7 @@
 
 package controllers.partnerdetails
 
-import controllers.businesscontactdetails.LoadedContactDetails
+import controllers.businesscontactdetails.LoadedUserAnswers
 import models.{BusinessType, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage}
@@ -120,13 +120,13 @@ trait PartnerDetailsHelper {
   )
 
   def userAnswersPartnerDetailsEmpty: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, JsObject.empty, NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, JsObject.empty, NewPartnerDetailsSection, ExistingPartnerDetailsSection)
   def userAnswersPartnerDetailsMinimalValidData: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, minimalValidData, NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, minimalValidData, NewPartnerDetailsSection, ExistingPartnerDetailsSection)
   def userAnswersPartnerDetailsExistingPartners: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataExistingPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataExistingPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
   def userAnswersPartnerDetailsNewPartners: UserAnswers =
-    LoadedContactDetails.apply(mgdRegNumber, cleanedDataNewPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+    LoadedUserAnswers.apply(mgdRegNumber, cleanedDataNewPartners(), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
   def cleanedDataExistingPartners(
     faxNumber: Option[String] = None,

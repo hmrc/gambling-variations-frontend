@@ -22,9 +22,9 @@ import play.api.libs.json.JsObject
 
 import java.time.Instant
 
-// Answers in which the business contact details have already been loaded from the backend, with the given original data
-object LoadedContactDetails {
+object LoadedUserAnswers {
 
+  // Answers in which the business contact details have already been loaded from the backend, with the given original data
   def apply(id: String, data: JsObject): UserAnswers =
     UserAnswers(id, OriginalAnswers(data, Map(BusinessContactDetailsSection.key -> Instant.EPOCH)))
 

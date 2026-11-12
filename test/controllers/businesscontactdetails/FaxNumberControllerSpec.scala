@@ -43,7 +43,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new FaxNumberFormProvider()
   val form = formProvider("faxNumber")
-  val noAnswers = LoadedContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
+  val noAnswers = LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
   lazy val faxNumberRoute = controllers.businesscontactdetails.routes.FaxNumberController.onPageLoad().url
 
   "FaxNumber Controller" - {
@@ -69,7 +69,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
       val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedUserAnswers(userAnswersId, data))).build()
 
       running(application) {
         val request = FakeRequest(GET, faxNumberRoute)
@@ -89,7 +89,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
         "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> "07700900999")
       )
 
-      val userAnswers = LoadedContactDetails(userAnswersId, data)
+      val userAnswers = LoadedUserAnswers(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -164,7 +164,7 @@ class FaxNumberControllerSpec extends SpecBase with MockitoSugar {
       val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedUserAnswers(userAnswersId, data))).build()
 
       running(application) {
         val request =
