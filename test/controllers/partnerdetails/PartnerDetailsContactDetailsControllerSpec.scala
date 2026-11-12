@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedUserAnswers
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import forms.ContactNumberFormProvider
 import models.{CheckMode, ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -47,7 +47,7 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
   lazy val partnerDetailsContactDetailsRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
-  val userAnswersExistingPartners: UserAnswers = LoadedUserAnswers(
+  val userAnswersExistingPartners: UserAnswers = LoadedPartnerDetails(
     "id",
     cleanedDataExistingPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)),
     ExistingPartnerDetailsSection
@@ -55,7 +55,7 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
 
   val emptyUserAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
 
-  val userAnswersNewPartners: UserAnswers = LoadedUserAnswers(
+  val userAnswersNewPartners: UserAnswers = LoadedPartnerDetails(
     "id",
     cleanedDataNewPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)),
     ExistingPartnerDetailsSection

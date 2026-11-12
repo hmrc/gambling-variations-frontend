@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedUserAnswers
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import forms.partnerdetails.PartnerDetailsRemoveNationalInsuranceNumberYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -47,7 +47,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
   lazy val partnerDetailsRemoveNinoRouteExistingUsers: String =
     controllers.partnerdetails.routes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  val validUserAnswersNewPartners: UserAnswers = LoadedUserAnswers
+  val validUserAnswersNewPartners: UserAnswers = LoadedPartnerDetails
     .apply(
       mgdRegNumber,
       cleanedDataNewPartners(nino = Some(testNino)),
@@ -61,7 +61,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoControllerSpec extends Spe
     .success
     .value
 
-  val validUserAnswersExistingUsers: UserAnswers = LoadedUserAnswers
+  val validUserAnswersExistingUsers: UserAnswers = LoadedPartnerDetails
     .apply(
       mgdRegNumber,
       cleanedDataExistingPartners(nino = Some(testNino)),

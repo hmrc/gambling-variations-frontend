@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedUserAnswers
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes.JourneyRecoveryController
 import forms.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
@@ -45,7 +45,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
   private lazy val partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val baseUserAnswersNewPartners: UserAnswers = LoadedUserAnswers
+  private val baseUserAnswersNewPartners: UserAnswers = LoadedPartnerDetails
     .apply(
       mgdRegNumber,
       cleanedDataNewPartners(emailAddress = Some(testEmailAddress)),
@@ -59,7 +59,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
     .success
     .value
 
-  private val baseUserAnswersExistingPartners: UserAnswers = LoadedUserAnswers
+  private val baseUserAnswersExistingPartners: UserAnswers = LoadedPartnerDetails
     .apply(
       mgdRegNumber,
       cleanedDataExistingPartners(emailAddress = Some(testEmailAddress)),
@@ -112,7 +112,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
-          val userAnswers = LoadedUserAnswers(mgdRegNumber, cleanedDataExistingPartners(None), ExistingPartnerDetailsSection)
+          val userAnswers = LoadedPartnerDetails(mgdRegNumber, cleanedDataExistingPartners(None), ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -272,7 +272,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
-          val userAnswers = LoadedUserAnswers(mgdRegNumber, cleanedDataNewPartners(None), ExistingPartnerDetailsSection)
+          val userAnswers = LoadedPartnerDetails(mgdRegNumber, cleanedDataNewPartners(None), ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

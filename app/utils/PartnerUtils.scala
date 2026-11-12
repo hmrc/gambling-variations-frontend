@@ -35,14 +35,12 @@ object PartnerUtils {
     case _: String => CheckMode
   }
 
-  // TODO wrong way of fetching data
-  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = // (userAnswers.data \ "partnersSection")
-    ExistingPartnerDetailsSection.path
-      .asSingleJson(userAnswers.data)
-      .asOpt[JsObject]
-      .fold(Seq.empty[String])(_.fields.map(_._1))
-      // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
-      .toSeq
+  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = ExistingPartnerDetailsSection.path
+    .asSingleJson(userAnswers.data)
+    .asOpt[JsObject]
+    .fold(Seq.empty[String])(_.fields.map(_._1))
+    // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
+    .toSeq
 
   def getCompletedNewPartners(userAnswers: UserAnswers): IndexedSeq[Int] = (0 to getNewPartnersSize(userAnswers))
     .map(index => userAnswers.get(PartnerDetailsAddPartnerCompletedPage(index)))
@@ -56,9 +54,7 @@ object PartnerUtils {
       case _                           => userAnswers.get(PartnerDetailsBusinessNamePage(businessNumberOrIndex))
     }
 
-  // TODO outdated approach
   def getNewPartnersSize(userAnswers: UserAnswers): Int =
     NewPartnerDetailsSection.path.asSingleJson(userAnswers.data).validate[JsArray].map(_.value.size).getOrElse(0)
-//    (userAnswers.data \ "newPartnersSection").validate[JsArray].map(_.value.size).getOrElse(0)
 
 }

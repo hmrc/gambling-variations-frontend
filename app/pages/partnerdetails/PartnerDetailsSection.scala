@@ -18,7 +18,6 @@ package pages.partnerdetails
 
 import models.Section
 
-//TODO might need spec, check Dan's
 trait PartnerDetailsSection extends Section
 
 case object NewPartnerDetailsSection extends PartnerDetailsSection {

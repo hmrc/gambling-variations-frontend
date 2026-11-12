@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedUserAnswers
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoFormProvider
@@ -47,7 +47,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
   lazy val partnerDetailsRemoveFaxNumberYesNoRouteExistingPartners: String =
     PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val validUserAnswersNewPartners: UserAnswers = LoadedUserAnswers
+  private val validUserAnswersNewPartners: UserAnswers = LoadedPartnerDetails
     .apply(mgdRegNumber, cleanedDataExistingPartners(Some(testFaxNumber)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
     .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
     .success
@@ -56,7 +56,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
     .success
     .value
 
-  private val validUserAnswersExistingPartners: UserAnswers = LoadedUserAnswers
+  private val validUserAnswersExistingPartners: UserAnswers = LoadedPartnerDetails
     .apply(mgdRegNumber, cleanedDataNewPartners(Some(testFaxNumber)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
     .set(PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1), testFaxNumber)
     .success
@@ -104,7 +104,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but faxNumber is None" in {
           val userAnswers =
-            LoadedUserAnswers(mgdRegNumber, cleanedDataExistingPartners(None), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
+            LoadedPartnerDetails(mgdRegNumber, cleanedDataExistingPartners(None), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -265,8 +265,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         }
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but faxNumber is None" in {
-          val userAnswers = LoadedUserAnswers(mgdRegNumber, cleanedDataNewPartners(None), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
-//          val userAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners(None))
+          val userAnswers = LoadedPartnerDetails(mgdRegNumber, cleanedDataNewPartners(None), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

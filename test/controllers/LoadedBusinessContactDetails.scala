@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package controllers.businesscontactdetails
+package controllers
 
-import models.{OriginalAnswers, Section, UserAnswers}
+import models.{OriginalAnswers, UserAnswers}
 import pages.contactdetails.BusinessContactDetailsSection
 import play.api.libs.json.JsObject
 
 import java.time.Instant
 
-object LoadedUserAnswers {
+// Answers in which the business contact details have already been loaded from the backend, with the given original data
+object LoadedBusinessContactDetails {
 
-  // Answers in which the business contact details have already been loaded from the backend, with the given original data
   def apply(id: String, data: JsObject): UserAnswers =
     UserAnswers(id, OriginalAnswers(data, Map(BusinessContactDetailsSection.key -> Instant.EPOCH)))
-
-  def apply(id: String, data: JsObject, sections: Section*): UserAnswers =
-    UserAnswers(id, OriginalAnswers(data, sections.map(section => section.key -> Instant.EPOCH).toMap))
 }

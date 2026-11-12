@@ -17,7 +17,7 @@
 package controllers.businesscontactdetails
 
 import base.SpecBase
-import controllers.routes
+import controllers.{LoadedBusinessContactDetails, routes}
 import forms.RemoveEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
@@ -41,9 +41,10 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   private val email = "test@test.com"
 
   private val baseAnswers =
-    LoadedUserAnswers(userAnswersId,
-                      Json.obj(GroupMemberPage.toString -> false, "businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email))
-                     )
+    LoadedBusinessContactDetails(
+      userAnswersId,
+      Json.obj(GroupMemberPage.toString -> false, "businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email))
+    )
 
   val formProvider = new RemoveEmailAddressFormProvider()
   val form = formProvider()
@@ -76,9 +77,10 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on GET" in {
 
       val userAnswers =
-        LoadedUserAnswers(userAnswersId,
-                          Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email))
-                         )
+        LoadedBusinessContactDetails(
+          userAnswersId,
+          Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email))
+        )
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -99,7 +101,7 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to system error when GroupMemberPage is missing on GET" in {
 
       val userAnswers =
-        LoadedUserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email)))
+        LoadedPartnerDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -326,9 +328,10 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on POST" in {
 
       val userAnswers =
-        LoadedUserAnswers(userAnswersId,
-                          Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email))
-                         )
+        LoadedBusinessContactDetails(
+          userAnswersId,
+          Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email))
+        )
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -351,7 +354,7 @@ class RemoveEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to system error when GroupMemberPage is missing on POST" in {
 
       val userAnswers =
-        LoadedUserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email)))
+        LoadedPartnerDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj("businessEmailAddress" -> email)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

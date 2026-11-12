@@ -17,7 +17,7 @@
 package controllers.businesscontactdetails
 
 import base.SpecBase
-import controllers.routes
+import controllers.{LoadedBusinessContactDetails, routes}
 import pages.GroupMemberPage
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -42,7 +42,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         )
       )
 
-      val userAnswers = LoadedUserAnswers("id-number", data)
+      val userAnswers = LoadedBusinessContactDetails("id-number", data)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -71,7 +71,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         )
       )
 
-      val userAnswers = LoadedUserAnswers("id-number", data)
+      val userAnswers = LoadedBusinessContactDetails("id-number", data)
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
@@ -101,7 +101,7 @@ class CheckContactDetailsControllerSpec extends SpecBase {
         )
       )
 
-      val userAnswers = LoadedUserAnswers("id-number", data)
+      val userAnswers = LoadedPartnerDetails("id-number", data)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

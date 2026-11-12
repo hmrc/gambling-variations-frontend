@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedUserAnswers
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import models.UserAnswers
 import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.Application
@@ -44,7 +44,7 @@ class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with P
       .onPageLoad()
       .url
 
-  override val emptyUserAnswers: UserAnswers = LoadedUserAnswers.apply(
+  override val emptyUserAnswers: UserAnswers = LoadedPartnerDetails.apply(
     userAnswersId,
     JsObject.empty,
     ExistingPartnerDetailsSection,

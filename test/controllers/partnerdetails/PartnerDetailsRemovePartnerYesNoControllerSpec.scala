@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedUserAnswers
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsRemovePartnerYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
@@ -125,7 +125,7 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val withoutBusinessName =
             userAnswersExistingPartners.remove(PartnerDetailsBusinessNamePage(businessNumber1)).success.value
 
-          LoadedUserAnswers(
+          LoadedPartnerDetails(
             withoutBusinessName.id,
             withoutBusinessName.data.deepMerge(
               Json.obj(
@@ -361,7 +361,7 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
       "must shift later new partners down when an earlier one is deleted" in {
 
         val twoNewPartners: UserAnswers =
-          LoadedUserAnswers(
+          LoadedPartnerDetails(
             mgdRegNumber,
             cleanedDataNewPartners() ++ Json.obj(
               "newPartnersSection" -> Json.arr(

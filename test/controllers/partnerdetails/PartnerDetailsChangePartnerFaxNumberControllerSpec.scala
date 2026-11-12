@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
-import controllers.businesscontactdetails.LoadedUserAnswers
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import forms.FaxNumberFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -44,21 +44,21 @@ class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with M
   lazy val partnerDetailsChangePartnerFaxNumberRouteNewPartner: String =
     controllers.partnerdetails.routes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
-  val userAnswersWithNoFaxExistingPartners: UserAnswers = LoadedUserAnswers.apply(
+  val userAnswersWithNoFaxExistingPartners: UserAnswers = LoadedPartnerDetails.apply(
     mgdRegNumber,
     cleanedDataExistingPartners(),
     ExistingPartnerDetailsSection,
     NewPartnerDetailsSection
   )
 
-  val userAnswersWithFaxExistingPartners: UserAnswers = LoadedUserAnswers.apply(
+  val userAnswersWithFaxExistingPartners: UserAnswers = LoadedPartnerDetails.apply(
     mgdRegNumber,
     cleanedDataExistingPartners(faxNumber = Some(testFaxNumber)),
     ExistingPartnerDetailsSection,
     NewPartnerDetailsSection
   )
 
-  val userAnswersWithNoFaxNewPartners: UserAnswers = LoadedUserAnswers
+  val userAnswersWithNoFaxNewPartners: UserAnswers = LoadedPartnerDetails
     .apply(
       mgdRegNumber,
       cleanedDataNewPartners(),
@@ -69,7 +69,7 @@ class PartnerDetailsChangePartnerFaxNumberControllerSpec extends SpecBase with M
     .success
     .value
 
-  val userAnswersWithFaxNewPartners: UserAnswers = LoadedUserAnswers
+  val userAnswersWithFaxNewPartners: UserAnswers = LoadedPartnerDetails
     .apply(
       mgdRegNumber,
       cleanedDataNewPartners(faxNumber = Some(testFaxNumber)),

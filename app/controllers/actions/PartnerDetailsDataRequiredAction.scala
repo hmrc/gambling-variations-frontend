@@ -101,7 +101,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
     partnersDetails.partners
       .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
       .foldLeft(Try(loadedAnswers)) { case (userAnswers, partnerDetails) =>
-        partnerDetails.businessPartnerNumber.fold(userAnswers)(businessNumber => buildPartnerDetails(partnerDetails, businessNumber, userAnswers))
+        buildPartnerDetails(partnerDetails, partnerDetails.businessPartnerNumber, userAnswers)
       }
   }
 
@@ -109,44 +109,47 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
 
     updatedAnswers <- userAnswers
 
-    updatedAnswers <- updatedAnswers.set(PartnerDetailsMgdRegNumberPage(partnerBusinessNumber), partnerDetails.mgdRegNumber)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(partnerBusinessNumber), partnerDetails.tradingName)
-    updatedAnswers <- updatedAnswers.set(PartnerDetailsBusinessTypePage(partnerBusinessNumber), partnerDetails.businessType)
+    updatedAnswers <- updatedAnswers.setOriginal(PartnerDetailsMgdRegNumberPage(partnerBusinessNumber), partnerDetails.mgdRegNumber)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsTradingNamePage(partnerBusinessNumber), partnerDetails.tradingName)
+    updatedAnswers <- updatedAnswers.setOriginal(PartnerDetailsBusinessTypePage(partnerBusinessNumber), partnerDetails.businessType)
 
     updatedAnswers <-
-      updatedAnswers.set(PartnerDetailsBusinessPartnerNumberPage(partnerBusinessNumber), partnerDetails.businessPartnerNumber)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfJoiningPage(partnerBusinessNumber), partnerDetails.dateOfJoining)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfLeavingPage(partnerBusinessNumber), partnerDetails.dateOfLeaving)
+      updatedAnswers.setOriginal(PartnerDetailsBusinessPartnerNumberPage(partnerBusinessNumber), partnerDetails.businessPartnerNumber)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfJoiningPage(partnerBusinessNumber), partnerDetails.dateOfJoining)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfLeavingPage(partnerBusinessNumber), partnerDetails.dateOfLeaving)
 
     updatedAnswers <-
-      updatedAnswers.setIfDefined(PartnerDetailsCorrespondenceDetailsSectionPage(partnerBusinessNumber), partnerDetails.correspondenceDetails)
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsCorrespondenceDetailsSectionPage(partnerBusinessNumber), partnerDetails.correspondenceDetails)
 
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfIncorporationPage(partnerBusinessNumber), partnerDetails.dateOfIncorporation)
     updatedAnswers <-
-      updatedAnswers.setIfDefined(PartnerDetailsCountryOfIncorporationPage(partnerBusinessNumber), partnerDetails.countryOfIncorporation)
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfIncorporationPage(partnerBusinessNumber), partnerDetails.dateOfIncorporation)
     updatedAnswers <-
-      updatedAnswers.setIfDefined(PartnerDetailsForeignCorporateReferencePage(partnerBusinessNumber), partnerDetails.foreignCorporateRef)
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsCountryOfIncorporationPage(partnerBusinessNumber), partnerDetails.countryOfIncorporation)
+    updatedAnswers <-
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsForeignCorporateReferencePage(partnerBusinessNumber), partnerDetails.foreignCorporateRef)
 
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfBirthPage(partnerBusinessNumber), partnerDetails.dateOfBirth)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsNinoPage(partnerBusinessNumber), partnerDetails.nino)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsUtrPage(partnerBusinessNumber), partnerDetails.utr)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsVrnPage(partnerBusinessNumber), partnerDetails.vrn)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCrnPage(partnerBusinessNumber), partnerDetails.crn)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfBirthPage(partnerBusinessNumber), partnerDetails.dateOfBirth)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsNinoPage(partnerBusinessNumber), partnerDetails.nino)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsUtrPage(partnerBusinessNumber), partnerDetails.utr)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsVrnPage(partnerBusinessNumber), partnerDetails.vrn)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsCrnPage(partnerBusinessNumber), partnerDetails.crn)
 
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureLeaveDatePage(partnerBusinessNumber), partnerDetails.isFutureLeaveDate)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureJoinDatePage(partnerBusinessNumber), partnerDetails.isFutureJoinDate)
+    updatedAnswers <-
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsIsFutureLeaveDatePage(partnerBusinessNumber), partnerDetails.isFutureLeaveDate)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsIsFutureJoinDatePage(partnerBusinessNumber), partnerDetails.isFutureJoinDate)
 
     updatedAnswers <- partnerDetails.businessType match {
                         case Soleproprietor =>
                           val partnerDetailsSoleProp = partnerDetails.asInstanceOf[SoleProprietorPartnerDetails]
-                          updatedAnswers.set(PartnerDetailsSoleProprietorPage(partnerBusinessNumber), partnerDetailsSoleProp.soleProprietorName)
+                          updatedAnswers.setOriginal(PartnerDetailsSoleProprietorPage(partnerBusinessNumber),
+                                                     partnerDetailsSoleProp.soleProprietorName
+                                                    )
                         case _ =>
                           val partnerDetailsBusiness = partnerDetails.asInstanceOf[BusinessPartnerDetails]
-                          updatedAnswers.set(PartnerDetailsBusinessNamePage(partnerBusinessNumber), partnerDetailsBusiness.businessName)
+                          updatedAnswers.setOriginal(PartnerDetailsBusinessNamePage(partnerBusinessNumber), partnerDetailsBusiness.businessName)
                       }
 
   } yield updatedAnswers
-
 }
 
 trait PartnerDetailsDataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

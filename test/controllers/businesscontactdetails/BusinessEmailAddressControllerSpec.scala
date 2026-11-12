@@ -17,7 +17,7 @@
 package controllers.businesscontactdetails
 
 import base.SpecBase
-import controllers.routes
+import controllers.{LoadedBusinessContactDetails, routes}
 import forms.EmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -45,7 +45,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider("emailAddress")
 
   val noAnswers =
-    LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
+    LoadedBusinessContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
 
   lazy val emailAddressRoute =
     controllers.businesscontactdetails.routes.BusinessEmailAddressController.onPageLoad().url
@@ -75,7 +75,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
                           "businessContactDetailsSection" -> Json.obj(BusinessEmailAddressPage.toString -> "validEmail@example.com")
                          )
 
-      val userAnswers = LoadedUserAnswers(userAnswersId, data)
+      val userAnswers = LoadedBusinessContactDetails(userAnswersId, data)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -95,7 +95,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on GET" in {
 
       val userAnswers =
-        LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
+        LoadedBusinessContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -232,7 +232,7 @@ class BusinessEmailAddressControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on POST" in {
 
       val userAnswers =
-        LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
+        LoadedBusinessContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> true))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

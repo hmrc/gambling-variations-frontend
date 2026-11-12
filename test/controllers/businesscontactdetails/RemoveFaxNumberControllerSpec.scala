@@ -17,7 +17,8 @@
 package controllers.businesscontactdetails
 
 import base.SpecBase
-import controllers.routes
+import controllers.businessname.LoadedBusinessName
+import controllers.{LoadedBusinessContactDetails, routes}
 import forms.RemoveFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -44,16 +45,16 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
   private val faxNumber = "123456789"
 
   private val baseAnswers =
-    LoadedUserAnswers(
+    LoadedBusinessContactDetails(
       userAnswersId,
       Json.obj(GroupMemberPage.toString -> false, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
     )
 
   private val answersWithoutFaxNumber =
-    LoadedUserAnswers(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
+    LoadedBusinessContactDetails(userAnswersId, Json.obj(GroupMemberPage.toString -> false))
 
   private val answersWithoutGroupMember =
-    LoadedUserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
+    LoadedBusinessContactDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
 
   val formProvider = new RemoveFaxNumberFormProvider()
   val form = formProvider()
@@ -106,7 +107,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on GET" in {
 
       val userAnswers =
-        LoadedUserAnswers(
+        LoadedBusinessContactDetails(
           userAnswersId,
           Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
         )
@@ -361,7 +362,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to access denied when group member is true on POST" in {
 
       val userAnswers =
-        LoadedUserAnswers(
+        LoadedBusinessContactDetails(
           userAnswersId,
           Json.obj(GroupMemberPage.toString -> true, "businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber))
         )
@@ -387,7 +388,7 @@ class RemoveFaxNumberControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to system error when GroupMemberPage is missing on POST" in {
 
       val userAnswers =
-        LoadedUserAnswers(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
+        LoadedPartnerDetails(userAnswersId, Json.obj("businessContactDetailsSection" -> Json.obj(BusinessFaxNumberPage.toString -> faxNumber)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
