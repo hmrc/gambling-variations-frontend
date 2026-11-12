@@ -32,9 +32,7 @@ class ControllingBodyNINumberFormProvider @Inject() extends Mappings {
           .transform[String](normaliseNino, identity)
           .verifying(
             Seq(
-              Constraint[String](invalidCharsKey) { nino =>
-                if (nino.trim.matches(ninoCharsRegex)) Valid else Invalid(invalidCharsKey)
-              },
+              regexp(ninoCharsRegex, invalidCharsKey),
               Constraint[String](invalidFormatKey) { nino =>
                 if (nino.matches(ninoValidRegex)) Valid else Invalid(invalidFormatKey)
               }
