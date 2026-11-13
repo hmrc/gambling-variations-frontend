@@ -27,7 +27,9 @@ class PartnerDetailsSoleProprietorPageSpec extends PlaySpec with PartnerDetailsH
     "PartnerDetailsSoleProprietorPage" must {
 
       "have the correct path" in {
-        PartnerDetailsSoleProprietorPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsSoleProprietor")
+        PartnerDetailsSoleProprietorPage(
+          businessNumber1
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsSoleProprietor")
       }
 
       "have the correct toString value" in {
@@ -52,7 +54,7 @@ class PartnerDetailsSoleProprietorPageSpec extends PlaySpec with PartnerDetailsH
         )
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsSoleProprietorPage(businessNumber1).toString -> Json.toJson(value1)
             ),
@@ -82,7 +84,7 @@ class PartnerDetailsSoleProprietorPageSpec extends PlaySpec with PartnerDetailsH
       "have the correct path" in {
         PartnerDetailsSoleProprietorPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsSoleProprietor")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsSoleProprietor")
       }
 
       "have the correct toString value" in {
@@ -107,7 +109,7 @@ class PartnerDetailsSoleProprietorPageSpec extends PlaySpec with PartnerDetailsH
         )
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsSoleProprietorPage(newPartnersIndex1).toString -> Json.toJson(value1)
             ),

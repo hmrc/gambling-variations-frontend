@@ -25,8 +25,8 @@ import scala.util.Try
 case class PartnerDetailsBusinessTypePage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[BusinessType] {
 
   override val path: JsPath = businessNumberOrIndex match {
-    case key: String => JsPath \ "partners" \ key \ toString
-    case index: Int  => JsPath \ "newPartners" \ index \ toString
+    case key: String => ExistingPartnerDetailsSection.path \ key \ toString
+    case index: Int  => NewPartnerDetailsSection.path \ index \ toString
   }
 
   override def toString: String = "partnerDetailsBusinessType"

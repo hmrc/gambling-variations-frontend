@@ -27,7 +27,7 @@ class PartnerDetailsSubmittedPageSpec extends SpecBase with PartnerDetailsHelper
     "partners" - {
       "have the correct path" in {
         PartnerDetailsSubmittedPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsSection" \ "submitted")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsSection" \ "submitted")
       }
 
       "have the correct toString value" in {
@@ -36,7 +36,7 @@ class PartnerDetailsSubmittedPageSpec extends SpecBase with PartnerDetailsHelper
 
       "be able to read and write values with correct index" in {
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               "partnerDetailsSection" -> Json.obj(PartnerDetailsSubmittedPage(businessNumber1).toString -> Json.toJson(true))
             )
@@ -50,12 +50,12 @@ class PartnerDetailsSubmittedPageSpec extends SpecBase with PartnerDetailsHelper
     "newPartners" - {
       "have the correct path" in {
         PartnerDetailsSubmittedPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsSection" \ "submitted")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsSection" \ "submitted")
       }
 
       "be able to read and write values with correct index" in {
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj("partnerDetailsSection" -> Json.obj(PartnerDetailsSubmittedPage(newPartnersIndex1).toString -> Json.toJson(true)))
           )
         )

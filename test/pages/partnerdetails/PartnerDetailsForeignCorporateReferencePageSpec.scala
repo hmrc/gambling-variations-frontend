@@ -27,7 +27,7 @@ class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec with Part
 
       "have the correct path" in {
         PartnerDetailsForeignCorporateReferencePage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsForeignCorporateRef")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsForeignCorporateRef")
       }
 
       "have the correct toString value" in {
@@ -41,7 +41,7 @@ class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec with Part
         val value2 = "Value2"
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsForeignCorporateReferencePage(businessNumber1).toString -> Json.toJson(value1)
             ),
@@ -70,7 +70,7 @@ class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec with Part
 
       "have the correct path" in {
         PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsForeignCorporateRef")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsForeignCorporateRef")
       }
 
       "have the correct toString value" in {
@@ -84,7 +84,7 @@ class PartnerDetailsForeignCorporateReferencePageSpec extends PlaySpec with Part
         val value2 = "Value2"
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsForeignCorporateReferencePage(newPartnersIndex1).toString -> Json.toJson(value1)
             ),

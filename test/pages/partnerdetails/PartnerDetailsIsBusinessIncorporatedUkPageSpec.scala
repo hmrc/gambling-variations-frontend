@@ -27,7 +27,7 @@ class PartnerDetailsIsBusinessIncorporatedUkPageSpec extends PlaySpec with Partn
     "partners" must {
       "have the correct path" in {
         PartnerDetailsIsBusinessIncorporatedUkPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsIsBusinessIncorporatedUk")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsIsBusinessIncorporatedUk")
       }
 
       "have the correct string representation" in {
@@ -38,7 +38,7 @@ class PartnerDetailsIsBusinessIncorporatedUkPageSpec extends PlaySpec with Partn
     "newPartners" must {
       "have the correct path" in {
         PartnerDetailsIsBusinessIncorporatedUkPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsIsBusinessIncorporatedUk")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsIsBusinessIncorporatedUk")
       }
 
       "have the correct string representation" in {

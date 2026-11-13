@@ -35,7 +35,8 @@ object PartnerUtils {
     case _: String => CheckMode
   }
 
-  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = (userAnswers.data \ "partners")
+  def getExistingPartnersBusinessNumbers(userAnswers: UserAnswers): Seq[String] = ExistingPartnerDetailsSection.path
+    .asSingleJson(userAnswers.data)
     .asOpt[JsObject]
     .fold(Seq.empty[String])(_.fields.map(_._1))
     // Note: compiler says its redundant, but you cannot remove it without compiler mixing up scala.collection.immutable.Seq and scala.collection.Seq
@@ -54,6 +55,6 @@ object PartnerUtils {
     }
 
   def getNewPartnersSize(userAnswers: UserAnswers): Int =
-    (userAnswers.data \ "newPartners").validate[JsArray].map(_.value.size).getOrElse(0)
+    NewPartnerDetailsSection.path.asSingleJson(userAnswers.data).validate[JsArray].map(_.value.size).getOrElse(0)
 
 }

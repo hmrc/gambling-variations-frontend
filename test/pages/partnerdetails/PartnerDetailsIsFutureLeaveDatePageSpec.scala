@@ -28,7 +28,7 @@ class PartnerDetailsIsFutureLeaveDatePageSpec extends PlaySpec with PartnerDetai
       "have the correct path" in {
         PartnerDetailsIsFutureLeaveDatePage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsIsFutureLeaveDate")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsIsFutureLeaveDate")
       }
 
       "have the correct toString value" in {
@@ -42,7 +42,7 @@ class PartnerDetailsIsFutureLeaveDatePageSpec extends PlaySpec with PartnerDetai
         val value2 = 2
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsIsFutureLeaveDatePage(businessNumber1).toString -> Json.toJson(value1)
             ),
@@ -72,7 +72,7 @@ class PartnerDetailsIsFutureLeaveDatePageSpec extends PlaySpec with PartnerDetai
       "have the correct path" in {
         PartnerDetailsIsFutureLeaveDatePage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsIsFutureLeaveDate")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsIsFutureLeaveDate")
       }
 
       "have the correct toString value" in {
@@ -85,7 +85,7 @@ class PartnerDetailsIsFutureLeaveDatePageSpec extends PlaySpec with PartnerDetai
         val value2 = 2
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsIsFutureLeaveDatePage(newPartnersIndex1).toString -> Json.toJson(value1)
             ),

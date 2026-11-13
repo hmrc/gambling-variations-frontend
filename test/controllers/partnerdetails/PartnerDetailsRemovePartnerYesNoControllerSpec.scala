@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsRemovePartnerYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
@@ -25,7 +26,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsBusinessNamePage, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsRemovePartnerYesNoPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.{JsArray, JsObject, Json}
@@ -56,20 +57,18 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
   lazy val deleteDateRoute: String =
     controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad().url
 
-  val userAnswersExistingPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-      .set(PartnerDetailsBusinessNamePage(businessNumber1), testBusinessName)
-      .success
-      .value
+  val userAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
+    .set(PartnerDetailsBusinessNamePage(businessNumber1), testBusinessName)
+    .success
+    .value
 
-  val userAnswersNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-      .set(PartnerDetailsBusinessNamePage(newPartnersIndex1), testBusinessName)
-      .success
-      .value
+  val userAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
+    .set(PartnerDetailsBusinessNamePage(newPartnersIndex1), testBusinessName)
+    .success
+    .value
 
   private def newPartnersIn(userAnswers: UserAnswers): Seq[JsObject] =
-    (userAnswers.data \ "newPartners").asOpt[JsArray].map(_.value.toSeq.map(_.as[JsObject])).getOrElse(Seq.empty)
+    (userAnswers.data \ "newPartnersSection").asOpt[JsArray].map(_.value.toSeq.map(_.as[JsObject])).getOrElse(Seq.empty)
 
   private def mockedSessionRepository: SessionRepository = {
     val mockSessionRepository = mock[SessionRepository]
@@ -126,11 +125,11 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
           val withoutBusinessName =
             userAnswersExistingPartners.remove(PartnerDetailsBusinessNamePage(businessNumber1)).success.value
 
-          UserAnswers(
+          LoadedPartnerDetails(
             withoutBusinessName.id,
             withoutBusinessName.data.deepMerge(
               Json.obj(
-                "partners" -> Json.obj(
+                "partnersSection" -> Json.obj(
                   businessNumber1 -> Json.obj(
                     "partnerDetailsSoleProprietor" -> Json.obj(
                       "title"     -> "Ms",
@@ -140,7 +139,8 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
                   )
                 )
               )
-            )
+            ),
+            ExistingPartnerDetailsSection
           )
         }
 
@@ -361,14 +361,16 @@ class PartnerDetailsRemovePartnerYesNoControllerSpec extends SpecBase with Mocki
       "must shift later new partners down when an earlier one is deleted" in {
 
         val twoNewPartners: UserAnswers =
-          UserAnswers(
+          LoadedPartnerDetails(
             mgdRegNumber,
             cleanedDataNewPartners() ++ Json.obj(
-              "newPartners" -> Json.arr(
+              "newPartnersSection" -> Json.arr(
                 Json.obj("partnerDetailsBusinessName" -> "First Partner Ltd"),
                 Json.obj("partnerDetailsBusinessName" -> "Second Partner Ltd")
               )
-            )
+            ),
+            ExistingPartnerDetailsSection,
+            NewPartnerDetailsSection
           )
 
         val mockSessionRepository = mockedSessionRepository

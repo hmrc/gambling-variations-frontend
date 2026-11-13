@@ -17,10 +17,12 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import models.UserAnswers
-import pages.partnerdetails.{PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsChosenPartnerToRemovePage, PartnerDetailsDateOfLeavingPage, PartnerDetailsMgdRegNumberPage, PartnerDetailsTradingNamePage}
 import play.api.Application
 import play.api.i18n.Messages
+import play.api.libs.json.JsObject
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -42,8 +44,12 @@ class PartnerDetailsCheckConfirmRemoveDateControllerSpec extends SpecBase with P
       .onPageLoad()
       .url
 
-  override val emptyUserAnswers: UserAnswers =
-    UserAnswers(userAnswersId)
+  override val emptyUserAnswers: UserAnswers = LoadedPartnerDetails.apply(
+    userAnswersId,
+    JsObject.empty,
+    ExistingPartnerDetailsSection,
+    NewPartnerDetailsSection
+  )
 
   private val userAnswers: UserAnswers =
     emptyUserAnswers

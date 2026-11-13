@@ -28,7 +28,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoPageSpec extends SpecBase with Par
       "must have the correct path" in {
         PartnerDetailsAdditionalAddressInfoYesNoPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsAdditionalAddressInfoYesNo")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsAdditionalAddressInfoYesNo")
       }
 
       "must have the correct string representation" in {
@@ -43,7 +43,7 @@ class PartnerDetailsAdditionalAddressInfoYesNoPageSpec extends SpecBase with Par
       "must have the correct path" in {
         PartnerDetailsAdditionalAddressInfoYesNoPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAdditionalAddressInfoYesNo")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsAdditionalAddressInfoYesNo")
       }
 
       "must have the correct string representation" in {

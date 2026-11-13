@@ -40,11 +40,10 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
   def validUserAnswers(vrn: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(vrn = vrn))
 
-  val userAnswersNoVrnNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-  val userAnswersWithVrnNewPartners: UserAnswers = userAnswersNoVrnNewPartners.set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN).success.value
-
-  val userAnswersNoVrnExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-  val userAnswersWithVrnExistingPartners: UserAnswers = userAnswersNoVrnNewPartners.set(PartnerDetailsVrnPage(businessNumber1), testVRN).success.value
+  val userAnswersWithVrnNewPartners: UserAnswers =
+    userAnswersPartnerDetailsNewPartners.set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN).success.value
+  val userAnswersWithVrnExistingPartners: UserAnswers =
+    userAnswersPartnerDetailsNewPartners.set(PartnerDetailsVrnPage(businessNumber1), testVRN).success.value
 
   val fieldName = "partnerDetailsVatRegistrationNumber"
 
@@ -60,7 +59,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
       "must return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersNoVrnNewPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsNewPartners)).build()
 
         running(application) {
           val request = FakeRequest(GET, partnerVatRegistrationNumberRouteExistingPartners)
@@ -95,9 +94,10 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
         val mockSessionRepository = mock[SessionRepository]
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val baseUserAnswers = userAnswersPartnerDetailsExistingPartners
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersNoVrnExistingPartners))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -110,7 +110,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
               .withFormUrlEncodedBody((fieldName, testVRN))
 
           val result = route(application, request).value
-          val expectedAnswers = userAnswersNoVrnExistingPartners.set(PartnerDetailsVrnPage(businessNumber1), testVRN).success.value
+          val expectedAnswers = baseUserAnswers.set(PartnerDetailsVrnPage(businessNumber1), testVRN).success.value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
@@ -120,7 +120,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
       "must return a Bad Request and errors when invalid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersNoVrnExistingPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsExistingPartners)).build()
 
         running(application) {
           val request =
@@ -177,7 +177,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
       "must return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersNoVrnNewPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsNewPartners)).build()
 
         running(application) {
           val request = FakeRequest(GET, partnerVatRegistrationNumberRouteNewPartners)
@@ -212,9 +212,10 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
         val mockSessionRepository = mock[SessionRepository]
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        val baseUserAnswers = userAnswersPartnerDetailsNewPartners
 
         val application =
-          applicationBuilder(userAnswers = Some(userAnswersNoVrnNewPartners))
+          applicationBuilder(userAnswers = Some(baseUserAnswers))
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
               bind[SessionRepository].toInstance(mockSessionRepository)
@@ -227,7 +228,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
               .withFormUrlEncodedBody((fieldName, testVRN))
 
           val result = route(application, request).value
-          val expectedAnswers = userAnswersNoVrnNewPartners.set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN).success.value
+          val expectedAnswers = baseUserAnswers.set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN).success.value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual onwardRoute.url
@@ -237,7 +238,7 @@ class PartnerDetailsVatRegistrationNumberControllerSpec extends SpecBase with Mo
 
       "must return a Bad Request and errors when invalid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersNoVrnNewPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsNewPartners)).build()
 
         running(application) {
           val request =

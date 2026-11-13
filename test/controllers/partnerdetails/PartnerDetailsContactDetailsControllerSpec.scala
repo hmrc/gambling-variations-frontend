@@ -17,13 +17,14 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import forms.ContactNumberFormProvider
 import models.{CheckMode, ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -46,16 +47,22 @@ class PartnerDetailsContactDetailsControllerSpec extends SpecBase with MockitoSu
   lazy val partnerDetailsContactDetailsRouteNewPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsContactDetailsController.onPageLoad(newPartnersIndex1.toString, NormalMode).url
 
-  val userAnswersExistingPartners: UserAnswers =
-    UserAnswers("id", cleanedDataExistingPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)))
+  val userAnswersExistingPartners: UserAnswers = LoadedPartnerDetails(
+    "id",
+    cleanedDataExistingPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)),
+    ExistingPartnerDetailsSection
+  )
 
   val emptyUserAnswersExistingPartners: UserAnswers = userAnswersPartnerDetailsExistingPartners
 
-  val userAnswersNewPartners: UserAnswers =
-    UserAnswers("id", cleanedDataNewPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
+  val userAnswersNewPartners: UserAnswers = LoadedPartnerDetails(
+    "id",
+    cleanedDataNewPartners(phoneNumber = Some(phoneAndMobileNumber), mobilePhoneNumber = Some(phoneAndMobileNumber)),
+    ExistingPartnerDetailsSection
+  )
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
 
   val emptyUserAnswersNewPartners: UserAnswers = userAnswersPartnerDetailsNewPartners
     .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)

@@ -105,12 +105,6 @@ final case class UserAnswers(
   def hasChanges(section: Section): Boolean =
     changes(section).fields.nonEmpty
 
-  def partnersCount: Int =
-    (data \ "partners").asOpt[JsObject].map(_.value.size).getOrElse(0)
-
-  def newPartnersCount: Int =
-    (data \ "newPartners").asOpt[JsArray].map(_.value.size).getOrElse(0)
-
   private def isKeysOnly(path: JsPath): Boolean =
     path.path.forall(_.isInstanceOf[KeyPathNode])
 

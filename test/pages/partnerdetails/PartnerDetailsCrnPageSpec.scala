@@ -28,7 +28,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
     "PartnerDetailsCrnPage" must {
 
       "have the correct path" in {
-        PartnerDetailsCrnPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsCrn")
+        PartnerDetailsCrnPage(businessNumber1).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsCrn")
       }
 
       "have the correct toString value" in {
@@ -38,7 +38,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
 
       "read PartnerDetailsCrnPage values for the correct business number" in {
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj("partnerDetailsCrn" -> "SC123456"),
             businessNumber2 -> Json.obj("partnerDetailsCrn" -> "OC303030")
           )
@@ -53,7 +53,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
       "write PartnerDetailsCrnPage values under the business number" in {
         val answers = UserAnswers("id").set(PartnerDetailsCrnPage(businessNumber1), "SC123456").success.value
 
-        (answers.data \ "partners" \ businessNumber1 \ "partnerDetailsCrn").as[String] mustEqual "SC123456"
+        (answers.data \ "partnersSection" \ businessNumber1 \ "partnerDetailsCrn").as[String] mustEqual "SC123456"
         answers.get(PartnerDetailsCrnPage(businessNumber1)) mustBe Some("SC123456")
       }
 
@@ -62,8 +62,8 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
         val after = before.set(PartnerDetailsCrnPage(businessNumber1), "SC123456").success.value
 
         after.get(PartnerDetailsCrnPage(businessNumber1)) mustBe Some("SC123456")
-        (after.data \ "partners" \ businessNumber1).as[JsObject] - "partnerDetailsCrn" mustEqual
-          (before.data \ "partners" \ businessNumber1).as[JsObject] - "partnerDetailsCrn"
+        (after.data \ "partnersSection" \ businessNumber1).as[JsObject] - "partnerDetailsCrn" mustEqual
+          (before.data \ "partnersSection" \ businessNumber1).as[JsObject] - "partnerDetailsCrn"
       }
 
     }
@@ -73,7 +73,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
     "PartnerDetailsCrnPage" must {
 
       "have the correct path" in {
-        PartnerDetailsCrnPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCrn")
+        PartnerDetailsCrnPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsCrn")
       }
 
       "have the correct toString value" in {
@@ -83,7 +83,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
 
       "read PartnerDetailsCrnPage values at the correct index" in {
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj("partnerDetailsCrn" -> "SC123456"),
             Json.obj("partnerDetailsCrn" -> "OC303030")
           )
@@ -98,7 +98,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
       "write PartnerDetailsCrnPage values at the index" in {
         val answers = UserAnswers("id").set(PartnerDetailsCrnPage(newPartnersIndex1), "SC123456").success.value
 
-        (answers.data \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCrn").as[String] mustEqual
+        (answers.data \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsCrn").as[String] mustEqual
           "SC123456"
         answers.get(PartnerDetailsCrnPage(newPartnersIndex1)) mustBe Some("SC123456")
       }
@@ -108,7 +108,7 @@ class PartnerDetailsCrnPageSpec extends PlaySpec with PartnerDetailsHelper {
         val after = before.set(PartnerDetailsCrnPage(newPartnersIndex2), "OC303030").success.value
 
         after.get(PartnerDetailsCrnPage(newPartnersIndex2)) mustBe Some("OC303030")
-        (after.data \ "newPartners" \ newPartnersIndex1) mustEqual (before.data \ "newPartners" \
+        (after.data \ "newPartnersSection" \ newPartnersIndex1) mustEqual (before.data \ "newPartnersSection" \
           newPartnersIndex1)
       }
 

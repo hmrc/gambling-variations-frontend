@@ -16,11 +16,16 @@
 
 package pages.partnerdetails
 
-import pages.QuestionPage
-import play.api.libs.json.{JsObject, JsPath}
+import models.Section
 
-case object PartnerDetailsPage extends QuestionPage[JsObject] {
-  override def path: JsPath = JsPath \ toString
+trait PartnerDetailsSection extends Section
 
-  override def toString: String = "partners"
+case object NewPartnerDetailsSection extends PartnerDetailsSection {
+
+  override def key: String = "newPartners"
+}
+
+case object ExistingPartnerDetailsSection extends PartnerDetailsSection {
+
+  override def key: String = "partners"
 }

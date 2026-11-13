@@ -1780,7 +1780,7 @@ class NavigatorSpec extends SpecBase {
 
         "should route PartnerDetailsBusinessTypePage to PartnerDetailsChangeBusinessNameController when answered" in {
           val businessData = Json.obj(
-            "newPartners" -> Json.arr(
+            "newPartnersSection" -> Json.arr(
               Json.obj("partnerDetailsBusinessType" -> 2)
             )
           )
@@ -2175,15 +2175,20 @@ class NavigatorSpec extends SpecBase {
 
       "CYA page navigation for new partners" - {
 
+        val savedNewPartnerAnswersAnsweredAllQuestions =
+          savedNewPartnerAnswers.set(PartnerDetailsHasAnsweredAllQuestionsPage(newPartnersIndex1), true).success.value
+
         valuePages(newPartnersIndex1).foreach { page =>
           s"should route $page to check your answers for a saved new partner" in {
-            navigator.nextPage(page, CheckMode, savedNewPartnerAnswers) mustBe checkYourAnswers(newPartnersIndex1)
+            navigator.nextPage(page, CheckMode, savedNewPartnerAnswersAnsweredAllQuestions) mustBe checkYourAnswers(newPartnersIndex1)
           }
         }
 
         addYesNoPages(newPartnersIndex1).foreach { page =>
           s"should route $page to check your answers when the answer is No for a saved new partner" in {
-            navigator.nextPage(page, CheckMode, withYesNo(page, false, savedNewPartnerAnswers)) mustBe checkYourAnswers(newPartnersIndex1)
+            navigator.nextPage(page, CheckMode, withYesNo(page, false, savedNewPartnerAnswersAnsweredAllQuestions)) mustBe checkYourAnswers(
+              newPartnersIndex1
+            )
           }
         }
 

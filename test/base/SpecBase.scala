@@ -17,9 +17,9 @@
 package base
 
 import com.typesafe.config.ConfigFactory
+import config.FrontendAppConfig
 import controllers.actions.*
 import models.UserAnswers
-import config.FrontendAppConfig
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.Materializer
 import org.mockito.{ArgumentMatchers, Mockito}
@@ -28,11 +28,11 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{OptionValues, TryValues}
-import play.api.{Application, Configuration}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
+import play.api.{Application, Configuration}
 import repositories.SessionRepository
 
 import scala.concurrent.Future

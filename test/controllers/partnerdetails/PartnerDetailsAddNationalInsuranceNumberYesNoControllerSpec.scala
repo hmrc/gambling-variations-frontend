@@ -17,13 +17,14 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import forms.partnerdetails.PartnerDetailsAddNationalInsuranceNumberYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddNationalInsuranceNumberYesNoPage, PartnerDetailsAddPartnerCompletedPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddNationalInsuranceNumberYesNoPage, PartnerDetailsAddPartnerCompletedPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -42,7 +43,8 @@ class PartnerDetailsAddNationalInsuranceNumberYesNoControllerSpec extends SpecBa
     controllers.partnerdetails.routes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(newPartnersIndex1.toString).url
 
   val validUserAnswers: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners())
+    LoadedPartnerDetails
+      .apply(mgdRegNumber, cleanedDataNewPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
       .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
       .success
       .value

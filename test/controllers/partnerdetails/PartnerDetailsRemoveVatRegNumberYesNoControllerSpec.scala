@@ -17,14 +17,14 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import forms.partnerdetails.PartnerDetailsRemoveVatRegNumberYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveVatRegNumberYesNoPage}
-import pages.partnerdetails.PartnerDetailsVrnPage
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsRemoveVatRegNumberYesNoPage, PartnerDetailsVrnPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -45,20 +45,20 @@ class PartnerDetailsRemoveVatRegNumberYesNoControllerSpec extends SpecBase with 
   private lazy val removeVrnRouteExistingPartners =
     controllers.partnerdetails.routes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val userAnswersWithVrnNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners(vrn = Some(testVRN)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN)
-      .success
-      .value
+  private val userAnswersWithVrnNewPartners: UserAnswers = LoadedPartnerDetails
+    .apply(mgdRegNumber, cleanedDataNewPartners(vrn = Some(testVRN)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
+    .set(PartnerDetailsVrnPage(newPartnersIndex1), testVRN)
+    .success
+    .value
 
-  private val userAnswersWithVrnExistingUsers: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners(vrn = Some(testVRN)))
-      .set(PartnerDetailsVrnPage(businessNumber1), testVRN)
-      .success
-      .value
+  private val userAnswersWithVrnExistingUsers: UserAnswers = LoadedPartnerDetails
+    .apply(mgdRegNumber, cleanedDataExistingPartners(vrn = Some(testVRN)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    .set(PartnerDetailsVrnPage(businessNumber1), testVRN)
+    .success
+    .value
 
   "partners" - {
 

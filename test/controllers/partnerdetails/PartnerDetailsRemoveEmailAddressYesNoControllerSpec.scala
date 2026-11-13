@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes.JourneyRecoveryController
 import forms.partnerdetails.PartnerDetailsRemoveEmailAddressYesNoFormProvider
 import models.{CheckMode, NormalMode, UserAnswers}
@@ -24,7 +25,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceEmailAddressPage, PartnerDetailsRemoveEmailAddressYesNoPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceEmailAddressPage, PartnerDetailsRemoveEmailAddressYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -44,26 +45,30 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
   private lazy val partnerDetailsRemoveEmailAddressYesNoRouteExistingPartners: String =
     controllers.partnerdetails.routes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val baseUserAnswersNewPartners: UserAnswers =
-    UserAnswers(
+  private val baseUserAnswersNewPartners: UserAnswers = LoadedPartnerDetails
+    .apply(
       mgdRegNumber,
-      cleanedDataNewPartners(emailAddress = Some(testEmailAddress))
+      cleanedDataNewPartners(emailAddress = Some(testEmailAddress)),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
     )
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), testEmailAddress)
-      .success
-      .value
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
+    .set(PartnerDetailsCorrespondenceEmailAddressPage(newPartnersIndex1), testEmailAddress)
+    .success
+    .value
 
-  private val baseUserAnswersExistingPartners: UserAnswers =
-    UserAnswers(
+  private val baseUserAnswersExistingPartners: UserAnswers = LoadedPartnerDetails
+    .apply(
       mgdRegNumber,
-      cleanedDataExistingPartners(emailAddress = Some(testEmailAddress))
+      cleanedDataExistingPartners(emailAddress = Some(testEmailAddress)),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
     )
-      .set(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1), testEmailAddress)
-      .success
-      .value
+    .set(PartnerDetailsCorrespondenceEmailAddressPage(businessNumber1), testEmailAddress)
+    .success
+    .value
 
   "partners" - {
 
@@ -107,7 +112,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
-          val userAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(None))
+          val userAnswers = LoadedPartnerDetails(mgdRegNumber, cleanedDataExistingPartners(None), ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -267,7 +272,7 @@ class PartnerDetailsRemoveEmailAddressYesNoControllerSpec extends SpecBase with 
         }
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but emailAddr is None" in {
-          val userAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners(None))
+          val userAnswers = LoadedPartnerDetails(mgdRegNumber, cleanedDataNewPartners(None), ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

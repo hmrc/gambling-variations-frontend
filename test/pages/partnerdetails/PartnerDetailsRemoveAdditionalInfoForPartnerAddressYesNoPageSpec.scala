@@ -27,7 +27,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPageSpec extends S
 
       "must have the correct path" in {
         PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "removeAdditionalInfoForPartnerAddressYesNo")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "removeAdditionalInfoForPartnerAddressYesNo")
       }
 
       "must have the correct string representation" in {
@@ -42,7 +42,7 @@ class PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPageSpec extends S
 
       "must have the correct path" in {
         PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "removeAdditionalInfoForPartnerAddressYesNo")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "removeAdditionalInfoForPartnerAddressYesNo")
       }
 
       "must have the correct string representation" in {
