@@ -55,7 +55,7 @@ object PartnerMandatoryDetails {
   }
 
   /** Mandatory fields for the partner's current answers, in journey order. */
-  private def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
+  def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
     val mode = PartnerUtils.modeFor(index)
 
     val businessTypeField =
@@ -64,12 +64,13 @@ object PartnerMandatoryDetails {
     val businessFields =
       userAnswers.get(PartnerDetailsBusinessTypePage(index)).fold(Seq.empty[Field])(businessFieldsFor(userAnswers, index, _))
 
-    (businessTypeField +: businessFields) ++ commonFields(index)
+    (businessTypeField +: businessFields) ++ sharedMandatoryFields(index)
   }
 
   /** Pages are keyed by the typed index; routes only take the string form. */
   private def urlIndex(index: BusinessNumberOrIndex): String = index.toString
 
+  /** Mandatory fields for a given business type. */
   private def businessFieldsFor(userAnswers: UserAnswers, index: BusinessNumberOrIndex, bt: BusinessType): Seq[Field] = {
     val key = urlIndex(index)
     val mode = PartnerUtils.modeFor(index)
@@ -82,7 +83,7 @@ object PartnerMandatoryDetails {
 
     val ukIncorporation = Seq(
       Field.of(PartnerDetailsDateOfIncorporationPage(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(key, mode)),
-      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key, mode))
+      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(key, mode))
     )
 
     val nonUkIncorporation = Seq(
@@ -98,14 +99,13 @@ object PartnerMandatoryDetails {
 
     bt match {
       case Soleproprietor =>
-        Seq(
-          Field.of(
-            PartnerDetailsSoleProprietorPage(index),
-            routes.PartnerDetailsChangeBusinessNameController.onPageLoad(key, businessType = Soleproprietor, mode)
-          ),
-          Field.of(PartnerDetailsDateOfBirthPage(index), routes.PartnerDetailsSoleProprietorDobController.onPageLoad(key, mode)),
-          utr
+        val solePropName = Field.of(
+          PartnerDetailsSoleProprietorPage(index),
+          routes.PartnerDetailsChangeBusinessNameController.onPageLoad(key, businessType = Soleproprietor, mode)
         )
+        val solePropDOB = Field.of(PartnerDetailsDateOfBirthPage(index), routes.PartnerDetailsSoleProprietorDobController.onPageLoad(key, mode))
+
+        Seq(solePropName, solePropDOB, utr)
 
       case Corporatebody =>
         val isIncorporatedInUk =
@@ -120,15 +120,15 @@ object PartnerMandatoryDetails {
           case None        => Nil
         }
 
-        Seq(businessName, utr, isIncorporatedInUk) ++ incorporation
+        Seq(businessName, isIncorporatedInUk) ++ incorporation ++ Seq(utr)
 
-      case LimitedLiabilityPartnership => Seq(businessName, utr) ++ ukIncorporation
+      case LimitedLiabilityPartnership => Seq(businessName) ++ ukIncorporation ++ Seq(utr)
       case Unincorporatedbody          => Seq(businessName, utr)
       case Partnership                 => Seq(businessName)
     }
   }
 
-  private def commonFields(index: BusinessNumberOrIndex): Seq[Field] = {
+  private def sharedMandatoryFields(index: BusinessNumberOrIndex): Seq[Field] = {
     val key = urlIndex(index)
     val mode = PartnerUtils.modeFor(index)
 

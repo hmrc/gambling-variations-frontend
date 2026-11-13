@@ -17,7 +17,6 @@
 package forms.correspondencedetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.correspondencedetails.RemoveCorrespondenceFaxNumberFormProvider
 import play.api.data.FormError
 
 class RemoveCorrespondenceFaxNumberFormProviderSpec extends BooleanFieldBehaviours {

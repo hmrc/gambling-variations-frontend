@@ -43,6 +43,10 @@ trait PartnerDetailsHelper {
   val testUtr: String = "1121766916"
   val testForeignCorpRef = "FCR-987654"
   val testCRN: String = "SC123456"
+  val testFCR: String = "Foreign Corporate Ref"
+
+  val testSoleProprietor: JsObject = Json.obj("title" -> "Mx", "firstName" -> "Test", "lastName" -> "Test")
+  val testSolePropDOB: Option[String] = Some("1492-03-01")
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
@@ -133,7 +137,10 @@ trait PartnerDetailsHelper {
     vrn: Option[String] = None,
     utr: Option[String] = None,
     fcr: Option[String] = None,
-    crn: Option[String] = None
+    partnerDetailsBusinessType: Int = 1,
+    crn: Option[String] = None,
+    soleProprietorDob: Option[String] = None,
+    soleProprietorDetails: JsObject = JsObject.empty
   ): JsObject = Json.obj(
     "partners" -> Json.obj(
       businessNumber1 -> Json.obj(
@@ -163,7 +170,8 @@ trait PartnerDetailsHelper {
         "partnerDetailsCountryOfIncorporation" -> None,
         "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
         "partnerDetailsTradingName"            -> "XYZ Consulting",
-        "partnerDetailsDateOfBirth"            -> "1985-06-20",
+        "partnerDetailsDateOfBirth"            -> soleProprietorDob,
+        "partnerDetailsSoleProprietor"         -> soleProprietorDetails,
         "partnerDetailsNino"                   -> nino,
         "partnerDetailsUtr"                    -> utr,
         "partnerDetailsVrn"                    -> vrn,
@@ -187,7 +195,12 @@ trait PartnerDetailsHelper {
     utr: Option[String] = None,
     fcr: Option[String] = None,
     crn: Option[String] = None,
-    hasAnsweredAllQuestion: Option[Boolean] = None
+    dateOfIncorporation: Option[String] = None,
+    countryOfIncorporation: Option[String] = None,
+    businessType: Int = 1,
+    hasAnsweredAllQuestion: Option[Boolean] = None,
+    soleProprietorDob: Option[String] = None,
+    soleProprietorDetails: JsObject = JsObject.empty
   ): JsObject = Json.obj(
     "partners" -> Json.obj(),
     "newPartners" -> Json.arr(
@@ -214,11 +227,12 @@ trait PartnerDetailsHelper {
           "faxNumber" -> faxNumber,
           "emailAddr" -> emailAddress
         ),
-        "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-        "partnerDetailsCountryOfIncorporation" -> null,
+        "partnerDetailsDateOfIncorporation"    -> dateOfIncorporation,
+        "partnerDetailsCountryOfIncorporation" -> countryOfIncorporation,
         "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
         "partnerDetailsTradingName"            -> "XYZ Consulting",
-        "partnerDetailsDateOfBirth"            -> "1985-06-20",
+        "partnerDetailsDateOfBirth"            -> soleProprietorDob,
+        "partnerDetailsSoleProprietor"         -> soleProprietorDetails,
         "partnerDetailsNino"                   -> nino,
         "partnerDetailsUtr"                    -> utr,
         "partnerDetailsVrn"                    -> vrn,
