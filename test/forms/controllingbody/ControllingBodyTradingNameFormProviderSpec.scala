@@ -55,12 +55,17 @@ class ControllingBodyTradingNameFormProviderSpec extends StringFieldBehaviours {
     }
 
     "replace multiple consecutive spaces between characters with a single space" in {
-      val input = "ABC    123    Trading"
-      val expected = "ABC 123 Trading"
+      Seq(
+        "ABC    123    Trading"   -> "ABC 123 Trading",
+        "ABC\t\t123\t\tTrading"   -> "ABC 123 Trading",
+        "ABC\t\n123\n\n\tTrading" -> "ABC 123 Trading",
+        "AB\t\n123"               -> "AB 123"
+      ).foreach { case (input, expected) =>
+        val bound = form.bind(Map(fieldName -> input))
 
-      val result = form.bind(Map(fieldName -> input))
-
-      result.value mustBe Some(expected)
+        bound.value.value mustBe expected
+        bound.errors mustBe empty
+      }
     }
 
     "trim leading and trailing spaces" in {

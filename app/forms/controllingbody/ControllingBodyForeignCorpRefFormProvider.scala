@@ -28,7 +28,7 @@ class ControllingBodyForeignCorpRefFormProvider @Inject() extends Mappings {
     Form(
       "value" ->
         text(requiredKey)
-          .transform[String](_.trim.replaceAll(" {2,}", " "), identity)
+          .transform[String](_.trim.replaceAll("\\s+", " "), identity)
           .verifying(
             regexp(
               refNumberRegex,

@@ -134,13 +134,18 @@ class ControllingBodyForeignCorpRefFormProviderSpec extends StringFieldBehaviour
       bound.errors mustBe empty
     }
 
-    "trim multiple spaces to single space when they are not between digits" in {
-      val input = "AB  123"
+    "replace multiple consecutive spaces to single space when they are not between digits" in {
+      Seq(
+        "AB  123"   -> "AB 123",
+        "AB\t123"   -> "AB 123",
+        "AB\n123"   -> "AB 123",
+        "AB\t\n123" -> "AB 123"
+      ).foreach { case (input, expected) =>
+        val bound = form.bind(Map(fieldName -> input))
 
-      val bound = form.bind(Map(fieldName -> input))
-
-      bound.value.value mustBe "AB 123"
-      bound.errors mustBe empty
+        bound.value.value mustBe expected
+        bound.errors mustBe empty
+      }
     }
 
     "validate the normalized value against the maximum length" in {

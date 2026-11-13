@@ -40,7 +40,7 @@ class ChangeBusinessNameFormProvider @Inject() extends Mappings {
 
     Form(
       "value" -> text(requiredKey)
-        .transform[String](_.trim.replaceAll(" {2,}", " "), identity)
+        .transform[String](_.trim.replaceAll("\\s+", " "), identity)
         .verifying(maxLength(maxLen, lengthKey))
         .verifying(regexp(regex, invalidKey))
     )

@@ -71,6 +71,21 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
 
       result.value.value mustEqual expected
     }
+
+    "replace multiple consecutive spaces between characters with a single space" in {
+      Seq(
+        "ABC    123    Trading"   -> "ABC 123 Trading",
+        "ABC\t\t123\t\tTrading"   -> "ABC 123 Trading",
+        "ABC\t\n123\n\n\tTrading" -> "ABC 123 Trading",
+        "AB\t\n123"               -> "AB 123"
+      ).foreach { case (input, expected) =>
+        val bound = form.bind(Map(fieldName -> input))
+
+        bound.value.value mustBe expected
+        bound.errors mustBe empty
+      }
+    }
+
   }
   "a partnership name" - {
     val partnershipForm = formProvider(BusinessType.Partnership)
@@ -109,6 +124,20 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
 
       result.value.value mustEqual expected
     }
-  }
 
+    "replace multiple consecutive spaces between characters with a single space" in {
+      Seq(
+        "ABC    123    Trading"   -> "ABC 123 Trading",
+        "ABC\t\t123\t\tTrading"   -> "ABC 123 Trading",
+        "ABC\t\n123\n\n\tTrading" -> "ABC 123 Trading",
+        "AB\t\n123"               -> "AB 123"
+      ).foreach { case (input, expected) =>
+        val result = partnershipForm.bind(Map("value" -> input))
+
+        result.value.value mustBe expected
+        result.errors mustBe empty
+      }
+    }
+
+  }
 }

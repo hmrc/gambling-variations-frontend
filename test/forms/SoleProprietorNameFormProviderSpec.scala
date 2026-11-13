@@ -64,14 +64,14 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
       val result = form
         .bind(
           Map(
-            "title"     -> "  Mr  ",
+            "title"     -> "  M  r  ",
             "firstName" -> "John",
             "lastName"  -> "Doe"
           )
         )
         .value
 
-      result.value.title mustBe "Mr"
+      result.value.title mustBe "M r"
     }
   }
 
@@ -271,6 +271,20 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
         .value
 
       result.value.lastName mustBe "Smith 2"
+    }
+
+    "replace multiple consecutive spaces with a single space" in {
+      val result = form
+        .bind(
+          Map(
+            "title"     -> "Mr",
+            "firstName" -> "John",
+            "lastName"  -> " Smith\t2\n\n3"
+          )
+        )
+        .value
+
+      result.value.lastName mustBe "Smith 2 3"
     }
 
   }

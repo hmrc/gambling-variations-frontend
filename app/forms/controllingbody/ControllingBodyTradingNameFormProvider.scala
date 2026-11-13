@@ -27,7 +27,7 @@ class ControllingBodyTradingNameFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "controllingBodyTradingName" -> text("controllingBodyTradingName.error.required")
-        .transform[String](value => value.trim.replaceAll(" {2,}", " "), identity)
+        .transform[String](value => value.trim.replaceAll("\\s+", " "), identity)
         .verifying(
           regexp(tradingNameRegex, "controllingBodyTradingName.error.invalid"),
           maxLength(maxStringLength, "controllingBodyTradingName.error.length")
