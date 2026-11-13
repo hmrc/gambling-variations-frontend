@@ -55,10 +55,10 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
     request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) match {
       case Some(Soleproprietor) =>
         val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(newIndex)) match {
-          case None => form
+          case None       => form
           case Some(nino) =>
-            val sanitized = if nino.last != '_' then nino else nino.init
-            form.fill(sanitized)
+            // val sanitized = if nino.last != ' ' then nino else nino.init
+            form.fill(nino)
         }
 
         Ok(view(preparedForm, index, mode))
@@ -74,7 +74,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
       .fold(
         formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
         nino =>
-          val sanitized = if nino.length == 9 then nino else nino.concat("_")
+          val sanitized = if nino.length == 9 then nino else nino.concat(" ")
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsNinoPage(newIndex), sanitized))
             _              <- sessionRepository.set(updatedAnswers)
