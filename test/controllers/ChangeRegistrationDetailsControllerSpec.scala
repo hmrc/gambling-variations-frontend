@@ -19,6 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.GamblingConnector
 import models.controllingbody.ControllingBodyDetails
+import controllers.actions.{BusinessDetailsDataRequiredAction, FakeAgentAuthorisedAction, FakeDataRetrievalAction}
 import models.{BusinessType, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -259,6 +260,42 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
         controllers.controllingbody.routes.ControllingBodyChangeScreenerController
           .onPageLoad()
           .url
+    }
+  }
+
+  "onLanding" - {
+    def landingRequest(regNumber: String) =
+      FakeRequest(GET, routes.ChangeRegistrationDetailsController.onLanding(regNumber).url)
+
+    "must redirect an organisation to the page and store the regNumber" in {
+      val application = applicationBuilder().build()
+
+      running(application) {
+        val result = route(application, landingRequest("id")).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.ChangeRegistrationDetailsController.onPageLoad().url
+        cookies(result).get("mdtp") mustBe defined
+      }
+    }
+
+    "must redirect an agent to the page and store the requested regNumber" in {
+      val cc = stubMessagesControllerComponents()
+      val controller = new ChangeRegistrationDetailsController(
+        cc.messagesApi,
+        new FakeAgentAuthorisedAction(cc.parsers),
+        new FakeDataRetrievalAction(None),
+        mock[BusinessDetailsDataRequiredAction],
+        mock[config.FrontendAppConfig],
+        cc,
+        mock[views.html.ChangeRegistrationDetailsView]
+      )
+
+      val result = controller.onLanding("client1")(landingRequest("client1"))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustEqual routes.ChangeRegistrationDetailsController.onPageLoad().url
+      session(result).get("mgdRegNum").value mustEqual "client1"
     }
   }
 }
