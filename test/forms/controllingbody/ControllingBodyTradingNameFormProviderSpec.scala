@@ -54,10 +54,29 @@ class ControllingBodyTradingNameFormProviderSpec extends StringFieldBehaviours {
         FormError(fieldName, "controllingBodyTradingName.error.invalid", Seq(ControllingBodyTradingNameFormProvider.tradingNameRegex))
     }
 
+    "replace multiple consecutive spaces between characters with a single space" in {
+      val input = "ABC    123    Trading"
+      val expected = "ABC 123 Trading"
+
+      val result = form.bind(Map(fieldName -> input))
+
+      result.value mustBe Some(expected)
+    }
+
+    "trim leading and trailing spaces" in {
+      val input = "  ABC Trading  "
+      val expected = "ABC Trading"
+
+      val result = form.bind(Map(fieldName -> input))
+
+      result.value mustBe Some(expected)
+    }
+
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

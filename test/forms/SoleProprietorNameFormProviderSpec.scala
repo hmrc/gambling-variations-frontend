@@ -59,6 +59,20 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
         FormError(fieldName, invalidKey, Seq("^[A-Za-z' -]+$"))
       )
     }
+
+    "trim leading and trailing spaces and replace multiple consecutive spaces with a single space" in {
+      val result = form
+        .bind(
+          Map(
+            "title"     -> "  Mr  ",
+            "firstName" -> "John",
+            "lastName"  -> "Doe"
+          )
+        )
+        .value
+
+      result.value.title mustBe "Mr"
+    }
   }
 
   ".firstName" - {
@@ -93,6 +107,20 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
         FormError(fieldName, lengthKey, Seq(maxLength)),
         FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
       )
+    }
+
+    "trim leading and trailing spaces and replace multiple consecutive spaces with a single space" in {
+      val result = form
+        .bind(
+          Map(
+            "title"     -> "Mr",
+            "firstName" -> "  Mary    2  ",
+            "lastName"  -> "Doe"
+          )
+        )
+        .value
+
+      result.value.firstName mustBe "Mary 2"
     }
   }
 
@@ -158,6 +186,21 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
         FormError(fieldName, invalidKey, Seq("^$|^[A-Za-z0-9' -]+$"))
       )
     }
+
+    "trim leading and trailing spaces and replace multiple consecutive spaces with a single space" in {
+      val result = form
+        .bind(
+          Map(
+            "title"      -> "Mr",
+            "firstName"  -> "John",
+            "middleName" -> "  Mary    2  ",
+            "lastName"   -> "Doe"
+          )
+        )
+        .value
+
+      result.value.middleName mustBe Some("Mary 2")
+    }
   }
 
   ".lastName" - {
@@ -214,6 +257,20 @@ class SoleProprietorNameFormProviderSpec extends StringFieldBehaviours {
         .value
 
       result.value.lastName mustBe "Smith"
+    }
+
+    "trim leading and trailing spaces and replace multiple consecutive spaces with a single space" in {
+      val result = form
+        .bind(
+          Map(
+            "title"     -> "Mr",
+            "firstName" -> "John",
+            "lastName"  -> "  Smith    2  "
+          )
+        )
+        .value
+
+      result.value.lastName mustBe "Smith 2"
     }
 
   }

@@ -134,12 +134,12 @@ class ControllingBodyForeignCorpRefFormProviderSpec extends StringFieldBehaviour
       bound.errors mustBe empty
     }
 
-    "preserve multiple spaces when they are not between digits" in {
+    "trim multiple spaces to single space when they are not between digits" in {
       val input = "AB  123"
 
       val bound = form.bind(Map(fieldName -> input))
 
-      bound.value.value mustBe input
+      bound.value.value mustBe "AB 123"
       bound.errors mustBe empty
     }
 
