@@ -39,7 +39,7 @@ class ControllingBodyNINumberFormProviderSpec extends StringFieldBehaviours {
     "must fail to bind invalid characters (e.g. '@')" in {
       val invalidCharsInput = "AA12345@A"
       val result = form.bind(Map(fieldName -> invalidCharsInput))
-      result.errors must contain(FormError(fieldName, invalidCharsKey, Seq(ninoCharsRegex)))
+      result.errors must contain(FormError(fieldName, invalidCharsKey))
     }
 
     "must fail to bind when starting with digits" in {
