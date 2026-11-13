@@ -62,6 +62,30 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
 
       result.errors must contain only FormError(fieldName, invalidKey, Seq("^[A-Za-z0-9' -]+$"))
     }
+
+    "trim leading and trailing spaces and replace multiple consecutive spaces with a single space" in {
+      val input = "  ABC    123    XYZ  "
+      val expected = "ABC 123 XYZ"
+
+      val result = form.bind(Map("value" -> input))
+
+      result.value.value mustEqual expected
+    }
+
+    "replace multiple consecutive spaces between characters with a single space" in {
+      Seq(
+        "ABC    123    Trading"   -> "ABC 123 Trading",
+        "ABC\t\t123\t\tTrading"   -> "ABC 123 Trading",
+        "ABC\t\n123\n\n\tTrading" -> "ABC 123 Trading",
+        "AB\t\n123"               -> "AB 123"
+      ).foreach { case (input, expected) =>
+        val bound = form.bind(Map(fieldName -> input))
+
+        bound.value.value mustBe expected
+        bound.errors mustBe empty
+      }
+    }
+
   }
   "a partnership name" - {
     val partnershipForm = formProvider(BusinessType.Partnership)
@@ -91,6 +115,29 @@ class ChangeBusinessNameFormProviderSpec extends StringFieldBehaviours {
           "changeBusinessName.error.invalid.partnership"
       }
     }
-  }
 
+    "trim leading and trailing spaces and replace multiple consecutive spaces with a single space" in {
+      val input = "  ABC    123    XYZ  "
+      val expected = "ABC 123 XYZ"
+
+      val result = partnershipForm.bind(Map("value" -> input))
+
+      result.value.value mustEqual expected
+    }
+
+    "replace multiple consecutive spaces between characters with a single space" in {
+      Seq(
+        "ABC    123    Trading"   -> "ABC 123 Trading",
+        "ABC\t\t123\t\tTrading"   -> "ABC 123 Trading",
+        "ABC\t\n123\n\n\tTrading" -> "ABC 123 Trading",
+        "AB\t\n123"               -> "AB 123"
+      ).foreach { case (input, expected) =>
+        val result = partnershipForm.bind(Map("value" -> input))
+
+        result.value.value mustBe expected
+        result.errors mustBe empty
+      }
+    }
+
+  }
 }
