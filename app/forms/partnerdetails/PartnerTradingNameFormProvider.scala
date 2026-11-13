@@ -28,6 +28,10 @@ class PartnerTradingNameFormProvider @Inject() extends Mappings {
   def apply(): Form[String] =
     Form(
       "partnerTradingName" -> text("partnerTradingName.error.required")
+        .transform[String](
+          _.trim.replaceAll("\\s+", " "),
+          identity
+        )
         .verifying(
           maxLength(100, "partnerTradingName.error.length")
         )

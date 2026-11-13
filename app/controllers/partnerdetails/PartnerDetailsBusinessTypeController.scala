@@ -18,9 +18,10 @@ package controllers.partnerdetails
 
 import controllers.actions.*
 import forms.partnerdetails.PartnerDetailsBusinessTypeFormProvider
-import models.{BusinessType, Mode}
+import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
-import pages.partnerdetails.PartnerDetailsBusinessTypePage
+import pages.BusinessNumberOrIndex
+import pages.partnerdetails.{PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -59,18 +60,91 @@ class PartnerDetailsBusinessTypeController @Inject() (
     Ok(view(preparedForm, index, mode))
   }
 
-  def onSubmit(index: String, mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-    val newIndex = PartnerUtils.parseIndex(index, mode)
+  def onSubmit(index: String, mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
 
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, index, mode))),
-        businessType =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PartnerDetailsBusinessTypePage(newIndex), businessType))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PartnerDetailsBusinessTypePage(newIndex), mode, updatedAnswers))
+      val newIndex = PartnerUtils.parseIndex(index, mode)
+      val businessTypePage = PartnerDetailsBusinessTypePage(newIndex)
+
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors =>
+            Future.successful(
+              BadRequest(view(formWithErrors, index, mode))
+            ),
+          selectedBusinessType => {
+
+            val existingBusinessType =
+              request.userAnswers.get(businessTypePage)
+
+            for {
+              answersWithUpdatedType <-
+                Future.fromTry(
+                  request.userAnswers.set(
+                    businessTypePage,
+                    selectedBusinessType
+                  )
+                )
+
+              updatedAnswers <-
+                if (
+                  existingBusinessType.exists(
+                    _ != selectedBusinessType
+                  )
+                ) {
+                  clearPreviousBusinessDetails(
+                    answersWithUpdatedType,
+                    newIndex,
+                    existingBusinessType
+                  )
+                } else {
+                  Future.successful(answersWithUpdatedType)
+                }
+
+              _ <- sessionRepository.set(updatedAnswers)
+
+            } yield Redirect(
+              navigator.nextPage(
+                businessTypePage,
+                mode,
+                updatedAnswers
+              )
+            )
+          }
+        )
+    }
+
+  private def clearPreviousBusinessDetails(
+    userAnswers: UserAnswers,
+    newIndex: BusinessNumberOrIndex,
+    existingBusinessType: Option[BusinessType]
+  ): Future[UserAnswers] = {
+
+    val cleanedAnswers =
+      userAnswers.remove(
+        PartnerDetailsBusinessNamePage(newIndex)
       )
+
+    val fullyCleanedAnswers =
+      existingBusinessType match {
+        case Some(BusinessType.Soleproprietor) =>
+          cleanedAnswers
+            .flatMap(
+              _.remove(
+                PartnerDetailsSoleProprietorPage(newIndex)
+              )
+            )
+            .flatMap(
+              _.remove(
+                PartnerDetailsDateOfBirthPage(newIndex)
+              )
+            )
+
+        case _ =>
+          cleanedAnswers
+      }
+
+    Future.fromTry(fullyCleanedAnswers)
   }
 }

@@ -26,6 +26,10 @@ class PartnerDetailsAddCountryOfIncorporationFormProvider @Inject() extends Mapp
   def apply(): Form[String] =
     Form(
       "value" -> text("partnerDetailsAddCountryOfIncorporation.error.required")
+        .transform[String](
+          _.trim.replaceAll("\\s+", " "),
+          identity
+        )
         .verifying(
           regexp(countryRegex, "partnerDetailsAddCountryOfIncorporation.error.invalid"),
           maxLength(maxStringLength, "partnerDetailsAddCountryOfIncorporation.error.length")

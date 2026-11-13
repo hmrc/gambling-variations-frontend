@@ -96,28 +96,36 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
           }
         }
 
-        "must strip the trailing underscore when populating the view for an 8-character NINO" in {
+        "must populate the view with the trailing space for an 8-character NINO" in {
 
-          val storedNinoWithUnderscore = s"${validNino8Chars}_"
+          val storedNinoWithSpace = s"$validNino8Chars "
 
           val userAnswers = userAnswersNewPartners
-            .set(PartnerDetailsNinoPage(newPartnersIndex1), storedNinoWithUnderscore)
+            .set(
+              PartnerDetailsNinoPage(newPartnersIndex1),
+              storedNinoWithSpace
+            )
             .success
             .value
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
           running(application) {
-            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteNewPartners)
+            val request =
+              FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteNewPartners)
 
-            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+            val view =
+              application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
 
             val result = route(application, request).value
 
             status(result) mustBe OK
-            contentAsString(result) mustBe view(form.fill(validNino8Chars), newPartnersIndex1.toString, NormalMode)(request,
-                                                                                                                    messages(application)
-                                                                                                                   ).toString
+
+            contentAsString(result) mustBe view(
+              form.fill(storedNinoWithSpace),
+              newPartnersIndex1.toString,
+              NormalMode
+            )(request, messages(application)).toString
           }
         }
 
@@ -211,7 +219,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
             val result = route(application, request).value
 
             val expectedAnswers = userAnswersNewPartners
-              .set(PartnerDetailsNinoPage(newPartnersIndex1), s"${validNino8Chars}_")
+              .set(PartnerDetailsNinoPage(newPartnersIndex1), s"$validNino8Chars ")
               .success
               .value
 
@@ -309,26 +317,42 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
           }
         }
 
-        "must strip the trailing underscore when populating the view for an 8-character NINO" in {
+        "must populate the view with the trailing space for an 8-character NINO" in {
 
-          val storedNinoWithUnderscore = s"${validNino8Chars}_"
+          val storedNinoWithSpace = s"$validNino8Chars "
 
           val userAnswers = userAnswersExistingPartners
-            .set(PartnerDetailsNinoPage(businessNumber1), storedNinoWithUnderscore)
+            .set(
+              PartnerDetailsNinoPage(businessNumber1),
+              storedNinoWithSpace
+            )
             .success
             .value
 
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+          val application =
+            applicationBuilder(userAnswers = Some(userAnswers)).build()
 
           running(application) {
-            val request = FakeRequest(GET, PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners)
+            val request =
+              FakeRequest(
+                GET,
+                PartnerDetailsAddNationalInsuranceNumberRouteExistingPartners
+              )
 
-            val view = application.injector.instanceOf[PartnerDetailsAddNationalInsuranceNumberView]
+            val view =
+              application.injector.instanceOf[
+                PartnerDetailsAddNationalInsuranceNumberView
+              ]
 
             val result = route(application, request).value
 
             status(result) mustBe OK
-            contentAsString(result) mustBe view(form.fill(validNino8Chars), businessNumber1, CheckMode)(request, messages(application)).toString
+
+            contentAsString(result) mustBe view(
+              form.fill(storedNinoWithSpace),
+              businessNumber1,
+              CheckMode
+            )(request, messages(application)).toString
           }
         }
 
@@ -422,7 +446,7 @@ class PartnerDetailsAddNationalInsuranceNumberControllerSpec extends SpecBase wi
             val result = route(application, request).value
 
             val expectedAnswers = userAnswersExistingPartners
-              .set(PartnerDetailsNinoPage(businessNumber1), s"${validNino8Chars}_")
+              .set(PartnerDetailsNinoPage(businessNumber1), s"$validNino8Chars ")
               .success
               .value
 

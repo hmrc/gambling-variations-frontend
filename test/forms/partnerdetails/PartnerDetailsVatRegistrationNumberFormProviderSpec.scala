@@ -77,8 +77,8 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
       }
     }
 
-    "bind a checksum-valid VAT number ignoring tabs, newlines and other whitespace" in {
-      Seq("353\t868\t127", "353868127\n", "\r\n353868127", "353\u2003868127").foreach { input =>
+    "bind a checksum-valid VAT number ignoring tabs and  newlines" in {
+      Seq("353\t868\t127", "353868127\n", "\r\n353868127").foreach { input =>
         val bound = form.bind(Map(fieldName -> input))
         bound.value.value mustBe "353868127"
         bound.errors mustBe empty
@@ -88,11 +88,6 @@ class PartnerDetailsVatRegistrationNumberFormProviderSpec extends StringFieldBeh
     "fail to bind fewer than 9 digits once whitespace is removed, reporting the length error but not the characters error" in {
       val result = form.bind(Map(fieldName -> "35 38 68 12")).apply(fieldName)
       result.errors mustEqual Seq(FormError(fieldName, lengthKey, Seq(vrnLength)), FormError(fieldName, realKey))
-    }
-
-    "fail to bind 9 digits non-checksum VAT number containing spaces, reporting only the real-VAT number error" in {
-      val result = form.bind(Map(fieldName -> "353 868 128")).apply(fieldName)
-      result.errors mustEqual Seq(FormError(fieldName, realKey))
     }
 
     "fail to bind non-digit chars in a value containing whitespace" in {

@@ -26,7 +26,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsSoleProprietorPage}
+import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsDateOfBirthPage, PartnerDetailsSoleProprietorPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -192,6 +192,11 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
             val expectedAnswers = validUserAnswersNewPartners
               .set(PartnerDetailsBusinessTypePage(newPartnersIndex1), Corporatebody)
+              .flatMap(
+                _.remove(
+                  PartnerDetailsBusinessNamePage(newPartnersIndex1)
+                )
+              )
               .success
               .value
 
@@ -329,12 +334,72 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
             val expectedAnswers = validUserAnswersExistingPartners
               .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
+              .flatMap(
+                _.remove(
+                  PartnerDetailsBusinessNamePage(businessNumber1)
+                )
+              )
               .success
               .value
 
             status(result) mustEqual SEE_OTHER
             redirectLocation(result).value mustEqual onwardRoute.url
             verify(mockSessionRepository).set(expectedAnswers)
+          }
+        }
+
+        "must update UserAnswers, remove the previous business name and redirect to the next page when the business type changes" in {
+
+          val mockSessionRepository = mock[SessionRepository]
+
+          when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+          val application =
+            applicationBuilder(userAnswers = Some(validUserAnswersNewPartners))
+              .overrides(
+                bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+                bind[SessionRepository].toInstance(mockSessionRepository)
+              )
+              .build()
+
+          running(application) {
+            val request =
+              FakeRequest(
+                POST,
+                PartnerDetailsBusinessTypeController
+                  .onSubmit(newPartnersIndex1.toString, NormalMode)
+                  .url
+              ).withFormUrlEncodedBody(
+                "value" -> Corporatebody.toString
+              )
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual onwardRoute.url
+
+            val captor =
+              ArgumentCaptor.forClass(classOf[UserAnswers])
+
+            verify(mockSessionRepository).set(captor.capture())
+
+            val savedAnswers = captor.getValue
+
+            savedAnswers.get(
+              PartnerDetailsBusinessTypePage(newPartnersIndex1)
+            ) mustBe Some(Corporatebody)
+
+            savedAnswers.get(
+              PartnerDetailsBusinessNamePage(newPartnersIndex1)
+            ) mustBe None
+
+            savedAnswers.get(
+              PartnerDetailsSoleProprietorPage(newPartnersIndex1)
+            ) mustBe None
+
+            savedAnswers.get(
+              PartnerDetailsDateOfBirthPage(newPartnersIndex1)
+            ) mustBe None
           }
         }
 
