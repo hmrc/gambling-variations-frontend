@@ -17,7 +17,7 @@
 package controllers.tradingdetails
 
 import base.SpecBase
-import controllers.actions.{OtherTradeClassDataRequiredAction, OtherTradeClassDataRequiredActionImpl}
+import controllers.actions.{MgdTradeDetailsDataRequiredAction, MgdTradeDetailsDataRequiredActionImpl}
 import controllers.routes
 import forms.OtherTradeClassFormProvider
 import models.{NormalMode, UserAnswers}
@@ -47,7 +47,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
   val noAnswers =
     UserAnswers(
       userAnswersId,
-      Json.obj("otherTradeClassSection" -> Json.obj("mgdRegNum" -> userAnswersId))
+      Json.obj("mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
     )
 
   lazy val otherTradeClassRoute =
@@ -74,7 +74,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view on a GET when the question has previously been answered" in {
 
-      val data = Json.obj("otherTradeClassSection" -> Json.obj("mgdRegNum" -> userAnswersId), OtherTradeClassPage.toString -> "valid trade class")
+      val data = Json.obj("mgdTradeDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId), OtherTradeClassPage.toString -> "valid trade class")
 
       val userAnswers = UserAnswers(userAnswersId, data)
 
@@ -96,7 +96,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted and isSeasonal" in {
 
       val data = Json.obj(
-        "otherTradeClassSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
+        "mgdTradeDetailsSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
         OtherTradeClassPage.toString -> "valid trade class",
         "isBusinessSeasonal"         -> true
       )
@@ -128,7 +128,7 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the Seasonal Business page when seasonal data not provided" in {
       val seasonalBusinessRoute = controllers.tradingdetails.routes.SeasonalBusinessController.onPageLoad().url
       val data = Json.obj(
-        "otherTradeClassSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
+        "mgdTradeDetailsSection"     -> Json.obj("mgdRegNum" -> userAnswersId),
         OtherTradeClassPage.toString -> "valid trade class"
       )
 
@@ -239,8 +239,8 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = None)
           .overrides(
-            bind[OtherTradeClassDataRequiredAction]
-              .to[OtherTradeClassDataRequiredActionImpl]
+            bind[MgdTradeDetailsDataRequiredAction]
+              .to[MgdTradeDetailsDataRequiredActionImpl]
           )
           .build()
 
@@ -260,8 +260,8 @@ class OtherTradeClassControllerSpec extends SpecBase with MockitoSugar {
       val application =
         applicationBuilder(userAnswers = None)
           .overrides(
-            bind[OtherTradeClassDataRequiredAction]
-              .to[OtherTradeClassDataRequiredActionImpl]
+            bind[MgdTradeDetailsDataRequiredAction]
+              .to[MgdTradeDetailsDataRequiredActionImpl]
           )
           .build()
 
