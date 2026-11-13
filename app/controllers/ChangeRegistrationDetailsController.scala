@@ -40,6 +40,11 @@ class ChangeRegistrationDetailsController @Inject() (
     with I18nSupport
     with Logging {
 
+  def onLanding(regNumber: String): Action[AnyContent] =
+    authorise { request =>
+      Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()).addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
+    }
+
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen businessDetailsRequired) { implicit request =>
 

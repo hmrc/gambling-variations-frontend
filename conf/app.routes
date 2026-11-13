@@ -25,6 +25,10 @@ GET        /page-not-found                              controllers.PageNotFound
 
 GET        /change-registration-details                 controllers.ChangeRegistrationDetailsController.onPageLoad()
 
+# Landing url - These are used by gambling-management-frontend
+GET        /:regNumber/change-registration-details      controllers.ChangeRegistrationDetailsController.onLanding(regNumber: String)
+GET        /:regNumber/cancel-registration              controllers.cancellation.CancelRegistrationDateController.onLanding(regNumber: String)
+
 GET        /change-registration-details/business-name/check              controllers.businessname.CheckBusinessNameController.onPageLoad()
 
 GET        /change-registration-details/declaration             controllers.DeclarationController.onPageLoad()
@@ -388,4 +392,3 @@ GET        /cancel-group-registration/no-longer-liable                  controll
 POST       /cancel-group-registration/no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = NormalMode)
 GET        /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onPageLoad(mode: Mode = CheckMode)
 POST       /cancel-group-registration/change-no-longer-liable                  controllers.cancellation.CancelGroupRegistrationDateController.onSubmit(mode: Mode = CheckMode)
-
