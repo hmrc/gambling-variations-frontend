@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import models.BusinessType.Corporatebody
 import models.UserAnswers
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -46,8 +46,8 @@ class CheckControllingBodyDetailsControllerSpec extends SpecBase with MockitoSug
       answers <- answers.set(ControllingBodyBusinessNamePage, "BRUCE HOPKINS LIMITED")
     } yield answers).success.value
 
-  private val controlBodyDetails: ControlBodyDetails =
-    Json.obj("mgdRegNumber" -> mgdRegNum, "businessName" -> "BRUCE HOPKINS LIMITED", "typeOfControllingBody" -> 2).as[ControlBodyDetails]
+  private val controllingBodyDetails: ControllingBodyDetails =
+    Json.obj("mgdRegNumber" -> mgdRegNum, "businessName" -> "BRUCE HOPKINS LIMITED", "typeOfControllingBody" -> 2).as[ControllingBodyDetails]
 
   "CheckControllingBodyDetails Controller" - {
 
@@ -73,7 +73,7 @@ class CheckControllingBodyDetailsControllerSpec extends SpecBase with MockitoSug
       val mockGamblingConnector = mock[GamblingConnector]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockGamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future.successful(controlBodyDetails)
+      when(mockGamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(controllingBodyDetails)
 
       val application =
         applicationBuilder(userAnswers = None)
@@ -97,7 +97,7 @@ class CheckControllingBodyDetailsControllerSpec extends SpecBase with MockitoSug
 
       val mockGamblingConnector = mock[GamblingConnector]
 
-      when(mockGamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("backend unavailable"))
+      when(mockGamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("backend unavailable"))
 
       val application =
         applicationBuilder(userAnswers = None)

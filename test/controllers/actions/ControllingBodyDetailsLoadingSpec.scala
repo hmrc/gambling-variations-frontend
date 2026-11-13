@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import connectors.GamblingConnector
 import models.{BusinessType, SoleProprietorName, UserAnswers}
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import models.requests.OptionalDataRequest
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, verifyNoInteractions, when}
@@ -45,13 +45,13 @@ class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
       "typeOfControllingBody" -> 4,
       "businessName"          -> "Backend Partnership"
     )
-    .as[ControlBodyDetails]
+    .as[ControllingBodyDetails]
 
   private trait Setup {
     val repository = mock[SessionRepository]
     val connector = mock[GamblingConnector]
     when(repository.set(any())) thenReturn Future.successful(true)
-    when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(backendDetails)
+    when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(backendDetails)
     val action = new Harness(repository, connector)
   }
 
@@ -60,7 +60,7 @@ class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
       val loaded = action.run(None).futureValue.toOption.value.userAnswers
       val edited = loaded.set(ControllingBodyBusinessNamePage, "Edited name").success.value
       action.run(Some(edited)).futureValue.toOption.value.userAnswers mustBe edited
-      verify(connector).getControlBodyDetails(any())(any())
+      verify(connector).getControllingBodyDetails(any())(any())
       verify(repository).set(loaded)
     }
 
@@ -74,13 +74,13 @@ class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
                                   )
                                 )
                                )
-      when(connector.getControlBodyDetails(any())(any())) thenReturn
-        Future.successful(ControllingBodyDetailsDataRequiredActionSpec.controlBodyDetails)
+      when(connector.getControllingBodyDetails(any())(any())) thenReturn
+        Future.successful(ControllingBodyDetailsDataRequiredActionSpec.controllingBodyDetails)
       val result = action.run(Some(answers)).futureValue.toOption.value.userAnswers
       result.get(ControllingBodyBusinessNamePage).value mustBe "Edited name"
       result.get(ControllingBodyBusinessTypePage).value mustBe BusinessType.Partnership
       result.get(ControllingBodyCorrespondenceSectionPage).isDefined mustBe true
-      verify(connector).getControlBodyDetails(org.mockito.ArgumentMatchers.eq(mgdRegNum))(any())
+      verify(connector).getControllingBodyDetails(org.mockito.ArgumentMatchers.eq(mgdRegNum))(any())
     }
 
     "load and cache the name and business type when no session exists" in new Setup {
@@ -89,7 +89,7 @@ class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
       result.get(ControllingBodyBusinessNamePage).value mustEqual "Backend Partnership"
       result.get(ControllingBodyBusinessTypePage).value mustEqual BusinessType.Partnership
       result.get(ControllingBodySectionPage).value mustBe mgdRegNum
-      verify(connector).getControlBodyDetails(org.mockito.ArgumentMatchers.eq(mgdRegNum))(any())
+      verify(connector).getControllingBodyDetails(org.mockito.ArgumentMatchers.eq(mgdRegNum))(any())
       verify(repository).set(result)
     }
 
@@ -124,7 +124,7 @@ class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
     }
 
     "allow an absent business name to be displayed as a blank input" in new Setup {
-      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(backendDetails.copy(businessName = None))
+      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(backendDetails.copy(businessName = None))
       val answers = action.run(None).futureValue.toOption.value.userAnswers
       answers.get(ControllingBodyBusinessNamePage) mustBe None
       answers.get(ControllingBodySectionPage).value mustBe mgdRegNum
@@ -136,13 +136,13 @@ class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
                             solePropFirstName     = Some("Jane"),
                             solePropLastName      = Some("Smith")
                            )
-      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(details)
+      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(details)
       val answers = action.run(None).futureValue.toOption.value.userAnswers
       answers.get(ControllingBodySoleProprietorPage).value mustEqual SoleProprietorName("", "Jane", None, "Smith")
     }
 
     "allow a sole proprietor with no name fields" in new Setup {
-      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(
+      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(
         backendDetails.copy(typeOfControllingBody = Some(BusinessType.Soleproprietor))
       )
       action.run(None).futureValue.toOption.value.userAnswers.get(ControllingBodySoleProprietorPage) mustBe None
@@ -151,14 +151,14 @@ class ControllingBodyDetailsLoadingSpec extends SpecBase with MockitoSugar {
     "preserve an edited sole proprietor name" in new Setup {
       val name = SoleProprietorName("Ms", "Jane", None, "Jones")
       val answers = emptyUserAnswers.set(ControllingBodySoleProprietorPage, name).success.value
-      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(
+      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(
         backendDetails.copy(typeOfControllingBody = Some(BusinessType.Soleproprietor), solePropFirstName = Some("Old"))
       )
       action.run(Some(answers)).futureValue.toOption.value.userAnswers.get(ControllingBodySoleProprietorPage).value mustEqual name
     }
 
     "redirect to the service error when the backend fails" in new Setup {
-      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
+      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
       action.run(None).futureValue mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
       verifyNoInteractions(repository)
     }
