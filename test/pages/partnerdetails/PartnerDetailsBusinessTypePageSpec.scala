@@ -94,7 +94,7 @@ class PartnerDetailsBusinessTypePageSpec extends PlaySpec with PartnerDetailsHel
       behave like cleanupBehaviour(businessNumber1, businessNumber2)
 
       "have the correct path" in {
-        PartnerDetailsBusinessTypePage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsBusinessType")
+        PartnerDetailsBusinessTypePage(businessNumber1).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsBusinessType")
       }
 
       "have the correct toString value" in {
@@ -107,7 +107,7 @@ class PartnerDetailsBusinessTypePageSpec extends PlaySpec with PartnerDetailsHel
         val value2 = BusinessType.Unincorporatedbody
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsBusinessTypePage(businessNumber1).toString -> Json.toJson(value1.code)
             ),
@@ -137,7 +137,9 @@ class PartnerDetailsBusinessTypePageSpec extends PlaySpec with PartnerDetailsHel
       behave like cleanupBehaviour(newPartnersIndex1, newPartnersIndex2)
 
       "have the correct path" in {
-        PartnerDetailsBusinessTypePage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsBusinessType")
+        PartnerDetailsBusinessTypePage(
+          newPartnersIndex1
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsBusinessType")
       }
 
       "have the correct toString value" in {
@@ -150,7 +152,7 @@ class PartnerDetailsBusinessTypePageSpec extends PlaySpec with PartnerDetailsHel
         val value2 = BusinessType.Unincorporatedbody
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsBusinessTypePage(newPartnersIndex1).toString -> Json.toJson(value1.code)
             ),

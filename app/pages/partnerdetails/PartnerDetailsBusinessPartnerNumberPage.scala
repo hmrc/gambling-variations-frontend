@@ -22,8 +22,8 @@ import play.api.libs.json.JsPath
 case class PartnerDetailsBusinessPartnerNumberPage(businessNumberOrIndex: BusinessNumberOrIndex) extends QuestionPage[String] {
 
   override val path: JsPath = businessNumberOrIndex match {
-    case key: String => JsPath \ "partners" \ key \ "partnerDetailsBusinessPartnerNumber"
-    case index: Int  => JsPath \ "newPartners" \ index \ "partnerDetailsBusinessPartnerNumber"
+    case key: String => ExistingPartnerDetailsSection.path \ key \ toString
+    case index: Int  => NewPartnerDetailsSection.path \ index \ toString
   }
 
   override def toString: String =

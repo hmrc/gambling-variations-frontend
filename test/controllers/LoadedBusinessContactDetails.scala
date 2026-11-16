@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.businesscontactdetails
+package controllers
 
 import models.{OriginalAnswers, UserAnswers}
 import pages.contactdetails.BusinessContactDetailsSection
@@ -23,7 +23,7 @@ import play.api.libs.json.JsObject
 import java.time.Instant
 
 // Answers in which the business contact details have already been loaded from the backend, with the given original data
-object LoadedContactDetails {
+object LoadedBusinessContactDetails {
 
   def apply(id: String, data: JsObject): UserAnswers =
     UserAnswers(id, OriginalAnswers(data, Map(BusinessContactDetailsSection.key -> Instant.EPOCH)))

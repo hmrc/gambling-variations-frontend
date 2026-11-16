@@ -18,11 +18,13 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, BusinessPartnerDetails, BusinessType, ContactNumber, CorrespondenceDetails, PartnersDetails, SoleProprietorName, SoleProprietorPartnerDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection}
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
 import play.api.mvc.Results.*
@@ -31,7 +33,7 @@ import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
-import java.time.LocalDate
+import java.time.{Clock, Instant, LocalDate, ZoneOffset}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.language.postfixOps
@@ -41,7 +43,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
   import PartnerDetailsDataRequiredActionSpec.*
 
   class Harness(sessionRepository: SessionRepository, gamblingConnector: GamblingConnector)
-      extends PartnerDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector) {
+      extends PartnerDetailsDataRequiredActionImpl(sessionRepository, gamblingConnector, clock) {
     def callRefine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = refine(request)
   }
 
@@ -60,7 +62,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "partners" -> Json.obj(
+            "partnersSection" -> Json.obj(
               "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
                 "partnerDetailsBusinessPartnerNumber" -> "0100049899",
@@ -165,7 +167,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val minimalData = Json.obj(
-            "partners" -> Json.obj(
+            "partnersSection" -> Json.obj(
               "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber" -> "XWM00000001762"
               )
@@ -173,10 +175,12 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
             "systemDate" -> "2026-07-30"
           )
 
-          val result: Either[Result, DataRequest[AnyContent]] =
-            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(UserAnswers(mgdRegNum, minimalData)))).futureValue
+          val minimalDataWithSections = LoadedPartnerDetails.apply(mgdRegNum, minimalData, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
-          val expected = DataRequest(request, mgdRegNum, UserAnswers(mgdRegNum, minimalData))
+          val result: Either[Result, DataRequest[AnyContent]] =
+            action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(minimalDataWithSections))).futureValue
+
+          val expected = DataRequest(request, mgdRegNum, minimalDataWithSections)
 
           result.map { req =>
             req.request mustBe expected.request
@@ -203,7 +207,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           )
 
           val expectedResponse = Json.obj(
-            "partners" -> Json.obj(
+            "partnersSection" -> Json.obj(
               "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
                 "partnerDetailsBusinessPartnerNumber" -> "0100049899",
@@ -276,7 +280,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
@@ -355,7 +359,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
@@ -424,7 +428,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
         val action = new Harness(sessionRepository, gamblingConnector)
 
         val data = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             "0100049899" -> Json.obj(
               "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
               "partnerDetailsBusinessPartnerNumber" -> "0100049899",
@@ -490,7 +494,7 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
           val action = new Harness(sessionRepository, gamblingConnector)
 
           val data = Json.obj(
-            "partners" -> Json.obj(
+            "partnersSection" -> Json.obj(
               "0100049899" -> Json.obj(
                 "partnerDetailsMgdRegNumber"          -> "XWM00000001762",
                 "partnerDetailsBusinessPartnerNumber" -> "0100049899",
@@ -557,6 +561,9 @@ class PartnerDetailsDataRequiredActionSpec extends SpecBase with MockitoSugar {
 }
 
 object PartnerDetailsDataRequiredActionSpec {
+
+  val now: Instant = Instant.parse("2026-11-02T09:00:00Z")
+  val clock: Clock = Clock.fixed(now, ZoneOffset.UTC)
 
   val partnerDetailsBusiness = BusinessPartnerDetails(
     mgdRegNumber           = "XWM00000001762",

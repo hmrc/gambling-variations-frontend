@@ -27,7 +27,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoPageSpec extends PlaySpec 
     "partners" must {
       "have the correct path" in {
         PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsRemoveNationalInsuranceNumberYesNo")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsRemoveNationalInsuranceNumberYesNo")
       }
 
       "have the correct string representation" in {
@@ -38,7 +38,7 @@ class PartnerDetailsRemoveNationalInsuranceNumberYesNoPageSpec extends PlaySpec 
     "newPartners" must {
       "have the correct path" in {
         PartnerDetailsRemoveNationalInsuranceNumberYesNoPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsRemoveNationalInsuranceNumberYesNo")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsRemoveNationalInsuranceNumberYesNo")
       }
 
       "have the correct string representation" in {

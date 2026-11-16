@@ -26,7 +26,7 @@ class PartnerDetailsUtrPageSpec extends PlaySpec with PartnerDetailsHelper {
     "PartnerDetailsUtrPage" must {
 
       "have the correct path" in {
-        PartnerDetailsUtrPage(businessNumber1).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsUtr")
+        PartnerDetailsUtrPage(businessNumber1).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsUtr")
       }
 
       "have the correct toString value" in {
@@ -40,7 +40,7 @@ class PartnerDetailsUtrPageSpec extends PlaySpec with PartnerDetailsHelper {
         val value2 = "Value2"
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsUtrPage(businessNumber1).toString -> Json.toJson(value1)
             ),
@@ -68,7 +68,7 @@ class PartnerDetailsUtrPageSpec extends PlaySpec with PartnerDetailsHelper {
     "PartnerDetailsUtrPage" must {
 
       "have the correct path" in {
-        PartnerDetailsUtrPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsUtr")
+        PartnerDetailsUtrPage(newPartnersIndex1).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsUtr")
       }
 
       "have the correct toString value" in {
@@ -82,7 +82,7 @@ class PartnerDetailsUtrPageSpec extends PlaySpec with PartnerDetailsHelper {
         val value2 = "Value2"
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsUtrPage(newPartnersIndex1).toString -> Json.toJson(value1)
             ),
