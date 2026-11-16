@@ -414,7 +414,13 @@ class NavigatorSpec extends SpecBase {
 
     "in Check mode" - {
 
-      Seq(ControllingBodyIsUkIncorporatedPage, ControllingBodyCountryOfIncorporationPage, ControllingBodyDateOfIncorporationPage)
+      Seq(
+        ControllingBodyIsUkIncorporatedPage,
+        ControllingBodyCountryOfIncorporationPage,
+        ControllingBodyDateOfIncorporationPage,
+        ControllingBodyCrnPage,
+        ControllingBodyForeignCorpRefPage
+      )
         .foreach { page =>
           s"should preserve existing navigation for $page pending the CB-CYA tickets" in {
             val answers = emptyAnswers
@@ -1371,6 +1377,77 @@ class NavigatorSpec extends SpecBase {
 
             navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, answers) mustBe
               controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+          }
+
+          s"should route $businessType from company registration number to UTR" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessTypePage, businessType)
+              .success
+              .value
+              .set(ControllingBodyCrnPage, "12345678")
+              .success
+              .value
+
+            navigator.nextPage(ControllingBodyCrnPage, NormalMode, answers) mustBe
+              controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+          }
+        }
+
+        "should route a corporate body from foreign corporate reference to UTR" in {
+          val answers = emptyAnswers
+            .set(ControllingBodyBusinessTypePage, Corporatebody)
+            .success
+            .value
+            .set(ControllingBodyIsUkIncorporatedPage, "0")
+            .success
+            .value
+            .set(ControllingBodyForeignCorpRefPage, "FOREIGN123")
+            .success
+            .value
+
+          navigator.nextPage(ControllingBodyForeignCorpRefPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
+        }
+
+        Seq(
+          (ControllingBodyIsUkIncorporatedPage, "1", controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()),
+          (ControllingBodyIsUkIncorporatedPage, "0", controllers.controllingbody.routes.ControllingBodyCountryOfIncorporationController.onPageLoad()),
+          (ControllingBodyCountryOfIncorporationPage, "0", controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad()),
+          (ControllingBodyDateOfIncorporationPage,
+           "1",
+           controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+          ),
+          (ControllingBodyCrnPage, "1", controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()),
+          (ControllingBodyForeignCorpRefPage, "0", controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad())
+        ).foreach { case (page, incorporatedInUk, destination) =>
+          s"should preserve the existing body's destination from $page with UK incorporation $incorporatedInUk" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessTypePage, Corporatebody)
+              .success
+              .value
+              .set(ControllingBodyIsUkIncorporatedPage, incorporatedInUk)
+              .success
+              .value
+              .set(ControllingBodyBusinessPartnerNumberPage, "1234567890")
+              .success
+              .value
+
+            navigator.nextPage(page, NormalMode, answers) mustBe routes.IndexController.onPageLoad()
+          }
+
+          s"should allow first-time navigation from $page with UK incorporation $incorporatedInUk when the partner number is blank" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessTypePage, Corporatebody)
+              .success
+              .value
+              .set(ControllingBodyIsUkIncorporatedPage, incorporatedInUk)
+              .success
+              .value
+              .set(ControllingBodyBusinessPartnerNumberPage, "  ")
+              .success
+              .value
+
+            navigator.nextPage(page, NormalMode, answers) mustBe destination
           }
         }
       }
