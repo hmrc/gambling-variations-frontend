@@ -16,11 +16,11 @@
 
 package pages.partnerdetails
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
-case class PartnerDetailsHasClickedOnChangeOrRemovePage(key: String) extends QuestionPage[Boolean] {
+case class PartnerDetailsHasClickedOnChangeOrRemovePage(key: String) extends FlagPage[Boolean] {
 
-  override val path: JsPath = JsPath \ "partners" \ key \ toString
+  override val path: JsPath = ExistingPartnerDetailsSection.path \ key \ toString
 
   override def toString: String = "partnerDetailsHasClickedOnChangeOrRemove"
 }

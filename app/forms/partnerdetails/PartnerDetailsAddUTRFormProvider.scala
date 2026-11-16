@@ -28,7 +28,10 @@ class PartnerDetailsAddUTRFormProvider @Inject() extends Mappings with ChecksumC
   def apply(): Form[String] =
     Form(
       "value" -> text(requiredKey)
-        .transform[String](_.trim, identity)
+        .transform[String](
+          _.replaceAll("\\s+", ""),
+          identity
+        )
         .verifying(
           regexp(digitsOnlyRegex, invalidCharsKey),
           regexp(lengthRegex, invalidLengthKey),

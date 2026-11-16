@@ -17,7 +17,7 @@
 package controllers.businesscontactdetails
 
 import base.SpecBase
-import controllers.routes
+import controllers.{LoadedBusinessContactDetails, routes}
 import forms.ContactNumberFormProvider
 import models.{ContactNumber, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -60,14 +60,14 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
     controllers.businesscontactdetails.routes.BusinessContactNumberController.onPageLoad().url
 
   val userAnswers =
-    LoadedContactDetails(userAnswersId, data)
+    LoadedBusinessContactDetails(userAnswersId, data)
 
   "BusinessContactNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, noAnswers))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessContactDetails(userAnswersId, noAnswers))).build()
 
       running(application) {
 
@@ -89,7 +89,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessContactDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -109,7 +109,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       val data = Json.obj()
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedPartnerDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -159,7 +159,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, noAnswers)))
+        applicationBuilder(userAnswers = Some(LoadedBusinessContactDetails(userAnswersId, noAnswers)))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -220,7 +220,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       val data = Json.obj(GroupMemberPage.toString -> true)
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessContactDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -245,7 +245,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
       val data = Json.obj()
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, data))).build()
+        applicationBuilder(userAnswers = Some(LoadedPartnerDetails(userAnswersId, data))).build()
 
       running(application) {
 
@@ -302,7 +302,7 @@ class BusinessContactNumberControllerSpec extends SpecBase with MockitoSugar {
     "must return Bad Request and errors when invalid data is submitted" in {
 
       val application =
-        applicationBuilder(userAnswers = Some(LoadedContactDetails(userAnswersId, noAnswers))).build()
+        applicationBuilder(userAnswers = Some(LoadedBusinessContactDetails(userAnswersId, noAnswers))).build()
 
       running(application) {
 

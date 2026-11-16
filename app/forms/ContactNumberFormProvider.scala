@@ -70,13 +70,13 @@ class ContactNumberFormProvider @Inject() extends Mappings {
         "phoneNumber" ->
           optional(
             text()
-              .transform(_.trim, identity)
+              .transform[String](_.trim.replaceAll("\\s+", " "), identity)
               .verifying(phoneConstraint(prefix))
           ),
         "mobileNumber" ->
           optional(
             text()
-              .transform(_.trim, identity)
+              .transform[String](_.trim.replaceAll("\\s+", " "), identity)
               .verifying(mobileConstraint(prefix))
           )
       )((phone: Option[String], mobile: Option[String]) => ContactNumber(phone, mobile))((b: ContactNumber) =>

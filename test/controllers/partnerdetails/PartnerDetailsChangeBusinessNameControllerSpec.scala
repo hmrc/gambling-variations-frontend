@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes
 import forms.{ChangeBusinessNameFormProvider, SoleProprietorNameFormProvider}
 import models.BusinessType.Partnership
@@ -26,7 +27,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessNamePage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessNamePage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -47,43 +48,46 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
     val businessName = "Test Business"
     val form = formProvider(businessType)
 
-    val userAnswersExistingPartners: UserAnswers =
-      UserAnswers(
-        "id",
-        Json.obj(
-          "partners" -> Json.obj(
-            businessNumber1 -> Json.obj(
-              "partnerDetailsMgdRegNumber" -> mgdRegNum,
-              "partnerDetailsBusinessType" -> businessType.code,
-              "partnerDetailsBusinessName" -> businessName
-            )
+    val userAnswersExistingPartners: UserAnswers = LoadedPartnerDetails.apply(
+      "id",
+      Json.obj(
+        "partnersSection" -> Json.obj(
+          businessNumber1 -> Json.obj(
+            "partnerDetailsMgdRegNumber" -> mgdRegNum,
+            "partnerDetailsBusinessType" -> businessType.code,
+            "partnerDetailsBusinessName" -> businessName
           )
         )
-      )
+      ),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
+    )
 
-    val userAnswersNewPartners: UserAnswers =
-      UserAnswers(
+    val userAnswersNewPartners: UserAnswers = LoadedPartnerDetails
+      .apply(
         "id",
         Json.obj(
-          "partners" -> Json.obj(),
-          "newPartners" -> Json.arr(
+          "partnersSection" -> Json.obj(),
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               "partnerDetailsMgdRegNumber" -> mgdRegNum,
               "partnerDetailsBusinessType" -> businessType.code,
               "partnerDetailsBusinessName" -> businessName
             )
           )
-        )
+        ),
+        ExistingPartnerDetailsSection,
+        NewPartnerDetailsSection
       )
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-        .success
-        .value
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+      .success
+      .value
 
-    val soleProprietorUserAnswersExistingPartners: UserAnswers =
-      UserAnswers(
+    val soleProprietorUserAnswersExistingPartners: UserAnswers = LoadedPartnerDetails
+      .apply(
         "id",
         Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               "partnerDetailsMgdRegNumber" -> mgdRegNum,
               "partnerDetailsBusinessType" -> businessType.code,
@@ -95,15 +99,17 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
               )
             )
           )
-        )
+        ),
+        ExistingPartnerDetailsSection,
+        NewPartnerDetailsSection
       )
 
-    val soleProprietorUserAnswersNewPartners: UserAnswers =
-      UserAnswers(
+    val soleProprietorUserAnswersNewPartners: UserAnswers = LoadedPartnerDetails
+      .apply(
         "id",
         Json.obj(
-          "partners" -> Json.obj(),
-          "newPartners" -> Json.arr(
+          "partnersSection" -> Json.obj(),
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               "partnerDetailsMgdRegNumber" -> mgdRegNum,
               "partnerDetailsBusinessType" -> businessType.code,
@@ -115,17 +121,21 @@ class PartnerDetailsChangeBusinessNameControllerSpec extends SpecBase with Mocki
               )
             )
           )
-        )
+        ),
+        ExistingPartnerDetailsSection,
+        NewPartnerDetailsSection
       )
-        .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-        .success
-        .value
+      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+      .success
+      .value
 
-    val noAnswers = UserAnswers(
+    val noAnswers = LoadedPartnerDetails.apply(
       userAnswersId,
       Json.obj(
         "businessNameSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
+      ),
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
     )
 
     lazy val partnerDetailsChangeBusinessNameRouteExistingPartners =

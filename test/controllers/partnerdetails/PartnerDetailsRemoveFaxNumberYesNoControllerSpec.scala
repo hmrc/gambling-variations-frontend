@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.partnerdetails.routes.PartnerDetailsRemoveFaxNumberYesNoController
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsRemoveFaxNumberYesNoFormProvider
@@ -25,7 +26,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceFaxNumberPage, PartnerDetailsRemoveFaxNumberYesNoPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsCorrespondenceFaxNumberPage, PartnerDetailsRemoveFaxNumberYesNoPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -46,20 +47,20 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
   lazy val partnerDetailsRemoveFaxNumberYesNoRouteExistingPartners: String =
     PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(businessNumber1, CheckMode).url
 
-  private val validUserAnswersNewPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataExistingPartners(Some(testFaxNumber)))
-      .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
-      .success
-      .value
-      .set(PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1), testFaxNumber)
-      .success
-      .value
+  private val validUserAnswersNewPartners: UserAnswers = LoadedPartnerDetails
+    .apply(mgdRegNumber, cleanedDataExistingPartners(Some(testFaxNumber)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
+    .success
+    .value
+    .set(PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1), testFaxNumber)
+    .success
+    .value
 
-  private val validUserAnswersExistingPartners: UserAnswers =
-    UserAnswers(mgdRegNumber, cleanedDataNewPartners(Some(testFaxNumber)))
-      .set(PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1), testFaxNumber)
-      .success
-      .value
+  private val validUserAnswersExistingPartners: UserAnswers = LoadedPartnerDetails
+    .apply(mgdRegNumber, cleanedDataNewPartners(Some(testFaxNumber)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    .set(PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1), testFaxNumber)
+    .success
+    .value
 
   "partners" - {
 
@@ -102,7 +103,8 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         }
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but faxNumber is None" in {
-          val userAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(None))
+          val userAnswers =
+            LoadedPartnerDetails(mgdRegNumber, cleanedDataExistingPartners(None), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -263,7 +265,7 @@ class PartnerDetailsRemoveFaxNumberYesNoControllerSpec extends SpecBase with Moc
         }
 
         "must redirect to JourneyRecovery on a GET when correspondence details exist but faxNumber is None" in {
-          val userAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners(None))
+          val userAnswers = LoadedPartnerDetails(mgdRegNumber, cleanedDataNewPartners(None), NewPartnerDetailsSection, ExistingPartnerDetailsSection)
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

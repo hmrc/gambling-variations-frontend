@@ -29,7 +29,7 @@ class PartnerDetailsRemoveFaxNumberYesNoPageSpec extends SpecBase with PartnerDe
       "must have the correct path" in {
         PartnerDetailsRemoveFaxNumberYesNoPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsRemoveFaxNumberYesNo")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsRemoveFaxNumberYesNo")
       }
 
       "must have the correct string representation" in {
@@ -45,7 +45,7 @@ class PartnerDetailsRemoveFaxNumberYesNoPageSpec extends SpecBase with PartnerDe
       "must have the correct path" in {
         PartnerDetailsRemoveFaxNumberYesNoPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsRemoveFaxNumberYesNo")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsRemoveFaxNumberYesNo")
       }
 
       "must have the correct string representation" in {

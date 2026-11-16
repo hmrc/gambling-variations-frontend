@@ -30,7 +30,7 @@ class PartnerDetailsDateOfIncorporationPageSpec extends PlaySpec with PartnerDet
       "have the correct path" in {
         PartnerDetailsDateOfIncorporationPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsDateOfIncorporation")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsDateOfIncorporation")
       }
 
       "have the correct toString value" in {
@@ -44,7 +44,7 @@ class PartnerDetailsDateOfIncorporationPageSpec extends PlaySpec with PartnerDet
         val value2 = LocalDate.of(2025, 1, 1)
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsDateOfIncorporationPage(businessNumber1).toString -> Json.toJson(value1)
             ),
@@ -74,7 +74,7 @@ class PartnerDetailsDateOfIncorporationPageSpec extends PlaySpec with PartnerDet
       "have the correct path" in {
         PartnerDetailsDateOfIncorporationPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsDateOfIncorporation")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsDateOfIncorporation")
       }
 
       "have the correct toString value" in {
@@ -88,7 +88,7 @@ class PartnerDetailsDateOfIncorporationPageSpec extends PlaySpec with PartnerDet
         val value2 = LocalDate.of(2025, 1, 1)
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsDateOfIncorporationPage(newPartnersIndex1).toString -> Json.toJson(value1)
             ),
