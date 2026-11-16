@@ -65,6 +65,34 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
   private lazy val connector =
     app.injector.instanceOf[GamblingConnector]
 
+  "GamblingConnector.startClientListRetrieval" should {
+    "POST to the retrieval start endpoint and map the returned status" in {
+      wireMockServer.stubFor(
+        post(urlEqualTo("/gambling/agent/client-list/mgd/retrieval/start"))
+          .willReturn(okJson("""{"result":"succeeded"}"""))
+      )
+      connector.startClientListRetrieval("mgd").map(_ mustBe ClientListStatus.Succeeded)
+    }
+
+    "fail when the status payload is not recognised" in {
+      wireMockServer.stubFor(
+        post(urlEqualTo("/gambling/agent/client-list/mgd/retrieval/start"))
+          .willReturn(okJson("""{"result":"nonsense"}"""))
+      )
+      recoverToSucceededIf[RuntimeException](connector.startClientListRetrieval("mgd"))
+    }
+  }
+
+  "GamblingConnector.hasClient" should {
+    "GET the has-client endpoint and return the boolean" in {
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/agent/has-client/mgd/$mgdRegNumber"))
+          .willReturn(okJson("""{"hasClient":true}"""))
+      )
+      connector.hasClient("mgd", mgdRegNumber).map(_ mustBe true)
+    }
+  }
+
   "GamblingConnector.getDetails" should {
     "read the I1.36 response from the controlling body endpoint" in {
       wireMockServer.stubFor(
