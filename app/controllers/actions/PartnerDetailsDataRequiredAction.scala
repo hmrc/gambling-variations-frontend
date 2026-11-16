@@ -27,14 +27,14 @@ import pages.partnerdetails.*
 import play.api.Logging
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
-import play.api.libs.json.{JsObject, Writes}
+import play.api.libs.json.Writes
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
-import java.time.LocalDate
+import java.time.{Clock, Instant, LocalDate}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -42,7 +42,8 @@ import scala.util.control.NonFatal
 
 class PartnerDetailsDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
+  val gamblingConnector: GamblingConnector,
+  clock: Clock
 )(implicit val executionContext: ExecutionContext)
     extends PartnerDetailsDataRequiredAction
     with Logging {
@@ -59,11 +60,11 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers: UserAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(PartnerDetailsPage) map { _ =>
+        if (userAnswers.isLoaded(ExistingPartnerDetailsSection)) {
           logger.info(s"MgdRegNum found for PartnerDetails with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
+        } else {
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -95,49 +96,57 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
   private def setPartnerDetails(
     partnersDetails: PartnersDetails,
     answers: UserAnswers
-  ): Try[UserAnswers] = partnersDetails.partners
-    .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
-    .foldLeft(Try(answers)) { case (userAnswers, partnerDetails) =>
-      buildPartnerDetails(partnerDetails, partnerDetails.businessPartnerNumber, userAnswers)
-    }
+  ): Try[UserAnswers] = {
+    val loadedAnswers = answers.withSectionLoaded(ExistingPartnerDetailsSection, Instant.now(clock))
+    partnersDetails.partners
+      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+      .foldLeft(Try(loadedAnswers)) { case (userAnswers, partnerDetails) =>
+        buildPartnerDetails(partnerDetails, partnerDetails.businessPartnerNumber, userAnswers)
+      }
+  }
 
   private def buildPartnerDetails(partnerDetails: PartnerDetails, partnerBusinessNumber: String, userAnswers: Try[UserAnswers]) = for {
+
     updatedAnswers <- userAnswers
 
-    updatedAnswers <- updatedAnswers.set(PartnerDetailsMgdRegNumberPage(partnerBusinessNumber), partnerDetails.mgdRegNumber)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsTradingNamePage(partnerBusinessNumber), partnerDetails.tradingName)
-    updatedAnswers <- updatedAnswers.set(PartnerDetailsBusinessTypePage(partnerBusinessNumber), partnerDetails.businessType)
+    updatedAnswers <- updatedAnswers.setOriginal(PartnerDetailsMgdRegNumberPage(partnerBusinessNumber), partnerDetails.mgdRegNumber)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsTradingNamePage(partnerBusinessNumber), partnerDetails.tradingName)
+    updatedAnswers <- updatedAnswers.setOriginal(PartnerDetailsBusinessTypePage(partnerBusinessNumber), partnerDetails.businessType)
 
     updatedAnswers <-
-      updatedAnswers.set(PartnerDetailsBusinessPartnerNumberPage(partnerBusinessNumber), partnerDetails.businessPartnerNumber)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfJoiningPage(partnerBusinessNumber), partnerDetails.dateOfJoining)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfLeavingPage(partnerBusinessNumber), partnerDetails.dateOfLeaving)
+      updatedAnswers.setOriginal(PartnerDetailsBusinessPartnerNumberPage(partnerBusinessNumber), partnerDetails.businessPartnerNumber)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfJoiningPage(partnerBusinessNumber), partnerDetails.dateOfJoining)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfLeavingPage(partnerBusinessNumber), partnerDetails.dateOfLeaving)
 
     updatedAnswers <-
-      updatedAnswers.setIfDefined(PartnerDetailsCorrespondenceDetailsSectionPage(partnerBusinessNumber), partnerDetails.correspondenceDetails)
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsCorrespondenceDetailsSectionPage(partnerBusinessNumber), partnerDetails.correspondenceDetails)
 
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfIncorporationPage(partnerBusinessNumber), partnerDetails.dateOfIncorporation)
     updatedAnswers <-
-      updatedAnswers.setIfDefined(PartnerDetailsCountryOfIncorporationPage(partnerBusinessNumber), partnerDetails.countryOfIncorporation)
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfIncorporationPage(partnerBusinessNumber), partnerDetails.dateOfIncorporation)
     updatedAnswers <-
-      updatedAnswers.setIfDefined(PartnerDetailsForeignCorporateReferencePage(partnerBusinessNumber), partnerDetails.foreignCorporateRef)
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsCountryOfIncorporationPage(partnerBusinessNumber), partnerDetails.countryOfIncorporation)
+    updatedAnswers <-
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsForeignCorporateReferencePage(partnerBusinessNumber), partnerDetails.foreignCorporateRef)
 
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsDateOfBirthPage(partnerBusinessNumber), partnerDetails.dateOfBirth)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsNinoPage(partnerBusinessNumber), partnerDetails.nino)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsUtrPage(partnerBusinessNumber), partnerDetails.utr)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsVrnPage(partnerBusinessNumber), partnerDetails.vrn)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsCrnPage(partnerBusinessNumber), partnerDetails.crn)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsDateOfBirthPage(partnerBusinessNumber), partnerDetails.dateOfBirth)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsNinoPage(partnerBusinessNumber), partnerDetails.nino)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsUtrPage(partnerBusinessNumber), partnerDetails.utr)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsVrnPage(partnerBusinessNumber), partnerDetails.vrn)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsCrnPage(partnerBusinessNumber), partnerDetails.crn)
 
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureLeaveDatePage(partnerBusinessNumber), partnerDetails.isFutureLeaveDate)
-    updatedAnswers <- updatedAnswers.setIfDefined(PartnerDetailsIsFutureJoinDatePage(partnerBusinessNumber), partnerDetails.isFutureJoinDate)
+    updatedAnswers <-
+      updatedAnswers.setOriginalIfDefined(PartnerDetailsIsFutureLeaveDatePage(partnerBusinessNumber), partnerDetails.isFutureLeaveDate)
+    updatedAnswers <- updatedAnswers.setOriginalIfDefined(PartnerDetailsIsFutureJoinDatePage(partnerBusinessNumber), partnerDetails.isFutureJoinDate)
 
     updatedAnswers <- partnerDetails.businessType match {
                         case Soleproprietor =>
                           val partnerDetailsSoleProp = partnerDetails.asInstanceOf[SoleProprietorPartnerDetails]
-                          updatedAnswers.set(PartnerDetailsSoleProprietorPage(partnerBusinessNumber), partnerDetailsSoleProp.soleProprietorName)
+                          updatedAnswers.setOriginal(PartnerDetailsSoleProprietorPage(partnerBusinessNumber),
+                                                     partnerDetailsSoleProp.soleProprietorName
+                                                    )
                         case _ =>
                           val partnerDetailsBusiness = partnerDetails.asInstanceOf[BusinessPartnerDetails]
-                          updatedAnswers.set(PartnerDetailsBusinessNamePage(partnerBusinessNumber), partnerDetailsBusiness.businessName)
+                          updatedAnswers.setOriginal(PartnerDetailsBusinessNamePage(partnerBusinessNumber), partnerDetailsBusiness.businessName)
                       }
 
   } yield updatedAnswers

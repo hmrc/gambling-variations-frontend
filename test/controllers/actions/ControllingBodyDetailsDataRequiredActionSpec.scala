@@ -18,7 +18,7 @@ package controllers.actions
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, ContactNumber, CorrespondenceDetails, SoleProprietorName, UserAnswers}
 import org.mockito.ArgumentMatchers.*
@@ -52,7 +52,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
       val repository = mock[SessionRepository]
       val connector = mock[GamblingConnector]
       when(repository.set(any())) thenReturn Future.successful(true)
-      when(connector.getControlBodyDetails(any())(any())) thenReturn Future.successful(controlBodyDetails)
+      when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.successful(controllingBodyDetails)
       val editedProprietor = SoleProprietorName("Ms", "Jane", None, "Jones")
       val answers = (for {
         withType       <- emptyUserAnswers.set(ControllingBodyBusinessTypePage, models.BusinessType.Soleproprietor)
@@ -69,7 +69,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
       result.get(ControllingBodyBusinessTypePage).value mustBe models.BusinessType.Soleproprietor
       result.get(ControllingBodyBusinessNamePage).value mustBe "Edited name"
       result.get(ControllingBodySoleProprietorPage).value mustBe editedProprietor
-      result.get(ControllingBodySectionPage).value mustBe controlBodyDetails.mgdRegNumber
+      result.get(ControllingBodySectionPage).value mustBe controllingBodyDetails.mgdRegNumber
       verify(repository).set(result)
     }
 
@@ -82,7 +82,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         val gamblingConnector = mock[GamblingConnector]
 
         when(sessionRepository.set(any())) thenReturn Future(true)
-        when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controlBodyDetails)
+        when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
         val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -145,7 +145,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
         req.userAnswers.id mustBe expected.userAnswers.id
 
         verify(sessionRepository, times(1)).set(any())
-        verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+        verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
       }
 
       "redirect to SystemError" - {
@@ -157,7 +157,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(false)
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controlBodyDetails)
+          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
           val action = new Harness(sessionRepository, gamblingConnector)
 
@@ -167,16 +167,16 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
 
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
         }
 
-        "when getControlBodyDetails throws an exception" in {
+        "when getControllingBodyDetails throws an exception" in {
 
           val request = FakeRequest()
           val sessionRepository = mock[SessionRepository]
           val gamblingConnector = mock[GamblingConnector]
 
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future.failed(
+          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(
             UpstreamErrorResponse("Fail", INTERNAL_SERVER_ERROR)
           )
 
@@ -188,7 +188,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           result mustBe Left(Redirect(controllers.routes.SystemErrorController.onPageLoad()))
 
           verify(sessionRepository, never()).set(any())
-          verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
         }
       }
     }
@@ -225,7 +225,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           }
 
           verify(sessionRepository, never()).set(any())
-          verify(gamblingConnector, never()).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, never()).getControllingBodyDetails(any())(any())
         }
 
         "with call to backend" in {
@@ -235,7 +235,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           val gamblingConnector = mock[GamblingConnector]
 
           when(sessionRepository.set(any())) thenReturn Future(true)
-          when(gamblingConnector.getControlBodyDetails(any())(any())) thenReturn Future(controlBodyDetails)
+          when(gamblingConnector.getControllingBodyDetails(any())(any())) thenReturn Future(controllingBodyDetails)
 
           val existingUserAnswers =
             UserAnswers(mgdRegNum,
@@ -264,7 +264,7 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
           }
 
           verify(sessionRepository, times(1)).set(any())
-          verify(gamblingConnector, times(1)).getControlBodyDetails(any())(any())
+          verify(gamblingConnector, times(1)).getControllingBodyDetails(any())(any())
         }
       }
     }
@@ -273,8 +273,8 @@ class ControllingBodyDetailsDataRequiredActionSpec extends SpecBase with Mockito
 
 object ControllingBodyDetailsDataRequiredActionSpec {
 
-  val controlBodyDetails: ControlBodyDetails =
-    ControlBodyDetails(
+  val controllingBodyDetails: ControllingBodyDetails =
+    ControllingBodyDetails(
       mgdRegNumber           = "XGM00000001761",
       businessPartnerNumber  = Some("0100053091"),
       dateOfJoining          = Some(java.time.LocalDate.parse("2013-02-01")),

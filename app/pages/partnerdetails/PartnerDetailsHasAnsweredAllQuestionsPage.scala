@@ -16,12 +16,12 @@
 
 package pages.partnerdetails
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case class PartnerDetailsHasAnsweredAllQuestionsPage(index: Int) extends QuestionPage[Boolean] {
+case class PartnerDetailsHasAnsweredAllQuestionsPage(index: Int) extends FlagPage[Boolean] {
 
-  override val path: JsPath = JsPath \ "newPartners" \ index \ toString
+  override val path: JsPath = NewPartnerDetailsSection.path \ index \ toString
 
   override def toString: String = "partnerDetailsHasAnsweredAllQuestion"
 }

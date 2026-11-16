@@ -18,7 +18,7 @@ package controllers.controllingbody
 
 import base.SpecBase
 import connectors.GamblingConnector
-import models.controllingbody.ControlBodyDetails
+import models.controllingbody.ControllingBodyDetails
 import forms.controllingbody.ControllingBodyTradingNameFormProvider
 import models.{BusinessType, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -237,14 +237,14 @@ class ControllingBodyTradingNameControllerSpec extends SpecBase with MockitoSuga
       }
 
       Seq(
-        "unknown registration" -> Future.successful(Json.obj("mgdRegNumber" -> "").as[ControlBodyDetails]),
-        "backend failure"      -> Future.failed[ControlBodyDetails](new RuntimeException("Not found"))
+        "unknown registration" -> Future.successful(Json.obj("mgdRegNumber" -> "").as[ControllingBodyDetails]),
+        "backend failure"      -> Future.failed[ControllingBodyDetails](new RuntimeException("Not found"))
       ).foreach { case (scenario, backendResult) =>
         s"reject $method for $scenario when there is no cache" in {
           val connector = mock[GamblingConnector]
           val repository = mock[SessionRepository]
           val navigator = mock[Navigator]
-          when(connector.getControlBodyDetails(any())(any())).thenReturn(backendResult)
+          when(connector.getControllingBodyDetails(any())(any())).thenReturn(backendResult)
           when(repository.set(any())).thenReturn(Future.successful(true))
           val application = applicationBuilder(userAnswers = None)
             .overrides(
@@ -260,7 +260,7 @@ class ControllingBodyTradingNameControllerSpec extends SpecBase with MockitoSuga
                               ).value
             status(result) mustEqual SEE_OTHER
             redirectLocation(result).value mustEqual controllers.routes.SystemErrorController.onPageLoad().url
-            verify(connector).getControlBodyDetails(org.mockito.ArgumentMatchers.eq(userAnswersId))(any())
+            verify(connector).getControllingBodyDetails(org.mockito.ArgumentMatchers.eq(userAnswersId))(any())
             verifyNoInteractions(navigator)
           }
         }
@@ -271,8 +271,8 @@ class ControllingBodyTradingNameControllerSpec extends SpecBase with MockitoSuga
       val connector = mock[GamblingConnector]
       val repository = mock[SessionRepository]
       val details =
-        Json.obj("mgdRegNumber" -> userAnswersId, "typeOfControllingBody" -> 1, "tradingName" -> "Existing Trading Name").as[ControlBodyDetails]
-      when(connector.getControlBodyDetails(any())(any())).thenReturn(Future.successful(details))
+        Json.obj("mgdRegNumber" -> userAnswersId, "typeOfControllingBody" -> 1, "tradingName" -> "Existing Trading Name").as[ControllingBodyDetails]
+      when(connector.getControllingBodyDetails(any())(any())).thenReturn(Future.successful(details))
       when(repository.set(any())).thenReturn(Future.successful(true))
       val application = applicationBuilder(userAnswers = None)
         .overrides(
@@ -286,7 +286,7 @@ class ControllingBodyTradingNameControllerSpec extends SpecBase with MockitoSuga
         val doc = org.jsoup.Jsoup.parse(contentAsString(result))
         doc.select("#controllingBodyTradingName").`val`() mustEqual "Existing Trading Name"
         doc.select("#controllingBodyTradingName-hint").size() mustEqual 1
-        verify(connector).getControlBodyDetails(org.mockito.ArgumentMatchers.eq(userAnswersId))(any())
+        verify(connector).getControllingBodyDetails(org.mockito.ArgumentMatchers.eq(userAnswersId))(any())
         val saved = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(repository).set(saved.capture())
         saved.getValue.get(ControllingBodyTradingNamePage).value mustEqual "Existing Trading Name"

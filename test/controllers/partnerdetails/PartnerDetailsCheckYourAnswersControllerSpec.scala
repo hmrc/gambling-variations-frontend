@@ -17,13 +17,14 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes
 import models.BusinessType.Soleproprietor
 import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.PartnerDetailsAddPartnerCompletedPage
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -43,16 +44,13 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
   lazy val checkYourAnswersRouteExistingPartners: String = checkYourAnswersRoute(businessNumber1)
   lazy val checkYourAnswersRouteNewPartners: String = checkYourAnswersRoute(newPartnersIndex1.toString)
 
-  val userAnswersExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-  val userAnswersNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-
   "PartnerDetailsCheckYourAnswers Controller" - {
 
     "existing partners" - {
 
       "must return OK and the correct view for a GET" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsExistingPartners)).build()
 
         running(application) {
           val request = FakeRequest(GET, checkYourAnswersRouteExistingPartners)
@@ -62,7 +60,11 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
           val view = application.injector.instanceOf[PartnerDetailsCheckYourAnswersView]
 
           val expectedViewModel =
-            CheckPartnerDetailsViewModel.from(userAnswersExistingPartners, businessNumber1, isNewPartnerFlow = false, isSubmitted = None)
+            CheckPartnerDetailsViewModel.from(userAnswersPartnerDetailsExistingPartners,
+                                              businessNumber1,
+                                              isNewPartnerFlow = false,
+                                              isSubmitted      = None
+                                             )
 
           status(result) mustEqual OK
           contentAsString(result) mustEqual view(expectedViewModel)(request, messages(application)).toString
@@ -89,7 +91,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
       "must return OK and the correct view for a GET when the partner has not been saved" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), false)
             .success
             .value
@@ -114,7 +116,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
       "must return OK and the correct view for a GET when the partner has been saved" in {
 
         val userAnswersForGet: UserAnswers =
-          userAnswersNewPartners
+          userAnswersPartnerDetailsNewPartners
             .set(PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1), true)
             .success
             .value
@@ -146,7 +148,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
         val repository = mock[SessionRepository]
         when(repository.set(any[UserAnswers])).thenReturn(Future.successful(true))
 
-        val completeAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1))
+        val completeAnswers = LoadedPartnerDetails.apply(mgdRegNumber, cleanedDataNewPartnersRouting(businessType = 1), ExistingPartnerDetailsSection)
         val application = applicationBuilder(userAnswers = Some(completeAnswers))
           .overrides(bind[SessionRepository].toInstance(repository))
           .build()
@@ -186,7 +188,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
 
       "must redirect to SystemError for a negative index" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersNewPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsNewPartners)).build()
 
         running(application) {
           val request = FakeRequest(GET, checkYourAnswersRoute("-1"))
@@ -200,7 +202,7 @@ class PartnerDetailsCheckYourAnswersControllerSpec extends SpecBase with Mockito
 
       "must redirect to SystemError for a reference with invalid characters" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersExistingPartners)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersPartnerDetailsExistingPartners)).build()
 
         running(application) {
           val request = FakeRequest(GET, checkYourAnswersRoute("BPN-0001"))

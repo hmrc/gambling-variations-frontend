@@ -17,6 +17,7 @@
 package controllers.partnerdetails
 
 import base.SpecBase
+import controllers.businesscontactdetails.LoadedPartnerDetails
 import controllers.routes
 import forms.partnerdetails.PartnerDetailsForeignCorporateReferenceFormProvider
 import models.BusinessType.{Corporatebody, Soleproprietor}
@@ -25,9 +26,10 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.partnerdetails.{PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsForeignCorporateReferencePage, PartnerDetailsIsBusinessIncorporatedUkPage}
+import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsAddPartnerCompletedPage, PartnerDetailsBusinessTypePage, PartnerDetailsForeignCorporateReferencePage, PartnerDetailsIsBusinessIncorporatedUkPage}
 import play.api.data.Form
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -50,12 +52,18 @@ class PartnerDetailsForeignCorporateReferenceControllerSpec extends SpecBase wit
       .onPageLoad(businessNumber1, CheckMode)
       .url
 
-  def validUserAnswersNewPartners(fcr: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners(fcr = fcr))
-  def validUserAnswersExistingPartners(fcr: Option[String] = None): UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(fcr = fcr))
-  val userAnswersWithNoFcrNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners())
-  val userAnswersWithFcrNewPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataNewPartners(fcr = Some(testForeignCorpRef)))
-  val userAnswersWithNoFcrExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners())
-  val userAnswersWithFcrExistingPartners: UserAnswers = UserAnswers(mgdRegNumber, cleanedDataExistingPartners(fcr = Some(testForeignCorpRef)))
+  def validUserAnswersNewPartners(fcr: Option[String] = None): UserAnswers =
+    LoadedPartnerDetails.apply(mgdRegNumber, cleanedDataNewPartners(fcr = fcr), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+  def validUserAnswersExistingPartners(fcr: Option[String] = None): UserAnswers =
+    LoadedPartnerDetails.apply(mgdRegNumber, cleanedDataExistingPartners(fcr = fcr), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+  val userAnswersWithNoFcrNewPartners: UserAnswers =
+    LoadedPartnerDetails.apply(mgdRegNumber, cleanedDataNewPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+  val userAnswersWithFcrNewPartners: UserAnswers = LoadedPartnerDetails
+    .apply(mgdRegNumber, cleanedDataNewPartners(fcr = Some(testForeignCorpRef)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+  val userAnswersWithNoFcrExistingPartners: UserAnswers =
+    LoadedPartnerDetails.apply(mgdRegNumber, cleanedDataExistingPartners(), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+  val userAnswersWithFcrExistingPartners: UserAnswers = LoadedPartnerDetails
+    .apply(mgdRegNumber, cleanedDataExistingPartners(fcr = Some(testForeignCorpRef)), ExistingPartnerDetailsSection, NewPartnerDetailsSection)
 
   "partners" - {
     "PartnerDetailsForeignCorporateReference Controller" - {
