@@ -33,7 +33,6 @@ class Module extends AbstractModule {
     bind(classOf[CorrespondenceDetailsDataRequiredAction]).to(classOf[CorrespondenceDetailsDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[BusinessAddressDataRequiredAction]).to(classOf[BusinessAddressDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[BusinessDetailsDataRequiredAction]).to(classOf[BusinessDetailsDataRequiredActionImpl]).asEagerSingleton()
-    bind(classOf[OtherTradeClassDataRequiredAction]).to(classOf[OtherTradeClassDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[PartnerDetailsDataRequiredAction]).to(classOf[PartnerDetailsDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[LicencesPremisesDataRequiredAction]).to(classOf[LicencesPremisesDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[ControllingBodyDetailsDataRequiredAction]).to(classOf[ControllingBodyDetailsDataRequiredActionImpl]).asEagerSingleton()

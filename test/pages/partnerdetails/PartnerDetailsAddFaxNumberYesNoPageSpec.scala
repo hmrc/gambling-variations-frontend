@@ -27,7 +27,7 @@ class PartnerDetailsAddFaxNumberYesNoPageSpec extends PlaySpec with PartnerDetai
     "partners" must {
       "have the correct path" in {
         PartnerDetailsAddFaxNumberYesNoPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsAddFaxNumberYesNo")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsAddFaxNumberYesNo")
       }
 
       "have the correct string representation" in {
@@ -38,7 +38,7 @@ class PartnerDetailsAddFaxNumberYesNoPageSpec extends PlaySpec with PartnerDetai
     "newPartners" must {
       "have the correct path" in {
         PartnerDetailsAddFaxNumberYesNoPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAddFaxNumberYesNo")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsAddFaxNumberYesNo")
       }
 
       "have the correct string representation" in {

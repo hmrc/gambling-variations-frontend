@@ -27,7 +27,7 @@ class PartnerDetailsAddPartnerCompletedPageSpec extends SpecBase with PartnerDet
     "newPartners" - {
       "must have the correct path" in {
         PartnerDetailsAddPartnerCompletedPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAddPartnerCompleted")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsAddPartnerCompleted")
       }
 
       "must have the correct string representation" in {

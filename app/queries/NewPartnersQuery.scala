@@ -21,5 +21,5 @@ import play.api.libs.json.{JsArray, JsPath}
 // The partners added in this session, as a whole list
 case object NewPartnersQuery extends Gettable[JsArray] with Settable[JsArray] {
 
-  override def path: JsPath = JsPath \ "newPartners"
+  override def path: JsPath = JsPath \ "newPartnersSection"
 }

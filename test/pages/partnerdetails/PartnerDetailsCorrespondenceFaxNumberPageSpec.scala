@@ -28,7 +28,7 @@ class PartnerDetailsCorrespondenceFaxNumberPageSpec extends PlaySpec with Partne
       "have the correct path" in {
         PartnerDetailsCorrespondenceFaxNumberPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection" \ "faxNumber")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection" \ "faxNumber")
       }
 
       "have the correct toString value" in {
@@ -42,7 +42,7 @@ class PartnerDetailsCorrespondenceFaxNumberPageSpec extends PlaySpec with Partne
         val value2 = "Value2"
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 -> Json.obj(
               PartnerDetailsCorrespondenceDetailsSectionPage(businessNumber1).toString -> Json.obj(
                 PartnerDetailsCorrespondenceFaxNumberPage(businessNumber1).toString -> Json.toJson(value1)
@@ -76,7 +76,7 @@ class PartnerDetailsCorrespondenceFaxNumberPageSpec extends PlaySpec with Partne
       "have the correct path" in {
         PartnerDetailsCorrespondenceFaxNumberPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection" \ "faxNumber")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection" \ "faxNumber")
       }
 
       "have the correct toString value" in {
@@ -90,7 +90,7 @@ class PartnerDetailsCorrespondenceFaxNumberPageSpec extends PlaySpec with Partne
         val value2 = "Value2"
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsCorrespondenceDetailsSectionPage(newPartnersIndex1).toString -> Json.obj(
                 PartnerDetailsCorrespondenceFaxNumberPage(newPartnersIndex1).toString -> Json.toJson(value1)

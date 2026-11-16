@@ -29,7 +29,7 @@ class PartnerDetailsContactNumberPageSpec extends PlaySpec with PartnerDetailsHe
       "have the correct path" in {
         PartnerDetailsContactNumberPage(
           businessNumber1
-        ).path mustEqual (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection" \ "contactNumber")
+        ).path mustEqual (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsCorrespondenceDetailsSection" \ "contactNumber")
       }
 
       "have the correct toString value" in {
@@ -43,7 +43,7 @@ class PartnerDetailsContactNumberPageSpec extends PlaySpec with PartnerDetailsHe
         val value2 = ContactNumber(phoneNumber = Some("222"), mobilePhoneNumber = Some("222"))
 
         val json = Json.obj(
-          "partners" -> Json.obj(
+          "partnersSection" -> Json.obj(
             businessNumber1 ->
               Json.obj(
                 PartnerDetailsCorrespondenceDetailsSectionPage(businessNumber1).toString -> Json.obj(
@@ -79,7 +79,7 @@ class PartnerDetailsContactNumberPageSpec extends PlaySpec with PartnerDetailsHe
       "have the correct path" in {
         PartnerDetailsContactNumberPage(
           newPartnersIndex1
-        ).path mustEqual (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection" \ "contactNumber")
+        ).path mustEqual (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsCorrespondenceDetailsSection" \ "contactNumber")
       }
 
       "have the correct toString value" in {
@@ -93,7 +93,7 @@ class PartnerDetailsContactNumberPageSpec extends PlaySpec with PartnerDetailsHe
         val value2 = ContactNumber(phoneNumber = Some("222"), mobilePhoneNumber = Some("222"))
 
         val json = Json.obj(
-          "newPartners" -> Json.arr(
+          "newPartnersSection" -> Json.arr(
             Json.obj(
               PartnerDetailsCorrespondenceDetailsSectionPage(newPartnersIndex1).toString -> Json.obj(
                 PartnerDetailsContactNumberPage(newPartnersIndex1).toString -> Json.toJson(value1)

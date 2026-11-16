@@ -68,7 +68,7 @@ class PartnerDetailsAddTradingNameYesNoPageSpec extends PlaySpec with PartnerDet
 
       "have the correct path" in {
         PartnerDetailsAddTradingNameYesNoPage(businessNumber1).path mustEqual
-          (JsPath \ "partners" \ businessNumber1 \ "partnerDetailsAddTradingNameYesNo")
+          (JsPath \ "partnersSection" \ businessNumber1 \ "partnerDetailsAddTradingNameYesNo")
       }
 
       "have the correct string representation" in {
@@ -82,7 +82,7 @@ class PartnerDetailsAddTradingNameYesNoPageSpec extends PlaySpec with PartnerDet
 
       "have the correct path" in {
         PartnerDetailsAddTradingNameYesNoPage(newPartnersIndex1).path mustEqual
-          (JsPath \ "newPartners" \ newPartnersIndex1 \ "partnerDetailsAddTradingNameYesNo")
+          (JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "partnerDetailsAddTradingNameYesNo")
       }
 
       "have the correct string representation" in {

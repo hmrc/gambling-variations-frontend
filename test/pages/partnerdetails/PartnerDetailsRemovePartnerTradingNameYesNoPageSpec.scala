@@ -31,7 +31,7 @@ class PartnerDetailsRemovePartnerTradingNameYesNoPageSpec extends AnyFreeSpec wi
       }
 
       "must have a path corresponding to its name and index" in {
-        val expectedPath: JsPath = JsPath \ "partners" \ businessNumber1 \ "removePartnerTradingNameYesNo"
+        val expectedPath: JsPath = JsPath \ "partnersSection" \ businessNumber1 \ "removePartnerTradingNameYesNo"
 
         PartnerDetailsRemovePartnerTradingNameYesNoPage(businessNumber1).path mustBe expectedPath
       }
@@ -46,7 +46,7 @@ class PartnerDetailsRemovePartnerTradingNameYesNoPageSpec extends AnyFreeSpec wi
       }
 
       "must have a path corresponding to its name and index" in {
-        val expectedPath: JsPath = JsPath \ "newPartners" \ newPartnersIndex1 \ "removePartnerTradingNameYesNo"
+        val expectedPath: JsPath = JsPath \ "newPartnersSection" \ newPartnersIndex1 \ "removePartnerTradingNameYesNo"
 
         PartnerDetailsRemovePartnerTradingNameYesNoPage(newPartnersIndex1).path mustBe expectedPath
       }
