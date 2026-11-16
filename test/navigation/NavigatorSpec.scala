@@ -401,6 +401,21 @@ class NavigatorSpec extends SpecBase {
 
     "in Check mode" - {
 
+      Seq(ControllingBodyIsUkIncorporatedPage, ControllingBodyCountryOfIncorporationPage, ControllingBodyDateOfIncorporationPage)
+        .foreach { page =>
+          s"should preserve existing navigation for $page pending the CB-CYA tickets" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessTypePage, Corporatebody)
+              .success
+              .value
+              .set(ControllingBodyIsUkIncorporatedPage, "1")
+              .success
+              .value
+
+            navigator.nextPage(page, CheckMode, answers) mustBe routes.ChangeRegistrationDetailsController.onPageLoad()
+          }
+        }
+
       "should preserve check mode navigation for a controlling body business name" in {
         navigator.nextPage(ControllingBodyBusinessNamePage, CheckMode, emptyAnswers) mustBe
           routes.ChangeRegistrationDetailsController.onPageLoad()
@@ -1259,9 +1274,74 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
-      "should route ControllingBodyDateOfIncorporationPage to Index until the onward journey is built" in {
-        navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, emptyAnswers) mustBe
-          routes.IndexController.onPageLoad()
+      "first-time controlling body incorporation" - {
+        Seq(
+          "1" -> controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad(),
+          "0" -> controllers.controllingbody.routes.ControllingBodyCountryOfIncorporationController.onPageLoad()
+        ).foreach { case (answer, destination) =>
+          s"should route a corporate body's UK incorporation answer $answer to ${destination.url}" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessTypePage, Corporatebody)
+              .success
+              .value
+              .set(ControllingBodyIsUkIncorporatedPage, answer)
+              .success
+              .value
+
+            navigator.nextPage(ControllingBodyIsUkIncorporatedPage, NormalMode, answers) mustBe destination
+          }
+        }
+
+        "should route to SystemError when the UK incorporation answer is missing" in {
+          val answers = emptyAnswers.set(ControllingBodyBusinessTypePage, Corporatebody).success.value
+
+          navigator.nextPage(ControllingBodyIsUkIncorporatedPage, NormalMode, answers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route to SystemError when the UK incorporation answer is invalid" in {
+          val answers = emptyAnswers
+            .set(ControllingBodyBusinessTypePage, Corporatebody)
+            .success
+            .value
+            .set(ControllingBodyIsUkIncorporatedPage, "invalid")
+            .success
+            .value
+
+          navigator.nextPage(ControllingBodyIsUkIncorporatedPage, NormalMode, answers) mustBe
+            routes.SystemErrorController.onPageLoad()
+        }
+
+        "should route a corporate body's country of incorporation to foreign corporate reference" in {
+          val answers = emptyAnswers
+            .set(ControllingBodyBusinessTypePage, Corporatebody)
+            .success
+            .value
+            .set(ControllingBodyIsUkIncorporatedPage, "0")
+            .success
+            .value
+            .set(ControllingBodyCountryOfIncorporationPage, "France")
+            .success
+            .value
+
+          navigator.nextPage(ControllingBodyCountryOfIncorporationPage, NormalMode, answers) mustBe
+            controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad()
+        }
+
+        Seq(Corporatebody, BusinessType.LimitedLiabilityPartnership).foreach { businessType =>
+          s"should route $businessType from date of incorporation to company registration number" in {
+            val answers = emptyAnswers
+              .set(ControllingBodyBusinessTypePage, businessType)
+              .success
+              .value
+              .set(ControllingBodyDateOfIncorporationPage, java.time.LocalDate.of(2007, 3, 27))
+              .success
+              .value
+
+            navigator.nextPage(ControllingBodyDateOfIncorporationPage, NormalMode, answers) mustBe
+              controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+          }
+        }
       }
 
       "should route RemoveControllingBodyFaxNumberPage to Index until CB-CYA is built" in {
@@ -1712,13 +1792,13 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyUTRController when answer is false" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addNINumber" -> false
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber" -> "XGM00000001761",
+                          "addNINumber"  -> false
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
@@ -1727,13 +1807,13 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyNINumberController when answer is true" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addNINumber" -> true
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber" -> "XGM00000001761",
+                          "addNINumber"  -> true
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad()
@@ -1745,7 +1825,6 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
-
 
     }
 

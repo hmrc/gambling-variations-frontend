@@ -80,7 +80,7 @@ class ControllingBodyBusinessUKIncorporatedControllerSpec extends SpecBase with 
       }
     }
 
-    "must redirect to the next page when true is submitted" in {
+    "must redirect to date of incorporation when Yes is submitted for a new corporate body" in {
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any[UserAnswers]))
@@ -105,11 +105,12 @@ class ControllingBodyBusinessUKIncorporatedControllerSpec extends SpecBase with 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.DateOfIncorporationController.onPageLoad().url
         verify(mockSessionRepository).set(any[UserAnswers])
       }
     }
 
-    "must redirect to the next page when false is submitted" in {
+    "must redirect to country of incorporation when No is submitted for a new corporate body" in {
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any[UserAnswers]))
@@ -134,6 +135,7 @@ class ControllingBodyBusinessUKIncorporatedControllerSpec extends SpecBase with 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.ControllingBodyCountryOfIncorporationController.onPageLoad().url
         verify(mockSessionRepository).set(any[UserAnswers])
       }
     }
