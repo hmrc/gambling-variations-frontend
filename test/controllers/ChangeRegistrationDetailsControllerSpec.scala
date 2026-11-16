@@ -18,8 +18,8 @@ package controllers
 
 import base.SpecBase
 import connectors.GamblingConnector
+import models.controllingbody.ControllingBodyDetails
 import controllers.actions.{BusinessDetailsDataRequiredAction, FakeAgentAuthorisedAction, FakeDataRetrievalAction}
-import models.controllingbody.ControlBodyDetails
 import models.{BusinessType, UserAnswers}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -48,11 +48,11 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
   private def statuses(content: String): Seq[String] =
     Jsoup.parse(content).select("table.govuk-table tbody tr td:last-child").asScala.map(_.text).toSeq
 
-  private def controlBodyDetails(
+  private def controllingBodyDetails(
     mgdRegNumber: String,
     isRepMemSameAsCb: Option[String]
-  ): ControlBodyDetails =
-    ControlBodyDetails(
+  ): ControllingBodyDetails =
+    ControllingBodyDetails(
       mgdRegNumber           = mgdRegNumber,
       businessPartnerNumber  = None,
       dateOfJoining          = None,
@@ -90,12 +90,12 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
 
   private def applicationWith(
     userAnswers: UserAnswers,
-    details: ControlBodyDetails
+    details: ControllingBodyDetails
   ): Application = {
     val gamblingConnector = mock[GamblingConnector]
 
     when(
-      gamblingConnector.getControlBodyDetails(any[String])(any[HeaderCarrier])
+      gamblingConnector.getControllingBodyDetails(any[String])(any[HeaderCarrier])
     ).thenReturn(Future.successful(details))
 
     applicationBuilder(userAnswers = Some(userAnswers))
@@ -114,7 +114,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
     val application =
       applicationWith(
         userAnswers,
-        controlBodyDetails("", None)
+        controllingBodyDetails("", None)
       )
 
     running(application) {
@@ -143,7 +143,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
     val application =
       applicationWith(
         userAnswers,
-        controlBodyDetails("XGM00000001761", Some("1"))
+        controllingBodyDetails("XGM00000001761", Some("1"))
       )
 
     running(application) {
@@ -170,7 +170,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
     val application =
       applicationWith(
         userAnswers,
-        controlBodyDetails("", None)
+        controllingBodyDetails("", None)
       )
 
     running(application) {
@@ -202,7 +202,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
     val application =
       applicationWith(
         userAnswers,
-        controlBodyDetails("", None)
+        controllingBodyDetails("", None)
       )
 
     running(application) {
@@ -247,7 +247,7 @@ class ChangeRegistrationDetailsControllerSpec extends SpecBase with MockitoSugar
     val application =
       applicationWith(
         userAnswers,
-        controlBodyDetails("XGM00000001761", Some("1"))
+        controllingBodyDetails("XGM00000001761", Some("1"))
       )
 
     running(application) {
