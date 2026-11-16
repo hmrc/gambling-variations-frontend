@@ -57,7 +57,6 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
         val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(newIndex)) match {
           case None       => form
           case Some(nino) =>
-            // val sanitized = if nino.last != ' ' then nino else nino.init
             form.fill(nino)
         }
 
