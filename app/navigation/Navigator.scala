@@ -64,9 +64,12 @@ class Navigator @Inject() () {
     case ControllingBodyDateOfBirthPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyDateOfIncorporationPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Connect the next controlling body screen when the journey is built.
+      // DTR-9544: first-time controlling body setup; CB-CYA navigation is covered by follow-up tickets.
+      _ => controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
     case ControllingBodyIsUkIncorporatedPage =>
       userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
+    case ControllingBodyCountryOfIncorporationPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad()
     case ControllingBodyCrnPage =>
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-UTR when the controlling body journey is built.
     case ControllingBodySameAsRepYesNoPage =>
@@ -621,8 +624,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyIsUkIncorporatedPage)
       .map {
-        case "1" => routes.IndexController.onPageLoad() // TODO later -> DateOfIncorporation Screen
-        case "0" => routes.IndexController.onPageLoad() // TODO later -> CountryOfIncorporation Screen
+        case "1" => controllers.controllingbody.routes.DateOfIncorporationController.onPageLoad()
+        case "0" => controllers.controllingbody.routes.ControllingBodyCountryOfIncorporationController.onPageLoad()
         case _   => routes.SystemErrorController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())

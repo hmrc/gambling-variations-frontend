@@ -18,13 +18,13 @@ package controllers.controllingbody
 
 import base.SpecBase
 import forms.controllingbody.DateOfIncorporationFormProvider
-import models.UserAnswers
+import models.{BusinessType, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.controllingbody.{ControllingBodyChangesPage, ControllingBodyDateOfIncorporationPage, ControllingBodySubmittedPage}
+import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyDateOfIncorporationPage, ControllingBodySubmittedPage}
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
@@ -113,6 +113,25 @@ class DateOfIncorporationControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    Seq(BusinessType.Corporatebody, BusinessType.LimitedLiabilityPartnership).foreach { businessType =>
+      s"must redirect a new $businessType to company registration number when a valid date is submitted" in {
+        val mockSessionRepository = mock[SessionRepository]
+        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+        val answers = emptyUserAnswers.set(ControllingBodyBusinessTypePage, businessType).success.value
+        val application = applicationBuilder(userAnswers = Some(answers))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+        running(application) {
+          val result = route(application, postRequest()).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad().url
+        }
       }
     }
 
