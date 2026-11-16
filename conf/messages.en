@@ -1808,3 +1808,12 @@ cancelGroupRegistrationWarning.caption = Cancel registration
 cancelGroupRegistrationWarning.legend = You submitted a request to cancel this group''s registration on {0}. We will review this request within 48 hours.
 cancelGroupRegistrationWarning.hint = Do you want to submit a new cancellation request?
 cancelGroupRegistrationWarning.error.required = Select yes to submit a new cancellation request
+
+warningForCancellation.title = We are reviewing your cancellation request
+warningForCancellation.heading = We are reviewing your cancellation request
+warningForCancellation.caption = Cancel registration
+warningForCancellation.checkYourAnswersLabel = We are reviewing your cancellation request
+warningForCancellation.body = You submitted a request to cancel your registration on 13 October 2026. We will review this request within 48 hours.
+warningForCancellation.h2 = Do you want to submit a new cancellation request?
+warningForCancellation.error.required = Select yes to submit a new cancellation request
+warningForCancellation.change.hidden = We are reviewing your cancellation request
