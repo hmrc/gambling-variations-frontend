@@ -64,13 +64,14 @@ class Navigator @Inject() () {
       _ => controllers.controllingbody.routes.ControllingBodyAddTradingNameYesNoController.onPageLoad()
     case ControllingBodyDateOfIncorporationPage =>
       // DTR-9544: first-time controlling body setup; CB-CYA navigation is covered by follow-up tickets.
-      _ => controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad()
+      answers =>
+        firstTimeControllingBodyRoute(answers)(controllers.controllingbody.routes.ControllingBodyCompanyRegistrationNumberController.onPageLoad())
     case ControllingBodyIsUkIncorporatedPage =>
-      userAnswers => navigateControllingBodyIsUkIncorporatedPage(userAnswers)
+      answers => firstTimeControllingBodyRoute(answers)(navigateControllingBodyIsUkIncorporatedPage(answers))
     case ControllingBodyCountryOfIncorporationPage =>
-      _ => controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad()
-    case ControllingBodyCrnPage =>
-      _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-UTR when the controlling body journey is built.
+      answers => firstTimeControllingBodyRoute(answers)(controllers.controllingbody.routes.ControllingBodyForeignCorpRefController.onPageLoad())
+    case ControllingBodyCrnPage | ControllingBodyForeignCorpRefPage =>
+      answers => firstTimeControllingBodyRoute(answers)(controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad())
     case ControllingBodySameAsRepYesNoPage =>
       userAnswers => navigateControllingBodySameAsRepYesNoPage(userAnswers)
     case ControllingBodyNotProvidedYesNoPage =>
@@ -613,6 +614,14 @@ class Navigator @Inject() () {
         case false => routes.IndexController.onPageLoad() // TODO later
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
+
+  private def firstTimeControllingBodyRoute(answers: UserAnswers)(destination: => Call): Call =
+    if (answers.get(ControllingBodyBusinessPartnerNumberPage).exists(_.trim.nonEmpty)) {
+      // Preserve the existing destination until navigation to and from CB-CYA is specified.
+      routes.IndexController.onPageLoad()
+    } else {
+      destination
+    }
 
   private def navigateControllingBodyIsUkIncorporatedPage(userAnswers: UserAnswers): Call =
     userAnswers
