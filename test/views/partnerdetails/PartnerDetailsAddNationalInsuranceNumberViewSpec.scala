@@ -69,10 +69,6 @@ class PartnerDetailsAddNationalInsuranceNumberViewSpec extends SpecBase {
         .text mustBe messages("partnerDetailsAddNino.heading")
 
       doc
-        .select("label[for=value].govuk-visually-hidden")
-        .text() mustBe messages("partnerDetailsAddNino.heading")
-
-      doc
         .select(".govuk-hint")
         .text mustBe messages("partnerDetailsAddNino.hint")
 

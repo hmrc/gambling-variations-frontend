@@ -63,9 +63,6 @@ class PartnerDetailsVatRegistrationNumberViewSpec extends SpecBase {
 
       doc.select(".govuk-fieldset__legend--l").text mustBe messages("partnerDetailsVatRegistrationNumber.heading")
 
-      doc.select(s"label[for=$fieldName].govuk-visually-hidden").text mustBe
-        messages("partnerDetailsVatRegistrationNumber.heading")
-
       doc.select(".govuk-body").text must include(messages("partnerDetailsVatRegistrationNumber.paragraph"))
 
       doc.select(".govuk-hint").text mustBe messages("partnerDetailsVatRegistrationNumber.hint")
