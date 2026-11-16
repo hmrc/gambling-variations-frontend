@@ -92,27 +92,31 @@ object PartnerDetailsViewModel {
 
             val status =
               dateOfLeaving match {
-                case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
+                case Some(_) =>
                   messages("partnerDetails.status.dueToLeave")
 
-                case _ =>
+                case None =>
                   dateOfJoining match {
                     case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
                       messages("partnerDetails.status.dueToJoin")
 
                     case Some(joiningDate) =>
-                      messages("partnerDetails.status.active", joiningDate.format(dateFormatter))
-                    case _ =>
+                      messages(
+                        "partnerDetails.status.active",
+                        joiningDate.format(dateFormatter)
+                      )
+
+                    case None =>
                       messages("partnerDetails.status.active")
                   }
               }
 
             val statusDetails =
               dateOfLeaving match {
-                case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
+                case Some(leavingDate) =>
                   Some(leavingDate.format(dateFormatter))
 
-                case _ =>
+                case None =>
                   dateOfJoining match {
                     case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
                       Some(joiningDate.format(dateFormatter))

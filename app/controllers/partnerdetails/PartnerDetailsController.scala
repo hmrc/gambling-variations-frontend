@@ -196,7 +196,8 @@ class PartnerDetailsController @Inject() (
 
   private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int): PaginationResult = {
     val completedNewPartners = PartnerUtils.getCompletedNewPartners(userAnswers)
-    val existingPartners = getPresentExistingPartners(userAnswers, todayDate)
+    val existingPartners =
+      getPresentExistingPartners(userAnswers)
 
     paginationService
       .paginateAlphabeticallyPartnerDetails(
@@ -208,20 +209,15 @@ class PartnerDetailsController @Inject() (
       )
   }
 
-  private def getPresentExistingPartners(userAnswers: UserAnswers, todayDate: LocalDate): Seq[String] = PartnerUtils
-    .getExistingPartnersBusinessNumbers(userAnswers)
-    .filter { partnerNumber =>
-      val hasPartner =
+  private def getPresentExistingPartners(
+    userAnswers: UserAnswers
+  ): Seq[String] =
+    PartnerUtils
+      .getExistingPartnersBusinessNumbers(userAnswers)
+      .filter { partnerNumber =>
         userAnswers
           .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
           .isDefined
-
-      val hasPastLeavingDate =
-        userAnswers
-          .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
-          .exists(_.isBefore(todayDate))
-
-      hasPartner && !hasPastLeavingDate
-    }
-    .toSeq
+      }
+      .toSeq
 }

@@ -1712,13 +1712,13 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyUTRController when answer is false" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addNINumber" -> false
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber" -> "XGM00000001761",
+                          "addNINumber"  -> false
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
@@ -1727,13 +1727,13 @@ class NavigatorSpec extends SpecBase {
       "should route ControllingBodyAddNINumberYesNoPage to ControllingBodyNINumberController when answer is true" in {
         val answers =
           UserAnswers("id",
-            Json.obj(
-              "controllingBodyDetails" -> Json.obj(
-                "mgdRegNumber" -> "XGM00000001761",
-                "addNINumber" -> true
-              )
-            )
-          )
+                      Json.obj(
+                        "controllingBodyDetails" -> Json.obj(
+                          "mgdRegNumber" -> "XGM00000001761",
+                          "addNINumber"  -> true
+                        )
+                      )
+                     )
 
         navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
           controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad()
@@ -1745,7 +1745,6 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(ControllingBodyAddNINumberYesNoPage, NormalMode, answers) mustBe
           routes.SystemErrorController.onPageLoad()
       }
-
 
     }
 
