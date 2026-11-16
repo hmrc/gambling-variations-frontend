@@ -61,7 +61,7 @@ class ChangeControllingBodyNameControllerSpec extends SpecBase with MockitoSugar
   ): Unit = {
     val repository = mock[SessionRepository]
     val connector = mock[GamblingConnector]
-    when(connector.getControlBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
+    when(connector.getControllingBodyDetails(any())(any())) thenReturn Future.failed(new RuntimeException("Backend unavailable"))
     val navigator = mock[Navigator]
     when(repository.set(any())) thenReturn Future.successful(saved)
     when(navigator.nextPage(any(), any(), any())) thenReturn onwardRoute

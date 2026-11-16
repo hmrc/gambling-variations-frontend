@@ -27,7 +27,6 @@ import viewmodels.ChangeRegistrationDetailsViewModel
 import views.html.ChangeRegistrationDetailsView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -40,6 +39,11 @@ class ChangeRegistrationDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport
     with Logging {
+
+  def onLanding(regNumber: String): Action[AnyContent] =
+    authorise { request =>
+      Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()).addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
+    }
 
   def onPageLoad: Action[AnyContent] =
     (authorise andThen getData andThen businessDetailsRequired) { implicit request =>
