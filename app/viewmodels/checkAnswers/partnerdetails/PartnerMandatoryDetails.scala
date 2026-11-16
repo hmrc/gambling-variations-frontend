@@ -55,7 +55,7 @@ object PartnerMandatoryDetails {
   }
 
   /** Mandatory fields for the partner's current answers, in journey order. */
-  private def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
+  private[partnerdetails] def required(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Seq[Field] = {
     val mode = PartnerUtils.modeFor(index)
 
     val businessTypeField =
@@ -82,7 +82,7 @@ object PartnerMandatoryDetails {
 
     val ukIncorporation = Seq(
       Field.of(PartnerDetailsDateOfIncorporationPage(index), routes.PartnerDetailsDateOfIncorporationController.onPageLoad(key, mode)),
-      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key, mode))
+      Field.of(PartnerDetailsCrnPage(index), routes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(key, mode))
     )
 
     val nonUkIncorporation = Seq(

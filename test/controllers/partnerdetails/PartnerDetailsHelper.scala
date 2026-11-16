@@ -205,6 +205,7 @@ trait PartnerDetailsHelper {
     dateOfIncorporation: Option[String] = None,
     countryOfIncorporation: Option[String] = None,
     businessType: Int = 1,
+    isIncorporatedInTheUK: Option[Boolean] = None,
     hasAnsweredAllQuestion: Option[Boolean] = None,
     soleProprietorDob: Option[String] = None,
     soleProprietorDetails: JsObject = JsObject.empty
@@ -234,21 +235,22 @@ trait PartnerDetailsHelper {
           "faxNumber" -> faxNumber,
           "emailAddr" -> emailAddress
         ),
-        "partnerDetailsDateOfIncorporation"    -> dateOfIncorporation,
-        "partnerDetailsCountryOfIncorporation" -> countryOfIncorporation,
-        "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
-        "partnerDetailsTradingName"            -> "XYZ Consulting",
-        "partnerDetailsDateOfBirth"            -> soleProprietorDob,
-        "partnerDetailsSoleProprietor"         -> soleProprietorDetails,
-        "partnerDetailsNino"                   -> nino,
-        "partnerDetailsUtr"                    -> utr,
-        "partnerDetailsVrn"                    -> vrn,
-        "partnerDetailsCrn"                    -> crn,
-        "partnerDetailsForeignCorporateRef"    -> fcr,
-        "partnerDetailsIsFutureLeaveDate"      -> false,
-        "partnerDetailsIsFutureJoinDate"       -> false,
-        "partnerDetailsBusinessType"           -> businessType,
-        "partnerDetailsHasAnsweredAllQuestion" -> hasAnsweredAllQuestion
+        "partnerDetailsIsBusinessIncorporatedUk" -> isIncorporatedInTheUK,
+        "partnerDetailsDateOfIncorporation"      -> dateOfIncorporation,
+        "partnerDetailsCountryOfIncorporation"   -> countryOfIncorporation,
+        "partnerDetailsBusinessName"             -> "XYZ Consulting Ltd",
+        "partnerDetailsTradingName"              -> "XYZ Consulting",
+        "partnerDetailsDateOfBirth"              -> soleProprietorDob,
+        "partnerDetailsSoleProprietor"           -> soleProprietorDetails,
+        "partnerDetailsNino"                     -> nino,
+        "partnerDetailsUtr"                      -> utr,
+        "partnerDetailsVrn"                      -> vrn,
+        "partnerDetailsCrn"                      -> crn,
+        "partnerDetailsForeignCorporateRef"      -> fcr,
+        "partnerDetailsIsFutureLeaveDate"        -> false,
+        "partnerDetailsIsFutureJoinDate"         -> false,
+        "partnerDetailsBusinessType"             -> businessType,
+        "partnerDetailsHasAnsweredAllQuestion"   -> hasAnsweredAllQuestion
       )
     )
   )
