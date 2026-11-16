@@ -67,8 +67,8 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       vatRegistrationNumber     = None,
       isIncorporatedInUk        = Some(true),
       countryOfIncorporation    = None,
-      dateOfIncorporation       = Some("12 May 2015"),
       foreignCorporateReference = None,
+      dateOfIncorporation       = Some("12 May 2015"),
       companyRegistrationNumber = Some("01230002"),
       address                   = None,
       addAdditionalInformation  = None,
@@ -851,7 +851,7 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
     }
 
-    "add links for missing required values" - {
+    "add links for missing required values for new partners" - {
 
       "render an add link with visually hidden text for a missing UTR" in {
         val row = rowFor(newPartnerNotSaved.copy(utr = None).businessDetailsSummaryList, "utr").value
@@ -878,19 +878,158 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
         }
       }
 
-      "render an add link for a missing value on an existing partner not due to join or leave" in {
-        val viewModel = existingPartner.copy(companyRegistrationNumber = None)
-        val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, "companyRegistrationNumber").value)
+    }
 
-        html must include("<a href=")
+    "show Not Provided for missing required values for existing partners - edge case" - {
+
+      val emptyExistingPartner =
+        existingPartner
+          .copy(
+            utr                       = None,
+            isDueToLeave              = true,
+            dateOfLeaving             = Some(leavingDate),
+            dateOfJoining             = None,
+            businessName              = None,
+            dateOfIncorporation       = None,
+            tradingName               = None,
+            companyRegistrationNumber = None
+          )
+
+      "render Not provided for a missing mandatory field for Corporate Body UK" in {
+        val fields = List(
+          "utr",
+          "corporateBodyName",
+          "dateOfIncorporation",
+          "companyRegistrationNumber"
+        )
+
+        fields.foreach { f =>
+
+          val row = rowFor(emptyExistingPartner.businessDetailsSummaryList, f).value
+
+          val html = valueHtml(row)
+
+          html must not include "<a href="
+          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
+          html must include(messages("site.notProvided"))
+          actionsOf(row) mustBe empty
+
+        }
       }
 
-      "render no add link when the partner is due to leave" in {
-        val viewModel = existingPartner.copy(utr = None, isDueToLeave = true, dateOfLeaving = Some(leavingDate))
-        val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, "utr").value)
+      "render Not provided for a missing mandatory field for Corporate Body UK non-UK" in {
+        val fields = List(
+          "utr",
+          "corporateBodyName",
+          "countryOfIncorporation",
+          "foreignCorporateReference"
+        )
+
+        fields.foreach { f =>
+
+          val row = rowFor(emptyExistingPartner.copy(isIncorporatedInUk = Some(false)).businessDetailsSummaryList, f).value
+
+          val html = valueHtml(row)
+
+          html must not include "<a href="
+          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
+          html must include(messages("site.notProvided"))
+          actionsOf(row) mustBe empty
+
+        }
+
+      }
+
+      "render Not provided for a missing mandatory field for Sole Proprietor" in {
+        val fields = List(
+          "utr",
+          "soleProprietorName",
+          "soleProprietorDob"
+        )
+
+        fields.foreach { f =>
+
+          val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(Soleproprietor)).businessDetailsSummaryList, f).value
+
+          val html = valueHtml(row)
+
+          html must not include "<a href="
+          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
+          html must include(messages("site.notProvided"))
+          actionsOf(row) mustBe empty
+
+        }
+      }
+
+      "render Not provided for a missing mandatory field for unincorporated Body" in {
+        val fields = List(
+          "utr",
+          "unincorporatedBodyName"
+        )
+
+        fields.foreach { f =>
+
+          val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(Unincorporatedbody)).businessDetailsSummaryList, f).value
+
+          val html = valueHtml(row)
+
+          html must not include "<a href="
+          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
+          html must include(messages("site.notProvided"))
+          actionsOf(row) mustBe empty
+
+        }
+      }
+
+      "render Not provided for a missing mandatory field for Partnership" in {
+
+        val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(Partnership)).businessDetailsSummaryList, "partnershipName").value
+
+        val html = valueHtml(row)
 
         html must not include "<a href="
         html must include(messages("partnerDetailsCheckYourAnswers.noData"))
+        html must include(messages("site.notProvided"))
+        actionsOf(row) mustBe empty
+
+      }
+
+      "render Not provided for a missing mandatory field for LLP" in {
+        val fields = List(
+          "utr",
+          "dateOfIncorporation",
+          "companyRegistrationNumber"
+        )
+
+        fields.foreach { f =>
+
+          val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(LimitedLiabilityPartnership)).businessDetailsSummaryList, f).value
+
+          val html = valueHtml(row)
+
+          html must not include "<a href="
+          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
+          html must include(messages("site.notProvided"))
+          actionsOf(row) mustBe empty
+
+        }
+      }
+
+      "render Not provided for each business type" in {
+        val cases = Seq(
+          Soleproprietor              -> "soleProprietorName",
+          Corporatebody               -> "corporateBodyName",
+          Unincorporatedbody          -> "unincorporatedBodyName",
+          Partnership                 -> "partnershipName",
+          LimitedLiabilityPartnership -> "llpName"
+        )
+
+        cases.foreach { case (businessType, key) =>
+          val viewModel = emptyExistingPartner.copy(typeOfBusiness = Some(businessType))
+          val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, key).value)
+
+          html must include(messages("site.notProvided"))
+        }
       }
 
       "render no add link when a value is present" in {

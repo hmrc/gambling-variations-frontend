@@ -466,6 +466,10 @@ case class CheckPartnerDetailsViewModel(
       case None if dueToJoinOrLeave =>
         createSummaryListRow(label, Text(messages("partnerDetailsCheckYourAnswers.noData")), Nil)
 
+      // If the mandatory field is missing for an existing partner we should show not provided
+      case None if !isNewPartnerFlow =>
+        createSummaryListRow(label, Text(messages("site.notProvided")), Nil)
+
       case None =>
         val addText = messages(s"partnerDetailsCheckYourAnswers.$key.add")
         createSummaryListRow(
