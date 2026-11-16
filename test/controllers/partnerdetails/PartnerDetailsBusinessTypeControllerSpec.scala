@@ -334,11 +334,9 @@ class PartnerDetailsBusinessTypeControllerSpec extends SpecBase with MockitoSuga
 
             val expectedAnswers = validUserAnswersExistingPartners
               .set(PartnerDetailsBusinessTypePage(businessNumber1), Corporatebody)
-              .flatMap(
-                _.remove(
-                  PartnerDetailsBusinessNamePage(businessNumber1)
-                )
-              )
+              .success
+              .value
+              .remove(PartnerDetailsBusinessNamePage(businessNumber1))
               .success
               .value
 
