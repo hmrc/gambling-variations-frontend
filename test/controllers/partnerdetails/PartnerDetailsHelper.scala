@@ -43,6 +43,10 @@ trait PartnerDetailsHelper {
   val testUtr: String = "1121766916"
   val testForeignCorpRef = "FCR-987654"
   val testCRN: String = "SC123456"
+  val testFCR: String = "Foreign Corporate Ref"
+
+  val testSoleProprietor: JsObject = Json.obj("title" -> "Mx", "firstName" -> "Test", "lastName" -> "Test")
+  val testSolePropDOB: Option[String] = Some("1492-03-01")
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
@@ -129,17 +133,21 @@ trait PartnerDetailsHelper {
     mobilePhoneNumber: Option[String] = None,
     emailAddress: Option[String] = None,
     additionalInformation: Option[String] = Some("ADI123456"),
+    isIncorporatedInTheUK: Option[Boolean] = Some(true),
     nino: Option[String] = None,
     vrn: Option[String] = None,
     utr: Option[String] = None,
     fcr: Option[String] = None,
-    crn: Option[String] = None
+    partnerDetailsBusinessType: Int = 1,
+    crn: Option[String] = None,
+    soleProprietorDob: Option[String] = None,
+    soleProprietorDetails: JsObject = JsObject.empty
   ): JsObject = Json.obj(
     "partners" -> Json.obj(
       businessNumber1 -> Json.obj(
         "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
         "partnerDetailsDateOfJoining" -> "2022-01-15",
-        "partnerDetailsDateOfLeaving" -> "2028-12-31",
+        "partnerDetailsDateOfLeaving" -> null,
         "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
           "mgdRegNumber" -> mgdRegNumber,
           "correspondenceAddress" -> Json.obj(
@@ -159,19 +167,21 @@ trait PartnerDetailsHelper {
           "faxNumber" -> faxNumber,
           "emailAddr" -> emailAddress
         ),
-        "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-        "partnerDetailsCountryOfIncorporation" -> None,
-        "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
-        "partnerDetailsTradingName"            -> "XYZ Consulting",
-        "partnerDetailsDateOfBirth"            -> "1985-06-20",
-        "partnerDetailsNino"                   -> nino,
-        "partnerDetailsUtr"                    -> utr,
-        "partnerDetailsVrn"                    -> vrn,
-        "partnerDetailsCrn"                    -> crn,
-        "partnerDetailsForeignCorporateRef"    -> fcr,
-        "partnerDetailsIsFutureLeaveDate"      -> 0,
-        "partnerDetailsIsFutureJoinDate"       -> 0,
-        "partnerDetailsBusinessType"           -> 1
+        "partnerDetailsDateOfIncorporation"      -> "2020-03-01",
+        "partnerDetailsCountryOfIncorporation"   -> None,
+        "partnerDetailsBusinessName"             -> "XYZ Consulting Ltd",
+        "partnerDetailsTradingName"              -> "XYZ Consulting",
+        "partnerDetailsDateOfBirth"              -> soleProprietorDob,
+        "partnerDetailsSoleProprietor"           -> soleProprietorDetails,
+        "partnerDetailsIsBusinessIncorporatedUk" -> isIncorporatedInTheUK,
+        "partnerDetailsNino"                     -> nino,
+        "partnerDetailsUtr"                      -> utr,
+        "partnerDetailsVrn"                      -> vrn,
+        "partnerDetailsCrn"                      -> crn,
+        "partnerDetailsForeignCorporateRef"      -> fcr,
+        "partnerDetailsIsFutureLeaveDate"        -> false,
+        "partnerDetailsIsFutureJoinDate"         -> false,
+        "partnerDetailsBusinessType"             -> partnerDetailsBusinessType
       )
     )
   )
@@ -187,7 +197,12 @@ trait PartnerDetailsHelper {
     utr: Option[String] = None,
     fcr: Option[String] = None,
     crn: Option[String] = None,
-    hasAnsweredAllQuestion: Option[Boolean] = None
+    dateOfIncorporation: Option[String] = None,
+    countryOfIncorporation: Option[String] = None,
+    businessType: Int = 1,
+    hasAnsweredAllQuestion: Option[Boolean] = None,
+    soleProprietorDob: Option[String] = None,
+    soleProprietorDetails: JsObject = JsObject.empty
   ): JsObject = Json.obj(
     "partners" -> Json.obj(),
     "newPartners" -> Json.arr(
@@ -214,19 +229,20 @@ trait PartnerDetailsHelper {
           "faxNumber" -> faxNumber,
           "emailAddr" -> emailAddress
         ),
-        "partnerDetailsDateOfIncorporation"    -> "2020-03-01",
-        "partnerDetailsCountryOfIncorporation" -> null,
+        "partnerDetailsDateOfIncorporation"    -> dateOfIncorporation,
+        "partnerDetailsCountryOfIncorporation" -> countryOfIncorporation,
         "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
         "partnerDetailsTradingName"            -> "XYZ Consulting",
-        "partnerDetailsDateOfBirth"            -> "1985-06-20",
+        "partnerDetailsDateOfBirth"            -> soleProprietorDob,
+        "partnerDetailsSoleProprietor"         -> soleProprietorDetails,
         "partnerDetailsNino"                   -> nino,
         "partnerDetailsUtr"                    -> utr,
         "partnerDetailsVrn"                    -> vrn,
         "partnerDetailsCrn"                    -> crn,
         "partnerDetailsForeignCorporateRef"    -> fcr,
-        "partnerDetailsIsFutureLeaveDate"      -> 0,
-        "partnerDetailsIsFutureJoinDate"       -> 0,
-        "partnerDetailsBusinessType"           -> 1,
+        "partnerDetailsIsFutureLeaveDate"      -> false,
+        "partnerDetailsIsFutureJoinDate"       -> false,
+        "partnerDetailsBusinessType"           -> businessType,
         "partnerDetailsHasAnsweredAllQuestion" -> hasAnsweredAllQuestion
       )
     )

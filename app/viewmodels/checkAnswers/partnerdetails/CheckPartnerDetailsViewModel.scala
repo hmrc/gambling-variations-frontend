@@ -604,8 +604,8 @@ object CheckPartnerDetailsViewModel {
       emailAddress              = userAnswers.get(PartnerDetailsCorrespondenceEmailAddressPage(index)),
       isNewPartnerFlow          = isNewPartnerFlow,
       maybeSubmitted            = isSubmitted,
-      isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(1),
-      isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(1),
+      isDueToLeave              = userAnswers.get(PartnerDetailsIsFutureLeaveDatePage(index)).contains(true),
+      isDueToJoin               = userAnswers.get(PartnerDetailsIsFutureJoinDatePage(index)).contains(true),
       isMissingMandatoryDetails = PartnerMandatoryDetails.isMissing(userAnswers, index),
       hasChanges                = userAnswers.get(PartnerDetailsHasClickedOnChangeOrRemovePage(index.toString)), // existing partners only
       hasAnsweredAllQuestions   = userAnswers.get(PartnerDetailsHasAnsweredAllQuestionsPage(index.toString.toInt)).contains(true)
