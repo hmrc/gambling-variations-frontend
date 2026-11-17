@@ -1225,7 +1225,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, answers) mustBe
-          controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad()
+          controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
       }
 
       "should route ControllingBodyChangeScreenerPage to ChangeRegistrationDetails when the answer is KeepSame" in {
