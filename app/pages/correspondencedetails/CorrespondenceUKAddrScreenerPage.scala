@@ -17,7 +17,7 @@
 package pages.correspondencedetails
 
 import models.UserAnswers
-import pages.{FlagPage, QuestionPage}
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
 import scala.util.{Success, Try}

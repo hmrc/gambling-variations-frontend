@@ -17,7 +17,7 @@
 package pages.correspondencedetails
 
 import models.CorrespondenceChangeAddrOption
-import pages.{FlagPage, QuestionPage}
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
 case object CorrespondenceChangeAddrScreenerPage extends FlagPage[CorrespondenceChangeAddrOption] {

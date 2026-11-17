@@ -16,7 +16,7 @@
 
 package pages.correspondencedetails
 
-import pages.{FlagPage, QuestionPage}
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
 case object RemoveAdditionalCorrespondenceNameYesNoPage extends FlagPage[Boolean] {

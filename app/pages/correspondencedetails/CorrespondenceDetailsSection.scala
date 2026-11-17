@@ -17,7 +17,6 @@
 package pages.correspondencedetails
 
 import models.Section
-import play.api.libs.json.JsPath
 
 case object CorrespondenceDetailsSection extends Section {
 
