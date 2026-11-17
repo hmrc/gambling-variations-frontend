@@ -49,7 +49,7 @@ final case class PartnerDetailsRow(
 
 object PartnerDetailsViewModel {
 
-  private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+  private val dateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def from(
     partnerNumbers: Seq[BusinessNumberOrIndex],

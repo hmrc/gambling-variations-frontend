@@ -51,7 +51,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
     new FrontendAppConfig(application.configuration)
 
   private val dateFormatter =
-    DateTimeFormatter.ofPattern("dd MMM yyyy")
+    DateTimeFormatter.ofPattern("d MMM yyyy")
 
   "PartnerDetailsViewModel" - {
 
