@@ -40,7 +40,7 @@ class CheckTradingDetailsControllerSpec extends SpecBase with MockitoSugar {
     BusinessDetails(
       mgdRegNumber          = mgdRegNum,
       businessType          = None,
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = false,
       dateOfRegistration    = None,
       businessPartnerNumber = None,

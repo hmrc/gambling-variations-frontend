@@ -19,7 +19,7 @@ package controllers.returnperiods
 import base.SpecBase
 import connectors.GamblingConnector
 import models.ChooseReturnPeriods.Jan
-import models.{BusinessDetails, BusinessType, GamblingReturnPeriods, NormalMode, UserAnswers}
+import models.{BusinessDetails, BusinessType, GamblingReturnPeriods, NormalMode, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -68,7 +68,7 @@ class EnterNonStandardPeriodDateControllerSpec extends SpecBase with MockitoSuga
     BusinessDetails(
       mgdRegNumber          = mgdRegNum,
       businessType          = Some(BusinessType.Corporatebody),
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = false,
       dateOfRegistration    = Some(registrationDate),
       businessPartnerNumber = Some("XB1234567890"),
