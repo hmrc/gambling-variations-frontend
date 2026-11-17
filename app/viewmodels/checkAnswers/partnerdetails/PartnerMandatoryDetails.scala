@@ -52,27 +52,7 @@ object PartnerMandatoryDetails {
     val toBeRemoved = conditionalPages(index).filterNot(keep.contains)
 
     val filtered = toBeRemoved.foldLeft(Try(userAnswers))((acc, page) => acc.flatMap(_.remove(page)))
-
-    println()
-    println()
-    println("pages to keep")
-    keep.foreach(println)
-
-    println()
-    println()
-    println("toBeRemoved")
-    toBeRemoved.foreach(println)
-
-    println()
-    println()
-    println("original")
-    println(userAnswers.modified.data)
-
-    println()
-    println()
-    println("filtered")
-    println(filtered.get.modified.data)
-
+    
     filtered
   }
 

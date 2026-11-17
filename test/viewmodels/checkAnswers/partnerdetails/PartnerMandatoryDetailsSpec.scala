@@ -18,13 +18,13 @@ package viewmodels.checkAnswers.partnerdetails
 
 import base.SpecBase
 import controllers.partnerdetails.PartnerDetailsHelper
-import models.{ModifiedAnswers, UserAnswers}
+import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partnership, Soleproprietor, Unincorporatedbody}
+import models.{ContactNumber, ModifiedAnswers, SoleProprietorName, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.sharedMandatoryFields
 
 import java.time.LocalDate
-import scala.util.Try
 
 class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
 
@@ -36,13 +36,14 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
 
       "soleproprietor" in {
         val businessData = cleanedDataNewPartners(
+          phoneNumber            = Some(testPhoneNumber),
           nino                   = Some(testNino),
           vrn                    = Some(testVRN),
           utr                    = Some(testUtr),
           fcr                    = Some(testFCR),
           crn                    = Some(testCRN),
-          dateOfIncorporation    = Some("2000-05-05"),
-          countryOfIncorporation = Some("France"),
+          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
+          countryOfIncorporation = Some(testCountryOfIncorporation),
           isIncorporatedInTheUK  = Some(true),
           hasAnsweredAllQuestion = Some(true),
           soleProprietorDob      = testSolePropDOB,
@@ -52,10 +53,11 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
 
         userAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
         userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
-        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(LocalDate.of(2000, 5, 5))
+        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(testDateOfIncorporation)
         userAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
-        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some("France")
+        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
         userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
+        userAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
 
         val cleanedUpAnswers: UserAnswers = PartnerMandatoryDetails.cleanUp(userAnswers, idx).success.value
 
@@ -66,17 +68,26 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
         cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
 
+        cleanedUpAnswers.get(PartnerDetailsContactNumberPage(idx)) mustBe Some(ContactNumber(Some(testPhoneNumber), None))
+        cleanedUpAnswers.get(PartnerDetailsDateOfJoiningPage(idx)) mustBe Some(testDateOfJoining)
+        cleanedUpAnswers.get(PartnerDetailsUtrPage(idx)) mustBe Some(testUtr)
+        cleanedUpAnswers.get(PartnerDetailsBusinessTypePage(idx)) mustBe Some(Soleproprietor)
+        cleanedUpAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
+        cleanedUpAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
+        cleanedUpAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
+
       }
 
       "corporatebody - uk" in {
         val businessData = cleanedDataNewPartners(
+          phoneNumber            = Some(testPhoneNumber),
           nino                   = Some(testNino),
           vrn                    = Some(testVRN),
           utr                    = Some(testUtr),
           fcr                    = Some(testFCR),
           crn                    = Some(testCRN),
-          dateOfIncorporation    = Some("2000-05-05"),
-          countryOfIncorporation = Some("France"),
+          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
+          countryOfIncorporation = Some(testCountryOfIncorporation),
           isIncorporatedInTheUK  = Some(true),
           hasAnsweredAllQuestion = Some(true),
           soleProprietorDob      = testSolePropDOB,
@@ -85,33 +96,40 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
         )
         val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
 
-        userAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
-        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
-        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(LocalDate.of(2000, 5, 5))
-        userAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
-        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some("France")
+        userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
+        userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
+        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
         userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
 
         val cleanedUpAnswers: UserAnswers = PartnerMandatoryDetails.cleanUp(userAnswers, idx).success.value
 
-        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsCrnPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
+
+        cleanedUpAnswers.get(PartnerDetailsBusinessTypePage(idx)) mustBe Some(Corporatebody)
+        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
+        cleanedUpAnswers.get(PartnerDetailsDateOfJoiningPage(idx)) mustBe Some(testDateOfJoining)
+        cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
+        cleanedUpAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(testDateOfIncorporation)
+        cleanedUpAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
+        cleanedUpAnswers.get(PartnerDetailsUtrPage(idx)) mustBe Some(testUtr)
+        cleanedUpAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
+        cleanedUpAnswers.get(PartnerDetailsContactNumberPage(idx)) mustBe Some(ContactNumber(Some(testPhoneNumber), None))
 
       }
 
       "corporatebody - non uk" in {
         val businessData = cleanedDataNewPartners(
+          phoneNumber            = Some(testPhoneNumber),
           nino                   = Some(testNino),
           vrn                    = Some(testVRN),
           utr                    = Some(testUtr),
           fcr                    = Some(testFCR),
           crn                    = Some(testCRN),
-          dateOfIncorporation    = Some("2000-05-05"),
-          countryOfIncorporation = Some("France"),
+          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
+          countryOfIncorporation = Some(testCountryOfIncorporation),
           isIncorporatedInTheUK  = Some(false),
           hasAnsweredAllQuestion = Some(true),
           soleProprietorDob      = testSolePropDOB,
@@ -120,33 +138,43 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
         )
         val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
 
-        userAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
-        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
-        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(LocalDate.of(2000, 5, 5))
-        userAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
-        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some("France")
+        userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
+        userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
+        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
         userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
+        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(testDateOfIncorporation)
+        userAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
+        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(false)
 
         val cleanedUpAnswers: UserAnswers = PartnerMandatoryDetails.cleanUp(userAnswers, idx).success.value
 
-        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsCrnPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
+
+        cleanedUpAnswers.get(PartnerDetailsBusinessTypePage(idx)) mustBe Some(Corporatebody)
+        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
+        cleanedUpAnswers.get(PartnerDetailsDateOfJoiningPage(idx)) mustBe Some(testDateOfJoining)
+        cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(false)
+        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
+        userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
+        cleanedUpAnswers.get(PartnerDetailsUtrPage(idx)) mustBe Some(testUtr)
+        cleanedUpAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
+        cleanedUpAnswers.get(PartnerDetailsContactNumberPage(idx)) mustBe Some(ContactNumber(Some(testPhoneNumber), None))
 
       }
 
       "unincorporatedbody" in {
         val businessData = cleanedDataNewPartners(
+          phoneNumber            = Some(testPhoneNumber),
           nino                   = Some(testNino),
           vrn                    = Some(testVRN),
           utr                    = Some(testUtr),
           fcr                    = Some(testFCR),
           crn                    = Some(testCRN),
-          dateOfIncorporation    = Some("2000-05-05"),
-          countryOfIncorporation = Some("France"),
+          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
+          countryOfIncorporation = Some(testCountryOfIncorporation),
           isIncorporatedInTheUK  = Some(true),
           hasAnsweredAllQuestion = Some(true),
           soleProprietorDob      = testSolePropDOB,
@@ -155,33 +183,40 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
         )
         val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
 
-        userAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
-        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
-        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(LocalDate.of(2000, 5, 5))
-        userAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
-        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some("France")
+        userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
+        userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
+        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
         userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
 
         val cleanedUpAnswers: UserAnswers = PartnerMandatoryDetails.cleanUp(userAnswers, idx).success.value
 
-        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsCrnPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
+
+        cleanedUpAnswers.get(PartnerDetailsBusinessTypePage(idx)) mustBe Some(Unincorporatedbody)
+        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
+        cleanedUpAnswers.get(PartnerDetailsDateOfJoiningPage(idx)) mustBe Some(testDateOfJoining)
+        cleanedUpAnswers.get(PartnerDetailsUtrPage(idx)) mustBe Some(testUtr)
+        cleanedUpAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
+        cleanedUpAnswers.get(PartnerDetailsContactNumberPage(idx)) mustBe Some(ContactNumber(Some(testPhoneNumber), None))
 
       }
 
       "partnership" in {
         val businessData = cleanedDataNewPartners(
+          phoneNumber            = Some(testPhoneNumber),
           nino                   = Some(testNino),
           vrn                    = Some(testVRN),
           utr                    = Some(testUtr),
           fcr                    = Some(testFCR),
           crn                    = Some(testCRN),
-          dateOfIncorporation    = Some("2000-05-05"),
-          countryOfIncorporation = Some("France"),
+          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
+          countryOfIncorporation = Some(testCountryOfIncorporation),
           isIncorporatedInTheUK  = Some(true),
           hasAnsweredAllQuestion = Some(true),
           soleProprietorDob      = testSolePropDOB,
@@ -190,33 +225,40 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
         )
         val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
 
-        userAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
-        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
-        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(LocalDate.of(2000, 5, 5))
-        userAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
-        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some("France")
+        userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
+        userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
+        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
         userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
 
         val cleanedUpAnswers: UserAnswers = PartnerMandatoryDetails.cleanUp(userAnswers, idx).success.value
 
-        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsCrnPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsUtrPage(idx)) mustBe None
+
+        cleanedUpAnswers.get(PartnerDetailsBusinessTypePage(idx)) mustBe Some(Partnership)
+        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
+        cleanedUpAnswers.get(PartnerDetailsDateOfJoiningPage(idx)) mustBe Some(testDateOfJoining)
+        cleanedUpAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
+        cleanedUpAnswers.get(PartnerDetailsContactNumberPage(idx)) mustBe Some(ContactNumber(Some(testPhoneNumber), None))
 
       }
 
       "llp" in {
         val businessData = cleanedDataNewPartners(
+          phoneNumber            = Some(testPhoneNumber),
           nino                   = Some(testNino),
           vrn                    = Some(testVRN),
           utr                    = Some(testUtr),
           fcr                    = Some(testFCR),
           crn                    = Some(testCRN),
-          dateOfIncorporation    = Some("2000-05-05"),
-          countryOfIncorporation = Some("France"),
+          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
+          countryOfIncorporation = Some(testCountryOfIncorporation),
           isIncorporatedInTheUK  = Some(true),
           hasAnsweredAllQuestion = Some(true),
           soleProprietorDob      = testSolePropDOB,
@@ -225,21 +267,27 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
         )
         val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
 
-        userAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
-        userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
-        userAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(LocalDate.of(2000, 5, 5))
-        userAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
-        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some("France")
+        userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
+        userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
+        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
         userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
 
         val cleanedUpAnswers: UserAnswers = PartnerMandatoryDetails.cleanUp(userAnswers, idx).success.value
 
-        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe None
-        cleanedUpAnswers.get(PartnerDetailsCrnPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe None
         cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe None
+        cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe None
+
+        cleanedUpAnswers.get(PartnerDetailsBusinessTypePage(idx)) mustBe Some(LimitedLiabilityPartnership)
+        cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
+        cleanedUpAnswers.get(PartnerDetailsDateOfJoiningPage(idx)) mustBe Some(testDateOfJoining)
+        cleanedUpAnswers.get(PartnerDetailsDateOfIncorporationPage(idx)) mustBe Some(testDateOfIncorporation)
+        cleanedUpAnswers.get(PartnerDetailsCrnPage(idx)) mustBe Some(testCRN)
+        cleanedUpAnswers.get(PartnerDetailsUtrPage(idx)) mustBe Some(testUtr)
+        cleanedUpAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
+        cleanedUpAnswers.get(PartnerDetailsContactNumberPage(idx)) mustBe Some(ContactNumber(Some(testPhoneNumber), None))
 
       }
 

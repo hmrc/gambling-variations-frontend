@@ -17,7 +17,7 @@
 package controllers.partnerdetails
 
 import controllers.businesscontactdetails.LoadedPartnerDetails
-import models.{BusinessType, UserAnswers}
+import models.{BusinessType, SoleProprietorName, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
 import pages.partnerdetails.*
 import play.api.libs.json.{JsObject, Json}
@@ -45,9 +45,17 @@ trait PartnerDetailsHelper {
   val testForeignCorpRef = "FCR-987654"
   val testCRN: String = "SC123456"
   val testFCR: String = "Foreign Corporate Ref"
+   val testCountryOfIncorporation = "France"
+
+  val testDateOfJoiningAsString: String = "2022-01-05"
+  val testDateOfJoining: LocalDate = LocalDate.of(2022, 1, 5)
+  val testDateOfIncorporationAsString: String = "2022-03-05"
+  val testDateOfIncorporation: LocalDate = LocalDate.of(2022, 3, 5)
 
   val testSoleProprietor: JsObject = Json.obj("title" -> "Mx", "firstName" -> "Test", "lastName" -> "Test")
+  val testSoleProprietorADT: SoleProprietorName = SoleProprietorName("Mx", "Test", None, "Test")
   val testSolePropDOB: Option[String] = Some("1492-03-01")
+  val testDateSolePropDOB: LocalDate = LocalDate.of(1492, 3, 1)
 
   lazy val onwardRoute: Call = Call("GET", "/foo")
 
@@ -214,8 +222,8 @@ trait PartnerDetailsHelper {
     "newPartnersSection" -> Json.arr(
       Json.obj(
         "partnerDetailsMgdRegNumber"  -> mgdRegNumber,
-        "partnerDetailsDateOfJoining" -> "2022-01-15",
-        "partnerDetailsDateOfLeaving" -> "2028-12-31",
+        "partnerDetailsDateOfJoining" -> testDateOfJoining,
+        "partnerDetailsDateOfLeaving" -> null,
         "partnerDetailsCorrespondenceDetailsSection" -> Json.obj(
           "mgdRegNumber" -> mgdRegNumber,
           "correspondenceAddress" -> Json.obj(
