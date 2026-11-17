@@ -71,7 +71,7 @@ object PartnerMandatoryDetails {
   private def urlIndex(index: BusinessNumberOrIndex): String = index.toString
 
   /** Mandatory fields for a given business type. */
-  private def businessFieldsFor(userAnswers: UserAnswers, index: BusinessNumberOrIndex, bt: BusinessType): Seq[Field] = {
+  private[partnerdetails] def businessFieldsFor(userAnswers: UserAnswers, index: BusinessNumberOrIndex, bt: BusinessType): Seq[Field] = {
     val key = urlIndex(index)
     val mode = PartnerUtils.modeFor(index)
 
@@ -128,7 +128,7 @@ object PartnerMandatoryDetails {
     }
   }
 
-  private def sharedMandatoryFields(index: BusinessNumberOrIndex): Seq[Field] = {
+  private[partnerdetails] def sharedMandatoryFields(index: BusinessNumberOrIndex): Seq[Field] = {
     val key = urlIndex(index)
     val mode = PartnerUtils.modeFor(index)
 

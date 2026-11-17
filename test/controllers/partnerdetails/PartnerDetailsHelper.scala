@@ -249,8 +249,7 @@ trait PartnerDetailsHelper {
         "partnerDetailsForeignCorporateRef"      -> fcr,
         "partnerDetailsIsFutureLeaveDate"        -> false,
         "partnerDetailsIsFutureJoinDate"         -> false,
-        "partnerDetailsBusinessType"             -> businessType,
-        "partnerDetailsHasAnsweredAllQuestion"   -> hasAnsweredAllQuestion
+        "partnerDetailsBusinessType"             -> businessType
       )
     ),
     "flags" -> Json.obj(
@@ -263,7 +262,7 @@ trait PartnerDetailsHelper {
           "partnerDetailsAdditionalAddressInfoYesNo" -> false,
           "partnerDetailsAddFaxNumberYesNo"          -> false,
           "partnerDetailsAddEmailAddressYesNo"       -> false,
-          "partnerDetailsHasAnsweredAllQuestion"     -> true
+          "partnerDetailsHasAnsweredAllQuestion"     -> hasAnsweredAllQuestion
         )
       )
     )
