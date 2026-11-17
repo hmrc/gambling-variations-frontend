@@ -45,7 +45,7 @@ trait PartnerDetailsHelper {
   val testForeignCorpRef = "FCR-987654"
   val testCRN: String = "SC123456"
   val testFCR: String = "Foreign Corporate Ref"
-   val testCountryOfIncorporation = "France"
+  val testCountryOfIncorporation = "France"
 
   val testDateOfJoiningAsString: String = "2022-01-05"
   val testDateOfJoining: LocalDate = LocalDate.of(2022, 1, 5)

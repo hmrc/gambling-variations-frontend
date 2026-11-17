@@ -22,6 +22,7 @@ import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partners
 import models.{ContactNumber, ModifiedAnswers, SoleProprietorName, UserAnswers}
 import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
+import play.api.libs.json.Reads
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails.sharedMandatoryFields
 
 import java.time.LocalDate
@@ -30,12 +31,11 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
 
   private val idx: BusinessNumberOrIndex = newPartnersIndex1
 
-  "PartnerMandatoryDetails" - {
-
-    "cleanUp - new partners only" - {
-
-      "soleproprietor" in {
-        val businessData = cleanedDataNewPartners(
+  private def answersFor(businessType: Int = 1, isUk: Boolean = true): UserAnswers =
+    UserAnswers(
+      id = mgdRegNumber,
+      modified = ModifiedAnswers(
+        cleanedDataNewPartners(
           phoneNumber            = Some(testPhoneNumber),
           nino                   = Some(testNino),
           vrn                    = Some(testVRN),
@@ -44,12 +44,21 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
           crn                    = Some(testCRN),
           dateOfIncorporation    = Some(testDateOfIncorporationAsString),
           countryOfIncorporation = Some(testCountryOfIncorporation),
-          isIncorporatedInTheUK  = Some(true),
+          isIncorporatedInTheUK  = Some(isUk),
           hasAnsweredAllQuestion = Some(true),
           soleProprietorDob      = testSolePropDOB,
-          soleProprietorDetails  = testSoleProprietor
+          soleProprietorDetails  = testSoleProprietor,
+          businessType           = businessType
         )
-        val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+      )
+    )
+
+  "PartnerMandatoryDetails" - {
+
+    "cleanUp - new partners only" - {
+
+      "soleproprietor" in {
+        val userAnswers: UserAnswers = answersFor()
 
         userAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
         userAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(true)
@@ -79,22 +88,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "corporatebody - uk" in {
-        val businessData = cleanedDataNewPartners(
-          phoneNumber            = Some(testPhoneNumber),
-          nino                   = Some(testNino),
-          vrn                    = Some(testVRN),
-          utr                    = Some(testUtr),
-          fcr                    = Some(testFCR),
-          crn                    = Some(testCRN),
-          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
-          countryOfIncorporation = Some(testCountryOfIncorporation),
-          isIncorporatedInTheUK  = Some(true),
-          hasAnsweredAllQuestion = Some(true),
-          soleProprietorDob      = testSolePropDOB,
-          soleProprietorDetails  = testSoleProprietor,
-          businessType           = 2
-        )
-        val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers: UserAnswers = answersFor(2)
 
         userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
         userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
@@ -121,22 +115,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "corporatebody - non uk" in {
-        val businessData = cleanedDataNewPartners(
-          phoneNumber            = Some(testPhoneNumber),
-          nino                   = Some(testNino),
-          vrn                    = Some(testVRN),
-          utr                    = Some(testUtr),
-          fcr                    = Some(testFCR),
-          crn                    = Some(testCRN),
-          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
-          countryOfIncorporation = Some(testCountryOfIncorporation),
-          isIncorporatedInTheUK  = Some(false),
-          hasAnsweredAllQuestion = Some(true),
-          soleProprietorDob      = testSolePropDOB,
-          soleProprietorDetails  = testSoleProprietor,
-          businessType           = 2
-        )
-        val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers: UserAnswers = answersFor(2, false)
 
         userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
         userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
@@ -157,8 +136,8 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
         cleanedUpAnswers.get(PartnerDetailsBusinessNamePage(idx)) mustBe Some("XYZ Consulting Ltd")
         cleanedUpAnswers.get(PartnerDetailsDateOfJoiningPage(idx)) mustBe Some(testDateOfJoining)
         cleanedUpAnswers.get(PartnerDetailsIsBusinessIncorporatedUkPage(idx)) mustBe Some(false)
-        userAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
-        userAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
+        cleanedUpAnswers.get(PartnerDetailsCountryOfIncorporationPage(idx)) mustBe Some(testCountryOfIncorporation)
+        cleanedUpAnswers.get(PartnerDetailsForeignCorporateReferencePage(idx)) mustBe Some(testFCR)
         cleanedUpAnswers.get(PartnerDetailsUtrPage(idx)) mustBe Some(testUtr)
         cleanedUpAnswers.get(PartnerDetailsVrnPage(idx)) mustBe Some(testVRN)
         cleanedUpAnswers.get(PartnerDetailsContactNumberPage(idx)) mustBe Some(ContactNumber(Some(testPhoneNumber), None))
@@ -166,22 +145,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "unincorporatedbody" in {
-        val businessData = cleanedDataNewPartners(
-          phoneNumber            = Some(testPhoneNumber),
-          nino                   = Some(testNino),
-          vrn                    = Some(testVRN),
-          utr                    = Some(testUtr),
-          fcr                    = Some(testFCR),
-          crn                    = Some(testCRN),
-          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
-          countryOfIncorporation = Some(testCountryOfIncorporation),
-          isIncorporatedInTheUK  = Some(true),
-          hasAnsweredAllQuestion = Some(true),
-          soleProprietorDob      = testSolePropDOB,
-          soleProprietorDetails  = testSoleProprietor,
-          businessType           = 3
-        )
-        val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers: UserAnswers = answersFor(3)
 
         userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
         userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
@@ -208,22 +172,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "partnership" in {
-        val businessData = cleanedDataNewPartners(
-          phoneNumber            = Some(testPhoneNumber),
-          nino                   = Some(testNino),
-          vrn                    = Some(testVRN),
-          utr                    = Some(testUtr),
-          fcr                    = Some(testFCR),
-          crn                    = Some(testCRN),
-          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
-          countryOfIncorporation = Some(testCountryOfIncorporation),
-          isIncorporatedInTheUK  = Some(true),
-          hasAnsweredAllQuestion = Some(true),
-          soleProprietorDob      = testSolePropDOB,
-          soleProprietorDetails  = testSoleProprietor,
-          businessType           = 4
-        )
-        val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers: UserAnswers = answersFor(4)
 
         userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
         userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
@@ -250,22 +199,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "llp" in {
-        val businessData = cleanedDataNewPartners(
-          phoneNumber            = Some(testPhoneNumber),
-          nino                   = Some(testNino),
-          vrn                    = Some(testVRN),
-          utr                    = Some(testUtr),
-          fcr                    = Some(testFCR),
-          crn                    = Some(testCRN),
-          dateOfIncorporation    = Some(testDateOfIncorporationAsString),
-          countryOfIncorporation = Some(testCountryOfIncorporation),
-          isIncorporatedInTheUK  = Some(true),
-          hasAnsweredAllQuestion = Some(true),
-          soleProprietorDob      = testSolePropDOB,
-          soleProprietorDetails  = testSoleProprietor,
-          businessType           = 5
-        )
-        val userAnswers: UserAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers: UserAnswers = answersFor(5)
 
         userAnswers.get(PartnerDetailsSoleProprietorPage(idx)) mustBe Some(testSoleProprietorADT)
         userAnswers.get(PartnerDetailsDateOfBirthPage(idx)) mustBe Some(testDateSolePropDOB)
@@ -298,8 +232,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       val shared = sharedMandatoryFields(idx).map(_.page.toString)
 
       "soleproprietor" in {
-        val businessData = cleanedDataNewPartners()
-        val userAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers = answersFor()
 
         val expected =
           Seq("partnerDetailsBusinessType", "partnerDetailsSoleProprietor", "partnerDetailsDateOfBirth", "partnerDetailsUtr").concat(shared)
@@ -309,8 +242,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
 
       "corporatebody - uk" in {
 
-        val businessData = cleanedDataNewPartners(businessType = 2, isIncorporatedInTheUK = Some(true))
-        val userAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers = answersFor(2)
 
         val expected =
           Seq(
@@ -327,8 +259,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "corporatebody - non uk" in {
-        val businessData = cleanedDataNewPartners(businessType = 2, isIncorporatedInTheUK = Some(false))
-        val userAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers = answersFor(2, false)
 
         val expected =
           Seq(
@@ -345,8 +276,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
 
       "unincorporatedbody" in {
 
-        val businessData = cleanedDataNewPartners(businessType = 3)
-        val userAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers = answersFor(3)
 
         val expected =
           Seq("partnerDetailsBusinessType", "partnerDetailsBusinessName", "partnerDetailsUtr").concat(shared)
@@ -355,8 +285,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "partnership" in {
-        val businessData = cleanedDataNewPartners(businessType = 4)
-        val userAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers = answersFor(4)
 
         val expected =
           Seq("partnerDetailsBusinessType", "partnerDetailsBusinessName").concat(shared)
@@ -365,8 +294,7 @@ class PartnerMandatoryDetailsSpec extends SpecBase with PartnerDetailsHelper {
       }
 
       "llp" in {
-        val businessData = cleanedDataNewPartners(businessType = 5)
-        val userAnswers = UserAnswers(id = mgdRegNumber, modified = ModifiedAnswers(businessData))
+        val userAnswers = answersFor(5)
 
         val expected =
           Seq("partnerDetailsBusinessType",

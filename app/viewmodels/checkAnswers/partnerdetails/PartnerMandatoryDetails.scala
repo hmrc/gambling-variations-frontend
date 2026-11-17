@@ -52,7 +52,7 @@ object PartnerMandatoryDetails {
     val toBeRemoved = conditionalPages(index).filterNot(keep.contains)
 
     val filtered = toBeRemoved.foldLeft(Try(userAnswers))((acc, page) => acc.flatMap(_.remove(page)))
-    
+
     filtered
   }
 
