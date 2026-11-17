@@ -17,14 +17,14 @@
 package pages.correspondencedetails
 
 import models.UserAnswers
-import pages.QuestionPage
+import pages.{FlagPage, QuestionPage}
 import play.api.libs.json.JsPath
 
 import scala.util.Try
 
-case object CorrespondenceAdditionalNameYesNoPage extends QuestionPage[Boolean] {
+case object CorrespondenceAdditionalNameYesNoPage extends FlagPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = CorrespondenceDetailsSection.path \ toString
 
   override def toString: String = "correspondenceAdditionalNameYesNo"
 

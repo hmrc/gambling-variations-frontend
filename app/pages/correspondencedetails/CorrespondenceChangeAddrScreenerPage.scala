@@ -17,12 +17,12 @@
 package pages.correspondencedetails
 
 import models.CorrespondenceChangeAddrOption
-import pages.QuestionPage
+import pages.{FlagPage, QuestionPage}
 import play.api.libs.json.JsPath
 
-case object CorrespondenceChangeAddrScreenerPage extends QuestionPage[CorrespondenceChangeAddrOption] {
+case object CorrespondenceChangeAddrScreenerPage extends FlagPage[CorrespondenceChangeAddrOption] {
 
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
+  override def path: JsPath = CorrespondenceDetailsSection.path \ toString
 
   override def toString: String = "CorrespondenceChangeAddrScreener"
 }
