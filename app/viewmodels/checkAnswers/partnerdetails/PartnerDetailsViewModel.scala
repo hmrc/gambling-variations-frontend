@@ -155,7 +155,7 @@ object PartnerDetailsViewModel {
       rows.nonEmpty
 
     val canAddAnotherPartner =
-      rows.size < frontendAppConfig.maxPartners
+      rows.size < frontendAppConfig.maxPartners - 1
 
     PartnerDetailsViewModel(
       partners                   = rows,
