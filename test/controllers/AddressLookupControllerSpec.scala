@@ -40,7 +40,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
 
   private val userAnswers =
     emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, mgdRegNum)
+      .set(CorrespondenceDetailsSection, mgdRegNum)
       .success
       .value
 

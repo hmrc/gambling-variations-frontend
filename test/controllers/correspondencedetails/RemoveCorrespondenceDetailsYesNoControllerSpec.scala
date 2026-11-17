@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsSectionPage, RemoveCorrespondenceDetailsYesNoPage}
+import pages.correspondencedetails.{CorrespondenceDetailsSection, RemoveCorrespondenceDetailsYesNoPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -46,7 +46,7 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
 
   private val validUserAnswers =
     emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
+      .set(CorrespondenceDetailsSection, userAnswersId)
       .success
       .value
 

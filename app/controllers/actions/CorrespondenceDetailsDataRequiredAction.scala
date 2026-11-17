@@ -21,7 +21,7 @@ import controllers.routes
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{CorrespondenceDetails, UserAnswers}
 import pages.*
-import pages.correspondencedetails.{CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSectionPage, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage}
+import pages.correspondencedetails.{CorrespondenceAdditionalInformationPage, CorrespondenceAdditionalNamePage, CorrespondenceAddressNonUkPage, CorrespondenceAddressUkPage, CorrespondenceContactNumberPage, CorrespondenceDetailsSection, CorrespondenceEmailPage, CorrespondenceFaxNumberPage, CorrespondenceNamePage}
 import play.api.Logging
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -53,7 +53,7 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(CorrespondenceDetailsSectionPage) map { _ =>
+        userAnswers.get(CorrespondenceDetailsSection) map { _ =>
           logger.info(s"MgdRegNum found for Correspondence Details with id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
@@ -90,7 +90,7 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
   private def setCorrespondenceDetails(correspondenceDetails: CorrespondenceDetails, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Correspondence Details")
     for {
-      updatedAnswers <- answers.set(CorrespondenceDetailsSectionPage, correspondenceDetails.mgdRegNumber)
+      updatedAnswers <- answers.set(CorrespondenceDetailsSection, correspondenceDetails.mgdRegNumber)
       updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceNamePage, correspondenceDetails.nameLine1)
       updatedAnswers <- updatedAnswers.setIfDefined(CorrespondenceAdditionalNamePage, correspondenceDetails.nameLine2)
       updatedAnswers <- {

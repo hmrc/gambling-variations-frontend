@@ -16,12 +16,10 @@
 
 package pages.correspondencedetails
 
-import pages.QuestionPage
+import models.Section
 import play.api.libs.json.JsPath
 
-case object CorrespondenceDetailsSectionPage extends QuestionPage[String] {
+case object CorrespondenceDetailsSection extends Section {
 
-  override def path: JsPath = JsPath \ "correspondenceDetailsSection" \ toString
-
-  override def toString: String = "mgdRegNum"
+  val key = "correspondenceDetails"
 }

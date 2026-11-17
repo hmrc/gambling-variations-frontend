@@ -21,7 +21,7 @@ import forms.FaxNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import pages.*
-import pages.correspondencedetails.{CorrespondenceDetailsSectionPage, CorrespondenceFaxNumberPage}
+import pages.correspondencedetails.{CorrespondenceDetailsSection, CorrespondenceFaxNumberPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import views.html.correspondencedetails.CorrespondenceFaxNumberView
@@ -35,7 +35,7 @@ class CorrespondenceFaxNumberControllerSpec extends SpecBase {
 
   private val baseAnswers =
     emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, mgdRegNum)
+      .set(CorrespondenceDetailsSection, mgdRegNum)
       .success
       .value
 

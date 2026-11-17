@@ -23,7 +23,7 @@ import models.{NormalMode, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSectionPage, RemoveAdditionalCorrespondenceNameYesNoPage}
+import pages.correspondencedetails.{CorrespondenceAdditionalNamePage, CorrespondenceDetailsSection, RemoveAdditionalCorrespondenceNameYesNoPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -42,7 +42,7 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
 
   private val userAnswersWithAdditionalName =
     emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
+      .set(CorrespondenceDetailsSection, userAnswersId)
       .success
       .value
       .set(CorrespondenceAdditionalNamePage, "Name 2")
@@ -51,7 +51,7 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
 
   private val userAnswersWithoutAdditionalName =
     emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
+      .set(CorrespondenceDetailsSection, userAnswersId)
       .success
       .value
 

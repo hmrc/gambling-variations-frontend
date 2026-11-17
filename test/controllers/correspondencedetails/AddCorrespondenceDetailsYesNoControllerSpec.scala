@@ -23,7 +23,7 @@ import navigation.Navigator
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, CorrespondenceDetailsSectionPage}
+import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -45,7 +45,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
 
   private val userAnswersWithCorrespondenceDetails =
     emptyUserAnswers
-      .set(CorrespondenceDetailsSectionPage, userAnswersId)
+      .set(CorrespondenceDetailsSection, userAnswersId)
       .success
       .value
 
