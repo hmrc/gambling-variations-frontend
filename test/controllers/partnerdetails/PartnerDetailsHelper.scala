@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import controllers.businesscontactdetails.LoadedPartnerDetails
 import models.{BusinessType, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage}
+import pages.partnerdetails.*
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import services.{PaginationResult, PaginationService}
@@ -200,6 +200,7 @@ trait PartnerDetailsHelper {
     utr: Option[String] = None,
     fcr: Option[String] = None,
     crn: Option[String] = None,
+    isIncorporatedInTheUK: Option[Boolean] = None,
     dateOfIncorporation: Option[String] = None,
     countryOfIncorporation: Option[String] = None,
     businessType: Int = 1,
@@ -232,21 +233,36 @@ trait PartnerDetailsHelper {
           "faxNumber" -> faxNumber,
           "emailAddr" -> emailAddress
         ),
-        "partnerDetailsDateOfIncorporation"    -> dateOfIncorporation,
-        "partnerDetailsCountryOfIncorporation" -> countryOfIncorporation,
-        "partnerDetailsBusinessName"           -> "XYZ Consulting Ltd",
-        "partnerDetailsTradingName"            -> "XYZ Consulting",
-        "partnerDetailsDateOfBirth"            -> soleProprietorDob,
-        "partnerDetailsSoleProprietor"         -> soleProprietorDetails,
-        "partnerDetailsNino"                   -> nino,
-        "partnerDetailsUtr"                    -> utr,
-        "partnerDetailsVrn"                    -> vrn,
-        "partnerDetailsCrn"                    -> crn,
-        "partnerDetailsForeignCorporateRef"    -> fcr,
-        "partnerDetailsIsFutureLeaveDate"      -> 0,
-        "partnerDetailsIsFutureJoinDate"       -> 0,
-        "partnerDetailsBusinessType"           -> 1,
-        "partnerDetailsHasAnsweredAllQuestion" -> hasAnsweredAllQuestion
+        "partnerDetailsIsBusinessIncorporatedUk" -> isIncorporatedInTheUK,
+        "partnerDetailsDateOfIncorporation"      -> dateOfIncorporation,
+        "partnerDetailsCountryOfIncorporation"   -> countryOfIncorporation,
+        "partnerDetailsBusinessName"             -> "XYZ Consulting Ltd",
+        "partnerDetailsTradingName"              -> "XYZ Consulting",
+        "partnerDetailsDateOfBirth"              -> soleProprietorDob,
+        "partnerDetailsSoleProprietor"           -> soleProprietorDetails,
+        "partnerDetailsNino"                     -> nino,
+        "partnerDetailsUtr"                      -> utr,
+        "partnerDetailsVrn"                      -> vrn,
+        "partnerDetailsCrn"                      -> crn,
+        "partnerDetailsForeignCorporateRef"      -> fcr,
+        "partnerDetailsIsFutureLeaveDate"        -> 0,
+        "partnerDetailsIsFutureJoinDate"         -> 0,
+        "partnerDetailsBusinessType"             -> businessType,
+        "partnerDetailsHasAnsweredAllQuestion"   -> hasAnsweredAllQuestion
+      )
+    ),
+    "flags" -> Json.obj(
+      "partnerDetailsAddAnotherPartnerYesNo" -> true,
+      "newPartnersSection" -> Json.arr(
+        Json.obj(
+          "partnerDetailsAddPartnerCompleted"        -> false,
+          "partnerDetailsAddTradingNameYesNo"        -> false,
+          "partnerDetailsVrnYesNo"                   -> false,
+          "partnerDetailsAdditionalAddressInfoYesNo" -> false,
+          "partnerDetailsAddFaxNumberYesNo"          -> false,
+          "partnerDetailsAddEmailAddressYesNo"       -> false,
+          "partnerDetailsHasAnsweredAllQuestion"     -> true
+        )
       )
     )
   )

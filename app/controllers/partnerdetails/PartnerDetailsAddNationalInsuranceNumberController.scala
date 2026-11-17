@@ -55,7 +55,7 @@ class PartnerDetailsAddNationalInsuranceNumberController @Inject() (
     request.userAnswers.get(PartnerDetailsBusinessTypePage(newIndex)) match {
       case Some(Soleproprietor) =>
         val preparedForm = request.userAnswers.get(PartnerDetailsNinoPage(newIndex)) match {
-          case None       => form
+          case None => form
           case Some(nino) =>
             form.fill(nino)
         }
