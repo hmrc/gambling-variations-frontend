@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.GamblingConnector
 import controllers.businesscontactdetails.LoadedPartnerDetails
 import forms.partnerdetails.PartnerDeleteDateFormProvider
-import models.{BusinessDetails, BusinessType, NormalMode, UserAnswers}
+import models.{BusinessDetails, BusinessType, NormalMode, RegistrationStatus, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
@@ -125,7 +125,7 @@ class PartnerDetailsDeleteDateControllerSpec extends SpecBase with MockitoSugar 
       businessType = Some(
         BusinessType.Unincorporatedbody
       ),
-      currentlyRegistered = 1,
+      currentlyRegistered = RegistrationStatus.Cancelled,
       groupReg            = false,
       dateOfRegistration = Some(
         registrationDate

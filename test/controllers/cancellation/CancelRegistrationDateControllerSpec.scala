@@ -21,7 +21,7 @@ import connectors.GamblingConnector
 import controllers.actions.{BusinessDetailsDataRequiredAction, BusinessDetailsDataRequiredActionImpl, FakeAgentAuthorisedAction, FakeDataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.{BusinessDetails, NormalMode, UserAnswers}
+import models.{BusinessDetails, NormalMode, RegistrationStatus, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
@@ -159,7 +159,7 @@ class CancelRegistrationDateControllerSpec extends SpecBase with MockitoSugar {
     BusinessDetails(
       mgdRegNumber          = "XMGD00000000001",
       businessType          = None,
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = false,
       dateOfRegistration    = dateOfRegistration,
       businessPartnerNumber = None,

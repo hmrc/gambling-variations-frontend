@@ -17,7 +17,7 @@
 package services
 
 import connectors.GamblingConnector
-import models.{BusinessDetails, BusinessType}
+import models.{BusinessDetails, BusinessType, RegistrationStatus}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
@@ -45,7 +45,7 @@ class BusinessDetailsServiceSpec extends AnyFreeSpec with Matchers with MockitoS
   private val sampleDetails = BusinessDetails(
     mgdRegNumber          = "MGD123",
     businessType          = Some(BusinessType.Soleproprietor),
-    currentlyRegistered   = 1,
+    currentlyRegistered   = RegistrationStatus.Cancelled,
     groupReg              = false,
     dateOfRegistration    = Some(LocalDate.of(2020, 1, 1)),
     businessPartnerNumber = Some("BP001"),
