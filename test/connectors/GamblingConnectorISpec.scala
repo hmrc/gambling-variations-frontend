@@ -792,7 +792,7 @@ object GamblingConnectorISpec {
     BusinessDetails(
       mgdRegNumber          = mgdRegNumber,
       businessType          = Some(Unincorporatedbody),
-      currentlyRegistered   = 1,
+      currentlyRegistered   = RegistrationStatus.Cancelled,
       groupReg              = false,
       dateOfRegistration    = Some(LocalDate.of(2020, 1, 1)),
       businessPartnerNumber = Some("XB1234567890"),

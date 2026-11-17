@@ -31,7 +31,7 @@ class BusinessDetailsSpec extends AnyWordSpec with Matchers {
       val model = BusinessDetails(
         mgdRegNumber          = "123456789",
         businessType          = Some(BusinessType.Partnership),
-        currentlyRegistered   = 1,
+        currentlyRegistered   = RegistrationStatus.Cancelled,
         groupReg              = true,
         dateOfRegistration    = Some(LocalDate.of(2024, 1, 15)),
         businessPartnerNumber = Some("X1234567890"),
@@ -74,7 +74,7 @@ class BusinessDetailsSpec extends AnyWordSpec with Matchers {
       val expectedModel = BusinessDetails(
         mgdRegNumber          = "123456789",
         businessType          = Some(BusinessType.Partnership),
-        currentlyRegistered   = 1,
+        currentlyRegistered   = RegistrationStatus.Cancelled,
         groupReg              = true,
         dateOfRegistration    = Some(LocalDate.of(2024, 1, 15)),
         businessPartnerNumber = Some("X1234567890"),
@@ -89,7 +89,7 @@ class BusinessDetailsSpec extends AnyWordSpec with Matchers {
       val model = BusinessDetails(
         mgdRegNumber          = "123456789",
         businessType          = None,
-        currentlyRegistered   = 0,
+        currentlyRegistered   = RegistrationStatus.Cancelled,
         groupReg              = false,
         dateOfRegistration    = None,
         businessPartnerNumber = None,
