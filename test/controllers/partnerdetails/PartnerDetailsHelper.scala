@@ -19,7 +19,7 @@ package controllers.partnerdetails
 import controllers.businesscontactdetails.LoadedPartnerDetails
 import models.{BusinessType, UserAnswers}
 import org.scalatest.TryValues.convertTryToSuccessOrFailure
-import pages.partnerdetails.{ExistingPartnerDetailsSection, NewPartnerDetailsSection, PartnerDetailsBusinessNamePage, PartnerDetailsBusinessTypePage, PartnerDetailsMgdRegNumberPage}
+import pages.partnerdetails.*
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Call
 import services.{PaginationResult, PaginationService}
@@ -251,6 +251,20 @@ trait PartnerDetailsHelper {
         "partnerDetailsIsFutureJoinDate"         -> false,
         "partnerDetailsBusinessType"             -> businessType,
         "partnerDetailsHasAnsweredAllQuestion"   -> hasAnsweredAllQuestion
+      )
+    ),
+    "flags" -> Json.obj(
+      "partnerDetailsAddAnotherPartnerYesNo" -> true,
+      "newPartnersSection" -> Json.arr(
+        Json.obj(
+          "partnerDetailsAddPartnerCompleted"        -> false,
+          "partnerDetailsAddTradingNameYesNo"        -> false,
+          "partnerDetailsVrnYesNo"                   -> false,
+          "partnerDetailsAdditionalAddressInfoYesNo" -> false,
+          "partnerDetailsAddFaxNumberYesNo"          -> false,
+          "partnerDetailsAddEmailAddressYesNo"       -> false,
+          "partnerDetailsHasAnsweredAllQuestion"     -> true
+        )
       )
     )
   )

@@ -17,15 +17,16 @@
 package viewmodels.checkAnswers.partnerdetails
 
 import base.SpecBase
-import controllers.partnerdetails.PartnerDetailsHelper
 import models.BusinessType.*
-import models.{Address, ContactNumber, UserAnswers}
+import models.{Address, ContactNumber}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormats.longDateDisplay
+import utils.PartnerUtils
+import controllers.partnerdetails.routes as partnerRoutes
 
 import java.time.LocalDate
 
@@ -68,8 +69,8 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
       vatRegistrationNumber     = None,
       isIncorporatedInUk        = Some(true),
       countryOfIncorporation    = None,
-      foreignCorporateReference = None,
       dateOfIncorporation       = Some("12 May 2015"),
+      foreignCorporateReference = None,
       companyRegistrationNumber = Some("01230002"),
       address                   = None,
       addAdditionalInformation  = None,
@@ -139,6 +140,16 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
   private def valueHtml(row: SummaryListRow): String =
     row.value.content.asHtml.body
+
+  private def hrefsOf(row: SummaryListRow): Seq[String] =
+    row.actions.toSeq.flatMap(_.items).map(_.href)
+
+  private def addLinkHref(row: SummaryListRow): Option[String] =
+    """href="([^"]+)"""".r.findFirstMatchIn(valueHtml(row)).map(_.group(1))
+
+  private def key(vm: CheckPartnerDetailsViewModel): String = vm.businessNumberOrIndex.toString
+
+  private def mode(vm: CheckPartnerDetailsViewModel) = PartnerUtils.modeFor(vm.businessNumberOrIndex)
 
   private val missingDetails = messages("partnerDetailsCheckYourAnswers.error.missingDetails")
   private val missingChanges = messages("partnerDetailsCheckYourAnswers.error.missingChanges")
@@ -852,242 +863,202 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
 
     }
 
-    "add links for missing required values for new partners" - {
+    "destination urls" - {
 
-      "render an add link with visually hidden text for a missing UTR" in {
-        val row = rowFor(newPartnerNotSaved.copy(utr = None).businessDetailsSummaryList, "utr").value
-        val html = valueHtml(row)
+      def businessRow(vm: CheckPartnerDetailsViewModel, k: String) = rowFor(vm.businessDetailsSummaryList, k).value
 
-        html must include(messages("partnerDetailsCheckYourAnswers.utr.add"))
-        actionsOf(row) mustBe empty
-      }
+      "required rows (change links for a new partner)" - {
 
-      "use the business name add text that matches the business type" in {
-        val cases = Seq(
-          Soleproprietor              -> "soleProprietorName",
-          Corporatebody               -> "corporateBodyName",
-          Unincorporatedbody          -> "unincorporatedBodyName",
-          Partnership                 -> "partnershipName",
-          LimitedLiabilityPartnership -> "llpName"
-        )
-
-        cases.foreach { case (businessType, key) =>
-          val viewModel = newPartnerNotSaved.copy(typeOfBusiness = Some(businessType), businessName = None)
-          val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, key).value)
-
-          html must include(messages(s"partnerDetailsCheckYourAnswers.$key.add"))
+        "link the type of business to the business type page" in {
+          val vm = newPartnerNotSaved
+          hrefsOf(businessRow(vm, "typeOfBusiness")) mustBe
+            Seq(partnerRoutes.PartnerDetailsBusinessTypeController.onPageLoad(key(vm), mode(vm)).url)
         }
-      }
 
-    }
-
-    "show Not Provided for missing required values for existing partners - edge case" - {
-
-      val emptyExistingPartner =
-        existingPartner
-          .copy(
-            utr                       = None,
-            isDueToLeave              = true,
-            dateOfLeaving             = Some(leavingDate),
-            dateOfJoining             = None,
-            businessName              = None,
-            dateOfIncorporation       = None,
-            tradingName               = None,
-            companyRegistrationNumber = None
+        "link each business name row to the change business name page for its type" in {
+          val cases = Seq(
+            Soleproprietor              -> "soleProprietorName",
+            Corporatebody               -> "corporateBodyName",
+            Unincorporatedbody          -> "unincorporatedBodyName",
+            Partnership                 -> "partnershipName",
+            LimitedLiabilityPartnership -> "llpName"
           )
 
-      "render Not provided for a missing mandatory field for Corporate Body UK" in {
-        val fields = List(
-          "utr",
-          "corporateBodyName",
-          "dateOfIncorporation",
-          "companyRegistrationNumber"
-        )
+          cases.foreach { case (bt, rowKey) =>
+            val vm = newPartnerNotSaved.copy(typeOfBusiness = Some(bt), businessName = Some("Name"))
+            hrefsOf(businessRow(vm, rowKey)) mustBe
+              Seq(partnerRoutes.PartnerDetailsChangeBusinessNameController.onPageLoad(key(vm), businessType = bt, mode(vm)).url)
+          }
+        }
 
-        fields.foreach { f =>
+        "link the sole proprietor date of birth" in {
+          val vm = soleProprietor
+          hrefsOf(businessRow(vm, "soleProprietorDob")) mustBe
+            Seq(partnerRoutes.PartnerDetailsSoleProprietorDobController.onPageLoad(key(vm), mode(vm)).url)
+        }
 
-          val row = rowFor(emptyExistingPartner.businessDetailsSummaryList, f).value
+        "link the date of joining" in {
+          val vm = newPartnerNotSaved
+          hrefsOf(businessRow(vm, "dateOfJoining")) mustBe
+            Seq(partnerRoutes.PartnerDateOfJoiningController.onPageLoad(key(vm), mode(vm)).url)
+        }
 
-          val html = valueHtml(row)
+        "link the incorporated in UK question" in {
+          val vm = newPartnerNotSaved
+          hrefsOf(businessRow(vm, "isIncorporatedInUk")) mustBe
+            Seq(partnerRoutes.PartnerDetailsIsBusinessIncorporatedUkController.onPageLoad(key(vm), mode(vm)).url)
+        }
 
-          html must not include "<a href="
-          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
-          html must include(messages("site.notProvided"))
-          actionsOf(row) mustBe empty
+        "link the date of incorporation and company registration number for a UK corporate body" in {
+          val vm = newPartnerNotSaved
 
+          hrefsOf(businessRow(vm, "dateOfIncorporation")) mustBe
+            Seq(partnerRoutes.PartnerDetailsDateOfIncorporationController.onPageLoad(key(vm), mode(vm)).url)
+          hrefsOf(businessRow(vm, "companyRegistrationNumber")) mustBe
+            Seq(partnerRoutes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(key(vm), mode(vm)).url)
+        }
+
+        "link the country of incorporation and foreign corporate reference for a non-UK corporate body" in {
+          val vm = newPartnerNotSaved.copy(
+            isIncorporatedInUk        = Some(false),
+            countryOfIncorporation    = Some("France"),
+            foreignCorporateReference = Some("ABC-123")
+          )
+
+          hrefsOf(businessRow(vm, "countryOfIncorporation")) mustBe
+            Seq(partnerRoutes.PartnerDetailsAddCountryOfIncorporationController.onPageLoad(key(vm), mode(vm)).url)
+          hrefsOf(businessRow(vm, "foreignCorporateReference")) mustBe
+            Seq(partnerRoutes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key(vm), mode(vm)).url)
+        }
+
+        "link the UTR" in {
+          val vm = newPartnerNotSaved
+          hrefsOf(businessRow(vm, "utr")) mustBe
+            Seq(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(vm), mode(vm)).url)
         }
       }
 
-      "render Not provided for a missing mandatory field for Corporate Body UK non-UK" in {
-        val fields = List(
-          "utr",
-          "corporateBodyName",
-          "countryOfIncorporation",
-          "foreignCorporateReference"
-        )
+      "optional rows (change, then remove for a saved new partner)" - {
 
-        fields.foreach { f =>
-
-          val row = rowFor(emptyExistingPartner.copy(isIncorporatedInUk = Some(false)).businessDetailsSummaryList, f).value
-
-          val html = valueHtml(row)
-
-          html must not include "<a href="
-          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
-          html must include(messages("site.notProvided"))
-          actionsOf(row) mustBe empty
-
+        "link the trading name change and remove pages" in {
+          val vm = newPartnerSaved
+          hrefsOf(businessRow(vm, "tradingName")) mustBe Seq(
+            partnerRoutes.PartnerDetailsTradingNameController.onPageLoad(key(vm), mode(vm)).url,
+            partnerRoutes.PartnerDetailsRemovePartnerTradingNameYesNoController.onPageLoad(key(vm), mode(vm)).url
+          )
         }
 
-      }
-
-      "render Not provided for a missing mandatory field for Sole Proprietor" in {
-        val fields = List(
-          "utr",
-          "soleProprietorName",
-          "soleProprietorDob"
-        )
-
-        fields.foreach { f =>
-
-          val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(Soleproprietor)).businessDetailsSummaryList, f).value
-
-          val html = valueHtml(row)
-
-          html must not include "<a href="
-          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
-          html must include(messages("site.notProvided"))
-          actionsOf(row) mustBe empty
-
+        "link the NINO change and remove pages" in {
+          val vm = soleProprietor.copy(maybeSubmitted = Some(true))
+          hrefsOf(businessRow(vm, "nino")) mustBe Seq(
+            partnerRoutes.PartnerDetailsAddNationalInsuranceNumberController.onPageLoad(key(vm), mode(vm)).url,
+            partnerRoutes.PartnerDetailsRemoveNationalInsuranceNumberYesNoController.onPageLoad(key(vm), mode(vm)).url
+          )
         }
-      }
 
-      "render Not provided for a missing mandatory field for unincorporated Body" in {
-        val fields = List(
-          "utr",
-          "unincorporatedBodyName"
-        )
+        "link the VAT change and remove pages" in {
+          val vm = newPartnerSaved.copy(addVatRegistrationNumber = Some(true), vatRegistrationNumber = Some("123450002"))
+          hrefsOf(businessRow(vm, "vatRegistrationNumber")) mustBe Seq(
+            partnerRoutes.PartnerDetailsVatRegistrationNumberController.onPageLoad(key(vm), mode(vm)).url,
+            partnerRoutes.PartnerDetailsRemoveVatRegNumberYesNoController.onPageLoad(key(vm), mode(vm)).url
+          )
+        }
 
-        fields.foreach { f =>
+        "link the additional information change and remove pages" in {
+          val vm = newPartnerSaved.copy(addAdditionalInformation = Some(true), additionalInformation = Some("Care of Jane"))
+          hrefsOf(rowFor(vm.addressSummaryList, "additionalInformation").value) mustBe Seq(
+            partnerRoutes.PartnerDetailsAdditionalAddressInfoController.onPageLoad(key(vm), mode(vm)).url,
+            partnerRoutes.PartnerDetailsRemoveAdditionalInfoForPartnerAddressYesNoController.onPageLoad(key(vm), mode(vm)).url
+          )
+        }
 
-          val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(Unincorporatedbody)).businessDetailsSummaryList, f).value
+        "link the fax number change and remove pages" in {
+          val vm = newPartnerSaved.copy(addFaxNumber = Some(true), faxNumber = Some("0123456789"))
+          hrefsOf(rowFor(vm.contactDetailsSummaryList, "faxNumber").value) mustBe Seq(
+            partnerRoutes.PartnerDetailsChangePartnerFaxNumberController.onPageLoad(key(vm), mode(vm)).url,
+            partnerRoutes.PartnerDetailsRemoveFaxNumberYesNoController.onPageLoad(key(vm), mode(vm)).url
+          )
+        }
 
-          val html = valueHtml(row)
+        "link the email address change and remove pages" in {
+          val vm = newPartnerSaved.copy(addEmailAddress = Some(true), emailAddress = Some("a@example.com"))
+          hrefsOf(rowFor(vm.contactDetailsSummaryList, "emailAddress").value) mustBe Seq(
+            partnerRoutes.PartnerDetailsEmailAddressController.onPageLoad(key(vm), mode(vm)).url,
+            partnerRoutes.PartnerDetailsRemoveEmailAddressYesNoController.onPageLoad(key(vm), mode(vm)).url
+          )
+        }
 
-          html must not include "<a href="
-          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
-          html must include(messages("site.notProvided"))
-          actionsOf(row) mustBe empty
-
+        "link the contact numbers change page" in {
+          val vm = existingPartner
+          hrefsOf(rowFor(vm.contactDetailsSummaryList, "contactNumbers").value) mustBe
+            Seq(partnerRoutes.PartnerDetailsContactDetailsController.onPageLoad(key(vm), mode(vm)).url)
         }
       }
 
-      "render Not provided for a missing mandatory field for Partnership" in {
+      "yes/no screener rows" - {
 
-        val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(Partnership)).businessDetailsSummaryList, "partnershipName").value
+        "link each screener row to its yes/no page" in {
+          val vm = soleProprietor.copy(
+            addTradingName           = Some(true),
+            addAdditionalInformation = Some(true),
+            addFaxNumber             = Some(true),
+            addEmailAddress          = Some(true)
+          )
 
-        val html = valueHtml(row)
-
-        html must not include "<a href="
-        html must include(messages("partnerDetailsCheckYourAnswers.noData"))
-        html must include(messages("site.notProvided"))
-        actionsOf(row) mustBe empty
-
-      }
-
-      "render Not provided for a missing mandatory field for LLP" in {
-        val fields = List(
-          "utr",
-          "dateOfIncorporation",
-          "companyRegistrationNumber"
-        )
-
-        fields.foreach { f =>
-
-          val row = rowFor(emptyExistingPartner.copy(typeOfBusiness = Some(LimitedLiabilityPartnership)).businessDetailsSummaryList, f).value
-
-          val html = valueHtml(row)
-
-          html must not include "<a href="
-          html must include(messages("partnerDetailsCheckYourAnswers.noData"))
-          html must include(messages("site.notProvided"))
-          actionsOf(row) mustBe empty
-
+          hrefsOf(businessRow(vm, "tradingName.add")) mustBe
+            Seq(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(vm)).url)
+          hrefsOf(businessRow(vm, "nino.add")) mustBe
+            Seq(partnerRoutes.PartnerDetailsAddNationalInsuranceNumberYesNoController.onPageLoad(key(vm)).url)
+          hrefsOf(businessRow(vm, "vatRegistrationNumber.add")) mustBe
+            Seq(partnerRoutes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(key(vm)).url)
+          hrefsOf(rowFor(vm.addressSummaryList, "additionalInformation.add").value) mustBe
+            Seq(partnerRoutes.PartnerDetailsAdditionalAddressInfoYesNoController.onPageLoad(key(vm)).url)
+          hrefsOf(rowFor(vm.contactDetailsSummaryList, "faxNumber.add").value) mustBe
+            Seq(partnerRoutes.PartnerDetailsAddFaxNumberYesNoController.onPageLoad(key(vm)).url)
+          hrefsOf(rowFor(vm.contactDetailsSummaryList, "emailAddress.add").value) mustBe
+            Seq(partnerRoutes.PartnerDetailsAddEmailAddressYesNoPageController.onPageLoad(key(vm)).url)
         }
       }
 
-      "render Not provided for each business type" in {
-        val cases = Seq(
-          Soleproprietor              -> "soleProprietorName",
-          Corporatebody               -> "corporateBodyName",
-          Unincorporatedbody          -> "unincorporatedBodyName",
-          Partnership                 -> "partnershipName",
-          LimitedLiabilityPartnership -> "llpName"
-        )
-
-        cases.foreach { case (businessType, key) =>
-          val viewModel = emptyExistingPartner.copy(typeOfBusiness = Some(businessType))
-          val html = valueHtml(rowFor(viewModel.businessDetailsSummaryList, key).value)
-
-          html must include(messages("site.notProvided"))
+      "address row" - {
+        // --- TODO: add more tests when Address screen are built ---
+        "link the address change action to the address lookup placeholder" in {
+          hrefsOf(rowFor(existingPartner.addressSummaryList, "address").value) mustBe Seq("#")
         }
       }
 
-      "render no add link when a value is present" in {
-        val html = valueHtml(rowFor(existingPartner.businessDetailsSummaryList, "utr").value)
+      "add links for missing values" - {
 
-        html must not include "<a href="
-        html must include("1121766916")
+        "link a missing UTR to the UTR page" in {
+          val vm = newPartnerNotSaved.copy(utr = None)
+          addLinkHref(businessRow(vm, "utr")) mustBe
+            Some(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(vm), mode(vm)).url)
+        }
+
+        "link a missing business name to the change business name page for its type" in {
+          val vm = newPartnerNotSaved.copy(typeOfBusiness = Some(Partnership), businessName = None)
+          addLinkHref(businessRow(vm, "partnershipName")) mustBe
+            Some(partnerRoutes.PartnerDetailsChangeBusinessNameController.onPageLoad(key(vm), businessType = Partnership, mode(vm)).url)
+        }
+
+        "link a missing date of joining to the date of joining page" in {
+          val vm = newPartnerNotSaved.copy(dateOfJoining = None)
+          addLinkHref(businessRow(vm, "dateOfJoining")) mustBe
+            Some(partnerRoutes.PartnerDateOfJoiningController.onPageLoad(key(vm), mode(vm)).url)
+        }
+
+        "link a missing company registration number for an existing partner" in {
+          val vm = existingPartner.copy(companyRegistrationNumber = None)
+          addLinkHref(businessRow(vm, "companyRegistrationNumber")) mustBe
+            Some(partnerRoutes.PartnerDetailsCompanyRegistrationNumberController.onPageLoad(key(vm), mode(vm)).url)
+        }
+
+        "link a missing type of business to the business type page" in {
+          val vm = newPartnerNotSaved.copy(typeOfBusiness = None)
+          addLinkHref(businessRow(vm, "typeOfBusiness")) mustBe
+            Some(partnerRoutes.PartnerDetailsBusinessTypeController.onPageLoad(key(vm), mode(vm)).url)
+        }
       }
-    }
-
-    "from" - new PartnerDetailsHelper {
-      "should convert user answers to CYA model" in {
-        val data =
-          cleanedDataExistingPartners(partnerDetailsBusinessType = 2, utr = Some(testUtr), crn = Some(testCRN), phoneNumber = Some(testPhoneNumber))
-        val ua = UserAnswers(businessNumber1, data)
-        val model = CheckPartnerDetailsViewModel.from(ua, index = businessNumber1, false, None)
-
-        model mustBe expected
-
-      }
-
-      private def expected = CheckPartnerDetailsViewModel(
-        businessNumberOrIndex     = businessNumber1,
-        typeOfBusiness            = Some(Corporatebody),
-        businessName              = Some("XYZ Consulting Ltd"),
-        soleProprietorDob         = None,
-        addTradingName            = None,
-        tradingName               = Some("XYZ Consulting"),
-        dateOfJoining             = Some(LocalDate.of(2022, 1, 15)),
-        dateOfLeaving             = None,
-        addNino                   = None,
-        nino                      = None,
-        utr                       = Some(testUtr),
-        addVatRegistrationNumber  = None,
-        vatRegistrationNumber     = None,
-        isIncorporatedInUk        = Some(true),
-        dateOfIncorporation       = Some("1 Mar 2020"),
-        companyRegistrationNumber = Some(testCRN),
-        countryOfIncorporation    = None,
-        foreignCorporateReference = None,
-        address = Some(Address("123 High Street", Some("Suite 4"), Some("Business Park"), Some("London"), Some("SW1A 1AA"), Some("GB"))),
-        addAdditionalInformation  = None,
-        additionalInformation     = Some("ADI123456"),
-        contactNumbers            = Some(ContactNumber(phoneNumber = Some(testPhoneNumber), mobilePhoneNumber = None)),
-        addFaxNumber              = None,
-        faxNumber                 = None,
-        addEmailAddress           = None,
-        emailAddress              = None,
-        isNewPartnerFlow          = false,
-        maybeSubmitted            = None,
-        isDueToLeave              = false,
-        isDueToJoin               = false,
-        isMissingMandatoryDetails = false,
-        hasChanges                = None,
-        hasAnsweredAllQuestions   = false
-      )
-
     }
   }
 }
