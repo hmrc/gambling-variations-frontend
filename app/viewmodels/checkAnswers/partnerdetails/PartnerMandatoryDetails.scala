@@ -49,9 +49,31 @@ object PartnerMandatoryDetails {
   def cleanUp(userAnswers: UserAnswers, index: BusinessNumberOrIndex): Try[UserAnswers] = {
     val keep = required(userAnswers, index).map(_.page).toSet
 
-    conditionalPages(index)
-      .filterNot(keep.contains)
-      .foldLeft(Try(userAnswers))((acc, page) => acc.flatMap(_.remove(page)))
+    val toBeRemoved = conditionalPages(index).filterNot(keep.contains)
+
+    val filtered = toBeRemoved.foldLeft(Try(userAnswers))((acc, page) => acc.flatMap(_.remove(page)))
+
+    println()
+    println()
+    println("pages to keep")
+    keep.foreach(println)
+
+    println()
+    println()
+    println("toBeRemoved")
+    toBeRemoved.foreach(println)
+
+    println()
+    println()
+    println("original")
+    println(userAnswers.modified.data)
+
+    println()
+    println()
+    println("filtered")
+    println(filtered.get.modified.data)
+
+    filtered
   }
 
   /** Mandatory fields for the partner's current answers, in journey order. */

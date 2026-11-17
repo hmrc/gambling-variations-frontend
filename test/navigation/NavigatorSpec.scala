@@ -21,7 +21,7 @@ import controllers.partnerdetails.PartnerDetailsHelper
 import controllers.partnerdetails.routes.*
 import controllers.routes
 import models.*
-import models.BusinessType.{Corporatebody, LimitedLiabilityPartnership, Partnership, Soleproprietor, Unincorporatedbody}
+import models.BusinessType.{Corporatebody, Soleproprietor}
 import models.CorrespondenceChangeAddrOption.*
 import models.cancellation.ReasonForCancellation
 import models.controllingbody.ControllingBodyChangeOption.*
