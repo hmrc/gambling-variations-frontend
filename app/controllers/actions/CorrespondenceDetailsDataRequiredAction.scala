@@ -93,7 +93,6 @@ class CorrespondenceDetailsDataRequiredActionImpl @Inject() (
     logger.info("Setting User Answers for Correspondence Details")
     val loadedAnswers = answers.withSectionLoaded(CorrespondenceDetailsSection, Instant.now(clock))
     for {
-//      updatedAnswers <- answers.set(CorrespondenceDetailsSection, correspondenceDetails.mgdRegNumber)
       updatedAnswers <- loadedAnswers.setOriginalIfDefined(CorrespondenceNamePage, correspondenceDetails.nameLine1)
       updatedAnswers <- updatedAnswers.setOriginalIfDefined(CorrespondenceAdditionalNamePage, correspondenceDetails.nameLine2)
       updatedAnswers <- {
