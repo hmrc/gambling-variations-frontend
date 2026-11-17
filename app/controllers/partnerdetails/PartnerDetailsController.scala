@@ -56,11 +56,16 @@ class PartnerDetailsController @Inject() (
       maxVisiblePages = 5
     )
 
-  def onPageLoad(page: Option[Int]): Action[AnyContent] =
+  def onPageLoad(
+    page: Option[Int]
+  ): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
-      val selectedPage = page.getOrElse(1)
-      val todayDate = LocalDate.now(ZoneOffset.UTC)
+      val selectedPage =
+        page.getOrElse(1)
+
+      val todayDate =
+        LocalDate.now(ZoneOffset.UTC)
 
       val allPartnerNumbers =
         getAllPartnerNumbers(request.userAnswers)
@@ -104,11 +109,16 @@ class PartnerDetailsController @Inject() (
       )
     }
 
-  def onSubmit(page: Option[Int]): Action[AnyContent] =
+  def onSubmit(
+    page: Option[Int]
+  ): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
 
-      val selectedPage = page.getOrElse(1)
-      val todayDate = LocalDate.now(ZoneOffset.UTC)
+      val selectedPage =
+        page.getOrElse(1)
+
+      val todayDate =
+        LocalDate.now(ZoneOffset.UTC)
 
       val allPartnerNumbers =
         getAllPartnerNumbers(request.userAnswers)
@@ -153,31 +163,48 @@ class PartnerDetailsController @Inject() (
                 )
               )
             ),
-          value =>
-            for {
-              updatedAnswers <-
-                Future.fromTry(
-                  request.userAnswers.set(
-                    PartnerDetailsAddAnotherPartnerYesNoPage,
-                    value
+          value => {
+            val hasReachedMaximum =
+              hasReachedMaximumPartnerLimit(
+                partnerNumbers = allPartnerNumbers,
+                userAnswers    = request.userAnswers
+              )
+
+            if (value && hasReachedMaximum) {
+              Future.successful(
+                Redirect(
+                  routes.PartnerDetailsController.onPageLoad(
+                    Some(selectedPage)
                   )
                 )
-
-              _ <-
-                sessionRepository.set(updatedAnswers)
-
-              result <-
-                if (value) {
-                  addNewPartner(updatedAnswers)
-                } else {
-                  Future.successful(
-                    Redirect(
-                      controllers.routes.ChangeRegistrationDetailsController
-                        .onPageLoad()
+              )
+            } else {
+              for {
+                updatedAnswers <-
+                  Future.fromTry(
+                    request.userAnswers.set(
+                      PartnerDetailsAddAnotherPartnerYesNoPage,
+                      value
                     )
                   )
-                }
-            } yield result
+
+                _ <-
+                  sessionRepository.set(updatedAnswers)
+
+                result <-
+                  if (value) {
+                    addNewPartner(updatedAnswers)
+                  } else {
+                    Future.successful(
+                      Redirect(
+                        controllers.routes.ChangeRegistrationDetailsController
+                          .onPageLoad()
+                      )
+                    )
+                  }
+              } yield result
+            }
+          }
         )
     }
 
@@ -240,7 +267,9 @@ class PartnerDetailsController @Inject() (
       answersWithIncompletePartner <-
         Future.fromTry(
           userAnswers.set(
-            PartnerDetailsAddPartnerCompletedPage(newPartnerIndex),
+            PartnerDetailsAddPartnerCompletedPage(
+              newPartnerIndex
+            ),
             false
           )
         )
@@ -248,7 +277,9 @@ class PartnerDetailsController @Inject() (
       updatedAnswers <-
         Future.fromTry(
           answersWithIncompletePartner.set(
-            PartnerDetailsMgdRegNumberPage(newPartnerIndex),
+            PartnerDetailsMgdRegNumberPage(
+              newPartnerIndex
+            ),
             answersWithIncompletePartner.id
           )
         )
@@ -314,5 +345,23 @@ class PartnerDetailsController @Inject() (
       getPresentExistingPartners(userAnswers)
 
     completedNewPartners ++ existingPartners
+  }
+
+  private def hasReachedMaximumPartnerLimit(
+    partnerNumbers: Seq[BusinessNumberOrIndex],
+    userAnswers: UserAnswers
+  ): Boolean = {
+
+    val partnerCountForMaximumLimit =
+      partnerNumbers.count { partnerNumber =>
+        userAnswers
+          .get(
+            PartnerDetailsDateOfLeavingPage(partnerNumber)
+          )
+          .isEmpty
+      }
+
+    partnerCountForMaximumLimit >=
+      frontendAppConfig.maxPartners
   }
 }

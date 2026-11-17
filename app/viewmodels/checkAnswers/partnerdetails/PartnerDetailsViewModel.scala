@@ -167,12 +167,6 @@ object PartnerDetailsViewModel {
                   }
               }
 
-            /*
-             * activePartnerCount is based on ALL partners.
-             *
-             * Therefore the remove option is not incorrectly affected
-             * by only having 10 partners on the current page.
-             */
             val canRemove =
               dateOfLeaving.isEmpty &&
                 activePartnerCount > 2
@@ -199,25 +193,25 @@ object PartnerDetailsViewModel {
         }
         .sortBy(_.name.toLowerCase)
 
-    /*
-     * Use the complete collection for page-level business rules.
-     */
-    val totalPartnerCount =
-      allPartnerNumbers.size
+    val partnerCountForMaximumLimit =
+      allPartnerNumbers.count { partnerNumber =>
+        userAnswers
+          .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
+          .isEmpty
+      }
 
     val hasPartners =
-      totalPartnerCount > 0
+      allPartnerNumbers.nonEmpty
 
-    val canAddAnotherPartner =
-      totalPartnerCount < frontendAppConfig.maxPartners
+    val hasReachedMaximumPartnerLimit =
+      partnerCountForMaximumLimit >= frontendAppConfig.maxPartners
 
     PartnerDetailsViewModel(
-      partners              = rows,
-      addAnotherPartner     = canAddAnotherPartner,
-      showNoPartnersMessage = !hasPartners,
-      showMinimumPartnersMessage = hasPartners &&
-        activePartnerCount <= 2,
-      showMaximumPartnersMessage = totalPartnerCount >= frontendAppConfig.maxPartners,
+      partners                   = rows,
+      addAnotherPartner          = !hasReachedMaximumPartnerLimit,
+      showNoPartnersMessage      = !hasPartners,
+      showMinimumPartnersMessage = hasPartners && activePartnerCount <= 2,
+      showMaximumPartnersMessage = hasReachedMaximumPartnerLimit,
       showSubmitMessage = userAnswers
         .get(PartnerDetailsChangedPage)
         .contains(true)

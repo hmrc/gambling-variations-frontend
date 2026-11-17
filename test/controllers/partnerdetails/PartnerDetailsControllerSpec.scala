@@ -22,84 +22,168 @@ import forms.partnerdetails.AddAnotherPartnerFormProvider
 import models.{BusinessType, CheckMode, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{atLeastOnce, never, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
+import play.api.Application
 import play.api.inject.bind
 import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
+import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerDetailsViewModel
 import views.html.partnerdetails.PartnerDetailsView
 
 import scala.concurrent.Future
 
 class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with PartnerDetailsHelper {
+  private val existingPartners =
+    (1 to 100).map { index =>
+      index.toString -> f"XYZ Consulting-$index%03d"
+    }
 
-  private val existingPartners = (0 to 100).map(e => (e.toString, f"XYZ Consulting-$e%03d"))
+  private val paginationHelper =
+    PaginationHelper(
+      1,
+      businessNumbers = Seq(
+        businessNumber1 -> businessNumber1
+      ).toIndexedSeq
+    )
 
-  private val paginationHelper = PaginationHelper(1, businessNumbers = Seq((businessNumber1, businessNumber1)).toIndexedSeq)
-  private val paginationHelperMaxSizePage1 = PaginationHelper(100, 1, existingPartners)
-  private val paginationHelperMaxSizePage2 = PaginationHelper(100, 2, existingPartners)
+  private val paginationHelperMaxSizePage1 =
+    PaginationHelper(
+      100,
+      1,
+      existingPartners
+    )
+
+  private val paginationHelperMaxSizePage2 =
+    PaginationHelper(
+      100,
+      2,
+      existingPartners
+    )
 
   private val formProvider =
     new AddAnotherPartnerFormProvider()
 
   private val addAnotherPartnerForm =
-    formProvider("partnerDetails.addAnotherPartner.error.required")
+    formProvider(
+      "partnerDetails.addAnotherPartner.error.required"
+    )
 
   private lazy val partnerDetailsRoute =
-    controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None).url
+    routes.PartnerDetailsController
+      .onPageLoad(None)
+      .url
 
   private lazy val onSubmitRoute =
-    controllers.partnerdetails.routes.PartnerDetailsController.onSubmit(None).url
+    routes.PartnerDetailsController
+      .onSubmit(None)
+      .url
 
   private lazy val onPartnerDetailsRoute =
-    controllers.partnerdetails.routes.PartnerDetailsController
-      .onPartnerDetails(businessNumber1, CheckMode)
+    routes.PartnerDetailsController
+      .onPartnerDetails(
+        businessNumber1,
+        CheckMode
+      )
       .url
 
   private lazy val onRemoveRoute =
-    controllers.partnerdetails.routes.PartnerDetailsController
-      .onRemove(businessNumber1, CheckMode)
+    routes.PartnerDetailsController
+      .onRemove(
+        businessNumber1,
+        CheckMode
+      )
       .url
 
   override val emptyUserAnswers: UserAnswers =
-    LoadedPartnerDetails.apply(userAnswersId, JsObject.empty, ExistingPartnerDetailsSection, NewPartnerDetailsSection)
+    LoadedPartnerDetails(
+      userAnswersId,
+      JsObject.empty,
+      ExistingPartnerDetailsSection,
+      NewPartnerDetailsSection
+    )
 
   private val userAnswersWithPartner =
     emptyUserAnswers
-      .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "XWM00000001762")
+      .set(
+        PartnerDetailsMgdRegNumberPage(
+          businessNumber1
+        ),
+        "XWM00000001762"
+      )
       .success
       .value
-      .set(PartnerDetailsTradingNamePage(businessNumber1), "XYZ Consulting")
+      .set(
+        PartnerDetailsTradingNamePage(
+          businessNumber1
+        ),
+        "XYZ Consulting"
+      )
       .success
       .value
-      .set(PartnerDetailsBusinessNamePage(businessNumber1), "XYZ Consulting Ltd")
+      .set(
+        PartnerDetailsBusinessNamePage(
+          businessNumber1
+        ),
+        "XYZ Consulting Ltd"
+      )
       .success
       .value
-      .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+      .set(
+        PartnerDetailsBusinessTypePage(
+          businessNumber1
+        ),
+        BusinessType.Partnership
+      )
       .success
       .value
 
-  private val userAnswersWithPartnerMaxSize = (1 to 100).foldLeft(emptyUserAnswers)((userAnswers, businessNumber) => {
-    userAnswers
-      .set(PartnerDetailsMgdRegNumberPage(businessNumber.toString), f"XWM00000001762-$businessNumber%03d")
-      .success
-      .value
-      .set(PartnerDetailsTradingNamePage(businessNumber.toString), f"XYZ Consulting-$businessNumber%03d")
-      .success
-      .value
-      .set(PartnerDetailsBusinessNamePage(businessNumber.toString), f"XYZ Consulting Ltd-$businessNumber%03d")
-      .success
-      .value
-      .set(PartnerDetailsBusinessTypePage(businessNumber.toString), BusinessType.Partnership)
-      .success
-      .value
-  })
+  private val userAnswersWithPartnerMaxSize =
+    (1 to 100).foldLeft(emptyUserAnswers) { case (userAnswers, businessNumber) =>
+      val partnerNumber =
+        businessNumber.toString
 
-  "PartnerDetails Controller" - {
+      userAnswers
+        .set(
+          PartnerDetailsMgdRegNumberPage(
+            partnerNumber
+          ),
+          f"XWM00000001762-$businessNumber%03d"
+        )
+        .success
+        .value
+        .set(
+          PartnerDetailsTradingNamePage(
+            partnerNumber
+          ),
+          f"XYZ Consulting-$businessNumber%03d"
+        )
+        .success
+        .value
+        .set(
+          PartnerDetailsBusinessNamePage(
+            partnerNumber
+          ),
+          f"XYZ Consulting Ltd-$businessNumber%03d"
+        )
+        .success
+        .value
+        .set(
+          PartnerDetailsBusinessTypePage(
+            partnerNumber
+          ),
+          BusinessType.Partnership
+        )
+        .success
+        .value
+    }
+
+  "PartnerDetailsController" - {
 
     "onPageLoad" - {
 
@@ -119,7 +203,10 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           val view =
             application.injector
@@ -131,9 +218,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             view(
               addAnotherPartnerForm,
               viewModel(
-                application,
-                userAnswersWithPartner,
-                paginationHelper.partnerDetailsBusinessNumberList
+                application             = application,
+                userAnswers             = userAnswersWithPartner,
+                paginatedPartnerNumbers = paginationHelper.partnerDetailsBusinessNumberList
               ),
               paginationHelper.paginatedViewModel,
               paginationHelper.page,
@@ -148,14 +235,16 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
         }
       }
 
-      "must NOT populate the form when the question has previously been answered" in {
-        val userAnswers = userAnswersWithPartner
-          .set(
-            PartnerDetailsAddAnotherPartnerYesNoPage,
-            true
-          )
-          .success
-          .value
+      "must not populate the form when the question has previously been answered" in {
+
+        val userAnswers =
+          userAnswersWithPartner
+            .set(
+              PartnerDetailsAddAnotherPartnerYesNoPage,
+              true
+            )
+            .success
+            .value
 
         val application =
           applicationBuilder(
@@ -164,14 +253,21 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
 
         running(application) {
 
-          val request = FakeRequest(
-            GET,
-            partnerDetailsRoute
-          )
+          val request =
+            FakeRequest(
+              GET,
+              partnerDetailsRoute
+            )
 
-          val result = route(application, request).value
+          val result =
+            route(
+              application,
+              request
+            ).value
 
-          val view = application.injector.instanceOf[PartnerDetailsView]
+          val view =
+            application.injector
+              .instanceOf[PartnerDetailsView]
 
           status(result) mustEqual OK
 
@@ -179,9 +275,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             view(
               addAnotherPartnerForm,
               viewModel(
-                application,
-                userAnswers,
-                paginationHelper.partnerDetailsBusinessNumberList
+                application             = application,
+                userAnswers             = userAnswers,
+                paginatedPartnerNumbers = paginationHelper.partnerDetailsBusinessNumberList
               ),
               paginationHelper.paginatedViewModel,
               paginationHelper.page,
@@ -193,11 +289,10 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
               request,
               messages(application)
             ).toString
-
         }
       }
 
-      "must populate existing partners table with correct pagination" in {
+      "must populate the existing partners table with page two" in {
 
         val application =
           applicationBuilder(
@@ -213,11 +308,18 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           val view =
             application.injector
               .instanceOf[PartnerDetailsView]
+
+          val pageTwoPartnerNumbers =
+            paginationHelperMaxSizePage2.partnerDetailsBusinessNumberList
+              .slice(10, 20)
 
           status(result) mustEqual OK
 
@@ -225,9 +327,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             view(
               addAnotherPartnerForm,
               viewModel(
-                application,
-                userAnswersWithPartnerMaxSize,
-                paginationHelperMaxSizePage2.partnerDetailsBusinessNumberList.slice(10, 20)
+                application             = application,
+                userAnswers             = userAnswersWithPartnerMaxSize,
+                paginatedPartnerNumbers = pageTwoPartnerNumbers
               ),
               paginationHelperMaxSizePage2.paginatedViewModel,
               paginationHelperMaxSizePage2.page,
@@ -242,7 +344,7 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
         }
       }
 
-      "must populate existing partners table with correct pagination with page one when page param is missing" in {
+      "must use page one when the page parameter is missing" in {
 
         val application =
           applicationBuilder(
@@ -258,11 +360,18 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           val view =
             application.injector
               .instanceOf[PartnerDetailsView]
+
+          val pageOnePartnerNumbers =
+            paginationHelperMaxSizePage1.partnerDetailsBusinessNumberList
+              .slice(0, 10)
 
           status(result) mustEqual OK
 
@@ -270,9 +379,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             view(
               addAnotherPartnerForm,
               viewModel(
-                application,
-                userAnswersWithPartnerMaxSize,
-                paginationHelperMaxSizePage1.partnerDetailsBusinessNumberList.slice(0, 10)
+                application             = application,
+                userAnswers             = userAnswersWithPartnerMaxSize,
+                paginatedPartnerNumbers = pageOnePartnerNumbers
               ),
               paginationHelperMaxSizePage1.paginatedViewModel,
               paginationHelperMaxSizePage1.page,
@@ -286,17 +395,149 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             ).toString
         }
       }
+
+      "must hide the add option when 100 partners count towards the maximum" in {
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(userAnswersWithPartnerMaxSize)
+          ).build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              GET,
+              partnerDetailsRoute
+            )
+
+          val result =
+            route(
+              application,
+              request
+            ).value
+
+          val expectedViewModel =
+            viewModel(
+              application = application,
+              userAnswers = userAnswersWithPartnerMaxSize,
+              paginatedPartnerNumbers = paginationHelperMaxSizePage1.partnerDetailsBusinessNumberList
+                .slice(0, 10)
+            )
+
+          status(result) mustEqual OK
+
+          expectedViewModel.partners must have size 10
+          expectedViewModel.addAnotherPartner mustBe false
+          expectedViewModel.showMaximumPartnersMessage mustBe true
+        }
+      }
+
+      "must show the add option when one of 100 partners has a future leaving date" in {
+
+        val answers =
+          userAnswersWithPartnerMaxSize
+            .set(
+              PartnerDetailsDateOfLeavingPage("1"),
+              todayDate.plusDays(10)
+            )
+            .success
+            .value
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(answers)
+          ).build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              GET,
+              partnerDetailsRoute
+            )
+
+          val result =
+            route(
+              application,
+              request
+            ).value
+
+          val expectedViewModel =
+            viewModel(
+              application = application,
+              userAnswers = answers,
+              paginatedPartnerNumbers = paginationHelperMaxSizePage1.partnerDetailsBusinessNumberList
+                .slice(0, 10)
+            )
+
+          status(result) mustEqual OK
+
+          /*
+           * 100 total minus one having a leaving date gives a
+           * maximum-limit count of 99.
+           */
+          expectedViewModel.addAnotherPartner mustBe true
+          expectedViewModel.showMaximumPartnersMessage mustBe false
+        }
+      }
+
+      "must show the add option when one of 100 partners has a past leaving date" in {
+
+        val answers =
+          userAnswersWithPartnerMaxSize
+            .set(
+              PartnerDetailsDateOfLeavingPage("1"),
+              todayDate.minusDays(10)
+            )
+            .success
+            .value
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(answers)
+          ).build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              GET,
+              partnerDetailsRoute
+            )
+
+          val result =
+            route(
+              application,
+              request
+            ).value
+
+          val expectedViewModel =
+            viewModel(
+              application = application,
+              userAnswers = answers,
+              paginatedPartnerNumbers = paginationHelperMaxSizePage1.partnerDetailsBusinessNumberList
+                .slice(0, 10)
+            )
+
+          status(result) mustEqual OK
+          expectedViewModel.addAnotherPartner mustBe true
+          expectedViewModel.showMaximumPartnersMessage mustBe false
+        }
+      }
     }
 
     "onSubmit" - {
 
-      "must redirect to the partner details page when Yes is submitted" in {
+      "must redirect to the new partner business type page when Yes is submitted below the maximum" in {
 
         val mockSessionRepository =
           mock[SessionRepository]
 
         when(
-          mockSessionRepository.set(any[UserAnswers])
+          mockSessionRepository.set(
+            any[UserAnswers]
+          )
         ).thenReturn(
           Future.successful(true)
         )
@@ -322,98 +563,133 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(0.toString, NormalMode).url
+            routes.PartnerDetailsBusinessTypeController
+              .onPageLoad(
+                "0",
+                NormalMode
+              )
+              .url
+
+          verify(
+            mockSessionRepository,
+            atLeastOnce()
+          ).set(any[UserAnswers])
         }
       }
 
-      "url index increments on each new partner POST" in {
+      "must increment the new partner index for each completed new partner" in {
 
         val mockSessionRepository =
           mock[SessionRepository]
 
-        val userAnswersWithPartner2 = userAnswersWithPartner
-          .set(PartnerDetailsMgdRegNumberPage(0), 0.toString)
-          .success
-          .value
-          .set(
-            PartnerDetailsAddPartnerCompletedPage(0),
-            true
-          )
-          .success
-          .value
-
-        val userAnswersWithPartner3 = userAnswersWithPartner2
-          .set(PartnerDetailsMgdRegNumberPage(1), 1.toString)
-          .success
-          .value
-          .set(
-            PartnerDetailsAddPartnerCompletedPage(1),
-            true
-          )
-          .success
-          .value
-
         when(
-          mockSessionRepository.set(any[UserAnswers])
+          mockSessionRepository.set(
+            any[UserAnswers]
+          )
         ).thenReturn(
           Future.successful(true)
         )
 
-        val application1 =
-          applicationBuilder(
-            userAnswers = Some(userAnswersWithPartner)
-          )
-            .overrides(
-              bind[SessionRepository]
-                .toInstance(mockSessionRepository)
+        val answersWithNewPartnerZero =
+          userAnswersWithPartner
+            .set(
+              PartnerDetailsMgdRegNumberPage(0),
+              "0"
             )
-            .build()
-
-        val application2 =
-          applicationBuilder(
-            userAnswers = Some(userAnswersWithPartner2)
-          )
-            .overrides(
-              bind[SessionRepository]
-                .toInstance(mockSessionRepository)
+            .success
+            .value
+            .set(
+              PartnerDetailsAddPartnerCompletedPage(0),
+              true
             )
-            .build()
+            .success
+            .value
 
-        val application3 =
-          applicationBuilder(
-            userAnswers = Some(userAnswersWithPartner3)
-          )
-            .overrides(
-              bind[SessionRepository]
-                .toInstance(mockSessionRepository)
+        val answersWithNewPartnerOne =
+          answersWithNewPartnerZero
+            .set(
+              PartnerDetailsMgdRegNumberPage(1),
+              "1"
             )
-            .build()
-
-        running(application1) {
-
-          val request =
-            FakeRequest(
-              POST,
-              onSubmitRoute
-            ).withFormUrlEncodedBody(
-              "value" -> "true"
+            .success
+            .value
+            .set(
+              PartnerDetailsAddPartnerCompletedPage(1),
+              true
             )
+            .success
+            .value
 
-          val result =
-            route(application1, request).value
+        val applications =
+          Seq(
+            userAnswersWithPartner    -> "0",
+            answersWithNewPartnerZero -> "1",
+            answersWithNewPartnerOne  -> "2"
+          ).map { case (answers, expectedIndex) =>
+            applicationBuilder(
+              userAnswers = Some(answers)
+            )
+              .overrides(
+                bind[SessionRepository]
+                  .toInstance(mockSessionRepository)
+              )
+              .build() -> expectedIndex
+          }
 
-          status(result) mustEqual SEE_OTHER
+        applications.foreach { case (application, expectedIndex) =>
+          running(application) {
 
-          redirectLocation(result).value mustEqual
-            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(0.toString, NormalMode).url
+            val request =
+              FakeRequest(
+                POST,
+                onSubmitRoute
+              ).withFormUrlEncodedBody(
+                "value" -> "true"
+              )
+
+            val result =
+              route(
+                application,
+                request
+              ).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual
+              routes.PartnerDetailsBusinessTypeController
+                .onPageLoad(
+                  expectedIndex,
+                  NormalMode
+                )
+                .url
+          }
         }
+      }
 
-        running(application2) {
+      "must block a Yes submission when the maximum partner count has been reached" in {
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(userAnswersWithPartnerMaxSize)
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
 
           val request =
             FakeRequest(
@@ -424,15 +700,62 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application2, request).value
+            route(
+              application,
+              request
+            ).value
 
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(1.toString, NormalMode).url
+            routes.PartnerDetailsController
+              .onPageLoad(Some(1))
+              .url
+
+          /*
+           * The controller blocks the request before saving the
+           * answer or creating partner 101.
+           */
+          verify(
+            mockSessionRepository,
+            never()
+          ).set(any[UserAnswers])
         }
+      }
 
-        running(application3) {
+      "must allow a Yes submission when one of 100 partners has a future leaving date" in {
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(
+          mockSessionRepository.set(
+            any[UserAnswers]
+          )
+        ).thenReturn(
+          Future.successful(true)
+        )
+
+        val answers =
+          userAnswersWithPartnerMaxSize
+            .set(
+              PartnerDetailsDateOfLeavingPage("1"),
+              todayDate.plusDays(10)
+            )
+            .success
+            .value
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(answers)
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
 
           val request =
             FakeRequest(
@@ -443,12 +766,85 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application3, request).value
+            route(
+              application,
+              request
+            ).value
 
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(2.toString, NormalMode).url
+            routes.PartnerDetailsBusinessTypeController
+              .onPageLoad(
+                "0",
+                NormalMode
+              )
+              .url
+
+          verify(
+            mockSessionRepository,
+            atLeastOnce()
+          ).set(any[UserAnswers])
+        }
+      }
+
+      "must allow a Yes submission when one of 100 partners has a past leaving date" in {
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(
+          mockSessionRepository.set(
+            any[UserAnswers]
+          )
+        ).thenReturn(
+          Future.successful(true)
+        )
+
+        val answers =
+          userAnswersWithPartnerMaxSize
+            .set(
+              PartnerDetailsDateOfLeavingPage("1"),
+              todayDate.minusDays(10)
+            )
+            .success
+            .value
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(answers)
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              POST,
+              onSubmitRoute
+            ).withFormUrlEncodedBody(
+              "value" -> "true"
+            )
+
+          val result =
+            route(
+              application,
+              request
+            ).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            routes.PartnerDetailsBusinessTypeController
+              .onPageLoad(
+                "0",
+                NormalMode
+              )
+              .url
         }
       }
 
@@ -458,7 +854,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
           mock[SessionRepository]
 
         when(
-          mockSessionRepository.set(any[UserAnswers])
+          mockSessionRepository.set(
+            any[UserAnswers]
+          )
         ).thenReturn(
           Future.successful(true)
         )
@@ -484,7 +882,10 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           status(result) mustEqual SEE_OTHER
 
@@ -495,7 +896,60 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
         }
       }
 
-      "must return a Bad Request and errors when invalid data is submitted" in {
+      "must allow No to be submitted when the maximum partner count has been reached" in {
+
+        val mockSessionRepository =
+          mock[SessionRepository]
+
+        when(
+          mockSessionRepository.set(
+            any[UserAnswers]
+          )
+        ).thenReturn(
+          Future.successful(true)
+        )
+
+        val application =
+          applicationBuilder(
+            userAnswers = Some(userAnswersWithPartnerMaxSize)
+          )
+            .overrides(
+              bind[SessionRepository]
+                .toInstance(mockSessionRepository)
+            )
+            .build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(
+              POST,
+              onSubmitRoute
+            ).withFormUrlEncodedBody(
+              "value" -> "false"
+            )
+
+          val result =
+            route(
+              application,
+              request
+            ).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual
+            controllers.routes.ChangeRegistrationDetailsController
+              .onPageLoad()
+              .url
+
+          verify(
+            mockSessionRepository,
+            atLeastOnce()
+          ).set(any[UserAnswers])
+        }
+      }
+
+      "must return Bad Request with errors when invalid data is submitted" in {
 
         val application =
           applicationBuilder(
@@ -520,7 +974,10 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           val view =
             application.injector
@@ -532,9 +989,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             view(
               boundForm,
               viewModel(
-                application,
-                userAnswersWithPartner,
-                paginationHelper.partnerDetailsBusinessNumberList
+                application             = application,
+                userAnswers             = userAnswersWithPartner,
+                paginatedPartnerNumbers = paginationHelper.partnerDetailsBusinessNumberList
               ),
               paginationHelper.paginatedViewModel,
               paginationHelper.page,
@@ -549,7 +1006,8 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
         }
       }
 
-      "must return a Bad Request and errors when invalid data is submitted with correct pagination page" in {
+      "must return Bad Request with the correct page when invalid data is submitted" in {
+
         val application =
           applicationBuilder(
             userAnswers = Some(userAnswersWithPartnerMaxSize)
@@ -573,11 +1031,18 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           val view =
             application.injector
               .instanceOf[PartnerDetailsView]
+
+          val pageTwoPartnerNumbers =
+            paginationHelperMaxSizePage2.partnerDetailsBusinessNumberList
+              .slice(10, 20)
 
           status(result) mustEqual BAD_REQUEST
 
@@ -585,9 +1050,9 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             view(
               boundForm,
               viewModel(
-                application,
-                userAnswersWithPartnerMaxSize,
-                paginationHelperMaxSizePage2.partnerDetailsBusinessNumberList.slice(10, 20)
+                application             = application,
+                userAnswers             = userAnswersWithPartnerMaxSize,
+                paginatedPartnerNumbers = pageTwoPartnerNumbers
               ),
               paginationHelperMaxSizePage2.paginatedViewModel,
               paginationHelperMaxSizePage2.page,
@@ -621,25 +1086,32 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None).url
+            routes.PartnerDetailsController
+              .onPageLoad(None)
+              .url
         }
       }
     }
 
     "onRemove" - {
 
-      "must save the selected partner and redirect to the partner delete date page" in {
+      "must save the selected partner and redirect to the delete date page in CheckMode" in {
 
         val mockSessionRepository =
           mock[SessionRepository]
 
         when(
-          mockSessionRepository.set(any[UserAnswers])
+          mockSessionRepository.set(
+            any[UserAnswers]
+          )
         ).thenReturn(
           Future.successful(true)
         )
@@ -663,32 +1135,42 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
             )
 
           val result =
-            route(application, request).value
+            route(
+              application,
+              request
+            ).value
 
           status(result) mustEqual SEE_OTHER
 
           redirectLocation(result).value mustEqual
-            controllers.partnerdetails.routes.PartnerDetailsDeleteDateController
+            routes.PartnerDetailsDeleteDateController
               .onPageLoad()
               .url
 
           val capturedAnswers =
-            ArgumentCaptor.forClass(classOf[UserAnswers])
+            ArgumentCaptor.forClass(
+              classOf[UserAnswers]
+            )
 
-          verify(mockSessionRepository).set(capturedAnswers.capture())
+          verify(
+            mockSessionRepository
+          ).set(
+            capturedAnswers.capture()
+          )
 
           capturedAnswers.getValue
-            .get(PartnerDetailsChosenPartnerToRemovePage) mustEqual Some(businessNumber1)
+            .get(
+              PartnerDetailsChosenPartnerToRemovePage
+            ) mustEqual Some(businessNumber1)
         }
       }
-
     }
   }
 
   private def viewModel(
-    application: play.api.Application,
+    application: Application,
     userAnswers: UserAnswers,
-    paginatedPartnerDetailsBusinessNumber: Seq[String]
+    paginatedPartnerNumbers: Seq[BusinessNumberOrIndex]
   ): PartnerDetailsViewModel = {
 
     val frontendAppConfig =
@@ -698,11 +1180,44 @@ class PartnerDetailsControllerSpec extends SpecBase with MockitoSugar with Partn
     implicit val appMessages =
       messages(application)
 
+    val allPartnerNumbers =
+      getAllPartnerNumbers(userAnswers)
+
     PartnerDetailsViewModel.from(
-      paginatedPartnerDetailsBusinessNumber,
-      todayDate,
-      userAnswers,
-      frontendAppConfig
+      paginatedPartnerNumbers = paginatedPartnerNumbers,
+      allPartnerNumbers       = allPartnerNumbers,
+      todayDate               = todayDate,
+      userAnswers             = userAnswers,
+      frontendAppConfig       = frontendAppConfig
     )
+  }
+
+  private def getAllPartnerNumbers(
+    userAnswers: UserAnswers
+  ): Seq[BusinessNumberOrIndex] = {
+
+    val completedNewPartners: Seq[BusinessNumberOrIndex] =
+      PartnerUtils.getCompletedNewPartners(
+        userAnswers
+      )
+
+    val existingPartnerNumbers: Seq[BusinessNumberOrIndex] =
+      PartnerUtils
+        .getExistingPartnersBusinessNumbers(
+          userAnswers
+        )
+        .filter { partnerNumber =>
+          userAnswers
+            .get(
+              PartnerDetailsMgdRegNumberPage(
+                partnerNumber
+              )
+            )
+            .isDefined
+        }
+        .toSeq
+
+    completedNewPartners ++
+      existingPartnerNumbers
   }
 }
