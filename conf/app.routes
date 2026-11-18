@@ -398,3 +398,5 @@ GET        /cancel-group-registration/reviewing-cancellation-request   controlle
 POST       /cancel-group-registration/reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onSubmit(mode: Mode = NormalMode)
 
 GET        /cancel-group-registration/check                             controllers.cancellation.CheckGroupRegistrationCancellationDetailsController.onPageLoad()
+
+GET        /cancel-registration/already-cancelled                       controllers.cancellation.RegistrationCancellationLockedController.onPageLoad(mode: Mode = NormalMode)

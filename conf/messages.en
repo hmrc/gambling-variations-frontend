@@ -1816,3 +1816,8 @@ checkGroupRegistrationCancellationDetails.caption = Cancel group registration
 checkGroupRegistrationCancellationDetails.cancellationDate = Group registration cancellation date
 checkGroupRegistrationCancellationDetails.cancellationDate.change.hidden = group registration cancellation date
 
+registrationCancellationLocked.title = This registration has already been cancelled
+registrationCancellationLocked.heading = This registration has already been cancelled
+registrationCancellationLocked.caption = Cancel registration
+registrationCancellationLocked.legend = You cannot submit a new cancellation request.
+registrationCancellationLocked.legend2 = Return to your manage your Machine Games Duty
