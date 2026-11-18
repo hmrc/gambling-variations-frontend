@@ -1189,6 +1189,24 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
+      "should return to check controlling body details when an existing controlling body is changed to a partnership" in {
+        val answers =
+          UserAnswers(
+            "id",
+            Json.obj(
+              "controllingBodyDetails" -> Json.obj(
+                "mgdRegNumber"          -> "XGM00000001761",
+                "businessPartnerNumber" -> "1234567890",
+                "typeOfControllingBody" -> BusinessType.Partnership.code,
+                "businessName"          -> "New Partnership"
+              )
+            )
+          )
+
+        navigator.nextPage(ControllingBodyBusinessNamePage, NormalMode, answers) mustBe
+          controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
+      }
+
       Seq(None, Some(""), Some("   ")).foreach { businessPartnerNumber =>
         Seq(None, Some(EditDetails), Some(ProvideNew)).foreach { changeAnswer =>
           s"should continue setup to the trading name screener with business partner number $businessPartnerNumber and change answer $changeAnswer" in {
@@ -1220,7 +1238,7 @@ class NavigatorSpec extends SpecBase {
           controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
 
-      "should route ControllingBodyChangeScreenerPage to ControllingBodyBusinessType when the answer is ProvideNew" in {
+      "should route ControllingBodyChangeScreenerPage to ControllingBodyNotProvidedYesNo when the answer is ProvideNew" in {
         val answers =
           emptyAnswers
             .set(ControllingBodyChangeScreenerPage, ProvideNew)
@@ -1228,7 +1246,7 @@ class NavigatorSpec extends SpecBase {
             .value
 
         navigator.nextPage(ControllingBodyChangeScreenerPage, NormalMode, answers) mustBe
-          controllers.controllingbody.routes.ControllingBodyBusinessTypeController.onPageLoad()
+          controllers.controllingbody.routes.ControllingBodyNotProvidedYesNoController.onPageLoad()
       }
 
       "should route ControllingBodyChangeScreenerPage to ChangeRegistrationDetails when the answer is KeepSame" in {
