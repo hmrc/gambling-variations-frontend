@@ -23,6 +23,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
+import pages.correspondencedetails.{AddCorrespondenceAddressAdditionalInformationPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -40,9 +41,10 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
   val formProvider = new CorrespondenceAddrInfoScreenerFormProvider()
   val form = formProvider()
 
-  val requiredAnswer = Json.obj(
-    "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-  )
+  val requiredAnswer: UserAnswers = LoadedCorrespondenceDetails("id", Json.obj(), CorrespondenceDetailsSection)
+//  val requiredAnswer = Json.obj(
+//    "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
+//  )
 
   lazy val correspondenceAddrInfoScreenerRoute =
     controllers.correspondencedetails.routes.CorrespondenceAddrInfoScreenerController.onPageLoad().url
@@ -51,7 +53,7 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", requiredAnswer))).build()
+      val application = applicationBuilder(userAnswers = Some(requiredAnswer)).build()
 
       running(application) {
         val request = FakeRequest(GET, correspondenceAddrInfoScreenerRoute)
@@ -67,17 +69,18 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = Some(
-        UserAnswers(
-          "id",
-          Json.obj(
-            "correspondenceDetailsSection" -> Json.obj(
-              "mgdRegNum" -> mgdRegNum
-            ),
-            "addCorrespondenceAddressAdditionalInformation" -> true
-          )
-        )
-      )
+      val userAnswers = Some(requiredAnswer.set(AddCorrespondenceAddressAdditionalInformationPage, true).success.value)
+//      val userAnswers = Some(
+//        UserAnswers(
+//          "id",
+//          Json.obj(
+//            "correspondenceDetailsSection" -> Json.obj(
+//              "mgdRegNum" -> mgdRegNum
+//            ),
+//            "addCorrespondenceAddressAdditionalInformation" -> true
+//          )
+//        )
+//      )
 
       val application = applicationBuilder(userAnswers = userAnswers).build()
 
@@ -101,9 +104,7 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
         .thenReturn(Future.successful(true))
 
       val application =
-        applicationBuilder(
-          userAnswers = Some(UserAnswers("id", requiredAnswer))
-        )
+        applicationBuilder(userAnswers = Some(requiredAnswer))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -127,11 +128,10 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-      val requiredAnswer = Json.obj(
-        "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
 
-      val application = applicationBuilder(userAnswers = Some(UserAnswers("id", requiredAnswer))).build()
+      val requiredAnswer = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+
+      val application = applicationBuilder(Some(requiredAnswer)).build()
 
       running(application) {
         val request =

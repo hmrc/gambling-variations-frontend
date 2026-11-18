@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.CorrespondenceChangeAddrScreenerPage
+import pages.correspondencedetails.{CorrespondenceChangeAddrScreenerPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -45,11 +45,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
   lazy val CorrespondenceChangeAddrScreenerRoute =
     controllers.correspondencedetails.routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
 
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+  val noAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "CorrespondenceChangeAddrScreener Controller" - {
 
@@ -71,14 +67,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val data = Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum"                                   -> userAnswersId,
-          CorrespondenceChangeAddrScreenerPage.toString -> EditCurrentAddress.toString
-        )
-      )
-
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers = noAnswers.set(CorrespondenceChangeAddrScreenerPage, EditCurrentAddress).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

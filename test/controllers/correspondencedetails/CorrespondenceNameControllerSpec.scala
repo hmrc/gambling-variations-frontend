@@ -19,12 +19,12 @@ package controllers.correspondencedetails
 import base.SpecBase
 import controllers.routes
 import forms.correspondencedetails.CorrespondenceNameFormProvider
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.CorrespondenceNamePage
+import pages.correspondencedetails.{CorrespondenceDetailsSection, CorrespondenceNamePage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -42,11 +42,7 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new CorrespondenceNameFormProvider()
   val form = formProvider()
 
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+  val noAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val nameRoute =
     controllers.correspondencedetails.routes.CorrespondenceNameController.onPageLoad().url
@@ -73,11 +69,17 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "correspondenceDetailsSection"  -> Json.obj("mgdRegNum" -> userAnswersId),
-        CorrespondenceNamePage.toString -> "validName"
+        "correspondenceDetailsSection" -> Json.obj(
+          CorrespondenceNamePage.toString -> "validName"
+        )
       )
 
-      val userAnswers = UserAnswers(userAnswersId, data)
+//      val data = Json.obj(
+//        "correspondenceDetailsSection"  -> Json.obj("mgdRegNum" -> userAnswersId),
+//        CorrespondenceNamePage.toString -> "validName"
+//      )
+
+      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, data, CorrespondenceDetailsSection)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

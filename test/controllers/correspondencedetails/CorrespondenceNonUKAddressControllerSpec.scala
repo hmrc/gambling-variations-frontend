@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.CorrespondenceAddressNonUkPage
+import pages.correspondencedetails.{CorrespondenceAddressNonUkPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -61,15 +61,7 @@ class CorrespondenceNonUKAddressControllerSpec extends SpecBase with MockitoSuga
       "country"      -> "France"
     )
 
-  val noAnswers: UserAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum" -> userAnswersId
-        )
-      )
-    )
+  val noAnswers: UserAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val nameRoute: String =
     controllers.correspondencedetails.routes.CorrespondenceNonUKAddressController.onPageLoad().url

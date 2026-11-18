@@ -17,7 +17,6 @@
 package controllers.businesscontactdetails
 
 import base.SpecBase
-import controllers.businessname.LoadedBusinessName
 import controllers.{LoadedBusinessContactDetails, routes}
 import forms.RemoveFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}

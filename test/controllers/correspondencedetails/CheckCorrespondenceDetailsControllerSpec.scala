@@ -18,7 +18,7 @@ package controllers.correspondencedetails
 
 import base.SpecBase
 import controllers.routes
-import models.{Address, ContactNumber, UserAnswers}
+import models.{Address, ContactNumber}
 import pages.*
 import pages.correspondencedetails.*
 import play.api.libs.json.Json
@@ -27,13 +27,7 @@ import play.api.test.Helpers.*
 
 class CheckCorrespondenceDetailsControllerSpec extends SpecBase {
 
-  private val baseAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
-    )
+  private val baseAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val checkCorrespondenceDetailsRoute =
     controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad().url

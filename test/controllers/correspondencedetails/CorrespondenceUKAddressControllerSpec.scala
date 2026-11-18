@@ -24,7 +24,7 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.CorrespondenceAddressUkPage
+import pages.correspondencedetails.{CorrespondenceAddressUkPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -61,15 +61,7 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
       "postcode"     -> "SW1A 2AA"
     )
 
-  val noAnswers: UserAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum" -> userAnswersId
-        )
-      )
-    )
+  val noAnswers: UserAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val nameRoute: String =
     controllers.correspondencedetails.routes.CorrespondenceUKAddressController.onPageLoad().url

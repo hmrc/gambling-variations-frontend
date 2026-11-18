@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSubmittedPage, CorrespondenceFaxNumberPage, RemoveCorrespondenceFaxNumberPage}
+import pages.correspondencedetails.*
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -42,14 +42,14 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
   private val correspondenceFaxNumber = "123456789"
 
-  private val baseAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        CorrespondenceFaxNumberPage.toString -> correspondenceFaxNumber,
-        "correspondenceDetailsSection"       -> Json.obj("mgdRegNum" -> mgdRegNum)
-      )
-    )
+  private val baseAnswers = LoadedCorrespondenceDetails(
+    userAnswersId,
+    Json.obj(
+      "correspondenceDetailsSection" ->
+        Json.obj(CorrespondenceFaxNumberPage.toString -> correspondenceFaxNumber)
+    ),
+    CorrespondenceDetailsSection
+  )
 
   val formProvider = new RemoveCorrespondenceFaxNumberFormProvider()
   val form = formProvider()
@@ -195,16 +195,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to SystemError on GET when CorrespondenceFaxNumberPage is missing" in {
 
-      val userAnswers =
-        UserAnswers(
-          userAnswersId,
-          Json.obj(
-            "correspondenceDetailsSection" ->
-              Json.obj(
-                "mgdRegNum" -> mgdRegNum
-              )
-          )
-        )
+      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -226,16 +217,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to SystemError on POST when CorrespondenceFaxNumberPage is missing" in {
 
-      val userAnswers =
-        UserAnswers(
-          userAnswersId,
-          Json.obj(
-            "correspondenceDetailsSection" ->
-              Json.obj(
-                "mgdRegNum" -> mgdRegNum
-              )
-          )
-        )
+      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

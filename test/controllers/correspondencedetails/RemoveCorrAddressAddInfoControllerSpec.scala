@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, RemoveCorrAddressAddInfoPage}
+import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSection, RemoveCorrAddressAddInfoPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -45,15 +45,14 @@ class RemoveCorrAddressAddInfoControllerSpec extends SpecBase with MockitoSugar 
 
   lazy val removeAddrAddInfoRoute: String = controllers.correspondencedetails.routes.RemoveCorrAddressAddInfoController.onPageLoad().url
 
-  private val baseAnswers =
-    UserAnswers(userAnswersId,
-                Json.obj(
-                  "correspondenceDetailsSection" -> Json.obj(
-                    "mgdRegNum" -> userAnswersId
-                  ),
-                  "correspondenceAdditionalInformation" -> "abc"
-                )
-               )
+  private val baseAnswers = LoadedCorrespondenceDetails(userAnswersId,
+                                                        Json.obj(
+                                                          "correspondenceDetailsSection" -> Json.obj(
+                                                            "correspondenceAdditionalInformation" -> "abc"
+                                                          )
+                                                        ),
+                                                        CorrespondenceDetailsSection
+                                                       )
 
   "RemoveCorrAddressAddInfo Controller" - {
 

@@ -25,6 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.correspondencedetails.{AddCorrespondingDetailsYesNoPage, CorrespondenceDetailsSection}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -44,10 +45,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
     controllers.correspondencedetails.routes.AddCorrespondenceDetailsYesNoController.onPageLoad().url
 
   private val userAnswersWithCorrespondenceDetails =
-    emptyUserAnswers
-      .set(CorrespondenceDetailsSection, userAnswersId)
-      .success
-      .value
+    LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "AddCorrespondingDetailsYesNo Controller" - {
 

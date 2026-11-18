@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceEmailPage}
+import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSection, CorrespondenceEmailPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.mvc.Call
@@ -43,11 +43,7 @@ class CorrespondenceEmailAddressControllerSpec extends SpecBase with MockitoSuga
   val formProvider = new EmailAddressFormProvider()
   val form = formProvider("correspondenceEmailAddress")
 
-  val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+  val noAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val emailAddressRoute =
     controllers.correspondencedetails.routes.CorrespondenceEmailAddressController.onPageLoad().url
@@ -74,11 +70,11 @@ class CorrespondenceEmailAddressControllerSpec extends SpecBase with MockitoSuga
     "must populate the view on a GET when the question has previously been answered" in {
 
       val data = Json.obj(
-        "correspondenceDetailsSection"   -> Json.obj("mgdRegNum" -> userAnswersId),
-        CorrespondenceEmailPage.toString -> "validEmail@example.com"
+        "correspondenceDetailsSection" ->
+          Json.obj(CorrespondenceEmailPage.toString -> "validEmail@example.com")
       )
 
-      val userAnswers = UserAnswers(userAnswersId, data)
+      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, data, CorrespondenceDetailsSection)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

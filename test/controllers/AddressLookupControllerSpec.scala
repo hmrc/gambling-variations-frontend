@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import controllers.correspondencedetails.LoadedCorrespondenceDetails
 import models.{Address, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -26,6 +27,7 @@ import pages.correspondencedetails.*
 import pages.IsleMOrChannelFlagPage
 import play.api.inject.bind
 import play.api.i18n.Messages
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -39,10 +41,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
   private val addressLookupUrl = "/address-lookup/on-ramp"
 
   private val userAnswers =
-    emptyUserAnswers
-      .set(CorrespondenceDetailsSection, mgdRegNum)
-      .success
-      .value
+    LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "AddressLookup Controller" - {
 

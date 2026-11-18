@@ -24,7 +24,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, RemoveCorrespondenceEmailAddressPage}
+import pages.correspondencedetails.{CorrespondenceDetailsChangesPage, CorrespondenceDetailsSection, CorrespondenceEmailPage, RemoveCorrespondenceEmailAddressPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -44,26 +44,13 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
 
   private val correspondenceEmail = "test@example.com"
 
-  private val baseAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum" -> userAnswersId
-        ),
-        "correspondenceEmail" -> correspondenceEmail
-      )
-    )
+  private val baseAnswers = LoadedCorrespondenceDetails(
+    userAnswersId,
+    Json.obj("correspondenceDetailsSection" -> Json.obj("correspondenceEmail" -> correspondenceEmail)),
+    CorrespondenceDetailsSection
+  )
 
-  private val answersWithSectionOnly =
-    UserAnswers(
-      userAnswersId,
-      Json.obj(
-        "correspondenceDetailsSection" -> Json.obj(
-          "mgdRegNum" -> userAnswersId
-        )
-      )
-    )
+  private val answersWithSectionOnly = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "RemoveCorrespondenceEmailAddressController" - {
 
@@ -193,7 +180,10 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
 
         status(result) mustEqual SEE_OTHER
         verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
         savedAnswersCaptor.getValue.get(RemoveCorrespondenceEmailAddressPage).value mustEqual true
+        // The loaded email is removed - a tombstone over the original
+        savedAnswersCaptor.getValue.get(CorrespondenceEmailPage) mustBe None
         savedAnswersCaptor.getValue.get(CorrespondenceDetailsChangesPage).value mustEqual true
       }
     }
