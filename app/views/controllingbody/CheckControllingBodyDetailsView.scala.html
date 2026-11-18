@@ -54,7 +54,7 @@
 
     @govukSummaryList(viewModel.contactDetails)
 
-    @formHelper(action = controllers.controllingbody.routes.CheckControllingBodyDetailsController.onSubmit) {
+    @formHelper(action = controllers.controllingbody.routes.CheckControllingBodyDetailsController.onSubmit()) {
         @govukButton(
             ButtonViewModel(messages("site.continue"))
         )
