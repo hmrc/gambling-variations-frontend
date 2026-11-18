@@ -168,7 +168,7 @@ final case class UserAnswers(
     (original, asserted) match {
       case (originalObject: JsObject, assertedObject: JsObject) =>
         val kept = assertedObject.fields.map { case (key, value) => key -> withTombstones(valueAt(originalObject, JsPath \ key), value) }
-        val removed = (originalObject.keys -- assertedObject.keys).toSeq.map(_ -> JsNull)
+        val removed = originalObject.keys.diff(assertedObject.keys).toSeq.map(_ -> JsNull)
         JsObject(kept ++ removed)
       case (_, value) => value
     }
