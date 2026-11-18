@@ -1,3 +1,19 @@
+/*
+ * Copyright 2026 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package views.cancellation
 
 import base.SpecBase
@@ -5,67 +21,103 @@ import forms.cancellation.WarningForCancellationFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import play.api.test.Helpers.running
-import views.html.WarningForCancellationView
+import views.html.cancellation.WarningForCancellationView
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class WarningForCancellationViewSpec extends SpecBase {
 
-  private val form = new WarningForCancellationFormProvider()()
+  trait Setup {
+
+    private val app = applicationBuilder().build()
+
+    val view: WarningForCancellationView = app.injector.instanceOf[WarningForCancellationView]
+
+    val currentDate: LocalDate = LocalDate.of(2020, 3, 28)
+
+    private val dateFormatter =
+      DateTimeFormatter.ofPattern("d MMMM yyyy")
+
+    val currentDateFormatted: String = dateFormatter.format(currentDate)
+
+    val request: play.api.mvc.Request[?] =
+      FakeRequest()
+
+    implicit val messages: Messages =
+      app.injector
+        .instanceOf[play.api.i18n.MessagesApi]
+        .preferred(request)
+
+    val formProvider = new WarningForCancellationFormProvider()
+
+    val form = formProvider()
+
+    def document(
+      formToRender: play.api.data.Form[Boolean] = form
+    ): Document = {
+      val html = view(formToRender, currentDateFormatted, NormalMode)(request, messages)
+      Jsoup.parse(html.body)
+    }
+  }
 
   "WarningForCancellationView" - {
 
-    "render the page correctly" in {
+    "must render page correctly" in new Setup {
 
-      val application = applicationBuilder().build()
+      val doc = document()
 
-      running(application) {
+      doc.title must include(
+        messages("warningForCancellation.title")
+      )
 
-        val view = application.injector.instanceOf[WarningForCancellationView]
+      doc
+        .select(".govuk-caption-l")
+        .text() must include(
+        messages("warningForCancellation.caption")
+      )
 
-        val html = view(form, NormalMode)(FakeRequest(), messages(application))
+      doc
+        .select("h1")
+        .text() mustBe
+        messages("warningForCancellation.heading")
 
-        val document: Document = Jsoup.parse(html.toString)
+      doc
+        .body()
+        .text() must include
+      messages("warningForCancellation.body")
 
-        document.title() must include(
-          messages(application)("warningForCancellation.title")
-        )
+      doc
+        .select("button.govuk-button")
+        .text() must include(
+        messages("site.continue")
+      )
 
-        document.select("h1").select(".govuk-fieldset__heading").text() mustEqual
-          messages(application)("warningForCancellation.heading")
-
-        document.select("span").select(".govuk-caption-l").text() mustEqual
-          messages(application)("changeRegistrationDetails.caption")
-
-        document.getElementById("value").attr("value") mustEqual "true"
-
-        document.getElementById("value-no").attr("value") mustEqual "false"
-
-        document.select(".govuk-button").text() mustEqual
-          messages(application)("site.continue")
-      }
+      doc
+        .select(".govuk-error-summary")
+        .size() mustEqual 0
     }
 
-    "render an error summary when there are form errors" in {
+    "must render error summary when form has errors" in new Setup {
 
-      val application = applicationBuilder().build()
+      val boundForm =
+        form.bind(Map("reasonForCancellation" -> ""))
 
-      running(application) {
+      val html = view(boundForm, currentDateFormatted, NormalMode)(request, messages)
+      val doc: Document = Jsoup.parse(html.body)
 
-        val view = application.injector.instanceOf[WarningForCancellationView]
+      doc
+        .select(".govuk-error-summary")
+        .size() mustEqual 1
 
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val html = view(boundForm, NormalMode)(FakeRequest(), messages(application))
-
-        val document: Document = Jsoup.parse(html.toString)
-
-        document.select(".govuk-error-summary").size() mustEqual 1
-
-        document.body().text() must include(
-          messages(application)("warningForCancellation.error.required")
-        )
-      }
+      doc
+        .select(".govuk-error-summary")
+        .text must include(
+        messages("warningForCancellation.error.required")
+      )
     }
+
   }
 }

@@ -28,14 +28,14 @@
     h1: H1
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], dateFormatted: String, mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("warningForCancellation.title"), Some("warningForCancellation.caption"))) {
 
     @formHelper(action = controllers.cancellation.routes.WarningForCancellationController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form))
+            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
         @caption(messages("warningForCancellation.caption"))
@@ -45,7 +45,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("warningForCancellation.h2")).withCssClass("govuk-fieldset__legend--m")
+                legend = LegendViewModel(messages("warningForCancellation.h2", dateFormatted)).withCssClass("govuk-fieldset__legend--m")
             )
         )
 

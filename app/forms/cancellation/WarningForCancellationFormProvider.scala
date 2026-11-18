@@ -18,6 +18,7 @@ package forms.cancellation
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
 import javax.inject.Inject
 
@@ -26,5 +27,6 @@ class WarningForCancellationFormProvider @Inject() extends Mappings {
   def apply(): Form[Boolean] =
     Form(
       "value" -> boolean("warningForCancellation.error.required")
+        .verifying(Constraint[Boolean](if _ then Valid else Invalid("warningForCancellation.error.required")))
     )
 }

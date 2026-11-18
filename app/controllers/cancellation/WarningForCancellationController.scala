@@ -21,7 +21,7 @@ import controllers.routes
 import forms.cancellation.WarningForCancellationFormProvider
 import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.cancellation.{WarningForCancellationPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
+import pages.cancellation.{RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage, WarningForCancellationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -45,7 +45,7 @@ class WarningForCancellationController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
-  
+
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
@@ -56,9 +56,9 @@ class WarningForCancellationController @Inject() (
         cancellationDate <- request.userAnswers.get(RegistrationCancellationDatePage)
       } yield Ok(view(form, dateFormatter.format(cancellationDate), NormalMode)))
         .getOrElse(Redirect(routes.SystemErrorController.onPageLoad().url))
-  }
+    }
 
-  def onSubmit(mode: Mode): Action[AnyContent] =
+  def onSubmit(mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
       val form = formProvider()
       val cancellationDate = request.userAnswers.get(RegistrationCancellationDatePage)
@@ -77,12 +77,12 @@ class WarningForCancellationController @Inject() (
               value =>
                 for {
                   updatedAnswers <- Future.fromTry(
-                    request.userAnswers.set(WarningForCancellationPage, value)
-                  )
+                                      request.userAnswers.set(WarningForCancellationPage, value)
+                                    )
 
                   updatedAnswers <- Future.fromTry(
-                    request.userAnswers.set(RegistrationCancellationDeclarationPage, false)
-                  )
+                                      request.userAnswers.set(RegistrationCancellationDeclarationPage, false)
+                                    )
                   _ <- sessionRepository.set(updatedAnswers)
                 } yield Redirect(
                   navigator.nextPage(RegistrationCancellationDeclarationPage, mode, updatedAnswers)
@@ -91,8 +91,8 @@ class WarningForCancellationController @Inject() (
         )
         .getOrElse(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url)))
     }
-}
+  }
 
-private val dateFormatter =
-  DateTimeFormatter.ofPattern("d MMMM yyyy")
+  private val dateFormatter =
+    DateTimeFormatter.ofPattern("d MMMM yyyy")
 }
