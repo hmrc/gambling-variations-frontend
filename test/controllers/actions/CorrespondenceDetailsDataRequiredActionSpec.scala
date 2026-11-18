@@ -16,9 +16,8 @@
 
 package controllers.actions
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import connectors.GamblingConnector
-import controllers.correspondencedetails.LoadedCorrespondenceDetails
 import models.requests.{DataRequest, OptionalDataRequest}
 import models.{Address, ContactNumber, CorrespondenceDetails, UserAnswers}
 import org.mockito.ArgumentMatchers.*
@@ -150,7 +149,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           val gamblingConnector = mock[GamblingConnector]
           val action = new Harness(sessionRepository, gamblingConnector)
 
-          val loaded = LoadedCorrespondenceDetails(mgdRegNum, Json.obj(), CorrespondenceDetailsSection)
+          val loaded = LoadedSectionDetails(mgdRegNum, Json.obj(), CorrespondenceDetailsSection)
 
           val result: Either[Result, DataRequest[AnyContent]] =
             action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(loaded))).futureValue

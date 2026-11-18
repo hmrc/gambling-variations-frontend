@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.correspondencedetails
+package base
 
 import models.{OriginalAnswers, Section, UserAnswers}
 import play.api.libs.json.JsObject
 
 import java.time.Instant
 
-object LoadedCorrespondenceDetails {
+object LoadedSectionDetails {
 
   def apply(id: String, data: JsObject, sections: Section*): UserAnswers =
     UserAnswers(

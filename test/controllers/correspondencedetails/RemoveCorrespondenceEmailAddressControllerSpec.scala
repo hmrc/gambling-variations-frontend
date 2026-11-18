@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveCorrespondenceEmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
@@ -44,13 +44,13 @@ class RemoveCorrespondenceEmailAddressControllerSpec extends SpecBase with Mocki
 
   private val correspondenceEmail = "test@example.com"
 
-  private val baseAnswers = LoadedCorrespondenceDetails(
+  private val baseAnswers = LoadedSectionDetails(
     userAnswersId,
     Json.obj("correspondenceDetailsSection" -> Json.obj("correspondenceEmail" -> correspondenceEmail)),
     CorrespondenceDetailsSection
   )
 
-  private val answersWithSectionOnly = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  private val answersWithSectionOnly = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "RemoveCorrespondenceEmailAddressController" - {
 

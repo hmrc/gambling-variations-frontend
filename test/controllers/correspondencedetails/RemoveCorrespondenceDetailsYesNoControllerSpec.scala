@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveCorrespondenceDetailsYesNoFormProvider
 import models.{NormalMode, UserAnswers}
@@ -45,7 +45,7 @@ class RemoveCorrespondenceDetailsYesNoControllerSpec extends SpecBase with Mocki
   private lazy val removeCorrespondenceDetailsYesNoRoute =
     controllers.correspondencedetails.routes.RemoveCorrespondenceDetailsYesNoController.onPageLoad().url
 
-  private val validUserAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  private val validUserAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "RemoveCorrespondenceDetailsYesNo Controller" - {
 

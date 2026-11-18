@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import models.{Address, ContactNumber}
 import pages.*
@@ -27,7 +27,7 @@ import play.api.test.Helpers.*
 
 class CheckCorrespondenceDetailsControllerSpec extends SpecBase {
 
-  private val baseAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  private val baseAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val checkCorrespondenceDetailsRoute =
     controllers.correspondencedetails.routes.CheckCorrespondenceDetailsController.onPageLoad().url

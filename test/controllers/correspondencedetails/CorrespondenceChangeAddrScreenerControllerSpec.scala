@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import forms.correspondencedetails.CorrespondenceChangeAddrScreenerFormProvider
 import models.CorrespondenceChangeAddrOption.EditCurrentAddress
 import models.NormalMode
@@ -45,7 +45,7 @@ class CorrespondenceChangeAddrScreenerControllerSpec extends SpecBase with Mocki
   lazy val CorrespondenceChangeAddrScreenerRoute =
     controllers.correspondencedetails.routes.CorrespondenceChangeAddrScreenerController.onPageLoad().url
 
-  val noAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  val noAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "CorrespondenceChangeAddrScreener Controller" - {
 

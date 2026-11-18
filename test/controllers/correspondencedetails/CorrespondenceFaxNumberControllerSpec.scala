@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import forms.FaxNumberFormProvider
 import models.NormalMode
 import org.jsoup.Jsoup
@@ -34,7 +34,7 @@ class CorrespondenceFaxNumberControllerSpec extends SpecBase {
 
   private val validAnswer = "01234567890"
 
-  private val baseAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  private val baseAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   private lazy val onPageLoadRoute =
     controllers.correspondencedetails.routes.CorrespondenceFaxNumberController.onPageLoad().url

@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveAdditionalCorrespondenceNameYesNoFormProvider
 import models.{NormalMode, UserAnswers}
@@ -42,13 +42,13 @@ class RemoveAdditionalCorrespondenceNameYesNoControllerSpec extends SpecBase wit
     controllers.correspondencedetails.routes.RemoveAdditionalCorrespondenceNameYesNoController.onPageLoad().url
 
   private val userAnswersWithAdditionalName =
-    LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+    LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
       .set(CorrespondenceAdditionalNamePage, "Name 2")
       .success
       .value
 
   private val userAnswersWithoutAdditionalName =
-    LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+    LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "RemoveAdditionalCorrespondenceNameYesNo Controller" - {
 

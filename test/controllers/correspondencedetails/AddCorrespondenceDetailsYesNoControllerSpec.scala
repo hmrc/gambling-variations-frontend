@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import forms.correspondencedetails.AddCorrespondingDetailsYesNoFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.Navigator
@@ -45,7 +45,7 @@ class AddCorrespondenceDetailsYesNoControllerSpec extends SpecBase with MockitoS
     controllers.correspondencedetails.routes.AddCorrespondenceDetailsYesNoController.onPageLoad().url
 
   private val userAnswersWithCorrespondenceDetails =
-    LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+    LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "AddCorrespondingDetailsYesNo Controller" - {
 

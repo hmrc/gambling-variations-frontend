@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.EmailAddressFormProvider
 import models.{NormalMode, UserAnswers}
@@ -43,7 +43,7 @@ class CorrespondenceEmailAddressControllerSpec extends SpecBase with MockitoSuga
   val formProvider = new EmailAddressFormProvider()
   val form = formProvider("correspondenceEmailAddress")
 
-  val noAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  val noAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val emailAddressRoute =
     controllers.correspondencedetails.routes.CorrespondenceEmailAddressController.onPageLoad().url
@@ -74,7 +74,7 @@ class CorrespondenceEmailAddressControllerSpec extends SpecBase with MockitoSuga
           Json.obj(CorrespondenceEmailPage.toString -> "validEmail@example.com")
       )
 
-      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, data, CorrespondenceDetailsSection)
+      val userAnswers = LoadedSectionDetails(userAnswersId, data, CorrespondenceDetailsSection)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

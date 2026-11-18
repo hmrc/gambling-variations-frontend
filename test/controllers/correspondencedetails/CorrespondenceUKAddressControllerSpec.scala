@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.CorrespondenceUKAddressFormProvider
 import models.{Address, NormalMode, UserAnswers}
@@ -61,7 +61,7 @@ class CorrespondenceUKAddressControllerSpec extends SpecBase with MockitoSugar {
       "postcode"     -> "SW1A 2AA"
     )
 
-  val noAnswers: UserAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  val noAnswers: UserAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val nameRoute: String =
     controllers.correspondencedetails.routes.CorrespondenceUKAddressController.onPageLoad().url

@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveCorrespondenceFaxNumberFormProvider
 import models.{NormalMode, UserAnswers}
@@ -42,7 +42,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
   private val correspondenceFaxNumber = "123456789"
 
-  private val baseAnswers = LoadedCorrespondenceDetails(
+  private val baseAnswers = LoadedSectionDetails(
     userAnswersId,
     Json.obj(
       "correspondenceDetailsSection" ->
@@ -236,7 +236,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to SystemError on GET when CorrespondenceFaxNumberPage is missing" in {
 
-      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+      val userAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -258,7 +258,7 @@ class RemoveCorrespondenceFaxNumberControllerSpec extends SpecBase with MockitoS
 
     "must redirect to SystemError on POST when CorrespondenceFaxNumberPage is missing" in {
 
-      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+      val userAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

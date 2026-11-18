@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.RemoveCorrAddressAddInfoFormProvider
 import models.{NormalMode, UserAnswers}
@@ -45,14 +45,14 @@ class RemoveCorrAddressAddInfoControllerSpec extends SpecBase with MockitoSugar 
 
   lazy val removeAddrAddInfoRoute: String = controllers.correspondencedetails.routes.RemoveCorrAddressAddInfoController.onPageLoad().url
 
-  private val baseAnswers = LoadedCorrespondenceDetails(userAnswersId,
-                                                        Json.obj(
-                                                          "correspondenceDetailsSection" -> Json.obj(
-                                                            "correspondenceAdditionalInformation" -> "abc"
-                                                          )
-                                                        ),
-                                                        CorrespondenceDetailsSection
-                                                       )
+  private val baseAnswers = LoadedSectionDetails(userAnswersId,
+                                                 Json.obj(
+                                                   "correspondenceDetailsSection" -> Json.obj(
+                                                     "correspondenceAdditionalInformation" -> "abc"
+                                                   )
+                                                 ),
+                                                 CorrespondenceDetailsSection
+                                                )
 
   "RemoveCorrAddressAddInfo Controller" - {
 

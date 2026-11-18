@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import forms.correspondencedetails.CorrespondenceAddrInfoScreenerFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -41,7 +41,7 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
   val formProvider = new CorrespondenceAddrInfoScreenerFormProvider()
   val form = formProvider()
 
-  val requiredAnswer: UserAnswers = LoadedCorrespondenceDetails("id", Json.obj(), CorrespondenceDetailsSection)
+  val requiredAnswer: UserAnswers = LoadedSectionDetails("id", Json.obj(), CorrespondenceDetailsSection)
 //  val requiredAnswer = Json.obj(
 //    "correspondenceDetailsSection" -> Json.obj("mgdRegNum" -> mgdRegNum)
 //  )
@@ -129,7 +129,7 @@ class CorrespondenceAddrInfoScreenerControllerSpec extends SpecBase with Mockito
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val requiredAnswer = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+      val requiredAnswer = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
       val application = applicationBuilder(Some(requiredAnswer)).build()
 

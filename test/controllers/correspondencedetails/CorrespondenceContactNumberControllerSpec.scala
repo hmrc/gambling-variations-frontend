@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.ContactNumberFormProvider
 import models.{ContactNumber, NormalMode, UserAnswers}
@@ -52,12 +52,12 @@ class CorrespondenceContactNumberControllerSpec extends SpecBase with MockitoSug
     )
   )
 
-  val noAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  val noAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val correspondenceContactNumberRoute =
     controllers.correspondencedetails.routes.CorrespondenceContactNumberController.onPageLoad().url
 
-  val userAnswers = LoadedCorrespondenceDetails(userAnswersId, data, CorrespondenceDetailsSection)
+  val userAnswers = LoadedSectionDetails(userAnswersId, data, CorrespondenceDetailsSection)
 
   "CorrespondenceContact Controller" - {
 

@@ -16,8 +16,7 @@
 
 package controllers
 
-import base.SpecBase
-import controllers.correspondencedetails.LoadedCorrespondenceDetails
+import base.{LoadedSectionDetails, SpecBase}
 import models.{Address, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -41,7 +40,7 @@ class AddressLookupControllerSpec extends SpecBase with MockitoSugar {
   private val addressLookupUrl = "/address-lookup/on-ramp"
 
   private val userAnswers =
-    LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+    LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   "AddressLookup Controller" - {
 

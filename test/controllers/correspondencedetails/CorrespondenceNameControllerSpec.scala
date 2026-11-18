@@ -16,7 +16,7 @@
 
 package controllers.correspondencedetails
 
-import base.SpecBase
+import base.{LoadedSectionDetails, SpecBase}
 import controllers.routes
 import forms.correspondencedetails.CorrespondenceNameFormProvider
 import models.NormalMode
@@ -42,7 +42,7 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new CorrespondenceNameFormProvider()
   val form = formProvider()
 
-  val noAnswers = LoadedCorrespondenceDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
+  val noAnswers = LoadedSectionDetails(userAnswersId, Json.obj(), CorrespondenceDetailsSection)
 
   lazy val nameRoute =
     controllers.correspondencedetails.routes.CorrespondenceNameController.onPageLoad().url
@@ -79,7 +79,7 @@ class CorrespondenceNameControllerSpec extends SpecBase with MockitoSugar {
 //        CorrespondenceNamePage.toString -> "validName"
 //      )
 
-      val userAnswers = LoadedCorrespondenceDetails(userAnswersId, data, CorrespondenceDetailsSection)
+      val userAnswers = LoadedSectionDetails(userAnswersId, data, CorrespondenceDetailsSection)
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
