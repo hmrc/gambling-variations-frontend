@@ -392,10 +392,12 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
     "NINO rows" - {
 
       "show the NINO screener row only for a sole proprietor" in {
+        val viewModel =
+          soleProprietor.copy(addNino = Some(true), nino = Some("SR123456A"))
 
         rowFor(existingPartner.businessDetailsSummaryList, "nino.add") mustBe None
-        rowFor(soleProprietor.businessDetailsSummaryList, "nino") mustBe defined
-        rowFor(soleProprietor.businessDetailsSummaryList, "nino.add") mustBe defined
+        rowFor(viewModel.businessDetailsSummaryList, "nino") mustBe defined
+        rowFor(viewModel.businessDetailsSummaryList, "nino.add") mustBe defined
       }
 
       "hide the NINO row when the screener answer is no" in {
@@ -404,6 +406,20 @@ class CheckPartnerDetailsViewModelSpec extends SpecBase {
           soleProprietor.copy(addNino = Some(false), nino = None)
 
         rowFor(viewModel.businessDetailsSummaryList, "nino") mustBe None
+      }
+
+      //The skipped screener is an edge case that triggers when we switch from any BT to Sole Proprietor
+      "show the NINO row when the screener has been skipped" in {
+
+        val viewModel =
+          soleProprietor.copy(addNino = None, nino = None)
+
+        val ninoRow = rowFor(viewModel.businessDetailsSummaryList, "nino").value
+
+        val ninoHtml = ninoRow.value.content.asHtml.body
+
+        actionsOf(ninoRow) mustBe Seq(change)
+        ninoHtml must include(messages("site.notProvided"))
       }
 
       "change only for a new partner that has not been saved" in {
