@@ -21,7 +21,6 @@ import controllers.routes
 import models.UserAnswers
 import models.licencespremises.LicencesAndPremises
 import models.requests.{DataRequest, OptionalDataRequest}
-import pages.*
 import pages.licencespremises.*
 import play.api.Logging
 import play.api.mvc.Results.Redirect
@@ -30,6 +29,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import java.time.{Clock, Instant}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -37,7 +37,8 @@ import scala.util.control.NonFatal
 
 class LicencesPremisesDataRequiredActionImpl @Inject() (
   val sessionRepository: SessionRepository,
-  val gamblingConnector: GamblingConnector
+  val gamblingConnector: GamblingConnector,
+  clock: Clock
 )(implicit val executionContext: ExecutionContext)
     extends LicencesPremisesDataRequiredAction
     with Logging {
@@ -54,11 +55,11 @@ class LicencesPremisesDataRequiredActionImpl @Inject() (
       case Some(userAnswers) =>
         logger.info(s"User Answers found with id ${userAnswers.id}")
 
-        userAnswers.get(LicencesPremisesSectionPage) map { _ =>
-          logger.info(s"MgdRegNum found for License and Premises with id ${userAnswers.id}")
+        if (userAnswers.isLoaded(LicencesPremisesSection)) {
+          logger.info(s"License and Premises already loaded for id ${userAnswers.id}")
 
           Future.successful(Right(DataRequest(request.request, request.mgdRegNum, userAnswers)))
-        } getOrElse {
+        } else {
           logger.info(s"User Answers found with id ${userAnswers.id}")
 
           given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -90,25 +91,25 @@ class LicencesPremisesDataRequiredActionImpl @Inject() (
 
   private def setLicenceAndPremisesDetails(licencesAndPremisesDetails: LicencesAndPremises, answers: UserAnswers): Try[UserAnswers] = {
     logger.info("Setting User Answers for Licenses and Premises")
+    val loadedAnswers = answers.withSectionLoaded(LicencesPremisesSection, Instant.now(clock))
     for {
-      updatedAnswers <- answers.set(LicencesPremisesSectionPage, licencesAndPremisesDetails.mgdRegNumber)
-      updatedAnswers <- updatedAnswers.setIfDefined(HaveGamblingLicenceNoPage, licencesAndPremisesDetails.haveGamblingLicenceNo)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceNumberPage, licencesAndPremisesDetails.gamblingLicenceNo)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceHeldByLandlordPage, licencesAndPremisesDetails.heldByLandlord)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceLocalAuthorityPage, licencesAndPremisesDetails.localAuthority)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceFamilyEntertainmentPage, licencesAndPremisesDetails.familyEntertainment)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceClubGamingPage, licencesAndPremisesDetails.clubGaming)
-      updatedAnswers <- updatedAnswers.setIfDefined(ClubLicencePage, licencesAndPremisesDetails.clubLicence)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicencePrizeGamingPage, licencesAndPremisesDetails.prizeGaming)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceOnPremisesPage, licencesAndPremisesDetails.onPremises)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceClubPremisesPage, licencesAndPremisesDetails.clubPremises)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceRegCertPage, licencesAndPremisesDetails.regCert)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceBookmakingPage, licencesAndPremisesDetails.bookmaking)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceBingoPage, licencesAndPremisesDetails.bingo)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceAmusementPage, licencesAndPremisesDetails.amusement)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicenceServeAlcoholPage, licencesAndPremisesDetails.serveAlcohol)
-      updatedAnswers <- updatedAnswers.setIfDefined(LicencePremisesNotCoveredPage, licencesAndPremisesDetails.premisesNotCovered)
-      updatedAnswers <- updatedAnswers.setIfDefined(PremisesDetailsPage, licencesAndPremisesDetails.premisesDetails)
+      updatedAnswers <- loadedAnswers.setOriginalIfDefined(HaveGamblingLicenceNoPage, licencesAndPremisesDetails.haveGamblingLicenceNo)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceNumberPage, licencesAndPremisesDetails.gamblingLicenceNo)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceHeldByLandlordPage, licencesAndPremisesDetails.heldByLandlord)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceLocalAuthorityPage, licencesAndPremisesDetails.localAuthority)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceFamilyEntertainmentPage, licencesAndPremisesDetails.familyEntertainment)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceClubGamingPage, licencesAndPremisesDetails.clubGaming)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(ClubLicencePage, licencesAndPremisesDetails.clubLicence)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicencePrizeGamingPage, licencesAndPremisesDetails.prizeGaming)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceOnPremisesPage, licencesAndPremisesDetails.onPremises)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceClubPremisesPage, licencesAndPremisesDetails.clubPremises)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceRegCertPage, licencesAndPremisesDetails.regCert)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceBookmakingPage, licencesAndPremisesDetails.bookmaking)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceBingoPage, licencesAndPremisesDetails.bingo)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceAmusementPage, licencesAndPremisesDetails.amusement)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicenceServeAlcoholPage, licencesAndPremisesDetails.serveAlcohol)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(LicencePremisesNotCoveredPage, licencesAndPremisesDetails.premisesNotCovered)
+      updatedAnswers <- updatedAnswers.setOriginalIfDefined(PremisesDetailsPage, licencesAndPremisesDetails.premisesDetails)
     } yield updatedAnswers
   }
 

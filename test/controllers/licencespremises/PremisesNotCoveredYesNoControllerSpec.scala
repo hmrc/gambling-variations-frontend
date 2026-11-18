@@ -47,10 +47,7 @@ class PremisesNotCoveredYesNoControllerSpec extends SpecBase with MockitoSugar {
     controllers.licencespremises.routes.PremisesNotCoveredYesNoController.onPageLoad().url
 
   val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+    LoadedLicencesPremises(userAnswersId, Json.obj())
 
   "PremisesNotCoveredYesNoController Controller" - {
 

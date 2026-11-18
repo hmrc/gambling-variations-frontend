@@ -20,6 +20,7 @@ import base.SpecBase
 import models.UserAnswers
 import models.licencespremises.LicencesAndPremisesRadioOptions.ByPost
 import pages.licencespremises.*
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import viewmodels.checkAnswers.licencespremises.CheckLicencesAndPremisesViewModel
@@ -30,14 +31,11 @@ class CheckLicencesAndPremisesControllerSpec extends SpecBase {
   private lazy val checkLicencesAndPremisesRoute = routes.CheckLicencesAndPremisesController.onPageLoad().url
 
   private val userAnswers: UserAnswers =
-    emptyUserAnswers
-      .set(LicencesPremisesSectionPage, mgdRegNum)
+    LoadedLicencesPremises(userAnswersId, Json.obj())
+      .setOriginal(LicenceNumberPage, "123-456789-A-123456-789")
       .success
       .value
-      .set(LicenceNumberPage, "123-456789-A-123456-789")
-      .success
-      .value
-      .set(LicencePremisesNotCoveredPage, "1")
+      .setOriginal(LicencePremisesNotCoveredPage, "1")
       .success
       .value
       .set(LicencesPremisesPage, ByPost)

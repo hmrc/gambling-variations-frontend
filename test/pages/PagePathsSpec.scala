@@ -90,7 +90,6 @@ object PagePathsSpec {
   // among them go with that migration.
   val knownComposites: Set[String] = Set(
     "pages.controllingbody.ControllingBodyCorrespondenceSectionPage",
-    "pages.licencespremises.PremisesDetailsPage",
     "pages.partnerdetails.PartnerDetailsCorrespondenceDetailsSectionPage",
     "pages.partnerdetails.PartnerDetailsNewCorrespondenceDetailsSectionPage",
     "pages.returnperiods.GamblingReturnPeriodsPage"

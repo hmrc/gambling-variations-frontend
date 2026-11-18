@@ -40,11 +40,10 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
     controllers.licencespremises.routes.PremisesAddressListController.onPageLoad().url
   private val formProvider = new PremisesAddressListFormProvider
   private val form = formProvider()
-  private val userAnswers = UserAnswers(
-    id = userAnswersId,
-    data = Json.obj(
+  private val userAnswers = LoadedLicencesPremises(
+    userAnswersId,
+    Json.obj(
       "licencesPremisesSection" -> Json.obj(
-        "mgdRegNum" -> "XGM000001761",
         "premisesDetails" -> Json.obj(
           "totalRows" -> 1000,
           "premises" -> Json.arr(
@@ -78,11 +77,10 @@ class PremisesAddressListControllerSpec extends SpecBase with MockitoSugar {
     )
   )
 
-  private val uaNoPremises = UserAnswers(
-    id = userAnswersId,
-    data = Json.obj(
+  private val uaNoPremises = LoadedLicencesPremises(
+    userAnswersId,
+    Json.obj(
       "licencesPremisesSection" -> Json.obj(
-        "mgdRegNum"       -> "XGM000001761",
         "premisesDetails" -> Json.obj("totalRows" -> 1000, "premises" -> None)
       )
     )

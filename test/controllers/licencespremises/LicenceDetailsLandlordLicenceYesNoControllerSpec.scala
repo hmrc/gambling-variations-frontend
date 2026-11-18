@@ -47,10 +47,7 @@ class LicenceDetailsLandlordLicenceYesNoControllerSpec extends SpecBase with Moc
     controllers.licencespremises.routes.LicenceDetailsLandlordLicenceYesNoController.onPageLoad().url
 
   val noAnswers =
-    UserAnswers(
-      userAnswersId,
-      Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> userAnswersId))
-    )
+    LoadedLicencesPremises(userAnswersId, Json.obj())
 
   "LicenceDetailsLandlordLicenceYesNoController Controller" - {
 

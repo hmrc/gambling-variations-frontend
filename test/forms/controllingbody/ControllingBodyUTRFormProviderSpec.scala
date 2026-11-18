@@ -43,6 +43,14 @@ class ControllingBodyUTRFormProviderSpec extends StringFieldBehaviours {
       result.value.value mustBe validUtr
     }
 
+    "must remove spaces and other whitespace before validation" in {
+      Seq(" 1121766916 ", "1121 766 916", "1 1 2 1 7 6 6 9 1 6", "112\t17669\t16", "1121766916\n").foreach { input =>
+        val bound = form.bind(Map(fieldName -> input))
+        bound.errors mustBe empty
+        bound.value.value mustBe validUtr
+      }
+    }
+
     "must fail to bind non-numeric characters" in {
       val result = form.bind(Map(fieldName -> "12345ABCDE"))
       result.errors must contain(FormError(fieldName, invalidCharsKey, Seq(digitsOnlyRegex)))

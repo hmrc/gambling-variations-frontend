@@ -19,7 +19,7 @@ package viewmodels.checkAnswers.partnerdetails
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.partnerdetails.PartnerDetailsHelper
-import models.{BusinessType, SoleProprietorName}
+import models.BusinessType
 import pages.partnerdetails.*
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest

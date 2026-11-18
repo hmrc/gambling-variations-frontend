@@ -20,7 +20,7 @@ import connectors.GamblingConnector
 import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -48,6 +48,12 @@ class CancelRegistrationDateController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
+
+  def onLanding(regNumber: String): Action[AnyContent] =
+    authorise { request =>
+      Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
+        .addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
+    }
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>

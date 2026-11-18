@@ -80,6 +80,10 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad() // TODO: Redirect to CB-ADLK-S in add flow and CB-CYA in change flow.
     case ControllingBodyContactDetailsPage =>
       _ => controllers.controllingbody.routes.ControllingBodyAddFaxNumberYesNoController.onPageLoad()
+    case ControllingBodyFaxNumberPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
+    case ControllingBodyNinoPage =>
+      _ => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
     case RemoveTradeNamePage =>
       _ => controllers.businessname.routes.CheckBusinessNameController.onPageLoad()
     case BusinessNamePage =>
@@ -541,8 +545,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyAddNINumberYesNoPage)
       .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later
-        case false => routes.IndexController.onPageLoad() // TODO later
+        case true => controllers.controllingbody.routes.ControllingBodyNINumberController.onPageLoad()
+        case false  => controllers.controllingbody.routes.ControllingBodyUTRController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -567,8 +571,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyAddFaxNumberYesNoPage)
       .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later
-        case false => routes.IndexController.onPageLoad() // TODO later
+        case true  => controllers.controllingbody.routes.ControllingBodyFaxNumberController.onPageLoad()
+        case false => controllers.controllingbody.routes.ControllingBodyAddEmailAddressYesNoController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 
@@ -576,8 +580,8 @@ class Navigator @Inject() () {
     userAnswers
       .get(ControllingBodyAddEmailAddressYesNoPage)
       .map {
-        case true  => routes.IndexController.onPageLoad() // TODO later
-        case false => routes.IndexController.onPageLoad() // TODO later
+        case true  => controllers.controllingbody.routes.ControllingBodyEmailAddressController.onPageLoad()
+        case false => controllers.controllingbody.routes.CheckControllingBodyDetailsController.onPageLoad()
       }
       .getOrElse(routes.SystemErrorController.onPageLoad())
 

@@ -47,21 +47,19 @@ class OtherLicencesAndPermitsGBControllerSpec extends SpecBase with MockitoSugar
 
   val formProvider = new OtherLicencesAndPermitsGBFormProvider()
   val form = formProvider()
-  val blankAnswers = UserAnswers(userAnswersId, Json.obj("licencesPremisesSection" -> Json.obj("mgdRegNum" -> "XGM000001761")))
+  val blankAnswers = LoadedLicencesPremises(userAnswersId, Json.obj())
 
-  private val userAnswers = UserAnswers(
+  private val userAnswers = LoadedLicencesPremises(
     userAnswersId,
     Json.obj(
       "licencesPremisesSection" -> Json.obj(
-        "mgdRegNum"                            -> "XGM000001761",
-        "clubGaming"                           -> "1",
-        "clubMachine"                          -> "0",
-        "clubPremises"                         -> "0",
-        "familyEntertainment"                  -> "1",
-        "localAuthority"                       -> "0",
-        "onPremises"                           -> "1",
-        "prizeGaming"                          -> "0",
-        "noOtherLicencesAndPremisesGBSelected" -> "0"
+        "clubGaming"          -> "1",
+        "clubMachine"         -> "0",
+        "clubPremises"        -> "0",
+        "familyEntertainment" -> "1",
+        "localAuthority"      -> "0",
+        "onPremises"          -> "1",
+        "prizeGaming"         -> "0"
       )
     )
   )

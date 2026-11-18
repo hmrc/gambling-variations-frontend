@@ -50,10 +50,12 @@ class DefaultAuthorisedAction @Inject() (
 
     authorised()
       .retrieve(Retrievals.affinityGroup.and(Retrievals.allEnrolments)) {
-        case Some(affinityGroup @ AffinityGroup.Agent) ~ AuthorisedAction.HasActiveAgentEnrolment(
-              mgdRegNum
-            ) =>
-          block(AuthorisedRequest(request, affinityGroup, mgdRegNum))
+        case Some(affinityGroup @ AffinityGroup.Agent) ~ AuthorisedAction.HasActiveAgentEnrolment(agentRef) =>
+          // TODO(agent auth): Temporary. Trusts the regNumber stored in the session by the /:regNumber landing
+          //  endpoints until agent access to a client is properly authorised and validated.
+          //  Without a chosen client the agent reference is passed through as before.
+          val clientRegNum = request.session.get(AuthorisedAction.sessionRegNumberKey).getOrElse("")
+          block(AuthorisedRequest(request, affinityGroup, clientRegNum))
         case Some(AffinityGroup.Agent) ~ _ =>
           logger.warn(s"Agent auth failed: enrolment missing or not activated for ${request.path}")
           Future.failed(InsufficientEnrolments("Agent enrolment missing or not activated"))
@@ -83,6 +85,7 @@ class DefaultAuthorisedAction @Inject() (
 }
 
 object AuthorisedAction {
+  val sessionRegNumberKey = "mgdRegNum"
   val organisationEnrolmentKey = "HMRC-MGD-ORG"
   val organisationIdentifierName = "HMRCMGDRN"
   val agentEnrolmentKey = "HMRC-MGD-AGNT"

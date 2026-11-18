@@ -40,7 +40,7 @@ class ControllingBodyUTRFormProvider @Inject() extends Mappings with ChecksumCon
   def apply(): Form[String] =
     Form(
       "value" -> text(requiredKey)
-        .transform[String](_.trim, identity)
+        .transform[String](_.filterNot(_.isWhitespace), identity)
         .verifying(utrConstraint)
     )
 }

@@ -25,6 +25,7 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.licencespremises.*
 import play.api.inject.bind
+import play.api.libs.json.{JsNull, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import repositories.SessionRepository
@@ -43,19 +44,13 @@ class RemoveLicenceNumberControllerSpec extends SpecBase with MockitoSugar {
     routes.RemoveLicenceNumberController.onPageLoad().url
 
   private val userAnswersWithLicenceNumber: UserAnswers =
-    emptyUserAnswers
-      .set(LicencesPremisesSectionPage, userAnswersId)
-      .success
-      .value
-      .set(LicenceNumberPage, licenceNumber)
+    LoadedLicencesPremises(userAnswersId, Json.obj())
+      .setOriginal(LicenceNumberPage, licenceNumber)
       .success
       .value
 
   private val userAnswersWithoutLicenceNumber: UserAnswers =
-    emptyUserAnswers
-      .set(LicencesPremisesSectionPage, userAnswersId)
-      .success
-      .value
+    LoadedLicencesPremises(userAnswersId, Json.obj())
 
   "RemoveLicenceNumberController Controller" - {
 
@@ -238,6 +233,36 @@ class RemoveLicenceNumberControllerSpec extends SpecBase with MockitoSugar {
         savedAnswers.get(LicencesPremisesDetailsSubmittedPage).value mustEqual true
         savedAnswers.get(LicencesPremisesDetailsChangesPage).value mustEqual true
         savedAnswers.get(LicenceNumberPage) mustEqual None
+      }
+    }
+
+    "must assert the removal, so that the licence number loaded from the backend does not show again" in {
+
+      val mockSessionRepository = mock[SessionRepository]
+      val savedAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+
+      when(mockSessionRepository.set(any[UserAnswers])).thenReturn(Future.successful(true))
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersWithLicenceNumber))
+          .overrides(bind[SessionRepository].toInstance(mockSessionRepository))
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, routes.RemoveLicenceNumberController.onSubmit().url)
+            .withFormUrlEncodedBody("value" -> "true")
+
+        status(route(application, request).value) mustEqual SEE_OTHER
+
+        verify(mockSessionRepository).set(savedAnswersCaptor.capture())
+
+        val savedAnswers = savedAnswersCaptor.getValue
+        savedAnswers.get(LicenceNumberPage) mustBe None
+        savedAnswers.original.get[String](LicenceNumberPage.path).value mustEqual licenceNumber
+        savedAnswers.changes(LicencesPremisesSection) mustBe Json.obj(
+          "licencesPremisesSection" -> Json.obj("gamblingLicenceNo" -> JsNull, "haveGamblingLicenceNo" -> "0")
+        )
       }
     }
 

@@ -15,20 +15,9 @@
  */
 
 package pages.licencespremises
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.JsPath
 
-class PremisesPageSpec extends AnyFreeSpec with Matchers {
-  "PremisesPage" - {
+import models.Section
 
-    "must have the correct toString" in {
-      PremisesPage.toString mustBe "premises"
-    }
-
-    "must have a path corresponding to its name" in {
-      val expectedPath: JsPath = JsPath \ "licencesPremisesSection" \ "premisesDetails" \ "premises"
-      PremisesPage.path mustBe expectedPath
-    }
-  }
+case object LicencesPremisesSection extends Section {
+  val key = "licencesPremises"
 }
