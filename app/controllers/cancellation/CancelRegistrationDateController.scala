@@ -17,7 +17,7 @@
 package controllers.cancellation
 
 import connectors.GamblingConnector
-import controllers.actions.{AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
+import controllers.actions.{AuthenticatedAction, AuthorisedAction, BusinessDetailsDataRequiredAction, DataRetrievalAction}
 import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{Mode, NormalMode}
@@ -38,6 +38,7 @@ class CancelRegistrationDateController @Inject() (
   sessionRepository: SessionRepository,
   navigator: Navigator,
   authorise: AuthorisedAction,
+  authenticate: AuthenticatedAction,
   getData: DataRetrievalAction,
   requireData: BusinessDetailsDataRequiredAction,
   formProvider: CancelRegistrationDateFormProvider,
@@ -50,7 +51,7 @@ class CancelRegistrationDateController @Inject() (
     with I18nSupport {
 
   def onLanding(regNumber: String): Action[AnyContent] =
-    authorise { request =>
+    authenticate { request =>
       Redirect(controllers.cancellation.routes.CancelRegistrationDateController.onPageLoad(NormalMode))
         .addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
     }

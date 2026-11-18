@@ -119,7 +119,7 @@ class CheckRegistrationCancellationDetailsViewModelSpec extends SpecBase {
             "checkRegistrationCancellationDetails.cancellationDate"
           ).value
 
-        valueOf(row) mustBe Text("2 February 2026")
+        valueOf(row) mustBe Text("2 Feb 2026")
       }
 
       "use the CheckMode cancellation date route for the cancellation date Change link" in {

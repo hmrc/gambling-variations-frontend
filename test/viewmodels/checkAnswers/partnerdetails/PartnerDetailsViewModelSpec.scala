@@ -19,13 +19,15 @@ package viewmodels.checkAnswers.partnerdetails
 import base.SpecBase
 import config.FrontendAppConfig
 import controllers.partnerdetails.PartnerDetailsHelper
-import models.BusinessType
+import models.{BusinessType, UserAnswers}
+import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.test.FakeRequest
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import scala.collection.Seq
 
 class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
 
@@ -33,7 +35,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
   private val paginationHelper2 = PaginationHelper(2)
   private val paginationHelper3 = PaginationHelper(3)
   private val paginationHelper10 = PaginationHelper(10)
-  private val businessName1 = "business1"
+
+  private val businessName1 =
+    "business1"
 
   private val application =
     applicationBuilder()
@@ -51,7 +55,68 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
     new FrontendAppConfig(application.configuration)
 
   private val dateFormatter =
-    DateTimeFormatter.ofPattern("dd MMM yyyy")
+    DateTimeFormatter.ofPattern("d MMM yyyy")
+
+  /*
+   * Most unit tests are not concerned with pagination.
+   * For those tests, the same partner list represents both:
+   *
+   *  - partners displayed on the page
+   *  - all partners used for business-rule counts
+   */
+  private def buildViewModel(
+    partnerNumbers: Seq[BusinessNumberOrIndex],
+    userAnswers: UserAnswers
+  ): PartnerDetailsViewModel =
+    PartnerDetailsViewModel.from(
+      paginatedPartnerNumbers = partnerNumbers,
+      allPartnerNumbers       = partnerNumbers,
+      todayDate               = todayDate,
+      userAnswers             = userAnswers,
+      frontendAppConfig       = frontendAppConfig
+    )
+
+  /*
+   * Use this overload when the partners displayed on the page
+   * are different from the complete partner collection.
+   */
+  private def buildViewModel(
+    paginatedPartnerNumbers: Seq[BusinessNumberOrIndex],
+    allPartnerNumbers: Seq[BusinessNumberOrIndex],
+    userAnswers: UserAnswers
+  ): PartnerDetailsViewModel =
+    PartnerDetailsViewModel.from(
+      paginatedPartnerNumbers = paginatedPartnerNumbers,
+      allPartnerNumbers       = allPartnerNumbers,
+      todayDate               = todayDate,
+      userAnswers             = userAnswers,
+      frontendAppConfig       = frontendAppConfig
+    )
+
+  private def answersForPartners(
+    partnerNumbers: Seq[BusinessNumberOrIndex]
+  ): UserAnswers =
+    partnerNumbers.foldLeft(emptyUserAnswers) { case (userAnswers, partnerNumber) =>
+      userAnswers
+        .set(
+          PartnerDetailsMgdRegNumberPage(partnerNumber),
+          s"XWM-$partnerNumber"
+        )
+        .success
+        .value
+        .set(
+          PartnerDetailsBusinessTypePage(partnerNumber),
+          BusinessType.LimitedLiabilityPartnership
+        )
+        .success
+        .value
+        .set(
+          PartnerDetailsBusinessNamePage(partnerNumber),
+          s"Business $partnerNumber"
+        )
+        .success
+        .value
+    }
 
   "PartnerDetailsViewModel" - {
 
@@ -59,10 +124,11 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
 
       val viewModel =
         PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          emptyUserAnswers,
-          frontendAppConfig
+          paginatedPartnerNumbers = Seq.empty,
+          allPartnerNumbers       = Seq.empty,
+          todayDate               = todayDate,
+          userAnswers             = emptyUserAnswers,
+          frontendAppConfig       = frontendAppConfig
         )
 
       viewModel.partners mustBe empty
@@ -73,7 +139,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
       viewModel.showMaximumPartnersMessage mustBe false
     }
 
-    "use MGD registration number when trading and business names are absent" in {
+    "use business name when partner name details are present" in {
 
       val answers =
         emptyUserAnswers
@@ -89,23 +155,24 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.Partnership
+          )
           .success
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.partners must have size 1
       viewModel.partners.head.name mustBe businessName1
     }
 
-    "use trading name when present" in {
+    "use trading and business-name partner details correctly" in {
 
       val answers =
         emptyUserAnswers
@@ -121,7 +188,10 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.Partnership
+          )
           .success
           .value
           .set(
@@ -132,11 +202,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.partners.head.name mustBe businessName1
@@ -158,23 +226,26 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.Partnership
+          )
           .success
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.partners.head.name mustBe "XYZ Business"
     }
 
     "show active status when no future join or leave dates exist" in {
-      val pastDate = LocalDate.of(2025, 1, 1)
+
+      val pastDate =
+        LocalDate.of(2025, 1, 1)
 
       val answers =
         emptyUserAnswers
@@ -204,22 +275,26 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
-      val row = viewModel.partners.head
+      val row =
+        viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.active", pastDate.format(dateFormatter))
+      row.status mustBe messages(
+        "partnerDetails.status.active",
+        pastDate.format(dateFormatter)
+      )
+
       row.statusDetails mustBe None
     }
 
     "show due to join status when joining date is in the future" in {
 
-      val joinDate = LocalDate.now().plusDays(10)
+      val joinDate =
+        todayDate.plusDays(10)
 
       val answers =
         emptyUserAnswers
@@ -249,23 +324,27 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
-      val row = viewModel.partners.head
+      val row =
+        viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.dueToJoin")
-      row.statusDetails mustBe defined
-      row.statusDetails.value mustBe joinDate.format(dateFormatter)
+      row.status mustBe messages(
+        "partnerDetails.status.dueToJoin"
+      )
+
+      row.statusDetails mustBe Some(
+        joinDate.format(dateFormatter)
+      )
     }
 
     "show due to leave status when leaving date is in the future" in {
 
-      val leaveDate = LocalDate.now().plusDays(10)
+      val leaveDate =
+        todayDate.plusDays(10)
 
       val answers =
         emptyUserAnswers
@@ -295,24 +374,30 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
-      val row = viewModel.partners.head
+      val row =
+        viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.dueToLeave")
-      row.statusDetails mustBe defined
-      row.statusDetails.value mustBe leaveDate.format(dateFormatter)
+      row.status mustBe messages(
+        "partnerDetails.status.dueToLeave"
+      )
+
+      row.statusDetails mustBe Some(
+        leaveDate.format(dateFormatter)
+      )
     }
 
     "prioritise due to leave over due to join" in {
 
-      val joiningDate = LocalDate.now().plusDays(20)
-      val leavingDate = LocalDate.now().plusDays(10)
+      val joiningDate =
+        todayDate.plusDays(20)
+
+      val leavingDate =
+        todayDate.plusDays(10)
 
       val answers =
         emptyUserAnswers
@@ -348,11 +433,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.partners.head.status mustBe
@@ -362,73 +445,30 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
         Some(leavingDate.format(dateFormatter))
     }
 
-    "allow partner removal when leaving date is absent" in {
+    "allow partner removal when leaving date is absent and more than two active partners exist" in {
+
+      val partnerNumbers =
+        paginationHelper3.partnerDetailsBusinessNumberList
 
       val answers =
-        emptyUserAnswers
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber1), "XWM00000001761")
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessTypePage(businessNumber1),
-            BusinessType.LimitedLiabilityPartnership
-          )
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessNamePage(businessNumber1),
-            businessName1
-          )
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber2), "XWM00000001762")
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessTypePage(businessNumber2),
-            BusinessType.LimitedLiabilityPartnership
-          )
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessNamePage(businessNumber2),
-            businessName1
-          )
-          .success
-          .value
-          .set(PartnerDetailsMgdRegNumberPage(businessNumber3), "XWM00000001763")
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessTypePage(businessNumber3),
-            BusinessType.LimitedLiabilityPartnership
-          )
-          .success
-          .value
-          .set(
-            PartnerDetailsBusinessNamePage(businessNumber3),
-            businessName1
-          )
-          .success
-          .value
+        answersForPartners(partnerNumbers)
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper3.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = partnerNumbers,
+          userAnswers    = answers
         )
 
-      val row = viewModel.partners.head
-
-      row.canRemove mustBe true
-      row.removeUrl mustBe defined
+      viewModel.partners.foreach { row =>
+        row.canRemove mustBe true
+        row.removeUrl mustBe defined
+      }
     }
 
     "not allow partner removal when leaving date is present" in {
 
-      val leavingDate = LocalDate.now().plusDays(10)
+      val leavingDate =
+        todayDate.plusDays(10)
 
       val answers =
         emptyUserAnswers
@@ -458,14 +498,13 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
-      val row = viewModel.partners.head
+      val row =
+        viewModel.partners.head
 
       row.canRemove mustBe false
       row.removeUrl mustBe None
@@ -487,7 +526,10 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.Partnership
+          )
           .success
           .value
           .set(
@@ -502,16 +544,17 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsBusinessTypePage(businessNumber2), BusinessType.Partnership)
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber2),
+            BusinessType.Partnership
+          )
           .success
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper2.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper2.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.partners.map(_.name) mustBe Seq(
@@ -536,7 +579,10 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsBusinessTypePage(businessNumber1), BusinessType.Partnership)
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber1),
+            BusinessType.Partnership
+          )
           .success
           .value
           .set(
@@ -551,16 +597,17 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsBusinessTypePage(businessNumber2), BusinessType.Partnership)
+          .set(
+            PartnerDetailsBusinessTypePage(businessNumber2),
+            BusinessType.Partnership
+          )
           .success
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper2.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper2.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.partners.map(_.name) mustBe Seq(
@@ -571,7 +618,8 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
 
     "show due to join status when joining date is today" in {
 
-      val joinDate = LocalDate.now()
+      val joiningDate =
+        todayDate
 
       val answers =
         emptyUserAnswers
@@ -583,7 +631,7 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
           .set(
             PartnerDetailsDateOfJoiningPage(businessNumber1),
-            joinDate
+            joiningDate
           )
           .success
           .value
@@ -601,24 +649,27 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
-      val row = viewModel.partners.head
+      val row =
+        viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.dueToJoin")
+      row.status mustBe messages(
+        "partnerDetails.status.dueToJoin"
+      )
+
       row.statusDetails mustBe Some(
-        joinDate.format(dateFormatter)
+        joiningDate.format(dateFormatter)
       )
     }
 
     "show due to leave status and date when leaving date is today" in {
 
-      val leavingDate = LocalDate.now()
+      val leavingDate =
+        todayDate
 
       val answers =
         emptyUserAnswers
@@ -648,16 +699,18 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
-      val row = viewModel.partners.head
+      val row =
+        viewModel.partners.head
 
-      row.status mustBe messages("partnerDetails.status.dueToLeave")
+      row.status mustBe messages(
+        "partnerDetails.status.dueToLeave"
+      )
+
       row.statusDetails mustBe Some(
         leavingDate.format(dateFormatter)
       )
@@ -673,7 +726,10 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           )
           .success
           .value
-          .set(PartnerDetailsChangedPage, true)
+          .set(
+            PartnerDetailsChangedPage,
+            true
+          )
           .success
           .value
           .set(
@@ -690,11 +746,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.partners must have size 1
@@ -702,68 +756,71 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
       viewModel.showSubmitMessage mustBe true
     }
 
-    "not show minimum partners message when there are more than three active partners" in {
+    "not show minimum partners message when more than three active partners exist" in {
+
+      val allPartnerNumbers: Seq[BusinessNumberOrIndex] =
+        (0 until 4).map(_.toString)
 
       val answers =
-        (0 until 4).foldLeft(emptyUserAnswers) { (userAnswers, index) =>
-          userAnswers
-            .set(
-              PartnerDetailsMgdRegNumberPage(index.toString),
-              s"XWM0000000176$index"
-            )
-            .success
-            .value
-            .set(PartnerDetailsChangedPage, true)
-            .success
-            .value
-        }
+        answersForPartners(allPartnerNumbers)
+          .set(
+            PartnerDetailsChangedPage,
+            true
+          )
+          .success
+          .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers.take(1),
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
         )
 
+      viewModel.partners must have size 1
       viewModel.showMinimumPartnersMessage mustBe false
       viewModel.showSubmitMessage mustBe true
     }
 
-    "show maximum partners message when maximum number of partners is reached" in {
+    "use all partners for minimum-partner rules rather than only the current page" in {
+
+      val allPartnerNumbers =
+        paginationHelper3.partnerDetailsBusinessNumberList
 
       val answers =
-        paginationHelper10.partnerDetailsBusinessNumberList.foldLeft(emptyUserAnswers) { (userAnswers, index) =>
-          userAnswers
-            .set(
-              PartnerDetailsMgdRegNumberPage(index),
-              s"XWM0000000${index.reverse.padTo(4, '0').reverse}"
-            )
-            .success
-            .value
-            .set(PartnerDetailsChangedPage, true)
-            .success
-            .value
-            .set(
-              PartnerDetailsBusinessTypePage(index),
-              BusinessType.LimitedLiabilityPartnership
-            )
-            .success
-            .value
-            .set(
-              PartnerDetailsBusinessNamePage(index),
-              businessName1
-            )
-            .success
-            .value
-        }
+        answersForPartners(allPartnerNumbers)
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper10.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers.take(1),
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
+        )
+
+      viewModel.partners must have size 1
+      viewModel.showMinimumPartnersMessage mustBe false
+      viewModel.partners.head.canRemove mustBe true
+    }
+
+    "show maximum partners message when maximum number of partners without a leaving date is reached" in {
+
+      val allPartnerNumbers =
+        paginationHelper10.partnerDetailsBusinessNumberList
+
+      val answers =
+        answersForPartners(allPartnerNumbers)
+          .set(
+            PartnerDetailsChangedPage,
+            true
+          )
+          .success
+          .value
+
+      val viewModel =
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers,
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
         )
 
       viewModel.partners must have size 10
@@ -772,27 +829,173 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
       viewModel.showSubmitMessage mustBe true
     }
 
-    "allow another partner when below maximum" in {
+    "use all partners for maximum limit when only one page is displayed" in {
+
+      val allPartnerNumbers =
+        paginationHelper10.partnerDetailsBusinessNumberList
 
       val answers =
-        emptyUserAnswers
+        answersForPartners(allPartnerNumbers)
+
+      val viewModel =
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers.take(2),
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
+        )
+
+      viewModel.partners must have size 2
+      viewModel.showMaximumPartnersMessage mustBe true
+      viewModel.addAnotherPartner mustBe false
+    }
+
+    "allow another partner when below maximum" in {
+
+      val partnerNumbers =
+        paginationHelper1.partnerDetailsBusinessNumberList
+
+      val answers =
+        answersForPartners(partnerNumbers)
+
+      val viewModel =
+        buildViewModel(
+          partnerNumbers = partnerNumbers,
+          userAnswers    = answers
+        )
+
+      viewModel.addAnotherPartner mustBe true
+      viewModel.showMaximumPartnersMessage mustBe false
+    }
+
+    "exclude a partner with a future leaving date from the maximum count" in {
+
+      val allPartnerNumbers =
+        paginationHelper10.partnerDetailsBusinessNumberList
+
+      val partnerWithLeavingDate =
+        allPartnerNumbers.head
+
+      val answers =
+        answersForPartners(allPartnerNumbers)
           .set(
-            PartnerDetailsMgdRegNumberPage(businessNumber1),
-            "XWM00000001762"
+            PartnerDetailsDateOfLeavingPage(
+              partnerWithLeavingDate
+            ),
+            todayDate.plusDays(10)
           )
           .success
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers,
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
         )
 
       viewModel.addAnotherPartner mustBe true
       viewModel.showMaximumPartnersMessage mustBe false
+    }
+
+    "exclude a partner with a past leaving date from the maximum count" in {
+
+      val allPartnerNumbers =
+        paginationHelper10.partnerDetailsBusinessNumberList
+
+      val partnerWithLeavingDate =
+        allPartnerNumbers.head
+
+      val answers =
+        answersForPartners(allPartnerNumbers)
+          .set(
+            PartnerDetailsDateOfLeavingPage(
+              partnerWithLeavingDate
+            ),
+            todayDate.minusDays(10)
+          )
+          .success
+          .value
+
+      val viewModel =
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers,
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
+        )
+
+      viewModel.addAnotherPartner mustBe true
+      viewModel.showMaximumPartnersMessage mustBe false
+    }
+
+    "exclude every partner having a leaving date from the maximum count" in {
+
+      val allPartnerNumbers =
+        paginationHelper10.partnerDetailsBusinessNumberList
+
+      val firstLeavingPartner =
+        allPartnerNumbers.head
+
+      val secondLeavingPartner =
+        allPartnerNumbers(1)
+
+      val answers =
+        answersForPartners(allPartnerNumbers)
+          .set(
+            PartnerDetailsDateOfLeavingPage(
+              firstLeavingPartner
+            ),
+            todayDate.minusDays(10)
+          )
+          .success
+          .value
+          .set(
+            PartnerDetailsDateOfLeavingPage(
+              secondLeavingPartner
+            ),
+            todayDate.plusDays(10)
+          )
+          .success
+          .value
+
+      val viewModel =
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers,
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
+        )
+
+      viewModel.addAnotherPartner mustBe true
+      viewModel.showMaximumPartnersMessage mustBe false
+    }
+
+    "include a future-joining partner in the maximum count" in {
+
+      val allPartnerNumbers =
+        paginationHelper10.partnerDetailsBusinessNumberList
+
+      val futureJoiningPartner =
+        allPartnerNumbers.head
+
+      val answers =
+        answersForPartners(allPartnerNumbers)
+          .set(
+            PartnerDetailsDateOfJoiningPage(
+              futureJoiningPartner
+            ),
+            todayDate.plusDays(10)
+          )
+          .success
+          .value
+
+      val viewModel =
+        buildViewModel(
+          paginatedPartnerNumbers = allPartnerNumbers,
+          allPartnerNumbers       = allPartnerNumbers,
+          userAnswers             = answers
+        )
+
+      viewModel.addAnotherPartner mustBe false
+      viewModel.showMaximumPartnersMessage mustBe true
     }
 
     "show submit message when partner details have been changed" in {
@@ -813,11 +1016,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.showSubmitMessage mustBe true
@@ -835,11 +1036,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
           .value
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          answers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = answers
         )
 
       viewModel.showSubmitMessage mustBe false
@@ -848,11 +1047,9 @@ class PartnerDetailsViewModelSpec extends SpecBase with PartnerDetailsHelper {
     "not show submit message when there are no partners" in {
 
       val viewModel =
-        PartnerDetailsViewModel.from(
-          paginationHelper1.partnerDetailsBusinessNumberList,
-          todayDate,
-          emptyUserAnswers,
-          frontendAppConfig
+        buildViewModel(
+          partnerNumbers = paginationHelper1.partnerDetailsBusinessNumberList,
+          userAnswers    = emptyUserAnswers
         )
 
       viewModel.showSubmitMessage mustBe false

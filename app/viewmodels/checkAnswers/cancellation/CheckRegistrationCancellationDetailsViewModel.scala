@@ -101,6 +101,6 @@ object CheckRegistrationCancellationDetailsViewModel {
 
   private def formatDate(date: LocalDate)(implicit messages: Messages): String = {
     val locale = Locale.forLanguageTag(messages.lang.code)
-    date.format(DateTimeFormatter.ofPattern("d MMMM yyyy", locale))
+    date.format(DateTimeFormatter.ofPattern("d MMM yyyy", locale))
   }
 }

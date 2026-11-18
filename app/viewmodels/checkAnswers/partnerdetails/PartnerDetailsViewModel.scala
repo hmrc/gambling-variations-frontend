@@ -24,9 +24,9 @@ import pages.partnerdetails.*
 import play.api.i18n.Messages
 import utils.PartnerUtils
 
-import scala.collection.Seq
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import scala.collection.Seq
 
 final case class PartnerDetailsViewModel(
   partners: Seq[PartnerDetailsRow],
@@ -49,16 +49,29 @@ final case class PartnerDetailsRow(
 
 object PartnerDetailsViewModel {
 
-  private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+  private val dateFormatter =
+    DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def from(
-    partnerNumbers: Seq[BusinessNumberOrIndex],
+    paginatedPartnerNumbers: Seq[BusinessNumberOrIndex],
+    allPartnerNumbers: Seq[BusinessNumberOrIndex],
     todayDate: LocalDate,
     userAnswers: UserAnswers,
     frontendAppConfig: FrontendAppConfig
   )(implicit messages: Messages): PartnerDetailsViewModel = {
+
+    /*
+     * This must use ALL partners, not just the current page.
+     *
+     * For example:
+     *   100 total partners
+     *   10 partners per page
+     *
+     * paginatedPartnerNumbers.size = 10
+     * allPartnerNumbers.size       = 100
+     */
     val activePartnerCount =
-      partnerNumbers.count { partnerNumber =>
+      allPartnerNumbers.count { partnerNumber =>
 
         val dateOfLeaving =
           userAnswers.get(
@@ -68,18 +81,32 @@ object PartnerDetailsViewModel {
         dateOfLeaving match {
           case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
             false
+
           case _ =>
             true
         }
       }
 
+    /*
+     * Only create rows for the current page.
+     */
     val rows: Seq[PartnerDetailsRow] =
-      partnerNumbers
+      paginatedPartnerNumbers
         .flatMap { partnerNumber =>
           for {
-            _    <- userAnswers.get(PartnerDetailsMgdRegNumberPage(partnerNumber))
-            name <- PartnerUtils.getPartnerDetailsName(partnerNumber, userAnswers)
+            _ <-
+              userAnswers.get(
+                PartnerDetailsMgdRegNumberPage(partnerNumber)
+              )
+
+            name <-
+              PartnerUtils.getPartnerDetailsName(
+                partnerNumber,
+                userAnswers
+              )
+
           } yield {
+
             val dateOfJoining =
               userAnswers.get(
                 PartnerDetailsDateOfJoiningPage(partnerNumber)
@@ -92,30 +119,48 @@ object PartnerDetailsViewModel {
 
             val status =
               dateOfLeaving match {
-                case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
-                  messages("partnerDetails.status.dueToLeave")
 
-                case _ =>
+                case Some(_) =>
+                  messages(
+                    "partnerDetails.status.dueToLeave"
+                  )
+
+                case None =>
                   dateOfJoining match {
+
                     case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
-                      messages("partnerDetails.status.dueToJoin")
+                      messages(
+                        "partnerDetails.status.dueToJoin"
+                      )
 
                     case Some(joiningDate) =>
-                      messages("partnerDetails.status.active", joiningDate.format(dateFormatter))
-                    case _ =>
-                      messages("partnerDetails.status.active")
+                      messages(
+                        "partnerDetails.status.active",
+                        joiningDate.format(dateFormatter)
+                      )
+
+                    case None =>
+                      messages(
+                        "partnerDetails.status.active"
+                      )
                   }
               }
 
             val statusDetails =
               dateOfLeaving match {
-                case Some(leavingDate) if !leavingDate.isBefore(todayDate) =>
-                  Some(leavingDate.format(dateFormatter))
 
-                case _ =>
+                case Some(leavingDate) =>
+                  Some(
+                    leavingDate.format(dateFormatter)
+                  )
+
+                case None =>
                   dateOfJoining match {
+
                     case Some(joiningDate) if !joiningDate.isBefore(todayDate) =>
-                      Some(joiningDate.format(dateFormatter))
+                      Some(
+                        joiningDate.format(dateFormatter)
+                      )
 
                     case _ =>
                       None
@@ -128,14 +173,15 @@ object PartnerDetailsViewModel {
 
             val removeUrl =
               if (canRemove) {
-                Some(onRemoveRoute(partnerNumber))
+                Some(
+                  onRemoveRoute(partnerNumber)
+                )
               } else {
                 None
               }
 
             PartnerDetailsRow(
-              index = partnerNumber,
-              // Note: Realistically this should never happen, left it here for now to easily identify if it happens
+              index             = partnerNumber,
               name              = name,
               status            = status,
               statusDetails     = statusDetails,
@@ -147,43 +193,66 @@ object PartnerDetailsViewModel {
         }
         .sortBy(_.name.toLowerCase)
 
-    val hasPartners =
-      rows.nonEmpty
+    val partnerCountForMaximumLimit =
+      allPartnerNumbers.count { partnerNumber =>
+        userAnswers
+          .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
+          .isEmpty
+      }
 
-    val canAddAnotherPartner =
-      rows.size < frontendAppConfig.maxPartners
+    val hasPartners =
+      allPartnerNumbers.nonEmpty
+
+    val hasReachedMaximumPartnerLimit =
+      partnerCountForMaximumLimit >= frontendAppConfig.maxPartners
 
     PartnerDetailsViewModel(
       partners                   = rows,
-      addAnotherPartner          = canAddAnotherPartner,
+      addAnotherPartner          = !hasReachedMaximumPartnerLimit,
       showNoPartnersMessage      = !hasPartners,
       showMinimumPartnersMessage = hasPartners && activePartnerCount <= 2,
-      showMaximumPartnersMessage = rows.size >= frontendAppConfig.maxPartners,
-      showSubmitMessage          = userAnswers.get(PartnerDetailsChangedPage).contains(true)
+      showMaximumPartnersMessage = hasReachedMaximumPartnerLimit,
+      showSubmitMessage = userAnswers
+        .get(PartnerDetailsChangedPage)
+        .contains(true)
     )
-
   }
 
-  private def onPartnerDetailsRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
-    case _: Int =>
-      routes.PartnerDetailsCheckYourAnswersController
-        .onPageLoad(partnerNumber.toString)
-        .url
-    case _: String =>
-      routes.PartnerDetailsCheckYourAnswersController
-        .onPageLoad(partnerNumber.toString)
-        .url
-  }
+  private def onPartnerDetailsRoute(
+    partnerNumber: BusinessNumberOrIndex
+  ): String =
+    partnerNumber match {
 
-  private def onRemoveRoute(partnerNumber: BusinessNumberOrIndex): String = partnerNumber match {
-    case _: Int =>
-      routes.PartnerDetailsController
-        .onRemove(partnerNumber.toString, NormalMode)
-        .url
-    case _: String =>
-      routes.PartnerDetailsController
-        .onRemove(partnerNumber.toString, CheckMode)
-        .url
-  }
+      case _: Int =>
+        routes.PartnerDetailsCheckYourAnswersController
+          .onPageLoad(partnerNumber.toString)
+          .url
 
+      case _: String =>
+        routes.PartnerDetailsCheckYourAnswersController
+          .onPageLoad(partnerNumber.toString)
+          .url
+    }
+
+  private def onRemoveRoute(
+    partnerNumber: BusinessNumberOrIndex
+  ): String =
+    partnerNumber match {
+
+      case _: Int =>
+        routes.PartnerDetailsController
+          .onRemove(
+            partnerNumber.toString,
+            NormalMode
+          )
+          .url
+
+      case _: String =>
+        routes.PartnerDetailsController
+          .onRemove(
+            partnerNumber.toString,
+            CheckMode
+          )
+          .url
+    }
 }

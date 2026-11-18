@@ -105,7 +105,7 @@ class CheckRegistrationCancellationDetailsViewSpec extends SpecBase {
     "must display the cancellation date" in {
 
       document
-        .text() must include("2 February 2026")
+        .text() must include("2 Feb 2026")
     }
 
     "must display the cancellation reason" in {

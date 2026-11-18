@@ -31,6 +31,7 @@ import javax.inject.Inject
 class ChangeRegistrationDetailsController @Inject() (
   override val messagesApi: MessagesApi,
   authorise: AuthorisedAction,
+  authenticate: AuthenticatedAction,
   getData: DataRetrievalAction,
   businessDetailsRequired: BusinessDetailsDataRequiredAction,
   appConfig: FrontendAppConfig,
@@ -41,7 +42,7 @@ class ChangeRegistrationDetailsController @Inject() (
     with Logging {
 
   def onLanding(regNumber: String): Action[AnyContent] =
-    authorise { request =>
+    authenticate { request =>
       Redirect(routes.ChangeRegistrationDetailsController.onPageLoad()).addingToSession(AuthorisedAction.sessionRegNumberKey -> regNumber)(request)
     }
 

@@ -18,9 +18,10 @@ package connectors
 
 import models.controllingbody.ControllingBodyDetails
 import models.licencespremises.LicencesAndPremises
-import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, CorrespondenceDetails, EntityName, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnersDetails}
+import models.{BusinessAddress, BusinessContactDetails, BusinessDetails, ClientListStatus, CorrespondenceDetails, EntityName, GamblingReturnPeriods, MgdCertificate, MgdTradeDetails, PartnersDetails}
 import play.api.Logging
 import play.api.http.Status.OK
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReadsInstances, HttpResponse, StringContextOps, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -34,6 +35,23 @@ class GamblingConnector @Inject() (config: ServicesConfig, http: HttpClientV2)(i
     with Logging {
 
   private val baseUrl: String = config.baseUrl("gambling") + "/gambling"
+
+  def startClientListRetrieval(regime: String)(implicit hc: HeaderCarrier): Future[ClientListStatus] =
+    http
+      .post(url"$baseUrl/agent/client-list/$regime/retrieval/start")
+      .execute[JsValue]
+      .map(readStatus)
+
+  def hasClient(regime: String, regNumber: String)(implicit hc: HeaderCarrier): Future[Boolean] =
+    http
+      .get(url"$baseUrl/agent/has-client/$regime/$regNumber")
+      .execute[JsValue]
+      .map(json => (json \ "hasClient").as[Boolean])
+
+  private def readStatus(json: JsValue): ClientListStatus =
+    (json \ "result").asOpt[String].flatMap(ClientListStatus.fromString).getOrElse {
+      throw new RuntimeException(s"Invalid client-list status response: ${json.toString}")
+    }
 
   def getCertificate(mgdRegNumber: String)(implicit hc: HeaderCarrier): Future[MgdCertificate] = {
     http
