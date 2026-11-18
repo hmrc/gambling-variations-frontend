@@ -22,6 +22,7 @@ import models.BusinessType.Unincorporatedbody
 import models.controllingbody.ControllingBodyDetails
 import models.licencespremises.{LicencesAndPremises, PremisesDetails, PremisesDetailsResponse}
 import models.*
+import models.groupmembers.GroupMembers
 import org.mockito.Mockito
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -743,6 +744,57 @@ class GamblingConnectorISpec extends AsyncWordSpec with Matchers with BeforeAndA
     }
 
   }
+
+
+  "GamblingConnector.getGroupMembers" should {
+
+    "return GroupMembers when backend returns 200" in {
+
+      val jsonAsString: String =
+        s"""{
+           |  "mgdRegNumber": "$mgdRegNumber",
+           |  "businessPartnerNumber": "0100049899",
+           |  "businessName": "XYZ Consulting Ltd",
+           |  "crn": "09876543",
+           |  "foreignCorporateRef": "FCR-987654",
+           |  "dateOfJoining": "2022-01-15",
+           |  "dateOfLeaving": "2028-12-31",
+           |  "isRepMemPartOfGroup": "0",
+           |  "systemDate": "2023-01-01"
+           |}""".stripMargin
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(okJson(jsonAsString))
+      )
+
+      connector.getGroupMembers(mgdRegNumber).futureValue mustBe groupMember
+    }
+
+    "return UpstreamErrorResponse when backend returns 404" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(aResponse().withStatus(404))
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGamblingReturnPeriods(mgdRegNumber)
+      }
+    }
+
+    "return UpstreamErrorResponse when backend returns 500" in {
+
+      wireMockServer.stubFor(
+        get(urlEqualTo(s"/gambling/group-member/mgd/$mgdRegNumber"))
+          .willReturn(serverError())
+      )
+
+      recoverToSucceededIf[UpstreamErrorResponse] {
+        connector.getGamblingReturnPeriods(mgdRegNumber)
+      }
+    }
+  }
 }
 
 object GamblingConnectorISpec {
@@ -883,6 +935,15 @@ object GamblingConnectorISpec {
       isInLastNstp          = Some(false),
       finalPeriodWarning    = Some(false),
       hasExistingNstpValues = Some(true)
+    )
+
+
+  val groupMember: GroupMembers =
+    GroupMembers(mgdRegNumber = mgdRegNumber, businessPartnerNumber = Some("0100049899"), businessName = Some("XYZ Consulting Ltd"),
+      crn = Some("09876543"),
+      foreignCorporateRef = Some("FCR-987654"), dateOfJoining = Some(LocalDate.parse("2022-01-15")), dateOfLeaving = Some(LocalDate.parse("2028-12-31")),
+      isRepMemPartOfGroup = Some("0"),
+      systemDate   = Some(LocalDate.parse("2023-01-01"))
     )
 
   val partnersDetailsBusinessName = PartnersDetails(
