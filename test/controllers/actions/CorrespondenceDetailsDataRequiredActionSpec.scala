@@ -96,7 +96,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
         // Loaded as original answers, nothing asserted, section marked loaded.
         req.userAnswers.original.data mustBe data
         req.userAnswers.modified.data mustBe Json.obj()
-        req.userAnswers.isLoaded(CorrespondenceDetailsSection) mustBe true
+        req.userAnswers.original.loaded mustBe Map(CorrespondenceDetailsSection.key -> now)
 
         verify(sessionRepository, times(1)).set(any())
         verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
@@ -119,7 +119,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
         }
 
-        "getMgdTradeDetails throws an exception" in {
+        "getCorrespondenceDetails throws an exception" in {
 
           val request = FakeRequest()
           val sessionRepository = mock[SessionRepository]
@@ -152,12 +152,6 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
 
           val loaded = LoadedCorrespondenceDetails(mgdRegNum, Json.obj(), CorrespondenceDetailsSection)
 
-//          val data = Json.obj(
-//            "correspondenceDetailsSection" -> Json.obj(
-//              "mgdRegNum" -> "ABC12345678901"
-//            )
-//          )
-//
           val result: Either[Result, DataRequest[AnyContent]] =
             action.callRefine(OptionalDataRequest(request, mgdRegNum, Some(loaded))).futureValue
 
@@ -223,7 +217,7 @@ class CorrespondenceDetailsDataRequiredActionSpec extends SpecBase with MockitoS
           req.request mustBe expected.request
           req.userAnswers.data mustBe expected.userAnswers.data
           req.userAnswers.id mustBe expected.userAnswers.id
-          req.userAnswers.isLoaded(CorrespondenceDetailsSection) mustBe true
+          req.userAnswers.original.loaded mustBe Map(CorrespondenceDetailsSection.key -> now)
 
           verify(sessionRepository, times(1)).set(any())
           verify(gamblingConnector, times(1)).getCorrespondenceDetails(any())(any())
