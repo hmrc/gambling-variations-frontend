@@ -99,7 +99,7 @@ class PartnerDetailsDataRequiredActionImpl @Inject() (
   ): Try[UserAnswers] = {
     val loadedAnswers = answers.withSectionLoaded(ExistingPartnerDetailsSection, Instant.now(clock))
     partnersDetails.partners
-      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
+//      .filterNot(_.dateOfLeaving.exists(_.isBefore(LocalDate.now())))
       .foldLeft(Try(loadedAnswers)) { case (userAnswers, partnerDetails) =>
         buildPartnerDetails(partnerDetails, partnerDetails.businessPartnerNumber, userAnswers)
       }

@@ -44,19 +44,23 @@ class RegistrationCancellationWarningController @Inject() (
   view: RegistrationCancellationWarningView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with CancellationNavigator
     with I18nSupport {
 
-  def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData) { implicit request =>
+  // TODO extra check
+  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+    checkScreen(request.userAnswers, Cancel.Warning) {
+      request.userAnswers
+        .get(RegistrationCancellationDatePage)
+        .fold(Redirect(routes.SystemErrorController.onPageLoad())) { cancellationDate =>
+          val form = request.userAnswers
+            .get(RegistrationCancellationCancelAgainYesNoPage)
+            .fold(formProvider())(formProvider().fill)
 
-      val form = request.userAnswers.get(RegistrationCancellationCancelAgainYesNoPage).fold(formProvider())(formProvider().fill)
-
-      (for {
-        isCancelled      <- request.userAnswers.get(RegistrationCancellationDeclarationPage).filter(identity)
-        cancellationDate <- request.userAnswers.get(RegistrationCancellationDatePage)
-      } yield Ok(view(form, dateFormatter.format(cancellationDate), NormalMode)))
-        .getOrElse(Redirect(routes.SystemErrorController.onPageLoad().url))
+          Ok(view(form, dateFormatter.format(cancellationDate), NormalMode))
+        }
     }
+  }
 
   def onSubmit(mode: Mode): Action[AnyContent] = {
     (authorise andThen getData andThen requireData).async { implicit request =>
