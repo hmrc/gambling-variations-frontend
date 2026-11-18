@@ -300,7 +300,7 @@ object CheckControllingBodyDetailsViewModel {
   private def yesNo(answer: Boolean)(implicit messages: Messages): String =
     if (answer) messages("site.yes") else messages("site.no")
 
-  def from(answers: UserAnswers, isSubmitted: Boolean = false): CheckControllingBodyDetailsViewModel = {
+  def from(answers: UserAnswers): CheckControllingBodyDetailsViewModel = {
 
     def text(page: QuestionPage[String]): Option[String] =
       answers.get(page).map(_.trim).filter(_.nonEmpty)
@@ -337,7 +337,7 @@ object CheckControllingBodyDetailsViewModel {
       faxNumber              = text(ControllingBodyFaxNumberPage),
       addEmailAddress        = answers.get(ControllingBodyAddEmailAddressYesNoPage),
       emailAddress           = text(ControllingBodyEmailPage),
-      isSubmitted            = isSubmitted
+      isSubmitted            = answers.get(ControllingBodySubmittedPage).getOrElse(false)
     )
   }
 }
