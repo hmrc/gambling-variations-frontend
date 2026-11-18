@@ -21,6 +21,7 @@ import controllers.routes
 import models.{BusinessType, Mode, UserAnswers}
 import pages.partnerdetails.*
 import pages.{BusinessNumberOrIndex, Page, QuestionPage}
+import play.api.libs.json.Reads
 import play.api.mvc.Call
 import utils.PartnerUtils
 import viewmodels.checkAnswers.partnerdetails.PartnerMandatoryDetails
@@ -110,25 +111,60 @@ object PartnerDetailsNavigator {
     // --- Value pages: carry on to the next page in the journey ---
 
     case PartnerDetailsBusinessNamePage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))))
+      carryOn(
+        index,
+        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))),
+        checkMandatory = true
+      )
+
     case PartnerDetailsSoleProprietorPage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsSoleProprietorDobController.onPageLoad(key(index), mode(index))))
+      carryOn(
+        index,
+        to(partnerRoutes.PartnerDetailsSoleProprietorDobController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
+      )
+
     case PartnerDetailsDateOfBirthPage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))))
+      carryOn(
+        index,
+        to(partnerRoutes.PartnerDetailsAddTradingNameYesNoController.onPageLoad(key(index))),
+        checkMandatory = true
+      )
     case PartnerDetailsTradingNamePage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDateOfJoiningController.onPageLoad(key(index), mode(index))))
+
     case PartnerDetailsDateOfJoiningPage(index) =>
       carryOn(index, afterDateOfJoining(index))
+
     case PartnerDetailsDateOfIncorporationPage(index) =>
-      carryOn(index, afterDateOfIncorporation(index))
+      carryOn(
+        index,
+        afterDateOfIncorporation(index),
+        checkMandatory = true
+      )
+
+    case PartnerDetailsCrnPage(index) =>
+      carryOn(
+        index,
+        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
+      )
     case PartnerDetailsNinoPage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
-    case PartnerDetailsCrnPage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
+
     case PartnerDetailsCountryOfIncorporationPage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key(index), mode(index))))
+      carryOn(
+        index,
+        to(partnerRoutes.PartnerDetailsForeignCorporateReferenceController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
+      )
     case PartnerDetailsForeignCorporateReferencePage(index) =>
-      carryOn(index, to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))))
+      carryOn(
+        index,
+        to(partnerRoutes.PartnerDetailsAddUTRController.onPageLoad(key(index), mode(index))),
+        checkMandatory = true
+      )
+
     case PartnerDetailsUtrPage(index) =>
       carryOn(index, to(partnerRoutes.PartnerDetailsVatRegistrationNumberYesNoController.onPageLoad(key(index))))
     case PartnerDetailsVrnPage(index) => // TODO -> this should go to address lookup
@@ -203,10 +239,18 @@ object PartnerDetailsNavigator {
       case i: Int    => answers.get(PartnerDetailsHasAnsweredAllQuestionsPage(i)).contains(true) // new partner that has reached CYA
     }
 
-  private def carryOn(index: BusinessNumberOrIndex, next: UserAnswers => Call): UserAnswers => Call =
-    answers =>
-      if (returnsToCheckYourAnswers(index, answers)) checkYourAnswers(index)
-      else next(answers)
+  /** Existing partners and saved new partners return to check your answers. With `checkMandatory`, they only do so once every mandatory field is
+    * answered; otherwise they are sent to the first missing one (the business type change mini-flow).
+    */
+  private def carryOn(
+    index: BusinessNumberOrIndex,
+    next: UserAnswers => Call,
+    checkMandatory: Boolean = false
+  ): UserAnswers => Call = { answers =>
+    if (!returnsToCheckYourAnswers(index, answers)) next(answers)
+    else if (checkMandatory && PartnerMandatoryDetails.isMissing(answers, index)) nextMissing(index)(answers)
+    else checkYourAnswers(index)
+  }
 
   private def addYesNo(
     index: BusinessNumberOrIndex,
