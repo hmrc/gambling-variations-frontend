@@ -68,12 +68,6 @@ class ControllingBodySoleProprietorDobControllerSpec extends SpecBase with Mocki
       .success
       .value
 
-  private val validFormData: Map[String, String] =
-    Map("value.day"   -> validAnswer.getDayOfMonth.toString,
-        "value.month" -> validAnswer.getMonthValue.toString,
-        "value.year"  -> validAnswer.getYear.toString
-       )
-
   private def form(application: play.api.Application)(implicit msgs: Messages) =
     application.injector.instanceOf[ControllingBodySoleProprietorDobFormProvider].apply()
 

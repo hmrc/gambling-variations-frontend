@@ -17,7 +17,6 @@
 package forms.correspondencedetails
 
 import forms.behaviours.BooleanFieldBehaviours
-import forms.correspondencedetails.RemoveCorrespondenceDetailsYesNoFormProvider
 import play.api.data.FormError
 
 class RemoveCorrespondenceDetailsYesNoFormProviderSpec extends BooleanFieldBehaviours {

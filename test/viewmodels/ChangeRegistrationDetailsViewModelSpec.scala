@@ -140,12 +140,6 @@ class ChangeRegistrationDetailsViewModelSpec extends SpecBase {
 
     "must send the sections that are not built yet to the page not found screen" in {
 
-      // These rows are shown so the user sees the full picture, but the journeys behind them do
-      // not exist. Remove a name from this list as each journey is built.
-      val notBuiltYet = Set(
-        "Group member details"
-      )
-
       val vm = viewModel(partnershipAnswers, isGroupMember = true)
 
       vm.sections

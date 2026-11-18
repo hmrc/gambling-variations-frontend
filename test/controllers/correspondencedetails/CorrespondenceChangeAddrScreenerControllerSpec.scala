@@ -19,7 +19,7 @@ package controllers.correspondencedetails
 import base.SpecBase
 import forms.correspondencedetails.CorrespondenceChangeAddrScreenerFormProvider
 import models.CorrespondenceChangeAddrOption.EditCurrentAddress
-import models.{NormalMode, UserAnswers}
+import models.NormalMode
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
