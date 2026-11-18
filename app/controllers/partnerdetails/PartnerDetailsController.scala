@@ -20,9 +20,10 @@ import config.FrontendAppConfig
 import controllers.actions.*
 import forms.partnerdetails.AddAnotherPartnerFormProvider
 import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages.BusinessNumberOrIndex
 import pages.partnerdetails.*
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import services.{PaginationResult, PaginationService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -48,32 +49,51 @@ class PartnerDetailsController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  private val paginationService: PaginationService = PaginationService(
-    recordsPerPage  = frontendAppConfig.partnersPerPage,
-    maxRecords      = frontendAppConfig.maxPartners,
-    maxVisiblePages = 5
-  )
+  private val paginationService: PaginationService =
+    PaginationService(
+      recordsPerPage  = frontendAppConfig.partnersPerPage,
+      maxRecords      = frontendAppConfig.maxPartners,
+      maxVisiblePages = 5
+    )
 
-  def onPageLoad(page: Option[Int]): Action[AnyContent] =
+  def onPageLoad(
+    page: Option[Int]
+  ): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
-      val selectedPage = page.getOrElse(1)
 
-      val todayDate = LocalDate.now(ZoneOffset.UTC)
-      val paginatedPartnerNumbers = fetchPaginatedPartnerDetails(request.userAnswers, todayDate, selectedPage)
+      val selectedPage =
+        page.getOrElse(1)
+
+      val todayDate =
+        LocalDate.now(ZoneOffset.UTC)
+
+      val allPartnerNumbers =
+        getAllPartnerNumbers(request.userAnswers)
+
+      val paginatedPartnerNumbers =
+        fetchPaginatedPartnerDetails(
+          userAnswers = request.userAnswers,
+          page        = selectedPage
+        )
 
       val viewModel =
         PartnerDetailsViewModel.from(
-          paginatedPartnerNumbers.paginatedData,
-          todayDate,
-          request.userAnswers,
-          frontendAppConfig
+          paginatedPartnerNumbers = paginatedPartnerNumbers.paginatedData,
+          allPartnerNumbers       = allPartnerNumbers,
+          todayDate               = todayDate,
+          userAnswers             = request.userAnswers,
+          frontendAppConfig       = frontendAppConfig
         )
 
       val errorMessage =
-        if viewModel.showNoPartnersMessage then "partnerDetails.addPartner.error.required"
-        else "partnerDetails.addAnotherPartner.error.required"
+        if (viewModel.showNoPartnersMessage) {
+          "partnerDetails.addPartner.error.required"
+        } else {
+          "partnerDetails.addAnotherPartner.error.required"
+        }
 
-      val form = formProvider(errorMessage)
+      val form =
+        formProvider(errorMessage)
 
       Ok(
         view(
@@ -89,26 +109,41 @@ class PartnerDetailsController @Inject() (
       )
     }
 
-  def onSubmit(page: Option[Int]): Action[AnyContent] =
+  def onSubmit(
+    page: Option[Int]
+  ): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
-      val selectedPage = page.getOrElse(1)
 
-      val todayDate = LocalDate.now(ZoneOffset.UTC)
-      val paginatedPartnerNumbers = fetchPaginatedPartnerDetails(request.userAnswers, todayDate, selectedPage)
+      val selectedPage =
+        page.getOrElse(1)
+
+      val todayDate =
+        LocalDate.now(ZoneOffset.UTC)
+
+      val allPartnerNumbers =
+        getAllPartnerNumbers(request.userAnswers)
+
+      val paginatedPartnerNumbers =
+        fetchPaginatedPartnerDetails(
+          userAnswers = request.userAnswers,
+          page        = selectedPage
+        )
 
       val viewModel =
         PartnerDetailsViewModel.from(
-          paginatedPartnerNumbers.paginatedData,
-          todayDate,
-          request.userAnswers,
-          frontendAppConfig
+          paginatedPartnerNumbers = paginatedPartnerNumbers.paginatedData,
+          allPartnerNumbers       = allPartnerNumbers,
+          todayDate               = todayDate,
+          userAnswers             = request.userAnswers,
+          frontendAppConfig       = frontendAppConfig
         )
 
       val errorMessage =
-        if (viewModel.showNoPartnersMessage)
+        if (viewModel.showNoPartnersMessage) {
           "partnerDetails.addPartner.error.required"
-        else
+        } else {
           "partnerDetails.addAnotherPartner.error.required"
+        }
 
       formProvider(errorMessage)
         .bindFromRequest()
@@ -128,43 +163,55 @@ class PartnerDetailsController @Inject() (
                 )
               )
             ),
-          value =>
-            for {
-              updatedAnswers <-
-                Future.fromTry(
-                  request.userAnswers.set(
-                    PartnerDetailsAddAnotherPartnerYesNoPage,
-                    value
+          value => {
+            val hasReachedMaximum =
+              hasReachedMaximumPartnerLimit(
+                partnerNumbers = allPartnerNumbers,
+                userAnswers    = request.userAnswers
+              )
+
+            if (value && hasReachedMaximum) {
+              Future.successful(
+                Redirect(
+                  routes.PartnerDetailsController.onPageLoad(
+                    Some(selectedPage)
                   )
                 )
-
-              _ <- sessionRepository.set(updatedAnswers)
-            } yield {
-              if (value) {
-                val newPartnerIndex = PartnerUtils.getNewPartnersSize(updatedAnswers)
-                for {
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsAddPartnerCompletedPage(newPartnerIndex), false))
-                  updatedAnswers <- Future.fromTry(updatedAnswers.set(PartnerDetailsMgdRegNumberPage(newPartnerIndex), updatedAnswers.id))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield ()
-
-                Redirect(
-                  controllers.partnerdetails.routes.PartnerDetailsBusinessTypeController.onPageLoad(
-                    newPartnerIndex.toString,
-                    NormalMode
+              )
+            } else {
+              for {
+                updatedAnswers <-
+                  Future.fromTry(
+                    request.userAnswers.set(
+                      PartnerDetailsAddAnotherPartnerYesNoPage,
+                      value
+                    )
                   )
-                )
-              } else {
-                Redirect(
-                  controllers.routes.ChangeRegistrationDetailsController
-                    .onPageLoad()
-                )
-              }
+
+                _ <-
+                  sessionRepository.set(updatedAnswers)
+
+                result <-
+                  if (value) {
+                    addNewPartner(updatedAnswers)
+                  } else {
+                    Future.successful(
+                      Redirect(
+                        controllers.routes.ChangeRegistrationDetailsController
+                          .onPageLoad()
+                      )
+                    )
+                  }
+              } yield result
             }
+          }
         )
     }
 
-  def onPartnerDetails(partnerNumber: String, mode: Mode): Action[AnyContent] =
+  def onPartnerDetails(
+    partnerNumber: String,
+    mode: Mode
+  ): Action[AnyContent] =
     (authorise andThen getData andThen requireData) { implicit request =>
 
       Redirect(
@@ -172,12 +219,21 @@ class PartnerDetailsController @Inject() (
       )
     }
 
-  def onRemove(partnerNumber: String, mode: Mode): Action[AnyContent] =
+  def onRemove(
+    partnerNumber: String,
+    mode: Mode
+  ): Action[AnyContent] =
     (authorise andThen getData andThen requireData).async { implicit request =>
+
       mode match {
         case NormalMode =>
-          // TODO journey for removing newPartners
-          Future.successful(Redirect(controllers.partnerdetails.routes.PartnerDetailsController.onPageLoad(None)))
+          // TODO: Journey for removing new partners
+          Future.successful(
+            Redirect(
+              routes.PartnerDetailsController.onPageLoad(None)
+            )
+          )
+
         case CheckMode =>
           for {
             updatedAnswers <-
@@ -187,41 +243,125 @@ class PartnerDetailsController @Inject() (
                   partnerNumber
                 )
               )
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(
-            controllers.partnerdetails.routes.PartnerDetailsDeleteDateController.onPageLoad()
-          )
+
+            _ <-
+              sessionRepository.set(updatedAnswers)
+
+          } yield {
+            Redirect(
+              routes.PartnerDetailsDeleteDateController
+                .onPageLoad()
+            )
+          }
       }
     }
 
-  private def fetchPaginatedPartnerDetails(userAnswers: UserAnswers, todayDate: LocalDate, page: Int): PaginationResult = {
-    val completedNewPartners = PartnerUtils.getCompletedNewPartners(userAnswers)
-    val existingPartners = getPresentExistingPartners(userAnswers, todayDate)
+  private def addNewPartner(
+    userAnswers: UserAnswers
+  ): Future[Result] = {
 
-    paginationService
-      .paginateAlphabeticallyPartnerDetails(
-        completedNewPartners,
-        existingPartners,
-        userAnswers,
-        page,
-        routes.PartnerDetailsController.onPageLoad(None).url
+    val newPartnerIndex =
+      PartnerUtils.getNewPartnersSize(userAnswers)
+
+    for {
+      answersWithIncompletePartner <-
+        Future.fromTry(
+          userAnswers.set(
+            PartnerDetailsAddPartnerCompletedPage(
+              newPartnerIndex
+            ),
+            false
+          )
+        )
+
+      updatedAnswers <-
+        Future.fromTry(
+          answersWithIncompletePartner.set(
+            PartnerDetailsMgdRegNumberPage(
+              newPartnerIndex
+            ),
+            answersWithIncompletePartner.id
+          )
+        )
+
+      _ <-
+        sessionRepository.set(updatedAnswers)
+
+    } yield {
+      Redirect(
+        routes.PartnerDetailsBusinessTypeController
+          .onPageLoad(
+            newPartnerIndex.toString,
+            NormalMode
+          )
       )
+    }
   }
 
-  private def getPresentExistingPartners(userAnswers: UserAnswers, todayDate: LocalDate): Seq[String] = PartnerUtils
-    .getExistingPartnersBusinessNumbers(userAnswers)
-    .filter { partnerNumber =>
-      val hasPartner =
+  private def fetchPaginatedPartnerDetails(
+    userAnswers: UserAnswers,
+    page: Int
+  ): PaginationResult = {
+
+    val completedNewPartners =
+      PartnerUtils.getCompletedNewPartners(userAnswers)
+
+    val existingPartners =
+      getPresentExistingPartners(userAnswers)
+
+    paginationService.paginateAlphabeticallyPartnerDetails(
+      completedNewPartners,
+      existingPartners,
+      userAnswers,
+      page,
+      routes.PartnerDetailsController
+        .onPageLoad(None)
+        .url
+    )
+  }
+
+  private def getPresentExistingPartners(
+    userAnswers: UserAnswers
+  ): Seq[String] =
+    PartnerUtils
+      .getExistingPartnersBusinessNumbers(userAnswers)
+      .filter { partnerNumber =>
         userAnswers
-          .get(PartnerDetailsMgdRegNumberPage(partnerNumber))
+          .get(
+            PartnerDetailsMgdRegNumberPage(partnerNumber)
+          )
           .isDefined
+      }
+      .toSeq
 
-      val hasPastLeavingDate =
+  private def getAllPartnerNumbers(
+    userAnswers: UserAnswers
+  ): Seq[BusinessNumberOrIndex] = {
+
+    val completedNewPartners: Seq[BusinessNumberOrIndex] =
+      PartnerUtils.getCompletedNewPartners(userAnswers)
+
+    val existingPartners: Seq[BusinessNumberOrIndex] =
+      getPresentExistingPartners(userAnswers)
+
+    completedNewPartners ++ existingPartners
+  }
+
+  private def hasReachedMaximumPartnerLimit(
+    partnerNumbers: Seq[BusinessNumberOrIndex],
+    userAnswers: UserAnswers
+  ): Boolean = {
+
+    val partnerCountForMaximumLimit =
+      partnerNumbers.count { partnerNumber =>
         userAnswers
-          .get(PartnerDetailsDateOfLeavingPage(partnerNumber))
-          .exists(_.isBefore(todayDate))
+          .get(
+            PartnerDetailsDateOfLeavingPage(partnerNumber)
+          )
+          .isEmpty
+      }
 
-      hasPartner && !hasPastLeavingDate
-    }
-    .toSeq
+    partnerCountForMaximumLimit >=
+      frontendAppConfig.maxPartners
+  }
 }
