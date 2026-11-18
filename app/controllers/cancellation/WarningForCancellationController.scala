@@ -17,16 +17,18 @@
 package controllers.cancellation
 
 import controllers.actions.*
+import controllers.routes
 import forms.cancellation.WarningForCancellationFormProvider
-import models.Mode
+import models.{Mode, NormalMode}
 import navigation.Navigator
-import pages.cancellation.WarningForCancellationPage
+import pages.cancellation.{WarningForCancellationPage, RegistrationCancellationDatePage, RegistrationCancellationDeclarationPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.cancellation.WarningForCancellationView
 
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,37 +38,61 @@ class WarningForCancellationController @Inject() (
   navigator: Navigator,
   authorise: AuthorisedAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  requireData: BusinessDetailsDataRequiredAction,
   formProvider: WarningForCancellationFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: WarningForCancellationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
+  
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData) { implicit request =>
 
-  val form = formProvider()
+      val form = request.userAnswers.get(WarningForCancellationPage).fold(formProvider())(formProvider().fill)
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData) { implicit request =>
+      (for {
+        isCancelled      <- request.userAnswers.get(RegistrationCancellationDeclarationPage).filter(identity)
+        cancellationDate <- request.userAnswers.get(RegistrationCancellationDatePage)
+      } yield Ok(view(form, dateFormatter.format(cancellationDate), NormalMode)))
+        .getOrElse(Redirect(routes.SystemErrorController.onPageLoad().url))
+  }
 
-    val preparedForm = request.userAnswers.get(WarningForCancellationPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (authorise andThen getData andThen requireData).async { implicit request =>
+      val form = formProvider()
+      val cancellationDate = request.userAnswers.get(RegistrationCancellationDatePage)
+
+      cancellationDate
+        .map(systemDate =>
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors =>
+                Future.successful(
+                  BadRequest(
+                    view(formWithErrors, dateFormatter.format(systemDate), mode)
+                  )
+                ),
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(
+                    request.userAnswers.set(WarningForCancellationPage, value)
+                  )
+
+                  updatedAnswers <- Future.fromTry(
+                    request.userAnswers.set(RegistrationCancellationDeclarationPage, false)
+                  )
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(
+                  navigator.nextPage(RegistrationCancellationDeclarationPage, mode, updatedAnswers)
+                )
+            )
+        )
+        .getOrElse(Future.successful(Redirect(routes.SystemErrorController.onPageLoad().url)))
     }
+}
 
-    Ok(view(preparedForm, mode))
-  }
-
-  def onSubmit(mode: Mode): Action[AnyContent] = (authorise andThen getData andThen requireData).async { implicit request =>
-
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(WarningForCancellationPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(WarningForCancellationPage, mode, updatedAnswers))
-      )
-  }
+private val dateFormatter =
+  DateTimeFormatter.ofPattern("d MMMM yyyy")
 }

@@ -32,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages("warningForCancellation.title"), Some("warningForCancellation.caption"))) {
 
-    @formHelper(action = controllers.cancellation.routes.WarningForCancellationController.onSubmit(mode), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.cancellation.routes.WarningForCancellationController.onSubmit(), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

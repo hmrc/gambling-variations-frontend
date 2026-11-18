@@ -396,7 +396,6 @@ POST       /cancel-group-registration/change-no-longer-liable                  c
 
 GET        /cancel-group-registration/reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onPageLoad(mode: Mode = NormalMode)
 POST       /cancel-group-registration/reviewing-cancellation-request   controllers.cancellation.RegistrationCancellationWarningController.onSubmit(mode: Mode = NormalMode)
-GET        /warningForCancellation                        controllers.cancellation.WarningForCancellationController.onPageLoad(mode: Mode = NormalMode)
-POST       /warningForCancellation                        controllers.cancellation.WarningForCancellationController.onSubmit(mode: Mode = NormalMode)
-GET        /changeWarningForCancellation                  controllers.cancellation.WarningForCancellationController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeWarningForCancellation                  controllers.cancellation.WarningForCancellationController.onSubmit(mode: Mode = CheckMode)
+
+GET        /cancel-registration/reviewing-cancellation-request                      controllers.cancellation.WarningForCancellationController.onPageLoad(mode: Mode = NormalMode)
+POST       /cancel-registration/reviewing-cancellation-request                       controllers.cancellation.WarningForCancellationController.onSubmit(mode: Mode = NormalMode)

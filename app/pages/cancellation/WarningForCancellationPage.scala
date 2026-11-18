@@ -16,10 +16,10 @@
 
 package pages.cancellation
 
-import pages.QuestionPage
+import pages.FlagPage
 import play.api.libs.json.JsPath
 
-case object WarningForCancellationPage extends QuestionPage[Boolean] {
+case object WarningForCancellationPage extends FlagPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 
