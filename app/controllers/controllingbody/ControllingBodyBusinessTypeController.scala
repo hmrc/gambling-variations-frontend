@@ -18,9 +18,9 @@ package controllers.controllingbody
 
 import controllers.actions.*
 import forms.controllingbody.ControllingBodyBusinessTypeFormProvider
-import models.{BusinessType, Mode}
+import models.{BusinessType, Mode, UserAnswers}
 import navigation.Navigator
-import pages.controllingbody.{ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodySubmittedPage}
+import pages.controllingbody.{ControllingBodyBusinessPartnerNumberPage, ControllingBodyBusinessTypePage, ControllingBodyChangesPage, ControllingBodyPreviousBusinessTypePage, ControllingBodySubmittedPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,6 +31,7 @@ import utils.FlagsUtil.checkIfChanged
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Success, Try}
 
 class ControllingBodyBusinessTypeController @Inject() (
   override val messagesApi: MessagesApi,
@@ -66,11 +67,25 @@ class ControllingBodyBusinessTypeController @Inject() (
           val ua = request.userAnswers
           val isChanged = checkIfChanged(businessType, ua, ControllingBodyBusinessTypePage, ControllingBodyChangesPage)
           for {
-            updatedAnswers              <- Future.fromTry(ua.set(ControllingBodyBusinessTypePage, businessType))
+            withPreviousType            <- Future.fromTry(recordPreviousBusinessType(ua, businessType))
+            updatedAnswers              <- Future.fromTry(withPreviousType.set(ControllingBodyBusinessTypePage, businessType))
             updatedAnswersWithSubmitted <- Future.fromTry(updatedAnswers.set(ControllingBodySubmittedPage, true))
             finalAnswers                <- Future.fromTry(updatedAnswersWithSubmitted.set(ControllingBodyChangesPage, isChanged))
             _                           <- sessionRepository.set(finalAnswers)
           } yield Redirect(navigator.nextPage(ControllingBodyBusinessTypePage, mode, updatedAnswers))
       )
   }
+
+  // Keeps the type the existing controlling body had before the first change, so that the navigation can follow the
+  // mini-flow for a change of type. A first-time setup has no business partner number and records nothing.
+  private def recordPreviousBusinessType(ua: UserAnswers, businessType: BusinessType): Try[UserAnswers] =
+    ua.get(ControllingBodyBusinessTypePage) match {
+      case Some(current)
+          if current != businessType &&
+            ua.get(ControllingBodyPreviousBusinessTypePage).isEmpty &&
+            ua.get(ControllingBodyBusinessPartnerNumberPage).exists(_.trim.nonEmpty) =>
+        ua.set(ControllingBodyPreviousBusinessTypePage, current)
+      case _ =>
+        Success(ua)
+    }
 }
