@@ -22,6 +22,7 @@ import controllers.routes
 import forms.cancellation.CancelRegistrationDateFormProvider
 import models.{Mode, NormalMode}
 import navigation.Navigator
+import pages.DateOfRegistrationPage
 import pages.cancellation.CancelRegistrationDatePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -48,6 +49,7 @@ class CancelRegistrationDateController @Inject() (
   view: CancelRegistrationDateView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
+    with CancellationNavigator
     with I18nSupport {
 
   def onLanding(regNumber: String): Action[AnyContent] =
@@ -57,44 +59,43 @@ class CancelRegistrationDateController @Inject() (
     }
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
-    (authorise andThen getData andThen requireData).async { implicit request =>
-      gamblingConnector
-        .getBusinessDetails(request.mgdRegNum)
-        .map { businessDetails =>
-          businessDetails.dateOfRegistration match {
-            case Some(registrationDate) =>
-              val maximumValidDate =
-                LocalDate.now(clock).plusDays(14)
+    (authorise andThen getData andThen requireData) { implicit request =>
+      checkScreen(request.userAnswers, Cancel.Proceed) {
 
-              val firstInvalidDate =
-                maximumValidDate.plusDays(1)
+        request.userAnswers.get(DateOfRegistrationPage) match {
+          case Some(registrationDate) =>
+            val maximumValidDate =
+              LocalDate.now(clock).plusDays(14)
 
-              val form =
-                formProvider(registrationDate, maximumValidDate)
+            val firstInvalidDate =
+              maximumValidDate.plusDays(1)
 
-              val middleOfDateRange =
-                middleDate(registrationDate, firstInvalidDate)
+            val form =
+              formProvider(registrationDate, maximumValidDate)
 
-              val preparedForm =
-                request.userAnswers
-                  .get(CancelRegistrationDatePage)
-                  .map(form.fill)
-                  .getOrElse(form)
+            val middleOfDateRange =
+              middleDate(registrationDate, firstInvalidDate)
 
-              Ok(
-                view(
-                  preparedForm,
-                  mode,
-                  registrationDate,
-                  firstInvalidDate,
-                  middleOfDateRange
-                )
+            val preparedForm =
+              request.userAnswers
+                .get(CancelRegistrationDatePage)
+                .map(form.fill)
+                .getOrElse(form)
+
+            Ok(
+              view(
+                preparedForm,
+                mode,
+                registrationDate,
+                firstInvalidDate,
+                middleOfDateRange
               )
+            )
 
-            case None =>
-              systemErrorRedirect
-          }
+          case None =>
+            systemErrorRedirect
         }
+      }
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] =
